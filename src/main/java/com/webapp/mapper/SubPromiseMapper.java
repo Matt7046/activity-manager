@@ -12,6 +12,7 @@ public interface SubPromiseMapper {
 
     // Da Entity a DTO
     SubPromiseDTO toDTO(SubPromise utente);
+    
 
     // Da DTO a Entity
     SubPromise fromDTO(SubPromiseDTO dto);
