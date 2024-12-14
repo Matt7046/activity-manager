@@ -21,7 +21,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
         @Id
         private Object _id;
         private Long identificativo; // Identificatore unico
-        private String  testo;
+        private String  subTesto;
         private String nome;
     
     

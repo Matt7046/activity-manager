@@ -26,7 +26,7 @@ public class SubPromiseController {
     @Autowired
     private SubPromiseService subPromiseService;
 
-    @GetMapping("testo")
+    @GetMapping("")
     public ResponseDTO getTesto() {
 
         //String[] texts = { "Ciao, mondo!", "Benvenuto in Java", "Programmazione è divertente" };
@@ -40,8 +40,7 @@ public class SubPromiseController {
         return response;
     }
 
-
-     @GetMapping("/{identificativo}")
+    @GetMapping("/{identificativo}")
     public ResponseDTO findByIdentificativo(@PathVariable Long identificativo) {
         SubPromise item = subPromiseService.findByIdentificativo(identificativo);
     //SubPromise item  = new SubPromise();
@@ -52,5 +51,4 @@ public class SubPromiseController {
             return new ResponseDTO(subDTO, HttpStatus.NOT_FOUND);  // 404 Not Found
         }
     }
-
 }
