@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class SubPromiseDTO {
 
     private Long identificativo; // Identificatore unico
-    private String  testo;
+    private String  subTesto;
     private String nome;
 
 
