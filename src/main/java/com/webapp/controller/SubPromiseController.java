@@ -9,6 +9,7 @@ import com.webapp.dto.SubPromiseDTO;
 import com.webapp.mapper.SubPromiseMapper;
 import com.webapp.service.SubPromiseService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,26 +30,40 @@ public class SubPromiseController {
     @GetMapping("")
     public ResponseDTO getTesto() {
 
-        //String[] texts = { "Ciao, mondo!", "Benvenuto in Java", "Programmazione è divertente" };
+        // String[] texts = { "Ciao, mondo!", "Benvenuto in Java", "Programmazione è
+        // divertente" };
         List<SubPromise> sub = subPromiseService.findAll();
         // mapping
-       List<SubPromiseDTO> subDTO=  sub.stream()
+        List<SubPromiseDTO> subDTO = sub.stream()
                 .map(SubPromiseMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
 
-        ResponseDTO response = new ResponseDTO(subDTO, HttpStatus.OK);
+        ResponseDTO response = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
         return response;
     }
 
     @GetMapping("/{identificativo}")
     public ResponseDTO findByIdentificativo(@PathVariable String identificativo) {
-        SubPromise item = subPromiseService.findByIdentificativo(identificativo);
-    //SubPromise item  = new SubPromise();
-    SubPromiseDTO subDTO = SubPromiseMapper.INSTANCE.toDTO(item);
-        if (subDTO!=null) {
-            return new ResponseDTO(subDTO, HttpStatus.OK);
-        } else {
-            return new ResponseDTO(subDTO, HttpStatus.NOT_FOUND);  // 404 Not Found
+        List<String> errori = new ArrayList<>();
+        SubPromise item = new SubPromise();
+        ResponseDTO responseDTO = null;
+        try {
+            item = subPromiseService.findByIdentificativo(identificativo);
+
+        } catch (Exception e) {
+            errori.add(e.getMessage());
+            errori.add(e.getLocalizedMessage());
+       
+        } finally {
+            SubPromiseDTO subDTO = SubPromiseMapper.INSTANCE.toDTO(item);
+            if (subDTO.get_id() != null) {
+                responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
+            } else {
+
+                responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND, errori); // 404 Not Found
+            }
         }
+        return responseDTO;
     }
+
 }

@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.webapp.dto.ResponseDTO;
 import com.webapp.dto.SubPromiseDTO;
 import com.webapp.service.SubPromiseService;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,32 +27,42 @@ public class AboutController {
     @Autowired
     private SubPromiseService subPromiseService;
 
- 
     @DeleteMapping("/{identificativo}")
     public ResponseDTO deleteByIdentificativo(@PathVariable String identificativo) {
         Long item = subPromiseService.deleteByIdentificativo(identificativo);
     //SubPromise item  = new SubPromise();
-   
-        return new ResponseDTO(item, HttpStatus.OK);
+        try{
+        return new ResponseDTO(item, HttpStatus.OK, new ArrayList<>());
+        }
+        catch(Exception e)
+        {
+            List<String> errori = new ArrayList<>();
+            errori.add(e.getMessage());
+            errori.add(e.getLocalizedMessage());
+            return new ResponseDTO(item, HttpStatus.OK,errori);
+        }
     }
 
-  @PostMapping("/dati")
-public ResponseEntity<ResponseDTO> saveSubPromise(@RequestBody SubPromiseDTO subPromiseDTO) {
-    try {
-        // Salva i dati e ottieni l'ID o l'oggetto salvato
-        String itemId = subPromiseService.saveSubPromise(subPromiseDTO);
+    @PostMapping("/dati")
+    public ResponseEntity<ResponseDTO> saveSubPromise(@RequestBody SubPromiseDTO subPromiseDTO) {
+        try {
+            // Salva i dati e ottieni l'ID o l'oggetto salvato
+            String itemId = subPromiseService.saveSubPromise(subPromiseDTO);
 
-        // Crea una risposta
-        ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK);
+            // Crea una risposta
+            ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK, new ArrayList<>());
 
-        // Ritorna una ResponseEntity con lo status HTTP
-        return ResponseEntity.ok(response);
+            // Ritorna una ResponseEntity con lo status HTTP
+            return ResponseEntity.ok(response);
 
-    } catch (Exception e) {
-        // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
-        ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        } catch (Exception e) {
+            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
+            List<String> errori = new ArrayList<>();
+            errori.add(e.getMessage());
+            errori.add(e.getLocalizedMessage());
+            ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR, errori);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
-}
 
 }
