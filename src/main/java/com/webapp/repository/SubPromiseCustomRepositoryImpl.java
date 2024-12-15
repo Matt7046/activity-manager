@@ -11,12 +11,12 @@ public class SubPromiseCustomRepositoryImpl implements SubPromiseCustomRepositor
 
 @Lazy
     @Autowired
-    private SubPromiseService subPromiseRepository;
+    private SubPromiseService subPromiseService;
     public String saveSubPromise(SubPromiseDTO subPromiseDTO) {
         // Verifica se esiste già un documento con l'identificativo
         SubPromise existingPromise = null;
         if (subPromiseDTO.get_id() != null) {
-            existingPromise = subPromiseRepository.findByIdentificativo(subPromiseDTO.get_id());
+            existingPromise = subPromiseService.findByIdentificativo(subPromiseDTO.get_id());
         }
 
         if (existingPromise != null) {
@@ -25,7 +25,7 @@ public class SubPromiseCustomRepositoryImpl implements SubPromiseCustomRepositor
             newPromise.set_id(existingPromise.get_id());
             newPromise.setNome(subPromiseDTO.getNome());
             newPromise.setSubTesto(subPromiseDTO.getSubTesto());
-            existingPromise = subPromiseRepository.save(newPromise);
+            existingPromise = subPromiseService.save(newPromise);
 
             return existingPromise.get_id();// Restituisci l'ID aggiornato
         } else {
@@ -35,7 +35,7 @@ public class SubPromiseCustomRepositoryImpl implements SubPromiseCustomRepositor
             newPromise.setNome(subPromiseDTO.getNome());
             newPromise.setSubTesto(subPromiseDTO.getSubTesto());
             try {
-                newPromiseR = subPromiseRepository.save(newPromise);
+                newPromiseR = subPromiseService.save(newPromise);
             } catch (Exception e) {
                 // Log dell'errore per un'analisi successiva
                 System.err.println("Errore durante il salvataggio del documento SubPromise: " + e.getMessage());
