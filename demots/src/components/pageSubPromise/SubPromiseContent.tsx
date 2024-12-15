@@ -63,12 +63,12 @@ const SubPromiseContent: React.FC<any> = ({
 
 
 
-  function clickRowNome(rowIndex: any): void {
+  const clickRowNome = (rowIndex: any): void => {
   }
 
 
 
-  function openDetail(_id: string): void {
+  const openDetail = (_id: string): void => {
     componentDidMount(_id)
 
   }
@@ -131,7 +131,7 @@ const SubPromiseContent: React.FC<any> = ({
         </div>
 
         <Grid container justifyContent="flex-end" spacing={2}
-          style={{ height: '30px'}} >
+          style={{ height: '30px' }} >
           <Grid item>
             <div
               className="col-button-container"
