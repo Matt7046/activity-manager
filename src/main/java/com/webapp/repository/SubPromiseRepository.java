@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 import com.webapp.data.SubPromise;
 
-public interface SubPromiseRepository extends MongoRepository<SubPromise, String> {
+public interface SubPromiseRepository extends MongoRepository<SubPromise, String>, SubPromiseCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario
      List<SubPromise>  findAll();
 
