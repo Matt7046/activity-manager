@@ -19,7 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
     @AllArgsConstructor // Genera un costruttore con tutti i campi
     public class SubPromise {
         @Id
-        private Object _id;
+        private String _id;
         private Long identificativo; // Identificatore unico
         private String  subTesto;
         private String nome;
