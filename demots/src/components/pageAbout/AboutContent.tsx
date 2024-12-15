@@ -107,7 +107,7 @@ const AboutContent: React.FC<any> = ({
             onChange={handleChangeNome} // Aggiorna lo stato quando cambia
           />
         </div>
-        <div id={'text-box'} style={{ paddingLeft: '15px' }} >
+        <div id={'text-box-sub-testo'} style={{ paddingLeft: '15px', width: 'calc(100% - 50px)' }} >
           <TextField id="subTesto" label={testoOld.subTesto} variant="standard" value={subTesto} // Collega il valore allo stato
             onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia
             fullWidth
@@ -123,7 +123,7 @@ const AboutContent: React.FC<any> = ({
         </div>
 
 
-        <Grid container justifyContent="flex-end" spacing={2}>
+        <Grid container justifyContent="flex-end" spacing={2} style={{ paddingTop : '17px' }}>
           <Grid item>
             <div
               className="col-button-container-top"

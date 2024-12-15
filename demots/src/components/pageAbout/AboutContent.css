@@ -41,6 +41,11 @@
   opacity: 1; /* Rende visibile l'elemento */
 }
 
+.text-box-sub-testo {
+  width: calc(100% - 40px); /* Senza gli apostrofi */
+  padding-left: '15px'
+}
+
 
 .row-hidden {
   display: block; /* Nascondi l'elemento di default */
