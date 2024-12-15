@@ -1,0 +1,12 @@
+.text-box {
+    border: 1px solid #ccc; /* Bordo del riquadro */
+    border-radius: 8px; /* Angoli arrotondati */
+    background-color: #f9f9f9; /* Sfondo tenue */
+    font-size: 16px; /* Dimensione del testo */
+    color: #333; /* Colore del testo */
+    max-width: 100%; /* Impedisce di superare il contenitore */
+    word-wrap: break-word; /* Gestisce la divisione delle parole lunghe */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Ombreggiatura */
+    padding-left: 50px;
+  }
+  
