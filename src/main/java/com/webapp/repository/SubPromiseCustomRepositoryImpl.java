@@ -6,12 +6,13 @@ import org.springframework.context.annotation.Lazy;
 import com.webapp.data.SubPromise;
 import com.webapp.dto.SubPromiseDTO;
 import com.webapp.service.SubPromiseService;
+
 public class SubPromiseCustomRepositoryImpl implements SubPromiseCustomRepository {
 
-
-@Lazy
+    @Lazy
     @Autowired
     private SubPromiseService subPromiseService;
+
     public String saveSubPromise(SubPromiseDTO subPromiseDTO) {
         // Verifica se esiste già un documento con l'identificativo
         SubPromise existingPromise = null;
@@ -30,7 +31,7 @@ public class SubPromiseCustomRepositoryImpl implements SubPromiseCustomRepositor
             return existingPromise.get_id();// Restituisci l'ID aggiornato
         } else {
             SubPromise newPromiseR = new SubPromise();
-             // Se non esiste, crea un nuovo documento
+            // Se non esiste, crea un nuovo documento
             SubPromiseDTO newPromise = new SubPromiseDTO();
             newPromise.setNome(subPromiseDTO.getNome());
             newPromise.setSubTesto(subPromiseDTO.getSubTesto());
