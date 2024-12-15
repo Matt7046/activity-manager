@@ -86,7 +86,7 @@ const SubPromise: React.FC<any> = ({ }) => {
 
 
 
-  function navigateToFromAboutPage(): void {
+  const  navigateToFromAboutPage= (): void =>{
     navigateRouting(navigate, `about`, {})
 
   }
