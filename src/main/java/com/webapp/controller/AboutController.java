@@ -36,7 +36,7 @@ public class AboutController {
 
         try {
             item = subPromiseService.deleteByIdentificativo(identificativo);
-            if (item == null) {
+            if (item.equals(0L)) {
                 throw new RuntimeException("Documento non trovato con identificativo: " + identificativo);
             }
             // SubPromise item = new SubPromise();
@@ -46,7 +46,7 @@ public class AboutController {
         }
         SubPromiseDTO subDTO = new SubPromiseDTO(); // Inizializza DTO vuoto
         subDTO.set_id(identificativo);
-        if (item != null) {
+        if (!item.equals(0L)) {
             // Mappatura se l'oggetto è stato trovato
             responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
         } else {
