@@ -24,4 +24,10 @@ public class SubPromiseService {
         return subPromiseRepository.findByIdentificativo(identificativo);
     }
 
+    public Long deleteByIdentificativo(Long identificativo) {
+        
+        return subPromiseRepository.deleteByIdentificativo(identificativo);
+    }
+
+
 }

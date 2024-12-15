@@ -16,4 +16,8 @@ public interface SubPromiseRepository extends MongoRepository<SubPromise, String
 
      @Query("{'identificativo': ?0}")
     SubPromise findByIdentificativo(Long id);
+
+
+    @Query(value = "{'identificativo': ?0}", delete = true)
+        Long deleteByIdentificativo(Long id);
 }
