@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.webapp.dto.ResponseDTO;
 import com.webapp.dto.SubPromiseDTO;
+import com.webapp.mapper.SubPromiseMapper;
 import com.webapp.service.SubPromiseService;
 
 import java.util.ArrayList;
@@ -29,18 +30,31 @@ public class AboutController {
 
     @DeleteMapping("/{identificativo}")
     public ResponseDTO deleteByIdentificativo(@PathVariable String identificativo) {
-        Long item = subPromiseService.deleteByIdentificativo(identificativo);
-    //SubPromise item  = new SubPromise();
-        try{
-        return new ResponseDTO(item, HttpStatus.OK, new ArrayList<>());
-        }
-        catch(Exception e)
-        {
-            List<String> errori = new ArrayList<>();
+        Long item = null;
+        List<String> errori = new ArrayList<>();
+        ResponseDTO responseDTO;
+
+        try {
+            item = subPromiseService.deleteByIdentificativo(identificativo);
+            if (item == null) {
+                throw new RuntimeException("Documento non trovato con identificativo: " + identificativo);
+            }
+            // SubPromise item = new SubPromise();
+
+        } catch (Exception e) {
             errori.add(e.getMessage());
-            errori.add(e.getLocalizedMessage());
-            return new ResponseDTO(item, HttpStatus.OK,errori);
         }
+        SubPromiseDTO subDTO = new SubPromiseDTO(); // Inizializza DTO vuoto
+        subDTO.set_id(identificativo);
+        if (item != null) {
+            // Mappatura se l'oggetto è stato trovato
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
+        } else {
+            // Risposta in caso di errore o elemento non trovato
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND, errori); // 404 con dettagli errore
+        }
+        return responseDTO;
+
     }
 
     @PostMapping("/dati")

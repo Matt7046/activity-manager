@@ -45,25 +45,32 @@ public class SubPromiseController {
     @GetMapping("/{identificativo}")
     public ResponseDTO findByIdentificativo(@PathVariable String identificativo) {
         List<String> errori = new ArrayList<>();
-        SubPromise item = new SubPromise();
-        ResponseDTO responseDTO = null;
+        SubPromise item = null; // Inizializza l'oggetto come null
+        ResponseDTO responseDTO;
+    
         try {
+            // Tentativo di trovare il documento
             item = subPromiseService.findByIdentificativo(identificativo);
-
-        } catch (Exception e) {
-            errori.add(e.getMessage());
-            errori.add(e.getLocalizedMessage());
-       
-        } finally {
-            SubPromiseDTO subDTO = SubPromiseMapper.INSTANCE.toDTO(item);
-            if (subDTO.get_id() != null) {
-                responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
-            } else {
-
-                responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND, errori); // 404 Not Found
+            if (item == null) {
+                throw new RuntimeException("Documento non trovato con identificativo: " + identificativo);
             }
+        } catch (Exception e) {
+            // Gestione dell'errore: log e aggiunta dei dettagli
+            errori.add("Errore: " + e.getMessage());
         }
+    
+        if (item != null) {
+            // Mappatura se l'oggetto è stato trovato
+            SubPromiseDTO subDTO = SubPromiseMapper.INSTANCE.toDTO(item);
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
+        } else {
+            // Risposta in caso di errore o elemento non trovato
+            SubPromiseDTO subDTO = new SubPromiseDTO(); // Inizializza DTO vuoto
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND, errori); // 404 con dettagli errore
+        }
+    
         return responseDTO;
     }
+    
 
 }
