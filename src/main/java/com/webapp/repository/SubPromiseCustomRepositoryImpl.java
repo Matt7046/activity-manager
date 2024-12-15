@@ -33,12 +33,7 @@ public class SubPromiseCustomRepositoryImpl implements SubPromiseCustomRepositor
             SubPromise newPromise = new SubPromise();
             newPromise.setNome(subPromiseDTO.getNome());
             newPromise.setSubTesto(subPromiseDTO.getSubTesto());
-            try {
-                newPromise = subPromiseRepository.save(newPromise);
-            } catch (Exception e) {
-                // Log dell'errore per un'analisi successiva
-                System.err.println("Errore durante il salvataggio del documento SubPromise: " + e.getMessage());
-            }
+            newPromise = subPromiseRepository.save(newPromise);
             return newPromise.get_id(); // Restituisci l'ID del nuovo documento
         }
     }

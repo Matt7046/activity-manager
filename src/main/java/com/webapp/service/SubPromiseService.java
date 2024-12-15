@@ -24,7 +24,7 @@ public class SubPromiseService {
         return subPromiseRepository.findAll();
     }
 
-    public SubPromise findByIdentificativo(String identificativo) {
+    public SubPromise findByIdentificativo(String identificativo)  {
 
         return subPromiseRepository.findByIdentificativo(identificativo);
     }
