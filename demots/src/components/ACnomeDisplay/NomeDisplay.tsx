@@ -8,7 +8,7 @@ const NomeDisplay = observer((props: {
 }) => {
  return ( 
   <>
-    <h2 id={'displayer-' + props.rowIndex.toString()} onClick={props.handleClick}>
+    <h2 id={'displayer-' + props.rowIndex.toString()} onClick={props.handleClick}  style={{ paddingLeft: '17px' }}>
       {props.value} {/* Mostra il testo dallo store */}
     </h2>
   </>
