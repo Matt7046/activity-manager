@@ -98,7 +98,7 @@ const AboutContent: React.FC<any> = ({
             -{errors}
           </Alert>
         </Snackbar>
-        <div id={`returnHome`} style={{ gridColumn: 'span 12', textAlign: 'left', paddingLeft: '15px', paddingBottom: '50px' }}  >
+        <div id={`returnHome`} style={{ gridColumn: 'span 12', textAlign: 'left',  paddingBottom: '50px' }}  >
           <Label text='home' handleClick={() => navigateRoutingWithResetStore(navigate, _id)} _id='0' isUnderlined={true} />
         </div>
 
