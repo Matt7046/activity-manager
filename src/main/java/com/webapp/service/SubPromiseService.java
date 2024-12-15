@@ -26,36 +26,34 @@ public class SubPromiseService {
         return subPromiseRepository.findAll();
     }
 
-    public SubPromise findByIdentificativo(Long identificativo) {
+    public SubPromise findByIdentificativo(String identificativo) {
 
         return subPromiseRepository.findByIdentificativo(identificativo);
     }
 
-    public Long deleteByIdentificativo(Long identificativo) {
+    public Long deleteByIdentificativo(String identificativo) {
 
         return subPromiseRepository.deleteByIdentificativo(identificativo);
     }
 
-    public Long saveSubPromise(SubPromiseDTO subPromiseDTO) {
+    public String saveSubPromise(SubPromiseDTO subPromiseDTO) {
         // Verifica se esiste già un documento con l'identificativo
         SubPromise existingPromise = null;
-        if (subPromiseDTO.getIdentificativo() != null) {
-            existingPromise = subPromiseRepository.findByIdentificativo(subPromiseDTO.getIdentificativo());
+        if (subPromiseDTO.get_id() != null) {
+            existingPromise = subPromiseRepository.findByIdentificativo(subPromiseDTO.get_id());
         }
 
         if (existingPromise != null) {
             // Se esiste, aggiorna i campi
             existingPromise.setNome(subPromiseDTO.getNome());
             existingPromise.setSubTesto(subPromiseDTO.getSubTesto());
-            return existingPromise.getIdentificativo(); // Restituisci l'ID aggiornato
-        } else {
-            Random random = new Random();
+            existingPromise = subPromiseRepository.save(existingPromise);
 
-            // Generating a random integer
-            Long randomNumber = random.nextLong(1000000);
-            // Se non esiste, crea un nuovo documento
+            return existingPromise.get_id();// Restituisci l'ID aggiornato
+        } else {
+
+             // Se non esiste, crea un nuovo documento
             SubPromise newPromise = new SubPromise();
-            newPromise.setIdentificativo(randomNumber);
             newPromise.setNome(subPromiseDTO.getNome());
             newPromise.setSubTesto(subPromiseDTO.getSubTesto());
             try {
@@ -64,7 +62,7 @@ public class SubPromiseService {
                 // Log dell'errore per un'analisi successiva
                 System.err.println("Errore durante il salvataggio del documento SubPromise: " + e.getMessage());
             }
-            return newPromise.getIdentificativo(); // Restituisci l'ID del nuovo documento
+            return newPromise.get_id(); // Restituisci l'ID del nuovo documento
         }
     }
 }

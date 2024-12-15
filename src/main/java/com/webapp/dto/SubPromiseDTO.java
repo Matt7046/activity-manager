@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // Genera un costruttore con tutti i campi
 public class SubPromiseDTO {
 
-    private Long identificativo; // Identificatore unico
+    private String _id; // Identificatore unico
     private String  subTesto;
     private String nome;
 
