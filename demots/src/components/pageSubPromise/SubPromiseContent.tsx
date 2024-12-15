@@ -130,7 +130,8 @@ const SubPromiseContent: React.FC<any> = ({
           />
         </div>
 
-        <Grid container justifyContent="flex-end" spacing={2}>
+        <Grid container justifyContent="flex-end" spacing={2}
+          style={{ height: '30px'}} >
           <Grid item>
             <div
               className="col-button-container"
@@ -176,6 +177,8 @@ const SubPromiseContent: React.FC<any> = ({
         <div id={`rowHidden-${rowIndex}`} style={{ gridColumn: 'span 10', visibility: 'hidden' }}  >
           <Label _id={rowIndex} text={labelText} handleClick={() => handleClick()} />
         </div>
+        <hr className="custom-separator" /> {/* Stile con classe */}
+
 
 
       </div>

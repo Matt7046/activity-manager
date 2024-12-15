@@ -1,6 +1,4 @@
 import { observer } from 'mobx-react';
-import subPromiseStore from '../pageSubPromise/store/SubPromiseStore';
-
 
 const NomeDisplay = observer((props: {
   key: number;
@@ -8,10 +6,13 @@ const NomeDisplay = observer((props: {
   rowIndex: number; handleClick: () => void
   
 }) => {
-  return (
-    <h1 id={'displayer-' + props.rowIndex.toString()} onClick={props.handleClick}>
+ return ( 
+  <>
+    <h2 id={'displayer-' + props.rowIndex.toString()} onClick={props.handleClick}>
       {props.value} {/* Mostra il testo dallo store */}
-    </h1>
-  );
+    </h2>
+  </>
+);
+
 })
 export default NomeDisplay;
