@@ -112,7 +112,9 @@ const SubPromise: React.FC<any> = ({ }) => {
               visibility: visibiityButton ? 'visible' : 'hidden',
             }}
           >
-            <div className="col-button">
+            <div className="col-button"   style={{
+             paddingTop:'30px'
+            }}>
               <button
                 id="button-new"
                 className="button-blue"
