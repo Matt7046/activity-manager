@@ -51,7 +51,7 @@ const AboutContent: React.FC<any> = ({
 
 
 
-  function cancellaRecord(_id: any): void {
+  const cancellaRecord = (_id: any): void =>{
 
     deleteAboutById(_id).then((response) => {
       if (response.status === 'OK') {
@@ -71,7 +71,7 @@ const AboutContent: React.FC<any> = ({
 
 
 
-  function salvaRecord(_id: string): void {
+  const salvaRecord = (_id: string): void =>{
 
     const testo = {
       _id: _id,
