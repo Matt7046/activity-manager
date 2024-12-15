@@ -20,4 +20,9 @@ public interface SubPromiseRepository extends MongoRepository<SubPromise, String
 
     @Query(value = "{'identificativo': ?0}", delete = true)
         Long deleteByIdentificativo(Long id);
+
+
+        
+        
+       
 }
