@@ -20,7 +20,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
     public class SubPromise {
         @Id
         private String _id;
-        private Long identificativo; // Identificatore unico
         private String  subTesto;
         private String nome;
     

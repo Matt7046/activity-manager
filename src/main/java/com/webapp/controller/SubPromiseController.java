@@ -41,7 +41,7 @@ public class SubPromiseController {
     }
 
     @GetMapping("/{identificativo}")
-    public ResponseDTO findByIdentificativo(@PathVariable Long identificativo) {
+    public ResponseDTO findByIdentificativo(@PathVariable String identificativo) {
         SubPromise item = subPromiseService.findByIdentificativo(identificativo);
     //SubPromise item  = new SubPromise();
     SubPromiseDTO subDTO = SubPromiseMapper.INSTANCE.toDTO(item);

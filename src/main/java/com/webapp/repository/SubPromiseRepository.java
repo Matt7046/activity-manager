@@ -14,12 +14,12 @@ public interface SubPromiseRepository extends MongoRepository<SubPromise, String
     // Puoi aggiungere metodi personalizzati se necessario
      List<SubPromise>  findAll();
 
-     @Query("{'identificativo': ?0}")
-    SubPromise findByIdentificativo(Long id);
+     @Query("{'_id': ?0}")
+    SubPromise findByIdentificativo(String id);
 
 
-    @Query(value = "{'identificativo': ?0}", delete = true)
-        Long deleteByIdentificativo(Long id);
+    @Query(value = "{'_id': ?0}", delete = true)
+        Long deleteByIdentificativo(String id);
 
 
         

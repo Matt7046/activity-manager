@@ -11,11 +11,11 @@ public interface SubPromiseMapper {
     SubPromiseMapper INSTANCE = Mappers.getMapper(SubPromiseMapper.class);
 
     // Da Entity a DTO
-    SubPromiseDTO toDTO(SubPromise utente);
+    SubPromiseDTO toDTO(SubPromise subPromise);
     
 
     // Da DTO a Entity
-    SubPromise fromDTO(SubPromiseDTO dto);
+    SubPromise fromDTO(SubPromiseDTO subPromiseDto);
 }
 
 
