@@ -7,6 +7,7 @@ import { Grid } from '@mui/material';
 import { navigateRouting } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import Drawer from '../ACDrawer/Drawer';
+import Button, { Pulsante } from '../ACButton/Button';
 
 
 const SubPromise: React.FC<any> = ({ }) => {
@@ -96,47 +97,31 @@ const SubPromise: React.FC<any> = ({ }) => {
 
   }
 
+  const pulsanteBlue: Pulsante = {
+    icona: 'fas fa-plus',
+    funzione: () => navigateToFromAboutPage(), // Passi la funzione direttamente
+    nome: 'blue',
+    title: 'Nuovo documento'
+
+  };
+
   return (
     <>
       <div>
-        <Drawer sezioni={sezioni}  nameMenu='Menu' anchor='left'/>
+        <Drawer sezioni={sezioni} nameMenu='Menu' anchor='left' />
       </div>
       <div>
-      {Array.from({ length: rows }, (_, rowIndex) => (<SubPromiseContent
-        rowIndex={rowIndex}
-        key={rowIndex} // Chiave univoca per ogni elemento
-        visibiityButton={visibiityButton}
-      />
-      ))
-      }
-        </div>
+        {Array.from({ length: rows }, (_, rowIndex) => (<SubPromiseContent
+          rowIndex={rowIndex}
+          key={rowIndex} // Chiave univoca per ogni elemento
+          visibiityButton={visibiityButton}
+        />
+        ))
+        }
+      </div>
       <Grid container justifyContent="flex-end" spacing={2}>
         <Grid item>
-          <div
-            className="col-button-container"
-            style={{
-              gridColumn: 'span 2', // Unisce le colonne 11 e 12
-              display: 'flex', // Utilizza il grid per disporre i pulsanti
-              gridTemplateColumns: '2fr 1fr', // Due colonne uguali
-              gap: '12px', // Distanza tra i pulsanti
-              visibility: visibiityButton ? 'visible' : 'hidden',
-            }}
-          >
-            <div className="col-button" style={{
-              paddingTop: '30px'
-            }}>
-              <button
-                id="button-new"
-                className="button-blue"
-                title="Nuovo Record"  /* Tooltip nativo */
-
-                onClick={() => navigateToFromAboutPage()} >
-
-                <i className="fas fa-plus" ></i> {/* Icona */}
-                {/* Testo accanto all'icona */}
-              </button>
-            </div>
-          </div>
+          <Button pulsanti={[pulsanteBlue]} />
         </Grid>
       </Grid>
     </>
