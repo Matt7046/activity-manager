@@ -3,8 +3,8 @@ import SubPromiseContent from './SubPromiseContent';
 import { ascoltatore } from './SubPromiseFunc';
 import subPromiseStore from './store/SubPromiseStore';
 import { fetchDataPromise } from './service/SubPromiseService';
-import { Grid } from '@mui/material';
-import { navigateRouting } from '../../App';
+import { Box, Grid } from '@mui/material';
+import { navigateRouting, sezioni } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import Drawer from '../ACDrawer/Drawer';
 import Button, { Pulsante } from '../ACButton/Button';
@@ -19,10 +19,7 @@ const SubPromise: React.FC<any> = ({ }) => {
   const [response, setResponse] = useState<any>({}); // Stato iniziale vuoto
 
   const [visibiityButton, setVisibilityButton] = useState<boolean>(false); // Stato iniziale vuoto
-  const sezioni = [
-    ['Inbox', 'Starred', 'Send email', 'Drafts'],
-    ['All mail', 'Trash', 'Spam'],
-  ];
+  
 
   // default class SubPromise extends React.Component {
 
@@ -107,9 +104,19 @@ const SubPromise: React.FC<any> = ({ }) => {
 
   return (
     <>
-      <div>
-        <Drawer sezioni={sezioni} nameMenu='Menu' anchor='left' />
-      </div>
+   
+
+      <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
+        <Grid item>
+          <Drawer sezioni={sezioni} nameMenu='Menu' anchor='left' />
+        </Grid>
+      </Grid>
+      <Box sx={{ paddingLeft: 31, paddingRight: 5 }}>
+      <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
+         <Grid item>
+          <Button pulsanti={[pulsanteBlue]} />
+        </Grid>
+      </Grid>
       <div>
         {Array.from({ length: rows }, (_, rowIndex) => (<SubPromiseContent
           rowIndex={rowIndex}
@@ -119,11 +126,7 @@ const SubPromise: React.FC<any> = ({ }) => {
         ))
         }
       </div>
-      <Grid container justifyContent="flex-end" spacing={2}>
-        <Grid item>
-          <Button pulsanti={[pulsanteBlue]} />
-        </Grid>
-      </Grid>
+      </Box>
     </>
   );
 }

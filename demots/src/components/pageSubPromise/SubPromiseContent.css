@@ -50,7 +50,6 @@
 .label {
   width: 100%; /* Occupa il 100% della larghezza del contenitore */
   max-width: 100%; /* Garantisce che non superi la larghezza del contenitore */
-  padding-left: 17px;
 }
 
 .row-hidden {
@@ -78,7 +77,6 @@ h1 {
   white-space: nowrap; /* Evita che il testo vada a capo */
   overflow: hidden; /* Nasconde il testo che supera la larghezza */
   text-overflow: ellipsis; /* Mostra "..." se il testo è troppo lungo */
-  padding-left: 15px;
 }
 
 
