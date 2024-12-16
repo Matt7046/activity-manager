@@ -15,15 +15,20 @@ import { observer } from 'mobx-react';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
+export interface MenuLaterale {
+  funzione: any
+  testo: string
+
+}
 
 
 
 const Drawer = observer((props: {
   //key: number;
-  sezioni : string[][]; 
-  nameMenu : string;
-  anchor : Anchor;
-  route? : string;
+  sezioni: MenuLaterale[][];
+  nameMenu: string;
+  route?: string;
+  anchor: Anchor
 }) => {
 
   const [statoComponente, setStatoComponente] = React.useState({
@@ -32,23 +37,21 @@ const Drawer = observer((props: {
     bottom: false,
     right: false,
   });
+
+
   return (
     <div>
       {[props.anchor].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true, setStatoComponente, statoComponente)}>{props.nameMenu}
-
-
-
-            
           </Button>
           <SwipeableDrawer
             anchor={anchor}
             open={statoComponente[anchor]}
             onClose={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
-            onOpen={toggleDrawer(anchor, true ,setStatoComponente, statoComponente)}
+            onOpen={toggleDrawer(anchor, true, setStatoComponente, statoComponente)}
           >
-            {list1(anchor, props.sezioni,setStatoComponente, statoComponente)}
+            {listaItem(anchor, props.sezioni, setStatoComponente, statoComponente)}
           </SwipeableDrawer>
         </React.Fragment>
       ))}
@@ -75,11 +78,11 @@ const toggleDrawer =
 
 
 
-const list1 = (anchor: Anchor, sezioni: string[][],setStatoComponente: ((arg0: any) => void), statoComponente: any) => (
+const listaItem = (anchor: Anchor, sezioni: MenuLaterale[][], setStatoComponente: ((arg0: any) => void), statoComponente: any) => (
   <Box
     sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
     role="presentation"
-    onClick={toggleDrawer(anchor, false,setStatoComponente, statoComponente)}
+    onClick={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
     onKeyDown={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
   >
     <>
@@ -87,20 +90,29 @@ const list1 = (anchor: Anchor, sezioni: string[][],setStatoComponente: ((arg0: a
         <div key={sectionIndex}>
           <List>
             {section.map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
+              <ListItem key={text.testo} disablePadding>
+                <ListItemButton
+                  onClick={() => {
+                    if (text.funzione) {
+                      text.funzione(); // Chiama la funzione associata a questo elemento
+                    } else {
+                      console.warn(`Nessuna funzione definita per l'elemento: ${text.testo}`);
+                    }
+                  }}
+                >
                   <ListItemIcon>
                     {(sectionIndex * section.length + index) % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                   </ListItemIcon>
-                  <ListItemText primary={text} />
+                  <ListItemText primary={text.testo} />
                 </ListItemButton>
               </ListItem>
             ))}
           </List>
+
           {sectionIndex !== sezioni.length - 1 && <Divider />} {/* Divider tra le sezioni */}
         </div>
       ))}
-    </>  
+    </>
   </Box>
 );
 
