@@ -5,15 +5,17 @@ export interface Pulsante {
   icona: string
   nome :string
   funzione : any,
-  title: string
+  title: string,
+  visibility? : boolean
 }
 
 
 const Button = observer((props: {
   //key: number;
-  visibilityButton: boolean;
+  visibilityButton?: boolean;
   pulsanti :Pulsante[]
 }) => {
+  const visibilityButton = props.visibilityButton ? props.visibilityButton : true
   return (
     <div
       className="col-button-container"
@@ -22,7 +24,7 @@ const Button = observer((props: {
         display: 'flex',
         gridTemplateColumns: '2fr 1fr',
         gap: '12px',
-        visibility: props.visibilityButton ? 'visible' : 'hidden',
+        visibility: visibilityButton ? 'visible' : 'hidden',
       }}
     >
       {props.pulsanti.map((button, index) => (
@@ -32,7 +34,11 @@ const Button = observer((props: {
             className={button.nome === 'red' ? 'button-red' : 'button-blue'}
             title={button.title}
             onClick={() => button.funzione()}
+            style={{
+             visibility: button.visibility ===false ? 'hidden' :  'visible',
+            }}
           >
+
             <i className={button.icona}></i>
             {/* Testo accanto all'icona */}
           </button>
