@@ -1,4 +1,4 @@
-import { getData } from '../../general/AxiosService';
+import { getData } from "../../../general/AxiosService";
 
 export const fetchDataPromise = async (funzioneErrore?: any) => {
   try {
