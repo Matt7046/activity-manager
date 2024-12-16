@@ -9,9 +9,9 @@ import { navigateRouting, showError } from "../../App";
 import About from "../pageAbout/About";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import Button, { Pulsante } from "../../components/ACButton/Button";
-import NomeDisplay from "../../components/ACnomeDisplay/NomeDisplay";
-import handleClick from "../../components/AClabel/labelFunc";
-import Label from "../../components/AClabel/label";
+import NomeDisplay from "../../components/ACNomeDisplay/NomeDisplay";
+import handleClick from "../../components/ACLabel/labelFunc";
+import Label from "../../components/ACLabel/label";
 
 
 
