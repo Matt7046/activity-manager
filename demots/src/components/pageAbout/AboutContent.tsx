@@ -3,13 +3,13 @@ import "./About.css";
 import Label from "../AClabel/label";
 import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 import subPromiseStore from "../pageSubPromise/store/SubPromiseStore";
-import { navigateRouting, sezioni } from "../../App";
+import { navigateRouting, sezioniMenu, sezioniMenuIniziale } from "../../App";
 import TextField from '@mui/material/TextField';
 import { Alert, Box, Grid, Hidden, Snackbar } from "@mui/material";
 import { deleteAboutById, saveAboutById } from "./service/AboutService";
 import { DTOSubPromise } from "../dto/DTOSubPromise";
 import Button, { Pulsante } from "../ACButton/Button";
-import Drawer from "../ACDrawer/Drawer";
+import Drawer, { MenuLaterale } from "../ACDrawer/Drawer";
 
 
 
@@ -42,22 +42,11 @@ const AboutContent: React.FC<any> = ({
 
 
 
-  const navigateRoutingWithResetStore = (navigate: NavigateFunction, _id?: string) => {
-
-    // subPromiseStore.setAllTesto([]);
-    //  subPromiseStore.setTestoById(+_id!, '');
-    //   ascoltatore(response.testo.nome, "nome")
-    //   ascoltatore(response.testo.subTesto, "subTesto")
-    navigateRouting(navigate, '', {})
-  }
-
-
-
   const cancellaRecord = (_id: any): void => {
 
     deleteAboutById(_id).then((response) => {
       if (response.status === 'OK') {
-        navigateRoutingWithResetStore(navigate, _id)
+        navigateRouting(navigate, '', {})
         console.log('Dati ricevuti:', response);
       } else {
         setErrors(response.errors);
@@ -82,7 +71,7 @@ const AboutContent: React.FC<any> = ({
     }
     saveAboutById(_id, testo).then((response) => {
       if (response.testo) {
-        navigateRoutingWithResetStore(navigate, _id)
+        navigateRouting(navigate, '', {})
       }
     })
   }
@@ -103,14 +92,14 @@ const AboutContent: React.FC<any> = ({
     title: 'Salva'
 
   };
-
-
+ let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, ``, {}, 0);
+  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
   return (
     <>
       <div>
         <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
           <Grid item>
-            <Drawer sezioni={sezioni} nameMenu='Menu' anchor='left' />
+            <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left'/>
           </Grid>
           </Grid>
         <Box sx={{ paddingLeft: 31, paddingRight: 5 }}>
@@ -126,10 +115,6 @@ const AboutContent: React.FC<any> = ({
               -{errors}
             </Alert>
           </Snackbar>
-          <div id={`returnHome`} style={{ gridColumn: 'span 12', textAlign: 'left', paddingBottom: '50px' }}  >
-            <Label text='home' handleClick={() => navigateRoutingWithResetStore(navigate, _id)} _id='0' isUnderlined={true} />
-          </div>
-
           <div id={'text-box'}  >
             <TextField id="nome" label={testoOld.nome} variant="standard" value={nome} // Collega il valore allo stato
               onChange={handleChangeNome} // Aggiorna lo stato quando cambia
