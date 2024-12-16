@@ -3,10 +3,10 @@ import SubPromiseContent from './SubPromiseContent';
 import { ascoltatore } from './SubPromiseFunc';
 import subPromiseStore from './store/SubPromiseStore';
 import { fetchDataPromise } from './service/SubPromiseService';
-import { Box, Grid } from '@mui/material';
-import { navigateRouting, sezioni } from '../../App';
+import { Box, Grid, Menu } from '@mui/material';
+import { navigateRouting, sezioniMenu, sezioniMenuIniziale } from '../../App';
 import { useNavigate } from 'react-router-dom';
-import Drawer from '../ACDrawer/Drawer';
+import Drawer, { MenuLaterale } from '../ACDrawer/Drawer';
 import Button, { Pulsante } from '../ACButton/Button';
 
 
@@ -19,7 +19,7 @@ const SubPromise: React.FC<any> = ({ }) => {
   const [response, setResponse] = useState<any>({}); // Stato iniziale vuoto
 
   const [visibiityButton, setVisibilityButton] = useState<boolean>(false); // Stato iniziale vuoto
-  
+
 
   // default class SubPromise extends React.Component {
 
@@ -102,30 +102,36 @@ const SubPromise: React.FC<any> = ({ }) => {
 
   };
 
+  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, ``, {}, 0);
+  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
+
+
+
+
   return (
     <>
-   
+
 
       <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
         <Grid item>
-          <Drawer sezioni={sezioni} nameMenu='Menu' anchor='left' />
+          <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left' />
         </Grid>
       </Grid>
       <Box sx={{ paddingLeft: 31, paddingRight: 5 }}>
-      <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-         <Grid item>
-          <Button pulsanti={[pulsanteBlue]} />
+        <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
+          <Grid item>
+            <Button pulsanti={[pulsanteBlue]} />
+          </Grid>
         </Grid>
-      </Grid>
-      <div>
-        {Array.from({ length: rows }, (_, rowIndex) => (<SubPromiseContent
-          rowIndex={rowIndex}
-          key={rowIndex} // Chiave univoca per ogni elemento
-          visibiityButton={visibiityButton}
-        />
-        ))
-        }
-      </div>
+        <div>
+          {Array.from({ length: rows }, (_, rowIndex) => (<SubPromiseContent
+            rowIndex={rowIndex}
+            key={rowIndex} // Chiave univoca per ogni elemento
+            visibiityButton={visibiityButton}
+          />
+          ))
+          }
+        </div>
       </Box>
     </>
   );
