@@ -92,19 +92,17 @@ const AboutContent: React.FC<any> = ({
     title: 'Salva'
 
   };
- let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, ``, {}, 0);
+  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, ``, {}, 0);
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
   return (
     <>
       <div>
         <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
           <Grid item>
-            <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left'/>
+            <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
           </Grid>
-          </Grid>
-        <Box sx={{ paddingLeft: 31, paddingRight: 5 }}>
-
-
+        </Grid>
+        <Box sx={{ paddingLeft: 31, paddingRight: 5, marginTop: 4 }}>
           <Snackbar
             open={open}
             autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
@@ -115,42 +113,51 @@ const AboutContent: React.FC<any> = ({
               -{errors}
             </Alert>
           </Snackbar>
-          <div id={'text-box'}  >
-            <TextField id="nome" label={testoOld.nome} variant="standard" value={nome} // Collega il valore allo stato
-              onChange={handleChangeNome} // Aggiorna lo stato quando cambia
-            />
-          </div>
-          <div id={'text-box-sub-testo'} style={{ width: 'calc(100% - 50px)' }} >
-            <TextField id="subTesto" label={testoOld.subTesto} variant="standard" value={subTesto} // Collega il valore allo stato
-              onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia
-              fullWidth
-              multiline
-              rows={10}  // Numero di righe visibili per il campo
-              InputLabelProps={{
-                style: {
-                  whiteSpace: 'normal', // Permette al testo di andare a capo
-                  wordWrap: 'break-word', // Interrompe le parole lunghe
-                }
-              }}
-            />
-          </div>
-
-
+  
+          {/* Contenitore per i TextField */}
+          <Box sx={{ marginBottom: 4 }}>
+            <div id="text-box">
+              <TextField
+                id="nome"
+                label={testoOld.nome}
+                variant="standard"
+                value={nome} // Collega il valore allo stato
+                onChange={handleChangeNome} // Aggiorna lo stato quando cambia
+                fullWidth
+              />
+            </div>
+            <div id="text-box-sub-testo" style={{ marginTop: '16px' }}>
+              <TextField
+                id="subTesto"
+                label={testoOld.subTesto}
+                variant="standard"
+                value={subTesto} // Collega il valore allo stato
+                onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia
+                fullWidth
+                multiline
+                rows={10} // Numero di righe visibili per il campo
+                InputLabelProps={{
+                  style: {
+                    whiteSpace: 'normal', // Permette al testo di andare a capo
+                    wordWrap: 'break-word', // Interrompe le parole lunghe
+                  },
+                }}
+              />
+            </div>
+          </Box>
+  
+          {/* Pulsanti */}
           <Grid container justifyContent="flex-end" spacing={2}>
             <Grid item>
-              <div>
-                <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
-              </div>
-
+              <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
             </Grid>
-
           </Grid>
         </Box>
       </div>
     </>
   );
-};
-
+  
+}
 
 
 // Componente che visualizza il testo dallo store
