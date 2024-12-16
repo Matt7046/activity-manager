@@ -6,6 +6,7 @@ import { fetchDataPromise } from './service/SubPromiseService';
 import { Grid } from '@mui/material';
 import { navigateRouting } from '../../App';
 import { useNavigate } from 'react-router-dom';
+import Drawer from '../ACDrawer/Drawer';
 
 
 const SubPromise: React.FC<any> = ({ }) => {
@@ -17,6 +18,10 @@ const SubPromise: React.FC<any> = ({ }) => {
   const [response, setResponse] = useState<any>({}); // Stato iniziale vuoto
 
   const [visibiityButton, setVisibilityButton] = useState<boolean>(false); // Stato iniziale vuoto
+  const sezioni = [
+    ['Inbox', 'Starred', 'Send email', 'Drafts'],
+    ['All mail', 'Trash', 'Spam'],
+  ];
 
   // default class SubPromise extends React.Component {
 
@@ -86,13 +91,17 @@ const SubPromise: React.FC<any> = ({ }) => {
 
 
 
-  const  navigateToFromAboutPage= (): void =>{
+  const navigateToFromAboutPage = (): void => {
     navigateRouting(navigate, `about`, {})
 
   }
 
   return (
     <>
+      <div>
+        <Drawer sezioni={sezioni}  nameMenu='Menu' anchor='left'/>
+      </div>
+      <div>
       {Array.from({ length: rows }, (_, rowIndex) => (<SubPromiseContent
         rowIndex={rowIndex}
         key={rowIndex} // Chiave univoca per ogni elemento
@@ -100,6 +109,7 @@ const SubPromise: React.FC<any> = ({ }) => {
       />
       ))
       }
+        </div>
       <Grid container justifyContent="flex-end" spacing={2}>
         <Grid item>
           <div
@@ -112,8 +122,8 @@ const SubPromise: React.FC<any> = ({ }) => {
               visibility: visibiityButton ? 'visible' : 'hidden',
             }}
           >
-            <div className="col-button"   style={{
-             paddingTop:'30px'
+            <div className="col-button" style={{
+              paddingTop: '30px'
             }}>
               <button
                 id="button-new"
