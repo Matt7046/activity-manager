@@ -3,7 +3,7 @@ import "./About.css";
 import Label from "../AClabel/label";
 import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 import subPromiseStore from "../pageSubPromise/store/SubPromiseStore";
-import { navigateRouting, sezioniMenu, sezioniMenuIniziale } from "../../App";
+import { navigateRouting, sezioniMenu, sezioniMenuIniziale, showError } from "../../App";
 import TextField from '@mui/material/TextField';
 import { Alert, Box, Grid, Hidden, Snackbar } from "@mui/material";
 import { deleteAboutById, saveAboutById } from "./service/AboutService";
@@ -44,13 +44,15 @@ const AboutContent: React.FC<any> = ({
 
   const cancellaRecord = (_id: any): void => {
 
-    deleteAboutById(_id).then((response) => {
-      if (response.status === 'OK') {
-        navigateRouting(navigate, '', {})
-        console.log('Dati ricevuti:', response);
-      } else {
-        setErrors(response.errors);
-        setOpen(true);
+    deleteAboutById(_id, showError(setOpen, setErrors)).then((response) => {
+      if (response) {
+        if (response.status === 'OK') {
+          navigateRouting(navigate, '', {})
+          console.log('Dati ricevuti:', response);
+        } else {
+          setErrors(response.errors);
+          setOpen(true);
+        }
       }
     })
   }
@@ -69,8 +71,8 @@ const AboutContent: React.FC<any> = ({
       nome: nome,
       subTesto: subTesto
     }
-    saveAboutById(_id, testo).then((response) => {
-      if (response.testo) {
+    saveAboutById(_id, testo, showError(setOpen, setErrors)).then((response) => {
+      if (response?.testo) {
         navigateRouting(navigate, '', {})
       }
     })
@@ -113,7 +115,7 @@ const AboutContent: React.FC<any> = ({
               -{errors}
             </Alert>
           </Snackbar>
-  
+
           {/* Contenitore per i TextField */}
           <Box sx={{ marginBottom: 4 }}>
             <div id="text-box">
@@ -145,7 +147,7 @@ const AboutContent: React.FC<any> = ({
               />
             </div>
           </Box>
-  
+
           {/* Pulsanti */}
           <Grid container justifyContent="flex-end" spacing={2}>
             <Grid item>
@@ -156,7 +158,7 @@ const AboutContent: React.FC<any> = ({
       </div>
     </>
   );
-  
+
 }
 
 

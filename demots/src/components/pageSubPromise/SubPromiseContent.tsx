@@ -8,7 +8,7 @@ import { fetchDataPromiseById } from "./service/SubPromiseService";
 import NomeDisplay from "../ACnomeDisplay/NomeDisplay";
 import handleClick from "../AClabel/labelFunc";
 import { ascoltatore } from "./SubPromiseFunc";
-import { navigateRouting } from "../../App";
+import { navigateRouting, showError } from "../../App";
 import About from "../pageAbout/About";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import Button, { Pulsante } from "../ACButton/Button";
@@ -51,14 +51,16 @@ const SubPromiseContent: React.FC<any> = ({
 
   const handleClickMostraLabel = (rowIndex: number, _id: string) => {
 
-    return fetchDataPromiseById(_id).then((response) => {
-      //subPromiseStore.setTesto(rowIndex, response.testo.testo);
-      //  setLabelText(subPromiseStore.testo[rowIndex]);
+    return fetchDataPromiseById(_id , () => showError(setOpen,setErrors)).then((response) => {
+      if(response){
       const subTesto = response.testo.subTesto && response.testo.subTesto !== '' ? response.testo.subTesto : 'Nessun dato aggiuntivo';
       return ascoltatore(subTesto, "label-" + rowIndex.toString())
+      }
     })
 
   }
+
+  
 
 
 
@@ -81,7 +83,7 @@ const SubPromiseContent: React.FC<any> = ({
 
   const componentDidMount = (_id: string) => {
     // Effettua la chiamata GET quando il componente è montato
-    fetchDataPromiseById(_id)
+    fetchDataPromiseById(_id,  () =>showError(setOpen,setErrors))
       .then((response) => {
         if (response.status === 'OK') {
           subPromiseStore.setTestoById(_id, response.testo);

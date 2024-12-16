@@ -35,7 +35,7 @@ const Button = observer((props: {
             title={button.title}
             onClick={() => button.funzione()}
             style={{
-             visibility: button.visibility ===false ? 'hidden' :  'visible',
+             display: button.visibility ===false ? 'none' :  'block',
             }}
           >
 
