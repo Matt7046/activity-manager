@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import "./About.css";
-import Label from "../AClabel/label";
-import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import subPromiseStore from "../pageSubPromise/store/SubPromiseStore";
 import { navigateRouting, sezioniMenu, sezioniMenuIniziale, showError } from "../../App";
 import TextField from '@mui/material/TextField';
 import { Alert, Box, Grid, Hidden, Snackbar } from "@mui/material";
 import { deleteAboutById, saveAboutById } from "./service/AboutService";
-import { DTOSubPromise } from "../dto/DTOSubPromise";
-import Button, { Pulsante } from "../ACButton/Button";
-import Drawer, { MenuLaterale } from "../ACDrawer/Drawer";
+import { DTOSubPromise } from "../../dto/DTOSubPromise";
+import Drawer from "../../components/ACDrawer/Drawer";
+import Button, { Pulsante } from "../../components/ACButton/Button";
 
 
 
@@ -44,7 +43,7 @@ const AboutContent: React.FC<any> = ({
 
   const cancellaRecord = (_id: any): void => {
 
-    deleteAboutById(_id, showError(setOpen, setErrors)).then((response) => {
+    deleteAboutById(_id,() =>  showError(setOpen, setErrors)).then((response) => {
       if (response) {
         if (response.status === 'OK') {
           navigateRouting(navigate, '', {})
@@ -71,7 +70,7 @@ const AboutContent: React.FC<any> = ({
       nome: nome,
       subTesto: subTesto
     }
-    saveAboutById(_id, testo, showError(setOpen, setErrors)).then((response) => {
+    saveAboutById(_id, testo, () => showError(setOpen, setErrors)).then((response) => {
       if (response?.testo) {
         navigateRouting(navigate, '', {})
       }

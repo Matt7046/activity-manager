@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import BaseStore from '../../general/BaseStore';
+import BaseStore from '../../../general/BaseStore';
 
 export class AboutStore extends BaseStore {
   

@@ -1,10 +1,10 @@
 
 import './App.css';
-import SubPromise from "./components/pageSubPromise/SubPromise";
-import About from './components/pageAbout/About';
 import { BrowserRouter as Router, Route, Routes, Link, useNavigate, NavigateFunction } from 'react-router-dom'; // Importa i componenti necessari
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { MenuLaterale } from './components/ACDrawer/Drawer';
+import SubPromise from './page/pageSubPromise/SubPromise';
+import About from './page/pageAbout/About';
 
 // App.tsx
 

@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { observer } from "mobx-react";
 import subPromiseStore from "./store/SubPromiseStore";  // Importa lo store
 import "./SubPromiseContent.css";
-import Label from "../AClabel/label";
 import { useNavigate } from "react-router-dom";
 import { fetchDataPromiseById } from "./service/SubPromiseService";
-import NomeDisplay from "../ACnomeDisplay/NomeDisplay";
-import handleClick from "../AClabel/labelFunc";
 import { ascoltatore } from "./SubPromiseFunc";
 import { navigateRouting, showError } from "../../App";
 import About from "../pageAbout/About";
 import { Alert, Grid, Snackbar } from "@mui/material";
-import Button, { Pulsante } from "../ACButton/Button";
+import Button, { Pulsante } from "../../components/ACButton/Button";
+import NomeDisplay from "../../components/ACnomeDisplay/NomeDisplay";
+import handleClick from "../../components/AClabel/labelFunc";
+import Label from "../../components/AClabel/label";
 
 
 

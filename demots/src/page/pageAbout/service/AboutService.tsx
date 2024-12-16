@@ -1,4 +1,4 @@
-import { deleteData, getData, postData } from '../../general/AxiosService';
+import { deleteData, postData } from "../../../general/AxiosService";
 
 
 
@@ -31,5 +31,4 @@ export const saveAboutById = async (_id: string, about: any, funzioneErrore?: an
     }
   }
 };
-
 
