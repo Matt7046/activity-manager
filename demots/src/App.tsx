@@ -25,6 +25,16 @@ export const sezioniMenuIniziale: MenuLaterale[][] = [
   ],
 ];
 
+ export const showError = (setOpen:any, setError: any, errore?:string) => {
+  errore = errore ? errore : 'Il server non risponde';
+  setOpen(true);
+  setError(errore)
+  console.error(errore);
+
+
+  }
+
+
 export const sezioniMenu = (
   sezioni: MenuLaterale[][],
   navigate: NavigateFunction,

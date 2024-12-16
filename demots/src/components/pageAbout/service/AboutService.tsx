@@ -2,7 +2,7 @@ import { deleteData, getData, postData } from '../../general/AxiosService';
 
 
 
-export const deleteAboutById = async (_id: string) => {
+export const deleteAboutById = async (_id: string, funzioneErrore?:any) => {
   try {
     _id = _id ? _id : '-1';
     const path = `/about/${_id}`;
@@ -11,11 +11,14 @@ export const deleteAboutById = async (_id: string) => {
     return data;
   } catch (error) {
     console.error('Errore durante il recupero dei dati:', error);
+    if (funzioneErrore) {
+      funzioneErrore();
+    }
   }
 };
 
 
-export const saveAboutById = async (_id: string, about: any) => {
+export const saveAboutById = async (_id: string, about: any, funzioneErrore?: any) => {
   try {
     const path = `/about/dati`;
     const data = await postData(path, about); // Endpoint dell'API
@@ -23,6 +26,9 @@ export const saveAboutById = async (_id: string, about: any) => {
     return data;
   } catch (error) {
     console.error('Errore durante il recupero dei dati:', error);
+    if (funzioneErrore) {
+      funzioneErrore();
+    }
   }
 };
 
