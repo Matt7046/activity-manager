@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import subPromiseStore from "./store/SubPromiseStore";  // Importa lo store
 import "./SubPromiseContent.css";
 import Label from "../AClabel/label";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchDataPromiseById } from "./service/SubPromiseService";
 import NomeDisplay from "../ACnomeDisplay/NomeDisplay";
 import handleClick from "../AClabel/labelFunc";
@@ -11,6 +11,7 @@ import { ascoltatore } from "./SubPromiseFunc";
 import { navigateRouting } from "../../App";
 import About from "../pageAbout/About";
 import { Alert, Grid, Snackbar } from "@mui/material";
+import Button, { Pulsante } from "../ACButton/Button";
 
 
 
@@ -108,6 +109,22 @@ const SubPromiseContent: React.FC<any> = ({
     setOpen(false);
   };
 
+  const pulsanteRed: Pulsante = {
+    icona: 'fas fa-download',
+    funzione: () => toggleVisibility(rowIndex, _id), // Passi la funzione direttamente
+    nome: 'red',
+    title:'Carica sottotesto'
+  };
+  
+  const pulsanteBlue: Pulsante = {
+    icona: 'fas fa-eye',
+    funzione: () => openDetail(_id), // Passi la funzione direttamente
+    nome: 'blue',
+    title:'Apri dettaglio'
+
+  };
+  
+
   return (
     <>
       <div className={`row`}>
@@ -129,63 +146,21 @@ const SubPromiseContent: React.FC<any> = ({
             key={0}
           />
         </div>
-
         <Grid container justifyContent="flex-end" spacing={2}
           style={{ height: '30px' }} >
           <Grid item>
-            <div
-              className="col-button-container"
-              style={{
-                gridColumn: 'span 2', // Unisce le colonne 11 e 12
-                display: 'flex', // Utilizza il grid per disporre i pulsanti
-                gridTemplateColumns: '2fr 1fr', // Due colonne uguali
-                gap: '12px', // Distanza tra i pulsanti
-                visibility: visibiityButton ? 'visible' : 'hidden',
-              }}
-            >
-              <div className="col-button">
-                <button
-                  id="button-red"
-                  className="button-red"
-                  title="Carica sottotesto"  /* Tooltip nativo */
-
-                  onClick={() => toggleVisibility(rowIndex, _id)} >
-
-                  <i className="fas fa-download" ></i> {/* Icona */}
-                  {/* Testo accanto all'icona */}
-                </button>
-              </div>
-
-              <div className="col-button-link">
-                <button
-                  type="button"
-                  className="button-blue"
-                  id='button-blue'
-                  title="Vai alla pagina dei dettagli"  /* Tooltip nativo */
-
-                  onClick={() => openDetail(_id)}>
-                  <i className="fas fa-eye" ></i> {/* Icona */}
-                  {/* Testo accanto all'icona */}
-                </button>
-              </div>
+            <div>
+              <Button visibilityButton={visibiityButton} pulsanti={[pulsanteRed, pulsanteBlue]} />
             </div>
-
           </Grid>
-
         </Grid>
-
         <div id={`rowHidden-${rowIndex}`} style={{ gridColumn: 'span 10', visibility: 'hidden' }}  >
           <Label _id={rowIndex} text={labelText} handleClick={() => handleClick()} />
         </div>
         <hr className="custom-separator" /> {/* Stile con classe */}
-
-
-
       </div>
-
     </>
   );
-
 };
 
 
