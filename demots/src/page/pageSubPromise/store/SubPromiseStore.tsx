@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
-import BaseStore from '../../general/BaseStore';
-import { DTOSubPromise } from '../../dto/DTOSubPromise';
+import { DTOSubPromise } from '../../../dto/DTOSubPromise';
+import BaseStore from '../../../general/BaseStore';
 
 export class SubPromiseStore extends BaseStore {
   
