@@ -36,7 +36,12 @@ const Drawer = observer((props: {
     <div>
       {[props.anchor].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true, setStatoComponente, statoComponente)}>{props.nameMenu}</Button>
+          <Button onClick={toggleDrawer(anchor, true, setStatoComponente, statoComponente)}>{props.nameMenu}
+
+
+
+            
+          </Button>
           <SwipeableDrawer
             anchor={anchor}
             open={statoComponente[anchor]}

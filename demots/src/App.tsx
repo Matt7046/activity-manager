@@ -7,6 +7,10 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 // App.tsx
 
+export const sezioni = [
+  ['Inbox', 'Starred', 'Send email', 'Drafts'],
+  ['All mail', 'Trash', 'Spam'],
+];
 
 const App = () => {
   return (
