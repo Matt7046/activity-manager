@@ -8,10 +8,9 @@ import { ascoltatore } from "./SubPromiseFunc";
 import { navigateRouting, showError } from "../../App";
 import About from "../pageAbout/About";
 import { Alert, Grid, Snackbar } from "@mui/material";
-import Button, { Pulsante } from "../../components/ACButton/Button";
-import NomeDisplay from "../../components/ACNomeDisplay/NomeDisplay";
-import handleClick from "../../components/ACLabel/labelFunc";
-import Label from "../../components/ACLabel/label";
+import Button, { Pulsante } from "../../components/msButton/Button";
+import NomeDisplay from "../../components/msNomeDisplay/NomeDisplay";
+import Label from "../../components/msLabel/label";
 
 
 
@@ -126,6 +125,9 @@ const SubPromiseContent: React.FC<any> = ({
 
   };
   
+
+  function handleClick() {
+  }
 
   return (
     <>
