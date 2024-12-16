@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import { Alert, Grid, Hidden, Snackbar } from "@mui/material";
 import { deleteAboutById, saveAboutById } from "./service/AboutService";
 import { DTOSubPromise } from "../dto/DTOSubPromise";
+import Button, { Pulsante } from "../ACButton/Button";
 
 
 
@@ -85,6 +86,24 @@ const AboutContent: React.FC<any> = ({
     })
   }
 
+
+    const pulsanteRed: Pulsante = {
+      icona: 'fas fa-solid fa-trash',
+      funzione: () => cancellaRecord(_id), // Passi la funzione direttamente
+      nome: 'red',
+      title:'Elimina',
+      visibility: _id ? true : false
+    };
+    
+    const pulsanteBlue: Pulsante = {
+      icona: 'fas fa-solid fa-floppy-disk',
+      funzione: () => salvaRecord(_id), // Passi la funzione direttamente
+      nome: 'blue',
+      title:'Salva'
+  
+    };
+    
+
   return (
     <>
       <div>
@@ -125,41 +144,8 @@ const AboutContent: React.FC<any> = ({
 
         <Grid container justifyContent="flex-end" spacing={2} style={{ paddingTop : '17px' }}>
           <Grid item>
-            <div
-              className="col-button-container-top"
-              style={{
-                gridColumn: 'span 2', // Unisce le colonne 11 e 12
-                display: 'flex', // Utilizza il grid per disporre i pulsanti
-                gridTemplateColumns: '2fr 1fr', // Due colonne uguali
-                gap: '12px', // Distanza tra i pulsanti
-
-              }}
-            >
-              <div className="col-button" style={{ visibility: _id ? 'visible' : 'hidden' }}>
-                <button
-                  id="button-red"
-                  className="button-red"
-                  title="Elimina"  /* Tooltip nativo */
-
-                  onClick={() => cancellaRecord(_id)} >
-
-                  <i className="fas fa-solid fa-trash" ></i> {/* Icona */}
-                  {/* Testo accanto all'icona */}
-                </button>
-              </div>
-
-              <div className="col-button-link">
-                <button
-                  type="button"
-                  className="button-blue"
-                  id='button-blue'
-                  title="Salva"  /* Tooltip nativo */
-
-                  onClick={() => salvaRecord(_id)}>
-                  <i className="fas fa-solid fa-floppy-disk" ></i> {/* Icona */}
-                  {/* Testo accanto all'icona */}
-                </button>
-              </div>
+          <div>
+              <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
             </div>
 
           </Grid>
