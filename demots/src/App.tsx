@@ -2,7 +2,7 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Link, useNavigate, NavigateFunction } from 'react-router-dom'; // Importa i componenti necessari
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { MenuLaterale } from './components/msDrawer/Drawer';
+import { MenuLaterale } from './components/msdrawer/Drawer';
 import SubPromise from './page/pageSubPromise/SubPromise';
 import About from './page/pageAbout/About';
 

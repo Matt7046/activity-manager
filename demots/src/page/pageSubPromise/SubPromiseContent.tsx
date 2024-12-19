@@ -8,9 +8,9 @@ import { ascoltatore } from "./SubPromiseFunc";
 import { navigateRouting, showError } from "../../App";
 import About from "../pageAbout/About";
 import { Alert, Grid, Snackbar } from "@mui/material";
-import Button, { Pulsante } from "../../components/msButton/Button";
-import NomeDisplay from "../../components/msNomeDisplay/NomeDisplay";
-import Label from "../../components/msLabel/label";
+import Button, { Pulsante } from "../../components/msbutton/Button";
+import NomeDisplay from "../../components/msnomedisplay/NomeDisplay";
+import Label from "../../components/mslabel/label";
 
 
 
