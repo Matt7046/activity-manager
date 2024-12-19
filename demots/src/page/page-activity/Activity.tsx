@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import SubPromiseContent from './SubPromiseContent';
-import { ascoltatore } from './SubPromiseFunc';
-import subPromiseStore from './store/SubPromiseStore';
-import { fetchDataPromise } from './service/SubPromiseService';
+import ActivityContent from './ActivityContent';
+import { ascoltatore } from './ActivityFunc';
+import activityStore from './store/ActivityStore';
+import { fetchDataPromise } from './service/ActivityService';
 import { Box, Grid, Menu } from '@mui/material';
 import { navigateRouting, sezioniMenu, sezioniMenuIniziale } from '../../App';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,7 @@ import Button, { Pulsante } from '../../components/msbutton/Button';
 import Drawer from '../../components/msdrawer/Drawer';
 
 
-const SubPromise: React.FC<any> = ({ }) => {
+const Activity: React.FC<any> = ({ }) => {
 
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
@@ -21,7 +21,7 @@ const SubPromise: React.FC<any> = ({ }) => {
   const [visibiityButton, setVisibilityButton] = useState<boolean>(false); // Stato iniziale vuoto
 
 
-  // default class SubPromise extends React.Component {
+  // default class Activity extends React.Component {
 
   let hasFetchedData = false;
 
@@ -82,7 +82,7 @@ const SubPromise: React.FC<any> = ({ }) => {
 
 
   const setAllTesto = (response: any, dimension: number[]) => {
-    subPromiseStore.setAllTesto(response);
+    activityStore.setAllTesto(response);
     aggiornaDOMComponente(dimension.length, response);
 
   }
@@ -124,7 +124,7 @@ const SubPromise: React.FC<any> = ({ }) => {
           </Grid>
         </Grid>
         <div>
-          {Array.from({ length: rows }, (_, rowIndex) => (<SubPromiseContent
+          {Array.from({ length: rows }, (_, rowIndex) => (<ActivityContent
             rowIndex={rowIndex}
             key={rowIndex} // Chiave univoca per ogni elemento
             visibiityButton={visibiityButton}
@@ -136,17 +136,17 @@ const SubPromise: React.FC<any> = ({ }) => {
     </>
   );
 }
-export default SubPromise;
+export default Activity;
 
 
 
-export interface SubPromiseProps {
+export interface ActivityProps {
   nomeProps: string;
   children?: React.ReactNode;  // Aggiungi 'children' opzionale
 
 }
 
-export interface SubPromiseState {
+export interface ActivityState {
   nome: string; // Definisci lo stato per 'nome'
   testo: string;
 }
