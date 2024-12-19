@@ -4,9 +4,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webapp.dto.ResponseDTO;
-import com.webapp.dto.SubPromiseDTO;
-import com.webapp.mapper.SubPromiseMapper;
-import com.webapp.service.SubPromiseService;
+import com.webapp.dto.ActivityDTO;
+import com.webapp.mapper.ActivityMapper;
+import com.webapp.service.ActivityService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AboutController {
 
     @Autowired
-    private SubPromiseService subPromiseService;
+    private ActivityService ActivityService;
 
     @DeleteMapping("/{identificativo}")
     public ResponseDTO deleteByIdentificativo(@PathVariable String identificativo) {
@@ -35,16 +35,16 @@ public class AboutController {
         ResponseDTO responseDTO;
 
         try {
-            item = subPromiseService.deleteByIdentificativo(identificativo);
+            item = ActivityService.deleteByIdentificativo(identificativo);
             if (item.equals(0L)) {
                 throw new RuntimeException("Documento non trovato con identificativo: " + identificativo);
             }
-            // SubPromise item = new SubPromise();
+            // Activity item = new Activity();
 
         } catch (Exception e) {
             errori.add(e.getMessage());
         }
-        SubPromiseDTO subDTO = new SubPromiseDTO(); // Inizializza DTO vuoto
+        ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
         subDTO.set_id(identificativo);
         if (!item.equals(0L)) {
             // Mappatura se l'oggetto è stato trovato
@@ -58,10 +58,10 @@ public class AboutController {
     }
 
     @PostMapping("/dati")
-    public ResponseEntity<ResponseDTO> saveSubPromise(@RequestBody SubPromiseDTO subPromiseDTO) {
+    public ResponseEntity<ResponseDTO> saveActivity(@RequestBody ActivityDTO ActivityDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
-            String itemId = subPromiseService.saveSubPromise(subPromiseDTO);
+            String itemId = ActivityService.saveActivity(ActivityDTO);
 
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK, new ArrayList<>());
