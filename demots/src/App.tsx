@@ -1,10 +1,11 @@
 
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, Link, useNavigate, NavigateFunction } from 'react-router-dom'; // Importa i componenti necessari
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate, NavigateFunction, useLocation } from 'react-router-dom'; // Importa i componenti necessari
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { MenuLaterale } from './components/msdrawer/Drawer';
 import Activity from './page/page-activity/Activity';
 import About from './page/page-about/About';
+import { useEffect, useState } from 'react';
 
 // App.tsx
 
@@ -59,30 +60,30 @@ export const sezioniMenu = (
   return sezioni;
 };
 
-
 const App = () => {
+  const [title, setTitle] = useState('');  // Usa useState per gestire il titolo dinamico
+
+  const location = useLocation(); // Ottieni la posizione corrente
+  useEffect(() => {
+    // Cambia il titolo della pagina in base alla route
+    if (location.pathname === "/") {
+    setTitle("Home - Activity");  // Titolo per la home page
+    } else if (location.pathname === "/about") {
+      setTitle("About");  // Titolo per la pagina "About"
+    }
+    document.title = title
+  }, [location]);  // Il titolo si aggiorna ogni volta che cambia la route
+
   return (
-    <Router>
-      <div>
-        <h1>App1 con Routing</h1>
-        <nav>
-          <ul>
-           
-          </ul>
-        </nav>
-
-        <Routes>
-          <Route path="/" element={<Activity/>} /> {/* Rende il componente Home alla route '/' */}
-          <Route path="/about" element={<About/>} />
-          </Routes>
-      </div>
-    </Router>
+    <div>
+      <h1>{title}</h1>
+       <Routes>
+        <Route path="/" element={<Activity />} /> {/* Rende il componente Activity alla route '/' */}
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </div>
   );
-}
-
-
-
-
+};
 
 export default App;
 

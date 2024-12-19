@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { observer } from "mobx-react";
 import activityStore from "./store/ActivityStore";  // Importa lo store
 import "./ActivityContent.css";
 import { useNavigate } from "react-router-dom";
 import { fetchDataActivityById } from "./service/ActivityService";
 import { ascoltatore } from "./ActivityFunc";
 import { navigateRouting, showError } from "../../App";
-import About from "../page-about/About";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import NomeDisplay from "../../components/msnomedisplay/NomeDisplay";
