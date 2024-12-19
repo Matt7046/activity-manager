@@ -3,11 +3,11 @@ package com.webapp.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.webapp.data.SubPromise;
+import com.webapp.data.Activity;
 import com.webapp.dto.ResponseDTO;
-import com.webapp.dto.SubPromiseDTO;
-import com.webapp.mapper.SubPromiseMapper;
-import com.webapp.service.SubPromiseService;
+import com.webapp.dto.ActivityDTO;
+import com.webapp.mapper.ActivityMapper;
+import com.webapp.service.ActivityService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,22 +20,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping("api/subPromise")
+@RequestMapping("api/Activity")
 @CrossOrigin(origins = "http://localhost:3000")
-public class SubPromiseController {
+public class ActivityController {
 
     @Autowired
-    private SubPromiseService subPromiseService;
+    private ActivityService ActivityService;
 
     @GetMapping("")
     public ResponseDTO getTesto() {
 
         // String[] texts = { "Ciao, mondo!", "Benvenuto in Java", "Programmazione è
         // divertente" };
-        List<SubPromise> sub = subPromiseService.findAll();
+        List<Activity> sub = ActivityService.findAll();
         // mapping
-        List<SubPromiseDTO> subDTO = sub.stream()
-                .map(SubPromiseMapper.INSTANCE::toDTO)
+        List<ActivityDTO> subDTO = sub.stream()
+                .map(ActivityMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
 
         ResponseDTO response = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
@@ -45,12 +45,12 @@ public class SubPromiseController {
     @GetMapping("/{identificativo}")
     public ResponseDTO findByIdentificativo(@PathVariable String identificativo) {
         List<String> errori = new ArrayList<>();
-        SubPromise item = null; // Inizializza l'oggetto come null
+        Activity item = null; // Inizializza l'oggetto come null
         ResponseDTO responseDTO;
     
         try {
             // Tentativo di trovare il documento
-            item = subPromiseService.findByIdentificativo(identificativo);
+            item = ActivityService.findByIdentificativo(identificativo);
             if (item == null) {
                 throw new RuntimeException("Documento non trovato con identificativo: " + identificativo);
             }
@@ -61,11 +61,11 @@ public class SubPromiseController {
     
         if (item != null) {
             // Mappatura se l'oggetto è stato trovato
-            SubPromiseDTO subDTO = SubPromiseMapper.INSTANCE.toDTO(item);
+            ActivityDTO subDTO = ActivityMapper.INSTANCE.toDTO(item);
             responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
         } else {
             // Risposta in caso di errore o elemento non trovato
-            SubPromiseDTO subDTO = new SubPromiseDTO(); // Inizializza DTO vuoto
+            ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
             responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND, errori); // 404 con dettagli errore
         }
     

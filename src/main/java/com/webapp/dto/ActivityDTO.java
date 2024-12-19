@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data // Genera getter, setter, toString, equals e hashCode
 @NoArgsConstructor // Genera un costruttore senza argomenti
 @AllArgsConstructor // Genera un costruttore con tutti i campi
-public class SubPromiseDTO {
+public class ActivityDTO {
 
     private String _id; // Identificatore unico
     private String  subTesto;

@@ -8,14 +8,14 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import com.webapp.data.SubPromise;
+import com.webapp.data.Activity;
 
-public interface SubPromiseRepository extends MongoRepository<SubPromise, String>, SubPromiseCustomRepository {
+public interface ActivityRepository extends MongoRepository<Activity, String>, ActivityCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario
-     List<SubPromise>  findAll();
+     List<Activity>  findAll();
 
      @Query("{'_id': ?0}")
-    SubPromise findByIdentificativo(String id);
+    Activity findByIdentificativo(String id);
 
 
     @Query(value = "{'_id': ?0}", delete = true)
