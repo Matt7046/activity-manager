@@ -52,6 +52,9 @@
       "last 1 safari version"
     ]
   },
+  "proxyLocale": "http://localhost:8080",
+  "proxy": "https://webappbe.onrender.com/",
+
   "devDependencies": {
     "@eslint/js": "^9.16.0",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
