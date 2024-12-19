@@ -16,14 +16,10 @@ const GoogleAuthComponent = () => {
   const login = useGoogleLogin({
     onSuccess: (codeResponse: any) => {
       console.log('Login Success:', codeResponse);
-      setUser({
-        name: codeResponse.hd,
-        email: "user@simulated.com",
-        token: codeResponse.credential,
-      });
-      const accessToken = codeResponse?.credential;
+ 
+      const accessToken = codeResponse?.access_token;
       // Puoi usare l'access token per fare richieste all'API di Google
-     // fetchUserData(accessToken);
+      fetchUserData(accessToken);
 
     //  handleLoginSuccessFake(codeResponse);
     },
@@ -44,24 +40,34 @@ const GoogleAuthComponent = () => {
   // Funzione per ottenere i dati utente
   const fetchUserData = async (accessToken: string) => {
     try {
+      // Verifica che il token sia valido
+      const tokenInfoResponse = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`);
+      const tokenInfo = await tokenInfoResponse.json();
+      
+      if (tokenInfo.error) {
+        console.error('Token invalido:', tokenInfo.error);
+        return;
+      }
+  
+      // Se il token è valido, recupera i dati dell'utente
       const userDataResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-
+  
       if (userDataResponse.ok) {
         const userData = await userDataResponse.json();
         setUser(userData); // Salva i dati utente
+        console.log('User Data:', userData); // Logga i dati utente per il debug
       } else {
-        console.error('Failed to fetch user data');
+        console.error('Failed to fetch user data:', userDataResponse.status);
       }
     } catch (error) {
       console.error('Error fetching user data', error);
     }
   };
-
   // Funzione di logout
   const logOut = () => {
     setUser(null); // Resetta il profilo utente
