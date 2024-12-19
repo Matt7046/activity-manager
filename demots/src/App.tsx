@@ -1,13 +1,126 @@
-
 import './App.css';
-import { Route, Routes, NavigateFunction, useLocation } from 'react-router-dom'; // Importa i componenti necessari
+import { Route, Routes, NavigateFunction, useLocation } from 'react-router-dom'; 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { MenuLaterale } from './components/msdrawer/Drawer';
 import Activity from './page/page-activity/Activity';
 import About from './page/page-about/About';
 import { useEffect, useState } from 'react';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-// App.tsx
+import { GoogleOAuthProvider, GoogleLogin, googleLogout, useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
+
+// Componente di autenticazione
+const GoogleAuthComponent = () => {
+  const [user, setUser] = useState<any>(null);
+
+  // Configura useGoogleLogin
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse: any) => {
+      console.log('Login Success:', codeResponse);
+      setUser({
+        name: codeResponse.hd,
+        email: "user@simulated.com",
+        token: codeResponse.credential,
+      });
+      const accessToken = codeResponse?.credential;
+      // Puoi usare l'access token per fare richieste all'API di Google
+     // fetchUserData(accessToken);
+
+    //  handleLoginSuccessFake(codeResponse);
+    },
+    onError: (error) => {
+      console.error('Login Failed:', error);
+    },
+  });
+
+  const handleLoginSuccessFake = (fakeResponse: any) => {
+    setUser({
+      name: "Simulated User",
+      email: "user@simulated.com",
+      token: fakeResponse.credential,
+    });
+    console.log("Login simulato effettuato:", fakeResponse);
+  };
+
+  // Funzione per ottenere i dati utente
+  const fetchUserData = async (accessToken: string) => {
+    try {
+      const userDataResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (userDataResponse.ok) {
+        const userData = await userDataResponse.json();
+        setUser(userData); // Salva i dati utente
+      } else {
+        console.error('Failed to fetch user data');
+      }
+    } catch (error) {
+      console.error('Error fetching user data', error);
+    }
+  };
+
+  // Funzione di logout
+  const logOut = () => {
+    setUser(null); // Resetta il profilo utente
+  };
+
+  const [simulated, setSimulated] = useState(false);
+  const [title, setTitle] = useState("");
+
+  // Simulazione del login con Google
+  const simulateLogin = () => {
+    setSimulated(true);
+    const fakeResponse = {
+      credential: "fake-token-id",
+      clientId: "549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com",
+      select_by: "google",
+    };
+    handleLoginSuccessFake(fakeResponse);
+  };
+
+  return (
+    <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
+      <div>
+        <h1>
+          Login con Google ({user ? user.name : "Non autenticato"})
+        </h1>
+
+        {!user ? (
+          <div>
+            {/* Pulsante per simulare il login */}
+            <button onClick={simulateLogin}>Simula Login con Google</button>
+
+            {/* Pulsante di login reale */}
+            <GoogleLogin
+              onSuccess={(response) => login()} 
+              onError={logOut}
+            />
+          </div>
+        ) : (
+          <div>
+            <h1>{title}</h1>
+            <Routes>
+              <Route path="/" element={<Activity />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </div>
+        )}
+      </div>
+    </GoogleOAuthProvider>
+  );
+};
+
+// Componente principale, avvolto da GoogleOAuthProvider
+const App = () => (
+  <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
+    <GoogleAuthComponent />
+  </GoogleOAuthProvider>
+
+  
+);
 
 export const navigateRouting = (navigate: NavigateFunction, path: string, params: any) => {
   navigate(`/${path}`, { state: params }); // Passa i parametri come stato
@@ -60,88 +173,4 @@ export const sezioniMenu = (
   return sezioni;
 };
 
-
-
-const App = () => {
-  const [user, setUser] = useState(null);
-
-  // Funzione per simulare la login di Google con risposta ammessa
-  const simulateLogin = () => {
-    const fakeResponse = {
-      credential: "fake-token-id",  // Token fittizio per simulare il login
-      clientId: "YOUR_GOOGLE_CLIENT_ID",
-      select_by: "google", // Simula la selezione di Google
-    };
-
-    // Simula la risposta del login
-    handleLoginSuccess(fakeResponse);
-  };
-
-  const handleLoginSuccess = (response: any) => {
-    console.log("Simulated Login Success:", response);
-    // Imposta l'utente come se il login fosse riuscito
-    setUser({
-      name: "Simulated User",  // Puoi simulare anche i dettagli dell'utente
-      email: "user@simulated.com",
-      token: response.credential,  // Usa il token fittizio
-    } as any);
-  };
-
-  const handleLoginFailure = () => {
-    console.log("Login Failed:");
-  };
-  const [title, setTitle] = useState('');  // Usa useState per gestire il titolo dinamico
-
-
-  const location = useLocation(); // Ottieni la posizione corrente
-  useEffect(() => {
-    // Cambia il titolo della pagina in base alla route
-    if (location.pathname === "/") {
-      setTitle("Home - Activity");  // Titolo per la home page
-    } else if (location.pathname === "/about") {
-      setTitle("About");  // Titolo per la pagina "About"
-    }
-    document.title = title
-  }, [location]);  // Il titolo si aggiorna ogni volta che cambia la route
-
-
-
-  return (
-    <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-    <div>
-      <h1>Login con Google (Simulato)</h1>
-
-      {/* Se non c'è un utente loggato, mostra il pulsante di login */}
-      {!user ? (
-        <div>
-          {/* Pulsante per simulare il login */}
-          <button onClick={simulateLogin}>Simula Login con Google</button>
-
-          {/* Effettivo pulsante di login di Google */}
-          <GoogleLogin
-            onSuccess={handleLoginSuccess}
-            onError={handleLoginFailure} // La funzione onError ora non ha parametri
-          />
-        </div>
-      ) : (
-        <div>
-           <div>
-            <h1>{title}</h1>
-            <Routes>
-              <Route path="/" element={<Activity />} /> {/* Rende il componente Activity alla route '/' */}
-              <Route path="/about" element={<About />} />
-            </Routes>
-          </div>
-  
-        </div>
-      )}
-    </div>
-  </GoogleOAuthProvider>
-);
- 
-};
-
 export default App;
-
-
-
