@@ -7,7 +7,7 @@ export const myDisplayer = ((some: any, value: any) => {
 })
 
 const functionTestActivity = (state: ActivityState) => {
-    return new Activity<string>((resolve, reject) => {
+    return new Promise<string>((resolve, reject) => {
         try {
             resolve('ok');
         } catch (error) {
