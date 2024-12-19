@@ -3,8 +3,8 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes, Link, useNavigate, NavigateFunction } from 'react-router-dom'; // Importa i componenti necessari
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { MenuLaterale } from './components/msdrawer/Drawer';
-import SubPromise from './page/pageSubPromise/SubPromise';
-import About from './page/pageAbout/About';
+import Activity from './page/page-activity/Activity';
+import About from './page/page-about/About';
 
 // App.tsx
 
@@ -72,7 +72,7 @@ const App = () => {
         </nav>
 
         <Routes>
-          <Route path="/" element={<SubPromise/>} /> {/* Rende il componente Home alla route '/' */}
+          <Route path="/" element={<Activity/>} /> {/* Rende il componente Home alla route '/' */}
           <Route path="/about" element={<About/>} />
           </Routes>
       </div>
