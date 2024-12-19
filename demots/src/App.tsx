@@ -11,9 +11,20 @@ import axios from 'axios';
 
 // Componente principale, avvolto da GoogleOAuthProvider
 const App = () => (
+  <div
+      className="col-button-container"
+      style={{
+        gridColumn: 'span 2',
+        display: 'flex',
+        gridTemplateColumns: '2fr 1fr',
+        gap: '12px',
+        visibility: true ? 'visible' : 'hidden',
+      }}
+    >
   <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
     <GoogleAuthComponent />
   </GoogleOAuthProvider>
+  </div>
 
   
 );
