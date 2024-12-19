@@ -8,6 +8,15 @@ import { useEffect, useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin, googleLogout, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 
+
+// Componente principale, avvolto da GoogleOAuthProvider
+const App = () => (
+  <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
+    <GoogleAuthComponent />
+  </GoogleOAuthProvider>
+
+  
+);
 // Componente di autenticazione
 const GoogleAuthComponent = () => {
   const [user, setUser] = useState<any>(null);
@@ -119,14 +128,7 @@ const GoogleAuthComponent = () => {
   );
 };
 
-// Componente principale, avvolto da GoogleOAuthProvider
-const App = () => (
-  <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
-    <GoogleAuthComponent />
-  </GoogleOAuthProvider>
 
-  
-);
 
 export const navigateRouting = (navigate: NavigateFunction, path: string, params: any) => {
   navigate(`/${path}`, { state: params }); // Passa i parametri come stato
