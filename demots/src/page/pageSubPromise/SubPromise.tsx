@@ -6,8 +6,8 @@ import { fetchDataPromise } from './service/SubPromiseService';
 import { Box, Grid, Menu } from '@mui/material';
 import { navigateRouting, sezioniMenu, sezioniMenuIniziale } from '../../App';
 import { useNavigate } from 'react-router-dom';
-import Button, { Pulsante } from '../../components/msButton/Button';
-import Drawer from '../../components/msDrawer/Drawer';
+import Button, { Pulsante } from '../../components/msbutton/Button';
+import Drawer from '../../components/msdrawer/Drawer';
 
 
 const SubPromise: React.FC<any> = ({ }) => {
