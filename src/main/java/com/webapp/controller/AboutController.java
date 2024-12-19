@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("api/about")
-@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+@RequestMapping("api/activity")
+@CrossOrigin(origins = {"http://localhost:3000", "https://webapp-tn6q.onrender.com"})
 public class AboutController {
 
     @Autowired
