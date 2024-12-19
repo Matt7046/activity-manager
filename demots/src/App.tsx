@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Routes, NavigateFunction, useLocation } from 'react-router-dom'; 
+import { Route, Routes, NavigateFunction, useLocation } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { MenuLaterale } from './components/msdrawer/Drawer';
 import Activity from './page/page-activity/Activity';
@@ -11,22 +11,13 @@ import axios from 'axios';
 
 // Componente principale, avvolto da GoogleOAuthProvider
 const App = () => (
-  <div
-      className="col-button-container"
-      style={{
-        gridColumn: 'span 2',
-        display: 'flex',
-        gridTemplateColumns: '2fr 1fr',
-        gap: '12px',
-        visibility: true ? 'visible' : 'hidden',
-      }}
-    >
+
   <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
     <GoogleAuthComponent />
   </GoogleOAuthProvider>
-  </div>
 
-  
+
+
 );
 // Componente di autenticazione
 const GoogleAuthComponent = () => {
@@ -36,12 +27,12 @@ const GoogleAuthComponent = () => {
   const login = useGoogleLogin({
     onSuccess: (codeResponse: any) => {
       console.log('Login Success:', codeResponse);
- 
+
       const accessToken = codeResponse?.access_token;
       // Puoi usare l'access token per fare richieste all'API di Google
       fetchUserData(accessToken);
 
-    //  handleLoginSuccessFake(codeResponse);
+      //  handleLoginSuccessFake(codeResponse);
     },
     onError: (error) => {
       console.error('Login Failed:', error);
@@ -63,12 +54,12 @@ const GoogleAuthComponent = () => {
       // Verifica che il token sia valido
       const tokenInfoResponse = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`);
       const tokenInfo = await tokenInfoResponse.json();
-      
+
       if (tokenInfo.error) {
         console.error('Token invalido:', tokenInfo.error);
         return;
       }
-  
+
       // Se il token è valido, recupera i dati dell'utente
       const userDataResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
         method: 'GET',
@@ -76,7 +67,7 @@ const GoogleAuthComponent = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-  
+
       if (userDataResponse.ok) {
         const userData = await userDataResponse.json();
         setUser(userData); // Salva i dati utente
@@ -110,20 +101,32 @@ const GoogleAuthComponent = () => {
   return (
     <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
       <div>
+
         <h1>
           Login con Google ({user ? user.name : "Non autenticato"})
         </h1>
 
         {!user ? (
           <div>
-            {/* Pulsante per simulare il login */}
-            <button onClick={simulateLogin}>Simula Login con Google</button>
+            <div
+              className="col-button-container"
+              style={{
+                gridColumn: 'span 2',
+                display: 'flex',
+                gridTemplateColumns: '2fr 1fr',
+                gap: '12px',
+                visibility: true ? 'visible' : 'hidden',
+              }}
+            >
+              {/* Pulsante per simulare il login */}
+              <button onClick={simulateLogin}>Simula Login con Google</button>
 
-            {/* Pulsante di login reale */}
-            <GoogleLogin
-              onSuccess={(response) => login()} 
-              onError={logOut}
-            />
+              {/* Pulsante di login reale */}
+              <GoogleLogin
+                onSuccess={(response) => login()}
+                onError={logOut}
+              />
+            </div>
           </div>
         ) : (
           <div>
