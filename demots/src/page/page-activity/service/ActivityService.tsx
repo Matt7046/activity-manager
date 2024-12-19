@@ -2,7 +2,8 @@ import { getData } from "../../../general/AxiosService";
 
 export const fetchDataActivity = async (funzioneErrore?: any) => {
   try {
-    const data = await getData('/activity'); // Endpoint dell'API
+    const apiUrl = process.env.REACT_APP_API_URL; // Ottieni l'URL dal file .env
+    const data = await getData(`${apiUrl}/api/activity`); // Usa l'URL dinamico
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
@@ -11,14 +12,15 @@ export const fetchDataActivity = async (funzioneErrore?: any) => {
       funzioneErrore();
     }
   }
-}
-
+};
 
 
 export const fetchDataActivityById = async (_id: string, funzioneErrore?: any) => {
   try {
     _id = _id ? _id : '-1';
-    const path = `/activity/${_id}`;
+    const apiUrl = process.env.REACT_APP_API_URL; // Ottieni l'URL dal file .env
+
+    const path = `${apiUrl}/api/activity/${_id}`;
     const data = await getData(path); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
