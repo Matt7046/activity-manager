@@ -4,11 +4,11 @@ import "./ActivityContent.css";
 import { useNavigate } from "react-router-dom";
 import { fetchDataActivityById } from "./service/ActivityService";
 import { ascoltatore } from "./ActivityFunc";
-import { navigateRouting, showError } from "../../App";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import NomeDisplay from "../../components/msnomedisplay/NomeDisplay";
 import Label from "../../components/mslabel/label";
+import { navigateRouting, showError } from "../../App";
 
 
 
