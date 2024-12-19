@@ -1,4 +1,4 @@
-import { SubPromiseState } from "./SubPromise";
+import { ActivityState } from "./Activity";
 
 
 
@@ -6,7 +6,7 @@ export const myDisplayer = ((some: any, value: any) => {
     document.getElementById(some)!.innerHTML = value;
 })
 
-const functionTestPromise = (state: SubPromiseState) => {
+const functionTestPromise = (state: ActivityState) => {
     return new Promise<string>((resolve, reject) => {
         try {
             resolve('ok');

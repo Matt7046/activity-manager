@@ -14,8 +14,8 @@ export class AboutStore extends BaseStore {
     return this;
   }
 }
-const subPromiseStore = new AboutStore();
-export default subPromiseStore;
+const activityStore = new AboutStore();
+export default activityStore;
 
 
 

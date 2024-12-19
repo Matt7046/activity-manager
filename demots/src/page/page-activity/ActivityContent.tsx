@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import subPromiseStore from "./store/SubPromiseStore";  // Importa lo store
-import "./SubPromiseContent.css";
+import activityStore from "./store/ActivityStore";  // Importa lo store
+import "./ActivityContent.css";
 import { useNavigate } from "react-router-dom";
-import { fetchDataPromiseById } from "./service/SubPromiseService";
-import { ascoltatore } from "./SubPromiseFunc";
+import { fetchDataPromiseById } from "./service/ActivityService";
+import { ascoltatore } from "./ActivityFunc";
 import { navigateRouting, showError } from "../../App";
-import About from "../pageAbout/About";
+import About from "../page-about/About";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import NomeDisplay from "../../components/msnomedisplay/NomeDisplay";
@@ -14,7 +14,7 @@ import Label from "../../components/mslabel/label";
 
 
 
-const SubPromiseContent: React.FC<any> = ({
+const ActivityContent: React.FC<any> = ({
   rowIndex,
   visibiityButton // Proprietà opzionale per la sottolineatura
 
@@ -85,7 +85,7 @@ const SubPromiseContent: React.FC<any> = ({
     fetchDataPromiseById(_id,  () =>showError(setOpen,setErrors))
       .then((response) => {
         if (response.status === 'OK') {
-          subPromiseStore.setTestoById(_id, response.testo);
+          activityStore.setTestoById(_id, response.testo);
           //   ascoltatore(response.testo.nome, "nome")
           //   ascoltatore(response.testo.subTesto, "subTesto")
           navigateRouting(navigate, `about`, { _id })
@@ -101,8 +101,8 @@ const SubPromiseContent: React.FC<any> = ({
       });
   }
 
-  const valueNome = subPromiseStore.testo[rowIndex] ? subPromiseStore.testo[rowIndex].nome! : '';
-  const _id = subPromiseStore.testo[rowIndex] ? subPromiseStore.testo[rowIndex]._id! : '-1';
+  const valueNome = activityStore.testo[rowIndex] ? activityStore.testo[rowIndex].nome! : '';
+  const _id = activityStore.testo[rowIndex] ? activityStore.testo[rowIndex]._id! : '-1';
 
 
 
@@ -171,4 +171,4 @@ const SubPromiseContent: React.FC<any> = ({
 
 
 
-export default SubPromiseContent;
+export default ActivityContent;

@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react';
-import { DTOSubPromise } from '../../../dto/DTOSubPromise';
+import { DTOActivity } from '../../../dto/DTOActivity';
 import BaseStore from '../../../general/BaseStore';
 
-export class SubPromiseStore extends BaseStore {
+export class ActivityStore extends BaseStore {
   
 
-  testo : DTOSubPromise[]
+  testo : DTOActivity[]
 
   constructor() {
     super(); // Inizializza la classe base
@@ -43,8 +43,8 @@ export class SubPromiseStore extends BaseStore {
     return this;
   }
 }
-const subPromiseStore = new SubPromiseStore();
-export default subPromiseStore;
+const activityStore = new ActivityStore();
+export default activityStore;
 
 
 

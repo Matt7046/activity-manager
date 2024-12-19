@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "./About.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import subPromiseStore from "../pageSubPromise/store/SubPromiseStore";
+import activityStore from "../page-activity/store/ActivityStore";
 import { navigateRouting, sezioniMenu, sezioniMenuIniziale, showError } from "../../App";
 import TextField from '@mui/material/TextField';
 import { Alert, Box, Grid, Hidden, Snackbar } from "@mui/material";
 import { deleteAboutById, saveAboutById } from "./service/AboutService";
-import { DTOSubPromise } from "../../dto/DTOSubPromise";
+import { DTOActivity } from "../../dto/DTOActivity";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import Drawer from "../../components/msdrawer/Drawer";
 
@@ -22,15 +22,15 @@ const AboutContent: React.FC<any> = ({
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
 
-  let testoOld = subPromiseStore.testo.find((x) => _id === x._id);
-  testoOld = testoOld ? testoOld : new DTOSubPromise();
-  const [nome, setNome] = useState(subPromiseStore.testo.find((x) => _id === x._id)?.nome);
+  let testoOld = activityStore.testo.find((x) => _id === x._id);
+  testoOld = testoOld ? testoOld : new DTOActivity();
+  const [nome, setNome] = useState(activityStore.testo.find((x) => _id === x._id)?.nome);
 
   const handleChangeNome = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNome(event.target.value); // Aggiorna lo stato con il valore inserito
   };
 
-  const [subTesto, setSubTesto] = useState(subPromiseStore.testo.find((x) => _id === x._id)?.subTesto);
+  const [subTesto, setSubTesto] = useState(activityStore.testo.find((x) => _id === x._id)?.subTesto);
 
   const handleChangeSubTesto = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSubTesto(event.target.value); // Aggiorna lo stato con il valore inserito
