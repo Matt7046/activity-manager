@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ActivityContent from './ActivityContent';
 import { ascoltatore } from './ActivityFunc';
 import activityStore from './store/ActivityStore';
-import { fetchDataPromise } from './service/ActivityService';
+import { fetchDataActivity } from './service/ActivityService';
 import { Box, Grid, Menu } from '@mui/material';
 import { navigateRouting, sezioniMenu, sezioniMenuIniziale } from '../../App';
 import { useNavigate } from 'react-router-dom';
@@ -44,7 +44,7 @@ const Activity: React.FC<any> = ({ }) => {
       // Effettua la chiamata GET quando il componente è montato 
       // axios.
       //  .get('https://api.example.com/data') // URL dell'API]
-      fetchDataPromise()
+      fetchDataActivity()
         .then((response) => {
           if (response) {
             setResponse(response)

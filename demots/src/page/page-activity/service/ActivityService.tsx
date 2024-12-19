@@ -1,6 +1,6 @@
 import { getData } from "../../../general/AxiosService";
 
-export const fetchDataPromise = async (funzioneErrore?: any) => {
+export const fetchDataActivity = async (funzioneErrore?: any) => {
   try {
     const data = await getData('/activity'); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
@@ -15,7 +15,7 @@ export const fetchDataPromise = async (funzioneErrore?: any) => {
 
 
 
-export const fetchDataPromiseById = async (_id: string, funzioneErrore?: any) => {
+export const fetchDataActivityById = async (_id: string, funzioneErrore?: any) => {
   try {
     _id = _id ? _id : '-1';
     const path = `/activity/${_id}`;

@@ -14,27 +14,27 @@ public class ActivityCustomRepositoryImpl implements ActivityCustomRepository {
 
     public String saveActivity(ActivityDTO ActivityDTO) {
         // Verifica se esiste già un documento con l'identificativo
-        Activity existingPromise = null;
+        Activity existingActivity = null;
         if (ActivityDTO.get_id() != null) {
-            existingPromise = ActivityRepository.findByIdentificativo(ActivityDTO.get_id());
+            existingActivity = ActivityRepository.findByIdentificativo(ActivityDTO.get_id());
         }
 
-        if (existingPromise != null) {
+        if (existingActivity != null) {
             // Se esiste, aggiorna i campi
-            Activity newPromise = new Activity();
-            newPromise.set_id(existingPromise.get_id());
-            newPromise.setNome(ActivityDTO.getNome());
-            newPromise.setSubTesto(ActivityDTO.getSubTesto());
-            existingPromise = ActivityRepository.save(newPromise);
+            Activity newActivity = new Activity();
+            newActivity.set_id(existingActivity.get_id());
+            newActivity.setNome(ActivityDTO.getNome());
+            newActivity.setSubTesto(ActivityDTO.getSubTesto());
+            existingActivity = ActivityRepository.save(newActivity);
 
-            return existingPromise.get_id();// Restituisci l'ID aggiornato
+            return existingActivity.get_id();// Restituisci l'ID aggiornato
         } else {
             // Se non esiste, crea un nuovo documento
-            Activity newPromise = new Activity();
-            newPromise.setNome(ActivityDTO.getNome());
-            newPromise.setSubTesto(ActivityDTO.getSubTesto());
-            newPromise = ActivityRepository.save(newPromise);
-            return newPromise.get_id(); // Restituisci l'ID del nuovo documento
+            Activity newActivity = new Activity();
+            newActivity.setNome(ActivityDTO.getNome());
+            newActivity.setSubTesto(ActivityDTO.getSubTesto());
+            newActivity = ActivityRepository.save(newActivity);
+            return newActivity.get_id(); // Restituisci l'ID del nuovo documento
         }
     }
 }
