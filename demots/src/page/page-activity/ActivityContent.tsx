@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import activityStore from "./store/ActivityStore";  // Importa lo store
 import "./ActivityContent.css";
 import { useNavigate } from "react-router-dom";
-import { fetchDataPromiseById } from "./service/ActivityService";
+import { fetchDataActivityById } from "./service/ActivityService";
 import { ascoltatore } from "./ActivityFunc";
 import { navigateRouting, showError } from "../../App";
 import About from "../page-about/About";
@@ -50,7 +50,7 @@ const ActivityContent: React.FC<any> = ({
 
   const handleClickMostraLabel = (rowIndex: number, _id: string) => {
 
-    return fetchDataPromiseById(_id , () => showError(setOpen,setErrors)).then((response) => {
+    return fetchDataActivityById(_id , () => showError(setOpen,setErrors)).then((response) => {
       if(response){
       const subTesto = response.testo.subTesto && response.testo.subTesto !== '' ? response.testo.subTesto : 'Nessun dato aggiuntivo';
       return ascoltatore(subTesto, "label-" + rowIndex.toString())
@@ -82,7 +82,7 @@ const ActivityContent: React.FC<any> = ({
 
   const componentDidMount = (_id: string) => {
     // Effettua la chiamata GET quando il componente è montato
-    fetchDataPromiseById(_id,  () =>showError(setOpen,setErrors))
+    fetchDataActivityById(_id,  () =>showError(setOpen,setErrors))
       .then((response) => {
         if (response.status === 'OK') {
           activityStore.setTestoById(_id, response.testo);

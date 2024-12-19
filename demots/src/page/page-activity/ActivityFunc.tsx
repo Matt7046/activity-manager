@@ -6,8 +6,8 @@ export const myDisplayer = ((some: any, value: any) => {
     document.getElementById(some)!.innerHTML = value;
 })
 
-const functionTestPromise = (state: ActivityState) => {
-    return new Promise<string>((resolve, reject) => {
+const functionTestActivity = (state: ActivityState) => {
+    return new Activity<string>((resolve, reject) => {
         try {
             resolve('ok');
         } catch (error) {
@@ -19,7 +19,7 @@ const functionTestPromise = (state: ActivityState) => {
 
 
 export const ascoltatore = (valueStore: any, p0: string) => {
-    return functionTestPromise(valueStore)
+    return functionTestActivity(valueStore)
         .then((value: any) => {
             console.log("Il valore dello store è ", valueStore)
             myDisplayer(p0, valueStore);
