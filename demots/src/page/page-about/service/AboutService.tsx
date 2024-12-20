@@ -7,7 +7,7 @@ export const deleteAboutById = async (_id: string, funzioneErrore?:any) => {
     _id = _id ? _id : '-1';
     const apiUrl = process.env.REACT_APP_API_URL; // Ottieni l'URL dal file .env
 
-    const path = `${apiUrl}/api/about/${_id}`;
+    const path = `about/${_id}`;
     const data = await deleteData(path); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
@@ -24,7 +24,7 @@ export const saveAboutById = async (_id: string, about: any, funzioneErrore?: an
   try {
     const apiUrl = process.env.REACT_APP_API_URL; // Ottieni l'URL dal file .env
 
-    const path = `${apiUrl}/api/about/dati`;
+    const path = `about/dati`;
     const data = await postData(path, about); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;

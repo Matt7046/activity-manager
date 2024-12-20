@@ -4,8 +4,27 @@ rem Attendi 5 secondi prima di avviare il comando "npm start"
 timeout /t 5 /nobreak > nul
 start cmd /c "cd ..\demots && npm start"
 
-rem Avvia l'applicazione Java in un'altra console
-start cmd /c "java -jar webApp-0.0.1-SNAPSHOT.jar"
+rem Elimina il file webApp-0.0.1-SNAPSHOT.jar se esiste
+cd ..\jar
+if exist webApp-0.0.1-SNAPSHOT.jar (
+    del webApp-0.0.1-SNAPSHOT.jar
+    echo File webApp-0.0.1-SNAPSHOT.jar eliminato.
+) else (
+    echo File webApp-0.0.1-SNAPSHOT.jar non trovato.
+)
 
-rem Mantieni aperta la finestra principale (opzionale)
+rem Torna alla directory principale e esegui mvn clean package
+cd ..\
+call mvn clean package
+if %errorlevel% neq 0 (
+    echo Errore durante mvn clean package
+    pause
+    exit /b %errorlevel%
+)
+
+echo "mvn clean package completato"
+cd .\jar
+java -jar webApp-0.0.1-SNAPSHOT.jar
+
 pause
+
