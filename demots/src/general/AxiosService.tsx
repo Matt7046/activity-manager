@@ -1,8 +1,9 @@
 import axios from 'axios';
+const apiUrl = process.env.REACT_APP_API_URL ; // Ottieni l'URL dal file .env
 
 // Configura l'istanza di Axios
 const apiClient = axios.create({
-  baseURL: '/api', // URL base dell'API
+  baseURL: apiUrl, // URL base dell'API
   timeout: 5000,                     // Timeout in millisecondi
   headers: {
     'Content-Type': 'application/json', // Header predefinito
