@@ -2,8 +2,10 @@ import { getData } from "../../../general/AxiosService";
 
 export const fetchDataActivity = async (funzioneErrore?: any) => {
   try {
-    const apiUrl = process.env.REACT_APP_API_URL; // Ottieni l'URL dal file .env
-    const data = await getData(`${apiUrl}/api/activity`); // Usa l'URL dinamico
+    const apiUrl = process.env.REACT_APP_API_URL_LOCALE ; // Ottieni l'URL dal file .env
+    //const apiUrl = process.env.REACT_APP_API_URL // Ottieni l'URL dal file .env
+
+    const data = await getData(`${apiUrl}/activity`); // Usa l'URL dinamico
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
