@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = {"https://webapp-tn6q.onrender.com"})
 @RequestMapping("api/activity")
 public class ActivityController {
 
