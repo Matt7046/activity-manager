@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Configura l'istanza di Axios
 const apiClient = axios.create({
-  baseURL: '/api', // URL base dell'API
+  baseURL: '', // URL base dell'API
   timeout: 5000,                     // Timeout in millisecondi
   headers: {
     'Content-Type': 'application/json', // Header predefinito
