@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
+@CrossOrigin(origins = {"https://webapp-tn6q.onrender.com"})
 @RequestMapping("api/activity")
-@CrossOrigin(origins = {"http://localhost:3000", "https://webapp-tn6q.onrender.com"})
 public class ActivityController {
 
     @Autowired
