@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("api/activity")
-@CrossOrigin(origins = {"http://localhost:3000", "https://webapp-tn6q.onrender.com"})
 public class ActivityController {
 
     @Autowired
