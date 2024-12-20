@@ -49,15 +49,13 @@
         <!-- MapStruct for object mapping -->
         <dependency>
             <groupId>org.mapstruct</groupId>
-			    <version>1.5.5.Final</version>
-
             <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
-			    <version>1.5.5.Final</version>
-
             <artifactId>mapstruct-processor</artifactId>
+            <version>1.5.5.Final</version>
             <scope>provided</scope>
         </dependency>
 
@@ -74,7 +72,32 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!-- Plugin per copiare il file .jar -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/../jar</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>*.jar</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
-
