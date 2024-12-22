@@ -8,15 +8,19 @@ interface cardProps {
   text: string;
   title: string;
   img: string;
-  pulsanti:Pulsante[];
+  pulsanti: Pulsante[];
   className?: string;
   handleClick?: () => void;
 }
 
-const card = observer((props: cardProps) => {
-
+const CardComponent = observer((props: cardProps) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card 
+      sx={{ 
+        maxWidth: 345,      
+        height: '100%' 
+      }}
+    >
       <CardMedia
         sx={{ height: 140 }}
         image={props.img}
@@ -24,25 +28,33 @@ const card = observer((props: cardProps) => {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          Lizard
+          {props.title}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           {props.text}
         </Typography>
       </CardContent>
       <CardActions>
-      <Grid container justifyContent="flex-end" spacing={2}>
-            <Grid item>
-              <Button pulsanti={props.pulsanti} />
-            </Grid>
+        <Grid container justifyContent="flex-end" spacing={2}>
+          <Grid item>
+            <Button pulsanti={props.pulsanti} />
           </Grid>
+        </Grid>
       </CardActions>
     </Card>
-  )
+  );
 });
 
-export default card;
+const CardGrid = ({ cardsData }: { cardsData: cardProps[] }) => {
+  return (
+    <Grid container spacing={2} alignItems="stretch">
+      {cardsData.map((cardData) => (
+        <Grid item xs={12} sm={6} md={4} lg={3} key={cardData._id}>
+          <CardComponent {...cardData} />
+        </Grid>
+      ))}
+    </Grid>
+  );
+};
 
-
-
-
+export default CardGrid;
