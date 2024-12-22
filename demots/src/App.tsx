@@ -77,7 +77,7 @@ const GoogleAuthComponent = () => {
         const userData = await userDataResponse.json();
         setUser(userData); // Salva i dati utente
         console.log('User Data:', userData); // Logga i dati utente per il debug
-        navigateRouting(useNavigate(), `activity`, {})
+        navigateRouting(navigate, `activity`, {})
 
       } else {
         console.error('Failed to fetch user data:', userDataResponse.status);
