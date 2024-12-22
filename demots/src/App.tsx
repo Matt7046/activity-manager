@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Routes, NavigateFunction, useLocation } from 'react-router-dom';
+import { Route, Routes, NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { MenuLaterale } from './components/msdrawer/Drawer';
 import Activity from './page/page-activity/Activity';
@@ -11,6 +11,7 @@ import axios from 'axios';
 
 // Componente principale, avvolto da GoogleOAuthProvider
 const App = () => (
+  
 
   <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
     <GoogleAuthComponent />
@@ -19,9 +20,12 @@ const App = () => (
 
 
 );
+
 // Componente di autenticazione
 const GoogleAuthComponent = () => {
   const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
+
 
   // Configura useGoogleLogin
   const login = useGoogleLogin({
@@ -46,6 +50,7 @@ const GoogleAuthComponent = () => {
       token: fakeResponse.credential,
     });
     console.log("Login simulato effettuato:", fakeResponse);
+    navigateRouting(navigate, `activity`, {})
   };
 
   // Funzione per ottenere i dati utente
@@ -72,6 +77,8 @@ const GoogleAuthComponent = () => {
         const userData = await userDataResponse.json();
         setUser(userData); // Salva i dati utente
         console.log('User Data:', userData); // Logga i dati utente per il debug
+        navigateRouting(useNavigate(), `activity`, {})
+
       } else {
         console.error('Failed to fetch user data:', userDataResponse.status);
       }
@@ -132,7 +139,7 @@ const GoogleAuthComponent = () => {
           <div>
             <h1>{title}</h1>
             <Routes>
-              <Route path="/" element={<Activity />} />
+              <Route path="/activity" element={<Activity />} />
               <Route path="/about" element={<About />} />
             </Routes>
           </div>
@@ -149,7 +156,7 @@ export const navigateRouting = (navigate: NavigateFunction, path: string, params
 };
 export const sezioniMenuIniziale: MenuLaterale[][] = [
   [
-    { funzione: null, testo: 'Home' },
+    { funzione: null, testo: 'Activity' },
     { funzione: null, testo: 'About' },
     { funzione: null, testo: 'Send email' },
     { funzione: null, testo: 'Drafts' },

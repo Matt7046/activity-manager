@@ -1,13 +1,5 @@
 package com.webapp.repository;
 
-
-
-
-import java.util.List;
-
-import org.springframework.data.mongodb.repository.Query;
-
-import com.webapp.data.Activity;
 import com.webapp.dto.ActivityDTO;
 
 public interface ActivityCustomRepository {
