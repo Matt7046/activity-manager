@@ -29,6 +29,7 @@ const PointsContent: React.FC<any> = ({
   const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
   const [testo, setTesto] = useState('I Points a disposizione sono: ')
   const [testoLog, setTestoLog] = useState('Non ci sono attività svolte recentemente per questo utente, puoi rimediare dalla sezione Operative e dedicarti ad una attività')
+  //const [testoLog, setTestoLog] = useState('[\"Punto uno\", \"Punto due\", \"Punto tre\"]')
 
 
   const getUser =(email: any): void => {

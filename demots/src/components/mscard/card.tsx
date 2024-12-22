@@ -1,11 +1,10 @@
-import { Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { Card as MuiCard, CardActions, CardContent, CardMedia, Grid, Typography, List, ListItem } from '@mui/material';
 import { observer } from 'mobx-react';
 import Button, { Pulsante } from '../msbutton/Button';
 
-
 interface cardProps {
   _id: string;
-  text: string;
+  text: string; // Può essere un array JSON serializzato o una stringa delimitata
   title: string;
   img: string;
   pulsanti: Pulsante[];
@@ -14,11 +13,23 @@ interface cardProps {
 }
 
 const CardComponent = observer((props: cardProps) => {
+  let parsedText: string[] = [];
+
+  // Parsing del testo in array
+  try {
+    parsedText = JSON.parse(props.text); // Tenta di interpretare il testo come JSON
+  } catch {
+    parsedText = props.text.includes('|') ? props.text.split('|') : [props.text]; // Fallback per stringhe delimitate o singole
+  }
+
   return (
-    <Card 
-      sx={{ 
-        maxWidth: 345,      
-        height: '100%' 
+    <MuiCard
+      sx={{
+        maxWidth: 345,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: '100%', // Allinea l'altezza delle card
       }}
     >
       <CardMedia
@@ -26,13 +37,24 @@ const CardComponent = observer((props: cardProps) => {
         image={props.img}
         title={props.title}
       />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+      <CardContent sx={{ flexGrow: 1 }}>
+        <Typography gutterBottom variant="h5" component="div" sx={{ minHeight: 56 }}>
           {props.title}
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {props.text}
-        </Typography>
+        {/* Render condizionale del contenuto */}
+        {parsedText.length > 1 ? (
+          <List>
+            {parsedText.map((item, index) => (
+              <ListItem key={index} sx={{ padding: 0 }}>
+                - {item}
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {props.text}
+          </Typography>
+        )}
       </CardContent>
       <CardActions>
         <Grid container justifyContent="flex-end" spacing={2}>
@@ -41,7 +63,7 @@ const CardComponent = observer((props: cardProps) => {
           </Grid>
         </Grid>
       </CardActions>
-    </Card>
+    </MuiCard>
   );
 });
 
@@ -58,3 +80,4 @@ const CardGrid = ({ cardsData }: { cardsData: cardProps[] }) => {
 };
 
 export default CardGrid;
+
