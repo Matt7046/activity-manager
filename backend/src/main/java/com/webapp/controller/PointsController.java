@@ -4,8 +4,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webapp.dto.ResponseDTO;
+import com.webapp.mapper.ActivityMapper;
+import com.webapp.mapper.PointsMapper;
+import com.webapp.data.Activity;
+import com.webapp.data.Points;
 import com.webapp.dto.ActivityDTO;
+import com.webapp.dto.PointsDTO;
 import com.webapp.service.ActivityService;
+import com.webapp.service.PointsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,52 +21,55 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 
-@RequestMapping("api/about")
-public class AboutController {
+@RequestMapping("api/points")
+public class PointsController {
 
     @Autowired
-    private ActivityService ActivityService;
-
-    @DeleteMapping("/{identificativo}")
-    public ResponseDTO deleteByIdentificativo(@PathVariable String identificativo) {
-        Long item = null;
+    private PointsService pointsService;
+    
+    @PostMapping("")
+    public ResponseDTO findByEmail(@RequestBody PointsDTO pointsDTO) {
         List<String> errori = new ArrayList<>();
+        Points item = null; // Inizializza l'oggetto come null
         ResponseDTO responseDTO;
-
+    
         try {
-            item = ActivityService.deleteByIdentificativo(identificativo);
-            if (item.equals(0L)) {
-                throw new RuntimeException("Documento non trovato con identificativo: " + identificativo);
+            // Tentativo di trovare il documento
+            item = pointsService.findByEmail(pointsDTO.getEmail());
+            if (item == null) {
+                throw new RuntimeException("Documento non trovato con identificativo: " + pointsDTO.getEmail());
             }
-            // Activity item = new Activity();
-
         } catch (Exception e) {
-            errori.add(e.getMessage());
+            // Gestione dell'errore: log e aggiunta dei dettagli
+            errori.add("Errore: " + e.getMessage());
         }
-        ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
-        subDTO.set_id(identificativo);
-        if (item !=null && !item.equals(0L)) {
+    
+        if (item != null) {
             // Mappatura se l'oggetto è stato trovato
+            PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(item);
+            subDTO.setNumeroPunti("I Points a disposizione sono: ".concat(subDTO.getPoints().toString()) );
             responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
         } else {
             // Risposta in caso di errore o elemento non trovato
+            ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
             responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND, errori); // 404 con dettagli errore
         }
+    
         return responseDTO;
-
     }
-
+    
     @PostMapping("/dati")
-    public ResponseEntity<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {
+    public ResponseEntity<ResponseDTO> savePoints(@RequestBody PointsDTO pointsDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
-            String itemId = ActivityService.saveActivity(activityDTO);
+            String itemId = pointsService.savePoints(pointsDTO);
 
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK, new ArrayList<>());

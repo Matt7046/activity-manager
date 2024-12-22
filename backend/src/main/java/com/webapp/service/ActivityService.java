@@ -5,37 +5,37 @@ import org.springframework.stereotype.Service;
 import com.webapp.data.Activity;
 import com.webapp.dto.ActivityDTO;
 import com.webapp.mapper.ActivityMapper;
-import com.webapp.repository.ActivityRepository;
+import com.webapp.repository.Activity.ActivityRepository;
 
 import java.util.List;
 
 @Service
 public class ActivityService {
     @Autowired
-    private ActivityRepository ActivityRepository;
+    private ActivityRepository activityRepository;
 
 
     public List<Activity> findAll() {
-        return ActivityRepository.findAll();
+        return activityRepository.findAll();
     }
 
     public Activity findByIdentificativo(String identificativo)  {
 
-        return ActivityRepository.findByIdentificativo(identificativo);
+        return activityRepository.findByIdentificativo(identificativo);
     }
 
     public Long deleteByIdentificativo(String identificativo) {
 
-        return ActivityRepository.deleteByIdentificativo(identificativo);
+        return activityRepository.deleteByIdentificativo(identificativo);
     }
 
     public String saveActivity(ActivityDTO ActivityDTO) {
-        return ActivityRepository.saveActivity(ActivityDTO);       
+        return activityRepository.saveActivity(ActivityDTO);       
     }
 
     public Activity save(ActivityDTO ActivityDTO) {
             Activity subDTO = ActivityMapper.INSTANCE.fromDTO(ActivityDTO);
 
-        return ActivityRepository.save(subDTO);
+        return activityRepository.save(subDTO);
     }
 }
