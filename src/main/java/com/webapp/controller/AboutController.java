@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.webapp.dto.ResponseDTO;
 import com.webapp.dto.ActivityDTO;
-import com.webapp.mapper.ActivityMapper;
 import com.webapp.service.ActivityService;
 
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public class AboutController {
         }
         ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
         subDTO.set_id(identificativo);
-        if (!item.equals(0L)) {
+        if (item !=null && !item.equals(0L)) {
             // Mappatura se l'oggetto è stato trovato
             responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
         } else {

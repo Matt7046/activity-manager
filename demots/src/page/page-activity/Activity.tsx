@@ -102,7 +102,7 @@ const Activity: React.FC<any> = ({ }) => {
 
   };
 
-  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, ``, {}, 0);
+  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
 
 
