@@ -12,10 +12,9 @@ public class SecurityConfig implements WebFluxConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://webapp-tn6q.onrender.com", "localhost:3000")  // Sostituisci con l'URL del tuo frontend
+                .allowedOrigins("http://localhost:3000","https://localhost:3000", "https://webapp-tn6q.onrender.com")  // Aggiungi http:// per localhost
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*");
+                .allowedHeaders("*")
+                .allowCredentials(true);  // Aggiungi questo se invii cookie o header di autenticazione
     }
-
- 
 }

@@ -10,5 +10,8 @@ COPY jar/webApp-0.0.1-SNAPSHOT.jar app.jar
 # Espone la porta sulla quale l'applicazione Spring Boot è in ascolto (di default 8080)
 EXPOSE 8080
 
-# Esegui il JAR
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Aggiungi un'opzione per personalizzare gli argomenti di avvio
+ENV JAVA_OPTS=""
+
+# Esegui il JAR con eventuali opzioni passate
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
