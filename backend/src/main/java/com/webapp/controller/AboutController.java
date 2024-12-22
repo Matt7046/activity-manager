@@ -57,10 +57,10 @@ public class AboutController {
     }
 
     @PostMapping("/dati")
-    public ResponseEntity<ResponseDTO> saveActivity(@RequestBody ActivityDTO ActivityDTO) {
+    public ResponseEntity<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
-            String itemId = ActivityService.saveActivity(ActivityDTO);
+            String itemId = ActivityService.saveActivity(activityDTO);
 
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK, new ArrayList<>());

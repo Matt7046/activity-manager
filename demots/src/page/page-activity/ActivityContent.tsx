@@ -1,24 +1,28 @@
 import React, { useState } from "react";
 import activityStore from "./store/ActivityStore";  // Importa lo store
 import "./ActivityContent.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchDataActivityById } from "./service/ActivityService";
 import { ascoltatore } from "./ActivityFunc";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import NomeDisplay from "../../components/msnomedisplay/NomeDisplay";
 import Label from "../../components/mslabel/label";
-import { navigateRouting, showError } from "../../App";
+import { navigateRouting, sezioniMenu, sezioniMenuIniziale, showError } from "../../App";
 
 
 
 const ActivityContent: React.FC<any> = ({
+  user,
   rowIndex,
   visibiityButton // Proprietà opzionale per la sottolineatura
 
 }) => {
+  
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-
+  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
+  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
+  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email}, 2);
 
   const toggleVisibility = (rowIndex: number, _id: string) => {
     const element = document.querySelector(`#rowHidden-${rowIndex}`) as HTMLElement;

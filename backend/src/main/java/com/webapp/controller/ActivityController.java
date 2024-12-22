@@ -24,14 +24,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class ActivityController {
 
     @Autowired
-    private ActivityService ActivityService;
+    private ActivityService activityService;
 
     @GetMapping("")
     public ResponseDTO getTesto() {
 
         // String[] texts = { "Ciao, mondo!", "Benvenuto in Java", "Programmazione è
         // divertente" };
-        List<Activity> sub = ActivityService.findAll();
+        List<Activity> sub = activityService.findAll();
         // mapping
         List<ActivityDTO> subDTO = sub.stream()
                 .map(ActivityMapper.INSTANCE::toDTO)
@@ -49,7 +49,7 @@ public class ActivityController {
     
         try {
             // Tentativo di trovare il documento
-            item = ActivityService.findByIdentificativo(identificativo);
+            item = activityService.findByIdentificativo(identificativo);
             if (item == null) {
                 throw new RuntimeException("Documento non trovato con identificativo: " + identificativo);
             }
