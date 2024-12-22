@@ -93,7 +93,7 @@ const AboutContent: React.FC<any> = ({
     title: 'Salva'
 
   };
-  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, ``, {}, 0);
+  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
   return (
     <>
