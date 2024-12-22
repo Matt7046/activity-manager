@@ -9,15 +9,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // Genera un costruttore con tutti i campi
 public class PointsDTO {
 
-    private String _id; // Identificatore unico
-    private String  email;
-    private Long points;
-    private String numeroPunti;
+	private String _id; // Identificatore unico
+	private String email;
+	private Long points;
+	private String numeroPunti;
+	private String attivita;
+
+	public void generaAttivita(String[] attivitaSvolte)
+    {
+    	 setAttivita(attivitaSvolte.toString()
+                 .replace("[", "[\"")
+                 .replace("]", "\"]")
+                 .replace(", ", "\", \"");
+    }
 
 }
-
-
-    
-
-
-
