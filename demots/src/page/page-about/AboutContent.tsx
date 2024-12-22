@@ -46,7 +46,7 @@ const AboutContent: React.FC<any> = ({
     deleteAboutById(_id,() =>  showError(setOpen, setErrors)).then((response) => {
       if (response) {
         if (response.status === 'OK') {
-          navigateRouting(navigate, '', {})
+          navigateRouting(navigate, 'activity', {})
           console.log('Dati ricevuti:', response);
         } else {
           setErrors(response.errors);
@@ -72,7 +72,7 @@ const AboutContent: React.FC<any> = ({
     }
     saveAboutById(_id, testo, () => showError(setOpen, setErrors)).then((response) => {
       if (response?.testo) {
-        navigateRouting(navigate, '', {})
+        navigateRouting(navigate, 'activity', {})
       }
     })
   }
