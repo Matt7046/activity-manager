@@ -176,12 +176,10 @@ export const sezioniMenuIniziale: MenuLaterale[][] = [
     { funzione: null, testo: 'Activity' },
     { funzione: null, testo: 'About' },
     { funzione: null, testo: 'Points' },
-    { funzione: null, testo: 'Drafts' },
+    { funzione: null, testo: 'Operative' },
   ],
   [
-    { funzione: null, testo: 'All mail' },
-    { funzione: null, testo: 'Trash' },
-    { funzione: null, testo: 'Spam' },
+    { funzione: null, testo: 'Family' },
   ],
 ];
 
