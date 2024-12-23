@@ -25,7 +25,11 @@ const AboutContent: React.FC<any> = ({
   
 
   let testoOld = activityStore.testo.find((x) => _id === x._id);
-  testoOld = testoOld ? testoOld : new DTOActivity();
+  const activity = new DTOActivity();
+  activity.nome = "Attività";
+  activity.subTesto = "Descrizione";
+  testoOld =  activity;
+
   const [nome, setNome] = useState(activityStore.testo.find((x) => _id === x._id)?.nome);
 
   const handleChangeNome = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +39,7 @@ const AboutContent: React.FC<any> = ({
   const [subTesto, setSubTesto] = useState(activityStore.testo.find((x) => _id === x._id)?.subTesto);
 
   const handleChangeSubTesto = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSubTesto(event.target.value); // Aggiorna lo stato con il valore inserito
+    setSubTesto(event.target.value); // Aggiorna lo stato con il valore inserito    
   };
 
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
@@ -92,6 +96,7 @@ const AboutContent: React.FC<any> = ({
 
   };
 
+
   return (
     <>
       <div>
@@ -100,7 +105,7 @@ const AboutContent: React.FC<any> = ({
             <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
           </Grid>
         </Grid>
-        <Box sx={{ paddingLeft: 31, paddingRight: 5, marginTop: 4 }}>
+        <Box sx={{ paddingLeft: 20, paddingRight: 5, marginTop: 4 }}>
           <Snackbar
             open={open}
             autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
@@ -155,7 +160,10 @@ const AboutContent: React.FC<any> = ({
     </>
   );
 
+
 }
+
+
 
 
 // Componente che visualizza il testo dallo store
