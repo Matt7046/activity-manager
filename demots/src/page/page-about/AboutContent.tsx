@@ -25,7 +25,11 @@ const AboutContent: React.FC<any> = ({
   
 
   let testoOld = activityStore.testo.find((x) => _id === x._id);
-  testoOld = testoOld ? testoOld : new DTOActivity();
+  const activity = new DTOActivity();
+  activity.nome = "Attività";
+  activity.subTesto = "Descrizione";
+  testoOld =  activity;
+
   const [nome, setNome] = useState(activityStore.testo.find((x) => _id === x._id)?.nome);
 
   const handleChangeNome = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +39,7 @@ const AboutContent: React.FC<any> = ({
   const [subTesto, setSubTesto] = useState(activityStore.testo.find((x) => _id === x._id)?.subTesto);
 
   const handleChangeSubTesto = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSubTesto(event.target.value); // Aggiorna lo stato con il valore inserito
+    setSubTesto(event.target.value); // Aggiorna lo stato con il valore inserito    
   };
 
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
@@ -91,6 +95,7 @@ const AboutContent: React.FC<any> = ({
     title: 'Salva'
 
   };
+
 
   return (
     <>
@@ -155,7 +160,10 @@ const AboutContent: React.FC<any> = ({
     </>
   );
 
+
 }
+
+
 
 
 // Componente che visualizza il testo dallo store
