@@ -13,7 +13,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,10 +56,10 @@ public class AboutController {
     }
 
     @PostMapping("/dati")
-    public ResponseEntity<ResponseDTO> saveActivity(@RequestBody ActivityDTO ActivityDTO) {
+    public ResponseEntity<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
-            String itemId = ActivityService.saveActivity(ActivityDTO);
+            String itemId = ActivityService.saveActivity(activityDTO);
 
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK, new ArrayList<>());

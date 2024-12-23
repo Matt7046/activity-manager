@@ -1,4 +1,4 @@
-import { getData } from "../../../general/AxiosService";
+import { getData, postData } from "../../../general/AxiosService";
 
 export const fetchDataActivity = async (funzioneErrore?: any) => {
   try {
@@ -33,5 +33,22 @@ export const fetchDataActivityById = async (_id: string, funzioneErrore?: any) =
     }
   }
 };
+
+export const logActivityByEmail = async (pointsDTO: any,funzioneErrore?: any) => {
+  try {
+    const apiUrl = process.env.REACT_APP_API_URL ; // Ottieni l'URL dal file .env
+    //const apiUrl = process.env.REACT_APP_API_URL // Ottieni l'URL dal file .env
+
+    const data = await postData(`activity/log`,pointsDTO); // Usa l'URL dinamico
+    console.log('Dati ricevuti:', data);
+    return data;
+  } catch (error) {
+    console.error('Errore durante il recupero dei dati:', error);
+    if (funzioneErrore) {
+      funzioneErrore();
+    }
+  }
+};
+
 
 
