@@ -1,16 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AboutContent from './AboutContent';
 
+const About: React.FC<{ user: any }> = ({ user }) => {
 
-const About: React.FC = () => {
-  
- 
+  const [utente, setUtente] = useState<any>(user); // Stato iniziale vuoto
+
+
   return (
     <>
-      <AboutContent
-        key={0} // Chiave univoca (modifica se necessario per un array di elementi)
-        rowIndex={0} // Passa la riga corrente o aggiorna dinamicamente
-      />
+      <AboutContent user={utente} />
     </>
   );
 };

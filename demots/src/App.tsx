@@ -1,17 +1,19 @@
 import './App.css';
-import { Route, Routes, NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
+import { Route, Routes, NavigateFunction, useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { MenuLaterale } from './components/msdrawer/Drawer';
 import Activity from './page/page-activity/Activity';
 import About from './page/page-about/About';
-import { useEffect, useState } from 'react';
-import { GoogleOAuthProvider, GoogleLogin, googleLogout, useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
+import { useState } from 'react';
+import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import Points from './page/page-points/Points';
+import { savePointsById } from './page/page-points/service/PointsService';
+
 
 
 // Componente principale, avvolto da GoogleOAuthProvider
 const App = () => (
-  
+
 
   <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
     <GoogleAuthComponent />
@@ -24,6 +26,10 @@ const App = () => (
 // Componente di autenticazione
 const GoogleAuthComponent = () => {
   const [user, setUser] = useState<any>(null);
+  const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
+  const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
+
+
   const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
 
 
@@ -44,14 +50,23 @@ const GoogleAuthComponent = () => {
   });
 
   const handleLoginSuccessFake = (fakeResponse: any) => {
-    setUser({
+    const userData = {
       name: "Simulated User",
       email: "user@simulated.com",
       token: fakeResponse.credential,
-    });
+    };
+    setUser(userData);
+    saveUserData(userData);
+
     console.log("Login simulato effettuato:", fakeResponse);
     navigateRouting(navigate, `activity`, {})
   };
+
+
+  const saveUserData = (userData: any): void => {
+    const utente = { email: userData.email, points: 100 }
+    savePointsById(utente, () => showError(setOpen, setErrors))
+  }
 
   // Funzione per ottenere i dati utente
   const fetchUserData = async (accessToken: string) => {
@@ -76,6 +91,7 @@ const GoogleAuthComponent = () => {
       if (userDataResponse.ok) {
         const userData = await userDataResponse.json();
         setUser(userData); // Salva i dati utente
+        saveUserData(userData);
         console.log('User Data:', userData); // Logga i dati utente per il debug
         navigateRouting(navigate, `activity`, {})
 
@@ -85,7 +101,7 @@ const GoogleAuthComponent = () => {
     } catch (error) {
       console.error('Error fetching user data', error);
     }
-  };
+  }
   // Funzione di logout
   const logOut = () => {
     setUser(null); // Resetta il profilo utente
@@ -139,8 +155,9 @@ const GoogleAuthComponent = () => {
           <div>
             <h1>{title}</h1>
             <Routes>
-              <Route path="/activity" element={<Activity />} />
-              <Route path="/about" element={<About />} />
+              <Route path="/activity" element={<Activity user={user} />} />
+              <Route path="/about" element={<About user={user} />} />
+              <Route path="/points" element={<Points user={user} />} />
             </Routes>
           </div>
         )}
@@ -158,7 +175,7 @@ export const sezioniMenuIniziale: MenuLaterale[][] = [
   [
     { funzione: null, testo: 'Activity' },
     { funzione: null, testo: 'About' },
-    { funzione: null, testo: 'Send email' },
+    { funzione: null, testo: 'Points' },
     { funzione: null, testo: 'Drafts' },
   ],
   [

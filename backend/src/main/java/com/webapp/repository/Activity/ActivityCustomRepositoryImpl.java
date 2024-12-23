@@ -1,4 +1,4 @@
-package com.webapp.repository;
+package com.webapp.repository.Activity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
