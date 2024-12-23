@@ -1,13 +1,10 @@
-package com.webapp.repository;
+package com.webapp.repository.Points;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
-import com.webapp.data.Activity;
 import com.webapp.data.Points;
-import com.webapp.dto.ActivityDTO;
 import com.webapp.dto.PointsDTO;
-import com.webapp.repository.Activity.ActivityRepository;
 
 public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 

@@ -1,5 +1,6 @@
 package com.webapp.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,7 @@ public class ActivityDTO {
     private String _id; // Identificatore unico
     private String  subTesto;
     private String nome;
-
-
+	private String logAttivita;	
 }
 
 

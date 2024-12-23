@@ -4,7 +4,7 @@ const apiUrl = process.env.REACT_APP_API_URL_LOCALE ; // Ottieni l'URL dal file 
 // Configura l'istanza di Axios
 const apiClient = axios.create({
   baseURL: apiUrl, // URL base dell'API
-  timeout: 5000,                     // Timeout in millisecondi
+  timeout: 20000,                     // Timeout in millisecondi
   headers: {
     'Content-Type': 'application/json', // Header predefinito
     'Authorization': 'Bearer your-token-here' // Token opzionale

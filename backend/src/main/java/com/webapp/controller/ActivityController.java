@@ -4,10 +4,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webapp.data.Activity;
+import com.webapp.data.LogAttivita;
 import com.webapp.dto.ResponseDTO;
 import com.webapp.dto.ActivityDTO;
+import com.webapp.dto.PointsDTO;
 import com.webapp.mapper.ActivityMapper;
+import com.webapp.mapper.LogAttivitaMapper;
 import com.webapp.service.ActivityService;
+import com.webapp.service.PointsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +19,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("api/activity")
@@ -25,6 +31,9 @@ public class ActivityController {
 
     @Autowired
     private ActivityService activityService;
+    
+    @Autowired
+    private PointsService pointsService;
 
     @GetMapping("")
     public ResponseDTO getTesto() {
@@ -69,6 +78,31 @@ public class ActivityController {
         }
     
         return responseDTO;
+    }
+    
+    @PostMapping("/log")
+    public ResponseEntity<ResponseDTO> logActivityByEmail(@RequestBody PointsDTO pointsDTO) {
+        try {
+            // Salva i dati e ottieni l'ID o l'oggetto salvato
+            List<LogAttivita> sub = pointsService.logAttivitaByEmail(pointsDTO);
+            List<String> logAttivitaUnica = sub.stream()
+            .map(LogAttivitaMapper.INSTANCE::toCastDTO) // Converte ogni elemento in ActivityDTO
+            .map(ActivityDTO::getLogAttivita) // Estrae il campo logAttivita
+            .collect(Collectors.toList());
+            // Crea una risposta
+            ResponseDTO response = new ResponseDTO(logAttivitaUnica, HttpStatus.OK, new ArrayList<>());
+
+            // Ritorna una ResponseEntity con lo status HTTP
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
+            List<String> errori = new ArrayList<>();
+            errori.add(e.getMessage());
+            errori.add(e.getLocalizedMessage());
+            ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR, errori);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
     
 
