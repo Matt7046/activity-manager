@@ -4,7 +4,7 @@ import Button, { Pulsante } from '../msbutton/Button';
 
 interface cardProps {
   _id: string;
-  text: string; // Può essere un array JSON serializzato o una stringa delimitata
+  text: string[]; // Può essere un array JSON serializzato o una stringa delimitata
   title: string;
   img: string;
   pulsanti: Pulsante[];
@@ -13,14 +13,6 @@ interface cardProps {
 }
 
 const CardComponent = observer((props: cardProps) => {
-  let parsedText: string[] = [];
-
-  // Parsing del testo in array
-  try {
-    parsedText = JSON.parse(props.text); // Tenta di interpretare il testo come JSON
-  } catch {
-    parsedText = props.text.includes('|') ? props.text.split('|') : [props.text]; // Fallback per stringhe delimitate o singole
-  }
 
   return (
     <MuiCard
@@ -42,9 +34,9 @@ const CardComponent = observer((props: cardProps) => {
           {props.title}
         </Typography>
         {/* Render condizionale del contenuto */}
-        {parsedText.length > 1 ? (
+        {props.text.length > 1 ? (
           <List>
-            {parsedText.map((item, index) => (
+            {props.text.map((item, index) => (
               <ListItem key={index} sx={{ padding: 0 }}>
                 - {item}
               </ListItem>
