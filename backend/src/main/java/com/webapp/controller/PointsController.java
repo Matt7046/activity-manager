@@ -14,11 +14,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-
+@CrossOrigin(origins = "https://webapp-tn6q.onrender.com")
 @RequestMapping("api/points")
 public class PointsController {
 
@@ -56,7 +57,8 @@ public class PointsController {
         return responseDTO;
     }
     
-    @PostMapping("/dati")
+    @CrossOrigin(origins = "https://webapp-tn6q.onrender.com")
+    @PostMapping("dati/user")
     public ResponseEntity<ResponseDTO> savePoints(@RequestBody PointsDTO pointsDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
