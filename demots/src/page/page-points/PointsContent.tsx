@@ -48,7 +48,7 @@ const PointsContent: React.FC<any> = ({
 
   // Crea l'array dei pulsanti in base all'orientamento
 
-  const padding = isVertical ? 5   :20;
+  const padding = isVertical ? 5   :8;
 
 
 
@@ -122,7 +122,7 @@ const PointsContent: React.FC<any> = ({
             <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
           </Grid>
         </Grid>
-        <Box sx={{ paddingLeft: {padding}, paddingRight: 5, marginTop: 4 }}>
+        <Box sx={{ paddingLeft: padding, paddingRight: 5, marginTop: 4 }}>
           <Snackbar
             open={open}
             autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
