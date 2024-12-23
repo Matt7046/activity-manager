@@ -25,6 +25,7 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
   // default class Activity extends React.Component {
 
   let hasFetchedData = false;
+  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
 
 
   useEffect(() => {
@@ -32,12 +33,16 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
     componentDidMount();
     //window.addEventListener('resize', handleResize);
 
-    // Funzione di cleanup (opzionale)
-    return () => {
-
-      //window.removeEventListener('resize', handleResize);
+    const handleResize = () => {
+      setIsVertical(window.innerHeight > window.innerWidth);
     };
+
+    window.addEventListener("resize", handleResize);
+
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener("resize", handleResize);
   }, []); // Il secondo argomento vuoto ind ica che l'effetto dipenderà solo dal mount
+  const paddingType = isVertical ? 5   :8;
 
   const componentDidMount = () => {
     if (!hasFetchedData) {
@@ -115,10 +120,10 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
 
       <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
         <Grid item>
-          <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left' />
+          <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left'  />
         </Grid>
       </Grid>
-      <Box sx={{ paddingLeft: 20, paddingRight: 5 }}>
+      <Box sx={{ paddingLeft:paddingType, paddingRight: 5 }}>
         <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
           <Grid item>
             <Button pulsanti={[pulsanteBlue]} />
