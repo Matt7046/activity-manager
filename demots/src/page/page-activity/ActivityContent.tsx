@@ -142,7 +142,7 @@ const ActivityContent: React.FC<any> = ({
 
   // Crea l'array dei pulsanti in base all'orientamento
   const pulsantiVisibili = isVertical ? [pulsanteBlue] : [pulsanteRed, pulsanteBlue]
-  
+  const flex = isVertical ? 'flex-start' :'flex-end'
 
   function handleClick() {
   }
@@ -168,7 +168,7 @@ const ActivityContent: React.FC<any> = ({
             key={0}
           />
         </div>
-        <Grid container justifyContent="flex-end" spacing={2}
+        <Grid container justifyContent={flex} spacing={2}
           style={{ height: '30px' }} >
           <Grid item>
             <div>
@@ -176,7 +176,7 @@ const ActivityContent: React.FC<any> = ({
             </div>
           </Grid>
         </Grid>
-        <div id={`rowHidden-${rowIndex}`} style={{ gridColumn: 'span 10', visibility: 'hidden' }}  >
+        <div id={`rowHidden-${rowIndex}`} style={{ gridColumn: 'span 12', visibility: 'hidden' }}  >
           <Label _id={rowIndex} text={labelText} handleClick={() => handleClick()} />
         </div>
         <hr className="custom-separator" /> {/* Stile con classe */}
