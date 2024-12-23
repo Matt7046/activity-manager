@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import activityStore from "./store/ActivityStore";  // Importa lo store
 import "./ActivityContent.css";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -126,6 +126,22 @@ const ActivityContent: React.FC<any> = ({
     title:'Apri dettaglio'
 
   };
+  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
+
+  useEffect(() => {
+
+    const handleResize = () => {
+      setIsVertical(window.innerHeight > window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Crea l'array dei pulsanti in base all'orientamento
+  const pulsantiVisibili = isVertical ? [pulsanteBlue] : [pulsanteRed, pulsanteBlue]
   
 
   function handleClick() {
@@ -156,7 +172,7 @@ const ActivityContent: React.FC<any> = ({
           style={{ height: '30px' }} >
           <Grid item>
             <div>
-              <Button visibilityButton={visibiityButton} pulsanti={[pulsanteRed, pulsanteBlue]} />
+              <Button visibilityButton={visibiityButton} pulsanti={pulsantiVisibili} />
             </div>
           </Grid>
         </Grid>
