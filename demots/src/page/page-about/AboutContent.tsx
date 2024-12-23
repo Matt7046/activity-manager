@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./About.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import activityStore from "../page-activity/store/ActivityStore";
@@ -45,7 +45,23 @@ const AboutContent: React.FC<any> = ({
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
 
+ const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
 
+  useEffect(() => {
+
+    const handleResize = () => {
+      setIsVertical(window.innerHeight > window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Crea l'array dei pulsanti in base all'orientamento
+
+  const padding = isVertical ? 5 :20;
 
   const cancellaRecord = (_id: any): void => {
 
@@ -105,7 +121,7 @@ const AboutContent: React.FC<any> = ({
             <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
           </Grid>
         </Grid>
-        <Box sx={{ paddingLeft: 20, paddingRight: 5, marginTop: 4 }}>
+        <Box sx={{ paddingLeft: {padding}, paddingRight: 5, marginTop: 4 }}>
           <Snackbar
             open={open}
             autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
