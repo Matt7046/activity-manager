@@ -7,10 +7,11 @@ import { Alert, Box, Grid, Snackbar } from "@mui/material";
 import { Pulsante } from "../../components/msbutton/Button";
 import Drawer from "../../components/msdrawer/Drawer";
 import Card from "../../components/mscard/card";
-import { findByEmail, findLogByEmail } from "./service/PointsService";
 import lizard from "../../assets/images/lizard.jpg"; // Percorso del file locale
 import points from "../../assets/images/points.jpg"; // Percorso del file locale
 import CardGrid from "../../components/mscard/card";
+import { logActivityByEmail } from "../page-activity/service/ActivityService";
+import { findByEmail } from "./service/PointsService";
 
 
 const PointsContent: React.FC<any> = ({
@@ -22,19 +23,19 @@ const PointsContent: React.FC<any> = ({
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
   let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
-  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email}, 2);
+  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email }, 2);
 
 
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
-  const [testo, setTesto] = useState('I Points a disposizione sono: ')
-  const [testoLog, setTestoLog] = useState('Non ci sono attività svolte recentemente per questo utente, puoi rimediare dalla sezione Operative e dedicarti ad una attività')
+  const [testo, setTesto] = useState('');
+  const [testoLog, setTestoLog] = useState([] as string[]);
   //const [testoLog, setTestoLog] = useState('[\"Punto uno\", \"Punto due\", \"Punto tre\"]')
 
 
-  const getUser =(email: any): void => {
+  const getUser = (email: any): void => {
 
-    findByEmail(email, () => showError(setOpen, setErrors)).then((response:any) => {
+    findByEmail(email, () => showError(setOpen, setErrors)).then((response: any) => {
       if (response) {
         if (response.status === 'OK') {
           setTesto(response.testo.numeroPunti)
@@ -46,7 +47,24 @@ const PointsContent: React.FC<any> = ({
       }
     })
   }
-  getUser(user.email);
+  const getLogAttivita = (email: any): void => {
+
+    logActivityByEmail(email, () => showError(setOpen, setErrors)).then((response: any) => {
+      if (response) {
+        if (response.status === 'OK') {
+          console.log("response", response)
+          setTestoLog(response.testo)
+        } else {
+          setErrors(response.errors);
+          setOpen(true);
+        }
+      }
+    })
+  }
+  if (testo === '') {
+    getUser(user.email);
+    getLogAttivita(user);
+  }
 
 
   const handleClose = () => {
@@ -61,30 +79,18 @@ const PointsContent: React.FC<any> = ({
     visibility: user ? true : false
   };
 
- 
 
-  const getLogAttivita = (email: any): void => {
 
-    findLogByEmail(email, () => showError(setOpen, setErrors)).then((response:any) => {
-      if (response) {
-        if (response.status === 'OK') {
-          setTestoLog(response.testoLog)
-        } else {
-          setErrors(response.errors);
-          setOpen(true);
-        }
-      }
-    })
-  }
+
 
   const cardsData = [
     {
       _id: 'card1',
-      text:testo, title:"Points" , img:lizard, pulsanti:[] // Puoi aggiungere pulsanti qui se necessario
+      text: [testo], title: "Points", img: lizard, pulsanti: [] // Puoi aggiungere pulsanti qui se necessario
     },
     {
       _id: 'card2',
-      text:testoLog, title:"Log Points" , img:points, pulsanti:[] // Puoi aggiungere pulsanti qui se necessario
+      text: testoLog, title: "Log Activity", img: points, pulsanti: [] // Puoi aggiungere pulsanti qui se necessario
     }
   ];
 
@@ -110,9 +116,9 @@ const PointsContent: React.FC<any> = ({
 
           {/* Contenitore per i TextField */}
           <Box sx={{ marginBottom: 4 }}>
-              <div id="cardData">
+            <div id="cardData">
               <CardGrid cardsData={cardsData} />
-              </div>
+            </div>
 
           </Box>
         </Box>

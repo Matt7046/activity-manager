@@ -2,10 +2,13 @@ package com.webapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.webapp.data.LogAttivita;
 import com.webapp.data.Points;
 import com.webapp.dto.PointsDTO;
 import com.webapp.mapper.PointsMapper;
-import com.webapp.repository.PointsRepository;
+import com.webapp.repository.LogAttivita.LogAttivitaRepository;
+import com.webapp.repository.Points.PointsRepository;
 
 import java.util.List;
 
@@ -13,6 +16,8 @@ import java.util.List;
 public class PointsService {
     @Autowired
     private PointsRepository pointsRepository;
+    @Autowired
+    private LogAttivitaRepository logAttivitaRepository;
 
 
     public List<Points> findAll() {
@@ -24,8 +29,8 @@ public class PointsService {
         return pointsRepository.findByEmail(identificativo);
     } 
 
-    public String savePoints(PointsDTO ActivityDTO) {
-        return pointsRepository.savePoints(ActivityDTO);       
+    public String savePoints(PointsDTO pointsDTO) {
+        return pointsRepository.savePoints(pointsDTO);       
     }
 
     public Points save(PointsDTO pointsDTO) {
@@ -33,4 +38,9 @@ public class PointsService {
 
         return pointsRepository.save(subDTO);
     }
+    
+    public List<LogAttivita> logAttivitaByEmail(PointsDTO pointsDTO) {
+        return logAttivitaRepository.findLogByEmail(pointsDTO.getEmail());
+    }
+
 }
