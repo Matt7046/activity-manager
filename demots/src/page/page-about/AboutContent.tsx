@@ -100,7 +100,7 @@ const AboutContent: React.FC<any> = ({
             <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
           </Grid>
         </Grid>
-        <Box sx={{ paddingLeft: 31, paddingRight: 5, marginTop: 4 }}>
+        <Box sx={{ paddingLeft: 20, paddingRight: 5, marginTop: 4 }}>
           <Snackbar
             open={open}
             autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
