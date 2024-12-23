@@ -1,4 +1,4 @@
-package com.webapp.repository;
+package com.webapp.repository.Activity;
 
 
 

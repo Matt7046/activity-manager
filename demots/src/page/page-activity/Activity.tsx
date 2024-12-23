@@ -10,8 +10,9 @@ import Button, { Pulsante } from '../../components/msbutton/Button';
 import Drawer from '../../components/msdrawer/Drawer';
 
 
-const Activity: React.FC<any> = ({ }) => {
+const Activity: React.FC<{ user: any }> = ({ user }) => {
 
+  const [utente, setUtente] = useState<any>(user); // Stato iniziale vuoto
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
 
@@ -125,8 +126,8 @@ const Activity: React.FC<any> = ({ }) => {
         </Grid>
         <div>
           {Array.from({ length: rows }, (_, rowIndex) => (<ActivityContent
+            user={utente}
             rowIndex={rowIndex}
-            key={rowIndex} // Chiave univoca per ogni elemento
             visibiityButton={visibiityButton}
           />
           ))

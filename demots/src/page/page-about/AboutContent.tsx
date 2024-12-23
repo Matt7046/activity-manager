@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import activityStore from "../page-activity/store/ActivityStore";
 import { navigateRouting, sezioniMenu, sezioniMenuIniziale, showError } from "../../App";
 import TextField from '@mui/material/TextField';
-import { Alert, Box, Grid, Hidden, Snackbar } from "@mui/material";
+import { Alert, Box, Grid, Snackbar } from "@mui/material";
 import { deleteAboutById, saveAboutById } from "./service/AboutService";
 import { DTOActivity } from "../../dto/DTOActivity";
 import Button, { Pulsante } from "../../components/msbutton/Button";
@@ -13,14 +13,16 @@ import Drawer from "../../components/msdrawer/Drawer";
 
 
 const AboutContent: React.FC<any> = ({
+  user
 }) => {
-
-
-
+  
   const location = useLocation();
-  const { _id } = location.state || {}; // Ottieni il valore dallo stato
-
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
+  const { _id } = location.state || {}; // Ottieni il valore dallo stato
+  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
+  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
+  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email}, 2);
+  
 
   let testoOld = activityStore.testo.find((x) => _id === x._id);
   testoOld = testoOld ? testoOld : new DTOActivity();
@@ -43,7 +45,7 @@ const AboutContent: React.FC<any> = ({
 
   const cancellaRecord = (_id: any): void => {
 
-    deleteAboutById(_id,() =>  showError(setOpen, setErrors)).then((response) => {
+    deleteAboutById(_id, () => showError(setOpen, setErrors)).then((response) => {
       if (response) {
         if (response.status === 'OK') {
           navigateRouting(navigate, 'activity', {})
@@ -55,14 +57,7 @@ const AboutContent: React.FC<any> = ({
       }
     })
   }
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-
-
-
+  
   const salvaRecord = (_id: string): void => {
 
     const testo = {
@@ -77,6 +72,9 @@ const AboutContent: React.FC<any> = ({
     })
   }
 
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-solid fa-trash',
@@ -93,8 +91,7 @@ const AboutContent: React.FC<any> = ({
     title: 'Salva'
 
   };
-  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
-  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
+
   return (
     <>
       <div>
