@@ -15,12 +15,11 @@ public class PointsDTO {
 	private String numeroPunti;
 	private String attivita;
 
-	public void generaAttivita(String[] attivitaSvolte)
-    {
+	public void generaAttivita(String[] attivitaSvolte) {
     	 setAttivita(attivitaSvolte.toString()
                  .replace("[", "[\"")
                  .replace("]", "\"]")
-                 .replace(", ", "\", \"");
+                 .replace(", ", "\", \""));
     }
 
 }
