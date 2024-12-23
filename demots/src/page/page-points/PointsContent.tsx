@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./PointsContent.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import activityStore from "../page-activity/store/ActivityStore";
@@ -31,6 +31,26 @@ const PointsContent: React.FC<any> = ({
   const [testo, setTesto] = useState('');
   const [testoLog, setTestoLog] = useState([] as string[]);
   //const [testoLog, setTestoLog] = useState('[\"Punto uno\", \"Punto due\", \"Punto tre\"]')
+
+  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
+
+  useEffect(() => {
+
+    const handleResize = () => {
+      setIsVertical(window.innerHeight > window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Crea l'array dei pulsanti in base all'orientamento
+
+  const padding = isVertical ? 5   :20;
+
+
 
 
   const getUser = (email: any): void => {
@@ -102,7 +122,7 @@ const PointsContent: React.FC<any> = ({
             <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
           </Grid>
         </Grid>
-        <Box sx={{ paddingLeft: 20, paddingRight: 5, marginTop: 4 }}>
+        <Box sx={{ paddingLeft: {padding}, paddingRight: 5, marginTop: 4 }}>
           <Snackbar
             open={open}
             autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
