@@ -118,7 +118,7 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
           <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left' />
         </Grid>
       </Grid>
-      <Box sx={{ paddingLeft: 31, paddingRight: 5 }}>
+      <Box sx={{ paddingLeft: 20, paddingRight: 5 }}>
         <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
           <Grid item>
             <Button pulsanti={[pulsanteBlue]} />
