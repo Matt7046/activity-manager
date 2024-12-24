@@ -1,3 +1,5 @@
 export const myDisplayer = ((some: any, value: any) => {
-    document.getElementById(some)!.innerHTML = value;
+    if (document.getElementById(some)) {
+        document.getElementById(some)!.innerHTML = value;
+    }
 })

@@ -2,24 +2,20 @@ import React, { useEffect, useState } from 'react';
 import ActivityContent from './ActivityContent';
 import activityStore from './store/ActivityStore';
 import { fetchDataActivity } from './service/ActivityService';
-import { Box, Grid, Menu } from '@mui/material';
-import { navigateRouting, sezioniMenu, sezioniMenuIniziale } from '../../App';
+import { Box, Grid } from '@mui/material';
+import { sezioniMenu, sezioniMenuIniziale } from '../../App';
 import { useNavigate } from 'react-router-dom';
-import Button, { Pulsante } from '../../components/msbutton/Button';
 import Drawer from '../../components/msdrawer/Drawer';
-import { aggiornaDOMComponente } from '../../components/msschedule/Schedule';
+import { aggiornaDOMComponente, MsSchedule } from '../../components/msschedule/Schedule';
 
 
 const Activity: React.FC<{ user: any }> = ({ user }) => {
 
   const [utente, setUtente] = useState<any>(user); // Stato iniziale vuoto
-
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-
   const [rows, setRows] = useState<number>(10); // Stato iniziale vuoto
-  const [schedule, setSchedule] = useState<any>([]); // Stato iniziale vuoto
-
-  const [visibiityButton, setVisibilityButton] = useState<boolean>(false); // Stato iniziale vuoto
+  const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
+  const [visibilityButton, setVisibilityButton] = useState<boolean>(false); // Stato iniziale vuoto
 
 
   // default class Activity extends React.Component {
@@ -53,12 +49,10 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
       fetchDataActivity()
         .then((response) => {
           if (response) {
-            setSchedule(response.testo)
-            const rows = Array.from({ length: response.testo.length }, (_, i) => i + 1); // Genera un array dinamico
+            setResponse(response.testo)
             setRows(response.testo.length);
-            caricamentoIniziale(response, rows);
+            caricamentoIniziale(response);
           }
-
         })
         .catch((error) => {
           console.error('Errore durante il recupero dei dati:', error);
@@ -66,87 +60,44 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
     }
   }
 
-  const caricamentoIniziale = (response: any, rows: number[]): any => {
-    // const nome = response.testo.map((x: { nome: any; }) => x.nome);
-    return setAllTesto(response, rows)
+  const caricamentoIniziale = (response: any): any => {
+    return setAllTesto(response);
   }
 
-  const setAllTesto = (response: any, dimension: number[]) => {
+  const setAllTesto = (response: any) => {
     activityStore.setAllTesto(response);
-    aggiornaDOMComponente(response.testo,() => setVisibilityButton(true));
+    aggiornaDOMComponente(response.testo, () => setVisibilityButton(true));
   }
-
-  const navigateToFromAboutPage = (): void => {
-    navigateRouting(navigate, `about`, {})
-  }
-
-  const pulsanteBlue: Pulsante = {
-    icona: 'fas fa-plus',
-    funzione: () => navigateToFromAboutPage(), // Passi la funzione direttamente
-    nome: 'blue',
-    title: 'Nuovo documento'
-
-  };
 
   let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
 
-
-
-
   return (
     <>
-
-
       <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
         <Grid item>
           <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left' />
         </Grid>
       </Grid>
       <Box sx={{ paddingLeft: paddingType, paddingRight: 5 }}>
-        <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-          <Grid item>
-            <Button pulsanti={[pulsanteBlue]} />
-          </Grid>
-        </Grid>
         <div>
-          {/* Iterazione su schedule */}
-          {schedule.map((item: { _id: string; }, rowIndex: any) => (
-            <ActivityContent
-              user={utente}
-              identificativo={item._id} // Accedi all'ID di ogni elemento
-              visibiityButton={visibiityButton}
-            />
-          ))}
+          <ActivityContent
+            responseSchedule={response}
+            user={utente}
+          />
         </div>
       </Box>
     </>
   );
-}
+}  
 export default Activity;
-
-
 
 export interface ActivityProps {
   nomeProps: string;
   children?: React.ReactNode;  // Aggiungi 'children' opzionale
-
 }
 
 export interface ActivityState {
   nome: string; // Definisci lo stato per 'nome'
   testo: string;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

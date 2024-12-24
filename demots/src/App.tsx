@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import Points from './page/page-points/Points';
 import { savePointsById } from './page/page-points/service/PointsService';
-import { Alert, Snackbar } from '@mui/material';
+import { Alert, CircularProgress, Snackbar } from '@mui/material';
 
 
 
@@ -26,13 +26,21 @@ const App = () => (
 
 // Componente di autenticazione
 const GoogleAuthComponent = () => {
+  const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
   const [user, setUser] = useState<any>(null);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
+  const [loading, setLoading] = useState(false);
+  const [simulated, setSimulated] = useState(false);
+  const [title, setTitle] = useState("");
 
-
-  const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
-
+  // Funzione di logout
+  const logOut = () => {
+    setUser(null); // Resetta il profilo utente
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   // Configura useGoogleLogin
   const login = useGoogleLogin({
@@ -42,8 +50,6 @@ const GoogleAuthComponent = () => {
       const accessToken = codeResponse?.access_token;
       // Puoi usare l'access token per fare richieste all'API di Google
       fetchUserData(accessToken);
-
-      //  handleLoginSuccessFake(codeResponse);
     },
     onError: (error) => {
       console.error('Login Failed:', error);
@@ -57,16 +63,14 @@ const GoogleAuthComponent = () => {
       token: fakeResponse.credential,
     };
     setUser(userData);
-    saveUserData(userData);
-
+    saveUserData(userData,setLoading);
     console.log("Login simulato effettuato:", fakeResponse);
     navigateRouting(navigate, `activity`, {})
   };
 
-
-  const saveUserData = (userData: any): void => {
+  const saveUserData = (userData: any, setLoading: any): void => {
     const utente = { email: userData.email, points: 100 }
-    savePointsById(utente, () => showError(setOpen, setErrors))
+    savePointsById(utente, () => showError(setOpen, setErrors), setLoading)
   }
 
   // Funzione per ottenere i dati utente
@@ -75,12 +79,10 @@ const GoogleAuthComponent = () => {
       // Verifica che il token sia valido
       const tokenInfoResponse = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`);
       const tokenInfo = await tokenInfoResponse.json();
-
       if (tokenInfo.error) {
         console.error('Token invalido:', tokenInfo.error);
         return;
       }
-
       // Se il token è valido, recupera i dati dell'utente
       const userDataResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
         method: 'GET',
@@ -88,14 +90,12 @@ const GoogleAuthComponent = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-
       if (userDataResponse.ok) {
         const userData = await userDataResponse.json();
         setUser(userData); // Salva i dati utente
-        saveUserData(userData);
+        saveUserData(userData,setLoading);
         console.log('User Data:', userData); // Logga i dati utente per il debug
         navigateRouting(navigate, `activity`, {})
-
       } else {
         console.error('Failed to fetch user data:', userDataResponse.status);
       }
@@ -103,13 +103,6 @@ const GoogleAuthComponent = () => {
       console.error('Error fetching user data', error);
     }
   }
-  // Funzione di logout
-  const logOut = () => {
-    setUser(null); // Resetta il profilo utente
-  };
-
-  const [simulated, setSimulated] = useState(false);
-  const [title, setTitle] = useState("");
 
   // Simulazione del login con Google
   const simulateLogin = () => {
@@ -122,12 +115,7 @@ const GoogleAuthComponent = () => {
     handleLoginSuccessFake(fakeResponse);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
-
     <><Snackbar
       open={open}
       autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
@@ -135,15 +123,14 @@ const GoogleAuthComponent = () => {
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Posizione del messaggio
     >
       <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-        -{errors}
+        {errors}
       </Alert>
-    </Snackbar><GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
+    </Snackbar>     
+      <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <div>
-
           <h1>
             Login con Google ({user ? user.name : "Non autenticato"})
           </h1>
-
           {!user ? (
             <div>
               <div
@@ -176,15 +163,17 @@ const GoogleAuthComponent = () => {
             </div>
           )}
         </div>
-      </GoogleOAuthProvider></>
+      </GoogleOAuthProvider>
+      {loading && <CircularProgress />}
+      </>
+      
   );
 };
-
-
 
 export const navigateRouting = (navigate: NavigateFunction, path: string, params: any) => {
   navigate(`/${path}`, { state: params }); // Passa i parametri come stato
 };
+
 export const sezioniMenuIniziale: MenuLaterale[][] = [
   [
     { funzione: null, testo: 'Activity' },
@@ -202,10 +191,7 @@ export const showError = (setOpen: any, setError: any, errore?: string) => {
   setOpen(true);
   setError(errore)
   console.error(errore);
-
-
 }
-
 
 export const sezioniMenu = (
   sezioni: MenuLaterale[][],
@@ -214,7 +200,6 @@ export const sezioniMenu = (
   params: any,
   indice: number
 ): MenuLaterale[][] => {
-
 
   // Calcola la posizione (riga e colonna) per assegnare la funzione
   const numeroRighe = sezioni.length;
@@ -227,7 +212,6 @@ export const sezioniMenu = (
   if (riga < numeroRighe && colonna < sezioni[riga].length) {
     sezioni[riga][colonna].funzione = () => navigateRouting(navigate, path, params);
   }
-
   return sezioni;
 };
 
