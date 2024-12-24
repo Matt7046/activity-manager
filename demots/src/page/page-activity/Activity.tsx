@@ -17,7 +17,7 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
 
   const [rows, setRows] = useState<number>(10); // Stato iniziale vuoto
-  const [response, setResponse] = useState<any>({}); // Stato iniziale vuoto
+  const [schedule, setSchedule] = useState<any>([]); // Stato iniziale vuoto
 
   const [visibiityButton, setVisibilityButton] = useState<boolean>(false); // Stato iniziale vuoto
 
@@ -53,7 +53,7 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
       fetchDataActivity()
         .then((response) => {
           if (response) {
-            setResponse(response)
+            setSchedule(response.testo)
             const rows = Array.from({ length: response.testo.length }, (_, i) => i + 1); // Genera un array dinamico
             setRows(response.testo.length);
             caricamentoIniziale(response, rows);
@@ -130,13 +130,14 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
           </Grid>
         </Grid>
         <div>
-          {Array.from({ length: rows }, (_, rowIndex) => (<ActivityContent
+           {/* Iterazione su schedule */}
+        {schedule.map((item: { _id: string; }, rowIndex: any) => (
+          <ActivityContent
             user={utente}
-            rowIndex={rowIndex}
+            identificativo={item._id} // Accedi all'ID di ogni elemento
             visibiityButton={visibiityButton}
           />
-          ))
-          }
+        ))}
         </div>
       </Box>
     </>
