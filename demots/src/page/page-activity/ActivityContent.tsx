@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { fetchDataActivityById } from "./service/ActivityService";
 import { ascoltatore } from "./ActivityFunc";
 import { navigateRouting, sezioniMenu, sezioniMenuIniziale, showError } from "../../App";
-import Schedule from "../../components/msschedule/Schedule;
 import { Pulsante } from "../../components/msbutton/Button";
+import Schedule from "../../components/msschedule/Schedule";
 
 
 
