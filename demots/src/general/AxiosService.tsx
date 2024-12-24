@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = process.env.REACT_APP_API_URL ; // Ottieni l'URL dal file .env
+const apiUrl = process.env.REACT_APP_API_URL_LOCALE ; // Ottieni l'URL dal file .env
 
 // Configura l'istanza di Axios
 const apiClient = axios.create({
