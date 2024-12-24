@@ -5,9 +5,13 @@ export interface Pulsante {
   icona: string
   nome :string
   funzione : any,
+  callBackEnd?: any;
   title: string,
   visibility? : boolean
 }
+
+
+
 
 
 const Button = observer((props: {
