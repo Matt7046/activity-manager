@@ -6,6 +6,7 @@ import Button, { Pulsante } from '../msbutton/Button';
 
 
 export interface MsSchedule {
+  
   icona: string
   nome :string
   funzione : any,
