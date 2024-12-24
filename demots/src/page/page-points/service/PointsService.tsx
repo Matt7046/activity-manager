@@ -1,11 +1,11 @@
-import { getData, postData } from "../../../general/AxiosService";
+import { postData } from "../../../general/AxiosService";
 
 
 
-export const findByEmail = async (email: string, funzioneErrore?: any) => {
+export const findByEmail = async (email: string, funzioneErrore?: any, setLoading?:any) => {
   try {
     const path = `points`;
-    const data = await postData(path, { email }); // Endpoint dell'API
+    const data = await postData(path, { email }, setLoading); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
@@ -16,10 +16,10 @@ export const findByEmail = async (email: string, funzioneErrore?: any) => {
   }
 };
 
-export const savePointsById = async (user: any, funzioneErrore?: any) => {
+export const savePointsById = async (user: any, funzioneErrore?: any, setLoading?:any) => {
   try {
     const path = `points/dati`;
-    const data = await postData(path, user); // Endpoint dell'API
+    const data = await postData(path, user, setLoading); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {

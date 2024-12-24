@@ -1,3 +1,4 @@
+import { navigateRouting } from "../../App";
 
 
 
@@ -22,5 +23,9 @@
   export const openDetail = (_id: string, componentDidMount: any): void => {
     componentDidMount(_id)
   } 
+
+  export const navigateToAboutPage = ( navigate: any): void => {
+    navigateRouting(navigate, `about`, {})
+  }
 
 
