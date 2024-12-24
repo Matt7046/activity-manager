@@ -17,22 +17,36 @@ import { findByEmail } from "./service/PointsService";
 const PointsContent: React.FC<any> = ({
   user }) => {
 
-
-  const location = useLocation();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const { _id } = location.state || {}; // Ottieni il valore dallo stato
   let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email }, 2);
-
 
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
   const [testo, setTesto] = useState('');
   const [testoLog, setTestoLog] = useState([] as string[]);
-  //const [testoLog, setTestoLog] = useState('[\"Punto uno\", \"Punto due\", \"Punto tre\"]')
-
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
+  const padding = isVertical ? 5   :8;
+
+  const pulsanteLog: Pulsante = {
+    icona: 'fas fa-clipboard',
+    funzione: () => getLogAttivita(user.email), // Passi la funzione direttamente
+    nome: 'red',
+    title: 'Log Attività',
+    visibility: user ? true : false
+  };
+
+  const cardsData = [
+    {
+      _id: 'card1',
+      text: [testo], title: "Points", img: lizard, pulsanti: [] // Puoi aggiungere pulsanti qui se necessario
+    },
+    {
+      _id: 'card2',
+      text: testoLog, title: "Log Activity", img: points, pulsanti: [] // Puoi aggiungere pulsanti qui se necessario
+    }
+  ];
 
   useEffect(() => {
 
@@ -47,11 +61,6 @@ const PointsContent: React.FC<any> = ({
   }, []);
 
   // Crea l'array dei pulsanti in base all'orientamento
-
-  const padding = isVertical ? 5   :8;
-
-
-
 
   const getUser = (email: any): void => {
 
@@ -85,34 +94,10 @@ const PointsContent: React.FC<any> = ({
     getUser(user.email);
     getLogAttivita(user);
   }
-
-
+  
   const handleClose = () => {
     setOpen(false);
   };
-
-  const pulsanteLog: Pulsante = {
-    icona: 'fas fa-clipboard',
-    funzione: () => getLogAttivita(user.email), // Passi la funzione direttamente
-    nome: 'red',
-    title: 'Log Attività',
-    visibility: user ? true : false
-  };
-
-
-
-
-
-  const cardsData = [
-    {
-      _id: 'card1',
-      text: [testo], title: "Points", img: lizard, pulsanti: [] // Puoi aggiungere pulsanti qui se necessario
-    },
-    {
-      _id: 'card2',
-      text: testoLog, title: "Log Activity", img: points, pulsanti: [] // Puoi aggiungere pulsanti qui se necessario
-    }
-  ];
 
   return (
     <>
@@ -145,11 +130,7 @@ const PointsContent: React.FC<any> = ({
       </div>
     </>
   );
-
 }
-
-
 // Componente che visualizza il testo dallo store
-
 
 export default PointsContent;
