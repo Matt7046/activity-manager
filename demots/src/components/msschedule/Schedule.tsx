@@ -35,6 +35,7 @@ const Schedule = observer((props: {
             -{props.schedule.errors}
           </Alert>
         </Snackbar>
+        
 
         {/* Pulsante "NEW" solo una volta all'inizio */}
         {props.schedule.pulsanti.filter(
