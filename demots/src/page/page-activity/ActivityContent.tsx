@@ -3,11 +3,9 @@ import activityStore from "./store/ActivityStore";  // Importa lo store
 import "./ActivityContent.css";
 import { useNavigate } from "react-router-dom";
 import { fetchDataActivityById } from "./service/ActivityService";
-import { navigateToAboutPage, openDetail, toggleVisibility } from "./ActivityFunc";
 import { navigateRouting, sezioniMenu, sezioniMenuIniziale, showError } from "../../App";
 import { Pulsante } from "../../components/msbutton/Button";
 import Schedule, { MsSchedule } from "../../components/msschedule/Schedule";
-import { myDisplayer } from "../../general/Utils";
 
 
 
@@ -29,13 +27,13 @@ const ActivityContent: React.FC<any> = ({
   const [visibilityButton, setVisibilityButton] = useState<boolean>(true); // Stato iniziale vuoto
   const flex = isVertical ? 'flex-start' : 'flex-end';
 
-
-
-
+  const openDetail = (_id: string, componentDidMount: any): void => {
+    componentDidMount(_id)
+  }
 
   const pulsanteNew: Pulsante = {
     icona: 'fas fa-plus',
-    funzione: () => navigateToAboutPage(navigate),
+    funzione: () => navigateRouting(navigate, `about`, {}),
     callBackEnd : () =>{ },
     nome: 'new',
     title: 'Nuovo documento'
