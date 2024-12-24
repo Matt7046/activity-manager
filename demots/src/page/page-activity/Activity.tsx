@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import ActivityContent from './ActivityContent';
-import { ascoltatore } from './ActivityFunc';
 import activityStore from './store/ActivityStore';
 import { fetchDataActivity } from './service/ActivityService';
 import { Box, Grid, Menu } from '@mui/material';
@@ -8,6 +7,7 @@ import { navigateRouting, sezioniMenu, sezioniMenuIniziale } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import Button, { Pulsante } from '../../components/msbutton/Button';
 import Drawer from '../../components/msdrawer/Drawer';
+import { aggiornaDOMComponente } from '../../components/msschedule/Schedule';
 
 
 const Activity: React.FC<{ user: any }> = ({ user }) => {
@@ -42,7 +42,7 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
   }, []); // Il secondo argomento vuoto ind ica che l'effetto dipenderà solo dal mount
-  const paddingType = isVertical ? 5   :8;
+  const paddingType = isVertical ? 5 : 8;
 
   const componentDidMount = () => {
     if (!hasFetchedData) {
@@ -66,38 +66,18 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
     }
   }
 
-
-  const aggiornaDOMComponente = (dimension: number, responseNome: string[]): any => {
-    if (responseNome) {
-      for (let index = 0; index < responseNome.length; index++) {
-        if (dimension !== 0)
-          ascoltatore(responseNome[index], "displayer-" + index.toString());
-      }
-      setVisibilityButton(true);
-    }
-  }
-
-
-
-
   const caricamentoIniziale = (response: any, rows: number[]): any => {
     // const nome = response.testo.map((x: { nome: any; }) => x.nome);
     return setAllTesto(response, rows)
   }
 
-
-
   const setAllTesto = (response: any, dimension: number[]) => {
     activityStore.setAllTesto(response);
-    aggiornaDOMComponente(dimension.length, response);
-
+    aggiornaDOMComponente(response.testo,() => setVisibilityButton(true));
   }
-
-
 
   const navigateToFromAboutPage = (): void => {
     navigateRouting(navigate, `about`, {})
-
   }
 
   const pulsanteBlue: Pulsante = {
@@ -120,24 +100,24 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
 
       <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
         <Grid item>
-          <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left'  />
+          <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left' />
         </Grid>
       </Grid>
-      <Box sx={{ paddingLeft:paddingType, paddingRight: 5 }}>
+      <Box sx={{ paddingLeft: paddingType, paddingRight: 5 }}>
         <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
           <Grid item>
             <Button pulsanti={[pulsanteBlue]} />
           </Grid>
         </Grid>
         <div>
-           {/* Iterazione su schedule */}
-        {schedule.map((item: { _id: string; }, rowIndex: any) => (
-          <ActivityContent
-            user={utente}
-            identificativo={item._id} // Accedi all'ID di ogni elemento
-            visibiityButton={visibiityButton}
-          />
-        ))}
+          {/* Iterazione su schedule */}
+          {schedule.map((item: { _id: string; }, rowIndex: any) => (
+            <ActivityContent
+              user={utente}
+              identificativo={item._id} // Accedi all'ID di ogni elemento
+              visibiityButton={visibiityButton}
+            />
+          ))}
         </div>
       </Box>
     </>

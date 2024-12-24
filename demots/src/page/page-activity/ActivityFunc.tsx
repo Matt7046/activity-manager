@@ -1,30 +1,26 @@
-import { ActivityState } from "./Activity";
 
 
 
-export const myDisplayer = ((some: any, value: any) => {
-    document.getElementById(some)!.innerHTML = value;
-})
+ export const toggleVisibility = (_id: string, handleClickMostraLabel:any) => {
+    const element = document.querySelector(`#rowHidden-${_id}`) as HTMLElement;
+    const check = element.style.visibility === "hidden";
+    // Rimuove il valore inline
+    if (check) {
+      element.style.visibility = ""; // Rimuove il valore inline
 
-const functionTestActivity = (state: ActivityState) => {
-    return new Promise<string>((resolve, reject) => {
-        try {
-            resolve('ok');
-        } catch (error) {
-            reject(error); // Gestisci eventuali errori
-        }
-    });
-};
+    } else {
+      element.style.visibility = "hidden"; // Rimuove il valore inline
 
+    }
 
+    if (check) {
+      handleClickMostraLabel(_id)
+    }
+    return check; // Aggiorna lo stato
+  };
 
-export const ascoltatore = (valueStore: any, p0: string) => {
-    return functionTestActivity(valueStore)
-        .then((value: any) => {
-            console.log("Il valore dello store è ", valueStore)
-            myDisplayer(p0, valueStore);
-        },
-        )
+  export const openDetail = (_id: string, componentDidMount: any): void => {
+    componentDidMount(_id)
+  } 
 
 
-}
