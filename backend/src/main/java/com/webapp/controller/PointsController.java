@@ -24,13 +24,13 @@ public class PointsController {
 
     @Autowired
     private PointsService pointsService;
-    
+
     @PostMapping("")
     public ResponseDTO findByEmail(@RequestBody PointsDTO pointsDTO) {
         List<String> errori = new ArrayList<>();
         Points item = null; // Inizializza l'oggetto come null
         ResponseDTO responseDTO;
-    
+
         try {
             // Tentativo di trovare il documento
             item = pointsService.findByEmail(pointsDTO.getEmail());
@@ -41,21 +41,21 @@ public class PointsController {
             // Gestione dell'errore: log e aggiunta dei dettagli
             errori.add("Errore: " + e.getMessage());
         }
-    
+
         if (item != null) {
             // Mappatura se l'oggetto è stato trovato
             PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(item);
-            subDTO.setNumeroPunti("I Points a disposizione sono: ".concat(subDTO.getPoints().toString()) );
+            subDTO.setNumeroPunti("I Points a disposizione sono: ".concat(subDTO.getPoints().toString()));
             responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
         } else {
             // Risposta in caso di errore o elemento non trovato
             ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
             responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND, errori); // 404 con dettagli errore
         }
-    
+
         return responseDTO;
     }
-    
+
     @PostMapping("/dati")
     public ResponseEntity<ResponseDTO> savePoints(@RequestBody PointsDTO pointsDTO) {
         try {
@@ -77,5 +77,4 @@ public class PointsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
-
 }
