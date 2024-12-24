@@ -16,12 +16,16 @@ import { observer } from 'mobx-react';
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 export interface MenuLaterale {
-  funzione: any
+  funzione: ((...args: unknown[]) => unknown) | null; // Può essere una funzione o `null`
   testo: string
-
 }
 
-
+export interface TypeAnchor {
+  top: boolean,
+  left: boolean,
+  bottom: boolean,
+  right: boolean
+}
 
 const Drawer = observer((props: {
   //key: number;
@@ -31,13 +35,14 @@ const Drawer = observer((props: {
   anchor: Anchor
 }) => {
 
-  const [statoComponente, setStatoComponente] = React.useState({
+  const typeAnchor: TypeAnchor = {
     top: false,
     left: false,
     bottom: false,
     right: false,
-  });
+  }
 
+  const [statoComponente, setStatoComponente] = React.useState<TypeAnchor>(typeAnchor);
 
   return (
     <div>
@@ -59,26 +64,29 @@ const Drawer = observer((props: {
   );
 })
 
+const toggleDrawer = (
+  anchor: keyof TypeAnchor, // Specifica che "anchor" deve essere una delle chiavi di TypeAnchor
+  open: boolean,
+  setStatoComponente: React.Dispatch<React.SetStateAction<TypeAnchor>>, // Tipo corretto per il setter dello stato
+  statoComponente: TypeAnchor
+) => 
+(event: React.KeyboardEvent | React.MouseEvent) => {
+  if (
+    event.type === 'keydown' &&
+    ((event as React.KeyboardEvent).key === 'Tab' || 
+     (event as React.KeyboardEvent).key === 'Shift')
+  ) {
+    return; // Se è un evento di tastiera con i tasti "Tab" o "Shift", esci senza fare nulla
+  }
 
-const toggleDrawer =
-  (anchor: Anchor, open: boolean, setStatoComponente: ((arg0: any) => void), statoComponente: any) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event &&
-        event.type === 'keydown' &&
-        ((event as React.KeyboardEvent).key === 'Tab' ||
-          (event as React.KeyboardEvent).key === 'Shift')
-      ) {
-        return;
-      }
-
-      setStatoComponente({ ...statoComponente, [anchor]: open });
-    };
+  setStatoComponente({ ...statoComponente, [anchor]: open }); // Aggiorna lo stato con il nuovo valore
+};
 
 
 
 
-const listaItem = (anchor: Anchor, sezioni: MenuLaterale[][], setStatoComponente: ((arg0: any) => void), statoComponente: any) => (
+
+const listaItem = (anchor: Anchor, sezioni: MenuLaterale[][], setStatoComponente:React.Dispatch<React.SetStateAction<TypeAnchor>>, statoComponente: TypeAnchor) => (
   <Box
     sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
     role="presentation"
@@ -95,8 +103,6 @@ const listaItem = (anchor: Anchor, sezioni: MenuLaterale[][], setStatoComponente
                   onClick={() => {
                     if (text.funzione) {
                       text.funzione(); // Chiama la funzione associata a questo elemento
-                    } else {
-                      console.warn(`Nessuna funzione definita per l'elemento: ${text.testo}`);
                     }
                   }}
                 >

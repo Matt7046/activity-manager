@@ -99,7 +99,6 @@ const ActivityContent: React.FC<any> = ({
 
   const scheduler: MsSchedule = {
     justifyContent: flex,
-    onClose: onclose,
     handleClose: handleClose,
     schedule: responseSchedule,
     errors: errors,
