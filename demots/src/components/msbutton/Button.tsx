@@ -1,18 +1,13 @@
 import { observer } from 'mobx-react';
 
-
 export interface Pulsante {
   icona: string
   nome :string
-  funzione : any,
-  callBackEnd?: any;
+  funzione : ((...args: any[]) => any),
+  callBackEnd?: ((...args: any[]) => any);
   title: string,
   visibility? : boolean
 }
-
-
-
-
 
 const Button = observer((props: {
   //key: number;
@@ -51,14 +46,5 @@ const Button = observer((props: {
     </div>
   );  
 })
-
-
-
-
-
-
-
-
-
 
 export default Button;

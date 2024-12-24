@@ -5,33 +5,22 @@ import Label from '../mslabel/label';
 import Button, { Pulsante } from '../msbutton/Button';
 import { myDisplayer } from '../../general/Utils';
 import React from 'react';
-import { fetchDataActivityById } from '../../page/page-activity/service/ActivityService';
-import { showError } from '../../App';
-
 
 export interface MsSchedule {
-
   justifyContent?: string;
-  onClose: any;
-  handleClose: any;
-  schedule: { _id: string; nome: string; subtesto: string }[]; // Migliorata la tipizzazione
-  errors: any;
-  visibilityButton: boolean;
-  open: any;
-  pulsanti: Pulsante[];
+  onClose?: () => void;  // La funzione onClose non ha parametri e non ritorna nulla
+  handleClose: () => void;  // La funzione handleClose non ha parametri e non ritorna nulla
+  schedule: { _id: string; nome: string; subtesto: string }[]; // Array di oggetti con proprietà _id, nome e subtesto
+  errors:string;  // Supponiamo che errors sia un oggetto con chiavi e valori stringa (può essere modificato in base alla tua struttura)
+  visibilityButton: boolean;  // La visibilità del bottone, un booleano
+  open: boolean;  // open è un booleano, per esempio per la visibilità di un dialogo
+  pulsanti: Pulsante[];  // Array di oggetti Pulsante
 }
 
 
 const Schedule = observer((props: {
   schedule: MsSchedule
 }) => {
-  const visibilityButton = props.schedule.visibilityButton ?? true;
-
-  let pulsanteNew = props.schedule.pulsanti.find(
-    (pulsante) => pulsante.nome.toUpperCase() === 'NEW'
-  )!;
-  pulsanteNew = pulsanteNew ?? {} as Pulsante;
-
   return (
     <>
       <div className="row">
@@ -46,32 +35,23 @@ const Schedule = observer((props: {
             -{props.schedule.errors}
           </Alert>
         </Snackbar>
-      
-      {/* Pulsante "NEW" solo una volta all'inizio */}
-      {props.schedule.pulsanti.filter(
-        (pulsante) => pulsante.nome.toUpperCase() === 'NEW'
-      ).map((pulsante) => (
-        <Grid container justifyContent="space-between" alignItems="center" spacing={2} key="newButton">
-          <Grid item>
-            <Button
-              pulsanti={[
-                {
-                  ...pulsante,
-                  funzione: (_id: string) => {
-                    pulsante.funzione(); // Funzione dinamica per l'ID
-                  },
-                  callBackEnd: (_id: string) => {
-                    pulsante.callBackEnd(); // Funzione dinamica per callBackEnd
-                  },
-                },
-              ]}
-            />
+
+        {/* Pulsante "NEW" solo una volta all'inizio */}
+        {props.schedule.pulsanti.filter(
+          (pulsante) => pulsante.nome.toUpperCase() === 'NEW'
+        ).map((pulsante) => (
+          <Grid container justifyContent="space-between" alignItems="center" spacing={2} key="newButton">
+            <Grid item>
+              <Button
+                pulsanti={[{ ...pulsante },
+                ]}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-      ))}
-  
+        ))}
+
         {/* Iterazione sui dati dello schedule */}
-        {props.schedule.schedule.map((item, rowIndex) => {
+        {props.schedule.schedule.map((item) => {
           // Creazione dei pulsanti "RED"
           const pulsanteWithFunctionRED = props.schedule.pulsanti
             .filter((pulsante) => pulsante.nome.toUpperCase() === 'RED')
@@ -81,13 +61,16 @@ const Schedule = observer((props: {
                 // La funzione viene definita dinamicamente con l'ID
                 toggleVisibility(item._id, pulsante);
               },
-              callBackEnd: (_id: string) => {
-                // La funzione viene definita dinamicamente con l'ID
-                pulsante.callBackEnd(item._id);
+              callBackEnd: (...args: any[]) => {
+                const updatedArgs = { ...args[0], _id: item._id }; // Sostituisci il valore di _id
+
+                if (pulsante.callBackEnd) {
+                  pulsante.callBackEnd(updatedArgs); // Passa l'oggetto aggiornato
+                }
               },
               visibility: !props.schedule.visibilityButton
             }));
-  
+
           // Creazione degli altri pulsanti
           const pulsanteWithFunctionOther = props.schedule.pulsanti
             .filter(
@@ -100,38 +83,41 @@ const Schedule = observer((props: {
                 // La funzione viene definita dinamicamente con l'ID
                 pulsante.funzione(item._id); // Passiamo item._id
               },
-              callBackEnd: (_id: string) => {
-                // La funzione viene definita dinamicamente con l'ID
-                pulsante.callBackEnd(item._id); // Passiamo item._id
+              callBackEnd: (...args: any[]) => {
+                const updatedArgs = { ...args[0], _id: item._id }; // Sostituisci il valore di _id
+
+                if (pulsante.callBackEnd) {
+                  pulsante.callBackEnd(updatedArgs); // Passa l'oggetto aggiornato
+                }
               },
               visibility: true
             }));
-  
+
           // Uniamo i pulsanti "RED" e gli altri
           const pulsanti = [
             ...pulsanteWithFunctionRED,
             ...pulsanteWithFunctionOther,
           ];
-  
+
           return (
-            <React.Fragment key={item._id}>   
-  
+            <React.Fragment key={item._id}>
+
               <div className="col-display">
                 <NameDisplay value={item.nome} identificativo={item._id} />
               </div>
-  
+
               <Grid container justifyContent={props.schedule.justifyContent} spacing={2} style={{ height: '30px' }}>
                 <Grid item>
                   <div>
-                    <Button  pulsanti={pulsanti} />
+                    <Button pulsanti={pulsanti} />
                   </div>
                 </Grid>
               </Grid>
-  
+
               <div id={`rowHidden-${item._id}`} style={{ gridColumn: 'span 12', visibility: 'hidden' }}>
                 <Label _id={item._id} text={item.subtesto} />
               </div>
-  
+
               {/* Separatore */}
               <hr className="custom-separator" />
             </React.Fragment>
@@ -166,7 +152,8 @@ export const toggleVisibility = (_id: string, pulsante: Pulsante) => {
   return check; // Aggiorna lo stato
 };
 
-export const aggiornaDOMComponente = (responseNome: any[], setVisibilityButton: any): any => {
+export const aggiornaDOMComponente = (responseNome: any, setVisibilityButton: (visibility: boolean) => void
+): void => {
   if (responseNome) {
     for (let index = 0; index < responseNome.length; index++) {
       myDisplayer("displayer-" + responseNome[index]._id, responseNome[index].nome);
