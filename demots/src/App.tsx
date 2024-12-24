@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import Points from './page/page-points/Points';
 import { savePointsById } from './page/page-points/service/PointsService';
+import { Alert, Snackbar } from '@mui/material';
 
 
 
@@ -121,48 +122,61 @@ const GoogleAuthComponent = () => {
     handleLoginSuccessFake(fakeResponse);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
-      <div>
 
-        <h1>
-          Login con Google ({user ? user.name : "Non autenticato"})
-        </h1>
+    <><Snackbar
+      open={open}
+      autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
+      onClose={handleClose}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Posizione del messaggio
+    >
+      <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        -{errors}
+      </Alert>
+    </Snackbar><GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
+        <div>
 
-        {!user ? (
-          <div>
-            <div
-              className="col-button-container"
-              style={{
-                gridColumn: 'span 2',
-                display: 'flex',
-                gridTemplateColumns: '2fr 1fr',
-                gap: '12px',
-                visibility: true ? 'visible' : 'hidden',
-              }}
-            >
-              {/* Pulsante per simulare il login */}
-              <button onClick={simulateLogin}>Simula Login con Google</button>
+          <h1>
+            Login con Google ({user ? user.name : "Non autenticato"})
+          </h1>
 
-              {/* Pulsante di login reale */}
-              <GoogleLogin
-                onSuccess={(response) => login()}
-                onError={logOut}
-              />
+          {!user ? (
+            <div>
+              <div
+                className="col-button-container"
+                style={{
+                  gridColumn: 'span 2',
+                  display: 'flex',
+                  gridTemplateColumns: '2fr 1fr',
+                  gap: '12px',
+                  visibility: true ? 'visible' : 'hidden',
+                }}
+              >
+                {/* Pulsante per simulare il login */}
+                <button onClick={simulateLogin}>Simula Login con Google</button>
+
+                {/* Pulsante di login reale */}
+                <GoogleLogin
+                  onSuccess={(response) => login()}
+                  onError={logOut} />
+              </div>
             </div>
-          </div>
-        ) : (
-          <div>
-            <h1>{title}</h1>
-            <Routes>
-              <Route path="/activity" element={<Activity user={user} />} />
-              <Route path="/about" element={<About user={user} />} />
-              <Route path="/points" element={<Points user={user} />} />
-            </Routes>
-          </div>
-        )}
-      </div>
-    </GoogleOAuthProvider>
+          ) : (
+            <div>
+              <h1>{title}</h1>
+              <Routes>
+                <Route path="/activity" element={<Activity user={user} />} />
+                <Route path="/about" element={<About user={user} />} />
+                <Route path="/points" element={<Points user={user} />} />
+              </Routes>
+            </div>
+          )}
+        </div>
+      </GoogleOAuthProvider></>
   );
 };
 

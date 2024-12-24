@@ -15,37 +15,52 @@ import Drawer from "../../components/msdrawer/Drawer";
 const AboutContent: React.FC<any> = ({
   user
 }) => {
-  
+
   const location = useLocation();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
   let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
-  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email}, 2);
-  
+  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email }, 2);
 
   let testoOld = activityStore.testo.find((x) => _id === x._id);
   const activity = new DTOActivity();
   activity.nome = "Attività";
   activity.subTesto = "Descrizione";
-  testoOld =  activity;
+  testoOld = activity;
 
+  const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
+  const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
+  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [nome, setNome] = useState(activityStore.testo.find((x) => _id === x._id)?.nome);
+  const [subTesto, setSubTesto] = useState(activityStore.testo.find((x) => _id === x._id)?.subTesto);
+  const padding = isVertical ? 5 : 8;
+
+  const pulsanteRed: Pulsante = {
+    icona: 'fas fa-solid fa-trash',
+    funzione: () => cancellaRecord(_id), // Passi la funzione direttamente
+    nome: 'red',
+    title: 'Elimina',
+    visibility: _id ? true : false
+  };
+
+  const pulsanteBlue: Pulsante = {
+    icona: 'fas fa-solid fa-floppy-disk',
+    funzione: () => salvaRecord(_id), // Passi la funzione direttamente
+    nome: 'blue',
+    title: 'Salva'
+  };
 
   const handleChangeNome = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNome(event.target.value); // Aggiorna lo stato con il valore inserito
   };
 
-  const [subTesto, setSubTesto] = useState(activityStore.testo.find((x) => _id === x._id)?.subTesto);
-
   const handleChangeSubTesto = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSubTesto(event.target.value); // Aggiorna lo stato con il valore inserito    
   };
-
-  const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
-  const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
-
- const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
 
@@ -61,8 +76,6 @@ const AboutContent: React.FC<any> = ({
 
   // Crea l'array dei pulsanti in base all'orientamento
 
-  const padding = isVertical ? 5 :8;
-
   const cancellaRecord = (_id: any): void => {
 
     deleteAboutById(_id, () => showError(setOpen, setErrors)).then((response) => {
@@ -77,7 +90,7 @@ const AboutContent: React.FC<any> = ({
       }
     })
   }
-  
+
   const salvaRecord = (_id: string): void => {
 
     const testo = {
@@ -91,27 +104,6 @@ const AboutContent: React.FC<any> = ({
       }
     })
   }
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const pulsanteRed: Pulsante = {
-    icona: 'fas fa-solid fa-trash',
-    funzione: () => cancellaRecord(_id), // Passi la funzione direttamente
-    nome: 'red',
-    title: 'Elimina',
-    visibility: _id ? true : false
-  };
-
-  const pulsanteBlue: Pulsante = {
-    icona: 'fas fa-solid fa-floppy-disk',
-    funzione: () => salvaRecord(_id), // Passi la funzione direttamente
-    nome: 'blue',
-    title: 'Salva'
-
-  };
-
 
   return (
     <>
@@ -175,14 +167,6 @@ const AboutContent: React.FC<any> = ({
       </div>
     </>
   );
-
-
 }
-
-
-
-
-// Componente che visualizza il testo dallo store
-
 
 export default AboutContent;
