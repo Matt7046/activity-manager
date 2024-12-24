@@ -3,15 +3,16 @@ import { observer } from 'mobx-react';
 import NameDisplay from '../msnamedisplay/NameDisplay';
 import Label from '../mslabel/label';
 import Button, { Pulsante } from '../msbutton/Button';
+import { myDisplayer } from '../../general/Utils';
 
 
 export interface MsSchedule {
-  
+
   icona: string
-  nome :string
-  funzione : any,
+  nome: string
+  funzione: any,
   title: string,
-  visibility? : boolean
+  visibility?: boolean
 }
 
 
@@ -67,6 +68,15 @@ const Schedule = observer((props: {
     </>
   );
 });
+
+export const aggiornaDOMComponente = (responseNome: any[], setVisibilityButton: any): any => {
+  if (responseNome) {
+    for (let index = 0; index < responseNome.length; index++) {
+      myDisplayer("displayer-" + responseNome[index]._id, responseNome[index].nome);
+      setVisibilityButton(true);
+    }
+  }
+}
 
 
 export default Schedule;
