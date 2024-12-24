@@ -5,7 +5,7 @@ interface LabelProps {
   _id: string;
   text: string;
   className?: string;
-  handleClick: () => void;
+  handleClick?: () => void;
   isUnderlined?: boolean; // Proprietà opzionale per la sottolineatura
 }
 
