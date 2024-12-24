@@ -6,13 +6,16 @@ import { navigateRouting, sezioniMenu, sezioniMenuIniziale, showError } from "..
 import TextField from '@mui/material/TextField';
 import { Alert, Box, Grid, Snackbar } from "@mui/material";
 import { deleteAboutById, saveAboutById } from "./service/AboutService";
-import { DTOActivity } from "../../dto/DTOActivity";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import Drawer from "../../components/msdrawer/Drawer";
+import { ActivityI } from "../page-activity/Activity";
 
 
+interface AboutContentProps {
+  user: any;
+}
 
-const AboutContent: React.FC<any> = ({
+const AboutContent: React.FC<AboutContentProps> = ({
   user
 }) => {
 
@@ -24,12 +27,14 @@ const AboutContent: React.FC<any> = ({
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email }, 2);
 
   let testoOld = activityStore.testo.find((x) => _id === x._id);
-  const activity = new DTOActivity();
-  activity.nome = "Attività";
-  activity.subTesto = "Descrizione";
-  testoOld = activity;
+  const activity : ActivityI = {
+  _id: undefined,
+  nome : "Attività",
+  subTesto : "Descrizione"
+  }
 
-  const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
+  testoOld = activity;
+  const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [nome, setNome] = useState(activityStore.testo.find((x) => _id === x._id)?.nome);
@@ -76,13 +81,12 @@ const AboutContent: React.FC<any> = ({
 
   // Crea l'array dei pulsanti in base all'orientamento
 
-  const cancellaRecord = (_id: any): void => {
+  const cancellaRecord = (_id: string): void => {
 
     deleteAboutById(_id, () => showError(setOpen, setErrors)).then((response) => {
       if (response) {
         if (response.status === 'OK') {
           navigateRouting(navigate, 'activity', {})
-          console.log('Dati ricevuti:', response);
         } else {
           setErrors(response.errors);
           setOpen(true);

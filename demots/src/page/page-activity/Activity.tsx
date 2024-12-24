@@ -6,7 +6,17 @@ import { Box, Grid } from '@mui/material';
 import { sezioniMenu, sezioniMenuIniziale } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import Drawer from '../../components/msdrawer/Drawer';
-import { aggiornaDOMComponente, MsSchedule } from '../../components/msschedule/Schedule';
+import { aggiornaDOMComponente } from '../../components/msschedule/Schedule';
+
+
+
+export interface ActivityI {
+  _id: string | undefined;
+  nome: string;
+  subTesto: string;
+}
+
+
 
 
 const Activity: React.FC<{ user: any }> = ({ user }) => {
@@ -89,7 +99,7 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
       </Box>
     </>
   );
-}  
+}
 export default Activity;
 
 export interface ActivityProps {
