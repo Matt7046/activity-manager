@@ -12,6 +12,7 @@ import points from "../../assets/images/points.jpg"; // Percorso del file locale
 import CardGrid from "../../components/mscard/card";
 import { logActivityByEmail } from "../page-activity/service/ActivityService";
 import { findByEmail } from "./service/PointsService";
+import { ResponseI } from "../../general/Utils";
 
 
 const PointsContent: React.FC<any> = ({
@@ -23,7 +24,7 @@ const PointsContent: React.FC<any> = ({
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email }, 2);
 
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
-  const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
+  const [errors, setErrors] = React.useState<string[]>([]); // Lo stato è ora un array di stringhe
   const [testo, setTesto] = useState('');
   const [testoLog, setTestoLog] = useState([] as string[]);
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
@@ -62,9 +63,9 @@ const PointsContent: React.FC<any> = ({
 
   // Crea l'array dei pulsanti in base all'orientamento
 
-  const getUser = (email: any): void => {
+  const getUser = (email: string): void => {
 
-    findByEmail(email, () => showError(setOpen, setErrors)).then((response: any) => {
+    findByEmail(email, () => showError(setOpen, setErrors)).then((response: ResponseI) => {
       if (response) {
         if (response.status === 'OK') {
           setTesto(response.testo.numeroPunti)
@@ -76,12 +77,11 @@ const PointsContent: React.FC<any> = ({
       }
     })
   }
-  const getLogAttivita = (email: any): void => {
+  const getLogAttivita = (email: string): void => {
 
-    logActivityByEmail(email, () => showError(setOpen, setErrors)).then((response: any) => {
+    logActivityByEmail(email, () => showError(setOpen, setErrors)).then((response: ResponseI) => {
       if (response) {
         if (response.status === 'OK') {
-          console.log("response", response)
           setTestoLog(response.testo)
         } else {
           setErrors(response.errors);

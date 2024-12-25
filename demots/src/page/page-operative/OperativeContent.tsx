@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import "./About.css";
+import "./Operative.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import activityStore from "../page-activity/store/ActivityStore";
 import { navigateRouting, sezioniMenu, sezioniMenuIniziale, showError } from "../../App";
-import TextField from '@mui/material/TextField';
 import { Alert, Box, Grid, Snackbar } from "@mui/material";
-import { deleteAboutById, saveAboutById } from "./service/AboutService";
-import Button, { Pulsante } from "../../components/msbutton/Button";
+import { deleteAboutById, saveAboutById } from "./service/OperativeService";
+import { Pulsante } from "../../components/msbutton/Button";
 import Drawer from "../../components/msdrawer/Drawer";
 import { ActivityI } from "../page-activity/Activity";
 import { UserI } from "../../general/Utils";
 
-interface AboutContentProps {
+interface OperativeContentProps {
   user: UserI;
 }
 
-const AboutContent: React.FC<AboutContentProps> = ({
+const OperativeContent: React.FC<OperativeContentProps> = ({
   user
 }) => {
 
@@ -127,50 +126,13 @@ const AboutContent: React.FC<AboutContentProps> = ({
             <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
               -{errors}
             </Alert>
-          </Snackbar>
+          </Snackbar>      
 
-          {/* Contenitore per i TextField */}
-          <Box sx={{ marginBottom: 4 }}>
-            <div id="text-box">
-              <TextField
-                id="nome"
-                label={testoOld.nome}
-                variant="standard"
-                value={nome} // Collega il valore allo stato
-                onChange={handleChangeNome} // Aggiorna lo stato quando cambia
-                fullWidth
-              />
-            </div>
-            <div id="text-box-sub-testo" style={{ marginTop: '16px' }}>
-              <TextField
-                id="subTesto"
-                label={testoOld.subTesto}
-                variant="standard"
-                value={subTesto} // Collega il valore allo stato
-                onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia
-                fullWidth
-                multiline
-                rows={10} // Numero di righe visibili per il campo
-                InputLabelProps={{
-                  style: {
-                    whiteSpace: 'normal', // Permette al testo di andare a capo
-                    wordWrap: 'break-word', // Interrompe le parole lunghe
-                  },
-                }}
-              />
-            </div>
-          </Box>
-
-          {/* Pulsanti */}
-          <Grid container justifyContent="flex-end" spacing={2}>
-            <Grid item>
-              <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
-            </Grid>
-          </Grid>
+         
         </Box>
       </div>
     </>
   );
 }
 
-export default AboutContent;
+export default OperativeContent;
