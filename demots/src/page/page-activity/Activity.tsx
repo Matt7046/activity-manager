@@ -7,8 +7,7 @@ import { sezioniMenu, sezioniMenuIniziale } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import Drawer from '../../components/msdrawer/Drawer';
 import { aggiornaDOMComponente } from '../../components/msschedule/Schedule';
-
-
+import { ResponseI, UserI } from '../../general/Utils';
 
 export interface ActivityI {
   _id: string | undefined;
@@ -16,14 +15,10 @@ export interface ActivityI {
   subTesto: string;
 }
 
+const Activity: React.FC<{ user: UserI }> = ({ user }) => {
 
-
-
-const Activity: React.FC<{ user: any }> = ({ user }) => {
-
-  const [utente, setUtente] = useState<any>(user); // Stato iniziale vuoto
+  const [utente, setUtente] = useState<UserI>(user); // Stato iniziale vuoto
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const [rows, setRows] = useState<number>(10); // Stato iniziale vuoto
   const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
   const [visibilityButton, setVisibilityButton] = useState<boolean>(false); // Stato iniziale vuoto
 
@@ -60,7 +55,6 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
         .then((response) => {
           if (response) {
             setResponse(response.testo)
-            setRows(response.testo.length);
             caricamentoIniziale(response);
           }
         })
@@ -70,11 +64,11 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
     }
   }
 
-  const caricamentoIniziale = (response: any): any => {
+  const caricamentoIniziale = (response: ResponseI): void => {
     return setAllTesto(response);
   }
 
-  const setAllTesto = (response: any) => {
+  const setAllTesto = (response: ResponseI): void=> {
     activityStore.setAllTesto(response);
     aggiornaDOMComponente(response.testo, () => setVisibilityButton(true));
   }
@@ -101,13 +95,3 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
   );
 }
 export default Activity;
-
-export interface ActivityProps {
-  nomeProps: string;
-  children?: React.ReactNode;  // Aggiungi 'children' opzionale
-}
-
-export interface ActivityState {
-  nome: string; // Definisci lo stato per 'nome'
-  testo: string;
-}

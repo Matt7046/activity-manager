@@ -2,10 +2,10 @@ import { deleteData, postData } from "../../../general/AxiosService";
 
 
 
-export const deleteAboutById = async (_id: string, funzioneErrore?:any, setLoading?:(loading: boolean)=>void) => {
+export const deleteAboutById = async (_id: string, funzioneErrore?:()=>void, setLoading?:(loading: boolean)=>void) => {
   try {
     _id = _id ? _id : '-1';
-    const path = `about/${_id}`;
+    const path = `operative/${_id}`;
     const data = await deleteData(path, setLoading); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
@@ -18,9 +18,9 @@ export const deleteAboutById = async (_id: string, funzioneErrore?:any, setLoadi
 };
 
 
-export const saveAboutById = async (_id: string, about: any, funzioneErrore?: any, setLoading?:(loading: boolean)=>void) => {
+export const saveAboutById = async (_id: string, about: any, funzioneErrore?:()=>void, setLoading?:(loading: boolean)=>void) => {
   try {
-    const path = `about/dati`;
+    const path = `operative/dati`;
     const data = await postData(path, about,setLoading); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
