@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./Operative.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserI } from "../../general/Utils";
-const [open, setOpen] = useState(false);
 
 interface OperativeContentProps {
   user: UserI;
@@ -31,12 +30,6 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  // Crea l'array dei pulsanti in base all'orientamento
-  const handleClose = () => {
-    setOpen(false);
-  };
-
 
   return (
     <>
