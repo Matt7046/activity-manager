@@ -3,15 +3,16 @@ import activityStore from "./store/ActivityStore";  // Importa lo store
 import "./ActivityContent.css";
 import { useNavigate } from "react-router-dom";
 import { fetchDataActivityById } from "./service/ActivityService";
-import { navigateRouting, sezioniMenu, sezioniMenuIniziale, showError } from "../../App";
+import { navigateRouting, showError } from "../../App";
 import { Pulsante } from "../../components/msbutton/Button";
 import Schedule, { MsSchedule } from "../../components/msschedule/Schedule";
-import { UserI } from "../../general/Utils";
+import { getMenuLaterale, UserI } from "../../general/Utils";
 
 
 interface ActivityContentProps {
   user: UserI;
   responseSchedule: any;
+  setErrors: any;
 }
 
 const ActivityContent: React.FC<ActivityContentProps> = ({
@@ -20,9 +21,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
-  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
-  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email }, 2);
+  const menuLaterale = getMenuLaterale(navigate,user);
 
   const [labelText] = React.useState('Nessun dato aggiuntivo'); // Stato dinamico per il testo della label
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
