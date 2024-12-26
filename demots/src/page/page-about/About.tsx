@@ -48,16 +48,16 @@ const About: React.FC<{ user: UserI }> = ({ user }) => {
         handleClose={handleClose}
         padding={padding}
       >
-              <AboutContent
-            user={user}
-            setErrors={setErrors}
-          />
-          </PageLayout>
+        <AboutContent
+          user={user}
+          setErrors={setErrors}
+        />
+      </PageLayout>
       <div>
         {/* Contenuto aggiuntivo, se necessario */}
       </div>
     </>
-  ); 
+  );
 };
 
 export default About;
