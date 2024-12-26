@@ -13,7 +13,7 @@ const apiClient = axios.create({
 });
 
 // Funzione per ottenere dati dall'API
-export const getData = async (endpoint: string, setLoading:any) => {
+export const getData = async (endpoint: string, setLoading?:(loading: boolean)=>void) => {
   setLoading = setLoading ?? (() => {});
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
@@ -28,7 +28,7 @@ export const getData = async (endpoint: string, setLoading:any) => {
 };
 
 // Funzione per inviare dati all'API (esempio POST)
-export const postData = async (endpoint: string, data: any, setLoading:any) => {
+export const postData = async (endpoint: string, data: any, setLoading?:(loading: boolean)=>void) => {
   setLoading = setLoading ?? (() => {});
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
@@ -43,7 +43,7 @@ export const postData = async (endpoint: string, data: any, setLoading:any) => {
 };
 
 // Altri metodi (PUT, DELETE, ecc.)
-export const putData = async (endpoint: string, data: any, setLoading:any) => {
+export const putData = async (endpoint: string, data: any, setLoading?:(loading: boolean)=>void) => {
   setLoading = setLoading ?? (() => {});
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
@@ -57,7 +57,7 @@ export const putData = async (endpoint: string, data: any, setLoading:any) => {
   }
 };
 
-export const deleteData = async (endpoint: string, setLoading: any) => {
+export const deleteData = async (endpoint: string,  setLoading?:(loading: boolean)=>void) => {
   setLoading = setLoading ?? (() => {});
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {

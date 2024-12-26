@@ -3,21 +3,25 @@ import activityStore from "./store/ActivityStore";  // Importa lo store
 import "./ActivityContent.css";
 import { useNavigate } from "react-router-dom";
 import { fetchDataActivityById } from "./service/ActivityService";
-import { navigateRouting, sezioniMenu, sezioniMenuIniziale, showError } from "../../App";
+import { navigateRouting, showError } from "../../App";
 import { Pulsante } from "../../components/msbutton/Button";
 import Schedule, { MsSchedule } from "../../components/msschedule/Schedule";
+import { getMenuLaterale, UserI } from "../../general/Utils";
 
 
+interface ActivityContentProps {
+  user: UserI;
+  responseSchedule: any;
+  setErrors: any;
+}
 
-const ActivityContent: React.FC<any> = ({
+const ActivityContent: React.FC<ActivityContentProps> = ({
   responseSchedule,
   user,
 }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
-  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
-  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email }, 2);
+  const menuLaterale = getMenuLaterale(navigate,user);
 
   const [labelText] = React.useState('Nessun dato aggiuntivo'); // Stato dinamico per il testo della label
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
@@ -34,29 +38,30 @@ const ActivityContent: React.FC<any> = ({
   const pulsanteNew: Pulsante = {
     icona: 'fas fa-plus',
     funzione: () => navigateRouting(navigate, `about`, {}),
-    callBackEnd : () =>{ },
+    callBackEnd: () => { },
     nome: 'new',
     title: 'Nuovo documento'
-  };;  
+  };;
 
   const pulsanteRed: Pulsante = {
-    icona: 'fas fa-download', 
-   // funzione: () => toggleVisibility('',fetchDataById('', () => showError(setOpen, setErrors)) ), // Passi la funzione direttamente
-   callBackEnd : (_id: string) =>fetchDataActivityById(_id, () => showError(setOpen, setErrors)),
-   nome: 'red', 
+    icona: 'fas fa-download',
+    funzione : (_id: string) => fetchDataActivityById(_id, () => showError(setOpen, setErrors)),
+    callBackEnd: () => { },
+    nome: 'red',
     title: 'Carica sottotesto',
-    visibilityButton: visibilityButton
-  } as any
+
+  }
 
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-eye',
     funzione: (_id: string) => openDetail(_id, () => componentDidMount(_id)), // Passi la funzione direttamente
-  //  callBackEnd : (_id: string) => componentDidMount(_id),
+    callBackEnd: () => { },
     nome: 'blue',
     title: 'Apri dettaglio'
-  } as any
+  }
 
-  const pulsantiVisibili = isVertical ? [pulsanteNew, pulsanteBlue] : [pulsanteNew, pulsanteRed, pulsanteBlue]
+ // const pulsantiVisibili = isVertical ? [pulsanteNew, pulsanteBlue] : [pulsanteNew, pulsanteRed, pulsanteBlue]
+  const pulsantiVisibili = [pulsanteNew, pulsanteRed, pulsanteBlue]
 
 
 
@@ -99,11 +104,10 @@ const ActivityContent: React.FC<any> = ({
 
   const scheduler: MsSchedule = {
     justifyContent: flex,
-    onClose: onclose,
     handleClose: handleClose,
     schedule: responseSchedule,
     errors: errors,
-    visibilityButton:isVertical,
+    isVertical: isVertical,
     open: open,
     pulsanti: pulsantiVisibili
   }

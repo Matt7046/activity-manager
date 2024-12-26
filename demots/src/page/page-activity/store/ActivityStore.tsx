@@ -1,11 +1,10 @@
-import { observer } from 'mobx-react';
-import { DTOActivity } from '../../../dto/DTOActivity';
 import BaseStore from '../../../general/BaseStore';
+import { ActivityI } from '../Activity';
 
 export class ActivityStore extends BaseStore {
   
 
-  testo : DTOActivity[]
+  testo : ActivityI[]
 
   constructor() {
     super(); // Inizializza la classe base

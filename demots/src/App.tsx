@@ -9,6 +9,7 @@ import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from '@react-oauth/g
 import Points from './page/page-points/Points';
 import { savePointsById } from './page/page-points/service/PointsService';
 import { Alert, CircularProgress, Snackbar } from '@mui/material';
+import Operative from './page/page-operative/Operative';
 
 
 
@@ -159,6 +160,7 @@ const GoogleAuthComponent = () => {
                 <Route path="/activity" element={<Activity user={user} />} />
                 <Route path="/about" element={<About user={user} />} />
                 <Route path="/points" element={<Points user={user} />} />
+                <Route path="/operative" element={<Operative user={user} />} />
               </Routes>
             </div>
           )}
