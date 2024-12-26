@@ -2,20 +2,27 @@ import React, { useEffect, useState } from 'react';
 import ActivityContent from './ActivityContent';
 import activityStore from './store/ActivityStore';
 import { fetchDataActivity } from './service/ActivityService';
-import { Box, Grid } from '@mui/material';
+import { Alert, Box, Grid, Snackbar } from '@mui/material';
 import { sezioniMenu, sezioniMenuIniziale } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import Drawer from '../../components/msdrawer/Drawer';
-import { aggiornaDOMComponente, MsSchedule } from '../../components/msschedule/Schedule';
+import { aggiornaDOMComponente } from '../../components/msschedule/Schedule';
+import { getMenuLaterale, ResponseI, UserI } from '../../general/Utils';
 
+export interface ActivityI {
+  _id: string | undefined;
+  nome: string;
+  subTesto: string;
+}
 
-const Activity: React.FC<{ user: any }> = ({ user }) => {
-
-  const [utente, setUtente] = useState<any>(user); // Stato iniziale vuoto
+const Activity: React.FC<{ user: UserI }> = ({ user }) => {
+  const [utente, setUtente] = useState<UserI>(user); // Stato iniziale vuoto
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const [rows, setRows] = useState<number>(10); // Stato iniziale vuoto
+  const menuLaterale = getMenuLaterale(navigate, user)
   const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
   const [visibilityButton, setVisibilityButton] = useState<boolean>(false); // Stato iniziale vuoto
+  const [errors, setErrors] = React.useState<string[]>([]); // Lo stato è un array di stringhe
+  const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
 
 
   // default class Activity extends React.Component {
@@ -50,7 +57,6 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
         .then((response) => {
           if (response) {
             setResponse(response.testo)
-            setRows(response.testo.length);
             caricamentoIniziale(response);
           }
         })
@@ -60,17 +66,18 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
     }
   }
 
-  const caricamentoIniziale = (response: any): any => {
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const caricamentoIniziale = (response: ResponseI): void => {
     return setAllTesto(response);
   }
 
-  const setAllTesto = (response: any) => {
+  const setAllTesto = (response: ResponseI): void => {
     activityStore.setAllTesto(response);
     aggiornaDOMComponente(response.testo, () => setVisibilityButton(true));
   }
-
-  let menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `activity`, {}, 0);
-  menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `about`, {}, 1);
 
   return (
     <>
@@ -79,25 +86,24 @@ const Activity: React.FC<{ user: any }> = ({ user }) => {
           <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left' />
         </Grid>
       </Grid>
+      <Snackbar
+              open={open}
+              autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
+              onClose={handleClose}
+              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+              <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                -{errors}
+              </Alert>
+            </Snackbar>
       <Box sx={{ paddingLeft: paddingType, paddingRight: 5 }}>
         <div>
           <ActivityContent
             responseSchedule={response}
-            user={utente}
-          />
+            user={utente} 
+            setErrors={setErrors} />
         </div>
       </Box>
     </>
   );
-}  
+}
 export default Activity;
-
-export interface ActivityProps {
-  nomeProps: string;
-  children?: React.ReactNode;  // Aggiungi 'children' opzionale
-}
-
-export interface ActivityState {
-  nome: string; // Definisci lo stato per 'nome'
-  testo: string;
-}

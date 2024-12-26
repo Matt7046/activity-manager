@@ -3,17 +3,10 @@ import { getMenuLaterale, UserI } from '../../general/Utils';
 import { Alert, Box, Grid, Snackbar } from '@mui/material';
 import Drawer from '../../components/msdrawer/Drawer';
 import { useNavigate } from 'react-router-dom';
-import AboutContent from './AboutContent';
+import OperativeContent from './OperativeContent';
 
-export interface PointsI {
-  _id: string | undefined;
-  email: string;
-  points: number;
-  numeroPunti: number;
-  attivita: string;
-}
 
-const About: React.FC<{ user: UserI }> = ({ user }) => {
+const Points: React.FC<{ user: UserI }> = ({ user }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
@@ -57,7 +50,7 @@ const About: React.FC<{ user: UserI }> = ({ user }) => {
       </Snackbar>
       <Box sx={{ paddingLeft: padding, paddingRight: 5 }}>
         <div>
-          <AboutContent
+          <OperativeContent
             user={user}
             setErrors={setErrors}
           />
@@ -68,7 +61,7 @@ const About: React.FC<{ user: UserI }> = ({ user }) => {
   );
 };
 
-export default About;
+export default Points;
 
 
 
