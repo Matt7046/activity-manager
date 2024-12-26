@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import ActivityContent from './ActivityContent';
-import activityStore from './store/ActivityStore';
-import { fetchDataActivity } from './service/ActivityService';
 import { useNavigate } from 'react-router-dom';
 import { getMenuLaterale, ResponseI, UserI } from '../../general/Utils';
 import PageLayout from '../page-layout/PageLayout';
+import ActivityContent from './ActivityContent';
+import { fetchDataActivity } from './service/ActivityService';
+import activityStore from './store/ActivityStore';
 
 export interface ActivityI {
   _id: string | undefined;
@@ -17,7 +17,6 @@ const Activity: React.FC<{ user: UserI }> = ({ user }) => {
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user)
   const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
-  const [visibilityButton, setVisibilityButton] = useState<boolean>(false); // Stato iniziale vuoto
   const [errors, setErrors] = React.useState<string[]>([]); // Lo stato è un array di stringhe
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
 
