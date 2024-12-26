@@ -60,7 +60,8 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     title: 'Apri dettaglio'
   }
 
-  const pulsantiVisibili = isVertical ? [pulsanteNew, pulsanteBlue] : [pulsanteNew, pulsanteRed, pulsanteBlue]
+ // const pulsantiVisibili = isVertical ? [pulsanteNew, pulsanteBlue] : [pulsanteNew, pulsanteRed, pulsanteBlue]
+  const pulsantiVisibili = [pulsanteNew, pulsanteRed, pulsanteBlue]
 
 
 
@@ -106,7 +107,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     handleClose: handleClose,
     schedule: responseSchedule,
     errors: errors,
-    visibilityButton: isVertical,
+    isVertical: isVertical,
     open: open,
     pulsanti: pulsantiVisibili
   }
