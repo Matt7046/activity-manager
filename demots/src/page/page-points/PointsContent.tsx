@@ -8,7 +8,7 @@ import points from "../../assets/images/points.jpg"; // Percorso del file locale
 import CardGrid from "../../components/mscard/card";
 import { logActivityByEmail } from "../page-activity/service/ActivityService";
 import { findByEmail } from "./service/PointsService";
-import { getMenuLaterale, ResponseI, UserI } from "../../general/Utils";
+import { ResponseI, UserI } from "../../general/Utils";
 import { showError } from "../../App";
 
 
@@ -91,7 +91,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
   return (
     <>
-      <div>       
+      <div>
         {/* Contenitore per i TextField */}
         <Box sx={{ marginBottom: 4 }}>
           <div id="cardData">
