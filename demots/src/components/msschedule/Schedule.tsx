@@ -81,7 +81,7 @@ const Schedule = observer((props: {
             .map((pulsante) => ({
               ...pulsante, // Copia tutte le altre proprietà del pulsante
               funzione: (_id: string) => {            
-                funzionalitaPulsanteRed(item, pulsante, handleSubTestoUpdate);
+                funzionalitaPulsanteRed(item, pulsante, handleSubTestoUpdate, subTesti);
               },
               callBackEnd: (...args: any[]) => {
                 const updatedArgs = { ...args[0], _id: item._id }; // Sostituisci il valore di _id
@@ -155,11 +155,11 @@ const Schedule = observer((props: {
   );
 })
 
-export const funzionalitaPulsanteRed = (item: any, pulsante: Pulsante,handleSubTestoUpdate:any) => {
+export const funzionalitaPulsanteRed = (item: any, pulsante: Pulsante,handleSubTestoUpdate:any, subTesti: any) => {
   const _id = item._id;
 
   const element = document.querySelector(`#rowHidden-${_id}`) as HTMLElement;
-  const check = element.style.visibility === "hidden";
+  const check = (element.style.visibility === ""  && subTesti[item._id]=== undefined)  || element.style.visibility === "hidden" ;
   // Rimuove il valore inline
   if (check) {
     element.style.visibility = ""; // Rimuove il valore inline
