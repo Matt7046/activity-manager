@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import Drawer from '../../components/msdrawer/Drawer';
 import { aggiornaDOMComponente } from '../../components/msschedule/Schedule';
 import { getMenuLaterale, ResponseI, UserI } from '../../general/Utils';
+import PageLayout from '../page-layout/PageLayout';
 
 export interface ActivityI {
   _id: string | undefined;
@@ -81,28 +82,22 @@ const Activity: React.FC<{ user: UserI }> = ({ user }) => {
 
   return (
     <>
-      <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-        <Grid item>
-          <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left' />
-        </Grid>
-      </Grid>
-      <Snackbar
-              open={open}
-              autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
-              onClose={handleClose}
-              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-              <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-                -{errors}
-              </Alert>
-            </Snackbar>
-      <Box sx={{ paddingLeft: paddingType, paddingRight: 5 }}>
-        <div>
-          <ActivityContent
-            responseSchedule={response}
-            user={utente} 
-            setErrors={setErrors} />
-        </div>
-      </Box>
+      <PageLayout
+        menuLaterale={menuLaterale}
+        open={open}
+        errors={errors}
+        handleClose={handleClose}
+        padding={paddingType}
+      >
+        <ActivityContent
+          responseSchedule={response}
+          user={utente}
+          setErrors={setErrors}
+        />
+      </PageLayout>
+      <div>
+        {/* Contenuto aggiuntivo, se necessario */}
+      </div>
     </>
   );
 }

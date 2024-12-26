@@ -4,6 +4,7 @@ import { Alert, Box, Grid, Snackbar } from '@mui/material';
 import Drawer from '../../components/msdrawer/Drawer';
 import { useNavigate } from 'react-router-dom';
 import AboutContent from './AboutContent';
+import PageLayout from '../page-layout/PageLayout';
 
 export interface PointsI {
   _id: string | undefined;
@@ -38,34 +39,25 @@ const About: React.FC<{ user: UserI }> = ({ user }) => {
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <>
-      <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-        <Grid item>
-          <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left' />
-        </Grid>
-      </Grid>
-      <Snackbar
+      <PageLayout
+        menuLaterale={menuLaterale}
         open={open}
-        autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          -{errors}
-        </Alert>
-      </Snackbar>
-      <Box sx={{ paddingLeft: padding, paddingRight: 5 }}>
-        <div>
-          <AboutContent
+        errors={errors}
+        handleClose={handleClose}
+        padding={padding}
+      >
+              <AboutContent
             user={user}
             setErrors={setErrors}
           />
-        </div>
-      </Box>
-
+          </PageLayout>
+      <div>
+        {/* Contenuto aggiuntivo, se necessario */}
+      </div>
     </>
-  );
+  ); 
 };
 
 export default About;
