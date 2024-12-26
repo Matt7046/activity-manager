@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react';
 
+type Visibility = 'visible' | 'hidden' | 'collapse' | undefined;
 
 interface LabelProps {
   _id: string;
@@ -7,12 +8,11 @@ interface LabelProps {
   className?: string;
   handleClick?: () => void;
   isUnderlined?: boolean; // Proprietà opzionale per la sottolineatura
-  visibility? : boolean;
+  visibility? : Visibility | undefined;
 }
 
 const Label = observer((props: LabelProps) => {
   const textDecoration = props.isUnderlined ? "underline" : "none";
-  const visibility = props.visibility ?  'visible': 'hidden';
   return (
     <div className="label" key={props._id}>
       <label
@@ -28,7 +28,7 @@ const Label = observer((props: LabelProps) => {
           display: 'inline-block', // Per applicare ellipsis correttamente
           maxWidth: '100%', // Imposta una larghezza massima
           textDecoration,
-        //  visibility: visibility
+          visibility: props.visibility
         }}
       >
         {props.text}
