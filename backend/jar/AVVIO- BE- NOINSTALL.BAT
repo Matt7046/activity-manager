@@ -31,5 +31,5 @@ pause
 :end
 REM Mantieni aperta la console corrente
 echo "Script completato."
-pause
+
 
