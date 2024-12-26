@@ -12,7 +12,7 @@ export interface MsSchedule {
   handleClose: () => void;  // La funzione handleClose non ha parametri e non ritorna nulla
   schedule: { _id: string; nome: string; subtesto: string }[]; // Array di oggetti con proprietà _id, nome e subtesto
   errors:string;  // Supponiamo che errors sia un oggetto con chiavi e valori stringa (può essere modificato in base alla tua struttura)
-  visibilityButton: boolean;  // La visibilità del bottone, un booleano
+  isVertical: boolean;  // La visibilità del bottone, un booleano
   open: boolean;  // open è un booleano, per esempio per la visibilità di un dialogo
   pulsanti: Pulsante[];  // Array di oggetti Pulsante
 }
@@ -69,7 +69,7 @@ const Schedule = observer((props: {
                   pulsante.callBackEnd(updatedArgs); // Passa l'oggetto aggiornato
                 }
               },
-              visibility: !props.schedule.visibilityButton
+              visibility: !props.schedule.isVertical
             }));
 
           // Creazione degli altri pulsanti
