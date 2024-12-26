@@ -45,8 +45,8 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-download',
-    funzione: () => { },
-    callBackEnd: (_id: string) => fetchDataActivityById(_id, () => showError(setOpen, setErrors)),
+    funzione : (_id: string) => fetchDataActivityById(_id, () => showError(setOpen, setErrors)),
+    callBackEnd: () => { },
     nome: 'red',
     title: 'Carica sottotesto',
 

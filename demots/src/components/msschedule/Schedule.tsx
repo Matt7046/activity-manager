@@ -4,14 +4,14 @@ import NameDisplay from '../msnamedisplay/NameDisplay';
 import Label from '../mslabel/label';
 import Button, { Pulsante } from '../msbutton/Button';
 import { myDisplayer } from '../../general/Utils';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export interface MsSchedule {
   justifyContent?: string;
   onClose?: () => void;  // La funzione onClose non ha parametri e non ritorna nulla
   handleClose: () => void;  // La funzione handleClose non ha parametri e non ritorna nulla
   schedule: { _id: string; nome: string; subtesto: string }[]; // Array di oggetti con proprietà _id, nome e subtesto
-  errors:string;  // Supponiamo che errors sia un oggetto con chiavi e valori stringa (può essere modificato in base alla tua struttura)
+  errors: string;  // Supponiamo che errors sia un oggetto con chiavi e valori stringa (può essere modificato in base alla tua struttura)
   isVertical: boolean;  // La visibilità del bottone, un booleano
   open: boolean;  // open è un booleano, per esempio per la visibilità di un dialogo
   pulsanti: Pulsante[];  // Array di oggetti Pulsante
@@ -21,6 +21,26 @@ export interface MsSchedule {
 const Schedule = observer((props: {
   schedule: MsSchedule
 }) => {
+  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
+  const [subTesti, setSubTesti] = useState<{ [key: string]: string }>({});
+
+
+  const handleSubTestoUpdate = (itemId: string, subTesto: string) => {
+    setSubTesti((prev) => ({
+      ...prev,
+      [itemId]: subTesto, // Imposta subTesto per il dato specifico
+    }));
+  }; 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsVertical(window.innerHeight > window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
     <>
       <div className="row">
@@ -35,7 +55,7 @@ const Schedule = observer((props: {
             -{props.schedule.errors}
           </Alert>
         </Snackbar>
-        
+
 
         {/* Pulsante "NEW" solo una volta all'inizio */}
         {props.schedule.pulsanti.filter(
@@ -50,17 +70,18 @@ const Schedule = observer((props: {
             </Grid>
           </Grid>
         ))}
+         
 
         {/* Iterazione sui dati dello schedule */}
         {props.schedule.schedule.map((item) => {
+        //  handleSubTestoUpdate(item._id,item.subtesto);
           // Creazione dei pulsanti "RED"
           const pulsanteWithFunctionRED = props.schedule.pulsanti
             .filter((pulsante) => pulsante.nome.toUpperCase() === 'RED')
             .map((pulsante) => ({
               ...pulsante, // Copia tutte le altre proprietà del pulsante
-              funzione: (_id: string) => {
-                // La funzione viene definita dinamicamente con l'ID
-                toggleVisibility(item._id, pulsante);
+              funzione: (_id: string) => {            
+                funzionalitaPulsanteRed(item, pulsante, handleSubTestoUpdate);
               },
               callBackEnd: (...args: any[]) => {
                 const updatedArgs = { ...args[0], _id: item._id }; // Sostituisci il valore di _id
@@ -69,7 +90,7 @@ const Schedule = observer((props: {
                   pulsante.callBackEnd(updatedArgs); // Passa l'oggetto aggiornato
                 }
               },
-              visibility: !props.schedule.isVertical
+              //visibility: !isVertical
             }));
 
           // Creazione degli altri pulsanti
@@ -95,11 +116,16 @@ const Schedule = observer((props: {
             }));
 
           // Uniamo i pulsanti "RED" e gli altri
-          const pulsanti = [
+          let pulsanti = [
             ...pulsanteWithFunctionRED,
             ...pulsanteWithFunctionOther,
           ];
+          pulsanti = pulsanti.map((x) => {
+            x.disableButton = x.nome.toUpperCase() === "RED" && isVertical;
+            return x;
+          });
 
+     
           return (
             <React.Fragment key={item._id}>
 
@@ -115,8 +141,8 @@ const Schedule = observer((props: {
                 </Grid>
               </Grid>
 
-              <div id={`rowHidden-${item._id}`} style={{ gridColumn: 'span 12', visibility: 'hidden' }}>
-                <Label _id={item._id} text={item.subtesto} />
+              <div id={`rowHidden-${item._id}`} style={{ gridColumn: 'span 12' }}>
+                <Label _id={item._id} text={subTesti[item._id]} />
               </div>
 
               {/* Separatore */}
@@ -129,27 +155,26 @@ const Schedule = observer((props: {
   );
 })
 
-export const toggleVisibility = (_id: string, pulsante: Pulsante) => {
+export const funzionalitaPulsanteRed = (item: any, pulsante: Pulsante,handleSubTestoUpdate:any) => {
+  const _id = item._id;
+
   const element = document.querySelector(`#rowHidden-${_id}`) as HTMLElement;
   const check = element.style.visibility === "hidden";
   // Rimuove il valore inline
   if (check) {
     element.style.visibility = ""; // Rimuove il valore inline
+    pulsante.funzione(_id).then((response: { testo: { subTesto: string; }; }) => {
+  
+      handleSubTestoUpdate(item._id,response.testo.subTesto);
 
-  } else {
-    element.style.visibility = "hidden"; // Rimuove il valore inline
-
-  }
-
-  if (check && pulsante.callBackEnd) {
-
-    pulsante.callBackEnd(_id).then((response: { testo: { subTesto: string; }; }) => {
-      if (response && pulsante.nome.toUpperCase() === "RED") {
-        const subTesto = response.testo.subTesto && response.testo.subTesto !== '' ? response.testo.subTesto : 'Nessun dato aggiuntivo';
-        return myDisplayer("label-" + _id, subTesto)
-      }
+     // handleSubTestoUpdate
+     // setSubTesto(response.testo.subTesto);
     })
-  }
+  } else {
+    element.style.visibility = "hidden"; // mette il valore inline
+  }    
+
+
   return check; // Aggiorna lo stato
 };
 
