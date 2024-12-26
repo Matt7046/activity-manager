@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PointsContent from './PointsContent';
 import { getMenuLaterale, UserI } from '../../general/Utils';
-import { Alert, Box, Grid, Snackbar } from '@mui/material';
-import Drawer from '../../components/msdrawer/Drawer';
 import { useNavigate } from 'react-router-dom';
 import PageLayout from '../page-layout/PageLayout';
 

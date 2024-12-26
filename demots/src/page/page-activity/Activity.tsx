@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ActivityContent from './ActivityContent';
 import activityStore from './store/ActivityStore';
 import { fetchDataActivity } from './service/ActivityService';
-import { Alert, Box, Grid, Snackbar } from '@mui/material';
-import { sezioniMenu, sezioniMenuIniziale } from '../../App';
 import { useNavigate } from 'react-router-dom';
-import Drawer from '../../components/msdrawer/Drawer';
-import { aggiornaDOMComponente } from '../../components/msschedule/Schedule';
 import { getMenuLaterale, ResponseI, UserI } from '../../general/Utils';
 import PageLayout from '../page-layout/PageLayout';
 
@@ -77,7 +73,6 @@ const Activity: React.FC<{ user: UserI }> = ({ user }) => {
 
   const setAllTesto = (response: ResponseI): void => {
     activityStore.setAllTesto(response);
-    aggiornaDOMComponente(response.testo, () => setVisibilityButton(true));
   }
 
   return (
