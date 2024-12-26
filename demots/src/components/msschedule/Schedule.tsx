@@ -34,6 +34,7 @@ const Schedule = observer((props: {
   useEffect(() => {
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
+
     };
 
     window.addEventListener("resize", handleResize);
@@ -124,8 +125,13 @@ const Schedule = observer((props: {
             x.disableButton = x.nome.toUpperCase() === "RED" && isVertical;
             return x;
           });
+          const pulsantiDom: HTMLElement[] = [];
+          Object.keys(subTesti).forEach((_id) => {
+            const element = document.querySelector(`#rowHidden-${_id}`) as HTMLElement;
+            pulsantiDom.push(element);
+          });
 
-     
+          const visibilitySubTesto = pulsantiDom.some((element) => element.style.visibility === '');
           return (
             <React.Fragment key={item._id}>
 
@@ -141,8 +147,8 @@ const Schedule = observer((props: {
                 </Grid>
               </Grid>
 
-              <div id={`rowHidden-${item._id}`} style={{ gridColumn: 'span 12' }}>
-                <Label _id={item._id} text={subTesti[item._id]} />
+              <div id={`rowHidden-${item._id}`} style={{ gridColumn: 'span 12'  }}>
+                <Label _id={item._id} text={subTesti[item._id]} visibility = {isVertical && visibilitySubTesto ? 'hidden': undefined}  />
               </div>
 
               {/* Separatore */}
