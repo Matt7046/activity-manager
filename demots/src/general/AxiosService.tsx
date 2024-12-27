@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { TypeMessage } from '../page/page-layout/PageLayout';
+import { HttpStatus } from './Utils';
 
 const apiUrl = process.env.REACT_APP_API_URL_LOCALE ; // Ottieni l'URL dal file .env
 
@@ -27,12 +29,27 @@ export const getData = async (endpoint: string, setLoading?:(loading: boolean)=>
     }
 };
 
-// Funzione per inviare dati all'API (esempio POST)
-export const postData = async (endpoint: string, data: any, setLoading?:(loading: boolean)=>void) => {
-  setLoading = setLoading ?? (() => {});
+export const postData = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
+  funzioneMessage?: (showSuccess?: boolean,message?: TypeMessage) => void, showSuccess? : boolean
+) => {
+  showSuccess = showSuccess ?? false;
+  setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
     const response = await apiClient.post(endpoint, data);
+    const message: TypeMessage = {
+      typeMessage: 'success'
+    }
+    if (funzioneMessage) {
+      message.message = response.data.errors?.[0];
+      if (response.data.status !== HttpStatus.OK) {
+        message.typeMessage = 'error'       
+      }else      {
+        message.message = ['Operazione avvenuta con successo'] 
+      }
+      if(message.typeMessage==='error'|| (message.typeMessage === 'success' && showSuccess === true))
+      funzioneMessage(showSuccess, message);
+    }
     return response.data; // Restituisce i dati della risposta
   } catch (error) {
     console.error('Errore durante la richiesta POST:', error);
@@ -42,13 +59,30 @@ export const postData = async (endpoint: string, data: any, setLoading?:(loading
   }
 };
 
+
 // Altri metodi (PUT, DELETE, ecc.)
-export const putData = async (endpoint: string, data: any, setLoading?:(loading: boolean)=>void) => {
+export const putData = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
+funzioneMessage?: (showSuccess?: boolean,message?: TypeMessage) => void, showSuccess? : boolean
+) => {
   setLoading = setLoading ?? (() => {});
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
     const response = await apiClient.put(endpoint, data);
-    return response.data;
+    const message: TypeMessage = {
+      typeMessage: 'success'
+    }
+    if (funzioneMessage) {
+      message.message = response.data.errors?.[0];
+      if (response.data.status !== HttpStatus.OK) {
+        message.typeMessage = 'error'       
+      }else      {
+        message.message = ['Operazione avvenuta con successo'] 
+      }
+      if(message.typeMessage==='error'|| (message.typeMessage === 'success' && showSuccess === true))
+      funzioneMessage(showSuccess, message);
+    }
+    return response.data; // Restituisce i dati della risposta
+
   } catch (error) {
     console.error('Errore durante la richiesta PUT:', error);
     throw error;
@@ -57,12 +91,27 @@ export const putData = async (endpoint: string, data: any, setLoading?:(loading:
   }
 };
 
-export const deleteData = async (endpoint: string,  setLoading?:(loading: boolean)=>void) => {
+export const deleteData = async (endpoint: string,   setLoading?: (loading: boolean) => void,
+funzioneMessage?: (showSuccess?: boolean,message?: TypeMessage) => void, showSuccess? : boolean
+) => {
   setLoading = setLoading ?? (() => {});
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
     const response = await apiClient.delete(endpoint);
-    return response.data;
+    const message: TypeMessage = {
+      typeMessage: 'success'
+    }
+    if (funzioneMessage) {
+      message.message = response.data.errors?.[0];
+      if (response.data.status !== HttpStatus.OK) {
+        message.typeMessage = 'error'       
+      }else      {
+        message.message = ['Operazione avvenuta con successo'] 
+      }
+      if(message.typeMessage==='error'|| (message.typeMessage === 'success' && showSuccess === true))
+      funzioneMessage(showSuccess, message);
+    }
+    return response.data; // Restituisce i dati della risposta
   } catch (error) {
     console.error('Errore durante la richiesta DELETE:', error);
     throw error;

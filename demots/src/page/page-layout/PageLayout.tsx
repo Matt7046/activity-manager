@@ -1,21 +1,26 @@
+import { Alert, AlertColor, Box, Grid, Snackbar } from '@mui/material';
 import React from 'react';
-import { Grid, Snackbar, Alert, Box } from '@mui/material';
 import Drawer, { MenuLaterale } from '../../components/msdrawer/Drawer';
 
 interface PageLayoutProps {
   children: React.ReactNode; // Contenuto specifico della maschera
   menuLaterale:MenuLaterale[][]; 
   open: boolean;
-  errors: string[];
+  message: TypeMessage;
   handleClose: () => void;
   padding: number; // Gestione padding dinamico
+}
+export interface TypeMessage
+{
+  message? : string[];
+  typeMessage? : AlertColor;
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({
   children,
   menuLaterale,
   open,
-  errors,
+  message,
   handleClose,
   padding,
 }) => {
@@ -32,8 +37,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errors}
+        <Alert onClose={handleClose} severity={message.typeMessage} sx={{ width: '100%' }}>
+          {message.message}
         </Alert>
       </Snackbar>
       <Box sx={{ paddingLeft: padding, paddingRight: 5 }}>{children}</Box>

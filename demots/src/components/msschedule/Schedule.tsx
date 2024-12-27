@@ -1,17 +1,15 @@
-import { Alert, Grid, Snackbar } from '@mui/material';
+import { Grid } from '@mui/material';
 import { observer } from 'mobx-react';
-import NameDisplay from '../msnamedisplay/NameDisplay';
-import Label from '../mslabel/label';
-import Button, { Pulsante } from '../msbutton/Button';
-import { myDisplayer } from '../../general/Utils';
 import React, { useEffect, useState } from 'react';
+import Button, { Pulsante } from '../msbutton/Button';
+import Label from '../mslabel/label';
+import NameDisplay from '../msnamedisplay/NameDisplay';
 
 export interface MsSchedule {
   justifyContent?: string;
   onClose?: () => void;  // La funzione onClose non ha parametri e non ritorna nulla
   handleClose: () => void;  // La funzione handleClose non ha parametri e non ritorna nulla
   schedule: { _id: string; nome: string; subtesto: string }[]; // Array di oggetti con proprietà _id, nome e subtesto
-  errors: string;  // Supponiamo che errors sia un oggetto con chiavi e valori stringa (può essere modificato in base alla tua struttura)
   isVertical: boolean;  // La visibilità del bottone, un booleano
   open: boolean;  // open è un booleano, per esempio per la visibilità di un dialogo
   pulsanti: Pulsante[];  // Array di oggetti Pulsante
@@ -45,19 +43,6 @@ const Schedule = observer((props: {
   return (
     <>
       <div className="row">
-        {/* Snackbar per messaggi */}
-        <Snackbar
-          open={props.schedule.open}
-          autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
-          onClose={props.schedule.handleClose}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Posizione del messaggio
-        >
-          <Alert onClose={props.schedule.onClose} severity="error" sx={{ width: '100%' }}>
-            -{props.schedule.errors}
-          </Alert>
-        </Snackbar>
-
-
         {/* Pulsante "NEW" solo una volta all'inizio */}
         {props.schedule.pulsanti.filter(
           (pulsante) => pulsante.nome.toUpperCase() === 'NEW'

@@ -1,5 +1,6 @@
 import { getData, postData } from "../../../general/AxiosService";
-import { HttpStatus, ResponseI } from "../../../general/Utils";
+import { ResponseI } from "../../../general/Utils";
+import { TypeMessage } from "../../page-layout/PageLayout";
 import { ActivityLogI } from "../Activity";
 
 export const fetchDataActivity = async (funzioneErrore?: () => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
@@ -46,22 +47,15 @@ export const logActivityByEmail = async (pointsDTO: any, funzioneErrore?: () => 
 
 
 
-export const saveActivityLog = async (activity: ActivityLogI, funzioneErrore?: (errors?:string) => void, setLoading?: (loading: boolean) => void) => {
+export const saveActivityLog = async (activity: ActivityLogI, funzioneMessage?:(showSuccess?: boolean , message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
   try {
     const path = `activity/dati`;
-    const data = await postData(path, activity, setLoading); // Endpoint dell'API
-    console.log('Dati ricevuti:', data); 
-    if (data.status !== HttpStatus.OK) {
-      if (funzioneErrore) {
-        funzioneErrore(data.errors[0]);
-      }
-    }
+    const showSuccess = true;
+    const data = await postData(path, activity, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
+    console.log('Dati ricevuti:', data);    
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);
-    if (funzioneErrore) {
-      funzioneErrore();
-    }
+    console.error('Errore durante il recupero dei dati:', error);    
   }
 };
 
