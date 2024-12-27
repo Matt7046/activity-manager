@@ -8,12 +8,12 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import com.webapp.data.LogAttivita;
+import com.webapp.data.LogActivity;
 
-public interface LogAttivitaRepository extends MongoRepository<LogAttivita, String>, LogAttivitaCustomRepository {
+public interface LogActivityRepository extends MongoRepository<LogActivity, String>, LogActivityCustomRepository {
   
      @Query("{'email': ?0}")
-     List<LogAttivita> findLogByEmail(String email,Sort sort);
+     List<LogActivity> findLogByEmail(String email,Sort sort);
         
         
        
