@@ -11,11 +11,13 @@ import "./Operative.css";
 interface OperativeContentProps {
   user: UserI;
   setErrors: any;
+  setOpen: any;
 }
 
 const OperativeContent: React.FC<OperativeContentProps> = ({
   user,
-  setErrors
+  setErrors,
+  setOpen
 }) => {
 
   const location = useLocation();
@@ -23,7 +25,6 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const padding = isVertical ? 5 : 8;
-  const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [pointsField, setPointsField] = useState(0);
   const [emailField, setEmailField] = useState(user.email);
   const [activity, setActivity] = useState([] as ActivityI[]);
@@ -95,11 +96,11 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
       email: user.email,
       log: selectedActivity.nome, // Non è necessario usare '!' se hai fatto il check
       date: new Date(),
-      pointsUse: pointsField
+      usePoints: pointsField
     };
   
     // Salva il log dell'attività
-    saveActivityLog(activityLog, () => showError(setOpen, setErrors));
+    saveActivityLog(activityLog, (errore?: string) => showError(setOpen, setErrors, errore));
   };
   
 

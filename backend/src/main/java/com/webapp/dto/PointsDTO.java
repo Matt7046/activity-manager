@@ -14,6 +14,7 @@ public class PointsDTO {
 	private Long points;
 	private String numeroPunti;
 	private String attivita;
+	private Long usePoints;
 
 	public void generaAttivita(String[] attivitaSvolte) {
     	 setAttivita(attivitaSvolte.toString()

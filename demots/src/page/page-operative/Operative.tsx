@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getMenuLaterale, UserI } from '../../general/Utils';
 import { useNavigate } from 'react-router-dom';
-import OperativeContent from './OperativeContent';
+import { getMenuLaterale, UserI } from '../../general/Utils';
 import PageLayout from '../page-layout/PageLayout';
+import OperativeContent from './OperativeContent';
 
 
 const Operative: React.FC<{ user: UserI }> = ({ user }) => {
@@ -43,6 +43,7 @@ const Operative: React.FC<{ user: UserI }> = ({ user }) => {
         <OperativeContent
           user={user}
           setErrors={setErrors}
+          setOpen = {setOpen}
         />
       </PageLayout>
       <div>
