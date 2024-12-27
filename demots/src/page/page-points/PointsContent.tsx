@@ -71,7 +71,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
         open={openDialog}
       >
         <DialogTitle id="customized-dialog-title" sx={{ m: 0, p: 2 }}>
-          Modal title
+          Log Activity
           <IconButton
             aria-label="close"
             onClick={handleCloseDialog}
