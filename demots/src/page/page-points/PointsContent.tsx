@@ -99,7 +99,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
                         Data: {new Date(item.date).toLocaleDateString()}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
-                        Point Use: {item.pointsUse}
+                        Point Use: {item.usePoints}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                         Description: {item.log}

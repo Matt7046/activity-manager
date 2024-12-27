@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Lazy;
 import com.webapp.data.Points;
 import com.webapp.dto.PointsDTO;
 
+import Exception.ArithmeticCustomException;
+
 public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 
 	@Lazy
@@ -24,9 +26,13 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 				user.setEmail(pointsDTO.getEmail());
 			}
 			else {
-				user = existingUser;
 				Long usePoints = pointsDTO.getUsePoints() != null ? pointsDTO.getUsePoints() : 0L;
-				user.setPoints(usePoints);
+				Long newPoints = existingUser.getPoints() - usePoints;
+				if (newPoints < 0L) {
+					throw new ArithmeticCustomException("I punti devono essere maggiori di zero.");
+				}
+				user = existingUser;
+				user.setPoints(newPoints);
 			}
 			user = pointsRepository.save(user);
 		}

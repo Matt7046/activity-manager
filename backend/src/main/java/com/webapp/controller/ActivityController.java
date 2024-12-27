@@ -33,7 +33,7 @@ public class ActivityController {
 
     @Autowired
     private ActivityService activityService;
-    
+
     @Autowired
     private PointsService pointsService;
 
@@ -57,7 +57,7 @@ public class ActivityController {
         List<String> errori = new ArrayList<>();
         Activity item = null; // Inizializza l'oggetto come null
         ResponseDTO responseDTO;
-    
+
         try {
             // Tentativo di trovare il documento
             item = activityService.findByIdentificativo(identificativo);
@@ -68,7 +68,7 @@ public class ActivityController {
             // Gestione dell'errore: log e aggiunta dei dettagli
             errori.add("Errore: " + e.getMessage());
         }
-    
+
         if (item != null) {
             // Mappatura se l'oggetto è stato trovato
             ActivityDTO subDTO = ActivityMapper.INSTANCE.toDTO(item);
@@ -78,62 +78,68 @@ public class ActivityController {
             ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
             responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND, errori); // 404 con dettagli errore
         }
-    
+
         return responseDTO;
     }
-    
+
     @PostMapping("/log")
-    public ResponseEntity<ResponseDTO> logActivityByEmail(@RequestBody PointsDTO pointsDTO) {
+    public ResponseDTO logActivityByEmail(@RequestBody PointsDTO pointsDTO) {
+        ResponseDTO responseDTO= null;
+        List<String> errori = new ArrayList<>();
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             Sort sort = Sort.by(Sort.Order.desc("date"));
             List<LogActivity> sub = pointsService.logAttivitaByEmail(pointsDTO, sort);
             List<LogActivityDTO> logAttivitaUnica = sub.stream()
-            .map(LogActivityMapper.INSTANCE::toDTO) // Converte ogni elemento in ActivityDTO
-          //  .map(ActivityDTO::getLogAttivita) // Estrae il campo logAttivita
-            .collect(Collectors.toList());
+                    .map(LogActivityMapper.INSTANCE::toDTO) // Converte ogni elemento in ActivityDTO
+                    // .map(ActivityDTO::getLogAttivita) // Estrae il campo logAttivita
+                    .collect(Collectors.toList());
+            responseDTO = new ResponseDTO(logAttivitaUnica, HttpStatus.OK, new ArrayList<>());
+
             // Crea una risposta
-            ResponseDTO response = new ResponseDTO(logAttivitaUnica, HttpStatus.OK, new ArrayList<>());
-
-            // Ritorna una ResponseEntity con lo status HTTP
-            return ResponseEntity.ok(response);
-
         } catch (Exception e) {
-            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
-            List<String> errori = new ArrayList<>();
-            errori.add(e.getMessage());
-            errori.add(e.getLocalizedMessage());
-            ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR, errori);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            // Gestione dell'errore: log e aggiunta dei dettagli
+            errori.add("Errore: " + e.getMessage());
         }
+        
+        if (errori.size() > 0) {
+            // Risposta in caso di errore o elemento non trovato
+            ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.INTERNAL_SERVER_ERROR, errori);
+        }
+        return responseDTO;
     }
 
     @PostMapping("/dati")
-    public ResponseEntity<ResponseDTO> saveActivity(@RequestBody LogActivityDTO activityDTO) {
-        try {
+    public ResponseDTO saveActivity(@RequestBody LogActivityDTO activityDTO) {
+        ResponseDTO responseDTO = null;
 
+        List<String> errori = new ArrayList<>();
+        try {
+            // Tentativo di trovare il documento
             PointsDTO pointsDTO = new PointsDTO();
             pointsDTO.setEmail(activityDTO.getEmail());
-            pointsDTO.setUsePoints(activityDTO.getPointsUse());
+            pointsDTO.setUsePoints(activityDTO.getUsePoints());
             pointsService.savePoints(pointsDTO);
 
             LogActivity sub = activityService.saveLogActivity(activityDTO);
-            
-            LogActivityDTO dto = LogActivityMapper.INSTANCE.toDTO(sub);         
-            // Crea una risposta
-            ResponseDTO response = new ResponseDTO(dto, HttpStatus.OK, new ArrayList<>());
-            // Ritorna una ResponseEntity con lo status HTTP
-            return ResponseEntity.ok(response);
 
+            LogActivityDTO dto = LogActivityMapper.INSTANCE.toDTO(sub);
+            // Crea una risposta
+            responseDTO = new ResponseDTO(dto, HttpStatus.OK.value(), new ArrayList<>());
         } catch (Exception e) {
-            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
-            List<String> errori = new ArrayList<>();
-            errori.add(e.getMessage());
-            errori.add(e.getLocalizedMessage());
-            ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR, errori);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            // Gestione dell'errore: log e aggiunta dei dettagli
+            errori.add("Errore: " + e.getMessage());
         }
+
+        if (errori.size() > 0) {
+            // Mappatura se l'oggetto è stato trovato
+             // Risposta in caso di errore o elemento non trovato
+             ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
+             responseDTO = new ResponseDTO(subDTO, HttpStatus.INTERNAL_SERVER_ERROR, errori);
+
+        } 
+        return responseDTO;
     }
-    
 
 }
