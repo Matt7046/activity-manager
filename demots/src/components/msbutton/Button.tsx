@@ -31,9 +31,9 @@ const Button = observer((props: {
     <div
       className="col-button-container"
       style={{
-        gridColumn: 'span 2',
+      //  gridColumn: 'span 2',
         display: 'flex',
-        gridTemplateColumns: '2fr 1fr',
+      //  gridTemplateColumns: '2fr 1fr',
         gap: '12px',
        // visibility: visibilityButton ? 'visible' : 'hidden',      
       }}

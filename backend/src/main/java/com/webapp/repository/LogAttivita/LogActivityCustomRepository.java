@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.data.domain.Sort;
 
-import com.webapp.data.LogAttivita;
+import com.webapp.data.LogActivity;
 
-public interface LogAttivitaCustomRepository {
+public interface LogActivityCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario
     
-    public List<LogAttivita> findLogByEmail(String email, Sort sort);
+    public List<LogActivity> findLogByEmail(String email, Sort sort);
 
 }

@@ -1,32 +1,32 @@
 package com.webapp.mapper;
 
 import org.mapstruct.factory.Mappers;
-import com.webapp.data.LogAttivita;
-import com.webapp.dto.LogAttivitaDTO;
+import com.webapp.data.LogActivity;
 import com.webapp.dto.ActivityDTO;
+import com.webapp.dto.LogActivityDTO;
 
 import org.mapstruct.*;
 
 @Mapper
-public interface LogAttivitaMapper {
+public interface LogActivityMapper {
 
-    LogAttivitaMapper INSTANCE = Mappers.getMapper(LogAttivitaMapper.class);
+    LogActivityMapper INSTANCE = Mappers.getMapper(LogActivityMapper.class);
 
     // Mappatura di base ignorando il campo _id
     @Mapping(target = "_id", ignore = true) // Ignora il campo _id
     @Mapping(target = "logAttivita", ignore = true) // Inizialmente ignoriamo attivitaSvolte
-    ActivityDTO toCastDTO(LogAttivita logAttivita);
+    ActivityDTO toCastDTO(LogActivity logAttivita);
 
       // Da Entity a DTO
-    LogAttivitaDTO toDTO(LogAttivita logAttivita);
+    LogActivityDTO toDTO(LogActivity logAttivita);
     
 
     // Da DTO a Entity
-    LogAttivita fromDTO(LogAttivitaDTO logAttivitaDto);
+    LogActivity fromDTO(LogActivityDTO logAttivitaDto);
 
     // Metodo per trasformare "attivitaSvolte" e popolare il DTO
     @AfterMapping
-    default void setLogAttivitaByLogAttivita(@MappingTarget ActivityDTO dto, LogAttivita entity) {
+    default void setLogAttivitaByLogAttivita(@MappingTarget ActivityDTO dto, LogActivity entity) {
         if (entity.getLog() != null) {           
             dto.setLogAttivita(entity.getLog());
         }

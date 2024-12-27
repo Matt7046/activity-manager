@@ -4,13 +4,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webapp.data.Activity;
-import com.webapp.data.LogAttivita;
+import com.webapp.data.LogActivity;
 import com.webapp.dto.ResponseDTO;
 import com.webapp.dto.ActivityDTO;
-import com.webapp.dto.LogAttivitaDTO;
+import com.webapp.dto.LogActivityDTO;
 import com.webapp.dto.PointsDTO;
 import com.webapp.mapper.ActivityMapper;
-import com.webapp.mapper.LogAttivitaMapper;
+import com.webapp.mapper.LogActivityMapper;
 import com.webapp.service.ActivityService;
 import com.webapp.service.PointsService;
 
@@ -87,14 +87,34 @@ public class ActivityController {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             Sort sort = Sort.by(Sort.Order.desc("date"));
-            List<LogAttivita> sub = pointsService.logAttivitaByEmail(pointsDTO, sort);
-            List<LogAttivitaDTO> logAttivitaUnica = sub.stream()
-            .map(LogAttivitaMapper.INSTANCE::toDTO) // Converte ogni elemento in ActivityDTO
+            List<LogActivity> sub = pointsService.logAttivitaByEmail(pointsDTO, sort);
+            List<LogActivityDTO> logAttivitaUnica = sub.stream()
+            .map(LogActivityMapper.INSTANCE::toDTO) // Converte ogni elemento in ActivityDTO
           //  .map(ActivityDTO::getLogAttivita) // Estrae il campo logAttivita
             .collect(Collectors.toList());
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(logAttivitaUnica, HttpStatus.OK, new ArrayList<>());
 
+            // Ritorna una ResponseEntity con lo status HTTP
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
+            List<String> errori = new ArrayList<>();
+            errori.add(e.getMessage());
+            errori.add(e.getLocalizedMessage());
+            ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR, errori);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    @PostMapping("/dati")
+    public ResponseEntity<ResponseDTO> saveActivity(@RequestBody LogActivityDTO activityDTO) {
+        try {
+            LogActivity sub = activityService.saveLogActivity(activityDTO);
+            LogActivityDTO dto = LogActivityMapper.INSTANCE.toDTO(sub);         
+            // Crea una risposta
+            ResponseDTO response = new ResponseDTO(dto, HttpStatus.OK, new ArrayList<>());
             // Ritorna una ResponseEntity con lo status HTTP
             return ResponseEntity.ok(response);
 
