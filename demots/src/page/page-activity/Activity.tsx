@@ -18,7 +18,7 @@ export interface ActivityLogI {
   email: string;
   log: string;
   date: Date;
-  pointsUse: number;
+  usePoints: number;
 
 }
 
