@@ -1,34 +1,31 @@
 import React, { useEffect, useState } from "react";
-import activityStore from "./store/ActivityStore";  // Importa lo store
-import "./ActivityContent.css";
 import { useNavigate } from "react-router-dom";
-import { fetchDataActivityById } from "./service/ActivityService";
-import { navigateRouting, showError } from "../../App";
+import { navigateRouting, showMessage } from "../../App";
 import { Pulsante } from "../../components/msbutton/Button";
 import Schedule, { MsSchedule } from "../../components/msschedule/Schedule";
-import { getMenuLaterale, UserI } from "../../general/Utils";
+import { HttpStatus, UserI } from "../../general/Utils";
+import { TypeMessage } from "../page-layout/PageLayout";
+import "./ActivityContent.css";
+import { fetchDataActivityById } from "./service/ActivityService";
+import activityStore from "./store/ActivityStore"; // Importa lo store
 
 
 interface ActivityContentProps {
   user: UserI;
   responseSchedule: any;
-  setErrors: any;
+  setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
 }
 
 const ActivityContent: React.FC<ActivityContentProps> = ({
-  responseSchedule,
   user,
+  responseSchedule,
+  setMessage
 }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const menuLaterale = getMenuLaterale(navigate,user);
-
-  const [labelText] = React.useState('Nessun dato aggiuntivo'); // Stato dinamico per il testo della label
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
-  const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [loading, setLoading] = useState(false);
-  const [visibilityButton, setVisibilityButton] = useState<boolean>(true); // Stato iniziale vuoto
   const flex = isVertical ? 'flex-start' : 'flex-end';
 
   const openDetail = (_id: string, componentDidMount: any): void => {
@@ -45,7 +42,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-download',
-    funzione : (_id: string) => fetchDataActivityById(_id, () => showError(setOpen, setErrors)),
+    funzione: (_id: string) => fetchDataActivityById(_id, () => showMessage(setOpen, setMessage)),
     callBackEnd: () => { },
     nome: 'red',
     title: 'Carica sottotesto',
@@ -60,7 +57,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     title: 'Apri dettaglio'
   }
 
- // const pulsantiVisibili = isVertical ? [pulsanteNew, pulsanteBlue] : [pulsanteNew, pulsanteRed, pulsanteBlue]
+  // const pulsantiVisibili = isVertical ? [pulsanteNew, pulsanteBlue] : [pulsanteNew, pulsanteRed, pulsanteBlue]
   const pulsantiVisibili = [pulsanteNew, pulsanteRed, pulsanteBlue]
 
 
@@ -81,14 +78,14 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   const componentDidMount = (_id: string) => {
     // Effettua la chiamata GET quando il componente è montato
-    fetchDataActivityById(_id, () => showError(setOpen, setErrors), setLoading)
+    fetchDataActivityById(_id, () => showMessage(setOpen, setMessage), setLoading)
       .then((response) => {
-        if (response.status === 'OK') {
+        if (response.status === HttpStatus.OK) {
           activityStore.setTestoById(_id, response.testo);
           navigateRouting(navigate, `about`, { _id })
           console.log('Dati ricevuti:', response);
         } else {
-          setErrors(response.errors);
+          setMessage({ message: response.errors, typeMessage: 'error' });
           setOpen(true);
         }
       })
@@ -106,7 +103,6 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     justifyContent: flex,
     handleClose: handleClose,
     schedule: responseSchedule,
-    errors: errors,
     isVertical: isVertical,
     open: open,
     pulsanti: pulsantiVisibili

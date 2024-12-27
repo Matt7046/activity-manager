@@ -48,7 +48,7 @@ public class ActivityController {
                 .map(ActivityMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
 
-        ResponseDTO response = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
+        ResponseDTO response = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
         return response;
     }
 
@@ -72,11 +72,11 @@ public class ActivityController {
         if (item != null) {
             // Mappatura se l'oggetto è stato trovato
             ActivityDTO subDTO = ActivityMapper.INSTANCE.toDTO(item);
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
         } else {
             // Risposta in caso di errore o elemento non trovato
             ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND, errori); // 404 con dettagli errore
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND.value(), errori); // 404 con dettagli errore
         }
 
         return responseDTO;
@@ -94,7 +94,7 @@ public class ActivityController {
                     .map(LogActivityMapper.INSTANCE::toDTO) // Converte ogni elemento in ActivityDTO
                     // .map(ActivityDTO::getLogAttivita) // Estrae il campo logAttivita
                     .collect(Collectors.toList());
-            responseDTO = new ResponseDTO(logAttivitaUnica, HttpStatus.OK, new ArrayList<>());
+            responseDTO = new ResponseDTO(logAttivitaUnica, HttpStatus.OK.value(), new ArrayList<>());
 
             // Crea una risposta
         } catch (Exception e) {
@@ -105,7 +105,7 @@ public class ActivityController {
         if (errori.size() > 0) {
             // Risposta in caso di errore o elemento non trovato
             ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.INTERNAL_SERVER_ERROR, errori);
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.INTERNAL_SERVER_ERROR.value(), errori);
         }
         return responseDTO;
     }
@@ -136,7 +136,7 @@ public class ActivityController {
             // Mappatura se l'oggetto è stato trovato
              // Risposta in caso di errore o elemento non trovato
              ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
-             responseDTO = new ResponseDTO(subDTO, HttpStatus.INTERNAL_SERVER_ERROR, errori);
+             responseDTO = new ResponseDTO(subDTO, HttpStatus.INTERNAL_SERVER_ERROR.value(), errori);
 
         } 
         return responseDTO;

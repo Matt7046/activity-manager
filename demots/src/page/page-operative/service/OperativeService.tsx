@@ -2,7 +2,7 @@ import { deleteData } from "../../../general/AxiosService";
 
 
 
-export const deleteAboutById = async (_id: string, funzioneErrore?:()=>void, setLoading?:(loading: boolean)=>void) => {
+export const deleteOperativeById = async (_id: string, funzioneErrore?:()=>void, setLoading?:(loading: boolean)=>void) => {
   try {
     _id = _id ? _id : '-1';
     const path = `operative/${_id}`;

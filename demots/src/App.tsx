@@ -1,15 +1,16 @@
-import './App.css';
-import { Route, Routes, NavigateFunction, useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { MenuLaterale } from './components/msdrawer/Drawer';
-import Activity from './page/page-activity/Activity';
-import About from './page/page-about/About';
+import { Alert, CircularProgress, Snackbar } from '@mui/material';
+import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
-import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import { NavigateFunction, Route, Routes, useNavigate } from 'react-router-dom';
+import './App.css';
+import { MenuLaterale } from './components/msdrawer/Drawer';
+import About from './page/page-about/About';
+import Activity from './page/page-activity/Activity';
+import { TypeMessage } from './page/page-layout/PageLayout';
+import Operative from './page/page-operative/Operative';
 import Points from './page/page-points/Points';
 import { savePointsById } from './page/page-points/service/PointsService';
-import { Alert, CircularProgress, Snackbar } from '@mui/material';
-import Operative from './page/page-operative/Operative';
 
 
 
@@ -71,7 +72,7 @@ const GoogleAuthComponent = () => {
 
   const saveUserData = (userData: any, setLoading: any): void => {
     const utente = { email: userData.email, points: 100 }
-    savePointsById(utente, () => showError(setOpen, setErrors), setLoading)
+    savePointsById(utente, () => showMessage(setOpen, setErrors), setLoading)
   }
 
   // Funzione per ottenere i dati utente
@@ -188,11 +189,10 @@ export const sezioniMenuIniziale: MenuLaterale[][] = [
   ],
 ];
 
-export const showError = (setOpen: any, setError: any, errore?: string) => {
-  errore = errore ? errore : 'Il server non risponde';
+export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage) => {
+  const messageBE = message?.message ? {message: message?.message, typeMessage: message?.typeMessage} : {message: 'Il server non risponde', typeMessage: 'error'} ;
   setOpen(true);
-  setError(errore)
-  console.error(errore);
+  setMessage(messageBE);
 }
 
 export const sezioniMenu = (

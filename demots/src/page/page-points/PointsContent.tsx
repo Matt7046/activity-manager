@@ -1,40 +1,53 @@
 import { Box, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { showError } from "../../App";
+import { showMessage } from "../../App";
 import lizard from "../../assets/images/lizard.jpg"; // Percorso del file locale
 import points from "../../assets/images/points.jpg"; // Percorso del file locale
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import CardGrid, { CardProps } from "../../components/mscard/card";
-import { ResponseI, UserI } from "../../general/Utils";
+import { HttpStatus, ResponseI, UserI } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { logActivityByEmail } from "../page-activity/service/ActivityService";
+import { TypeMessage } from "../page-layout/PageLayout";
 import "./PointsContent.css";
 import { findByEmail } from "./service/PointsService";
 
 
 interface PointsContentProps {
   user: UserI;
-  setErrors: any;
+  setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
 const PointsContent: React.FC<PointsContentProps> = ({
   user,
-  setErrors
+  setMessage,
+  setOpen,
 }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [openDialog, setOpenDialog] = useState(false); // Controlla la visibilità del messaggio
-
   const [testo, setTesto] = useState('');
   const [testoLog, setTestoLog] = useState([] as ActivityLogI[]);
   const [testoLogT, setTestoLogT] = useState([] as ActivityLogI[]);
 
 
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const padding = isVertical ? 5 : 8;
+
+  useEffect(() => {
+    getUser(user.email);
+    getLogAttivita(user, false);
+    const handleResize = () => {
+      setIsVertical(window.innerHeight > window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleClose = () => {
     setOpen(false);
@@ -99,7 +112,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
                         Data: {new Date(item.date).toLocaleDateString()}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
-                        Point Use: {item.usePoints}
+                        Use Points: {item.usePoints}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                         Description: {item.log}
@@ -124,9 +137,9 @@ const PointsContent: React.FC<PointsContentProps> = ({
     </React.Fragment>
     ;
 
-    const children2 =
+  const children2 =
     <React.Fragment>
-      <Button pulsanti={[]} />      
+      <Button pulsanti={[]} />
     </React.Fragment>
     ;
   const cardsData: CardProps[] = [
@@ -134,7 +147,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
       _id: 'card1',
       text: [testo], title: "Points", img: lizard,
       pulsanti: [], // Puoi aggiungere pulsanti qui se necessario
-      children : children2
+      children: children2
     },
     {
 
@@ -153,43 +166,34 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
   const getUser = (email: string): void => {
 
-    findByEmail(email, () => showError(setOpen, setErrors)).then((response: ResponseI) => {
+    findByEmail(email, () => showMessage(setOpen, setMessage)).then((response: ResponseI) => {
       if (response) {
-        if (response.status === 'OK') {
+        if (response.status === HttpStatus.OK) {
           setTesto(response.testo.numeroPunti)
           console.log('Dati ricevuti:', response);
-        } else {
-          setErrors(response.errors);
-          setOpen(true);
         }
       }
     })
   }
   const getLogAttivita = (userI: UserI, truncate: boolean): void => {
 
-    logActivityByEmail(userI, () => showError(setOpen, setErrors)).then((response: ResponseI) => {
+    logActivityByEmail(userI, () => showMessage(setOpen, setMessage)).then((response: ResponseI) => {
       if (response) {
-        if (response.status === 'OK') {
+        if (response.status === HttpStatus.OK) {
           let attivitaLog = response.testo;
           if (attivitaLog.length > 3) {
-            attivitaLog = attivitaLog.slice(0, 3).concat({log:'...'});
+            attivitaLog = attivitaLog.slice(0, 3).concat({ log: '...' });
           }
           if (truncate) {
             setOpenDialog(true);
           }
           setTestoLogT(attivitaLog);
           setTestoLog(response.testo)
-        } else {
-          setErrors(response.errors);
-          setOpen(true);
         }
       }
     })
   }
-  if (testo === '') {
-    getUser(user.email);
-    getLogAttivita(user, false);
-  }
+
 
 
   return (
