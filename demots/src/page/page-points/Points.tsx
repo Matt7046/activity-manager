@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import PointsContent from './PointsContent';
-import { getMenuLaterale, UserI } from '../../general/Utils';
 import { useNavigate } from 'react-router-dom';
+import { getMenuLaterale, UserI } from '../../general/Utils';
 import PageLayout from '../page-layout/PageLayout';
+import PointsContent from './PointsContent';
 
 export interface PointsI {
   _id: string | undefined;
@@ -10,6 +10,7 @@ export interface PointsI {
   points: number;
   numeroPunti: number;
   attivita: string;
+  usePoints?: number;
 }
 
 const Points: React.FC<{ user: UserI }> = ({ user }) => {
