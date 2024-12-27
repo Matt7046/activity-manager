@@ -1,22 +1,23 @@
 import { Box, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { showError } from "../../App";
+import { showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import { ResponseI, UserI } from "../../general/Utils";
 import { ActivityI, ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivity, saveActivityLog } from "../page-activity/service/ActivityService";
+import { TypeMessage } from "../page-layout/PageLayout";
 import "./Operative.css";
 
 interface OperativeContentProps {
   user: UserI;
-  setErrors: any;
+  setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: any;
 }
 
 const OperativeContent: React.FC<OperativeContentProps> = ({
   user,
-  setErrors,
+  setMessage,
   setOpen
 }) => {
 
@@ -100,7 +101,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     };
   
     // Salva il log dell'attività
-    saveActivityLog(activityLog, (errore?: string) => showError(setOpen, setErrors, errore));
+    saveActivityLog(activityLog, (showSuccess?: boolean , message?: TypeMessage) => showMessage(setOpen, setMessage, message));
   };
   
 

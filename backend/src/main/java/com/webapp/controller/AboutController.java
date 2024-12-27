@@ -46,10 +46,10 @@ public class AboutController {
         subDTO.set_id(identificativo);
         if (item !=null && !item.equals(0L)) {
             // Mappatura se l'oggetto è stato trovato
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
         } else {
             // Risposta in caso di errore o elemento non trovato
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND, errori); // 404 con dettagli errore
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND.value(), errori); // 404 con dettagli errore
         }
         return responseDTO;
 
@@ -62,7 +62,7 @@ public class AboutController {
             String itemId = ActivityService.saveActivity(activityDTO);
 
             // Crea una risposta
-            ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK, new ArrayList<>());
+            ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK.value(), new ArrayList<>());
 
             // Ritorna una ResponseEntity con lo status HTTP
             return ResponseEntity.ok(response);
@@ -73,7 +73,7 @@ public class AboutController {
             errori.add(e.getMessage());
             errori.add(e.getLocalizedMessage());
             ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR, errori);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(errorResponse);
         }
     }
 

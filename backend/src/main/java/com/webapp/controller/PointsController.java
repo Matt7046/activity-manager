@@ -47,11 +47,11 @@ public class PointsController {
             // Mappatura se l'oggetto è stato trovato
             PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(item);
             subDTO.setNumeroPunti("I Points a disposizione sono: ".concat(subDTO.getPoints().toString()));
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.OK, new ArrayList<>());
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
         } else {
             // Risposta in caso di errore o elemento non trovato
             ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND, errori); // 404 con dettagli errore
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND.value(), errori); // 404 con dettagli errore
         }
 
         return responseDTO;
@@ -64,7 +64,7 @@ public class PointsController {
             String itemId = pointsService.savePoints(pointsDTO);
 
             // Crea una risposta
-            ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK, new ArrayList<>());
+            ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK.value(), new ArrayList<>());
 
             // Ritorna una ResponseEntity con lo status HTTP
             return ResponseEntity.ok(response);
@@ -75,7 +75,7 @@ public class PointsController {
             errori.add(e.getMessage());
             errori.add(e.getLocalizedMessage());
             ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR, errori);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(errorResponse);
         }
     }
 }
