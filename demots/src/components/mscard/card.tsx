@@ -1,8 +1,11 @@
-import { Card as MuiCard, CardActions, CardContent, CardMedia, Grid, Typography, List, ListItem } from '@mui/material';
+import { CardActions, CardContent, CardMedia, Grid, List, ListItem, Card as MuiCard, Typography } from '@mui/material';
 import { observer } from 'mobx-react';
-import Button, { Pulsante } from '../msbutton/Button';
+import React from 'react';
+import { Pulsante } from '../msbutton/Button';
 
-interface cardProps {
+
+export interface CardProps {
+  children?: React.ReactNode 
   _id: string;
   text: string[]; // Può essere un array JSON serializzato o una stringa delimitata
   title: string;
@@ -12,7 +15,7 @@ interface cardProps {
   handleClick?: () => void;
 }
 
-const CardComponent = observer((props: cardProps) => {
+const CardComponent = observer((props: CardProps) => {
 
   return (
     <MuiCard
@@ -21,7 +24,12 @@ const CardComponent = observer((props: cardProps) => {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: '100%', // Allinea l'altezza delle card
+        height: '350px', // Allinea l'altezza delle card,
+        borderRadius: 4,
+        minHeight:380, 
+        boxShadow: 3,
+        overflow: 'hidden',
+        backgroundColor: '#f9f9f9',
       }}
     >
       <CardMedia
@@ -51,7 +59,7 @@ const CardComponent = observer((props: cardProps) => {
       <CardActions>
         <Grid container justifyContent="flex-end" spacing={2}>
           <Grid item>
-            <Button pulsanti={props.pulsanti} />
+          <div>{props.children}</div>          
           </Grid>
         </Grid>
       </CardActions>
@@ -59,7 +67,7 @@ const CardComponent = observer((props: cardProps) => {
   );
 });
 
-const CardGrid = ({ cardsData }: { cardsData: cardProps[] }) => {
+const CardGrid = ({ cardsData }: { cardsData: CardProps[] }) => {
   return (
     <Grid container spacing={2} alignItems="stretch">
       {cardsData.map((cardData) => (

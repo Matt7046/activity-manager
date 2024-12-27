@@ -184,14 +184,6 @@ export const funzionalitaPulsanteRed = (item: any, pulsante: Pulsante,handleSubT
   return check; // Aggiorna lo stato
 };
 
-export const aggiornaDOMComponente = (responseNome: any, setVisibilityButton: (visibility: boolean) => void
-): void => {
-  if (responseNome) {
-    for (let index = 0; index < responseNome.length; index++) {
-      myDisplayer("displayer-" + responseNome[index]._id, responseNome[index].nome);
-      setVisibilityButton(true);
-    }
-  }
-};
+
 
 export default Schedule;
