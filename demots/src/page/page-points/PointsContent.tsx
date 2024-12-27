@@ -130,11 +130,18 @@ const PointsContent: React.FC<PointsContentProps> = ({
       </Dialog>
     </React.Fragment>
     ;
+
+    const children2 =
+    <React.Fragment>
+      <Button pulsanti={[]} />      
+    </React.Fragment>
+    ;
   const cardsData: CardProps[] = [
     {
       _id: 'card1',
       text: [testo], title: "Points", img: lizard,
-      pulsanti: [] // Puoi aggiungere pulsanti qui se necessario
+      pulsanti: [], // Puoi aggiungere pulsanti qui se necessario
+      children : children2
     },
     {
 
