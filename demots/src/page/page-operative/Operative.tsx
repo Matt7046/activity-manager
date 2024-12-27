@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { getMenuLaterale, UserI } from '../../general/Utils';
-import { Alert, Box, Grid, Snackbar } from '@mui/material';
-import Drawer from '../../components/msdrawer/Drawer';
 import { useNavigate } from 'react-router-dom';
 import OperativeContent from './OperativeContent';
+import PageLayout from '../page-layout/PageLayout';
 
 
-const Points: React.FC<{ user: UserI }> = ({ user }) => {
+const Operative: React.FC<{ user: UserI }> = ({ user }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
@@ -34,34 +33,26 @@ const Points: React.FC<{ user: UserI }> = ({ user }) => {
 
   return (
     <>
-      <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-        <Grid item>
-          <Drawer sezioni={menuLaterale} nameMenu='Menu' anchor='left' />
-        </Grid>
-      </Grid>
-      <Snackbar
+      <PageLayout
+        menuLaterale={menuLaterale}
         open={open}
-        autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          -{errors}
-        </Alert>
-      </Snackbar>
-      <Box sx={{ paddingLeft: padding, paddingRight: 5 }}>
-        <div>
-          <OperativeContent
-            user={user}
-            setErrors={setErrors}
-          />
-        </div>
-      </Box>
-
+        errors={errors}
+        handleClose={handleClose}
+        padding={padding}
+      >
+        <OperativeContent
+          user={user}
+          setErrors={setErrors}
+        />
+      </PageLayout>
+      <div>
+        {/* Contenuto aggiuntivo, se necessario */}
+      </div>
     </>
   );
 };
 
-export default Points;
+export default Operative;
 
 
 
