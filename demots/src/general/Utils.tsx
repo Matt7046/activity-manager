@@ -1,4 +1,4 @@
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import { sezioniMenu, sezioniMenuIniziale } from "../App";
 import { MenuLaterale } from "../components/msdrawer/Drawer";
 
@@ -27,5 +27,15 @@ export const getMenuLaterale = (navigate: NavigateFunction, user: UserI): MenuLa
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `points`, { email: user.email }, 2);
   menuLaterale = sezioniMenu(sezioniMenuIniziale, navigate, `operative`, { email: user.email }, 3);
   return menuLaterale;
+}
+
+export enum HttpStatus {
+  OK = 200,
+  CREATED = 201,
+  BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
+  FORBIDDEN = 403,
+  NOT_FOUND = 404,
+  INTERNAL_SERVER_ERROR = 500,
 }
 

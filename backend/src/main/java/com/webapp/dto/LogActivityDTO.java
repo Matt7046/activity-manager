@@ -15,7 +15,7 @@ import java.util.Date;
         private String email;
         private String log;
         private Date  date;
-        private Long pointsUse;
+        private Long usePoints;
     
     
 }
