@@ -7,6 +7,7 @@ import com.webapp.data.Activity;
 import com.webapp.data.LogAttivita;
 import com.webapp.dto.ResponseDTO;
 import com.webapp.dto.ActivityDTO;
+import com.webapp.dto.LogAttivitaDTO;
 import com.webapp.dto.PointsDTO;
 import com.webapp.mapper.ActivityMapper;
 import com.webapp.mapper.LogAttivitaMapper;
@@ -85,9 +86,9 @@ public class ActivityController {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             List<LogAttivita> sub = pointsService.logAttivitaByEmail(pointsDTO);
-            List<String> logAttivitaUnica = sub.stream()
-            .map(LogAttivitaMapper.INSTANCE::toCastDTO) // Converte ogni elemento in ActivityDTO
-            .map(ActivityDTO::getLogAttivita) // Estrae il campo logAttivita
+            List<LogAttivitaDTO> logAttivitaUnica = sub.stream()
+            .map(LogAttivitaMapper.INSTANCE::toDTO) // Converte ogni elemento in ActivityDTO
+          //  .map(ActivityDTO::getLogAttivita) // Estrae il campo logAttivita
             .collect(Collectors.toList());
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(logAttivitaUnica, HttpStatus.OK, new ArrayList<>());
