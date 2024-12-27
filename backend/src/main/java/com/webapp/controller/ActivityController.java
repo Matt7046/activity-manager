@@ -111,7 +111,14 @@ public class ActivityController {
     @PostMapping("/dati")
     public ResponseEntity<ResponseDTO> saveActivity(@RequestBody LogActivityDTO activityDTO) {
         try {
+
+            PointsDTO pointsDTO = new PointsDTO();
+            pointsDTO.setEmail(activityDTO.getEmail());
+            pointsDTO.setUsePoints(activityDTO.getPointsUse());
+            pointsService.savePoints(pointsDTO);
+
             LogActivity sub = activityService.saveLogActivity(activityDTO);
+            
             LogActivityDTO dto = LogActivityMapper.INSTANCE.toDTO(sub);         
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(dto, HttpStatus.OK, new ArrayList<>());
