@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMenuLaterale, ResponseI, UserI } from '../../general/Utils';
-import PageLayout from '../page-layout/PageLayout';
+import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import ActivityContent from './ActivityContent';
 import { fetchDataActivity } from './service/ActivityService';
 import activityStore from './store/ActivityStore';
@@ -27,7 +27,7 @@ const Activity: React.FC<{ user: UserI }> = ({ user }) => {
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user)
   const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
-  const [errors, setErrors] = React.useState<string[]>([]); // Lo stato è un array di stringhe
+  const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
 
 
@@ -89,14 +89,14 @@ const Activity: React.FC<{ user: UserI }> = ({ user }) => {
       <PageLayout
         menuLaterale={menuLaterale}
         open={open}
-        errors={errors}
+        message={message}
         handleClose={handleClose}
         padding={paddingType}
       >
         <ActivityContent
           responseSchedule={response}
           user={utente}
-          setErrors={setErrors}
+          setMessage={setMessage}
         />
       </PageLayout>
       <div>
