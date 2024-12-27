@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,7 +86,8 @@ public class ActivityController {
     public ResponseEntity<ResponseDTO> logActivityByEmail(@RequestBody PointsDTO pointsDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
-            List<LogAttivita> sub = pointsService.logAttivitaByEmail(pointsDTO);
+            Sort sort = Sort.by(Sort.Order.desc("date"));
+            List<LogAttivita> sub = pointsService.logAttivitaByEmail(pointsDTO, sort);
             List<LogAttivitaDTO> logAttivitaUnica = sub.stream()
             .map(LogAttivitaMapper.INSTANCE::toDTO) // Converte ogni elemento in ActivityDTO
           //  .map(ActivityDTO::getLogAttivita) // Estrae il campo logAttivita
