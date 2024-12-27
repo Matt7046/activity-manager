@@ -1,30 +1,31 @@
-import React, { useEffect, useState } from "react";
-import "./About.css";
-import { useLocation, useNavigate } from "react-router-dom";
-import activityStore from "../page-activity/store/ActivityStore";
-import { navigateRouting, showError } from "../../App";
+import { Box, Grid } from "@mui/material";
 import TextField from '@mui/material/TextField';
-import { Alert, Box, Grid, Snackbar } from "@mui/material";
-import { deleteAboutById, saveAboutById } from "./service/AboutService";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { navigateRouting, showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
-import Drawer from "../../components/msdrawer/Drawer";
+import { HttpStatus, UserI } from "../../general/Utils";
 import { ActivityI } from "../page-activity/Activity";
-import { getMenuLaterale, UserI } from "../../general/Utils";
+import activityStore from "../page-activity/store/ActivityStore";
+import { TypeMessage } from "../page-layout/PageLayout";
+import "./About.css";
+import { deleteAboutById, saveAboutById } from "./service/AboutService";
 
 interface AboutContentProps {
   user: UserI;
-  setErrors: any;
+  setMessage:  React.Dispatch<React.SetStateAction<TypeMessage>>;
+  setOpen:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AboutContent: React.FC<AboutContentProps> = ({
   user,
-  setErrors
+  setMessage,
+  setOpen
 }) => {
 
   const location = useLocation();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
-  const menuLaterale = getMenuLaterale(navigate, user);
 
   let testoOld = activityStore.testo.find((x) => _id === x._id);
   const activity: ActivityI = {
@@ -34,11 +35,9 @@ const AboutContent: React.FC<AboutContentProps> = ({
   }
 
   testoOld = activity;
-  const [open, setOpen] = useState(false);
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [nome, setNome] = useState(activityStore.testo.find((x) => _id === x._id)?.nome);
   const [subTesto, setSubTesto] = useState(activityStore.testo.find((x) => _id === x._id)?.subTesto);
-  const padding = isVertical ? 5 : 8;
 
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-solid fa-trash',
@@ -82,14 +81,11 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   const cancellaRecord = (_id: string): void => {
 
-    deleteAboutById(_id, () => showError(setOpen, setErrors)).then((response) => {
+    deleteAboutById(_id,  (showSuccess?: boolean , message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response) {
-        if (response.status === 'OK') {
-          navigateRouting(navigate, 'activity', {})
-        } else {
-          setErrors(response.errors);
-          setOpen(true);
-        }
+        if (response.status === HttpStatus.OK) {
+         navigateRouting(navigate, 'activity', {})
+        } 
       }
     })
   }
@@ -101,9 +97,9 @@ const AboutContent: React.FC<AboutContentProps> = ({
       nome: nome,
       subTesto: subTesto
     }
-    saveAboutById(_id, testo, () => showError(setOpen, setErrors)).then((response) => {
+    saveAboutById(_id, testo,  (showSuccess?: boolean , message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.testo) {
-        navigateRouting(navigate, 'activity', {})
+       navigateRouting(navigate, 'activity', {})
       }
     })
   }

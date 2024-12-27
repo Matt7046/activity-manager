@@ -24,7 +24,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
         private String email;
         private String log;
         private Date  date;
-        private Long pointsUse;
+        private Long usePoints;
     
     
 }
