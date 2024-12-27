@@ -22,6 +22,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
         private String _id;
         private String  subTesto;
         private String nome;
+        private Long points;
     
     
 }

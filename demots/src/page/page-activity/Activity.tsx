@@ -10,6 +10,16 @@ export interface ActivityI {
   _id: string | undefined;
   nome: string;
   subTesto: string;
+  points?: number;
+}
+
+export interface ActivityLogI {
+  _id?: string;
+  email: string;
+  log: string;
+  date: Date;
+  pointsUse: number;
+
 }
 
 const Activity: React.FC<{ user: UserI }> = ({ user }) => {
