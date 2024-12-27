@@ -14,6 +14,7 @@ public class ActivityDTO {
     private String  subTesto;
     private String nome;
 	private String logAttivita;	
+    private Long points;
 }
 
 
