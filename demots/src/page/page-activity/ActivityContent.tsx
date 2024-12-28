@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage } from "../../App";
@@ -112,9 +113,13 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   return (
     <>
-      <div id="schedule">
-        <Schedule
-          schedule={scheduler} />
+      <div className="row">
+        <Box sx={{ padding: 2 }}>
+          <div id="schedule">
+            <Schedule
+              schedule={scheduler} />
+          </div>
+        </Box>
       </div>
     </>
   );
