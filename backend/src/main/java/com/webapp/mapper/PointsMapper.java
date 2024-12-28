@@ -10,11 +10,11 @@ public interface PointsMapper {
     PointsMapper INSTANCE = Mappers.getMapper(PointsMapper.class);
 
     // Da Entity a DTO
-    PointsDTO toDTO(Points points);
+    PointsDTO toDTO(Points points) throws Exception;
     
 
     // Da DTO a Entity
-    Points fromDTO(PointsDTO pointsDto);
+    Points fromDTO(PointsDTO pointsDto) throws Exception;
 }
 
 

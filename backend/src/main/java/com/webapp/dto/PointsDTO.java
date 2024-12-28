@@ -22,5 +22,6 @@ public class PointsDTO {
                  .replace("]", "\"]")
                  .replace(", ", "\", \""));
     }
+	
 
 }
