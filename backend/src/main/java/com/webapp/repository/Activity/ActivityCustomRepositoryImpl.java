@@ -25,10 +25,10 @@ public class ActivityCustomRepositoryImpl implements ActivityCustomRepository {
             activity.setPoints(activity.getPoints());
             existingActivity = ActivityRepository.save(activity);
 
-            return existingActivity.get_id();// Restituisci l'ID aggiornato
         } else {
-            activity = ActivityRepository.save(activity);
-            return activity.get_id(); // Restituisci l'ID del nuovo documento
+            existingActivity = ActivityRepository.save(activity);
         }
+        return existingActivity.get_id();// Restituisci l'ID aggiornato
+
     }
 }
