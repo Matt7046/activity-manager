@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-
 import com.webapp.data.Activity;
 
 public interface ActivityRepository extends MongoRepository<Activity, String>, ActivityCustomRepository {

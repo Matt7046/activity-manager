@@ -2,10 +2,8 @@ package com.webapp.repository.Points;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-
 import com.webapp.EncryptDecryptConverter;
 import com.webapp.data.Points;
-
 import Exception.ArithmeticCustomException;
 
 public class PointsCustomRepositoryImpl implements PointsCustomRepository {

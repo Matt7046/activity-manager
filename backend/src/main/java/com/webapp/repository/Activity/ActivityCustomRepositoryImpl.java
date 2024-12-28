@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 import com.webapp.data.Activity;
-import com.webapp.dto.ActivityDTO;
 
 public class ActivityCustomRepositoryImpl implements ActivityCustomRepository {
 
