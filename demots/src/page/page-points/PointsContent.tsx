@@ -198,9 +198,8 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
   return (
     <>
-      <div>
-        {/* Contenitore per i TextField */}
-        <Box sx={{ marginBottom: 4 }}>
+      <div className="row">
+        <Box sx={{ padding: 2 }}>
           <div id="cardData">
             <CardGrid cardsData={cardsData} />
           </div>
