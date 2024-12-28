@@ -95,7 +95,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
 
           {/* Render condizionale del contenuto */}
-          {testoLog.length > 1 ? (
+          {testoLog.length > 0 ? (
             <Grid container spacing={3}>
               {testoLog.map((item, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
