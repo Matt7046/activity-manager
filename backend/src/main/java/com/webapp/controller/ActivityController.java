@@ -90,7 +90,7 @@ public class ActivityController {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             Sort sort = Sort.by(Sort.Order.desc("date"));
-            List<LogActivity> sub = pointsService.logAttivitaByEmail(pointsDTO, sort);
+            List<LogActivity> sub = activityService.logAttivitaByEmail(pointsDTO, sort);
             List<LogActivityDTO> logAttivitaUnica = sub.stream()
                     .map(LogActivityMapper.INSTANCE::toDTO) // Converte ogni elemento in ActivityDTO
                     // .map(ActivityDTO::getLogAttivita) // Estrae il campo logAttivita
