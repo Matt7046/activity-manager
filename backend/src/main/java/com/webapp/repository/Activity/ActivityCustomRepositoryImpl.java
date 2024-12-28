@@ -20,23 +20,15 @@ public class ActivityCustomRepositoryImpl implements ActivityCustomRepository {
         }
 
         if (existingActivity != null) {
-            // Se esiste, aggiorna i campi
-            Activity newActivity = new Activity();
-            newActivity.set_id(existingActivity.get_id());
-            newActivity.setNome(activity.getNome());
-            newActivity.setSubTesto(activity.getSubTesto());
-            newActivity.setPoints(activity.getPoints());
-            existingActivity = ActivityRepository.save(newActivity);
+            activity.setNome(activity.getNome());
+            activity.setSubTesto(activity.getSubTesto());
+            activity.setPoints(activity.getPoints());
+            existingActivity = ActivityRepository.save(activity);
 
             return existingActivity.get_id();// Restituisci l'ID aggiornato
         } else {
-            // Se non esiste, crea un nuovo documento
-            Activity newActivity = new Activity();
-            newActivity.setNome(activity.getNome());
-            newActivity.setSubTesto(activity.getSubTesto());
-            newActivity.setPoints(activity.getPoints());
-            newActivity = ActivityRepository.save(newActivity);
-            return newActivity.get_id(); // Restituisci l'ID del nuovo documento
+            activity = ActivityRepository.save(activity);
+            return activity.get_id(); // Restituisci l'ID del nuovo documento
         }
     }
 }
