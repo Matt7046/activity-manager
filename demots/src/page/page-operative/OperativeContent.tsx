@@ -107,9 +107,9 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
   return (
     <>
-      <div className="row">
+        <div className="row">
 
-        <Box sx={{ padding: 2 }}>
+          <Box sx={{ padding: 2 }}>
 
           {/* Campo stringa 1 */}
           <TextField
