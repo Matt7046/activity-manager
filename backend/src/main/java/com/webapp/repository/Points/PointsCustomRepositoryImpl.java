@@ -2,11 +2,8 @@ package com.webapp.repository.Points;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-
 import com.webapp.EncryptDecryptConverter;
 import com.webapp.data.Points;
-import com.webapp.dto.PointsDTO;
-
 import Exception.ArithmeticCustomException;
 
 public class PointsCustomRepositoryImpl implements PointsCustomRepository {
@@ -17,25 +14,25 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 	@Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 
-	public String savePoints(PointsDTO pointsDTO) throws Exception {
+	public String savePoints(Points pointsSave, Long usePoints) throws Exception {
 		// Verifica se esiste già un documento con l'identificativo
 		Points existingUser = null;
 		Points user = new Points();
-		if (pointsDTO.getEmail() != null) {
-			String emailCrypt = encryptDecryptConverter.convert(pointsDTO.getEmail());
+		if (pointsSave.getEmail() != null) {
+			String emailCrypt = encryptDecryptConverter.convert(pointsSave.getEmail());
 			existingUser = pointsRepository.findByEmail(emailCrypt);
 			if (existingUser == null) {
 				// Se esiste, aggiorna i campi
 				user.setPoints(100L);
-				user.setEmail(pointsDTO.getEmail());
+				user.setEmail(pointsSave.getEmail());
 			} else {
-				Long usePoints = pointsDTO.getUsePoints() != null ? pointsDTO.getUsePoints() : 0L;
+				usePoints = usePoints != null ? usePoints : 0L;
 				Long newPoints = existingUser.getPoints() - usePoints;
 				if (newPoints < 0L) {
 					throw new ArithmeticCustomException("I punti devono essere maggiori di zero.");
 				}
 				user = existingUser;
-				user.setEmail(pointsDTO.getEmail());
+				user.setEmail(pointsSave.getEmail());
 				user.setPoints(newPoints);
 			}
 			user = pointsRepository.save(user);
