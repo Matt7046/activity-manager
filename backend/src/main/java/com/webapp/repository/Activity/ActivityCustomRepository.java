@@ -1,10 +1,10 @@
 package com.webapp.repository.Activity;
 
-import com.webapp.dto.ActivityDTO;
+import com.webapp.data.Activity;
 
 public interface ActivityCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario
     
-    public String saveActivity(ActivityDTO activityDTO);
+    public String saveActivity(Activity activity);
 
 }

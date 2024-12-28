@@ -19,8 +19,6 @@ public class PointsService {
     @Autowired
     private PointsRepository pointsRepository;
     @Autowired
-    private LogActivityRepository logAttivitaRepository;
-    @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
     public List<Points> findAll() {
@@ -33,17 +31,15 @@ public class PointsService {
     }
 
     public String savePoints(PointsDTO pointsDTO) throws Exception {
-        return pointsRepository.savePoints(pointsDTO);
+        Points points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
+        return pointsRepository.savePoints(points, pointsDTO.getPoints());
     }
 
     public Points save(PointsDTO pointsDTO) throws Exception {
-        Points subDTO = PointsMapper.INSTANCE.fromDTO(pointsDTO);
+        Points sub = PointsMapper.INSTANCE.fromDTO(pointsDTO);
 
-        return pointsRepository.save(subDTO);
+        return pointsRepository.save(sub);
     }
 
-    public List<LogActivity> logAttivitaByEmail(PointsDTO pointsDTO, Sort sort) {
-        return logAttivitaRepository.findLogByEmail(encryptDecryptConverter.convert(pointsDTO.getEmail()), sort);
-    }
 
 }
