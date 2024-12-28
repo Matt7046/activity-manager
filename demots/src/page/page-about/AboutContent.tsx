@@ -13,8 +13,8 @@ import { deleteAboutById, saveAboutById } from "./service/AboutService";
 
 interface AboutContentProps {
   user: UserI;
-  setMessage:  React.Dispatch<React.SetStateAction<TypeMessage>>;
-  setOpen:  React.Dispatch<React.SetStateAction<boolean>>;
+  setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AboutContent: React.FC<AboutContentProps> = ({
@@ -37,6 +37,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   testoOld = activity;
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [nome, setNome] = useState(activityStore.testo.find((x) => _id === x._id)?.nome);
+  const [points, setPoints] = useState(activityStore.testo.find((x) => _id === x._id)?.points);
   const [subTesto, setSubTesto] = useState(activityStore.testo.find((x) => _id === x._id)?.subTesto);
 
   const pulsanteRed: Pulsante = {
@@ -56,6 +57,10 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   const handleChangeNome = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNome(event.target.value); // Aggiorna lo stato con il valore inserito
+  };
+
+  const handleChangePoints = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPoints(parseInt(event.target.value)); // Aggiorna lo stato con il valore inserito
   };
 
   const handleChangeSubTesto = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,11 +86,11 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   const cancellaRecord = (_id: string): void => {
 
-    deleteAboutById(_id,  (showSuccess?: boolean , message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
+    deleteAboutById(_id, (showSuccess?: boolean, message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
-         navigateRouting(navigate, 'activity', {})
-        } 
+          navigateRouting(navigate, 'activity', {})
+        }
       }
     })
   }
@@ -95,11 +100,12 @@ const AboutContent: React.FC<AboutContentProps> = ({
     const testo = {
       _id: _id,
       nome: nome,
-      subTesto: subTesto
+      subTesto: subTesto,
+      points: points
     }
-    saveAboutById(_id, testo,  (showSuccess?: boolean , message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
+    saveAboutById(_id, testo, (showSuccess?: boolean, message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.testo) {
-       navigateRouting(navigate, 'activity', {})
+        navigateRouting(navigate, 'activity', {})
       }
     })
   }
@@ -109,6 +115,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
       <div>
         {/* Contenitore per i TextField */}
         <Box sx={{ marginBottom: 4 }}>
+         
           <div id="text-box">
             <TextField
               id="nome"
@@ -117,6 +124,17 @@ const AboutContent: React.FC<AboutContentProps> = ({
               value={nome} // Collega il valore allo stato
               onChange={handleChangeNome} // Aggiorna lo stato quando cambia
               fullWidth
+            />
+          </div>
+          <div id="text-box">
+            <TextField
+              id="points"
+              label={'Points'}
+              variant="standard"
+              value={points} // Collega il valore allo stato
+              onChange={handleChangePoints} // Aggiorna lo stato quando cambia
+              fullWidth
+              type="number"
             />
           </div>
           <div id="text-box-sub-testo" style={{ marginTop: '16px' }}>

@@ -3,6 +3,7 @@ package com.webapp.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webapp.EncryptDecryptConverter;
 import com.webapp.data.Activity;
 import com.webapp.data.LogActivity;
 import com.webapp.dto.ResponseDTO;
@@ -36,7 +37,7 @@ public class ActivityController {
 
     @Autowired
     private PointsService pointsService;
-
+   
     @GetMapping("")
     public ResponseDTO getTesto() {
 
@@ -84,7 +85,7 @@ public class ActivityController {
 
     @PostMapping("/log")
     public ResponseDTO logActivityByEmail(@RequestBody PointsDTO pointsDTO) {
-        ResponseDTO responseDTO= null;
+        ResponseDTO responseDTO = null;
         List<String> errori = new ArrayList<>();
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
@@ -101,7 +102,7 @@ public class ActivityController {
             // Gestione dell'errore: log e aggiunta dei dettagli
             errori.add("Errore: " + e.getMessage());
         }
-        
+
         if (errori.size() > 0) {
             // Risposta in caso di errore o elemento non trovato
             ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
@@ -111,18 +112,18 @@ public class ActivityController {
     }
 
     @PostMapping("/dati")
-    public ResponseDTO saveActivity(@RequestBody LogActivityDTO activityDTO) {
+    public ResponseDTO saveActivity(@RequestBody LogActivityDTO logActivityDTO) {
         ResponseDTO responseDTO = null;
 
         List<String> errori = new ArrayList<>();
         try {
-            // Tentativo di trovare il documento
             PointsDTO pointsDTO = new PointsDTO();
-            pointsDTO.setEmail(activityDTO.getEmail());
-            pointsDTO.setUsePoints(activityDTO.getUsePoints());
+            pointsDTO.setPoints(logActivityDTO.getPoints());
+            pointsDTO.setEmail(logActivityDTO.getEmail());
+            pointsDTO.setUsePoints(logActivityDTO.getUsePoints());
             pointsService.savePoints(pointsDTO);
 
-            LogActivity sub = activityService.saveLogActivity(activityDTO);
+            LogActivity sub = activityService.saveLogActivity(logActivityDTO);
 
             LogActivityDTO dto = LogActivityMapper.INSTANCE.toDTO(sub);
             // Crea una risposta
@@ -134,11 +135,11 @@ public class ActivityController {
 
         if (errori.size() > 0) {
             // Mappatura se l'oggetto è stato trovato
-             // Risposta in caso di errore o elemento non trovato
-             ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
-             responseDTO = new ResponseDTO(subDTO, HttpStatus.INTERNAL_SERVER_ERROR.value(), errori);
+            // Risposta in caso di errore o elemento non trovato
+            ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
+            responseDTO = new ResponseDTO(subDTO, HttpStatus.INTERNAL_SERVER_ERROR.value(), errori);
 
-        } 
+        }
         return responseDTO;
     }
 

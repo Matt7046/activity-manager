@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.webapp.dto.ResponseDTO;
 import com.webapp.mapper.PointsMapper;
+import com.webapp.EncryptDecryptConverter;
 import com.webapp.data.Points;
 import com.webapp.dto.ActivityDTO;
 import com.webapp.dto.PointsDTO;
@@ -25,16 +26,18 @@ public class PointsController {
 
     @Autowired
     private PointsService pointsService;
+    @Autowired
+    private EncryptDecryptConverter encryptDecryptConverter;
 
     @PostMapping("")
     public ResponseDTO findByEmail(@RequestBody PointsDTO pointsDTO) {
         List<String> errori = new ArrayList<>();
         Points item = null; // Inizializza l'oggetto come null
-        ResponseDTO responseDTO;
+        ResponseDTO responseDTO = null;
 
         try {
             // Tentativo di trovare il documento
-            item = pointsService.findByEmail(pointsDTO.getEmail());
+            item = pointsService.findByEmail(encryptDecryptConverter.convert(pointsDTO.getEmail()));
             if (item == null) {
                 throw new RuntimeException("Documento non trovato con identificativo: " + pointsDTO.getEmail());
             }
@@ -43,15 +46,19 @@ public class PointsController {
             errori.add("Errore: " + e.getMessage());
         }
 
-        if (item != null) {
-            // Mappatura se l'oggetto è stato trovato
-            PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(item);
-            subDTO.setNumeroPunti("I Points a disposizione sono: ".concat(subDTO.getPoints().toString()));
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
-        } else {
-            // Risposta in caso di errore o elemento non trovato
-            ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND.value(), errori); // 404 con dettagli errore
+        try {
+            if (item != null) {
+                // Mappatura se l'oggetto è stato trovato
+                PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(item);
+                subDTO.setEmail(encryptDecryptConverter.decrypt(item.getEmail()));
+                subDTO.setNumeroPunti("I Points a disposizione sono: ".concat(subDTO.getPoints().toString()));
+                responseDTO = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
+            } else {
+                // Risposta in caso di errore o elemento non trovato
+                ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
+                responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND.value(), errori); // 404 con dettagli errore
+            }
+        } catch (Exception e) {
         }
 
         return responseDTO;
