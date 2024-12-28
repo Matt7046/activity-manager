@@ -1,6 +1,10 @@
 package com.webapp;
 
+import java.util.List;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.config.EnableWebFlux;
@@ -17,4 +21,6 @@ public class SecurityConfig implements WebFluxConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true);  // Aggiungi questo se invii cookie o header di autenticazione
     }
+
+   
 }
