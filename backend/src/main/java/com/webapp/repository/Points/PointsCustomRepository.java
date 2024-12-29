@@ -7,6 +7,6 @@ public interface PointsCustomRepository {
     
     public String savePoints(Points points) throws Exception;
     
-    String savePointsByTypeStandard(Points points, Long usePoints) throws Exception;
+    Points savePointsByTypeStandard(Points points, Long usePoints, Boolean operation) throws Exception;
 
 }

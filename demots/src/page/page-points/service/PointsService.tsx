@@ -27,10 +27,12 @@ export const savePoints = async (user: any, funzioneMessage?:(message?: TypeMess
 };
 
 
-export const savePointsByTypeStandard = async (user: any, funzioneMessage?:(message?: TypeMessage)=>void , setLoading?:(loading: boolean)=>void) => {
+export const savePointsByTypeStandard = async (user: any, funzioneMessage?:(message?: TypeMessage)=>void , setLoading?:(loading: boolean)=>void,
+showSuccess?: boolean)=> {
   try {
-    const path = `points/dati`;
-    const data = await postData(path, user, setLoading, funzioneMessage); // Endpoint dell'API
+    showSuccess = true;
+    const path = `points/dati/standard`;
+    const data = await postData(path, user, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {

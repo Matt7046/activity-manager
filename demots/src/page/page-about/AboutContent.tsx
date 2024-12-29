@@ -90,7 +90,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   const cancellaRecord = (_id: string): void => {
 
-    deleteAboutById(_id, (showSuccess?: boolean, message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
+    deleteAboutById(_id, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           navigateRouting(navigate, 'activity', {})
