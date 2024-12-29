@@ -3,7 +3,7 @@ import { TypeMessage } from "../../page-layout/PageLayout";
 
 
 
-export const deleteAboutById = async (_id: string, funzioneMessage?:(showSuccess?: boolean , message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
+export const deleteAboutById = async (_id: string, funzioneMessage?:(message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
   try {
     _id = _id ? _id : '-1';
     const path = `about/${_id}`;
