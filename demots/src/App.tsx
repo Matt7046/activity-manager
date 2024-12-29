@@ -38,7 +38,7 @@ const GoogleAuthComponent = () => {
   const [simulated, setSimulated] = useState(false);
   const [title, setTitle] = useState("");
   const [openD, setOpenD] = useState(false); // Stato per la dialog
-  const [email, setEmail] = useState(""); // Stato per l'email
+  const [email, setEmail] = useState('parentemail@simulated.it'); // Stato per l'email
   const [userData, setUserData] = useState({
     name: "Simulated User",
     email: "user@simulated.com",
@@ -206,7 +206,7 @@ const GoogleAuthComponent = () => {
 
                 {/* Dialog */}
                 <Dialog open={openD} onClose={handleCloseD}>
-                  <DialogTitle>Inserisci la tua email</DialogTitle>
+                  <DialogTitle>Inserisci la tua email parentale </DialogTitle>
                   <DialogContent>
                     <TextField
                       autoFocus
