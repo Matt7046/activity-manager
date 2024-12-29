@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage } from "../../App";
 import { Pulsante } from "../../components/msbutton/Button";
 import Schedule, { MsSchedule } from "../../components/msschedule/Schedule";
-import { HttpStatus, UserI } from "../../general/Utils";
+import { HttpStatus, TypeUser, UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./ActivityContent.css";
 import { fetchDataActivityById } from "./service/ActivityService";
@@ -38,7 +38,8 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     funzione: () => navigateRouting(navigate, `about`, {}),
     nome: 'new',
     title: 'Nuovo documento',
-    configDialogPulsante: {message:'', showDialog:false}
+    configDialogPulsante: {message:'', showDialog:false},
+    disableButton : user.type === TypeUser.STANDARD
   };;
 
   const pulsanteRed: Pulsante = {
@@ -59,10 +60,6 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   // const pulsantiVisibili = isVertical ? [pulsanteNew, pulsanteBlue] : [pulsanteNew, pulsanteRed, pulsanteBlue]
   const pulsantiVisibili = [pulsanteNew, pulsanteRed, pulsanteBlue]
-
-
-
-
 
   useEffect(() => {
 
