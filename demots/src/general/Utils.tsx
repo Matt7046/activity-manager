@@ -25,10 +25,10 @@ export interface UserI {
 export const getMenuLaterale = (navigate: NavigateFunction, user: UserI): MenuLaterale[][] => {
   const sezioniMenuI = sezioniMenuIniziale(user);
   let menuLaterale = sezioniMenu(sezioniMenuI, navigate, `activity`, {}, 0);
-  menuLaterale = sezioniMenu(sezioniMenuI, navigate, `about`, {}, 1);
   menuLaterale = sezioniMenu(sezioniMenuI, navigate, `points`, { email: user.email }, 2);
   menuLaterale = sezioniMenu(sezioniMenuI, navigate, `operative`, { email: user.email }, 3);
   if (user.type === TypeUser.FAMILY) {
+    menuLaterale = sezioniMenu(sezioniMenuI, navigate, `about`, {}, 1);
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, `family`, { email: user.email }, 4);
   }
   return menuLaterale;
@@ -47,5 +47,9 @@ export enum HttpStatus {
 export enum TypeUser {
   STANDARD = 0,
   FAMILY = 1
+}
+
+export enum Alert{
+  SERVER_DOWN ="Il server non risponde"
 }
 
