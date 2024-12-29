@@ -2,7 +2,7 @@ import axios from 'axios';
 import { TypeMessage } from '../page/page-layout/PageLayout';
 import { HttpStatus } from './Utils';
 
-const apiUrl = process.env.REACT_APP_API_URL_LOCALE ; // Ottieni l'URL dal file .env
+const apiUrl = process.env.REACT_APP_API_URL_LOCALE; // Ottieni l'URL dal file .env
 
 // Configura l'istanza di Axios
 const apiClient = axios.create({
@@ -15,8 +15,8 @@ const apiClient = axios.create({
 });
 
 // Funzione per ottenere dati dall'API
-export const getData = async (endpoint: string, setLoading?:(loading: boolean)=>void) => {
-  setLoading = setLoading ?? (() => {});
+export const getData = async (endpoint: string, setLoading?: (loading: boolean) => void) => {
+  setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
     const response = await apiClient.get(endpoint);
@@ -25,12 +25,12 @@ export const getData = async (endpoint: string, setLoading?:(loading: boolean)=>
     console.error('Errore durante la richiesta:', error);
     throw error; // Propaga l'errore al chiamante
   } finally {
-      setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
-    }
+    setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
+  }
 };
 
 export const postData = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
-  funzioneMessage?: (showSuccess?: boolean,message?: TypeMessage) => void, showSuccess? : boolean
+  funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
   showSuccess = showSuccess ?? false;
   setLoading = setLoading ?? (() => { });
@@ -41,14 +41,15 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
       typeMessage: 'success'
     }
     if (funzioneMessage) {
-      message.message = response.data.errors?.[0];
+      message.message = response.data.errors;
       if (response.data.status !== HttpStatus.OK) {
-        message.typeMessage = 'error'       
-      }else      {
-        message.message = ['Operazione avvenuta con successo'] 
+        message.typeMessage = 'error'
+      } else {
+        message.message = ['Operazione avvenuta con successo']
       }
-      if(message.typeMessage==='error'|| (message.typeMessage === 'success' && showSuccess === true))
-      funzioneMessage(showSuccess, message);
+      if (message.typeMessage === 'error' || (message.typeMessage === 'success' && showSuccess === true)) {
+        funzioneMessage(message);
+      }
     }
     return response.data; // Restituisce i dati della risposta
   } catch (error) {
@@ -62,9 +63,9 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
 
 // Altri metodi (PUT, DELETE, ecc.)
 export const putData = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
-funzioneMessage?: (showSuccess?: boolean,message?: TypeMessage) => void, showSuccess? : boolean
+  funzioneMessage?: (showSuccess?: boolean, message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
-  setLoading = setLoading ?? (() => {});
+  setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
     const response = await apiClient.put(endpoint, data);
@@ -74,12 +75,12 @@ funzioneMessage?: (showSuccess?: boolean,message?: TypeMessage) => void, showSuc
     if (funzioneMessage) {
       message.message = response.data.errors?.[0];
       if (response.data.status !== HttpStatus.OK) {
-        message.typeMessage = 'error'       
-      }else      {
-        message.message = ['Operazione avvenuta con successo'] 
+        message.typeMessage = 'error'
+      } else {
+        message.message = ['Operazione avvenuta con successo']
       }
-      if(message.typeMessage==='error'|| (message.typeMessage === 'success' && showSuccess === true))
-      funzioneMessage(showSuccess, message);
+      if (message.typeMessage === 'error' || (message.typeMessage === 'success' && showSuccess === true))
+        funzioneMessage(showSuccess, message);
     }
     return response.data; // Restituisce i dati della risposta
 
@@ -91,10 +92,10 @@ funzioneMessage?: (showSuccess?: boolean,message?: TypeMessage) => void, showSuc
   }
 };
 
-export const deleteData = async (endpoint: string,   setLoading?: (loading: boolean) => void,
-funzioneMessage?: (showSuccess?: boolean,message?: TypeMessage) => void, showSuccess? : boolean
+export const deleteData = async (endpoint: string, setLoading?: (loading: boolean) => void,
+  funzioneMessage?: (showSuccess?: boolean, message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
-  setLoading = setLoading ?? (() => {});
+  setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
     const response = await apiClient.delete(endpoint);
@@ -104,12 +105,12 @@ funzioneMessage?: (showSuccess?: boolean,message?: TypeMessage) => void, showSuc
     if (funzioneMessage) {
       message.message = response.data.errors?.[0];
       if (response.data.status !== HttpStatus.OK) {
-        message.typeMessage = 'error'       
-      }else      {
-        message.message = ['Operazione avvenuta con successo'] 
+        message.typeMessage = 'error'
+      } else {
+        message.message = ['Operazione avvenuta con successo']
       }
-      if(message.typeMessage==='error'|| (message.typeMessage === 'success' && showSuccess === true))
-      funzioneMessage(showSuccess, message);
+      if (message.typeMessage === 'error' || (message.typeMessage === 'success' && showSuccess === true))
+        funzioneMessage(showSuccess, message);
     }
     return response.data; // Restituisce i dati della risposta
   } catch (error) {

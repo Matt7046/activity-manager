@@ -107,7 +107,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
       subTesto: subTesto,
       points: points,
     }
-    saveFamilyById(_id, testo, (showSuccess?: boolean, message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
+    saveFamilyById(_id, testo, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.testo) {
         navigateRouting(navigate, 'activity', {})
       }

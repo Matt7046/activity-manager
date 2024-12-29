@@ -11,6 +11,7 @@ public class PointsDTO {
 
 	private String _id; // Identificatore unico
 	private String email;
+	private String emailFamily;
 	private Long points;
 	private Long type;
 	private String numeroPunti;

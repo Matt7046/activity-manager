@@ -107,7 +107,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
       subTesto: subTesto,
       points: points,
     }
-    saveAboutById(_id, testo, (showSuccess?: boolean, message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
+    saveAboutById(_id, testo, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.testo) {
         navigateRouting(navigate, 'activity', {})
       }
