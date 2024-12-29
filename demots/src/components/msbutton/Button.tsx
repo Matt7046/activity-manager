@@ -1,41 +1,68 @@
+import { Button as ButtonMui, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
 
 export interface Pulsante {
-  icona: string
-  nome :string
-  funzione : ((...args: any[]) => any),
-  callBackEnd?: ((...args: any[]) => any);
-  title: string,
-  visibility? : boolean
-  disableButton?: boolean
+  icona: string;
+  nome: string;
+  funzione: (...args: any[]) => any;
+  callBackEnd?: (...args: any[]) => any;
+  title: string;
+  visibility?: boolean;
+  disableButton?: boolean;
+  configDialogPulsante: configDialogPulsante;
 }
 
-const Button = observer((props: {
-  pulsanti :Pulsante[]
-}) => {
-    const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);  
+export interface configDialogPulsante {
+  showDialog: boolean;
+  message: string;
+}
+
+const Button = observer((props: { pulsanti: Pulsante[] }) => {
+  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
+  const [open, setOpen] = useState(false);
+  const [currentFunction, setCurrentFunction] = useState<(() => any) | null>(null);
+  const [messageTitle, setMessageTitle] = useState<string>('');
+
+
+  const handleClickOpen = (funzione: (...args: any[]) => any, configDialogPulsante: configDialogPulsante) => {
+    setCurrentFunction(() => funzione); // Salva la funzione corrente
+    setMessageTitle(configDialogPulsante.message);
+    if (configDialogPulsante.showDialog) {
+      setOpen(true);
+    }else{
+      funzione();
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setCurrentFunction(null); // Resetta la funzione corrente
+  };
+
+  const handleConfirm = () => {
+    if (currentFunction) currentFunction(); // Esegui la funzione salvata
+    setOpen(false);
+    setCurrentFunction(null);
+  };
 
   useEffect(() => {
-  
-      const handleResize = () => {
-        setIsVertical(window.innerHeight > window.innerWidth);
-      };
-  
-      window.addEventListener("resize", handleResize);
-  
-      // Pulisci il listener al dismount
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    const handleResize = () => {
+      setIsVertical(window.innerHeight > window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div
       className="col-button-container"
       style={{
-      //  gridColumn: 'span 2',
         display: 'flex',
-      //  gridTemplateColumns: '2fr 1fr',
         gap: '12px',
-       // visibility: visibilityButton ? 'visible' : 'hidden',      
       }}
     >
       {props.pulsanti.map((button, index) => (
@@ -44,8 +71,8 @@ const Button = observer((props: {
             id={`button-${index}`}
             className={button.nome === 'red' ? 'button-red' : 'button-blue'}
             title={button.title}
-            onClick={() => button.funzione()}
-            style={{            
+            onClick={() => handleClickOpen(button.funzione, button.configDialogPulsante)} // Apri il dialog con la funzione specifica
+            style={{
               backgroundColor: button.disableButton ? 'initial' : 'initial',
               color: button.disableButton ? 'initial' : 'initial',
               opacity: button.disableButton ? 0.3 : 1,
@@ -54,14 +81,28 @@ const Button = observer((props: {
               border: button.disableButton ? '1px solid lightgrey' : 'initial',
             }}
           >
-
             <i className={button.icona}></i>
-            {/* Testo accanto all'icona */}
           </button>
         </div>
       ))}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Conferma azione</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {messageTitle}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <ButtonMui onClick={handleClose} color="secondary">
+            Annulla
+          </ButtonMui>
+          <ButtonMui onClick={handleConfirm} color="primary">
+            Conferma
+          </ButtonMui>
+        </DialogActions>
+      </Dialog>
     </div>
-  );  
-})
+  );
+});
 
 export default Button;

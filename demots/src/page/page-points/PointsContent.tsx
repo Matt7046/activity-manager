@@ -64,7 +64,8 @@ const PointsContent: React.FC<PointsContentProps> = ({
     funzione: () => getLogAttivita(user, true), // Passi la funzione direttamente
     nome: 'blue',
     title: 'Log Attività',
-    visibility: user ? true : false
+    visibility: user ? true : false,
+    configDialogPulsante: {message:'', showDialog:false}
   };
 
 
