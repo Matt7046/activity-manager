@@ -16,27 +16,24 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 
 	public String savePoints(Points pointsSave, Long usePoints) throws Exception {
 		// Verifica se esiste già un documento con l'identificativo
-		Points existingUser = null;
-		Points user = new Points();
+		Points existingUser = null;		
 		if (pointsSave.getEmail() != null) {
 			String emailCrypt = encryptDecryptConverter.convert(pointsSave.getEmail());
 			existingUser = pointsRepository.findByEmail(emailCrypt);
 			if (existingUser == null) {
 				// Se esiste, aggiorna i campi
-				user.setPoints(100L);
-				user.setEmail(pointsSave.getEmail());
+				pointsSave.setPoints(100L);
 			} else {
 				usePoints = usePoints != null ? usePoints : 0L;
 				Long newPoints = existingUser.getPoints() - usePoints;
 				if (newPoints < 0L) {
 					throw new ArithmeticCustomException("I punti devono essere maggiori di zero.");
 				}
-				user = existingUser;
-				user.setEmail(pointsSave.getEmail());
-				user.setPoints(newPoints);
+				pointsSave.set_id(existingUser.get_id());			
+				pointsSave.setPoints(newPoints);
 			}
-			user = pointsRepository.save(user);
+			pointsSave = pointsRepository.save(pointsSave);
 		}
-		return existingUser.get_id();// Restituisci l'ID aggiornato
+		return pointsSave.get_id();// Restituisci l'ID aggiornato
 	}
 }

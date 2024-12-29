@@ -75,7 +75,7 @@ const GoogleAuthComponent = () => {
 
 
   const saveUserData = (userData: any, setLoading: any): void => {
-    const utente = { email: userData.email, points: 100 }
+    const utente = { email: userData.email, type: userData.type }
     savePointsById(utente, () => showMessage(setOpen, setErrors), setLoading)
   }
 

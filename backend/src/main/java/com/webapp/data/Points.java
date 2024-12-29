@@ -21,6 +21,7 @@ public class Points {
     private String email;
 
     private Long points;
+    private Long type;
 
 
 }
