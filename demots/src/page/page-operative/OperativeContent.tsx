@@ -102,7 +102,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     };
   
     // Salva il log dell'attività
-    saveActivityLog(activityLog, (showSuccess?: boolean , message?: TypeMessage) => showMessage(setOpen, setMessage, message));
+    saveActivityLog(activityLog, (message?: TypeMessage) => showMessage(setOpen, setMessage, message));
   };
   
 

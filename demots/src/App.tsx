@@ -1,5 +1,5 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Alert, CircularProgress, Snackbar } from '@mui/material';
+import { Alert, Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, TextField } from '@mui/material';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
 import { NavigateFunction, Route, Routes, useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ import Family from './page/page-family/Family';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
 import Points from './page/page-points/Points';
-import { savePointsById } from './page/page-points/service/PointsService';
+import { savePoints } from './page/page-points/service/PointsService';
 
 
 
@@ -33,10 +33,18 @@ const GoogleAuthComponent = () => {
   const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
   const [user, setUser] = useState<any>(null);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
-  const [errors, setErrors] = useState('Si è verificato un errore! Controlla i dettagli.')
+  const [errors, setErrors] = useState('')
   const [loading, setLoading] = useState(false);
   const [simulated, setSimulated] = useState(false);
   const [title, setTitle] = useState("");
+  const [openD, setOpenD] = useState(false); // Stato per la dialog
+  const [email, setEmail] = useState(""); // Stato per l'email
+  const [userData, setUserData] = useState({
+    name: "Simulated User",
+    email: "user@simulated.com",
+    token: null,
+    type: -1
+  }); // Stato per userData
 
   // Funzione di logout
   const logOut = () => {
@@ -45,6 +53,20 @@ const GoogleAuthComponent = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+
+
+  // Funzioni di gestione
+  const handleOpenD = () => setOpenD(true);
+  const handleCloseD = () => setOpenD(false);
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setEmail(event.target.value);
+  const handleConfirm = ((userData: any) => {
+    console.log("Email confermata:", email);
+    userData.emailFamily = email;   
+    setUser(userData);
+    saveUserData(userData, setLoading);
+  });
 
   // Configura useGoogleLogin
   const login = useGoogleLogin({
@@ -60,23 +82,39 @@ const GoogleAuthComponent = () => {
     },
   });
 
+
+
   const handleLoginSuccessFake = (fakeResponse: any, type: number) => {
-    const userData = {
-      name: "Simulated User",
-      email: "user@simulated.com",
+    const user = {
+      ...userData,
       token: fakeResponse.credential,
       type: type
     };
-    setUser(userData);
-    saveUserData(userData, setLoading);
+    setUserData(user);
+    //  
+
     console.log("Login simulato effettuato:", fakeResponse);
-    navigateRouting(navigate, `activity`, {})
+    showDialog(type);
+
   };
+
+  const showDialog = (type: number): void => {
+
+    if (type === TypeUser.FAMILY) {
+      handleOpenD();
+    } else {
+      setUser({...userData, type : type});
+      saveUserData({...userData, type : type}, setLoading);
+    }
+    navigateRouting(navigate, `activity`, {})
+  }
+
+
 
 
   const saveUserData = (userData: any, setLoading: any): void => {
-    const utente = { email: userData.email, type: userData.type }
-    savePointsById(utente, () => showMessage(setOpen, setErrors), setLoading)
+ //  const utente = { email: userData.email, type: userData.type }
+    savePoints(userData, () => showMessage(setOpen, setErrors), setLoading)
   }
 
   // Funzione per ottenere i dati utente
@@ -122,21 +160,24 @@ const GoogleAuthComponent = () => {
   };
 
   return (
-    <><Snackbar
-      open={open}
-      autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
-      onClose={handleClose}
-      anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Posizione del messaggio
-    >
-      <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-        {errors}
-      </Alert>
-    </Snackbar>
+    <>
+      {/* Snackbar per notifiche */}
+      <Snackbar
+        open={open}
+        autoHideDuration={6000} // Chiude automaticamente dopo 6 secondi
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Posizione del messaggio
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          {errors}
+        </Alert>
+      </Snackbar>
+
+      {/* Google OAuth Provider */}
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <div>
-          <h1>
-            Login con Google ({user ? user.name : "Non autenticato"})
-          </h1>
+          <h1>Login con Google ({user ? user.name : "Non autenticato"})</h1>
+
           {!user ? (
             <div>
               <div
@@ -146,17 +187,50 @@ const GoogleAuthComponent = () => {
                   display: 'flex',
                   gridTemplateColumns: '2fr 1fr',
                   gap: '12px',
-                  visibility: true ? 'visible' : 'hidden',
                 }}
               >
+
                 {/* Pulsante per simulare il login */}
-                <button onClick={() => simulateLogin(TypeUser.STANDARD)}>Simula Login(STANDARD) con Google</button>
-                {/* Pulsante per simulare il login */}
-                <button onClick={() => simulateLogin(TypeUser.FAMILY)}>Simula Login(FAMILY) con Google</button>
+                <ButtonMui variant="contained" color="primary" onClick={() => simulateLogin(TypeUser.STANDARD)}>
+                  Simula Login (STANDARD) con Google</ButtonMui>
+                <ButtonMui variant="contained" color="primary" onClick={() => simulateLogin(TypeUser.FAMILY)}>
+                  Simula Login con Google</ButtonMui>
+
+
                 {/* Pulsante di login reale */}
-                <GoogleLogin
-                  onSuccess={(response) => login()}
-                  onError={logOut} />
+                <GoogleLogin onSuccess={() => login()} onError={logOut} />
+              </div>
+
+              <div>
+
+
+                {/* Dialog */}
+                <Dialog open={openD} onClose={handleCloseD}>
+                  <DialogTitle>Inserisci la tua email</DialogTitle>
+                  <DialogContent>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      label="Email"
+                      type="email"
+                      fullWidth
+                      value={email}
+                      onChange={handleEmailChange}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <ButtonMui onClick={handleCloseD} color="secondary">
+                      Annulla
+                    </ButtonMui>
+                    <ButtonMui
+                      onClick={() => handleConfirm(userData)}
+                      color="primary"
+                      disabled={!email} // Disabilita il pulsante se l'email è vuota
+                    >
+                      Conferma
+                    </ButtonMui>
+                  </DialogActions>
+                </Dialog>
               </div>
             </div>
           ) : (
@@ -173,10 +247,12 @@ const GoogleAuthComponent = () => {
           )}
         </div>
       </GoogleOAuthProvider>
+
+      {/* Mostra il loader se loading è true */}
       {loading && <CircularProgress />}
     </>
-
   );
+
 };
 
 export const navigateRouting = (navigate: NavigateFunction, path: string, params: any) => {
@@ -196,14 +272,14 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
         { funzione: null, testo: 'Family' }
       ]
     ];
-  }else{
+  } else {
     return [
       [
         { funzione: null, testo: 'Activity' },
         { funzione: null, testo: 'About' },
         { funzione: null, testo: 'Points' },
         { funzione: null, testo: 'Operative' },
-      ]     
+      ]
     ];
   }
 }
