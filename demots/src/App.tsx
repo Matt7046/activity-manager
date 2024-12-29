@@ -136,8 +136,8 @@ const GoogleAuthComponent = () => {
       });
       if (userDataResponse.ok) {
         const userData = await userDataResponse.json();
-        setUser(userData); // Salva i dati utente
-        saveUserData(userData, setLoading);
+        setUser({...userData, type : 1});
+        saveUserData({...userData, type : 1}, setLoading);
         console.log('User Data:', userData); // Logga i dati utente per il debug
         navigateRouting(navigate, `activity`, {})
       } else {
