@@ -17,7 +17,7 @@ export const deleteFamilyById = async (_id: string, funzioneMessage?:(showSucces
 };
 
 
-export const saveFamilyById = async (_id: string, Family: any, funzioneMessage?:(showSuccess?: boolean , message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
+export const saveFamilyById = async (_id: string, Family: any, funzioneMessage?:( message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
   try {
     const path = `Family/dati`;
     const showSuccess = true;

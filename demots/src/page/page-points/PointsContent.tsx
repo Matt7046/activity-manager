@@ -37,7 +37,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
 
   useEffect(() => {
-    getUser(user.email);
+    getUser();
     getLogAttivita(user, false);
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
@@ -165,9 +165,9 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
   // Crea l'array dei pulsanti in base all'orientamento
 
-  const getUser = (email: string): void => {
+  const getUser = (): void => {
 
-    findByEmail(email, () => showMessage(setOpen, setMessage)).then((response: ResponseI) => {
+    findByEmail(user, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           setTesto(response.testo.numeroPunti)
