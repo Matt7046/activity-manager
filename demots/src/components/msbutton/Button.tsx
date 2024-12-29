@@ -6,7 +6,6 @@ export interface Pulsante {
   icona: string;
   nome: string;
   funzione: (...args: any[]) => any;
-  callBackEnd?: (...args: any[]) => any;
   title: string;
   visibility?: boolean;
   disableButton?: boolean;

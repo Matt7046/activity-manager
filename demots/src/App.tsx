@@ -5,8 +5,10 @@ import { useState } from 'react';
 import { NavigateFunction, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import { MenuLaterale } from './components/msdrawer/Drawer';
+import { TypeUser, UserI } from './general/Utils';
 import About from './page/page-about/About';
 import Activity from './page/page-activity/Activity';
+import Family from './page/page-family/Family';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
 import Points from './page/page-points/Points';
@@ -58,17 +60,19 @@ const GoogleAuthComponent = () => {
     },
   });
 
-  const handleLoginSuccessFake = (fakeResponse: any) => {
+  const handleLoginSuccessFake = (fakeResponse: any, type: number) => {
     const userData = {
       name: "Simulated User",
       email: "user@simulated.com",
       token: fakeResponse.credential,
+      type: type
     };
     setUser(userData);
-    saveUserData(userData,setLoading);
+    saveUserData(userData, setLoading);
     console.log("Login simulato effettuato:", fakeResponse);
     navigateRouting(navigate, `activity`, {})
   };
+
 
   const saveUserData = (userData: any, setLoading: any): void => {
     const utente = { email: userData.email, points: 100 }
@@ -95,7 +99,7 @@ const GoogleAuthComponent = () => {
       if (userDataResponse.ok) {
         const userData = await userDataResponse.json();
         setUser(userData); // Salva i dati utente
-        saveUserData(userData,setLoading);
+        saveUserData(userData, setLoading);
         console.log('User Data:', userData); // Logga i dati utente per il debug
         navigateRouting(navigate, `activity`, {})
       } else {
@@ -107,14 +111,14 @@ const GoogleAuthComponent = () => {
   }
 
   // Simulazione del login con Google
-  const simulateLogin = () => {
+  const simulateLogin = (type: number) => {
     setSimulated(true);
     const fakeResponse = {
       credential: "fake-token-id",
       clientId: "549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com",
       select_by: "google",
     };
-    handleLoginSuccessFake(fakeResponse);
+    handleLoginSuccessFake(fakeResponse, type);
   };
 
   return (
@@ -127,7 +131,7 @@ const GoogleAuthComponent = () => {
       <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
         {errors}
       </Alert>
-    </Snackbar>     
+    </Snackbar>
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <div>
           <h1>
@@ -146,8 +150,9 @@ const GoogleAuthComponent = () => {
                 }}
               >
                 {/* Pulsante per simulare il login */}
-                <button onClick={simulateLogin}>Simula Login con Google</button>
-
+                <button onClick={() => simulateLogin(TypeUser.STANDARD)}>Simula Login(STANDARD) con Google</button>
+                {/* Pulsante per simulare il login */}
+                <button onClick={() => simulateLogin(TypeUser.FAMILY)}>Simula Login(FAMILY) con Google</button>
                 {/* Pulsante di login reale */}
                 <GoogleLogin
                   onSuccess={(response) => login()}
@@ -162,14 +167,15 @@ const GoogleAuthComponent = () => {
                 <Route path="/about" element={<About user={user} />} />
                 <Route path="/points" element={<Points user={user} />} />
                 <Route path="/operative" element={<Operative user={user} />} />
+                <Route path="/family" element={<Family user={user} />} />
               </Routes>
             </div>
           )}
         </div>
       </GoogleOAuthProvider>
       {loading && <CircularProgress />}
-      </>
-      
+    </>
+
   );
 };
 
@@ -177,20 +183,33 @@ export const navigateRouting = (navigate: NavigateFunction, path: string, params
   navigate(`/${path}`, { state: params }); // Passa i parametri come stato
 };
 
-export const sezioniMenuIniziale: MenuLaterale[][] = [
-  [
-    { funzione: null, testo: 'Activity' },
-    { funzione: null, testo: 'About' },
-    { funzione: null, testo: 'Points' },
-    { funzione: null, testo: 'Operative' },
-  ],
-  [
-    { funzione: null, testo: 'Family' }
-  ],
-];
+export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
+  if (user.type === TypeUser.FAMILY) {
+    return [
+      [
+        { funzione: null, testo: 'Activity' },
+        { funzione: null, testo: 'About' },
+        { funzione: null, testo: 'Points' },
+        { funzione: null, testo: 'Operative' },
+      ],
+      [
+        { funzione: null, testo: 'Family' }
+      ]
+    ];
+  }else{
+    return [
+      [
+        { funzione: null, testo: 'Activity' },
+        { funzione: null, testo: 'About' },
+        { funzione: null, testo: 'Points' },
+        { funzione: null, testo: 'Operative' },
+      ]     
+    ];
+  }
+}
 
 export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage) => {
-  const messageBE = message?.message ? {message: message?.message, typeMessage: message?.typeMessage} : {message: 'Il server non risponde', typeMessage: 'error'} ;
+  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage } : { message: 'Il server non risponde', typeMessage: 'error' };
   setOpen(true);
   setMessage(messageBE);
 }

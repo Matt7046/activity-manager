@@ -36,7 +36,6 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
   const pulsanteNew: Pulsante = {
     icona: 'fas fa-plus',
     funzione: () => navigateRouting(navigate, `about`, {}),
-    callBackEnd: () => { },
     nome: 'new',
     title: 'Nuovo documento',
     configDialogPulsante: {message:'', showDialog:false}
@@ -45,7 +44,6 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-download',
     funzione: (_id: string) => fetchDataActivityById(_id, () => showMessage(setOpen, setMessage)),
-    callBackEnd: () => { },
     nome: 'red',
     title: 'Carica sottotesto',
     configDialogPulsante: {message:'', showDialog:false}
@@ -54,7 +52,6 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-eye',
     funzione: (_id: string) => openDetail(_id, () => componentDidMount(_id)), // Passi la funzione direttamente
-    callBackEnd: () => { },
     nome: 'blue',
     title: 'Apri dettaglio',
     configDialogPulsante: {message:'', showDialog:false}
