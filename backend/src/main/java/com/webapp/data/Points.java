@@ -19,8 +19,10 @@ public class Points {
     private String _id;
     @Field("email")
     private String email;
-
     private Long points;
+    private Long type;
+    @Field("emailfamily")
+    private String emailFamily;  
 
 
 }
