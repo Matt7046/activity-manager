@@ -1,4 +1,6 @@
-import { Box, Grid } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { Box, Button as ButtonMui, Grid } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -8,6 +10,7 @@ import { HttpStatus, ResponseI, UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail, savePointsByTypeStandard } from "../page-points/service/PointsService";
 import "./Family.css";
+
 
 interface FamilyContentProps {
   user: UserI;
@@ -34,8 +37,11 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [newPoints, setNewPoints] = useState<number>(100);
   const [points, setPoints] = useState<number>(0);
+  const [isPlusIcon, setIsPlusIcon] = useState(true);
 
-
+  const toggleIcon = () => {
+    setIsPlusIcon((prev) => !prev);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -97,7 +103,8 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   
   const salvaRecord = (userData: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
-    return savePointsByTypeStandard({...userData, points: points, usePoints: newPoints}, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
+    const pointsWithPlus =  isPlusIcon ? newPoints : - newPoints;
+    return savePointsByTypeStandard({...userData, points: points, usePoints: pointsWithPlus}, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
       setPoints(x.testo.points)
      // navigateRouting(navigate, `activity`, {})
@@ -151,6 +158,19 @@ return (
             type="number"
           />
         </div>
+        <ButtonMui
+  variant="contained"
+  color="primary"
+  onClick={toggleIcon}
+  style={{
+    marginTop: '10px',
+    width: '40px', // Imposta una larghezza fissa più piccola
+    height: '40px', // Mantieni l'altezza invariata
+    minWidth: 'unset', // Impedisce al pulsante di espandersi oltre la larghezza definita
+  }}
+>
+  {isPlusIcon ? <AddIcon /> : <RemoveIcon />}
+</ButtonMui>
         <div id="text-box-use-points">
           <TextField
             id="UsePoints"
@@ -160,6 +180,9 @@ return (
             onChange={handleChangeNewPoints} // Aggiorna lo stato quando cambia
             fullWidth
             type="number"
+            style={{
+              marginTop: '10px'          
+            }}
           />
         </div>
       </Box>
