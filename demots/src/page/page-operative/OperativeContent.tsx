@@ -56,7 +56,6 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const pulsanteSave: Pulsante = {
     icona: 'fas fa-save',
     funzione : () => saveActivity(user),
-    callBackEnd: () => { },
     nome: 'red',
     title: 'Salva',
     configDialogPulsante: {message:"Vuoi salvare?", showDialog:true}

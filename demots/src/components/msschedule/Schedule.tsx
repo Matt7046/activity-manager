@@ -68,14 +68,7 @@ const Schedule = observer((props: {
               ...pulsante, // Copia tutte le altre proprietà del pulsante
               funzione: (_id: string) => {            
                 funzionalitaPulsanteRed(item, pulsante, handleSubTestoUpdate, subTesti);
-              },
-              callBackEnd: (...args: any[]) => {
-                const updatedArgs = { ...args[0], _id: item._id }; // Sostituisci il valore di _id
-
-                if (pulsante.callBackEnd) {
-                  pulsante.callBackEnd(updatedArgs); // Passa l'oggetto aggiornato
-                }
-              },
+              }             
               //visibility: !isVertical
             }));
 
@@ -90,14 +83,7 @@ const Schedule = observer((props: {
               funzione: (_id: string) => {
                 // La funzione viene definita dinamicamente con l'ID
                 pulsante.funzione(item._id); // Passiamo item._id
-              },
-              callBackEnd: (...args: any[]) => {
-                const updatedArgs = { ...args[0], _id: item._id }; // Sostituisci il valore di _id
-
-                if (pulsante.callBackEnd) {
-                  pulsante.callBackEnd(updatedArgs); // Passa l'oggetto aggiornato
-                }
-              },
+              },            
               visibility: true
             }));
 

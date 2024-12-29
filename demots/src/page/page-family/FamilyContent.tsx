@@ -4,20 +4,20 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
-import { HttpStatus, TypeUser, UserI } from "../../general/Utils";
+import { HttpStatus, UserI } from "../../general/Utils";
 import { ActivityI } from "../page-activity/Activity";
 import activityStore from "../page-activity/store/ActivityStore";
 import { TypeMessage } from "../page-layout/PageLayout";
-import "./About.css";
-import { deleteAboutById, saveAboutById } from "./service/AboutService";
+import "./Family.css";
+import { deleteFamilyById, saveFamilyById } from "./service/FamilyService";
 
-interface AboutContentProps {
+interface FamilyContentProps {
   user: UserI;
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AboutContent: React.FC<AboutContentProps> = ({
+const FamilyContent: React.FC<FamilyContentProps> = ({
   user,
   setMessage,
   setOpen
@@ -90,7 +90,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   const cancellaRecord = (_id: string): void => {
 
-    deleteAboutById(_id, (showSuccess?: boolean, message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
+    deleteFamilyById(_id, (showSuccess?: boolean, message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           navigateRouting(navigate, 'activity', {})
@@ -107,7 +107,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
       subTesto: subTesto,
       points: points,
     }
-    saveAboutById(_id, testo, (showSuccess?: boolean, message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
+    saveFamilyById(_id, testo, (showSuccess?: boolean, message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.testo) {
         navigateRouting(navigate, 'activity', {})
       }
@@ -138,7 +138,6 @@ const AboutContent: React.FC<AboutContentProps> = ({
               onChange={handleChangePoints} // Aggiorna lo stato quando cambia
               fullWidth
               type="number"
-              disabled = {user.type === TypeUser.STANDARD}
             />
           </div>
           <div id="text-box-sub-testo" style={{ marginTop: '16px' }}>
@@ -172,4 +171,4 @@ const AboutContent: React.FC<AboutContentProps> = ({
   );
 }
 
-export default AboutContent;
+export default FamilyContent;
