@@ -90,7 +90,7 @@ public class PointsController {
     public ResponseEntity<ResponseDTO> savePointsByTypeStandard(@RequestBody PointsDTO pointsDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
-            String itemId = pointsService.savePointsByTypeStandard(pointsDTO);
+            Points itemId = pointsService.savePointsByTypeStandard(pointsDTO, true);
 
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK.value(), new ArrayList<>());
