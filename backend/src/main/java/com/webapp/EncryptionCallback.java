@@ -27,6 +27,10 @@ public class EncryptionCallback {
                     user.setEmail(encryptDecryptConverter.convert(user.getEmail())); // Crittografa l'email prima del
                                                                                       // salvataggio
                 }
+                if (user.getEmailFamily() != null) {
+                    user.setEmailFamily(encryptDecryptConverter.convert(user.getEmailFamily())); // Crittografa l'email prima del
+                                                                                      // salvataggio
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -56,6 +60,10 @@ public class EncryptionCallback {
                 if (points.getEmail() != null) {
                     // Decrittografa l'email dopo il caricamento
                     points.setEmail(encryptDecryptConverter.decrypt(points.getEmail()));
+                }
+                if (points.getEmailFamily() != null) {
+                    // Decrittografa l'email dopo il caricamento
+                    points.setEmailFamily(encryptDecryptConverter.decrypt(points.getEmailFamily()));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

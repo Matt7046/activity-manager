@@ -47,7 +47,7 @@ export const logActivityByEmail = async (pointsDTO: any, funzioneErrore?: () => 
 
 
 
-export const saveActivityLog = async (activity: ActivityLogI, funzioneMessage?:(showSuccess?: boolean , message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
+export const saveActivityLog = async (activity: ActivityLogI, funzioneMessage?:(message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
   try {
     const path = `activity/dati`;
     const showSuccess = true;
