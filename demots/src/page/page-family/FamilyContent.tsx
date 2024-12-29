@@ -90,7 +90,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
 
   const cancellaRecord = (_id: string): void => {
 
-    deleteFamilyById(_id, (showSuccess?: boolean, message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
+    deleteFamilyById(_id, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           navigateRouting(navigate, 'activity', {})

@@ -63,7 +63,7 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
 
 // Altri metodi (PUT, DELETE, ecc.)
 export const putData = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
-  funzioneMessage?: (showSuccess?: boolean, message?: TypeMessage) => void, showSuccess?: boolean
+  funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
@@ -80,7 +80,7 @@ export const putData = async (endpoint: string, data: any, setLoading?: (loading
         message.message = ['Operazione avvenuta con successo']
       }
       if (message.typeMessage === 'error' || (message.typeMessage === 'success' && showSuccess === true))
-        funzioneMessage(showSuccess, message);
+        funzioneMessage(message);
     }
     return response.data; // Restituisce i dati della risposta
 
@@ -93,7 +93,7 @@ export const putData = async (endpoint: string, data: any, setLoading?: (loading
 };
 
 export const deleteData = async (endpoint: string, setLoading?: (loading: boolean) => void,
-  funzioneMessage?: (showSuccess?: boolean, message?: TypeMessage) => void, showSuccess?: boolean
+  funzioneMessage?: ( message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
@@ -110,7 +110,7 @@ export const deleteData = async (endpoint: string, setLoading?: (loading: boolea
         message.message = ['Operazione avvenuta con successo']
       }
       if (message.typeMessage === 'error' || (message.typeMessage === 'success' && showSuccess === true))
-        funzioneMessage(showSuccess, message);
+        funzioneMessage( message);
     }
     return response.data; // Restituisce i dati della risposta
   } catch (error) {
