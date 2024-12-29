@@ -45,14 +45,18 @@ const AboutContent: React.FC<AboutContentProps> = ({
     funzione: () => cancellaRecord(_id), // Passi la funzione direttamente
     nome: 'red',
     title: 'Elimina',
-    visibility: _id ? true : false
+    visibility: _id ? true : false,
+    configDialogPulsante: { message: 'Vuoi eliminare il record?', showDialog: true }
+
   };
 
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-solid fa-floppy-disk',
     funzione: () => salvaRecord(_id), // Passi la funzione direttamente
     nome: 'blue',
-    title: 'Salva'
+    title: 'Salva',
+    configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
+
   };
 
   const handleChangeNome = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +105,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
       _id: _id,
       nome: nome,
       subTesto: subTesto,
-      points: points
+      points: points,
     }
     saveAboutById(_id, testo, (showSuccess?: boolean, message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.testo) {

@@ -38,7 +38,8 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     funzione: () => navigateRouting(navigate, `about`, {}),
     callBackEnd: () => { },
     nome: 'new',
-    title: 'Nuovo documento'
+    title: 'Nuovo documento',
+    configDialogPulsante: {message:'', showDialog:false}
   };;
 
   const pulsanteRed: Pulsante = {
@@ -47,7 +48,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     callBackEnd: () => { },
     nome: 'red',
     title: 'Carica sottotesto',
-
+    configDialogPulsante: {message:'', showDialog:false}
   }
 
   const pulsanteBlue: Pulsante = {
@@ -55,7 +56,8 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     funzione: (_id: string) => openDetail(_id, () => componentDidMount(_id)), // Passi la funzione direttamente
     callBackEnd: () => { },
     nome: 'blue',
-    title: 'Apri dettaglio'
+    title: 'Apri dettaglio',
+    configDialogPulsante: {message:'', showDialog:false}
   }
 
   // const pulsantiVisibili = isVertical ? [pulsanteNew, pulsanteBlue] : [pulsanteNew, pulsanteRed, pulsanteBlue]
