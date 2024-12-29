@@ -56,7 +56,6 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const pulsanteSave: Pulsante = {
     icona: 'fas fa-save',
     funzione : () => saveActivity(user),
-    callBackEnd: () => { },
     nome: 'red',
     title: 'Salva',
     configDialogPulsante: {message:"Vuoi salvare?", showDialog:true}
@@ -103,7 +102,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     };
   
     // Salva il log dell'attività
-    saveActivityLog(activityLog, (showSuccess?: boolean , message?: TypeMessage) => showMessage(setOpen, setMessage, message));
+    saveActivityLog(activityLog, (message?: TypeMessage) => showMessage(setOpen, setMessage, message));
   };
   
 

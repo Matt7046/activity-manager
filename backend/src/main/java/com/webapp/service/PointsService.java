@@ -25,14 +25,19 @@ public class PointsService {
         return pointsRepository.findAll();
     }
 
-    public Points findByEmail(String identificativo) {
+    public Points findByEmail(String identificativo, Long type) {
 
-        return pointsRepository.findByEmail(identificativo);
+        return pointsRepository.findByEmail(identificativo,type);
     }
 
     public String savePoints(PointsDTO pointsDTO) throws Exception {
         Points points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
-        return pointsRepository.savePoints(points, pointsDTO.getPoints());
+        return pointsRepository.savePoints(points);
+    }
+
+    public String savePointsByTypeStandard(PointsDTO pointsDTO) throws Exception {
+        Points points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
+        return pointsRepository.savePointsByTypeStandard(points, pointsDTO.getUsePoints());
     }
 
     public Points save(PointsDTO pointsDTO) throws Exception {
