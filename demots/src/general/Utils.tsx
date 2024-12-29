@@ -19,6 +19,7 @@ export interface ResponseI {
 export interface UserI {
   _id: string | undefined;
   email: string;
+  emailFamily:string;
   type: TypeUser
 }
 

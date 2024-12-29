@@ -17,11 +17,11 @@ export const deleteFamilyById = async (_id: string, funzioneMessage?:(message?: 
 };
 
 
-export const saveFamilyById = async (_id: string, Family: any, funzioneMessage?:( message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
+export const saveFamilyById = async (family: any, funzioneMessage?:( message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
   try {
-    const path = `Family/dati`;
+    const path = `family/dati`;
     const showSuccess = true;
-    const data = await postData(path, Family,setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
+    const data = await postData(path, family,setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
