@@ -50,7 +50,7 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		return _id;// Restituisci l'ID aggiornato
 	}
 
-	public String savePointsByTypeStandard(Points pointsSave, Long usePoints) throws Exception {
+	public Points savePointsByTypeStandard(Points pointsSave, Long usePoints, Boolean operation) throws Exception {
 		// Verifica se esiste già un documento con l'identificativo
 		String emailCriypt = encryptDecryptConverter.convert(pointsSave.getEmail());
 		Points existingUser = pointsRepository.findByEmail(emailCriypt, 0L);
@@ -59,7 +59,12 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 			existingUsersFamily = pointsRepository.findFamilyEmailByEmail(emailCriypt);
 		}
 		usePoints = usePoints != null ? usePoints : 0L;
-		Long newPoints = existingUser.getPoints() - usePoints;
+		Long newPoints = 0L;
+		if (operation == true) {
+			newPoints = existingUser.getPoints() + usePoints;
+		} else {
+			newPoints = existingUser.getPoints() - usePoints;
+		}
 		if (newPoints < 0L) {
 			throw new ArithmeticCustomException("I punti devono essere maggiori di zero.");
 		}
@@ -68,24 +73,22 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		existingUser.setPoints(newPoints);
 		existingUser.setEmail(encryptDecryptConverter.decrypt(existingUser.getEmail()));
 		existingUser.setEmailFamily(encryptDecryptConverter.decrypt(existingUser.getEmailFamily()));
-
+		final long[] pointsWrapper = { newPoints };
 		// Utilizzo degli stream per aggiornare i punti per ogni membro della famiglia
-		existingUsersFamily.stream()
-				.forEach(points -> {
-					points.setPoints(newPoints);
-					try {
-						points.setEmail(encryptDecryptConverter.decrypt(points.getEmail()));
-						points.setEmailFamily(encryptDecryptConverter.decrypt(points.getEmailFamily()));
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				});
+		// Aggiorna i punti per ogni membro della famiglia
+		existingUsersFamily.forEach(points -> {
+			points.setPoints(pointsWrapper[0]);
+			try {
+				points.setEmail(encryptDecryptConverter.decrypt(points.getEmail()));
+				points.setEmailFamily(encryptDecryptConverter.decrypt(points.getEmailFamily()));
+			} catch (Exception e) {
+				e.printStackTrace(); // Gestione dell'eccezione
+			}
+		});
 
 		// Salva l'utente aggiornato e i membri della famiglia
 		pointsRepository.save(existingUser);
 		pointsRepository.saveAll(existingUsersFamily);
-
-		return pointsSave.get_id();// Restituisci l'ID aggiornato
+		return existingUser;// Restituisci l'ID aggiornato
 	}
 }
