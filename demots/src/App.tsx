@@ -1,5 +1,5 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Alert, Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, TextField } from '@mui/material';
+import { Alert, Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Snackbar, TextField } from '@mui/material';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
 import { NavigateFunction, Route, Routes, useNavigate } from 'react-router-dom';
@@ -63,7 +63,7 @@ const GoogleAuthComponent = () => {
     setEmail(event.target.value);
   const handleConfirm = ((userData: any) => {
     console.log("Email confermata:", email);
-    userData.emailFamily = email;   
+    userData.emailFamily = email;
     setUser(userData);
     saveUserData(userData, setLoading);
   });
@@ -103,8 +103,8 @@ const GoogleAuthComponent = () => {
     if (type === TypeUser.FAMILY) {
       handleOpenD();
     } else {
-      setUser({...userData, type : type});
-      saveUserData({...userData, type : type}, setLoading);
+      setUser({ ...userData, type: type });
+      saveUserData({ ...userData, type: type }, setLoading);
     }
     navigateRouting(navigate, `activity`, {})
   }
@@ -113,7 +113,7 @@ const GoogleAuthComponent = () => {
 
 
   const saveUserData = (userData: any, setLoading: any): void => {
- //  const utente = { email: userData.email, type: userData.type }
+    //  const utente = { email: userData.email, type: userData.type }
     savePoints(userData, () => showMessage(setOpen, setErrors), setLoading)
   }
 
@@ -136,8 +136,8 @@ const GoogleAuthComponent = () => {
       });
       if (userDataResponse.ok) {
         const userData = await userDataResponse.json();
-        setUser({...userData, type : 1});
-        saveUserData({...userData, type : 1}, setLoading);
+        setUser({ ...userData, type: 1 });
+        saveUserData({ ...userData, type: 1 }, setLoading);
         console.log('User Data:', userData); // Logga i dati utente per il debug
         navigateRouting(navigate, `activity`, {})
       } else {
@@ -190,62 +190,84 @@ const GoogleAuthComponent = () => {
                 }}
               >
 
-                {/* Pulsante per simulare il login */}
-                <ButtonMui variant="contained" color="primary" onClick={() => simulateLogin(TypeUser.STANDARD)}>
-                  Simula login utente base</ButtonMui>
-                <ButtonMui variant="contained" color="primary" onClick={() => simulateLogin(TypeUser.FAMILY)}>
-                  Simula login controllo parentale</ButtonMui>
+                <div>
+                  <Grid container spacing={2}>
+                    {/* Prima riga: Pulsanti per simulare il login */}
+                    <Grid item xs={12} sm={6}>
+                      <ButtonMui
+                        variant="contained"
+                        color="primary"
+                        onClick={() => simulateLogin(TypeUser.STANDARD)}
+                        fullWidth
+                      >
+                        Simula login utente base
+                      </ButtonMui>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <ButtonMui
+                        variant="contained"
+                        color="primary"
+                        onClick={() => simulateLogin(TypeUser.FAMILY)}
+                        fullWidth
+                      >
+                        Simula login controllo parentale
+                      </ButtonMui>
+                    </Grid>
+
+                    {/* Seconda riga: Pulsante di login reale */}
+                    <Grid item xs={12}>
+                    <GoogleLogin onSuccess={() => login()} onError={logOut} />
+
+                    </Grid>
+                  </Grid>
+                </div>
+                </div>
+
+                <div>
 
 
-                {/* Pulsante di login reale */}
-                <GoogleLogin onSuccess={() => login()} onError={logOut} />
+                  {/* Dialog */}
+                  <Dialog open={openD} onClose={handleCloseD}>
+                    <DialogTitle>Inserisci la tua email parentale </DialogTitle>
+                    <DialogContent>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        label="Email"
+                        type="email"
+                        fullWidth
+                        value={email}
+                        onChange={handleEmailChange}
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      <ButtonMui onClick={handleCloseD} color="secondary">
+                        Annulla
+                      </ButtonMui>
+                      <ButtonMui
+                        onClick={() => handleConfirm(userData)}
+                        color="primary"
+                        disabled={!email} // Disabilita il pulsante se l'email è vuota
+                      >
+                        Conferma
+                      </ButtonMui>
+                    </DialogActions>
+                  </Dialog>
+                </div>
               </div>
-
+              ) : (
               <div>
-
-
-                {/* Dialog */}
-                <Dialog open={openD} onClose={handleCloseD}>
-                  <DialogTitle>Inserisci la tua email parentale </DialogTitle>
-                  <DialogContent>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      label="Email"
-                      type="email"
-                      fullWidth
-                      value={email}
-                      onChange={handleEmailChange}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <ButtonMui onClick={handleCloseD} color="secondary">
-                      Annulla
-                    </ButtonMui>
-                    <ButtonMui
-                      onClick={() => handleConfirm(userData)}
-                      color="primary"
-                      disabled={!email} // Disabilita il pulsante se l'email è vuota
-                    >
-                      Conferma
-                    </ButtonMui>
-                  </DialogActions>
-                </Dialog>
+                <h1>{title}</h1>
+                <Routes>
+                  <Route path="/activity" element={<Activity user={user} />} />
+                  <Route path="/about" element={<About user={user} />} />
+                  <Route path="/points" element={<Points user={user} />} />
+                  <Route path="/operative" element={<Operative user={user} />} />
+                  <Route path="/family" element={<Family user={user} />} />
+                </Routes>
               </div>
-            </div>
-          ) : (
-            <div>
-              <h1>{title}</h1>
-              <Routes>
-                <Route path="/activity" element={<Activity user={user} />} />
-                <Route path="/about" element={<About user={user} />} />
-                <Route path="/points" element={<Points user={user} />} />
-                <Route path="/operative" element={<Operative user={user} />} />
-                <Route path="/family" element={<Family user={user} />} />
-              </Routes>
-            </div>
           )}
-        </div>
+            </div>
       </GoogleOAuthProvider>
 
       {/* Mostra il loader se loading è true */}
