@@ -59,6 +59,8 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     callBackEnd: () => { },
     nome: 'red',
     title: 'Salva',
+    configDialogPulsante: {message:"Vuoi salvare?", showDialog:true}
+
   }
 
 
