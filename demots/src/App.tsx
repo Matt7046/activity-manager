@@ -192,9 +192,9 @@ const GoogleAuthComponent = () => {
 
                 {/* Pulsante per simulare il login */}
                 <ButtonMui variant="contained" color="primary" onClick={() => simulateLogin(TypeUser.STANDARD)}>
-                  Simula Login (STANDARD) con Google</ButtonMui>
+                  Simula login utente base</ButtonMui>
                 <ButtonMui variant="contained" color="primary" onClick={() => simulateLogin(TypeUser.FAMILY)}>
-                  Simula Login con Google</ButtonMui>
+                  Simula login controllo parentale</ButtonMui>
 
 
                 {/* Pulsante di login reale */}
