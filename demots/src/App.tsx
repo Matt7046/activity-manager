@@ -110,9 +110,9 @@ const GoogleAuthComponent = () => {
 
   };
 
-  const showDialog = (type: number, googleAuth: boolean): void => {
-    const userType = type === 0 ? { ...userDataChild } : { ...userData }
-    saveUserData({ ...userType,  type: type },googleAuth,  setLoading)
+  const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
+    const userType = userDataGoogle ? userDataGoogle : type === 0 ? { ...userDataChild } : { ...userData }
+    saveUserData({ ...userType, type: type }, googleAuth, setLoading)
 
   }
 
@@ -127,9 +127,7 @@ const GoogleAuthComponent = () => {
 
       switch (x.testo.typeUser) {
         case 0: {
-          if (googleAuth !== true) {
-            setUser({ ...userD, type: x.testo.typeUser });
-          }
+          setUser({ ...userD, type: x.testo.typeUser });
           navigateRouting(navigate, `activity`, {});
           break;
         }
@@ -141,6 +139,9 @@ const GoogleAuthComponent = () => {
         case 2: {
           if (googleAuth !== true) {
             setUser({ ...userData, type: x.testo.typeUser });
+          }
+          else {
+            setUser({ ...userD, type: x.testo.typeUser });
           }
           navigateRouting(navigate, `register`, {})
         }
@@ -169,10 +170,10 @@ const GoogleAuthComponent = () => {
         },
       });
       if (userDataResponse.ok) {
-        const userData = await userDataResponse.json();
-        setUser({ ...userData, type: 1 });
-        
-        saveUserData({ ...userData, type: 1 }, true, setLoading)
+        const userDataGoogle = await userDataResponse.json();
+        //setUser({ ...userData, type: 1 });
+        setUserData(userDataGoogle);
+        showDialog(1, true, userDataGoogle);
       } else {
         console.error('Failed to fetch user data:', userDataResponse.status);
       }
