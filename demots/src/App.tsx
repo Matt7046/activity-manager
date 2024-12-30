@@ -103,6 +103,10 @@ const GoogleAuthComponent = () => {
       type: type
     };
     setUserData(user);
+    getEmailChild(user).then((x: any) => {
+      console.log('User Data:', x); // Logga i dati utente per il debug
+      setEmailOptions(x.testo);
+    })
     //  
 
     console.log("Login simulato effettuato:", fakeResponse);
