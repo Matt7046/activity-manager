@@ -177,8 +177,9 @@ const PointsContent: React.FC<PointsContentProps> = ({
     })
   }
   const getLogAttivita = (userI: UserI, truncate: boolean): void => {
+    const emailFind = user.emailFamily ? user.emailFamily: user.email;
 
-    logActivityByEmail(userI, () => showMessage(setOpen, setMessage)).then((response: ResponseI) => {
+    logActivityByEmail({...userI, email: emailFind}, () => showMessage(setOpen, setMessage)).then((response: ResponseI) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           let attivitaLog = response.testo;
