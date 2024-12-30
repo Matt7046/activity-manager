@@ -42,7 +42,7 @@ public class ActivityController {
 
         // String[] texts = { "Ciao, mondo!", "Benvenuto in Java", "Programmazione è
         // divertente" };
-        String email = pointsDTO.getEmail();
+        String email = pointsDTO.getEmail();        
         List<Activity> sub = activityService.findAllByEmail(email);
         // mapping
         List<ActivityDTO> subDTO = sub.stream()

@@ -115,13 +115,14 @@ const AboutContent: React.FC<AboutContentProps> = ({
   }
 
   const salvaRecord = (_id: string): void => {
-
+  const emailFind = user.emailFamily ? user.emailFamily: user.email;  
     const testo = {
       ...user,     
       _id: _id,
       nome: nome,
       subTesto: subTesto,
       points: points,
+      email : emailFind
     }
     saveAboutByUser(testo, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.testo) {
