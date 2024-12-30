@@ -37,7 +37,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
 
   useEffect(() => {
-    getUser();
+    getPoints();
     getLogAttivita(user, false);
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
@@ -97,9 +97,9 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
           {/* Render condizionale del contenuto */}
           {testoLog.length > 0 ? (
-            <Grid container spacing={3}>
+            <Grid container spacing={2}>
               {testoLog.map((item, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
+                <Grid item xs={12} sm={6} md={6} key={index}>
                   <Card
                     sx={{
                       borderRadius: 4,
@@ -165,9 +165,9 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
   // Crea l'array dei pulsanti in base all'orientamento
 
-  const getUser = (): void => {
-
-    findByEmail(user, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
+  const getPoints = (): void => {
+    const emailFind = user.emailFamily ? user.emailFamily: user.email;
+    findByEmail({...user, email: emailFind}, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           setTesto(response.testo.numeroPunti)
