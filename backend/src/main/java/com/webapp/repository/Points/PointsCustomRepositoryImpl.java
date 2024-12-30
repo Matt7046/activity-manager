@@ -56,6 +56,14 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 			List<Points> userList = pointsRepository.findByOnFigli(emailCriypt);
 			existingUser = !userList.isEmpty() ? userList.get(0) : null;
 		}
+		existingUser.setEmailFigli(existingUser.getEmailFigli().stream().map(x -> {
+			try {
+				return encryptDecryptConverter.decrypts(x);
+			} catch (Exception e) {			
+			}
+			return x;
+		}).collect(Collectors.toList())); // Crittografa l'email
+	
 		return existingUser;
 	}
 
@@ -91,13 +99,21 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 				.map(figlio -> {
 					try {
 						return encryptDecryptConverter.decrypt(figlio);
-					} catch (Exception e) {						
+					} catch (Exception e) {
 					}
 					return "";
 				})
-				.collect(Collectors.toList())); 
+				.collect(Collectors.toList()));
 		pointsRepository.save(existingUser);
 		return existingUser;
 
+	}
+
+	@Override
+	public List<Points> getPointsListByEmail(String email) throws Exception {
+		String emailCriypt = encryptDecryptConverter.convert(email);
+
+		List<Points> userList = pointsRepository.findByOnFigli(emailCriypt);
+		return userList;
 	}
 }
