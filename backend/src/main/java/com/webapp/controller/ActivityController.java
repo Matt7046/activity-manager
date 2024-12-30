@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,12 +37,13 @@ public class ActivityController {
     @Autowired
     private PointsService pointsService;
    
-    @GetMapping("")
-    public ResponseDTO getTesto() {
+    @PostMapping("")
+    public ResponseDTO getTesto(@RequestBody PointsDTO pointsDTO) {
 
         // String[] texts = { "Ciao, mondo!", "Benvenuto in Java", "Programmazione è
         // divertente" };
-        List<Activity> sub = activityService.findAll();
+        String email = pointsDTO.getEmail();        
+        List<Activity> sub = activityService.findAllByEmail(email);
         // mapping
         List<ActivityDTO> subDTO = sub.stream()
                 .map(ActivityMapper.INSTANCE::toDTO)

@@ -5,11 +5,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.webapp.EncryptDecryptConverter;
-import com.webapp.data.LogActivity;
 import com.webapp.data.Points;
 import com.webapp.dto.PointsDTO;
 import com.webapp.mapper.PointsMapper;
-import com.webapp.repository.LogAttivita.LogActivityRepository;
 import com.webapp.repository.Points.PointsRepository;
 
 import java.util.List;
@@ -27,12 +25,25 @@ public class PointsService {
 
     public Points findByEmail(String identificativo, Long type) {
 
-        return pointsRepository.findByEmail(identificativo,type);
+        return pointsRepository.findByEmail(identificativo, type);
     }
 
-    public String savePoints(PointsDTO pointsDTO) throws Exception {
+    public Long getUserType(PointsDTO pointsDTO) throws Exception {
         Points points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
-        return pointsRepository.savePoints(points);
+        return pointsRepository.getUserType(points);
+    }
+
+    public Boolean saveFamily(PointsDTO pointsDTO) throws Exception {
+        Points points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
+        return pointsRepository.saveFamily(points);
+    }
+
+    public Points getPointsByEmail(String email) throws Exception {
+        return pointsRepository.getPointsByEmail(email);
+    }
+
+    public List<Points> getPointsListByEmail(String email) throws Exception {
+        return pointsRepository.getPointsListByEmail(email);
     }
 
     public Points savePointsByTypeStandard(PointsDTO pointsDTO, Boolean operation) throws Exception {
@@ -45,6 +56,5 @@ public class PointsService {
 
         return pointsRepository.save(sub);
     }
-
 
 }
