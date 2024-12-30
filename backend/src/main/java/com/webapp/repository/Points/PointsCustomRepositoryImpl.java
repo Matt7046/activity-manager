@@ -2,6 +2,7 @@ package com.webapp.repository.Points;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -17,46 +18,67 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 	@Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 
-	public String savePoints(Points pointsSave) throws Exception {
-		Long usePoints = pointsSave.getPoints() == null ? 100L : pointsSave.getPoints();
-		// Verifica se esiste già un documento con l'identificativo
-		Points existingUser = null;
-		Points existingUserFamily = null;
-		String emailFamily = encryptDecryptConverter.convert(pointsSave.getEmailFamily());
+	public Long getUserType(Points pointsSave) throws Exception {
 		String email = encryptDecryptConverter.convert(pointsSave.getEmail());
-		String _id = null;
-		if (pointsSave.getEmailFamily() != null) {
-			existingUserFamily = pointsRepository.findByEmailFamilyAndEmail(emailFamily, email);
-			if (existingUserFamily == null) {
-				// Se esiste, aggiorna i campi
-				existingUserFamily = new Points();
-				existingUserFamily.setType(1L);
-				existingUserFamily.setPoints(usePoints);
-				existingUserFamily.setEmail(pointsSave.getEmail());
-				existingUserFamily.setEmailFamily(pointsSave.getEmailFamily());
-				pointsSave.setType(0L);
-				existingUserFamily = pointsRepository.save(existingUserFamily);
-			}
-			_id = existingUserFamily.getEmail();
+		List<Points> existPointsOnFigli = pointsRepository.findByOnFigli(email);
+		Points existPoints = pointsRepository.findByEmailOnEmail(email);
+		Long type;
+		if (existPoints != null) {
+			type = 1L;
+		} else if (existPointsOnFigli != null && !existPointsOnFigli.isEmpty()) {
+			type = 0L;
 		} else {
-			existingUser = pointsRepository.findByEmail(email, 0L);
-			if (existingUser == null) {
-				// Se esiste, aggiorna i campi
-				pointsSave.setPoints(usePoints);
-				pointsSave = pointsRepository.save(pointsSave);
-			}
-			_id = pointsSave.getEmail();
+			// Gestisci il caso in cui entrambi sono null, se necessario
+			type = 2L; // O un altro valore predefinito appropriato
 		}
-		return _id;// Restituisci l'ID aggiornato
+
+		return type;// Restituisci l'ID aggiornato
+	}
+
+	public Boolean saveFamily(Points pointsSave) throws Exception {
+		Boolean newUSer = false;
+
+		if (pointsSave.getEmail() != null && !pointsSave.getEmailFigli().isEmpty()) {
+			newUSer = true;
+			pointsSave.setType(1L);
+			pointsSave.setPoints(100L);
+			pointsRepository.save(pointsSave);
+
+		}
+		return newUSer;// Restituisci l'ID aggiornato
+	}
+
+	public Points getPointsByEmail(String email) throws Exception {
+		String emailCriypt = encryptDecryptConverter.convert(email);
+
+		Points existingUser = pointsRepository.findByEmailOnEmail(emailCriypt);
+		if (existingUser == null) {
+			List<Points> userList = pointsRepository.findByOnFigli(emailCriypt);
+			existingUser = !userList.isEmpty() ? userList.get(0) : null;
+		}
+		existingUser.setEmailFigli(existingUser.getEmailFigli().stream().map(x -> {
+			try {
+				return encryptDecryptConverter.decrypts(x);
+			} catch (Exception e) {			
+			}
+			return x;
+		}).collect(Collectors.toList())); // Crittografa l'email
+	
+		return existingUser;
 	}
 
 	public Points savePointsByTypeStandard(Points pointsSave, Long usePoints, Boolean operation) throws Exception {
 		// Verifica se esiste già un documento con l'identificativo
 		String emailCriypt = encryptDecryptConverter.convert(pointsSave.getEmail());
-		Points existingUser = pointsRepository.findByEmail(emailCriypt, 0L);
-		List<Points> existingUsersFamily = new ArrayList<>();
+
+		Points existingUser = pointsRepository.findByEmailOnEmail(emailCriypt);
+		if (existingUser == null) {
+			List<Points> userList = pointsRepository.findByOnFigli(emailCriypt);
+			existingUser = !userList.isEmpty() ? userList.get(0) : null;
+		}
+
 		if (pointsSave.getEmail() != null) {
-			existingUsersFamily = pointsRepository.findFamilyEmailByEmail(emailCriypt);
+			// existingUsersFamily = pointsRepository.findFamilyEmailByEmail(emailCriypt);
 		}
 		usePoints = usePoints != null ? usePoints : 0L;
 		Long newPoints = 0L;
@@ -73,22 +95,25 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		existingUser.setPoints(newPoints);
 		existingUser.setEmail(encryptDecryptConverter.decrypt(existingUser.getEmail()));
 		existingUser.setEmailFamily(encryptDecryptConverter.decrypt(existingUser.getEmailFamily()));
-		final long[] pointsWrapper = { newPoints };
-		// Utilizzo degli stream per aggiornare i punti per ogni membro della famiglia
-		// Aggiorna i punti per ogni membro della famiglia
-		existingUsersFamily.forEach(points -> {
-			points.setPoints(pointsWrapper[0]);
-			try {
-				points.setEmail(encryptDecryptConverter.decrypt(points.getEmail()));
-				points.setEmailFamily(encryptDecryptConverter.decrypt(points.getEmailFamily()));
-			} catch (Exception e) {
-				e.printStackTrace(); // Gestione dell'eccezione
-			}
-		});
-
-		// Salva l'utente aggiornato e i membri della famiglia
+		existingUser.setEmailFigli(existingUser.getEmailFigli().stream()
+				.map(figlio -> {
+					try {
+						return encryptDecryptConverter.decrypt(figlio);
+					} catch (Exception e) {
+					}
+					return "";
+				})
+				.collect(Collectors.toList()));
 		pointsRepository.save(existingUser);
-		pointsRepository.saveAll(existingUsersFamily);
-		return existingUser;// Restituisci l'ID aggiornato
+		return existingUser;
+
+	}
+
+	@Override
+	public List<Points> getPointsListByEmail(String email) throws Exception {
+		String emailCriypt = encryptDecryptConverter.convert(email);
+
+		List<Points> userList = pointsRepository.findByOnFigli(emailCriypt);
+		return userList;
 	}
 }

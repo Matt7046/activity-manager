@@ -28,8 +28,8 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
   const labelFamily = {
-    email: "Email  figlio",
-    emailFamily: "Email tutore",
+    email: "Email  tutore",
+    emailFamily: "Email figlio",
     points: "Points",
     newPoints: "Aggiungi points"
   }
@@ -48,7 +48,9 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
       setIsVertical(window.innerHeight > window.innerWidth);
     };
     window.addEventListener("resize", handleResize);
-    findByEmail(user, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
+    const emailFind = user.emailFamily ? user.emailFamily: user.email;
+
+    findByEmail({...user, email : emailFind}, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           setPoints(response.testo.points);
@@ -137,7 +139,6 @@ return (
             fullWidth
             disabled={true}
             multiline
-            rows={10} // Numero di righe visibili per il campo
             InputLabelProps={{
               style: {
                 whiteSpace: 'normal', // Permette al testo di andare a capo
