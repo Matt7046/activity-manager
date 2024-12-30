@@ -16,12 +16,11 @@ public interface PointsRepository extends MongoRepository<Points, String>, Point
      @Query("{'email': ?0, 'type': ?1}")
     Points findByEmail(String email, Long type);
 
-    @Query("{'emailfamily': ?0, 'email': ?1}")
-    Points findByEmailFamilyAndEmail(String emailFamily, String email);
-
+    @Query("{'emailFigli': {$in: [?0]}}")
+    List<Points> findByOnFigli(String email);
     
     @Query("{'email': ?0}")
-    List<Points>  findFamilyEmailByEmail(String email);
+    Points  findByEmailOnEmail(String email);
        
        
 }

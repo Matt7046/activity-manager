@@ -3,9 +3,9 @@ import { ResponseI } from "../../../general/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
 import { ActivityLogI } from "../Activity";
 
-export const fetchDataActivity = async (funzioneErrore?: () => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+export const fetchDataActivity = async (pointsDTO: any, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
-    const data = await getData(`activity`, setLoading); // Usa l'URL dinamico
+    const data = await postData(`activity`, pointsDTO, setLoading); // Usa l'URL dinamico
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {

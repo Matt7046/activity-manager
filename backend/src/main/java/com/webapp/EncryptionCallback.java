@@ -1,5 +1,7 @@
 package com.webapp;
 
+import java.util.stream.Collectors;
+
 import org.springframework.context.event.EventListener;
 import org.springframework.data.mongodb.core.mapping.event.AfterLoadEvent;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
@@ -24,12 +26,16 @@ public class EncryptionCallback {
             Points user = (Points) event.getSource();
             try {
                 if (user.getEmail() != null) {
-                    user.setEmail(encryptDecryptConverter.convert(user.getEmail())); // Crittografa l'email prima del
-                                                                                      // salvataggio
+                    user.setEmail(encryptDecryptConverter.convert(user.getEmail())); // Crittografa l'email //
+                                                                                     // salvataggio
                 }
                 if (user.getEmailFamily() != null) {
-                    user.setEmailFamily(encryptDecryptConverter.convert(user.getEmailFamily())); // Crittografa l'email prima del
-                                                                                      // salvataggio
+                    user.setEmailFamily(encryptDecryptConverter.convert(user.getEmailFamily())); // Crittografa l'email
+                }
+                if (user.getEmailFigli() != null) {
+                    user.setEmailFigli(user.getEmailFigli().stream().map(email -> {
+                        return encryptDecryptConverter.convert(email);
+                    }).collect(Collectors.toList())); // Crittografa l'email
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -40,8 +46,9 @@ public class EncryptionCallback {
             try {
                 if (user.getEmail() != null) {
                     user.setEmail(encryptDecryptConverter.convert(user.getEmail())); // Crittografa l'email prima del
-                                                                                      // salvataggio
+                                                                                     // salvataggio
                 }
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }

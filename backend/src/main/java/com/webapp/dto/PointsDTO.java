@@ -1,5 +1,7 @@
 package com.webapp.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,13 +19,13 @@ public class PointsDTO {
 	private String numeroPunti;
 	private String attivita;
 	private Long usePoints;
+	private List<String> emailFigli;
 
 	public void generaAttivita(String[] attivitaSvolte) {
-    	 setAttivita(attivitaSvolte.toString()
-                 .replace("[", "[\"")
-                 .replace("]", "\"]")
-                 .replace(", ", "\", \""));
-    }
-	
+		setAttivita(attivitaSvolte.toString()
+				.replace("[", "[\"")
+				.replace("]", "\"]")
+				.replace(", ", "\", \""));
+	}
 
 }

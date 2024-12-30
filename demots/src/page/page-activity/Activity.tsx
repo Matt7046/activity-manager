@@ -59,7 +59,7 @@ const Activity: React.FC<{ user: UserI }> = ({ user }) => {
       // Effettua la chiamata GET quando il componente è montato 
       // axios.
       //  .get('https://api.example.com/data') // URL dell'API]
-      fetchDataActivity()
+      fetchDataActivity(user)
         .then((response) => {
           if (response) {
             setResponse(response.testo)

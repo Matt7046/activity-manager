@@ -9,7 +9,7 @@ import { ActivityI } from "../page-activity/Activity";
 import activityStore from "../page-activity/store/ActivityStore";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./About.css";
-import { deleteAboutById, saveAboutById } from "./service/AboutService";
+import { deleteAboutById, saveAboutByUser } from "./service/AboutService";
 
 interface AboutContentProps {
   user: UserI;
@@ -33,6 +33,13 @@ const AboutContent: React.FC<AboutContentProps> = ({
     nome: "Attività",
     subTesto: "Descrizione"
   }
+
+  const labelFamily = {
+    email: "Email  tutore",
+    emailFamily: "Email figlio", 
+  }
+
+
 
   testoOld = activity;
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
@@ -70,6 +77,14 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const handleChangeSubTesto = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSubTesto(event.target.value); // Aggiorna lo stato con il valore inserito    
   };
+
+    const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    };
+  
+    const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {
+    };
+  
+  
   const handleClose = () => {
     setOpen(false);
   };
@@ -102,12 +117,13 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const salvaRecord = (_id: string): void => {
 
     const testo = {
+      ...user,     
       _id: _id,
       nome: nome,
       subTesto: subTesto,
       points: points,
     }
-    saveAboutById(_id, testo, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
+    saveAboutByUser(testo, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.testo) {
         navigateRouting(navigate, 'activity', {})
       }
@@ -118,6 +134,36 @@ const AboutContent: React.FC<AboutContentProps> = ({
     <>
       <div className="row">
         <Box sx={{ padding: 2 }}>
+           <div id="text-box-email-family">
+                    <TextField
+                      id="emailFamily"
+                      label={labelFamily.emailFamily}
+                      variant="standard"
+                      value={user.emailFamily} // Collega il valore allo stato
+                      onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
+                      fullWidth
+                      disabled={true}
+                    />
+                  </div>
+          
+                  <div id="text-box-email" style={{ marginTop: '16px' }}>
+                    <TextField
+                      id="email"
+                      label={labelFamily.email}
+                      variant="standard"
+                      value={user.email} // Collega il valore allo stato
+                      onChange={handleChangeEmail} // Aggiorna lo stato quando cambia
+                      fullWidth
+                      disabled={true}
+                      multiline
+                      InputLabelProps={{
+                        style: {
+                          whiteSpace: 'normal', // Permette al testo di andare a capo
+                          wordWrap: 'break-word', // Interrompe le parole lunghe
+                        },
+                      }}
+                    />
+                  </div>
 
           <div id="text-box">
             <TextField
