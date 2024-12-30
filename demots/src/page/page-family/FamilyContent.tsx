@@ -48,7 +48,9 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
       setIsVertical(window.innerHeight > window.innerWidth);
     };
     window.addEventListener("resize", handleResize);
-    findByEmail(user, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
+    const emailFind = user.emailFamily ? user.emailFamily: user.email;
+
+    findByEmail({...user, email : emailFind}, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           setPoints(response.testo.points);
