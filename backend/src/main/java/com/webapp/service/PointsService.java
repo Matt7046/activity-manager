@@ -25,7 +25,7 @@ public class PointsService {
 
     public Points findByEmail(String identificativo, Long type) {
 
-        return pointsRepository.findByEmail(identificativo,type);
+        return pointsRepository.findByEmail(identificativo, type);
     }
 
     public Long getUserType(PointsDTO pointsDTO) throws Exception {
@@ -39,8 +39,12 @@ public class PointsService {
     }
 
     public Points getPointsByEmail(String email) throws Exception {
-        return pointsRepository.getPointsByEmail(email);    }
+        return pointsRepository.getPointsByEmail(email);
+    }
 
+    public List<Points> getPointsListByEmail(String email) throws Exception {
+        return pointsRepository.getPointsListByEmail(email);
+    }
 
     public Points savePointsByTypeStandard(PointsDTO pointsDTO, Boolean operation) throws Exception {
         Points points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
@@ -52,6 +56,5 @@ public class PointsService {
 
         return pointsRepository.save(sub);
     }
-
 
 }

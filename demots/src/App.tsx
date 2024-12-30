@@ -1,5 +1,5 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Alert, Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Snackbar, TextField } from '@mui/material';
+import { Alert, Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Snackbar } from '@mui/material';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import React, { useState } from 'react';
 import { NavigateFunction, Route, Routes, useNavigate } from 'react-router-dom';
@@ -14,19 +14,15 @@ import Operative from './page/page-operative/Operative';
 import Points from './page/page-points/Points';
 import { savePoints as getUser } from './page/page-points/service/PointsService';
 import Register from './page/page-register/Register';
+import { getEmailChild } from './page/page-register/service/RegisterService';
 
 
 
 // Componente principale, avvolto da GoogleOAuthProvider
 const App = () => (
-
-
   <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
     <GoogleAuthComponent />
   </GoogleOAuthProvider>
-
-
-
 );
 
 // Componente di autenticazione
@@ -40,6 +36,8 @@ const GoogleAuthComponent = () => {
   const [openD, setOpenD] = useState(false); // Stato per la dialog
   const [email, setEmail] = useState('child@simulated.com'); // Stato per l'email
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
+  const [emailOptions, setEmailOptions] = React.useState<string[]>([]); // Lo stato è un array di stringhe
+
 
   const [userData, setUserData] = useState({
     name: "Simulated User",
@@ -65,11 +63,13 @@ const GoogleAuthComponent = () => {
 
 
 
+
   // Funzioni di gestione
   const handleOpenD = () => setOpenD(true);
   const handleCloseD = () => setOpenD(false);
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const handleEmailChange = (event: SelectChangeEvent) => {
     setEmail(event.target.value);
+  };
   const handleConfirm = ((userData: any) => {
     console.log("Email confermata:", email);
     userData.emailFamily = email;
@@ -171,6 +171,10 @@ const GoogleAuthComponent = () => {
       });
       if (userDataResponse.ok) {
         const userDataGoogle = await userDataResponse.json();
+        getEmailChild(userDataGoogle).then((x: any) => {
+          console.log('User Data:', x); // Logga i dati utente per il debug
+          setEmailOptions(x.testo);
+        })
         //setUser({ ...userData, type: 1 });
         setUserData(userDataGoogle);
         showDialog(1, true, userDataGoogle);
@@ -264,15 +268,19 @@ const GoogleAuthComponent = () => {
                 <Dialog open={openD} onClose={handleCloseD}>
                   <DialogTitle>Inserisci email del figlio </DialogTitle>
                   <DialogContent>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      label="Email"
-                      type="email"
-                      fullWidth
+                    <InputLabel>Email</InputLabel>
+                    <Select
                       value={email}
-                      onChange={handleEmailChange}
-                    />
+                      onChange={(event) => handleEmailChange(event)}
+                      label="Email"
+                      autoWidth
+                    >
+                      {emailOptions.map((option) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </Select>
                   </DialogContent>
                   <DialogActions>
                     <ButtonMui onClick={handleCloseD} color="secondary">
