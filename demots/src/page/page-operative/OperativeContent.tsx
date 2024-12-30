@@ -33,7 +33,9 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
   const fetchOptions = () => {
     try {
-      fetchDataActivity(user).then((response: ResponseI | undefined) => {
+      const emailFind = user.emailFamily ? user.emailFamily: user.email;
+
+      fetchDataActivity({...user, email: emailFind}).then((response: ResponseI | undefined) => {
         setActivity(response?.testo);
       })
     } catch (error) {
@@ -92,13 +94,15 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
       console.error('Activity not found');
       return; // Esci dalla funzione se non trovi l'attività
     }
-  
+    const emailFind = user.emailFamily ? user.emailFamily: user.email;
+
     // Crea il log dell'attività
     const activityLog: ActivityLogI = {
       ...user,
       log: selectedActivity.nome, // Non è necessario usare '!' se hai fatto il check
       date: new Date(),
-      usePoints: pointsField
+      usePoints: pointsField,
+      email: emailFind
     };
   
     // Salva il log dell'attività
