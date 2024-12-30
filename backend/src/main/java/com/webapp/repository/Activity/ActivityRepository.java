@@ -20,6 +20,9 @@ public interface ActivityRepository extends MongoRepository<Activity, String>, A
     @Query(value = "{'_id': ?0}", delete = true)
         Long deleteByIdentificativo(String id);
 
+        @Query("{'email': ?0}")
+    List<Activity> findAllByEmail(String email);
+
 
         
         

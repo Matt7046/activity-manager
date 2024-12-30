@@ -28,8 +28,8 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
   const labelFamily = {
-    email: "Email  figlio",
-    emailFamily: "Email tutore",
+    email: "Email  tutore",
+    emailFamily: "Email figlio",
     points: "Points",
     newPoints: "Aggiungi points"
   }
@@ -137,7 +137,6 @@ return (
             fullWidth
             disabled={true}
             multiline
-            rows={10} // Numero di righe visibili per il campo
             InputLabelProps={{
               style: {
                 whiteSpace: 'normal', // Permette al testo di andare a capo

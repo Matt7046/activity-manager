@@ -12,7 +12,8 @@ import Family from './page/page-family/Family';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
 import Points from './page/page-points/Points';
-import { savePoints } from './page/page-points/service/PointsService';
+import { savePoints as getUser } from './page/page-points/service/PointsService';
+import Register from './page/page-register/Register';
 
 
 
@@ -37,12 +38,19 @@ const GoogleAuthComponent = () => {
   const [simulated, setSimulated] = useState(false);
   const [title, setTitle] = useState("");
   const [openD, setOpenD] = useState(false); // Stato per la dialog
-  const [email, setEmail] = useState('parentemail@simulated.it'); // Stato per l'email
-    const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
-  
+  const [email, setEmail] = useState('child@simulated.com'); // Stato per l'email
+  const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
+
   const [userData, setUserData] = useState({
     name: "Simulated User",
     email: "user@simulated.com",
+    token: null,
+    type: -1
+  }); // Stato per userData
+
+  const [userDataChild, setUserDataChild] = useState({
+    name: "Simulated child User",
+    email: "child@simulated.com",
     token: null,
     type: -1
   }); // Stato per userData
@@ -66,7 +74,9 @@ const GoogleAuthComponent = () => {
     console.log("Email confermata:", email);
     userData.emailFamily = email;
     setUser(userData);
-    saveUserData(userData, setLoading);
+    navigateRouting(navigate, `activity`, {});
+
+    //saveUserData(userData, setLoading);
   });
 
   // Configura useGoogleLogin
@@ -86,8 +96,9 @@ const GoogleAuthComponent = () => {
 
 
   const handleLoginSuccessFake = (fakeResponse: any, type: number) => {
+    const userType = type === 0 ? { ...userDataChild } : { ...userData }
     const user = {
-      ...userData,
+      ...userType,
       token: fakeResponse.credential,
       type: type
     };
@@ -100,25 +111,41 @@ const GoogleAuthComponent = () => {
   };
 
   const showDialog = (type: number): void => {
+    const userType = type === 0 ? { ...userDataChild } : { ...userData } 
+    saveUserData({ ...userType, type: type }, setLoading)
 
-    if (type === TypeUser.FAMILY) {
-      handleOpenD();
-    } else {
-      setUser({ ...userData, type: type });
-      saveUserData({ ...userData, type: type }, setLoading)
-    }    
   }
 
 
 
 
-  const saveUserData = (userData: any, setLoading: any): Promise<any> => {
+  const saveUserData = (userD: any, setLoading: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
-    return savePoints(userData, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
+    return getUser(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
-       navigateRouting(navigate, `activity`, { })
+
+
+      switch (x.testo.typeUser) {
+        case 0: {
+          setUser({ ...userD, type: x.testo.typeUser });
+          navigateRouting(navigate, `activity`, {});
+          break;
+        }
+        case 1: {
+          setUserData({ ...userD, type: x.testo.typeUser })
+          handleOpenD();
+          break;
+        }
+        case 2: {          
+          setUser({ ...userData, type: x.testo.typeUser });
+          navigateRouting(navigate, `register`, {})
+        }
+          break;
+      }
     })
   }
+
+
 
   // Funzione per ottenere i dati utente
   const fetchUserData = async (accessToken: string) => {
@@ -229,7 +256,7 @@ const GoogleAuthComponent = () => {
 
                 {/* Dialog */}
                 <Dialog open={openD} onClose={handleCloseD}>
-                  <DialogTitle>Inserisci la tua email parentale </DialogTitle>
+                  <DialogTitle>Inserisci email del figlio </DialogTitle>
                   <DialogContent>
                     <TextField
                       autoFocus
@@ -260,6 +287,7 @@ const GoogleAuthComponent = () => {
             <div>
               <h1>{title}</h1>
               <Routes>
+                <Route path="/register" element={<Register user={user} />} />
                 <Route path="/activity" element={<Activity user={user} />} />
                 <Route path="/about" element={<About user={user} />} />
                 <Route path="/points" element={<Points user={user} />} />
@@ -298,7 +326,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
   } else {
     return [
       [
-        { funzione: null, testo: 'Activity' },  
+        { funzione: null, testo: 'Activity' },
         { funzione: null, testo: 'Points' },
         { funzione: null, testo: 'Operative' },
       ]
