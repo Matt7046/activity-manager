@@ -33,7 +33,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
   const fetchOptions = () => {
     try {
-      fetchDataActivity().then((response: ResponseI | undefined) => {
+      fetchDataActivity(user).then((response: ResponseI | undefined) => {
         setActivity(response?.testo);
       })
     } catch (error) {
@@ -95,7 +95,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   
     // Crea il log dell'attività
     const activityLog: ActivityLogI = {
-      email: user.email,
+      ...user,
       log: selectedActivity.nome, // Non è necessario usare '!' se hai fatto il check
       date: new Date(),
       usePoints: pointsField
