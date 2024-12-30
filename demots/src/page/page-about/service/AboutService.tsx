@@ -17,7 +17,7 @@ export const deleteAboutById = async (_id: string, funzioneMessage?:(message?: T
 };
 
 
-export const saveAboutById = async (_id: string, about: any, funzioneMessage?:(message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
+export const saveAboutByUser = async (about: any, funzioneMessage?:(message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
   try {
     const path = `about/dati`;
     const showSuccess = true;

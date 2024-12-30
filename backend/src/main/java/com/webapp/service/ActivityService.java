@@ -66,4 +66,8 @@ public class ActivityService {
     public List<LogActivity> logAttivitaByEmail(PointsDTO pointsDTO, Sort sort) {
         return logAttivitaRepository.findLogByEmail(encryptDecryptConverter.convert(pointsDTO.getEmail()), sort);
     }
+
+    public List<Activity> findAllByEmail(String email) {
+        return activityRepository.findAllByEmail(encryptDecryptConverter.convert(email));
+    }
 }
