@@ -14,6 +14,7 @@ import com.webapp.mapper.ActivityMapper;
 import com.webapp.mapper.LogActivityMapper;
 import com.webapp.service.ActivityService;
 import com.webapp.service.PointsService;
+import com.webapp.trasversali.PointsUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,8 +119,9 @@ public class ActivityController {
         List<String> errori = new ArrayList<>();
         try {
             PointsDTO pointsDTO = new PointsDTO();
-            pointsDTO.setPoints(logActivityDTO.getPoints());
+            pointsDTO.setPoint(logActivityDTO.getPoints());
             pointsDTO.setEmail(logActivityDTO.getEmail());
+            pointsDTO.setEmailFamily(logActivityDTO.getEmailFamily());
             pointsDTO.setUsePoints(logActivityDTO.getUsePoints());
             pointsService.savePointsByTypeStandard(pointsDTO, false);
 
