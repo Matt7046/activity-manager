@@ -121,7 +121,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
       _id: _id,
       nome: nome,
       subTesto: subTesto,
-      point: points,
+      points: points,
       email : emailFind
     }
     saveAboutByUser(testo, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
