@@ -33,7 +33,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
   }
 
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const [emailFigli, setEmailFigli] = useState<string[]>([]);
+  const [emailFigli, setEmailFigli] = useState<string[]>(['child@simulated.com']);
 
   // Funzione per gestire il cambio di valore
   const handleChangeEmailRegister = (index: number, value: string) => {

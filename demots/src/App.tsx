@@ -31,27 +31,42 @@ const GoogleAuthComponent = () => {
   const [user, setUser] = useState<any>(null);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [loading, setLoading] = useState(false);
-  const [simulated, setSimulated] = useState(false);
+  const [simulated, setSimulated] = useState(0);
   const [title, setTitle] = useState("");
   const [openD, setOpenD] = useState(false); // Stato per la dialog
   const [email, setEmail] = useState('child@simulated.com'); // Stato per l'email
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [emailOptions, setEmailOptions] = React.useState<string[]>([]); // Lo stato è un array di stringhe
+  const [emailLogin, setEmailLogin] = useState(); // Stato per l'email
+
 
 
   const [userData, setUserData] = useState({
     name: "Simulated User",
-    email: "user@simulated.com",
+    emailFamily: "user@simulated.com",
+    email:"user@simulated.com",
     token: null,
     type: -1
   }); // Stato per userData
 
   const [userDataChild, setUserDataChild] = useState({
     name: "Simulated child User",
-    email: "child@simulated.com",
+    emailFamily: "child@simulated.com",
+    email:"user@simulated.com",
     token: null,
     type: -1
   }); // Stato per userData
+
+  const handleConfirm = ((typeSimulated: number, emailGoogle?: string) => {
+    console.log("Email confermata:", emailGoogle);
+   const emailEnter = emailGoogle ? emailGoogle : typeSimulated ? 'child@simulated.com' : 'simulated@simulated.com';
+     userData.emailFamily = email;
+     userData.email = emailEnter
+    setUser(userData);
+    navigateRouting(navigate, `activity`, {});
+
+    //saveUserData(userData, setLoading);
+  });
 
   // Funzione di logout
   const logOut = () => {
@@ -70,14 +85,7 @@ const GoogleAuthComponent = () => {
   const handleEmailChange = (event: SelectChangeEvent) => {
     setEmail(event.target.value);
   };
-  const handleConfirm = ((userData: any) => {
-    console.log("Email confermata:", email);
-    userData.emailFamily = email;
-    setUser(userData);
-    navigateRouting(navigate, `activity`, {});
 
-    //saveUserData(userData, setLoading);
-  });
 
   // Configura useGoogleLogin
   const login = useGoogleLogin({
@@ -175,6 +183,7 @@ const GoogleAuthComponent = () => {
       });
       if (userDataResponse.ok) {
         const userDataGoogle = await userDataResponse.json();
+        setEmailLogin(userDataGoogle.email);
         getEmailChild(userDataGoogle).then((x: any) => {
           const emailChild = x?.testo?? [];
           setEmailOptions(emailChild);
@@ -192,7 +201,7 @@ const GoogleAuthComponent = () => {
 
   // Simulazione del login con Google
   const simulateLogin = (type: number) => {
-    setSimulated(true);
+    setSimulated(type);
     const fakeResponse = {
       credential: "fake-token-id",
       clientId: "549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com",
@@ -291,7 +300,7 @@ const GoogleAuthComponent = () => {
                       Annulla
                     </ButtonMui>
                     <ButtonMui
-                      onClick={() => handleConfirm(userData)}
+                      onClick={() => handleConfirm(simulated,emailLogin)}
                       color="primary"
                       disabled={!email} // Disabilita il pulsante se l'email è vuota
                     >
