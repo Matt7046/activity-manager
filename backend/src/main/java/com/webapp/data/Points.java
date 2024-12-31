@@ -10,7 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.webapp.EncryptDecryptConverter;
+import com.webapp.trasversali.PointsUser;
 
 @Document(collection = "points") // Specifica la collezione nel database
 @Data // Genera getter, setter, toString, equals e hashCode
@@ -21,7 +21,7 @@ public class Points {
     private String _id;
     @Field("email")
     private String email;
-    private Long points;
+    private List<PointsUser>  points;
     private Long type;
     @Field("emailfamily")
     private String emailFamily;  
