@@ -20,7 +20,7 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 	private EncryptDecryptConverter encryptDecryptConverter;
 
 	public Long getUserType(Points pointsSave) throws Exception {
-		String email = encryptDecryptConverter.convert(pointsSave.getEmail());
+		String email = encryptDecryptConverter.convert(pointsSave.getEmailFamily());
 		List<Points> existPointsOnFigli = pointsRepository.findByOnFigli(email);
 		Points existPoints = pointsRepository.findByEmailOnEmail(email);
 		Long type;
