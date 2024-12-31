@@ -117,7 +117,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const salvaRecord = (userData: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
     const pointsWithPlus = isPlusIcon ? newPoints : - newPoints;
-    return savePointsByTypeStandard({ ...userData, points: points, usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
+    return savePointsByTypeStandard({ ...userData,  usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
       setPoints(x.testo.points)
       // navigateRouting(navigate, `activity`, {})

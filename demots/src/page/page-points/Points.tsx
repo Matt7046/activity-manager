@@ -7,7 +7,8 @@ import PointsContent from './PointsContent';
 export interface PointsI {
   _id: string | undefined;
   email: string;
-  points: number;
+  //points: number;
+  point: number;
   numeroPunti: number;
   attivita: string;
   usePoints?: number;

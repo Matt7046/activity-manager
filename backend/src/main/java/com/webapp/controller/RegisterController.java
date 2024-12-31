@@ -57,6 +57,7 @@ public class RegisterController {
     public ResponseEntity<ResponseDTO> saveRegister(@RequestBody PointsDTO pointsDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
+            pointsDTO.setEmailFamily(pointsDTO.getEmail());
             Boolean itemId = pointsService.saveFamily(pointsDTO);
 
             // Crea una risposta

@@ -59,7 +59,7 @@ const GoogleAuthComponent = () => {
 
   const handleConfirm = ((typeSimulated: number, emailGoogle?: string) => {
     console.log("Email confermata:", emailGoogle);
-   const emailEnter = emailGoogle ? emailGoogle : typeSimulated ? 'child@simulated.com' : 'simulated@simulated.com';
+   const emailEnter = emailGoogle ? emailGoogle : typeSimulated ? 'simulated@simulated.com': 'child@simulated.com' ;
      userData.emailFamily = email;
      userData.email = emailEnter
     setUser(userData);
@@ -137,14 +137,14 @@ const GoogleAuthComponent = () => {
       console.log('User Data:', x); // Logga i dati utente per il debug
 
 
-      switch (x?.testo?.typeUser) {
+      switch (userD.type) {
         case 0: {
           setUser({ ...userD, type: x.testo.typeUser });
           navigateRouting(navigate, `activity`, {});
           break;
         }
         case 1: {
-          setUserData({ ...userD, type: x.testo.typeUser })
+        //  setUserData({ ...userD, email, type: x.testo.typeUser })
           handleOpenD();
           break;
         }
