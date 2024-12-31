@@ -124,27 +124,29 @@ const GoogleAuthComponent = () => {
   };
 
   const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
-    const userType = userDataGoogle ? userDataGoogle : type === 0 ? { ...userDataChild } : { ...userData }
-    saveUserData({ ...userType, type: type }, googleAuth, setLoading)
+    const userType = userDataGoogle ? {...userDataGoogle, emailFamily: userDataGoogle.email} : type === 0 ? { ...userDataChild } : { ...userData }
+    openHome({ ...userType, type: type }, googleAuth, setLoading)
 
   }
 
 
 
 
-  const saveUserData = (userD: any, googleAuth: boolean, setLoading: any): Promise<any> => {
+  const openHome = (userD: any, googleAuth: boolean, setLoading: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
     return getUser(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
 
 
       switch (x.testo?.typeUser) {
-        case 0: {
+        case 0: {          
+          setSimulated(TypeUser.STANDARD);
           setUser({ ...userD, type: x.testo.typeUser });
           navigateRouting(navigate, `activity`, {});
           break;
         }
         case 1: {
+          setSimulated(TypeUser.FAMILY);
           //  setUserData({ ...userD, email, type: x.testo.typeUser })
           handleOpenD();
           break;
