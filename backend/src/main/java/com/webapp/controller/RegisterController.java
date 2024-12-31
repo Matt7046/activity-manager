@@ -39,7 +39,7 @@ public class RegisterController {
         // divertente" };
         String email = pointsDTO.getEmail();
         Points sub = pointsService.getPointsByEmail(email);        // mapping
-     
+        
         ResponseDTO response = new ResponseDTO(sub.getEmailFigli(), HttpStatus.OK.value(), new ArrayList<>());
         return response;
         }

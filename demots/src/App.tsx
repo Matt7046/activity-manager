@@ -44,7 +44,7 @@ const GoogleAuthComponent = () => {
   const [userData, setUserData] = useState({
     name: "Simulated User",
     emailFamily: "user@simulated.com",
-    email:"user@simulated.com",
+    email: "user@simulated.com",
     token: null,
     type: -1
   }); // Stato per userData
@@ -52,16 +52,17 @@ const GoogleAuthComponent = () => {
   const [userDataChild, setUserDataChild] = useState({
     name: "Simulated child User",
     emailFamily: "child@simulated.com",
-    email:"user@simulated.com",
+    email: "user@simulated.com",
     token: null,
     type: -1
   }); // Stato per userData
 
   const handleConfirm = ((typeSimulated: number, emailGoogle?: string) => {
     console.log("Email confermata:", emailGoogle);
-   const emailEnter = emailGoogle ? emailGoogle : typeSimulated ? 'simulated@simulated.com': 'child@simulated.com' ;
-     userData.emailFamily = email;
-     userData.email = emailEnter
+    const emailEnter = emailGoogle ? emailGoogle : typeSimulated ? 'simulated@simulated.com' : 'child@simulated.com';
+    userData.emailFamily = email;
+    userData.email = emailEnter;
+    userData.type = typeSimulated;
     setUser(userData);
     navigateRouting(navigate, `activity`, {});
 
@@ -112,7 +113,7 @@ const GoogleAuthComponent = () => {
     };
     setUserData(user);
     getEmailChild(user).then((x: any) => {
-      const emailChild = x?.testo?? [];
+      const emailChild = x?.testo ?? [];
       setEmailOptions(emailChild);
     })
     //  
@@ -137,23 +138,24 @@ const GoogleAuthComponent = () => {
       console.log('User Data:', x); // Logga i dati utente per il debug
 
 
-      switch (userD.type) {
+      switch (x.testo?.typeUser) {
         case 0: {
           setUser({ ...userD, type: x.testo.typeUser });
           navigateRouting(navigate, `activity`, {});
           break;
         }
         case 1: {
-        //  setUserData({ ...userD, email, type: x.testo.typeUser })
+          //  setUserData({ ...userD, email, type: x.testo.typeUser })
           handleOpenD();
           break;
         }
         case 2: {
-          if (googleAuth !== true) {
-            setUser({ ...userData, type: x.testo.typeUser });
+          if (googleAuth === true) {
+            setUser({ ...userD, type: x.testo.typeUser });
+
           }
           else {
-            setUser({ ...userD, type: x.testo.typeUser });
+            setUser({ ...userData, type: x.testo.typeUser });
           }
           navigateRouting(navigate, `register`, {})
         }
@@ -185,7 +187,7 @@ const GoogleAuthComponent = () => {
         const userDataGoogle = await userDataResponse.json();
         setEmailLogin(userDataGoogle.email);
         getEmailChild(userDataGoogle).then((x: any) => {
-          const emailChild = x?.testo?? [];
+          const emailChild = x?.testo ?? [];
           setEmailOptions(emailChild);
         })
         //setUser({ ...userData, type: 1 });
@@ -300,7 +302,7 @@ const GoogleAuthComponent = () => {
                       Annulla
                     </ButtonMui>
                     <ButtonMui
-                      onClick={() => handleConfirm(simulated,emailLogin)}
+                      onClick={() => handleConfirm(simulated, emailLogin)}
                       color="primary"
                       disabled={!email} // Disabilita il pulsante se l'email è vuota
                     >
