@@ -1,6 +1,5 @@
 package com.webapp.repository.Points;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import com.webapp.EncryptDecryptConverter;
 import com.webapp.data.Points;
+import com.webapp.trasversali.PointsUser;
+
 import Exception.ArithmeticCustomException;
 
 public class PointsCustomRepositoryImpl implements PointsCustomRepository {
@@ -37,11 +38,16 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 
 	public Boolean saveFamily(Points pointsSave) throws Exception {
 		Boolean newUSer = false;
+		String email = encryptDecryptConverter.convert(pointsSave.getEmail());
 
 		if (pointsSave.getEmail() != null && !pointsSave.getEmailFigli().isEmpty()) {
 			newUSer = true;
 			pointsSave.setType(1L);
-			pointsSave.setPoints(100L);
+			pointsSave.getPoints().stream()
+					// .filter(point -> emailCrypt.equals(point.email())) // Filtra per email
+					// .findFirst() // Trova il primo match
+					.forEach(point -> point.setPoints(100L)); // Aggior
+			// pointsSave.setPoints(new PointsUser(100L, email));
 			pointsRepository.save(pointsSave);
 
 		}
@@ -59,40 +65,37 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		existingUser.setEmailFigli(existingUser.getEmailFigli().stream().map(x -> {
 			try {
 				return encryptDecryptConverter.decrypts(x);
-			} catch (Exception e) {			
+			} catch (Exception e) {
 			}
 			return x;
 		}).collect(Collectors.toList())); // Crittografa l'email
-	
+
 		return existingUser;
 	}
 
 	public Points savePointsByTypeStandard(Points pointsSave, Long usePoints, Boolean operation) throws Exception {
 		// Verifica se esiste già un documento con l'identificativo
-		String emailCriypt = encryptDecryptConverter.convert(pointsSave.getEmail());
+		String emailCriypt = encryptDecryptConverter.convert(pointsSave.getEmailFamily());
 
 		Points existingUser = pointsRepository.findByEmailOnEmail(emailCriypt);
 		if (existingUser == null) {
 			List<Points> userList = pointsRepository.findByOnFigli(emailCriypt);
 			existingUser = !userList.isEmpty() ? userList.get(0) : null;
 		}
-
-		if (pointsSave.getEmail() != null) {
-			// existingUsersFamily = pointsRepository.findFamilyEmailByEmail(emailCriypt);
-		}
-		usePoints = usePoints != null ? usePoints : 0L;
+		
+		// usePoints = usePoints != null ? usePoints : 0L;
 		Long newPoints = 0L;
-		if (operation == true) {
-			newPoints = existingUser.getPoints() + usePoints;
-		} else {
-			newPoints = existingUser.getPoints() - usePoints;
-		}
+		existingUser.getPoints().stream()
+				.filter(point -> pointsSave.getEmailFamily().equals(point.getEmail())) // Filtra per email
+				.findFirst() // Trova il primo match
+				.ifPresent(point -> point.setPoints(
+						point.getPoints() + (operation ? usePoints : -usePoints)));
 		if (newPoints < 0L) {
 			throw new ArithmeticCustomException("I punti devono essere maggiori di zero.");
 		}
 
 		// Aggiorna i punti per l'utente esistente
-		existingUser.setPoints(newPoints);
+		// existingUser.setPoints(new PointsUser(newPoints, emailCriypt));
 		existingUser.setEmail(encryptDecryptConverter.decrypt(existingUser.getEmail()));
 		existingUser.setEmailFamily(encryptDecryptConverter.decrypt(existingUser.getEmailFamily()));
 		existingUser.setEmailFigli(existingUser.getEmailFigli().stream()

@@ -10,9 +10,14 @@ import com.webapp.EncryptDecryptConverter;
 import com.webapp.data.Points;
 import com.webapp.dto.ActivityDTO;
 import com.webapp.dto.PointsDTO;
+import com.webapp.dto.PointsRDTO;
 import com.webapp.service.PointsService;
+import com.webapp.trasversali.PointsUser;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,11 +54,15 @@ public class PointsController {
 
         try {
             if (item != null) {
+                String email = pointsDTO.getEmail();
                 // Mappatura se l'oggetto è stato trovato
                 PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(item);
-                subDTO.setEmail(encryptDecryptConverter.decrypt(item.getEmail()));
-                subDTO.setNumeroPunti("I Points a disposizione sono: ".concat(subDTO.getPoints().toString()));
-                responseDTO = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
+                List<PointsUser> filteredList = subDTO.getPoints().stream()
+                .filter(point -> email.equals(point.getEmail()))
+                .collect(Collectors.toList());
+                PointsRDTO record = new PointsRDTO(filteredList.get(0).getPoints(),"I Points a disposizione sono: ".concat(filteredList.get(0).getPoints().toString()));
+
+                responseDTO = new ResponseDTO(record, HttpStatus.OK.value(), new ArrayList<>());
             } else {
                 // Risposta in caso di errore o elemento non trovato
                 ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
@@ -91,10 +100,15 @@ public class PointsController {
     public ResponseEntity<ResponseDTO> savePointsByTypeStandard(@RequestBody PointsDTO pointsDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
+            String email = pointsDTO.getEmailFamily();
             Points itemId = pointsService.savePointsByTypeStandard(pointsDTO, true);
-
+            PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(itemId);
+            List<PointsUser> filteredList = subDTO.getPoints().stream()
+            .filter(point -> email.equals(point.getEmail()))
+            .collect(Collectors.toList());
+            PointsRDTO record = new PointsRDTO(filteredList.get(0).getPoints(),"I Points a disposizione sono: ".concat(filteredList.get(0).getPoints().toString()));
             // Crea una risposta
-            ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK.value(), new ArrayList<>());
+            ResponseDTO response = new ResponseDTO(record, HttpStatus.OK.value(), new ArrayList<>());
 
             // Ritorna una ResponseEntity con lo status HTTP
             return ResponseEntity.ok(response);

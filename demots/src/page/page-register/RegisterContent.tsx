@@ -92,7 +92,8 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
   
   const salvaRecord = (userData: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
-    return saveRegisterByPoints({...userData, emailFigli: emailFigli}, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
+    const arrayDiOggetti = emailFigli.map(email => ({ email }));
+    return saveRegisterByPoints({...userData, emailFigli: emailFigli, points : arrayDiOggetti}, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
       
      // navigateRouting(navigate, `activity`, {})
