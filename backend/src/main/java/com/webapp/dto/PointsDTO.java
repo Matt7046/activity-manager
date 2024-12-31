@@ -2,6 +2,8 @@ package com.webapp.dto;
 
 import java.util.List;
 
+import com.webapp.trasversali.PointsUser;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,8 @@ public class PointsDTO {
 	private String _id; // Identificatore unico
 	private String email;
 	private String emailFamily;
-	private Long points;
+	private List<PointsUser>  points;
+	private Long point;
 	private Long type;
 	private String numeroPunti;
 	private String attivita;

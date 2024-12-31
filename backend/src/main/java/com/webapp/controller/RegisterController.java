@@ -39,7 +39,7 @@ public class RegisterController {
         // divertente" };
         String email = pointsDTO.getEmail();
         Points sub = pointsService.getPointsByEmail(email);        // mapping
-     
+        
         ResponseDTO response = new ResponseDTO(sub.getEmailFigli(), HttpStatus.OK.value(), new ArrayList<>());
         return response;
         }
@@ -57,6 +57,7 @@ public class RegisterController {
     public ResponseEntity<ResponseDTO> saveRegister(@RequestBody PointsDTO pointsDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
+            pointsDTO.setEmailFamily(pointsDTO.getEmail());
             Boolean itemId = pointsService.saveFamily(pointsDTO);
 
             // Crea una risposta

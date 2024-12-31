@@ -13,6 +13,7 @@ import java.util.Date;
     public class LogActivityDTO {
         private String _id;
         private String email;
+        private String emailFamily;
         private String log;
         private Date  date;
         private Long usePoints;
