@@ -104,8 +104,8 @@ const GoogleAuthComponent = () => {
     };
     setUserData(user);
     getEmailChild(user).then((x: any) => {
-      console.log('User Data:', x); // Logga i dati utente per il debug
-      setEmailOptions(x.testo);
+      const emailChild = x?.testo?? [];
+      setEmailOptions(emailChild);
     })
     //  
 
@@ -129,7 +129,7 @@ const GoogleAuthComponent = () => {
       console.log('User Data:', x); // Logga i dati utente per il debug
 
 
-      switch (x.testo.typeUser) {
+      switch (x?.testo?.typeUser) {
         case 0: {
           setUser({ ...userD, type: x.testo.typeUser });
           navigateRouting(navigate, `activity`, {});
@@ -176,8 +176,8 @@ const GoogleAuthComponent = () => {
       if (userDataResponse.ok) {
         const userDataGoogle = await userDataResponse.json();
         getEmailChild(userDataGoogle).then((x: any) => {
-          console.log('User Data:', x); // Logga i dati utente per il debug
-          setEmailOptions(x.testo);
+          const emailChild = x?.testo?? [];
+          setEmailOptions(emailChild);
         })
         //setUser({ ...userData, type: 1 });
         setUserData(userDataGoogle);
