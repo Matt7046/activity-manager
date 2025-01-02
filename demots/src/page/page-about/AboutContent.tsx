@@ -81,7 +81,6 @@ const AboutContent: React.FC<AboutContentProps> = ({
         
       }
       showMessageAboutForm((message?: TypeMessage) => showMessage(setOpen, setMessage, { ...message, message: errorFields }));
-
     }
   };
 
