@@ -4,7 +4,7 @@ import { showMessage } from '../../App';
 import { getMenuLaterale, ResponseI, UserI } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import ActivityContent from './ActivityContent';
-import { fetchDataActivity } from './service/ActivityService';
+import { fetchDataActivities } from './service/ActivityService';
 import activityStore from './store/ActivityStore';
 
 export interface ActivityI {
@@ -61,7 +61,7 @@ const Activity: React.FC<{ user: UserI }> = ({ user }) => {
       // axios.
       //  .get('https://api.example.com/data') // URL dell'API]
       const emailFind = user.emailFamily ? user.emailFamily: user.email;
-      fetchDataActivity({...user,email: emailFind}, (message: any) => showMessage(setOpen, setMessage, message))
+      fetchDataActivities({...user,email: emailFind}, (message: any) => showMessage(setOpen, setMessage, message))
         .then((response) => {
           if (response) {
             setResponse(response.testo)
