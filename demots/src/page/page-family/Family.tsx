@@ -12,7 +12,9 @@ export interface PointsI {
   attivita: string;
 }
 
-const Family: React.FC<{ user: UserI }> = ({ user }) => {
+const Family: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
+
+  setTitle("Section Family");
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
