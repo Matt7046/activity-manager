@@ -2,7 +2,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import React, { useState } from 'react';
-import { NavigateFunction, Route, Routes, useNavigate } from 'react-router-dom';
+import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import Alert from './components/msallert/Alert';
 import { MenuLaterale } from './components/msdrawer/Drawer';
@@ -33,12 +33,13 @@ const GoogleAuthComponent = () => {
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [loading, setLoading] = useState(false);
   const [simulated, setSimulated] = useState(0);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState("Activity manager");
   const [openD, setOpenD] = useState(false); // Stato per la dialog
   const [email, setEmail] = useState('child@simulated.com'); // Stato per l'email
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [emailOptions, setEmailOptions] = React.useState<string[]>([]); // Lo stato è un array di stringhe
   const [emailLogin, setEmailLogin] = useState(); // Stato per l'email
+  const location = useLocation();
 
 
 
@@ -309,14 +310,14 @@ const GoogleAuthComponent = () => {
             </div>
           ) : (
             <div>
-              <h1>{title}</h1>
+              <h2>{title}</h2>
               <Routes>
-                <Route path="/register" element={<Register user={user} />} />
-                <Route path="/activity" element={<Activity user={user} />} />
-                <Route path="/about" element={<About user={user} />} />
-                <Route path="/points" element={<Points user={user} />} />
-                <Route path="/operative" element={<Operative user={user} />} />
-                <Route path="/family" element={<Family user={user} />} />
+                <Route path="/register" element={<Register user={user} setTitle = {setTitle} />} />
+                <Route path="/activity" element={<Activity user={user}setTitle = {setTitle} />} />
+                <Route path="/about" element={<About user={user}  setTitle = {setTitle} />} />
+                <Route path="/points" element={<Points user={user} setTitle = {setTitle} />} />
+                <Route path="/operative" element={<Operative user={user} setTitle = {setTitle} />} />
+                <Route path="/family" element={<Family user={user} setTitle = {setTitle} />} />
               </Routes>
             </div>
           )}
