@@ -42,7 +42,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
       const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
       fetchDataActivity({ ...user, email: emailFind }).then((response: ResponseI | undefined) => {
-        setActivity(response?.testo);
+        setActivity(response?.testo ?? []);
       })
     } catch (error) {
       console.error('Error fetching options:', error);
