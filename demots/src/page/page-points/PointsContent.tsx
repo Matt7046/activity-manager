@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { showMessage } from "../../App";
@@ -66,10 +66,14 @@ const PointsContent: React.FC<PointsContentProps> = ({
     title: 'Log Attività',
     visibility: user ? true : false,
     configDialogPulsante: {message:'', showDialog:false}
+  };    
+  const logsPerPage = 8; // Numero di log per pagina
+  const [page, setPage] = useState(1);
+  // Gestisce il cambiamento della pagina
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
   };
-
-
-  const children =
+  const children = (
     <React.Fragment>
       <Button pulsanti={[pulsanteLog]} />
       <Dialog
@@ -93,50 +97,54 @@ const PointsContent: React.FC<PointsContentProps> = ({
           </IconButton>
         </DialogTitle>
         <DialogContent dividers>
-
-
-          {/* Render condizionale del contenuto */}
+          {/* Aggiungi la paginazione per i log */}
           {testoLog.length > 0 ? (
-            <Grid container spacing={2}>
-              {testoLog.map((item, index) => (
-                <Grid item xs={12} sm={6} md={6} key={index}>
-                  <Card
-                    sx={{
-                      borderRadius: 4,
-                      boxShadow: 3,
-                      overflow: 'hidden',
-                      backgroundColor: '#f9f9f9',
-                    }}
-                  >
-                    <CardContent>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
-                        Data: {new Date(item.date).toLocaleDateString()}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
-                        Use Points: {item.usePoints}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Description: {item.log}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
+            <>
+              <Grid container spacing={2}>
+                {testoLog.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
+                  <Grid item xs={12} sm={6} md={6} key={index}>
+                    <Card
+                      sx={{
+                        borderRadius: 4,
+                        boxShadow: 3,
+                        overflow: 'hidden',
+                        backgroundColor: '#f9f9f9',
+                      }}
+                    >
+                      <CardContent>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
+                          Data: {new Date(item.date).toLocaleDateString()}
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+                          Use Points: {item.usePoints}
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                          Description: {item.log}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+              {/* Paginazione per i log */}
+              <Pagination
+                count={Math.ceil(testoLog.length / logsPerPage)}
+                page={page}
+                onChange={handlePageChange}
+                color="primary"
+                sx={{ marginTop: 2, display: 'flex', justifyContent: 'center' }}
+              />
+            </>
           ) : (
             <Typography variant="body2" sx={{ color: 'text.secondary', mt: 2 }}>
               Nessun dato disponibile.
             </Typography>
           )}
-
-
         </DialogContent>
-        <DialogActions>
-
-        </DialogActions>
+        <DialogActions />
       </Dialog>
     </React.Fragment>
-    ;
+  );  
 
   const children2 =
     <React.Fragment>
