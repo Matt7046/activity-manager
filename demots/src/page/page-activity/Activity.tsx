@@ -23,7 +23,9 @@ export interface ActivityLogI {
 
 }
 
-const Activity: React.FC<{ user: UserI }> = ({ user }) => {
+const Activity: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
+
+  setTitle("Section Activity");
   const [utente, setUtente] = useState<UserI>(user); // Stato iniziale vuoto
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user)
