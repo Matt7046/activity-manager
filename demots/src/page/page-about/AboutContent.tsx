@@ -37,8 +37,8 @@ const AboutContent: React.FC<AboutContentProps> = ({
   };
 
   const [formValues, setFormValues] = useState<FormValues>({
-    activity: activityStore.testo.find((x) => _id === x._id)?.nome,
-    points: activityStore.testo.find((x) => _id === x._id)?.points,
+    activity: activityStore.activity.find((x) => _id === x._id)?.nome,
+    points: activityStore.activity.find((x) => _id === x._id)?.points,
   });
 
   const [formErrors, setFormErrors] = useState<FormErrorValues>({
@@ -85,7 +85,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   };
 
 
-  let testoOld = activityStore.testo.find((x) => _id === x._id);
+  let testoOld = activityStore.activity.find((x) => _id === x._id);
   const activityLabel: ActivityI = {
     _id: undefined,
     nome: "Attività",
@@ -102,7 +102,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   testoOld = activityLabel;
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
 
-  const [subTesto, setSubTesto] = useState(activityStore.testo.find((x) => _id === x._id)?.subTesto);
+  const [subTesto, setSubTesto] = useState(activityStore.activity.find((x) => _id === x._id)?.subTesto);
 
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-solid fa-trash',
