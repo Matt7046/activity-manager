@@ -5,7 +5,9 @@ import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import OperativeContent from './OperativeContent';
 
 
-const Operative: React.FC<{ user: UserI }> = ({ user }) => {
+const Operative: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
+
+  setTitle("Section Operative");
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
