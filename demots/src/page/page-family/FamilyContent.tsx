@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
 import { showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
-import { HttpStatus, ResponseI, UserI } from "../../general/Utils";
+import { FormErrorValues, HttpStatus, ResponseI, UserI, verifyForm } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail, savePointsByTypeStandard } from "../page-points/service/PointsService";
 import "./Family.css";
@@ -23,6 +23,19 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   setMessage,
   setOpen
 }) => {
+
+   // Stato per i valori dei campi
+    type FormValues = {
+      [key: string]: number | undefined;
+    };
+    const [disableButtonSave, setDisableButtonSave] = useState(true);  
+    const [formValues, setFormValues] = useState<FormValues>({
+      newPoints: 0,
+    });
+  
+    const [formErrors, setFormErrors] = useState<FormErrorValues>({
+      newPoints: true,  
+    });
   const labelFamily = {
     email: "Email  tutore",
     emailFamily: "Email figlio",
@@ -31,8 +44,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   }
 
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const [newPoints, setNewPoints] = useState<number>(100);
- // const [points, setPoints] = useState<number>(0);
+  //const [newPoints, setNewPoints] = useState<number>(100);
   const [isPlusIcon, setIsPlusIcon] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -59,6 +71,8 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
+          const errors: FormErrorValues = verifyForm(formValues);
+          setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
           setIsLoading(false);
           familyStore.setPoints(response.testo.points); // Update the state with the new value
         }
@@ -70,11 +84,18 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+    useEffect(() => {
+      const errors: FormErrorValues = verifyForm(formValues);
+      setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
+      // Puoi aggiungere altre azioni da eseguire quando formValues cambia
+    }, [formValues]); // Dipendenza su formValues
+
 
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-solid fa-floppy-disk',
     funzione: () => salvaRecord(user), // Passi la funzione direttamente
     nome: 'blue',
+    disableButton: disableButtonSave,
     title: 'Salva',
     configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
   };
@@ -91,8 +112,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   };
 
   const handleChangeNewPoints = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPoints(parseInt(event.target.value)); // Aggiorna lo stato con il valore inserito
-  };
+    setFormValues({ ...formValues, newPoints: parseInt(event.target.value) })  };
 
   const handleClose = () => {
     setOpen(false);
@@ -100,7 +120,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
 
   const salvaRecord = (userData: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
-    const pointsWithPlus = isPlusIcon ? newPoints : - newPoints;
+    const pointsWithPlus = isPlusIcon ? formValues.newPoints : - formValues.newPoints!;
     return savePointsByTypeStandard({ ...userData,  usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
      // setPoints(x.testo.points)
@@ -171,7 +191,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
                 <InputLabel htmlFor="filled-adornment-new-points">New Points</InputLabel>
                 <Input
                   id="filled-adornment-new-points"
-                  value={newPoints} // Collega il valore allo stato
+                  value={formValues.newPoints} // Collega il valore allo stato
                   onChange={handleChangeNewPoints} // Aggiorna lo stato quando cambia
                   type={'number'}
                   startAdornment={
