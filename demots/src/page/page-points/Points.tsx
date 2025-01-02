@@ -14,7 +14,9 @@ export interface PointsI {
   usePoints?: number;
 }
 
-const Points: React.FC<{ user: UserI }> = ({ user }) => {
+const Points: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
+
+  setTitle("Section Points");
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
