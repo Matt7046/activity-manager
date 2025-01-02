@@ -158,7 +158,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
               }}
             />
           </div>
-          <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+          <FormControl sx={{  marginTop:'16px', width: '25ch' }} variant="standard">
             <InputLabel htmlFor="filled-points">{labelFamily.points}</InputLabel>
             <Input
               id="filled-adornment-points"
@@ -170,7 +170,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
           </FormControl>
 
 
-          <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+          <FormControl sx={{ marginTop:'16px', width: '25ch' }} variant="standard">
             <InputLabel htmlFor="filled-adornment-points">New Points</InputLabel>
             <Input
               id="filled-adornment-points"
