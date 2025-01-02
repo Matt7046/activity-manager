@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { Box, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
+import { Box, FormControl, IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
 import { showMessage } from "../../App";
@@ -10,6 +11,7 @@ import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail, savePointsByTypeStandard } from "../page-points/service/PointsService";
 import "./Family.css";
 import familyStore from './store/FamilyStore';
+
 
 
 interface FamilyContentProps {
@@ -24,18 +26,18 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   setOpen
 }) => {
 
-   // Stato per i valori dei campi
-    type FormValues = {
-      [key: string]: number | undefined;
-    };
-    const [disableButtonSave, setDisableButtonSave] = useState(true);  
-    const [formValues, setFormValues] = useState<FormValues>({
-      newPoints: 0,
-    });
-  
-    const [formErrors, setFormErrors] = useState<FormErrorValues>({
-      newPoints: true,  
-    });
+  // Stato per i valori dei campi
+  type FormValues = {
+    [key: string]: number | undefined;
+  };
+  const [disableButtonSave, setDisableButtonSave] = useState(true);
+  const [formValues, setFormValues] = useState<FormValues>({
+    newPoints: 0,
+  });
+
+  const [formErrors, setFormErrors] = useState<FormErrorValues>({
+    newPoints: true,
+  });
   const labelFamily = {
     email: "Email  tutore",
     emailFamily: "Email figlio",
@@ -79,16 +81,16 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
       }
     })
 
-    
+
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-    useEffect(() => {
-      const errors: FormErrorValues = verifyForm(formValues);
-      setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
-      // Puoi aggiungere altre azioni da eseguire quando formValues cambia
-    }, [formValues]); // Dipendenza su formValues
+  useEffect(() => {
+    const errors: FormErrorValues = verifyForm(formValues);
+    setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
+    // Puoi aggiungere altre azioni da eseguire quando formValues cambia
+  }, [formValues]); // Dipendenza su formValues
 
 
   const pulsanteBlue: Pulsante = {
@@ -108,11 +110,12 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
 
 
   const handleChangePoints = (event: React.ChangeEvent<HTMLInputElement>) => {
-   familyStore.setPoints(parseInt(event.target.value)); // Update the state with the new value
+    familyStore.setPoints(parseInt(event.target.value)); // Update the state with the new value
   };
 
   const handleChangeNewPoints = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues({ ...formValues, newPoints: parseInt(event.target.value) })  };
+    setFormValues({ ...formValues, newPoints: parseInt(event.target.value) })
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -121,11 +124,11 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const salvaRecord = (userData: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
     const pointsWithPlus = isPlusIcon ? formValues.newPoints : - formValues.newPoints!;
-    return savePointsByTypeStandard({ ...userData,  usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
+    return savePointsByTypeStandard({ ...userData, usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
-     // setPoints(x.testo.points)
-     familyStore.setPoints(parseInt(x?.testo.points)); // Update the state with the new value
-   
+      // setPoints(x.testo.points)
+      familyStore.setPoints(parseInt(x?.testo.points)); // Update the state with the new value
+
 
       // navigateRouting(navigate, `activity`, {})
     })
@@ -140,7 +143,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
         <Box sx={{ padding: 2 }}>
           <Grid container spacing={2}>
             {/* Campo emailFamily */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="emailFamily"
                 label={labelFamily.emailFamily}
@@ -151,9 +154,9 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
                 disabled={true}
               />
             </Grid>
-  
+
             {/* Campo email */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 id="email"
                 label={labelFamily.email}
@@ -171,9 +174,9 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
                 }}
               />
             </Grid>
-  
+
             {/* Campo Points */}
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <FormControl fullWidth variant="standard">
                 <InputLabel htmlFor="filled-points">{labelFamily.points}</InputLabel>
                 <Input
@@ -184,9 +187,9 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
                 />
               </FormControl>
             </Grid>
-  
+
             {/* Campo New Points */}
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <FormControl fullWidth variant="standard">
                 <InputLabel htmlFor="filled-adornment-new-points">New Points</InputLabel>
                 <Input
@@ -211,18 +214,16 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
               </FormControl>
             </Grid>
           </Grid>
-  
+
           {/* Pulsanti */}
           <Grid container justifyContent="flex-end" spacing={2} sx={{ marginTop: 2 }}>
-            <Grid item>
-              <Button pulsanti={[pulsanteBlue]} />
-            </Grid>
+            <Button pulsanti={[pulsanteBlue]} />
           </Grid>
         </Box>
       </div>
     </>
   );
-  
+
 }
 
 export default FamilyContent;
