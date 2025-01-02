@@ -39,7 +39,7 @@ public class ActivityController {
     private PointsService pointsService;
    
     @PostMapping("")
-    public ResponseDTO getTesto(@RequestBody PointsDTO pointsDTO) {
+    public ResponseDTO getActivities(@RequestBody PointsDTO pointsDTO) {
 
         // String[] texts = { "Ciao, mondo!", "Benvenuto in Java", "Programmazione è
         // divertente" };
@@ -113,7 +113,7 @@ public class ActivityController {
     }
 
     @PostMapping("/dati")
-    public ResponseDTO saveActivity(@RequestBody LogActivityDTO logActivityDTO) {
+    public ResponseDTO savePointsAndLog(@RequestBody LogActivityDTO logActivityDTO) {
         ResponseDTO responseDTO = null;
 
         List<String> errori = new ArrayList<>();
