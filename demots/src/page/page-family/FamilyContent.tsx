@@ -3,13 +3,13 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import { HttpStatus, ResponseI, UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail, savePointsByTypeStandard } from "../page-points/service/PointsService";
 import "./Family.css";
+import familyStore from './store/FamilyStore';
 
 
 interface FamilyContentProps {
@@ -23,10 +23,6 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   setMessage,
   setOpen
 }) => {
-
-  const location = useLocation();
-  const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const { _id } = location.state || {}; // Ottieni il valore dallo stato
   const labelFamily = {
     email: "Email  tutore",
     emailFamily: "Email figlio",
@@ -36,8 +32,9 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
 
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [newPoints, setNewPoints] = useState<number>(100);
-  const [points, setPoints] = useState<number>(0);
+ // const [points, setPoints] = useState<number>(0);
   const [isPlusIcon, setIsPlusIcon] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
 
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -62,12 +59,13 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
-          setPoints(response.testo.points);
-          console.log('Dati ricevuti:', response);
+          setIsLoading(false);
+          familyStore.setPoints(response.testo.points); // Update the state with the new value
         }
       }
     })
 
+    
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -89,7 +87,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
 
 
   const handleChangePoints = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPoints(parseInt(event.target.value)); // Aggiorna lo stato con il valore inserito
+   familyStore.setPoints(parseInt(event.target.value)); // Update the state with the new value
   };
 
   const handleChangeNewPoints = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,26 +98,21 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     setOpen(false);
   };
 
-  useEffect(() => {
-
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const salvaRecord = (userData: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
     const pointsWithPlus = isPlusIcon ? newPoints : - newPoints;
     return savePointsByTypeStandard({ ...userData,  usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
-      setPoints(x.testo.points)
+     // setPoints(x.testo.points)
+     familyStore.setPoints(parseInt(x?.testo.points)); // Update the state with the new value
+   
+
       // navigateRouting(navigate, `activity`, {})
     })
+  }
+
+  if (isLoading) {
+    return <p>Caricamento...</p>; // Mostra un loader mentre i dati vengono caricati
   }
   return (
     <>
@@ -165,7 +158,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
                 <InputLabel htmlFor="filled-points">{labelFamily.points}</InputLabel>
                 <Input
                   id="filled-adornment-points"
-                  value={points} // Collega il valore allo stato
+                  value={familyStore.getStore().points} // Collega il valore allo stato
                   onChange={handleChangePoints} // Aggiorna lo stato quando cambia
                   disabled={true}
                 />

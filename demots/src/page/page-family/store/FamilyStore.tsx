@@ -1,21 +1,28 @@
-import { observer } from 'mobx-react';
+import { action, makeObservable, observable } from 'mobx';
 import BaseStore from '../../../general/BaseStore';
 
 export class FamilyStore extends BaseStore {
-  
 
 
-  constructor() {
+
+  @observable points: number = 0;
+
+  constructor() {    
     super(); // Inizializza la classe base
+    makeObservable(this);
 
   }
-
   getStore() {
     return this;
   }
+  @action
+  setPoints(points: number) {
+    this.points = points
+  }
 }
-const activityStore = new FamilyStore();
-export default activityStore;
+const familyStore = new FamilyStore();
+export default familyStore;
+
 
 
 
