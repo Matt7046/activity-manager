@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
-import { HttpStatus, ResponseI, UserI, verifyForm } from "../../general/Utils";
+import { FormErrorValues, HttpStatus, ResponseI, UserI, verifyForm } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivity, saveActivityLog } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
@@ -35,10 +35,6 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   // Stato per i valori dei campi
   type FormValues = {
     [key: string]: string | undefined;
-  };
-
-  type FormErrorValues = {
-    [key: string]: boolean | undefined;
   };
 
   const [formValues, setFormValues] = useState<FormValues>({
