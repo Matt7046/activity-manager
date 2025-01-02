@@ -19,6 +19,7 @@ export class FamilyStore extends BaseStore {
   setPoints(points: number) {
     this.points = points
   }
+  
 }
 const familyStore = new FamilyStore();
 export default familyStore;
