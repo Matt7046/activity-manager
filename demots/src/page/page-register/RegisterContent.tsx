@@ -1,5 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button as ButtonMui, Grid } from "@mui/material";
+import { Box, Button as ButtonMui } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,6 +10,7 @@ import { UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./Register.css";
 import { saveRegisterByPoints } from './service/RegisterService';
+
 
 
 interface RegisterContentProps {
@@ -153,9 +155,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
         </Box>
         {/* Pulsanti */}
         <Grid container justifyContent="flex-end" spacing={2}>
-          <Grid item>
             <Button pulsanti={[pulsanteBlue]} />
-          </Grid>
         </Grid>
       </div>
     </>

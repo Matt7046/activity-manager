@@ -1,4 +1,5 @@
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -257,14 +258,12 @@ const AboutContent: React.FC<AboutContentProps> = ({
               }}
             />
           </div>
-        </Box>
 
-        {/* Pulsanti */}
-        <Grid container justifyContent="flex-end" spacing={2}>
-          <Grid item>
-            <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
+          {/* Pulsanti */}
+          <Grid container justifyContent="flex-end" spacing={2} sx={{ marginTop: 2 }}>
+            <Button pulsanti={[pulsanteBlue]} />
           </Grid>
-        </Grid>
+        </Box >
       </div>
     </>
   );
