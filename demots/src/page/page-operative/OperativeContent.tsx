@@ -1,15 +1,16 @@
 import { Box, FormControl, Grid, Input, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import { HttpStatus, ResponseI, UserI } from "../../general/Utils";
-import { ActivityI, ActivityLogI } from "../page-activity/Activity";
+import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivity, saveActivityLog } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail } from "../page-points/service/PointsService";
 import "./Operative.css";
 import { showMessageOperativeForm } from "./service/OperativeService";
+import operativeStore from "./store/OperativeStore";
 
 interface OperativeContentProps {
   user: UserI;
@@ -24,15 +25,11 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 }) => {
 
   const location = useLocation();
-  const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const { _id } = location.state || {}; // Ottieni il valore dallo stato
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const padding = isVertical ? 5 : 8;
-  const [pointsField, setPointsField] = useState(0);
-  const [emailField, setEmailField] = useState(user.email);
-  const [activity, setActivity] = useState([] as ActivityI[]);
-  //const [comboBoxValue, setComboBoxValue] = useState('');
-  const [points, setPoints] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingO, setIsLoadingO] = useState(true);
+
+
 
   // Stato per i valori dei campi
   type FormValues = {
@@ -90,15 +87,16 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   };
 
   const handleChangePoints = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPoints(parseInt(event.target.value)); // Aggiorna lo stato con il valore inserito
+    operativeStore.setPoints(parseInt(event.target.value)); // Aggiorna lo stato con il valore inserito
   };
 
   const fetchOptions = () => {
     try {
       const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-      fetchDataActivity({ ...user, email: emailFind }).then((response: ResponseI | undefined) => {
-        setActivity(response?.testo ?? []);
+      return fetchDataActivity({ ...user, email: emailFind }).then((response: ResponseI | undefined) => {
+        setIsLoadingO(false);
+        operativeStore.setActivity(response?.testo ?? []);
       })
     } catch (error) {
       console.error('Error fetching options:', error);
@@ -112,7 +110,8 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
       findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
         if (response) {
           if (response.status === HttpStatus.OK) {
-            setPoints(response.testo.points);
+            setIsLoading(false);
+            operativeStore.setPoints(response.testo.points);
             console.log('Dati ricevuti:', response);
           }
         }
@@ -124,6 +123,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
 
   useEffect(() => {
+    operativeStore.setEmailField(user.email);
     fetchOptions();
     fetchPoints();
     const handleResize = () => {
@@ -156,7 +156,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
 
     // Trova l'attività selezionata tramite l'ID
-    const selectedActivity = activity.find(item => item._id === selectedValue);
+    const selectedActivity = operativeStore.activity.find(item => item._id === selectedValue);
 
     // Se l'attività non è trovata, mostra un errore
     if (!selectedActivity) {
@@ -165,13 +165,13 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     }
 
     // Imposta il valore dei punti in base all'attività selezionata
-    setPointsField(selectedActivity.points!);
+    operativeStore.setPointsField(selectedActivity.points!);
   };
 
 
   const saveActivity = (user: UserI) => {
     // Trova l'attività selezionata nell'array
-    const selectedActivity = activity.find(item => item._id === formValues.activity);
+    const selectedActivity = operativeStore.activity.find(item => item._id === formValues.activity);
 
     // Se l'attività selezionata non esiste, gestisci l'errore
     if (!selectedActivity) {
@@ -185,7 +185,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
       ...user,
       log: selectedActivity.nome, // Non è necessario usare '!' se hai fatto il check
       date: new Date(),
-      usePoints: pointsField,
+      usePoints: operativeStore.pointsField,
       email: emailFind
     };
 
@@ -195,6 +195,9 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
         fetchPoints();
       })
   };
+  if (isLoading || isLoadingO) {
+    return <p>Caricamento...</p>; // Mostra un loader mentre i dati vengono caricati
+  }
 
   return (
     <>
@@ -206,8 +209,8 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
               {/* Campo stringa 1 */}
               <TextField
                 label="Email"
-                value={emailField}
-                onChange={(e) => setEmailField(e.target.value)}
+                value={operativeStore.emailField}
+                onChange={(e) => operativeStore.setEmailField(e.target.value)}
                 fullWidth
                 margin="normal"
                 disabled={true} // Disabilita il campo
@@ -218,7 +221,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
                 <InputLabel htmlFor="filled-points">{'Points'}</InputLabel>
                 <Input
                   id="filled-adornment-points"
-                  value={points} // Collega il valore allo stato
+                  value={operativeStore.points} // Collega il valore allo stato
                   onChange={handleChangePoints} // Aggiorna lo stato quando cambia
                   disabled={true}
                 />
@@ -239,7 +242,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
                   label="Activity"
                   required={true}
                 >
-                  {activity.map((option) => (
+                  {operativeStore.activity.map((option) => (
                     <MenuItem key={option._id} value={option._id}>
                       {option.nome}
                     </MenuItem>
@@ -254,8 +257,8 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
               <TextField
                 label="Points Activity"
                 type="number"
-                value={pointsField}
-                onChange={(e) => setPointsField(parseInt(e.target.value, 10))}
+                value={operativeStore.pointsField}
+                onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
                 fullWidth
                 margin="normal"
                 disabled={true} // Disabilita il campo

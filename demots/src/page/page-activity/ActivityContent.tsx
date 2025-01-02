@@ -78,7 +78,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     fetchDataActivityById(_id, () => showMessage(setOpen, setMessage), setLoading)
       .then((response) => {
         if (response.status === HttpStatus.OK) {
-          activityStore.setTestoById(_id, response.testo);
+          activityStore.setActivityById(_id, response.testo);
           navigateRouting(navigate, `about`, { _id })
           console.log('Dati ricevuti:', response);
         } else {
