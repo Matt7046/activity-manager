@@ -1,4 +1,5 @@
-import { CardActions, CardContent, CardMedia, Grid, List, ListItem, Card as MuiCard, Typography } from '@mui/material';
+import { CardActions, CardContent, CardMedia, List, ListItem, Card as MuiCard, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { Pulsante } from '../msbutton/Button';
@@ -57,10 +58,8 @@ const CardComponent = observer((props: CardProps) => {
         )}
       </CardContent>
       <CardActions>
-        <Grid container justifyContent="flex-end" spacing={2}>
-          <Grid item>
-          <div>{props.children}</div>          
-          </Grid>
+        <Grid container justifyContent="flex-end" spacing={2}>          
+          <div>{props.children}</div>                   
         </Grid>
       </CardActions>
     </MuiCard>
@@ -71,7 +70,7 @@ const CardGrid = ({ cardsData }: { cardsData: CardProps[] }) => {
   return (
     <Grid container spacing={2} alignItems="stretch">
       {cardsData.map((cardData) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={cardData._id}>
+        <Grid size ={{xs:12, sm:6, md:4, lg:3}} key={cardData._id}>
           <CardComponent {...cardData} />
         </Grid>
       ))}

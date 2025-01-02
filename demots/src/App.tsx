@@ -1,5 +1,6 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import React, { useEffect, useState } from 'react';
 import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
@@ -16,7 +17,6 @@ import Points from './page/page-points/Points';
 import { savePoints as getUser } from './page/page-points/service/PointsService';
 import Register from './page/page-register/Register';
 import { getEmailChild } from './page/page-register/service/RegisterService';
-
 
 
 // Componente principale, avvolto da GoogleOAuthProvider
@@ -259,7 +259,7 @@ const GoogleAuthComponent = () => {
                 <div>
                   <Grid container spacing={2}>
                     {/* Prima riga: Pulsanti per simulare il login */}
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs:12, sm:6}}>
                       <ButtonMui
                         variant="contained"
                         color="primary"
@@ -269,7 +269,7 @@ const GoogleAuthComponent = () => {
                         Simula login utente base
                       </ButtonMui>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs:12, sm:6}}>
                       <ButtonMui
                         variant="contained"
                         color="primary"
@@ -281,7 +281,7 @@ const GoogleAuthComponent = () => {
                     </Grid>
 
                     {/* Seconda riga: Pulsante di login reale */}
-                    <Grid item xs={12}>
+                    <Grid size={{ xs:12}}>
                       <GoogleLogin onSuccess={() => login()} onError={logOut} />
 
                     </Grid>
