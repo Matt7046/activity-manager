@@ -118,7 +118,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-solid fa-floppy-disk',
     funzione: () => handleButtonClick(), // Passi la funzione direttamente
-    disableButton: disableButtonSave,
+    //disableButton: disableButtonSave,
     nome: 'blue',
     title: 'Salva',
     configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
