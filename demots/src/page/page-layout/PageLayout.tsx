@@ -4,16 +4,15 @@ import Drawer, { MenuLaterale } from '../../components/msdrawer/Drawer';
 
 interface PageLayoutProps {
   children: React.ReactNode; // Contenuto specifico della maschera
-  menuLaterale:MenuLaterale[][]; 
+  menuLaterale: MenuLaterale[][];
   open: boolean;
   message: TypeMessage;
   handleClose: () => void;
   padding: number; // Gestione padding dinamico
 }
-export interface TypeMessage
-{
-  message? : string[];
-  typeMessage? : AlertColor;
+export interface TypeMessage {
+  message?: string[];
+  typeMessage?: AlertColor;
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({
@@ -38,7 +37,9 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert onClose={handleClose} severity={message.typeMessage} sx={{ width: '100%' }}>
-          {message.message}
+          {message.message?.map((msg, index) => (
+            <p key={index}>{msg}</p> // Ogni messaggio su una nuova riga
+          ))}
         </Alert>
       </Snackbar>
       <Box sx={{ paddingLeft: padding, paddingRight: 5 }}>{children}</Box>
