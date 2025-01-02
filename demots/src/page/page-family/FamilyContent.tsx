@@ -38,9 +38,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const [newPoints, setNewPoints] = useState<number>(100);
   const [points, setPoints] = useState<number>(0);
   const [isPlusIcon, setIsPlusIcon] = useState(true);
-  const [showPassword, setShowPassword] = React.useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -127,86 +125,91 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     <>
       <div className="row">
         <Box sx={{ padding: 2 }}>
-
-          <div id="text-box-email-family">
-            <TextField
-              id="emailFamily"
-              label={labelFamily.emailFamily}
-              variant="standard"
-              value={user.emailFamily} // Collega il valore allo stato
-              onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
-              fullWidth
-              disabled={true}
-            />
-          </div>
-
-          <div id="text-box-email" style={{ marginTop: '16px' }}>
-            <TextField
-              id="email"
-              label={labelFamily.email}
-              variant="standard"
-              value={user.email} // Collega il valore allo stato
-              onChange={handleChangeEmail} // Aggiorna lo stato quando cambia
-              fullWidth
-              disabled={true}
-              multiline
-              InputLabelProps={{
-                style: {
-                  whiteSpace: 'normal', // Permette al testo di andare a capo
-                  wordWrap: 'break-word', // Interrompe le parole lunghe
-                },
-              }}
-            />
-          </div>
-          <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
-            <InputLabel htmlFor="filled-points">{labelFamily.points}</InputLabel>
-            <Input
-              id="filled-adornment-points"
-              value={points} // Collega il valore allo stato
-              onChange={handleChangePoints} // Aggiorna lo stato quando cambia
-
-              disabled={true}
-            />
-          </FormControl>
-
-
-          <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
-            <InputLabel htmlFor="filled-adornment-points">New Points</InputLabel>
-            <Input
-              id="filled-adornment-points"
-              value={newPoints} // Collega il valore allo stato
-              onChange={handleChangeNewPoints} // Aggiorna lo stato quando cambia
-              type={'number'}
-              startAdornment={
-                <InputAdornment position="start">
-                  <IconButton
-                    aria-label={
-                      showPassword ? 'hide the password' : 'display the password'
-                    }
-                    onClick={toggleIcon}
-                    onMouseDown={handleMouseDownPassword}
-                    onMouseUp={handleMouseUpPassword}
-                    edge="end"
-                  >
-                    {isPlusIcon ? <AddIcon /> : <RemoveIcon />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-
-
-
-        </Box>
-        {/* Pulsanti */}
-        <Grid container justifyContent="flex-end" spacing={2}>
-          <Grid item>
-            <Button pulsanti={[pulsanteBlue]} />
+          <Grid container spacing={2}>
+            {/* Campo emailFamily */}
+            <Grid item xs={12}>
+              <TextField
+                id="emailFamily"
+                label={labelFamily.emailFamily}
+                variant="standard"
+                value={user.emailFamily} // Collega il valore allo stato
+                onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
+                fullWidth
+                disabled={true}
+              />
+            </Grid>
+  
+            {/* Campo email */}
+            <Grid item xs={12}>
+              <TextField
+                id="email"
+                label={labelFamily.email}
+                variant="standard"
+                value={user.email} // Collega il valore allo stato
+                onChange={handleChangeEmail} // Aggiorna lo stato quando cambia
+                fullWidth
+                disabled={true}
+                multiline
+                InputLabelProps={{
+                  style: {
+                    whiteSpace: 'normal', // Permette al testo di andare a capo
+                    wordWrap: 'break-word', // Interrompe le parole lunghe
+                  },
+                }}
+              />
+            </Grid>
+  
+            {/* Campo Points */}
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth variant="standard">
+                <InputLabel htmlFor="filled-points">{labelFamily.points}</InputLabel>
+                <Input
+                  id="filled-adornment-points"
+                  value={points} // Collega il valore allo stato
+                  onChange={handleChangePoints} // Aggiorna lo stato quando cambia
+                  disabled={true}
+                />
+              </FormControl>
+            </Grid>
+  
+            {/* Campo New Points */}
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth variant="standard">
+                <InputLabel htmlFor="filled-adornment-new-points">New Points</InputLabel>
+                <Input
+                  id="filled-adornment-new-points"
+                  value={newPoints} // Collega il valore allo stato
+                  onChange={handleChangeNewPoints} // Aggiorna lo stato quando cambia
+                  type={'number'}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <IconButton
+                        aria-label={'Add points'}
+                        onClick={toggleIcon}
+                        onMouseDown={handleMouseDownPassword}
+                        onMouseUp={handleMouseUpPassword}
+                        edge="end"
+                      >
+                        {isPlusIcon ? <AddIcon /> : <RemoveIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+            </Grid>
           </Grid>
-        </Grid>
+  
+          {/* Pulsanti */}
+          <Grid container justifyContent="flex-end" spacing={2} sx={{ marginTop: 2 }}>
+            <Grid item>
+              <Button pulsanti={[pulsanteBlue]} />
+            </Grid>
+          </Grid>
+        </Box>
       </div>
     </>
   );
+  
 }
 
 export default FamilyContent;
