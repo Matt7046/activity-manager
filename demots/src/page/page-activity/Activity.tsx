@@ -32,12 +32,13 @@ const Activity: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) =>
   const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
+  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
+  const [paddingType, setPaddingType] =  useState<number>(isVertical ? 0 : 5);
 
 
   // default class Activity extends React.Component {
 
   let hasFetchedData = false;
-  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
 
 
   useEffect(() => {
@@ -47,6 +48,7 @@ const Activity: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) =>
 
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
+      setPaddingType(window.innerHeight > window.innerWidth ? 0 : 5);
     };
 
     window.addEventListener("resize", handleResize);
@@ -54,7 +56,6 @@ const Activity: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) =>
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
   }, []); // Il secondo argomento vuoto ind ica che l'effetto dipenderà solo dal mount
-  const paddingType = isVertical ? 5 : 8;
 
   const componentDidMount = () => {
     if (!hasFetchedData) {
