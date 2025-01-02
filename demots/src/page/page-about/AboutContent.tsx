@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
-import { HttpStatus, TypeUser, UserI } from "../../general/Utils";
+import { FormErrorValues, HttpStatus, TypeUser, UserI, verifyForm } from "../../general/Utils";
 import { ActivityI } from "../page-activity/Activity";
 import activityStore from "../page-activity/store/ActivityStore";
 import { TypeMessage } from "../page-layout/PageLayout";
@@ -26,65 +26,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const location = useLocation();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
-
-  // Stato per i valori dei campi
-  type FormValues = {
-    [key: string]: string | number | undefined;
-  };
-
-  type FormErrorValues = {
-    [key: string]: boolean | undefined;
-  };
-
-  const [formValues, setFormValues] = useState<FormValues>({
-    activity: activityStore.activity.find((x) => _id === x._id)?.nome,
-    points: activityStore.activity.find((x) => _id === x._id)?.points,
-  });
-
-  const [formErrors, setFormErrors] = useState<FormErrorValues>({
-    activity: true,
-    points: true,
-  });
-
-
-
-  const handleButtonClick = () => {
-    const errors: FormErrorValues = {};
-
-    // Controlla se i campi sono vuoti o non validi
-    Object.keys(formValues).forEach((key) => {
-      if (
-        formValues[key] === null || // Valore nullo
-        formValues[key] === undefined || // Valore non definito
-        (typeof formValues[key] === 'string' && (formValues[key] as string)!.trim() === '') || // Stringa vuota
-        (typeof formValues[key] === 'number' && isNaN((formValues[key] as number))) // Numero non valido
-      ) {
-        errors[key] = true; // Imposta errore per il campo
-      }
-      else {
-        errors[key] = false; // Imposta errore per il campo
-      }
-    });
-
-    setFormErrors(errors);
-
-    // Procedi solo se non ci sono errori
-    if (Object.keys(errors).filter((key) => errors[key] === true).length === 0) {
-      console.log('Form submitted:', formValues);
-      salvaRecord(_id); // Chiama la funzione per salvare i dati
-    } else {
-      console.log('Validation errors:', errors);
-      const erroriCampi = Object.keys(formErrors).filter((key) => errors[key] === true);
-      let errorFields: string[] = [];
-      if (erroriCampi.length > 0) {
-        errorFields = ["I valori invalidi sono:"].concat(erroriCampi);
-        
-      }
-      showMessageAboutForm((message?: TypeMessage) => showMessage(setOpen, setMessage, { ...message, message: errorFields }));
-    }
-  };
-
-
+  const [disableButtonSave, setDisableButtonSave] = useState(true);
   let testoOld = activityStore.activity.find((x) => _id === x._id);
   const activityLabel: ActivityI = {
     _id: undefined,
@@ -97,12 +39,71 @@ const AboutContent: React.FC<AboutContentProps> = ({
     emailFamily: "Email figlio",
   }
 
-
-
   testoOld = activityLabel;
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-
   const [subTesto, setSubTesto] = useState(activityStore.activity.find((x) => _id === x._id)?.subTesto);
+
+  // Stato per i valori dei campi
+  type FormValues = {
+    [key: string]: string | number | undefined;
+  };
+
+
+  const [formValues, setFormValues] = useState<FormValues>({
+    activity: activityStore.activity.find((x) => _id === x._id)?.nome,
+    points: activityStore.activity.find((x) => _id === x._id)?.points,
+  });
+
+  const [formErrors, setFormErrors] = useState<FormErrorValues>({
+    activity: true,
+    points: true,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsVertical(window.innerHeight > window.innerWidth);
+    };
+    const errors: FormErrorValues = verifyForm(formValues);
+    setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
+
+    window.addEventListener("resize", handleResize);
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Effetto per catturare i cambiamenti di formValues
+  useEffect(() => {
+    const errors: FormErrorValues = verifyForm(formValues);
+    setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
+    // Puoi aggiungere altre azioni da eseguire quando formValues cambia
+  }, [formValues]); // Dipendenza su formValues
+
+
+
+
+
+  const handleButtonClick = () => {
+    const errors: FormErrorValues = verifyForm(formValues);
+    setFormErrors(errors);
+
+    // Procedi solo se non ci sono errori
+    if (Object.keys(errors).filter((key) => errors[key] === true).length === 0) {
+      console.log('Form submitted:', formValues);
+      salvaRecord(_id); // Chiama la funzione per salvare i dati
+    } else {
+      console.log('Validation errors:', errors);
+      const erroriCampi = Object.keys(formErrors).filter((key) => errors[key] === true);
+      let errorFields: string[] = [];
+      if (erroriCampi.length > 0) {
+        errorFields = ["I valori invalidi sono:"].concat(erroriCampi);
+
+      }
+      showMessageAboutForm((message?: TypeMessage) => showMessage(setOpen, setMessage, { ...message, message: errorFields }));
+    }
+  };
+
+
+
 
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-solid fa-trash',
@@ -117,6 +118,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-solid fa-floppy-disk',
     funzione: () => handleButtonClick(), // Passi la funzione direttamente
+    disableButton: disableButtonSave,
     nome: 'blue',
     title: 'Salva',
     configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
@@ -147,18 +149,6 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const handleClose = () => {
     setOpen(false);
   };
-
-  useEffect(() => {
-
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   // Crea l'array dei pulsanti in base all'orientamento
 

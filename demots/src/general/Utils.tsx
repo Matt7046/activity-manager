@@ -23,6 +23,33 @@ export interface UserI {
   type: TypeUser
 }
 
+ export const verifyForm = (formValues:any) => {
+
+    const errors: any = {};
+
+    // Controlla se i campi sono vuoti o non validi
+    Object.keys(formValues).forEach((key) => {
+      if (
+        formValues[key] === null || // Valore nullo
+        formValues[key] === undefined || // Valore non definito
+        (typeof formValues[key] === 'string' && (formValues[key] as string)!.trim() === '') || // Stringa vuota
+        (typeof formValues[key] === 'number' && isNaN((formValues[key] as number))) // Numero non valido
+      ) {
+        errors[key] = true; // Imposta errore per il campo
+      }
+      else {
+        errors[key] = false; // Imposta errore per il campo
+      }
+    });
+
+    return errors;
+  }
+
+  export type FormErrorValues = {
+    [key: string]: boolean | undefined;
+  };
+
+
 export const getMenuLaterale = (navigate: NavigateFunction, user: UserI): MenuLaterale[][] => {
   const sezioniMenuI = sezioniMenuIniziale(user);
   let menuLaterale: MenuLaterale[][];
