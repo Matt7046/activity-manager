@@ -1,5 +1,6 @@
-import { Alert, AlertColor, Box, Grid, Snackbar } from '@mui/material';
+import { AlertColor, Box, Grid } from '@mui/material';
 import React from 'react';
+import Alert from '../../components/msallert/Alert';
 import Drawer, { MenuLaterale } from '../../components/msdrawer/Drawer';
 
 interface PageLayoutProps {
@@ -29,22 +30,19 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         <Grid item>
           <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
         </Grid>
-      </Grid>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity={message.typeMessage} sx={{ width: '100%' }}>
-          {message.message?.map((msg, index) => (
-            <p key={index}>{msg}</p> // Ogni messaggio su una nuova riga
-          ))}
-        </Alert>
-      </Snackbar>
-      <Box sx={{ paddingLeft: padding, paddingRight: 5 }}>{children}</Box>
+      </Grid>    
+  
+      {/* Mostra l'alert se open è true */}
+      {open && (
+        <Alert onClose={handleClose} message={message} />
+      )}
+  
+      <Box sx={{ paddingLeft: padding, paddingRight: 5 }}>
+        {children}
+      </Box>
     </>
   );
-};
+}  
 
 export default PageLayout;
+
