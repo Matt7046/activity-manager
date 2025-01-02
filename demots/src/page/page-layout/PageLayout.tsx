@@ -1,7 +1,9 @@
-import { AlertColor, Box, Grid } from '@mui/material';
+import { AlertColor, Box } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import React from 'react';
 import Alert from '../../components/msallert/Alert';
 import Drawer, { MenuLaterale } from '../../components/msdrawer/Drawer';
+
 
 interface PageLayoutProps {
   children: React.ReactNode; // Contenuto specifico della maschera
@@ -27,22 +29,20 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   return (
     <>
       <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-        <Grid item>
           <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
         </Grid>
-      </Grid>    
-  
+
       {/* Mostra l'alert se open è true */}
       {open && (
         <Alert onClose={handleClose} message={message} />
       )}
-  
+
       <Box sx={{ paddingLeft: padding }}>
         {children}
       </Box>
     </>
   );
-}  
+}
 
 export default PageLayout;
 

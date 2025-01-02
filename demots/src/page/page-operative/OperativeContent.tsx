@@ -1,4 +1,5 @@
-import { Box, FormControl, Grid, Input, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Box, FormControl, Input, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { showMessage } from "../../App";
@@ -195,7 +196,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
         <Box sx={{ padding: 2 }}>
           <Grid container spacing={2}>
             {/* Prima riga */}
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               {/* Campo stringa 1 */}
               <FormControl fullWidth >
                 <TextField
@@ -208,7 +209,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
                 />
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <FormControl sx={{ marginTop: '16px', width: '100%' }} variant="standard">
                 <InputLabel htmlFor="filled-points">{'Points'}</InputLabel>
                 <Input
@@ -221,7 +222,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
             </Grid>
 
             {/* Seconda riga */}
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               {/* Campo combobox */}
               <FormControl fullWidth margin="normal">
                 <InputLabel id="select-label">
@@ -244,7 +245,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
             </Grid>
             {/* Campo con punti */}
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               {/* Campo numerico */}
               <FormControl fullWidth >
                 <TextField
@@ -263,9 +264,8 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
           {/* Pulsante Salva */}
           <Grid container justifyContent="flex-end" spacing={1}>
-            <Grid item>
-              <Button pulsanti={[pulsanteSave]} />
-            </Grid>
+            <Button pulsanti={[pulsanteSave]} />
+
           </Grid>
         </Box>
       </div>
