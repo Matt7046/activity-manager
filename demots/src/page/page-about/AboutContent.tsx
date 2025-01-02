@@ -9,7 +9,7 @@ import { ActivityI } from "../page-activity/Activity";
 import activityStore from "../page-activity/store/ActivityStore";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./About.css";
-import { deleteAboutById, saveAboutByUser } from "./service/AboutService";
+import { deleteAboutById, saveAboutByUser, showMessageAboutForm } from "./service/AboutService";
 
 interface AboutContentProps {
   user: UserI;
@@ -27,8 +27,66 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
 
+  // Stato per i valori dei campi
+  type FormValues = {
+    [key: string]: string | number | undefined;
+  };
+
+  type FormErrorValues = {
+    [key: string]: boolean | undefined;
+  };
+
+  const [formValues, setFormValues] = useState<FormValues>({
+    activity: activityStore.testo.find((x) => _id === x._id)?.nome,
+    points: activityStore.testo.find((x) => _id === x._id)?.points,
+  });
+
+  const [formErrors, setFormErrors] = useState<FormErrorValues>({
+    activity: true,
+    points: true,
+  });
+
+
+
+  const handleButtonClick = () => {
+    const errors: FormErrorValues = {};
+
+    // Controlla se i campi sono vuoti o non validi
+    Object.keys(formValues).forEach((key) => {
+      if (
+        formValues[key] === null || // Valore nullo
+        formValues[key] === undefined || // Valore non definito
+        (typeof formValues[key] === 'string' && (formValues[key] as string)!.trim() === '') || // Stringa vuota
+        (typeof formValues[key] === 'number' && isNaN((formValues[key] as number))) // Numero non valido
+      ) {
+        errors[key] = true; // Imposta errore per il campo
+      }
+      else {
+        errors[key] = false; // Imposta errore per il campo
+      }
+    });
+
+    setFormErrors(errors);
+
+    // Procedi solo se non ci sono errori
+    if (Object.keys(errors).filter((key) => errors[key] === true).length === 0) {
+      console.log('Form submitted:', formValues);
+      salvaRecord(_id); // Chiama la funzione per salvare i dati
+    } else {
+      console.log('Validation errors:', errors);
+      const erroriCampi = Object.keys(formErrors).filter((key) => errors[key] === true);
+      let errorFields: string[] = [];
+      if (erroriCampi.length > 0) {
+        errorFields = ["I valori invalidi sono:"].concat(erroriCampi);
+        
+      }
+      showMessageAboutForm((message?: TypeMessage) => showMessage(setOpen, setMessage, { ...message, message: errorFields }));
+    }
+  };
+
+
   let testoOld = activityStore.testo.find((x) => _id === x._id);
-  const activity: ActivityI = {
+  const activityLabel: ActivityI = {
     _id: undefined,
     nome: "Attività",
     subTesto: "Descrizione"
@@ -36,15 +94,14 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   const labelFamily = {
     email: "Email  tutore",
-    emailFamily: "Email figlio", 
+    emailFamily: "Email figlio",
   }
 
 
 
-  testoOld = activity;
+  testoOld = activityLabel;
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const [nome, setNome] = useState(activityStore.testo.find((x) => _id === x._id)?.nome);
-  const [points, setPoints] = useState(activityStore.testo.find((x) => _id === x._id)?.points);
+
   const [subTesto, setSubTesto] = useState(activityStore.testo.find((x) => _id === x._id)?.subTesto);
 
   const pulsanteRed: Pulsante = {
@@ -59,32 +116,34 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-solid fa-floppy-disk',
-    funzione: () => salvaRecord(_id), // Passi la funzione direttamente
+    funzione: () => handleButtonClick(), // Passi la funzione direttamente
     nome: 'blue',
     title: 'Salva',
     configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
 
   };
 
-  const handleChangeNome = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNome(event.target.value); // Aggiorna lo stato con il valore inserito
+  const handleChangeActivity = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormValues({ ...formValues, activity: event.target.value })
+    // setActivity(event.target.value); // Aggiorna lo stato con il valore inserito
   };
 
   const handleChangePoints = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPoints(parseInt(event.target.value)); // Aggiorna lo stato con il valore inserito
+    setFormValues({ ...formValues, points: parseInt(event.target.value) })
+    //setPoints(parseInt(event.target.value)); // Aggiorna lo stato con il valore inserito
   };
 
   const handleChangeSubTesto = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSubTesto(event.target.value); // Aggiorna lo stato con il valore inserito    
   };
 
-    const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    };
-  
-    const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {
-    };
-  
-  
+  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+  };
+
+  const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {
+  };
+
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -115,14 +174,14 @@ const AboutContent: React.FC<AboutContentProps> = ({
   }
 
   const salvaRecord = (_id: string): void => {
-  const emailFind = user.emailFamily ? user.emailFamily: user.email;  
+    const emailFind = user.emailFamily ? user.emailFamily : user.email;
     const testo = {
-      ...user,     
+      ...user,
       _id: _id,
-      nome: nome,
+      nome: formValues.activity,
       subTesto: subTesto,
-      points: points,
-      email : emailFind
+      points: formValues.points,
+      email: emailFind
     }
     saveAboutByUser(testo, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.testo) {
@@ -135,45 +194,46 @@ const AboutContent: React.FC<AboutContentProps> = ({
     <>
       <div className="row">
         <Box sx={{ padding: 2 }}>
-           <div id="text-box-email-family">
-                    <TextField
-                      id="emailFamily"
-                      label={labelFamily.emailFamily}
-                      variant="standard"
-                      value={user.emailFamily} // Collega il valore allo stato
-                      onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
-                      fullWidth
-                      disabled={true}
-                    />
-                  </div>
-          
-                  <div id="text-box-email" style={{ marginTop: '16px' }}>
-                    <TextField
-                      id="email"
-                      label={labelFamily.email}
-                      variant="standard"
-                      value={user.email} // Collega il valore allo stato
-                      onChange={handleChangeEmail} // Aggiorna lo stato quando cambia
-                      fullWidth
-                      disabled={true}
-                      multiline
-                      InputLabelProps={{
-                        style: {
-                          whiteSpace: 'normal', // Permette al testo di andare a capo
-                          wordWrap: 'break-word', // Interrompe le parole lunghe
-                        },
-                      }}
-                    />
-                  </div>
+          <div id="text-box-email-family">
+            <TextField
+              id="emailFamily"
+              label={labelFamily.emailFamily}
+              variant="standard"
+              value={user.emailFamily} // Collega il valore allo stato
+              onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
+              fullWidth
+              disabled={true}
+            />
+          </div>
+
+          <div id="text-box-email" style={{ marginTop: '16px' }}>
+            <TextField
+              id="email"
+              label={labelFamily.email}
+              variant="standard"
+              value={user.email} // Collega il valore allo stato
+              onChange={handleChangeEmail} // Aggiorna lo stato quando cambia
+              fullWidth
+              disabled={true}
+              multiline
+              InputLabelProps={{
+                style: {
+                  whiteSpace: 'normal', // Permette al testo di andare a capo
+                  wordWrap: 'break-word', // Interrompe le parole lunghe
+                },
+              }}
+            />
+          </div>
 
           <div id="text-box">
             <TextField
-              id="nome"
+              id="activity"
               label={testoOld.nome}
               variant="standard"
-              value={nome} // Collega il valore allo stato
-              onChange={handleChangeNome} // Aggiorna lo stato quando cambia
+              value={formValues.activity} // Collega il valore allo stato
+              onChange={handleChangeActivity} // Aggiorna lo stato quando cambia
               fullWidth
+              required={true}
             />
           </div>
           <div id="text-box">
@@ -181,11 +241,12 @@ const AboutContent: React.FC<AboutContentProps> = ({
               id="points"
               label={'Points'}
               variant="standard"
-              value={points} // Collega il valore allo stato
+              value={formValues.points} // Collega il valore allo stato
               onChange={handleChangePoints} // Aggiorna lo stato quando cambia
               fullWidth
               type="number"
-              disabled = {user.type === TypeUser.STANDARD}
+              disabled={user.type === TypeUser.STANDARD}
+              required={true}
             />
           </div>
           <div id="text-box-sub-testo" style={{ marginTop: '16px' }}>
