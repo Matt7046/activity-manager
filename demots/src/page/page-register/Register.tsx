@@ -13,8 +13,9 @@ export interface PointsI {
   attivita: string;
 }
 
-const Register: React.FC<{ user: UserI }> = ({ user }) => {
+const Register: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
 
+  setTitle("Section register");
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale : MenuLaterale[][]= [];
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
