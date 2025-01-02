@@ -1,12 +1,13 @@
-import { Box, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Box, FormControl, Grid, Input, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
-import { ResponseI, UserI } from "../../general/Utils";
+import { HttpStatus, ResponseI, UserI } from "../../general/Utils";
 import { ActivityI, ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivity, saveActivityLog } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
+import { findByEmail } from "../page-points/service/PointsService";
 import "./Operative.css";
 
 interface OperativeContentProps {
@@ -30,12 +31,17 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const [emailField, setEmailField] = useState(user.email);
   const [activity, setActivity] = useState([] as ActivityI[]);
   const [comboBoxValue, setComboBoxValue] = useState('');
+  const [points, setPoints] = useState<number>(0);
+
+  const handleChangePoints = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPoints(parseInt(event.target.value)); // Aggiorna lo stato con il valore inserito
+  };
 
   const fetchOptions = () => {
     try {
-      const emailFind = user.emailFamily ? user.emailFamily: user.email;
+      const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-      fetchDataActivity({...user, email: emailFind}).then((response: ResponseI | undefined) => {
+      fetchDataActivity({ ...user, email: emailFind }).then((response: ResponseI | undefined) => {
         setActivity(response?.testo);
       })
     } catch (error) {
@@ -43,10 +49,30 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     }
   };
 
+  const fetchPoints = () => {
+    try {
+      const emailFind = user.emailFamily ? user.emailFamily : user.email;
+
+      findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
+          if (response) {
+            if (response.status === HttpStatus.OK) {
+              setPoints(response.testo.points);
+              console.log('Dati ricevuti:', response);
+            }
+          }
+        })
+    } catch (error) {
+      console.error('Error fetching options:', error);
+    }
+  };
+
+
   useEffect(() => {
     fetchOptions();
+    fetchPoints();
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
+      
     };
 
     window.addEventListener("resize", handleResize);
@@ -57,44 +83,44 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
   const pulsanteSave: Pulsante = {
     icona: 'fas fa-save',
-    funzione : () => saveActivity(user),
+    funzione: () => saveActivity(user),
     nome: 'red',
     title: 'Salva',
-    configDialogPulsante: {message:"Vuoi salvare?", showDialog:true}
+    configDialogPulsante: { message: "Vuoi salvare?", showDialog: true }
 
   }
 
 
   const clickCombobox = (e: SelectChangeEvent<string>) => {
     const selectedValue = e.target.value;
-  
+
     // Imposta il valore selezionato nel combobox
     setComboBoxValue(selectedValue);
-  
+
     // Trova l'attività selezionata tramite l'ID
     const selectedActivity = activity.find(item => item._id === selectedValue);
-  
+
     // Se l'attività non è trovata, mostra un errore
     if (!selectedActivity) {
       console.error('Activity not found');
       return; // Esci dalla funzione se non trovi l'attività
     }
-  
+
     // Imposta il valore dei punti in base all'attività selezionata
     setPointsField(selectedActivity.points!);
   };
-  
+
 
   const saveActivity = (user: UserI) => {
     // Trova l'attività selezionata nell'array
-    const selectedActivity = activity.find(item => item._id === comboBoxValue); 
+    const selectedActivity = activity.find(item => item._id === comboBoxValue);
 
     // Se l'attività selezionata non esiste, gestisci l'errore
     if (!selectedActivity) {
       console.error('Activity not found');
       return; // Esci dalla funzione se non trovi l'attività
     }
-    const emailFind = user.emailFamily ? user.emailFamily: user.email;
+    const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
     // Crea il log dell'attività
     const activityLog: ActivityLogI = {
@@ -104,63 +130,88 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
       usePoints: pointsField,
       email: emailFind
     };
-  
+
     // Salva il log dell'attività
-    saveActivityLog(activityLog, (message?: TypeMessage) => showMessage(setOpen, setMessage, message));
+    saveActivityLog(activityLog, (message?: TypeMessage) => showMessage(setOpen, setMessage, message))
+    .then((response: ResponseI | undefined) => {
+      fetchPoints();
+    })
   };
-  
 
   return (
     <>
       <div className="row">
-
         <Box sx={{ padding: 2 }}>
+          <Grid container spacing={2}>
+            {/* Prima riga */}
+            <Grid item xs={12} sm={6}>
+              {/* Campo stringa 1 */}
+              <TextField
+                label="Email"
+                value={emailField}
+                onChange={(e) => setEmailField(e.target.value)}
+                fullWidth
+                margin="normal"
+                disabled={true} // Disabilita il campo
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            <FormControl sx={{ marginTop: '16px', width: '100%' }} variant="standard">
+              <InputLabel htmlFor="filled-points">{'Points'}</InputLabel>
+              <Input
+                id="filled-adornment-points"
+                value={points} // Collega il valore allo stato
+                onChange={handleChangePoints} // Aggiorna lo stato quando cambia
+                disabled={true}
+              />
+            </FormControl>
+            </Grid>
 
-          {/* Campo stringa 1 */}
-          <TextField
-            label="Email"
-            value={emailField}
-            onChange={(e) => setEmailField(e.target.value)}
-            fullWidth
-            margin="normal" 
-            disabled={true}  // Disabilita il campo         
-          />
+            {/* Seconda riga */}
+            <Grid item xs={12} sm={6}>
+              {/* Campo combobox */}
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="select-label">Activity</InputLabel>
+                <Select
+                  labelId="select-label"
+                  value={comboBoxValue}
+                  onChange={(e) => clickCombobox(e)}
+                  label="Activity"
+                >
+                  {activity.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.nome}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+              {/* Campo con punti */}
+              <Grid item xs={6} sm={6}>
+                {/* Campo numerico */}
+                <TextField
+                  label="Points Activity"
+                  type="number"
+                  value={pointsField}
+                  onChange={(e) => setPointsField(parseInt(e.target.value, 10))}
+                  fullWidth
+                  margin="normal"
+                  disabled={true} // Disabilita il campo
+                />
+              </Grid>
+            </Grid>
 
-          {/* Campo Combobox */}
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="select-label">Activity</InputLabel>
-            <Select
-              labelId="select-label"
-              value={comboBoxValue}
-              onChange={(e) =>  clickCombobox(e)}
-              label="Activity"
-            >
-              {activity.map((option) => (
-                <MenuItem key={option._id} value={option._id}>
-                  {option.nome}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          {/* Campo numerico */}
-          <TextField
-            label="Points"
-            type="number"
-            value={pointsField}
-            onChange={(e) => setPointsField(parseInt(e.target.value, 10))}            fullWidth
-            margin="normal"
-            disabled={true}  // Disabilita il campo
-          />
+          {/* Pulsante Salva */}
           <Grid container justifyContent="flex-end" spacing={1}>
             <Grid item>
               <Button pulsanti={[pulsanteSave]} />
             </Grid>
           </Grid>
-          {/* Pulsante Salva */}
         </Box>
       </div>
     </>
   );
+
 };
 
 
