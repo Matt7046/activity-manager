@@ -83,7 +83,7 @@ const Activity: React.FC<{ user: UserI }> = ({ user }) => {
   }
 
   const setAllTesto = (response: ResponseI): void => {
-    activityStore.setAllTesto(response);
+    activityStore.setAllActivity(response);
   }
 
   return (
