@@ -37,7 +37,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         <Alert onClose={handleClose} message={message} />
       )}
   
-      <Box sx={{ paddingLeft: padding, paddingRight: 5 }}>
+      <Box sx={{ paddingLeft: padding }}>
         {children}
       </Box>
     </>
