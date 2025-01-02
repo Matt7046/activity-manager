@@ -96,6 +96,24 @@ export const deleteData = async (endpoint: string, setLoading?: (loading: boolea
 
 };
 
+
+export const showMessageForm = async (setLoading?: (loading: boolean) => void,
+  funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
+) => {
+  showSuccess = showSuccess ?? false;
+  setLoading = setLoading ?? (() => { });
+  setLoading(true);  // Mostra lo spinner prima della richiesta
+  try {  
+    eseguiAlert(funzioneMessage!, { typeMessage: 'error', message: [Alert.SERVER_DOWN] }, showSuccess);
+    return  'ok'; // Restituisce i dati della risposta
+  } catch (error: any) {
+    throw error;
+  } finally {
+    setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
+  }
+};
+
+
 export const eseguiAlert = (funzioneMessage: (message?: TypeMessage) => void, message: TypeMessage, showSuccess: boolean, response?: any) => {
  const messaggiAlert = message.message;
   response = response ?? { data: { status: HttpStatus.BAD_REQUEST, errors: messaggiAlert } }
