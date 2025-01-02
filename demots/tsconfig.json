@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
+
     "target": "esnext",                   // Aggiorna il target a "esnext" per supportare le caratteristiche moderne
     "moduleResolution": "node16",          // Cambia a "node16" per una risoluzione dei moduli compatibile con ESLint
     "module": "node16",                    // Usa "esnext" per i moduli ECMAScript moderni
