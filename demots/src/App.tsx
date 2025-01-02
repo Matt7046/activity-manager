@@ -138,7 +138,7 @@ const GoogleAuthComponent = () => {
       console.log('User Data:', x); // Logga i dati utente per il debug
 
 
-      switch (x.testo?.typeUser) {
+      switch (x?.testo?.typeUser) {
         case 0: {          
           setSimulated(TypeUser.STANDARD);
           setUser({ ...userD, type: x.testo.typeUser });
