@@ -3,7 +3,7 @@ import { ResponseI } from "../../../general/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
 import { ActivityLogI } from "../Activity";
 
-export const fetchDataActivity = async (pointsDTO: any,  funzioneMessage?:(message?: TypeMessage)=>void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+export const fetchDataActivities = async (pointsDTO: any,  funzioneMessage?:(message?: TypeMessage)=>void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const data = await postData(`activity`, pointsDTO, setLoading, funzioneMessage); // Usa l'URL dinamico
     console.log('Dati ricevuti:', data);
@@ -44,7 +44,7 @@ export const logActivityByEmail = async (pointsDTO: any, funzioneErrore?: () => 
 
 
 
-export const saveActivityLog = async (activity: ActivityLogI, funzioneMessage?:(message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
+export const savePointsAndLog = async (activity: ActivityLogI, funzioneMessage?:(message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
   try {
     const path = `activity/dati`;
     const showSuccess = true;

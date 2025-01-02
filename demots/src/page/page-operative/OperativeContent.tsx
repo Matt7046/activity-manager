@@ -5,7 +5,7 @@ import { showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import { FormErrorValues, HttpStatus, ResponseI, UserI, verifyForm } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
-import { fetchDataActivity, saveActivityLog } from "../page-activity/service/ActivityService";
+import { fetchDataActivities, savePointsAndLog } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail } from "../page-points/service/PointsService";
 import "./Operative.css";
@@ -99,7 +99,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     try {
       const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-      return fetchDataActivity({ ...user, email: emailFind }).then((response: ResponseI | undefined) => {
+      return fetchDataActivities({ ...user, email: emailFind }).then((response: ResponseI | undefined) => {
         setIsLoadingO(false);
         operativeStore.setActivity(response?.testo ?? []);
       })
@@ -180,7 +180,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     };
 
     // Salva il log dell'attività
-    saveActivityLog(activityLog, (message?: TypeMessage) => showMessage(setOpen, setMessage, message))
+    savePointsAndLog(activityLog, (message?: TypeMessage) => showMessage(setOpen, setMessage, message))
       .then((response: ResponseI | undefined) => {
         fetchPoints();
       })
