@@ -1,7 +1,7 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import Alert from './components/msallert/Alert';
@@ -40,6 +40,8 @@ const GoogleAuthComponent = () => {
   const [emailOptions, setEmailOptions] = React.useState<string[]>([]); // Lo stato è un array di stringhe
   const [emailLogin, setEmailLogin] = useState(); // Stato per l'email
   const location = useLocation();
+  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
+  
 
 
 
@@ -58,6 +60,18 @@ const GoogleAuthComponent = () => {
     token: null,
     type: -1
   }); // Stato per userData
+
+   useEffect(() => {
+      const handleResize = () => {
+        setIsVertical(window.innerHeight > window.innerWidth);
+  
+      };
+  
+      window.addEventListener("resize", handleResize);
+  
+      // Pulisci il listener al dismount
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
   const handleConfirm = ((typeSimulated: number, emailGoogle?: string) => {
     console.log("Email confermata:", emailGoogle);
@@ -225,7 +239,10 @@ const GoogleAuthComponent = () => {
       {/* Google OAuth Provider */}
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <div>
-          <h1>Login con Google ({user ? user.name : "Non autenticato"})</h1>
+        {isVertical ? (
+          <h3>Login con Google ({user ? user.name : "Non autenticato"})</h3>
+        ):  
+        <h1>Login con Google ({user ? user.name : "Non autenticato"})</h1>}
 
           {!user ? (
             <div>
