@@ -1,9 +1,10 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Alert, Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Snackbar } from '@mui/material';
+import { Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import React, { useState } from 'react';
 import { NavigateFunction, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
+import Alert from './components/msallert/Alert';
 import { MenuLaterale } from './components/msdrawer/Drawer';
 import { TypeUser, UserI } from './general/Utils';
 import About from './page/page-about/About';
@@ -216,17 +217,9 @@ const GoogleAuthComponent = () => {
 
   return (
     <>
-      {/* Snackbar per notifiche */}
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity={message.typeMessage} sx={{ width: '100%' }}>
-          {message.message}
-        </Alert>
-      </Snackbar>
+     {open && (
+        <Alert onClose={handleClose} message={message} />
+      )}
 
       {/* Google OAuth Provider */}
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
@@ -366,7 +359,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
 }
 
 export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage) => {
-  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage } : { message: 'Il server non risponde', typeMessage: 'error' };
+  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage } : { message:['Il server non risponde'], typeMessage: 'error' };
   setOpen(true);
   setMessage(messageBE);
 }
