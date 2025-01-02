@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { showMessage } from '../../App';
 import { getMenuLaterale, ResponseI, UserI } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import ActivityContent from './ActivityContent';
@@ -60,7 +61,7 @@ const Activity: React.FC<{ user: UserI }> = ({ user }) => {
       // axios.
       //  .get('https://api.example.com/data') // URL dell'API]
       const emailFind = user.emailFamily ? user.emailFamily: user.email;
-      fetchDataActivity({...user,email: emailFind})
+      fetchDataActivity({...user,email: emailFind}, (message: any) => showMessage(setOpen, setMessage, message))
         .then((response) => {
           if (response) {
             setResponse(response.testo)

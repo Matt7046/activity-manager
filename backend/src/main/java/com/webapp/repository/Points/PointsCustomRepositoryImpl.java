@@ -84,16 +84,21 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		}
 		
 		// usePoints = usePoints != null ? usePoints : 0L;
-		Long newPoints = 0L;
 		existingUser.getPoints().stream()
-				.filter(point -> pointsSave.getEmailFamily().equals(point.getEmail())) // Filtra per email
-				.findFirst() // Trova il primo match
-				.ifPresent(point -> point.setPoints(
-						point.getPoints() + (operation ? usePoints : -usePoints)));
-		if (newPoints < 0L) {
-			throw new ArithmeticCustomException("I punti devono essere maggiori di zero.");
-		}
-
+    .filter(point -> pointsSave.getEmailFamily().equals(point.getEmail())) // Filtra per email
+    .findFirst() // Trova il primo match
+    .ifPresent(point -> {
+        // Calcola i nuovi punti
+        Long updatedPoints = point.getPoints() + (operation ? usePoints : -usePoints);
+        
+        // Verifica che i punti non siano negativi
+        if (updatedPoints < 0L) {
+            throw new ArithmeticCustomException("I punti devono essere maggiori o uguali a zero.");
+        }
+        
+        // Aggiorna i punti solo se la condizione è soddisfatta
+        point.setPoints(updatedPoints);
+    });
 		// Aggiorna i punti per l'utente esistente
 		// existingUser.setPoints(new PointsUser(newPoints, emailCriypt));
 		existingUser.setEmail(encryptDecryptConverter.decrypt(existingUser.getEmail()));
