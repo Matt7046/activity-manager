@@ -30,7 +30,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingO, setIsLoadingO] = useState(true);
   const [disableButtonSave, setDisableButtonSave] = useState(true);
-
+  const [paddingType, setPaddingType] =  useState<number>(isVertical ? 0 : 5);
 
 
   // Stato per i valori dei campi
