@@ -197,14 +197,16 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
             {/* Prima riga */}
             <Grid item xs={12} sm={6}>
               {/* Campo stringa 1 */}
-              <TextField
-                label="Email"
-                value={operativeStore.emailField}
-                onChange={(e) => operativeStore.setEmailField(e.target.value)}
-                fullWidth
-                margin="normal"
-                disabled={true} // Disabilita il campo
-              />
+              <FormControl fullWidth >
+                <TextField
+                  label="Email"
+                  value={operativeStore.emailField}
+                  onChange={(e) => operativeStore.setEmailField(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  disabled={true} // Disabilita il campo
+                />
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl sx={{ marginTop: '16px', width: '100%' }} variant="standard">
@@ -242,17 +244,20 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
             </Grid>
             {/* Campo con punti */}
-            <Grid item xs={6} sm={6}>
+            <Grid item xs={12} sm={6}>
               {/* Campo numerico */}
-              <TextField
-                label="Points Activity"
-                type="number"
-                value={operativeStore.pointsField}
-                onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
-                fullWidth
-                margin="normal"
-                disabled={true} // Disabilita il campo
-              />
+              <FormControl fullWidth >
+                <TextField
+                  label="Points Activity"
+                  type="number"
+                  value={operativeStore.pointsField}
+                  onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
+                  margin="normal"
+                  disabled={true} // Disabilita il campo
+
+                />
+              </FormControl>
+
             </Grid>
           </Grid>
 
