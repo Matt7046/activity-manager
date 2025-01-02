@@ -20,7 +20,7 @@ const About: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const padding = isVertical ? 5 : 8;
+  const [paddingType, setPaddingType] =  useState<number>(isVertical ? 0 : 5);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
 
 
@@ -28,6 +28,7 @@ const About: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
 
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
+      setPaddingType(window.innerHeight > window.innerWidth ? 0 : 5);
     };
 
     window.addEventListener("resize", handleResize);
@@ -46,7 +47,7 @@ const About: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
         open={open}
         message={message}
         handleClose={handleClose}
-        padding={padding}
+        padding={paddingType}
       >
         <AboutContent
           user={user}
