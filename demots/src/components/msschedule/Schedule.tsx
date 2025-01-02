@@ -1,9 +1,10 @@
-import { Grid } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import Button, { Pulsante } from '../msbutton/Button';
 import Label from '../mslabel/label';
 import NameDisplay from '../msnamedisplay/NameDisplay';
+
 
 export interface MsSchedule {
   justifyContent?: string;
@@ -28,7 +29,7 @@ const Schedule = observer((props: {
       ...prev,
       [itemId]: subTesto, // Imposta subTesto per il dato specifico
     }));
-  }; 
+  };
   useEffect(() => {
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
@@ -48,27 +49,26 @@ const Schedule = observer((props: {
           (pulsante) => pulsante.nome.toUpperCase() === 'NEW'
         ).map((pulsante) => (
           <Grid container justifyContent="space-between" alignItems="center" spacing={2} key="newButton">
-            <Grid item>
-              <Button
-                pulsanti={[{ ...pulsante },
-                ]}
-              />
-            </Grid>
+
+            <Button
+              pulsanti={[{ ...pulsante },
+              ]}
+            />
           </Grid>
         ))}
-         
+
 
         {/* Iterazione sui dati dello schedule */}
         {props.schedule.schedule.map((item) => {
-        //  handleSubTestoUpdate(item._id,item.subtesto);
+          //  handleSubTestoUpdate(item._id,item.subtesto);
           // Creazione dei pulsanti "RED"
           const pulsanteWithFunctionRED = props.schedule.pulsanti
             .filter((pulsante) => pulsante.nome.toUpperCase() === 'RED')
             .map((pulsante) => ({
               ...pulsante, // Copia tutte le altre proprietà del pulsante
-              funzione: (_id: string) => {            
+              funzione: (_id: string) => {
                 funzionalitaPulsanteRed(item, pulsante, handleSubTestoUpdate, subTesti);
-              }             
+              }
               //visibility: !isVertical
             }));
 
@@ -83,7 +83,7 @@ const Schedule = observer((props: {
               funzione: (_id: string) => {
                 // La funzione viene definita dinamicamente con l'ID
                 pulsante.funzione(item._id); // Passiamo item._id
-              },            
+              },
               visibility: true
             }));
 
@@ -111,15 +111,10 @@ const Schedule = observer((props: {
               </div>
 
               <Grid container justifyContent={props.schedule.justifyContent} spacing={2} style={{ height: '30px' }}>
-                <Grid item>
-                  <div>
-                    <Button pulsanti={pulsanti} />
-                  </div>
-                </Grid>
+                <Button pulsanti={pulsanti} />
               </Grid>
-
-              <div id={`rowHidden-${item._id}`} style={{ gridColumn: 'span 12'  }}>
-                <Label _id={item._id} text={subTesti[item._id]} visibility = {isVertical && visibilitySubTesto ? 'hidden': undefined}  />
+              <div id={`rowHidden-${item._id}`} style={{ gridColumn: 'span 12' }}>
+                <Label _id={item._id} text={subTesti[item._id]} visibility={isVertical && visibilitySubTesto ? 'hidden' : undefined} />
               </div>
 
               {/* Separatore */}
@@ -132,24 +127,24 @@ const Schedule = observer((props: {
   );
 })
 
-export const funzionalitaPulsanteRed = (item: any, pulsante: Pulsante,handleSubTestoUpdate:any, subTesti: any) => {
+export const funzionalitaPulsanteRed = (item: any, pulsante: Pulsante, handleSubTestoUpdate: any, subTesti: any) => {
   const _id = item._id;
 
   const element = document.querySelector(`#rowHidden-${_id}`) as HTMLElement;
-  const check = (element.style.visibility === ""  && subTesti[item._id]=== undefined)  || element.style.visibility === "hidden" ;
+  const check = (element.style.visibility === "" && subTesti[item._id] === undefined) || element.style.visibility === "hidden";
   // Rimuove il valore inline
   if (check) {
     element.style.visibility = ""; // Rimuove il valore inline
     pulsante.funzione(_id).then((response: { testo: { subTesto: string; }; }) => {
-  
-      handleSubTestoUpdate(item._id,response.testo.subTesto);
 
-     // handleSubTestoUpdate
-     // setSubTesto(response.testo.subTesto);
+      handleSubTestoUpdate(item._id, response.testo.subTesto);
+
+      // handleSubTestoUpdate
+      // setSubTesto(response.testo.subTesto);
     })
   } else {
     element.style.visibility = "hidden"; // mette il valore inline
-  }    
+  }
 
 
   return check; // Aggiorna lo stato

@@ -1,4 +1,5 @@
-import { Box, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Pagination, Typography } from "@mui/material";
+import { Box, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Pagination, Typography } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { showMessage } from "../../App";
@@ -102,7 +103,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
             <>
               <Grid container spacing={2}>
                 {testoLog.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
-                  <Grid item xs={12} sm={6} md={6} key={index}>
+                   <Grid size={{ xs: 12, sm: 6 }} key={index} >
                     <Card
                       sx={{
                         borderRadius: 4,
