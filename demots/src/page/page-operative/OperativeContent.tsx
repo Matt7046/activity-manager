@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
-import { HttpStatus, ResponseI, UserI } from "../../general/Utils";
+import { HttpStatus, ResponseI, UserI, verifyForm } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivity, saveActivityLog } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
@@ -28,6 +28,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingO, setIsLoadingO] = useState(true);
+  const [disableButtonSave, setDisableButtonSave] = useState(true);
 
 
 
@@ -49,25 +50,33 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     points: true,
   });
 
+  useEffect(() => {
+    const errors: FormErrorValues = verifyForm(formValues);
+    setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
+    operativeStore.setEmailField(user.email);
+    fetchOptions();
+    fetchPoints();
+    const handleResize = () => {
+      setIsVertical(window.innerHeight > window.innerWidth);
+
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const errors: FormErrorValues = verifyForm(formValues);
+    setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
+    // Puoi aggiungere altre azioni da eseguire quando formValues cambia
+  }, [formValues]); // Dipendenza su formValues
+
 
 
   const handleButtonClick = () => {
-    const errors: FormErrorValues = {};
-
-    // Controlla se i campi sono vuoti o non validi
-    Object.keys(formValues).forEach((key) => {
-      if (
-        formValues[key] === null || // Valore nullo
-        formValues[key] === undefined || // Valore non definito
-        (typeof formValues[key] === 'string' && (formValues[key] as string)!.trim() === '') // Stringa vuota         
-      ) {
-        errors[key] = true; // Imposta errore per il campo
-      }
-      else {
-        errors[key] = false; // Imposta errore per il campo
-      }
-    });
-
+    const errors: FormErrorValues = verifyForm(formValues);
     setFormErrors(errors);
 
     // Procedi solo se non ci sono errori
@@ -121,26 +130,11 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     }
   };
 
-
-  useEffect(() => {
-    operativeStore.setEmailField(user.email);
-    fetchOptions();
-    fetchPoints();
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const pulsanteSave: Pulsante = {
     icona: 'fas fa-save',
     funzione: () => handleButtonClick(),
     nome: 'red',
+    disableButton: disableButtonSave,
     title: 'Salva',
     configDialogPulsante: { message: "Vuoi salvare?", showDialog: true }
 
