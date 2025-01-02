@@ -26,7 +26,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const location = useLocation();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
-  
+
   // Stato per i valori dei campi
   type FormValues = {
     [key: string]: string | number | undefined;
@@ -42,14 +42,14 @@ const AboutContent: React.FC<AboutContentProps> = ({
   });
 
   const [formErrors, setFormErrors] = useState<FormErrorValues>({
-    activity: false,
-    points: false,
+    activity: true,
+    points: true,
   });
- 
+
 
 
   const handleButtonClick = () => {
-    const errors : FormErrorValues = {};
+    const errors: FormErrorValues = {};
 
     // Controlla se i campi sono vuoti o non validi
     Object.keys(formValues).forEach((key) => {
@@ -61,18 +61,27 @@ const AboutContent: React.FC<AboutContentProps> = ({
       ) {
         errors[key] = true; // Imposta errore per il campo
       }
+      else {
+        errors[key] = false; // Imposta errore per il campo
+      }
     });
 
     setFormErrors(errors);
 
     // Procedi solo se non ci sono errori
-    if (Object.keys(errors).length === 0) {
+    if (Object.keys(errors).filter((key) => errors[key] === true).length === 0) {
       console.log('Form submitted:', formValues);
       salvaRecord(_id); // Chiama la funzione per salvare i dati
     } else {
       console.log('Validation errors:', errors);
-      const errorFields = ["I valori non validi sono:"].concat(Object.keys(formErrors).filter((key) => formErrors[key]));
-      showMessageAboutForm((message?: TypeMessage) => showMessage(setOpen, setMessage, {...message, message: errorFields}));
+      const erroriCampi = Object.keys(formErrors).filter((key) => errors[key] === true);
+      let errorFields: string[] = [];
+      if (erroriCampi.length > 0) {
+        errorFields = ["I valori invalidi sono:"].concat(erroriCampi);
+        
+      }
+      showMessageAboutForm((message?: TypeMessage) => showMessage(setOpen, setMessage, { ...message, message: errorFields }));
+
     }
   };
 
@@ -116,12 +125,12 @@ const AboutContent: React.FC<AboutContentProps> = ({
   };
 
   const handleChangeActivity = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues({...formValues, activity :event.target.value})
-   // setActivity(event.target.value); // Aggiorna lo stato con il valore inserito
+    setFormValues({ ...formValues, activity: event.target.value })
+    // setActivity(event.target.value); // Aggiorna lo stato con il valore inserito
   };
 
   const handleChangePoints = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues({...formValues, points :parseInt(event.target.value)})
+    setFormValues({ ...formValues, points: parseInt(event.target.value) })
     //setPoints(parseInt(event.target.value)); // Aggiorna lo stato con il valore inserito
   };
 
