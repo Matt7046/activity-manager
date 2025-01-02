@@ -22,13 +22,12 @@ interface CustomAlertProps {
 }
 
 const Alert: React.FC<CustomAlertProps> = ({ message, onClose }) => {
-  const { typeMessage, message: content } = message;
-
+ 
   useEffect(() => {
     // Automatic close after 5 seconds
     const timer = setTimeout(() => {
       onClose();
-    }, 3000);
+    }, 4000);
 
     // Clean up the timer when the component unmounts
     return () => clearTimeout(timer);
@@ -37,14 +36,14 @@ const Alert: React.FC<CustomAlertProps> = ({ message, onClose }) => {
   return (
     <Card sx={{ display: 'flex', alignItems: 'center', p: 2, mb: 2, backgroundColor: '#f9f9f9', boxShadow: 3 }}>
       <Box sx={{ mr: 2 }}>
-        {typeMessage && icons[typeMessage]}
+        {message.typeMessage && icons[message.typeMessage]}
       </Box>
 
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="h6" sx={{ textTransform: 'capitalize', mb: 1 }}>
-          {typeMessage}
+          {message.typeMessage}
         </Typography>
-        {content?.map((msg, index) => (
+        {message?.message?.map((msg, index) => (
           <Typography key={index} variant="body2">
             {msg}
           </Typography>
