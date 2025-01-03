@@ -15,7 +15,7 @@ export const findByEmail = async (user:UserI, funzioneMessage?:(message?: TypeMe
   }
 };
 
-export const savePoints = async (user: any, funzioneMessage?:(message?: TypeMessage)=>void , setLoading?:(loading: boolean)=>void) => {
+export const getUserType = async (user: any, funzioneMessage?:(message?: TypeMessage)=>void , setLoading?:(loading: boolean)=>void) => {
   try {
     const path = `points/dati`;
     const data = await postData(path, user, setLoading, funzioneMessage); // Endpoint dell'API

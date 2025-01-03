@@ -75,7 +75,7 @@ public class PointsController {
     }
 
     @PostMapping("/dati")
-    public ResponseEntity<ResponseDTO> savePoints(@RequestBody PointsDTO pointsDTO) {
+    public ResponseEntity<ResponseDTO> getUserType(@RequestBody PointsDTO pointsDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             Long itemId = pointsService.getUserType(pointsDTO);
