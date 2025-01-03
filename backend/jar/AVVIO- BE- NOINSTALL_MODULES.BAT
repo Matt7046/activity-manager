@@ -1,12 +1,12 @@
 @echo off
 
-rem Elimina il file webApp-0.0.1-SNAPSHOT.jar se esiste
+rem Elimina il file activityManager-1.5.jar se esiste
 cd ..\jar
-if exist webApp-0.0.1-SNAPSHOT.jar (
-    del webApp-0.0.1-SNAPSHOT.jar
-    echo File webApp-0.0.1-SNAPSHOT.jar eliminato.
+if exist activityManager-1.5.jar (
+    del activityManager-1.5.jar
+    echo File activityManager-1.5.jar eliminato.
 ) else (
-    echo File webApp-0.0.1-SNAPSHOT.jar non trovato.
+    echo File activityManager-1.5.jar non trovato.
 )
 
 rem Torna alla directory principale e esegui mvn clean package
@@ -23,7 +23,7 @@ REM Punto 2: Conferma completamento del comando Maven
 echo "mvn clean package completato"
 
 REM Punto 3: Apri una nuova console
-start cmd /k "cd ..\backend\jar && java -jar webApp-0.0.1-SNAPSHOT.jar
+start cmd /k "cd ..\backend\jar && java -jar activityManager-1.5.jar
 
 pause
 
