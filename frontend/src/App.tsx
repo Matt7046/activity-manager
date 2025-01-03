@@ -259,6 +259,7 @@ const GoogleAuthComponent = () => {
                 <div>
                   <Grid container spacing={2}>
                     {/* Prima riga: Pulsanti per simulare il login */}
+                    {/* 
                     <Grid size={{ xs:12, sm:6}}>
                       <ButtonMui
                         variant="contained"
@@ -279,6 +280,7 @@ const GoogleAuthComponent = () => {
                         Simula login controllo parentale
                       </ButtonMui>
                     </Grid>
+                    */}
 
                     {/* Seconda riga: Pulsante di login reale */}
                     <Grid size={{ xs:12}}>
