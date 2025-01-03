@@ -1,4 +1,4 @@
-package Exception;
+package com.webapp.Exception;
 
 
 public class ArithmeticCustomException extends ArithmeticException {

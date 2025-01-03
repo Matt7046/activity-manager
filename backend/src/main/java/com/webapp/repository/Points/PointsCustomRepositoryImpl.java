@@ -6,11 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import com.webapp.EncryptDecryptConverter;
+import com.webapp.Exception.ArithmeticCustomException;
 import com.webapp.data.Points;
-import com.webapp.trasversali.PointsUser;
-
-import Exception.ArithmeticCustomException;
-
 public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 
 	@Lazy
