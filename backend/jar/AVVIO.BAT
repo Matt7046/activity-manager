@@ -1,6 +1,6 @@
 @echo off
 
-start cmd /c "cd ..\..\demots && npm install && npm start"
+start cmd /c "cd ..\..\frontend && npm install && npm start"
 
 rem Elimina il file webApp-0.0.1-SNAPSHOT.jar se esiste
 cd ..\jar
