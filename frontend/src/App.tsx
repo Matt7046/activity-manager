@@ -14,7 +14,7 @@ import Family from './page/page-family/Family';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
 import Points from './page/page-points/Points';
-import { savePoints as getUser } from './page/page-points/service/PointsService';
+import { getUserType } from './page/page-points/service/PointsService';
 import Register from './page/page-register/Register';
 import { getEmailChild } from './page/page-register/service/RegisterService';
 
@@ -150,7 +150,7 @@ const GoogleAuthComponent = () => {
 
   const openHome = (userD: any, googleAuth: boolean, setLoading: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
-    return getUser(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
+    return getUserType(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
 
 
