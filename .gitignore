@@ -30,7 +30,7 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-demots/.vscode/
+frontend/.vscode/
 node_modules
 backend/.vscode/
 
