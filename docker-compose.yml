@@ -10,7 +10,7 @@ services:
 
   frontend:
     build:
-      context: ./demots
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "3000:80"
