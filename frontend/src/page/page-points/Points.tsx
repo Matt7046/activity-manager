@@ -50,6 +50,7 @@ const Points: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
         menuLaterale={menuLaterale}
         open={open}
         message={message}
+        user={user}
         handleClose={handleClose}
         padding={paddingType}
       >

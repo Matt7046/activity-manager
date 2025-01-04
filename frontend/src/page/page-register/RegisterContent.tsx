@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { showMessage } from "../../App";
+import { navigateRouting, showMessage, useUser } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import { UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
@@ -17,14 +17,17 @@ interface RegisterContentProps {
   user: UserI;
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setTitle: (title: string) => void;
+
 }
 
 const RegisterContent: React.FC<RegisterContentProps> = ({
   user,
   setMessage,
-  setOpen
+  setOpen,
+  setTitle,
 }) => {
-
+  const { setUser } = useUser(); //
   const location = useLocation();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
@@ -48,7 +51,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
   const handleAddEmailField = () => {
     setEmailFigli([...emailFigli, ""]); // Aggiungi un nuovo elemento vuoto
   };
-  
+
 
 
   const addField = () => {
@@ -60,7 +63,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
       setIsVertical(window.innerHeight > window.innerWidth);
     };
     window.addEventListener("resize", handleResize);
-     // Pulisci il listener al dismount
+    // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -91,14 +94,15 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  
+
   const salvaRecord = (userData: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
     const arrayDiOggetti = emailFigli.map(email => ({ email }));
-    return saveRegisterByPoints({...userData, emailFigli: emailFigli, points : arrayDiOggetti}, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
-      console.log('User Data:', x); // Logga i dati utente per il debug
-      
-     // navigateRouting(navigate, `activity`, {})
+    setUser(null);
+    return saveRegisterByPoints({ ...userData, emailFigli: emailFigli, points: arrayDiOggetti }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
+      console.log('User Data:', x); // Logga i dati utente per il debug     
+      setTitle(''); 
+      navigateRouting(navigate, ``, { newLogin : true })
     })
   }
   return (
@@ -149,16 +153,16 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
                 minWidth: 'unset', // Impedisce al pulsante di espandersi oltre la larghezza definita
               }}
             >
-               <AddIcon />
+              <AddIcon />
             </ButtonMui>
           </div>
         </Box>
         {/* Pulsanti */}
         <Grid container justifyContent="flex-end" spacing={2}>
-            <Button pulsanti={[pulsanteBlue]} />
+          <Button pulsanti={[pulsanteBlue]} />
         </Grid>
       </div>
     </>
   );
-}  
+}
 export default RegisterContent;
