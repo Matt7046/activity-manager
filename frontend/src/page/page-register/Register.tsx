@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { MenuLaterale } from '../../components/msdrawer/Drawer';
+import { useLocation } from 'react-router-dom';
 import { UserI } from '../../general/Utils';
-import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
+import { TypeMessage } from '../page-layout/PageLayout';
 import RegisterContent from './RegisterContent';
 
 export interface PointsI {
@@ -13,14 +12,13 @@ export interface PointsI {
   attivita: string;
 }
 
-const Register: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
+const Register: React.FC<{ user: UserI, setTitle: (title: string)=>void}> = ({ user, setTitle }) => {
 
+  const location = useLocation();
   setTitle("Section register");
-  const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const menuLaterale : MenuLaterale[][]= [];
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const [paddingType, setPaddingType] =  useState<number>(isVertical ? 0 : 5);
+  const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
 
 
@@ -43,22 +41,13 @@ const Register: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) =>
   };
   return (
     <>
-      <PageLayout
-        menuLaterale={menuLaterale}
-        open={open}
-        message={message}
-        handleClose={handleClose}
-        padding={paddingType}
-      >
-        <RegisterContent
-          user={user}
-          setMessage={setMessage}
-          setOpen ={setOpen}
-        />
-      </PageLayout>
-      <div>
-        {/* Contenuto aggiuntivo, se necessario */}
-      </div>
+
+      <RegisterContent
+        user={user}
+        setMessage={setMessage}
+        setOpen={setOpen}
+        setTitle={setTitle}
+      />
     </>
   );
 };

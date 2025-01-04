@@ -37,7 +37,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   const labelFamily = {
     email: "Email  tutore",
-    emailFamily: "Email figlio",
+    emailFamily: user.type === 0 ? "Email" : "Email child",
   }
 
   testoOld = activityLabel;
@@ -188,33 +188,14 @@ const AboutContent: React.FC<AboutContentProps> = ({
           <div id="text-box-email-family">
             <TextField
               id="emailFamily"
-              label={labelFamily.emailFamily}
+              label={labelFamily.email}
               variant="standard"
-              value={user.emailFamily} // Collega il valore allo stato
+              value={user.email} // Collega il valore allo stato
               onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
               fullWidth
               disabled={true}
             />
-          </div>
-
-          <div id="text-box-email" style={{ marginTop: '16px' }}>
-            <TextField
-              id="email"
-              label={labelFamily.email}
-              variant="standard"
-              value={user.email} // Collega il valore allo stato
-              onChange={handleChangeEmail} // Aggiorna lo stato quando cambia
-              fullWidth
-              disabled={true}
-              multiline
-              InputLabelProps={{
-                style: {
-                  whiteSpace: 'normal', // Permette al testo di andare a capo
-                  wordWrap: 'break-word', // Interrompe le parole lunghe
-                },
-              }}
-            />
-          </div>
+          </div>       
 
           <div id="text-box">
             <TextField
