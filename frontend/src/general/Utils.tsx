@@ -23,37 +23,37 @@ export interface UserI {
   type: TypeUser
 }
 
- export const verifyForm = (formValues:any) => {
+export const verifyForm = (formValues: any) => {
 
-    const errors: any = {};
+  const errors: any = {};
 
-    // Controlla se i campi sono vuoti o non validi
-    Object.keys(formValues).forEach((key) => {
-      if (
-        formValues[key] === null || // Valore nullo
-        formValues[key] === undefined || // Valore non definito
-        (typeof formValues[key] === 'string' && (formValues[key] as string)!.trim() === '') || // Stringa vuota
-        (typeof formValues[key] === 'number' && isNaN((formValues[key] as number))) // Numero non valido
-      ) {
-        errors[key] = true; // Imposta errore per il campo
-      }
-      else {
-        errors[key] = false; // Imposta errore per il campo
-      }
-    });
+  // Controlla se i campi sono vuoti o non validi
+  Object.keys(formValues).forEach((key) => {
+    if (
+      formValues[key] === null || // Valore nullo
+      formValues[key] === undefined || // Valore non definito
+      (typeof formValues[key] === 'string' && (formValues[key] as string)!.trim() === '') || // Stringa vuota
+      (typeof formValues[key] === 'number' && isNaN((formValues[key] as number))) // Numero non valido
+    ) {
+      errors[key] = true; // Imposta errore per il campo
+    }
+    else {
+      errors[key] = false; // Imposta errore per il campo
+    }
+  });
 
-    return errors;
-  }
+  return errors;
+}
 
-  export type FormErrorValues = {
-    [key: string]: boolean | undefined;
-  };
+export type FormErrorValues = {
+  [key: string]: boolean | undefined;
+};
 
 
 export const getMenuLaterale = (navigate: NavigateFunction, user: UserI): MenuLaterale[][] => {
   const sezioniMenuI = sezioniMenuIniziale(user);
-  let menuLaterale: MenuLaterale[][];
-  if (user.type === TypeUser.FAMILY) {
+  let menuLaterale: MenuLaterale[][] = [];
+  if (user.type === TypeUser.FAMILY || user.type === TypeUser.NEW_USER) {
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, `activity`, {}, 0);
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, `about`, {}, 1);
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, `points`, { email: user.email }, 2);
@@ -63,7 +63,7 @@ export const getMenuLaterale = (navigate: NavigateFunction, user: UserI): MenuLa
   if (user.type === TypeUser.STANDARD) {
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, `activity`, {}, 0);
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, `points`, { email: user.email }, 1);
-    menuLaterale = sezioniMenu(sezioniMenuI, navigate, `operative`, { email: user.email },2);
+    menuLaterale = sezioniMenu(sezioniMenuI, navigate, `operative`, { email: user.email }, 2);
   }
   return menuLaterale!;
 }
@@ -80,7 +80,8 @@ export enum HttpStatus {
 
 export enum TypeUser {
   STANDARD = 0,
-  FAMILY = 1
+  FAMILY = 1,
+  NEW_USER = 2
 }
 
 export enum Alert {

@@ -45,6 +45,7 @@ const About: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
       <PageLayout
         menuLaterale={menuLaterale}
         open={open}
+        user={user}
         message={message}
         handleClose={handleClose}
         padding={paddingType}

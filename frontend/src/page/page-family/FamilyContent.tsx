@@ -39,8 +39,8 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     newPoints: true,
   });
   const labelFamily = {
-    email: "Email  tutore",
-    emailFamily: "Email figlio",
+    email: "Email",
+    //emailFamily: "Email",
     points: "Points",
     newPoints: "Aggiungi points"
   }
@@ -146,35 +146,17 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
             <Grid size={{ xs: 12 }}>
               <TextField
                 id="emailFamily"
-                label={labelFamily.emailFamily}
+                label={labelFamily.email}
                 variant="standard"
-                value={user.emailFamily} // Collega il valore allo stato
+                value={user.email} // Collega il valore allo stato
                 onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
                 fullWidth
                 disabled={true}
               />
             </Grid>
 
-            {/* Campo email */}
-            <Grid size={{ xs: 12 }}>
-              <TextField
-                id="email"
-                label={labelFamily.email}
-                variant="standard"
-                value={user.email} // Collega il valore allo stato
-                onChange={handleChangeEmail} // Aggiorna lo stato quando cambia
-                fullWidth
-                disabled={true}
-                multiline
-                InputLabelProps={{
-                  style: {
-                    whiteSpace: 'normal', // Permette al testo di andare a capo
-                    wordWrap: 'break-word', // Interrompe le parole lunghe
-                  },
-                }}
-              />
-            </Grid>
-
+      
+            
             {/* Campo Points */}
             <Grid size={{ xs: 12, sm: 6 }}>
               <FormControl fullWidth variant="standard">
