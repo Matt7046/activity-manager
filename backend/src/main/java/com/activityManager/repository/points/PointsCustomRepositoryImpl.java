@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Lazy;
 import com.activityManager.EncryptDecryptConverter;
 import com.activityManager.data.Points;
 import com.activityManager.exception.ArithmeticCustomException;
+
 public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 
 	@Lazy
@@ -60,6 +61,9 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 			List<Points> userList = pointsRepository.findByOnFigli(emailCriypt);
 			existingUser = !userList.isEmpty() ? userList.get(0) : null;
 		}
+		if (existingUser == null) {
+			return new Points();
+		}
 		existingUser.setEmailFigli(existingUser.getEmailFigli().stream().map(x -> {
 			try {
 				return encryptDecryptConverter.decrypts(x);
@@ -80,23 +84,23 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 			List<Points> userList = pointsRepository.findByOnFigli(emailCriypt);
 			existingUser = !userList.isEmpty() ? userList.get(0) : null;
 		}
-		
+
 		// usePoints = usePoints != null ? usePoints : 0L;
 		existingUser.getPoints().stream()
-    .filter(point -> pointsSave.getEmailFamily().equals(point.getEmail())) // Filtra per email
-    .findFirst() // Trova il primo match
-    .ifPresent(point -> {
-        // Calcola i nuovi punti
-        Long updatedPoints = point.getPoints() + (operation ? usePoints : -usePoints);
-        
-        // Verifica che i punti non siano negativi
-        if (updatedPoints < 0L) {
-            throw new ArithmeticCustomException("I punti devono essere maggiori o uguali a zero.");
-        }
-        
-        // Aggiorna i punti solo se la condizione è soddisfatta
-        point.setPoints(updatedPoints);
-    });
+				.filter(point -> pointsSave.getEmailFamily().equals(point.getEmail())) // Filtra per email
+				.findFirst() // Trova il primo match
+				.ifPresent(point -> {
+					// Calcola i nuovi punti
+					Long updatedPoints = point.getPoints() + (operation ? usePoints : -usePoints);
+
+					// Verifica che i punti non siano negativi
+					if (updatedPoints < 0L) {
+						throw new ArithmeticCustomException("I punti devono essere maggiori o uguali a zero.");
+					}
+
+					// Aggiorna i punti solo se la condizione è soddisfatta
+					point.setPoints(updatedPoints);
+				});
 		// Aggiorna i punti per l'utente esistente
 		// existingUser.setPoints(new PointsUser(newPoints, emailCriypt));
 		existingUser.setEmail(encryptDecryptConverter.decrypt(existingUser.getEmail()));
