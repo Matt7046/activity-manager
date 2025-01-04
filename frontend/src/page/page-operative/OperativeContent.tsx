@@ -30,7 +30,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingO, setIsLoadingO] = useState(true);
   const [disableButtonSave, setDisableButtonSave] = useState(true);
-  const [paddingType, setPaddingType] =  useState<number>(isVertical ? 0 : 5);
+  const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
 
 
   // Stato per i valori dei campi
@@ -50,7 +50,12 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   useEffect(() => {
     const errors: FormErrorValues = verifyForm(formValues);
     setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
-    operativeStore.setEmailField(user.email);
+    if (user.type === 1) {
+      operativeStore.setEmailField(user.email);
+    }
+    else {
+      operativeStore.setEmailField(user.emailFamily);
+    }
     fetchOptions();
     fetchPoints();
     const handleResize = () => {
