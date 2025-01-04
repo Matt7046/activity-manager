@@ -1,9 +1,10 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
-import React, { useEffect, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { GoogleAuthComponentProps } from '.';
 import './App.css';
 import Alert from './components/msallert/Alert';
 import { MenuLaterale } from './components/msdrawer/Drawer';
@@ -19,17 +20,42 @@ import Register from './page/page-register/Register';
 import { getEmailChild } from './page/page-register/service/RegisterService';
 
 
+// Creazione del contesto per User
+const UserContext = createContext<any>(null);
+
+// Hook per accedere al contesto
+export const useUser = () => useContext(UserContext);
+
+// Componente UserProvider che gestisce lo stato di `user`
+interface UserProviderProps {
+  children: ReactNode; // Aggiungi la prop `children` di tipo ReactNode
+}
+
+export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+  const [user, setUser] = useState<any>(null); // Puoi specificare il tipo di `user` se necessario
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
 // Componente principale, avvolto da GoogleOAuthProvider
 const App = () => (
   <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
-    <GoogleAuthComponent />
+    <UserProvider>
+      <GoogleAuthComponent />
+    </UserProvider>
   </GoogleOAuthProvider>
 );
 
 // Componente di autenticazione
-const GoogleAuthComponent = () => {
+const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
   const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
-  const [user, setUser] = useState<any>(null);
+
+
+  const { user, setUser } = useUser(); 
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [loading, setLoading] = useState(false);
   const [simulated, setSimulated] = useState(0);
@@ -38,10 +64,27 @@ const GoogleAuthComponent = () => {
   const [email, setEmail] = useState('child@simulated.com'); // Stato per l'email
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [emailOptions, setEmailOptions] = React.useState<string[]>([]); // Lo stato è un array di stringhe
-  const [emailLogin, setEmailLogin] = useState(); // Stato per l'email
+  const [emailLogin, setEmailLogin] = useState('user@simulated.com'); // Stato per l'email
   const location = useLocation();
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  
+  const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  };
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsVertical(window.innerHeight > window.innerWidth);
+    };
+    setEmailOptions([]);
+    window.addEventListener("resize", handleResize);
+
+
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
 
 
 
@@ -61,29 +104,44 @@ const GoogleAuthComponent = () => {
     type: -1
   }); // Stato per userData
 
-   useEffect(() => {
-      const handleResize = () => {
-        setIsVertical(window.innerHeight > window.innerWidth);
-  
-      };
-  
-      window.addEventListener("resize", handleResize);
-  
-      // Pulisci il listener al dismount
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsVertical(window.innerHeight > window.innerWidth);
 
-  const handleConfirm = ((typeSimulated: number, emailGoogle?: string) => {
-    console.log("Email confermata:", emailGoogle);
-    const emailEnter = emailGoogle ? emailGoogle : typeSimulated ? 'simulated@simulated.com' : 'child@simulated.com';
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleConfirm = ((typeSimulated: number, emailFather: string) => {
+    console.log("Email confermata:", email);
+    userData.email = emailFather;
     userData.emailFamily = email;
-    userData.email = emailEnter;
     userData.type = typeSimulated;
-    setUser(userData);
-    navigateRouting(navigate, `activity`, {});
+    setUser(userData)
+    //navigateRouting(navigate, `activity`,{});
 
     //saveUserData(userData, setLoading);
   });
+  let check = false;
+  useEffect(() => {
+    if (user) {
+    
+      // Naviga solo quando `user` è stato aggiornato
+      if (user.type === 2 && !check) {
+
+        navigateRouting(navigate, 'register', { });
+        check = true;
+      }
+      else if ((user.type === 0 || user.type === 1) && !check) {
+         navigateRouting(navigate, 'activity', {});
+         check= false;
+      }
+    }
+  }, [user]);
 
   // Funzione di logout
   const logOut = () => {
@@ -131,16 +189,17 @@ const GoogleAuthComponent = () => {
     getEmailChild(user).then((x: any) => {
       const emailChild = x?.testo ?? [];
       setEmailOptions(emailChild);
+      const typeNew = emailChild?.length > 0 ? type : 2;
+      console.log("Login simulato effettuato:", fakeResponse);
+      showDialog(typeNew, false);
     })
     //  
 
-    console.log("Login simulato effettuato:", fakeResponse);
-    showDialog(type, false);
 
   };
 
   const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
-    const userType = userDataGoogle ? {...userDataGoogle, emailFamily: userDataGoogle.email} : type === 0 ? { ...userDataChild } : { ...userData }
+    const userType = userDataGoogle ? { ...userDataGoogle, emailFamily: userDataGoogle.email } : type === 0 ? { ...userDataChild } : { ...userData }
     openHome({ ...userType, type: type }, googleAuth, setLoading)
 
   }
@@ -155,10 +214,10 @@ const GoogleAuthComponent = () => {
 
 
       switch (x?.testo?.typeUser) {
-        case 0: {          
+        case 0: {
           setSimulated(TypeUser.STANDARD);
           setUser({ ...userD, type: x.testo.typeUser });
-          navigateRouting(navigate, `activity`, {});
+        //   navigateRouting(navigate, `activity`, {});
           break;
         }
         case 1: {
@@ -173,9 +232,9 @@ const GoogleAuthComponent = () => {
 
           }
           else {
-            setUser({ ...userData, type: x.testo.typeUser });
+            setUser({ ...userData, type: 2 });
           }
-          navigateRouting(navigate, `register`, {})
+          //  navigateRouting(navigate, `register`, {})
         }
           break;
       }
@@ -229,114 +288,124 @@ const GoogleAuthComponent = () => {
     };
     handleLoginSuccessFake(fakeResponse, type);
   };
-
+  const userLabel = user ? user.name : "Non autenticato"
+  const label = 'Login ' + userLabel;
   return (
     <>
-     {open && (
+      {open && (
         <Alert onClose={handleClose} message={message} />
       )}
 
       {/* Google OAuth Provider */}
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <div>
-        {isVertical ? (
-          <h3>Login con Google ({user ? user.name : "Non autenticato"})</h3>
-        ):  
-        <h1>Login con Google ({user ? user.name : "Non autenticato"})</h1>}
+
+
 
           {!user ? (
-            <div>
-              <div
-                className="col-button-container"
-                style={{
-                  gridColumn: 'span 2',
-                  display: 'flex',
-                  gridTemplateColumns: '2fr 1fr',
-                  gap: '12px',
-                }}
-              >
+            <><div id="text-box-email-family">
+              <TextField
+                id="emailFamily"
+                label=''
+                variant="standard"
+                value={label} // Collega il valore allo stato
+                onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
+                fullWidth
+                disabled={true} />
+            </div><div>
+                <div
+                  className="col-button-container"
+                  style={{
+                    gridColumn: 'span 2',
+                    display: 'flex',
+                    gridTemplateColumns: '2fr 1fr',
+                    gap: '12px',
+                  }}
+                >
+
+                  <div>
+                    <Grid container spacing={2}>
+                      {/* Prima riga: Pulsanti per simulare il login */}
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <ButtonMui
+                          variant="contained"
+                          color="primary"
+                          onClick={() => simulateLogin(TypeUser.STANDARD)}
+                          fullWidth
+                        >
+                          Simula login utente base
+                        </ButtonMui>
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <ButtonMui
+                          variant="contained"
+                          color="primary"
+                          onClick={() => simulateLogin(TypeUser.FAMILY)}
+                          fullWidth
+                        >
+                          Simula login controllo parentale
+                        </ButtonMui>
+                      </Grid>
+
+                      {/* Seconda riga: Pulsante di login reale */}
+                      <Grid size={{ xs: 12 }}>
+                        <GoogleLogin onSuccess={() => login()} onError={logOut} />
+
+                      </Grid>
+                    </Grid>
+                  </div>
+                </div>
 
                 <div>
-                  <Grid container spacing={2}>
-                    {/* Prima riga: Pulsanti per simulare il login */}
-                    {/* 
-                    <Grid size={{ xs:12, sm:6}}>
-                      <ButtonMui
-                        variant="contained"
-                        color="primary"
-                        onClick={() => simulateLogin(TypeUser.STANDARD)}
-                        fullWidth
-                      >
-                        Simula login utente base
-                      </ButtonMui>
-                    </Grid>
-                    <Grid size={{ xs:12, sm:6}}>
-                      <ButtonMui
-                        variant="contained"
-                        color="primary"
-                        onClick={() => simulateLogin(TypeUser.FAMILY)}
-                        fullWidth
-                      >
-                        Simula login controllo parentale
-                      </ButtonMui>
-                    </Grid>
-                    */}
 
-                    {/* Seconda riga: Pulsante di login reale */}
-                    <Grid size={{ xs:12}}>
-                      <GoogleLogin onSuccess={() => login()} onError={logOut} />
 
-                    </Grid>
-                  </Grid>
+                  {/* Dialog */}
+                  <Dialog open={openD} onClose={handleCloseD}>
+                    <DialogTitle>Inserisci email del figlio </DialogTitle>
+                    <DialogContent>
+                      <InputLabel>Email</InputLabel>
+                      <Select
+                        value={email}
+                        onChange={(event) => handleEmailChange(event)}
+                        label="Email"
+                        autoWidth
+                      >
+                        {
+
+                          emailOptions?.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </DialogContent>
+                    <DialogActions>
+                      <ButtonMui onClick={handleCloseD} color="secondary">
+                        Annulla
+                      </ButtonMui>
+                      <ButtonMui
+                        onClick={() => handleConfirm(simulated, emailLogin)}
+                        color="primary"
+                        disabled={!email} // Disabilita il pulsante se l'email è vuota
+                      >
+                        Conferma
+                      </ButtonMui>
+                    </DialogActions>
+                  </Dialog>
                 </div>
-              </div>
-
-              <div>
-
-
-                {/* Dialog */}
-                <Dialog open={openD} onClose={handleCloseD}>
-                  <DialogTitle>Inserisci email del figlio </DialogTitle>
-                  <DialogContent>
-                    <InputLabel>Email</InputLabel>
-                    <Select
-                      value={email}
-                      onChange={(event) => handleEmailChange(event)}
-                      label="Email"
-                      autoWidth
-                    >
-                      {emailOptions.map((option) => (
-                        <MenuItem key={option} value={option}>
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </DialogContent>
-                  <DialogActions>
-                    <ButtonMui onClick={handleCloseD} color="secondary">
-                      Annulla
-                    </ButtonMui>
-                    <ButtonMui
-                      onClick={() => handleConfirm(simulated, emailLogin)}
-                      color="primary"
-                      disabled={!email} // Disabilita il pulsante se l'email è vuota
-                    >
-                      Conferma
-                    </ButtonMui>
-                  </DialogActions>
-                </Dialog>
-              </div>
-            </div>
+              </div></>
           ) : (
             <div>
+
               <h2>{title}</h2>
               <Routes>
-                <Route path="/register" element={<Register user={user} setTitle = {setTitle} />} />
-                <Route path="/activity" element={<Activity user={user}setTitle = {setTitle} />} />
-                <Route path="/about" element={<About user={user}  setTitle = {setTitle} />} />
-                <Route path="/points" element={<Points user={user} setTitle = {setTitle} />} />
-                <Route path="/operative" element={<Operative user={user} setTitle = {setTitle} />} />
-                <Route path="/family" element={<Family user={user} setTitle = {setTitle} />} />
+                <Route path="/" element={<App />} />
+                <Route path="/register" element={<Register user={user} setTitle={setTitle} />} />
+                <Route path="/activity" element={<Activity user={user} setTitle={setTitle} />} />
+                <Route path="/about" element={<About user={user} setTitle={setTitle} />} />
+                <Route path="/points" element={<Points user={user} setTitle={setTitle} />} />
+                <Route path="/operative" element={<Operative user={user} setTitle={setTitle} />} />
+                <Route path="/family" element={<Family user={user} setTitle={setTitle} />} />
               </Routes>
             </div>
           )}
@@ -355,7 +424,7 @@ export const navigateRouting = (navigate: NavigateFunction, path: string, params
 };
 
 export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
-  if (user.type === TypeUser.FAMILY) {
+  if (user.type === TypeUser.FAMILY || user.type === TypeUser.NEW_USER) {
     return [
       [
         { funzione: null, testo: 'Activity' },
@@ -379,7 +448,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
 }
 
 export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage) => {
-  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage } : { message:['Il server non risponde'], typeMessage: 'error' };
+  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage } : { message: ['Il server non risponde'], typeMessage: 'error' };
   setOpen(true);
   setMessage(messageBE);
 }
