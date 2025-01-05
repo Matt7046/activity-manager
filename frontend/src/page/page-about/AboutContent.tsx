@@ -126,6 +126,16 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   };
 
+  const pulsanteReturn: Pulsante = {
+    icona: 'fas fa-arrow-left',
+    funzione: () => returnActivity(), // Passi la funzione direttamente
+    //disableButton: disableButtonSave,
+    nome: 'return',
+    title: 'Ritorna',
+    configDialogPulsante: { message: '', showDialog: false }
+
+  };
+
   const handleChangeActivity = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({ ...formValues, activity: event.target.value })
     // setActivity(event.target.value); // Aggiorna lo stato con il valore inserito
@@ -163,6 +173,9 @@ const AboutContent: React.FC<AboutContentProps> = ({
       }
     })
   }
+  const returnActivity = (): void => {
+    navigateRouting(navigate, 'activity', {})
+  }
 
   const salvaRecord = (_id: string): void => {
     const emailFind = user.emailFamily ? user.emailFamily : user.email;
@@ -195,7 +208,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
               fullWidth
               disabled={true}
             />
-          </div>       
+          </div>
 
           <div id="text-box">
             <TextField
@@ -241,9 +254,11 @@ const AboutContent: React.FC<AboutContentProps> = ({
           </div>
 
           {/* Pulsanti */}
-          <Grid container justifyContent="flex-end" spacing={2} sx={{ marginTop: 2 }}>
-            <Button pulsanti={[pulsanteBlue]} />
-          </Grid>
+            <Grid container justifyContent="space-between" spacing={2} sx={{ marginTop: 2 }}>
+              <Button pulsanti={[pulsanteReturn]} />
+           
+              <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
+            </Grid>
         </Box >
       </div>
     </>
