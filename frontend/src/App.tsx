@@ -369,6 +369,8 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
                         onChange={(event) => handleEmailChange(event)}
                         label="Email"
                         autoWidth
+                        sx={{ width: '100%', minWidth: '300px' }} // Imposta una larghezza di almeno la larghezza di uno smartphone
+
                       >
                         {
 
