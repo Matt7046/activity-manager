@@ -99,7 +99,7 @@ public class PointsController {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             String email = pointsDTO.getEmailFamily();
-            Points itemId = pointsService.savePointsByTypeStandard(pointsDTO, true);
+            Points itemId = pointsService.savePoints(pointsDTO, true);
             PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(itemId);
             List<PointsUser> filteredList = subDTO.getPoints().stream()
             .filter(point -> email.equals(point.getEmail()))
