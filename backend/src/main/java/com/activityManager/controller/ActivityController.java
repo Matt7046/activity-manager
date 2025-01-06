@@ -118,7 +118,7 @@ public class ActivityController {
             pointsDTO.setEmail(logActivityDTO.getEmail());
             pointsDTO.setEmailFamily(logActivityDTO.getEmailFamily());
             pointsDTO.setUsePoints(logActivityDTO.getUsePoints());
-            pointsService.savePointsByTypeStandard(pointsDTO, false);
+            pointsService.savePoints(pointsDTO, false);
 
             LogActivity sub = activityService.saveLogActivity(logActivityDTO);
 

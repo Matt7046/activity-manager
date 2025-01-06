@@ -33,7 +33,7 @@ public class PointsService {
         return pointsRepository.getPointsListByEmail(email);
     }
 
-    public Points savePointsByTypeStandard(PointsDTO pointsDTO, Boolean operation) throws Exception {
+    public Points savePoints(PointsDTO pointsDTO, Boolean operation) throws Exception {
         Points points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
         return pointsRepository.savePointsByTypeStandard(points, pointsDTO.getUsePoints(), operation);
     }
