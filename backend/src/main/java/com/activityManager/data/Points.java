@@ -3,13 +3,10 @@ package com.activityManager.data;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
 import com.activityManager.trasversali.PointsUser;
 
 @Document(collection = "points") // Specifica la collezione nel database
@@ -26,6 +23,4 @@ public class Points {
     @Field("emailfamily")
     private String emailFamily;  
     private List<String> emailFigli;
-
-
 }

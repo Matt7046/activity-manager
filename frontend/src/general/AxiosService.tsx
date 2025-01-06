@@ -130,3 +130,12 @@ export const eseguiAlert = (funzioneMessage: (message?: TypeMessage) => void, me
     }
   }
 }
+
+export const PATH_REGISTER = 'register';
+export const PATH_ACTIVITY = 'activity';
+export const PATH_ABOUT = 'about'
+export const PATH_POINTS = 'points';
+export const PATH_OPERATIVE = 'operative';
+export const PATH_FAMILY = 'family';
+
+

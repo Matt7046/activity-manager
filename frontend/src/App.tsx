@@ -15,7 +15,7 @@ import Family from './page/page-family/Family';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
 import Points from './page/page-points/Points';
-import { getUserType } from './page/page-points/service/PointsService';
+import { getUserType as getTypeUser } from './page/page-points/service/PointsService';
 import Register from './page/page-register/Register';
 import { getEmailChild } from './page/page-register/service/RegisterService';
 
@@ -31,11 +31,33 @@ interface UserProviderProps {
   children: ReactNode; // Aggiungi la prop `children` di tipo ReactNode
 }
 
-export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<any>(null); // Puoi specificare il tipo di `user` se necessario
+// Provider del contesto
+export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<any>(null); // Stato utente
+  const location = useLocation(); // Per monitorare la posizione corrente
+
+  // Funzione per distruggere l'utente
+  const resetUser = () => setUser(null);
+
+  useEffect(() => {
+    // Listener per l'evento popstate
+   // const handlePopState = () => {
+      // Se la posizione è la pagina di login, distruggi il contesto
+      if (location.pathname === '/') {
+        resetUser();
+      }
+   // };
+
+   // window.addEventListener('popstate', handlePopState);
+
+    // Cleanup per rimuovere il listener
+    return () => {
+     // window.removeEventListener('popstate', handlePopState);
+    };
+  }, [location]);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, resetUser }}>
       {children}
     </UserContext.Provider>
   );
@@ -61,15 +83,47 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
   const [simulated, setSimulated] = useState(0);
   const [title, setTitle] = useState("Activity manager");
   const [openD, setOpenD] = useState(false); // Stato per la dialog
-  const [email, setEmail] = useState('child@simulated.com'); // Stato per l'email
+  const [email, setEmail] = useState(''); // Stato per l'email
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [emailOptions, setEmailOptions] = React.useState<string[]>([]); // Lo stato è un array di stringhe
-  const [emailLogin, setEmailLogin] = useState('user@simulated.com'); // Stato per l'email
+  const [emailLogin, setEmailLogin] = useState(''); // Stato per l'email
   const location = useLocation();
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {
 
   };
+
+
+  useEffect(() => {
+    // Listener per l'evento popstate
+   // const handlePopState = () => {
+      // Se la posizione è la pagina di login, distruggi il contesto
+      if (location.pathname === '/') {
+          // Stato per userData
+        setUserData({
+          name: "Simulated User",
+          emailFamily: "user@simulated.com",
+          email: "user@simulated.com",
+          token: null,
+          type: -1
+        });
+        setUserDataChild({
+          name: "Simulated child User",
+          emailFamily: "child@simulated.com",
+          email: "user@simulated.com",
+          token: null,
+          type: -1
+        });
+      }
+   // };
+
+   // window.addEventListener('popstate', handlePopState);
+
+    // Cleanup per rimuovere il listener
+    return () => {
+     // window.removeEventListener('popstate', handlePopState);
+    };
+  }, [location]);
 
 
   useEffect(() => {
@@ -121,7 +175,8 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
     userData.email = emailFather;
     userData.emailFamily = email;
     userData.type = typeSimulated;
-    setUser(userData)
+    setUser(userData);
+    handleCloseD();
     //navigateRouting(navigate, `activity`,{});
 
     //saveUserData(userData, setLoading);
@@ -209,7 +264,7 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
 
   const openHome = (userD: any, googleAuth: boolean, setLoading: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
-    return getUserType(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
+    return getTypeUser(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
 
 
@@ -369,6 +424,8 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
                         onChange={(event) => handleEmailChange(event)}
                         label="Email"
                         autoWidth
+                        sx={{ width: '100%', minWidth: '300px' }} // Imposta una larghezza di almeno la larghezza di uno smartphone
+
                       >
                         {
 
@@ -400,12 +457,12 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
               <h2>{title}</h2>
               <Routes>
                 <Route path="/" element={<App />} />
-                <Route path="/register" element={<Register user={user} setTitle={setTitle} />} />
-                <Route path="/activity" element={<Activity user={user} setTitle={setTitle} />} />
-                <Route path="/about" element={<About user={user} setTitle={setTitle} />} />
-                <Route path="/points" element={<Points user={user} setTitle={setTitle} />} />
-                <Route path="/operative" element={<Operative user={user} setTitle={setTitle} />} />
-                <Route path="/family" element={<Family user={user} setTitle={setTitle} />} />
+                <Route path="/register" element={<Register setTitle={setTitle} />} />
+                <Route path="/activity" element={<Activity  setTitle={setTitle} />} />
+                <Route path="/about" element={<About setTitle={setTitle} />} />
+                <Route path="/points" element={<Points setTitle={setTitle} />} />
+                <Route path="/operative" element={<Operative  setTitle={setTitle} />} />
+                <Route path="/family" element={<Family setTitle={setTitle} />} />
               </Routes>
             </div>
           )}

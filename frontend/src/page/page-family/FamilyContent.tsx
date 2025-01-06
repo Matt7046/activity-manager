@@ -8,8 +8,9 @@ import { showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/msbutton/Button";
 import { FormErrorValues, HttpStatus, ResponseI, UserI, verifyForm } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
-import { findByEmail, savePointsByTypeStandard } from "../page-points/service/PointsService";
+import { findByEmail } from "../page-points/service/PointsService";
 import "./Family.css";
+import { savePointsByFamily } from './service/FamilyService';
 import familyStore from './store/FamilyStore';
 
 
@@ -124,7 +125,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const salvaRecord = (userData: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
     const pointsWithPlus = isPlusIcon ? formValues.newPoints : - formValues.newPoints!;
-    return savePointsByTypeStandard({ ...userData, usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
+    return savePointsByFamily({ ...userData, usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
       // setPoints(x.testo.points)
       familyStore.setPoints(parseInt(x?.testo.points)); // Update the state with the new value
