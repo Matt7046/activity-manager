@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { UserI } from '../../general/Utils';
+import { useUser } from '../../App';
 import { TypeMessage } from '../page-layout/PageLayout';
 import RegisterContent from './RegisterContent';
 
@@ -12,10 +12,11 @@ export interface PointsI {
   attivita: string;
 }
 
-const Register: React.FC<{ user: UserI, setTitle: (title: string)=>void}> = ({ user, setTitle }) => {
+const Register: React.FC<{ setTitle: (title: string)=>void}> = ({ setTitle }) => {
 
   const location = useLocation();
   setTitle("Section register");
+  const { user, setUser } = useUser(); 
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
