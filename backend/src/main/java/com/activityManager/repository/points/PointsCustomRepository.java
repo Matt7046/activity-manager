@@ -7,9 +7,9 @@ import com.activityManager.data.Points;
 public interface PointsCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario
     
-    public Long getUserType(Points points) throws Exception;
+    public Long getTypeUser(Points points) throws Exception;
 
-    public Boolean saveFamily(Points points) throws Exception;
+    public Boolean saveUser(Points points) throws Exception;
     
     Points savePointsByTypeStandard(Points points, Long usePoints, Boolean operation) throws Exception;
 

@@ -1,9 +1,7 @@
 package com.activityManager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import com.activityManager.EncryptDecryptConverter;
 import com.activityManager.data.Points;
 import com.activityManager.dto.PointsDTO;
@@ -26,16 +24,6 @@ public class PointsService {
     public Points findByEmail(String identificativo, Long type) {
 
         return pointsRepository.findByEmail(identificativo, type);
-    }
-
-    public Long getUserType(PointsDTO pointsDTO) throws Exception {
-        Points points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
-        return pointsRepository.getUserType(points);
-    }
-
-    public Boolean saveFamily(PointsDTO pointsDTO) throws Exception {
-        Points points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
-        return pointsRepository.saveFamily(points);
     }
 
     public Points getPointsByEmail(String email) throws Exception {
