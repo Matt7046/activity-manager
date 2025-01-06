@@ -31,11 +31,33 @@ interface UserProviderProps {
   children: ReactNode; // Aggiungi la prop `children` di tipo ReactNode
 }
 
-export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<any>(null); // Puoi specificare il tipo di `user` se necessario
+// Provider del contesto
+export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<any>(null); // Stato utente
+  const location = useLocation(); // Per monitorare la posizione corrente
+
+  // Funzione per distruggere l'utente
+  const resetUser = () => setUser(null);
+
+  useEffect(() => {
+    // Listener per l'evento popstate
+   // const handlePopState = () => {
+      // Se la posizione è la pagina di login, distruggi il contesto
+      if (location.pathname === '/') {
+        resetUser();
+      }
+   // };
+
+   // window.addEventListener('popstate', handlePopState);
+
+    // Cleanup per rimuovere il listener
+    return () => {
+     // window.removeEventListener('popstate', handlePopState);
+    };
+  }, [location]);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, resetUser }}>
       {children}
     </UserContext.Provider>
   );
@@ -121,7 +143,8 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
     userData.email = emailFather;
     userData.emailFamily = email;
     userData.type = typeSimulated;
-    setUser(userData)
+    setUser(userData);
+    handleCloseD();
     //navigateRouting(navigate, `activity`,{});
 
     //saveUserData(userData, setLoading);
@@ -402,12 +425,12 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
               <h2>{title}</h2>
               <Routes>
                 <Route path="/" element={<App />} />
-                <Route path="/register" element={<Register user={user} setTitle={setTitle} />} />
-                <Route path="/activity" element={<Activity user={user} setTitle={setTitle} />} />
-                <Route path="/about" element={<About user={user} setTitle={setTitle} />} />
-                <Route path="/points" element={<Points user={user} setTitle={setTitle} />} />
-                <Route path="/operative" element={<Operative user={user} setTitle={setTitle} />} />
-                <Route path="/family" element={<Family user={user} setTitle={setTitle} />} />
+                <Route path="/register" element={<Register setTitle={setTitle} />} />
+                <Route path="/activity" element={<Activity  setTitle={setTitle} />} />
+                <Route path="/about" element={<About setTitle={setTitle} />} />
+                <Route path="/points" element={<Points setTitle={setTitle} />} />
+                <Route path="/operative" element={<Operative  setTitle={setTitle} />} />
+                <Route path="/family" element={<Family setTitle={setTitle} />} />
               </Routes>
             </div>
           )}
