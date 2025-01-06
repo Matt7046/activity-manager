@@ -1,10 +1,8 @@
 package com.activityManager;
 
 import java.util.Base64;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

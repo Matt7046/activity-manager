@@ -2,10 +2,8 @@ package com.activityManager.repository.points;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-
 import com.activityManager.EncryptDecryptConverter;
 import com.activityManager.data.Points;
 import com.activityManager.exception.ArithmeticCustomException;
@@ -18,7 +16,7 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 	@Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 
-	public Long getUserType(Points pointsSave) throws Exception {
+	public Long getTypeUser(Points pointsSave) throws Exception {
 		String email = encryptDecryptConverter.convert(pointsSave.getEmailFamily());
 		List<Points> existPointsOnFigli = pointsRepository.findByOnFigli(email);
 		Points existPoints = pointsRepository.findByEmailOnEmail(email);
@@ -35,10 +33,8 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		return type;// Restituisci l'ID aggiornato
 	}
 
-	public Boolean saveFamily(Points pointsSave) throws Exception {
+	public Boolean saveUser(Points pointsSave) throws Exception {
 		Boolean newUSer = false;
-		String email = encryptDecryptConverter.convert(pointsSave.getEmail());
-
 		if (pointsSave.getEmail() != null && !pointsSave.getEmailFigli().isEmpty()) {
 			newUSer = true;
 			pointsSave.setType(1L);
