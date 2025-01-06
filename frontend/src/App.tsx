@@ -83,10 +83,10 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
   const [simulated, setSimulated] = useState(0);
   const [title, setTitle] = useState("Activity manager");
   const [openD, setOpenD] = useState(false); // Stato per la dialog
-  const [email, setEmail] = useState('child@simulated.com'); // Stato per l'email
+  const [email, setEmail] = useState(''); // Stato per l'email
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [emailOptions, setEmailOptions] = React.useState<string[]>([]); // Lo stato è un array di stringhe
-  const [emailLogin, setEmailLogin] = useState('user@simulated.com'); // Stato per l'email
+  const [emailLogin, setEmailLogin] = useState(''); // Stato per l'email
   const location = useLocation();
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -361,7 +361,7 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
             <><div id="text-box-email-family">
               <TextField
                 id="emailFamily"
-                label=''
+                label='Inserisci email'
                 variant="standard"
                 value={label} // Collega il valore allo stato
                 onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
