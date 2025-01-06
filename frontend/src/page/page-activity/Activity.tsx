@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { showMessage } from '../../App';
+import { showMessage, useUser } from '../../App';
 import { getMenuLaterale, ResponseI, UserI } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import ActivityContent from './ActivityContent';
@@ -23,10 +23,11 @@ export interface ActivityLogI {
 
 }
 
-const Activity: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
+const Activity: React.FC<{setTitle:any }> = ({setTitle}) => {
 
   
   setTitle("Section Activity");
+  const { user, setUser } = useUser(); 
   const [utente, setUtente] = useState<UserI>(user); // Stato iniziale vuoto
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user)
