@@ -31,11 +31,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 }) => {
   return (
     <>
-
-      <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-        <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
-      </Grid>
-
+      <Box sx={{ padding: 0.5 }}>
+        <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
+          <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
+        </Grid>
+      </Box>
       {/* Mostra l'alert se open è true */}
       {open && (
         <Alert onClose={handleClose} message={message} />

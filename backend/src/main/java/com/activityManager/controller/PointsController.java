@@ -2,8 +2,6 @@ package com.activityManager.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.activityManager.EncryptDecryptConverter;
 import com.activityManager.data.Points;
 import com.activityManager.dto.ActivityDTO;
 import com.activityManager.dto.PointsDTO;
@@ -12,12 +10,11 @@ import com.activityManager.dto.ResponseDTO;
 import com.activityManager.dto.UserDTO;
 import com.activityManager.mapper.PointsMapper;
 import com.activityManager.service.PointsService;
+import com.activityManager.service.RegisterService;
 import com.activityManager.trasversali.PointsUser;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +29,9 @@ public class PointsController {
 
     @Autowired
     private PointsService pointsService;
+
     @Autowired
-    private EncryptDecryptConverter encryptDecryptConverter;
+    private RegisterService registerService;
 
     @PostMapping("")
     public ResponseDTO findByEmail(@RequestBody PointsDTO pointsDTO) {
@@ -78,7 +76,7 @@ public class PointsController {
     public ResponseEntity<ResponseDTO> getUserType(@RequestBody PointsDTO pointsDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
-            Long itemId = pointsService.getUserType(pointsDTO);
+            Long itemId = registerService.getTypeUser(pointsDTO);
 
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(new UserDTO(itemId, null), HttpStatus.OK.value(), new ArrayList<>());
@@ -101,7 +99,7 @@ public class PointsController {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             String email = pointsDTO.getEmailFamily();
-            Points itemId = pointsService.savePointsByTypeStandard(pointsDTO, true);
+            Points itemId = pointsService.savePoints(pointsDTO, true);
             PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(itemId);
             List<PointsUser> filteredList = subDTO.getPoints().stream()
             .filter(point -> email.equals(point.getEmail()))
