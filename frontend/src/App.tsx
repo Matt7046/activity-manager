@@ -361,7 +361,7 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
             <><div id="text-box-email-family">
               <TextField
                 id="emailFamily"
-                label='Inserisci email'
+                label=''
                 variant="standard"
                 value={label} // Collega il valore allo stato
                 onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
