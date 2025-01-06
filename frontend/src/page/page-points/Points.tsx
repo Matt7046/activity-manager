@@ -54,7 +54,7 @@ const Points: React.FC<{ setTitle:any }> = ({ setTitle}) => {
         message={message}
         user={user}
         handleClose={handleClose}
-        padding={paddingType}
+        navigate={useNavigate()}   
       >
         <PointsContent
           user={user}
