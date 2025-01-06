@@ -18,7 +18,7 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 	@Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 
-	public Long getUserType(Points pointsSave) throws Exception {
+	public Long getTypeUser(Points pointsSave) throws Exception {
 		String email = encryptDecryptConverter.convert(pointsSave.getEmailFamily());
 		List<Points> existPointsOnFigli = pointsRepository.findByOnFigli(email);
 		Points existPoints = pointsRepository.findByEmailOnEmail(email);
@@ -35,7 +35,7 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		return type;// Restituisci l'ID aggiornato
 	}
 
-	public Boolean saveFamily(Points pointsSave) throws Exception {
+	public Boolean saveUser(Points pointsSave) throws Exception {
 		Boolean newUSer = false;
 		String email = encryptDecryptConverter.convert(pointsSave.getEmail());
 
