@@ -2,7 +2,6 @@ package com.activityManager.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.activityManager.data.Activity;
 import com.activityManager.data.LogActivity;
 import com.activityManager.dto.ActivityDTO;
@@ -13,11 +12,9 @@ import com.activityManager.mapper.ActivityMapper;
 import com.activityManager.mapper.LogActivityMapper;
 import com.activityManager.service.ActivityService;
 import com.activityManager.service.PointsService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
