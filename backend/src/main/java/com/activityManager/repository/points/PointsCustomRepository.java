@@ -1,7 +1,6 @@
 package com.activityManager.repository.points;
 
 import java.util.List;
-
 import com.activityManager.data.Points;
 
 public interface PointsCustomRepository {

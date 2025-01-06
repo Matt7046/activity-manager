@@ -1,13 +1,8 @@
 package com.activityManager.repository.points;
 
-
-
-
 import java.util.List;
-
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-
 import com.activityManager.data.Points;
 
 public interface PointsRepository extends MongoRepository<Points, String>, PointsCustomRepository {

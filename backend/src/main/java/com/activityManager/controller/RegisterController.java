@@ -2,23 +2,14 @@ package com.activityManager.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.activityManager.EncryptDecryptConverter;
-import com.activityManager.data.Activity;
 import com.activityManager.data.Points;
-import com.activityManager.dto.ActivityDTO;
 import com.activityManager.dto.PointsDTO;
 import com.activityManager.dto.ResponseDTO;
 import com.activityManager.dto.UserDTO;
-import com.activityManager.mapper.ActivityMapper;
-import com.activityManager.mapper.PointsMapper;
 import com.activityManager.service.PointsService;
 import com.activityManager.service.RegisterService;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

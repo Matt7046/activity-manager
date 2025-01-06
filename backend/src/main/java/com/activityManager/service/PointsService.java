@@ -7,7 +7,6 @@ import com.activityManager.data.Points;
 import com.activityManager.dto.PointsDTO;
 import com.activityManager.mapper.PointsMapper;
 import com.activityManager.repository.points.PointsRepository;
-
 import java.util.List;
 
 @Service
