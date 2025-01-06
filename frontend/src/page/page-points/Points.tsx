@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getMenuLaterale, UserI } from '../../general/Utils';
+import { useUser } from '../../App';
+import { getMenuLaterale } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import PointsContent from './PointsContent';
 
@@ -14,11 +15,12 @@ export interface PointsI {
   usePoints?: number;
 }
 
-const Points: React.FC<{ user: UserI, setTitle:any }> = ({ user, setTitle}) => {
+const Points: React.FC<{ setTitle:any }> = ({ setTitle}) => {
 
   setTitle("Section Points");
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
+  const { user, setUser } = useUser(); 
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
