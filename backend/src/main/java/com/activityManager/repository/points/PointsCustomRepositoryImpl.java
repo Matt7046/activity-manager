@@ -2,10 +2,8 @@ package com.activityManager.repository.points;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-
 import com.activityManager.EncryptDecryptConverter;
 import com.activityManager.data.Points;
 import com.activityManager.exception.ArithmeticCustomException;
@@ -37,8 +35,6 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 
 	public Boolean saveUser(Points pointsSave) throws Exception {
 		Boolean newUSer = false;
-		String email = encryptDecryptConverter.convert(pointsSave.getEmail());
-
 		if (pointsSave.getEmail() != null && !pointsSave.getEmailFigli().isEmpty()) {
 			newUSer = true;
 			pointsSave.setType(1L);

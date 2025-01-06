@@ -6,7 +6,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.mongodb.core.mapping.event.AfterLoadEvent;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Component;
-
 import com.activityManager.data.LogActivity;
 import com.activityManager.data.Points;
 
