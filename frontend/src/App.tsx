@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid2';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { GoogleAuthComponentProps } from '.';
 import './App.css';
 import Alert from './components/msallert/Alert';
 import { MenuLaterale } from './components/msdrawer/Drawer';
@@ -40,19 +39,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const resetUser = () => setUser(null);
 
   useEffect(() => {
-    // Listener per l'evento popstate
-   // const handlePopState = () => {
-      // Se la posizione è la pagina di login, distruggi il contesto
-      if (location.pathname === '/') {
-        resetUser();
-      }
-   // };
-
-   // window.addEventListener('popstate', handlePopState);
-
-    // Cleanup per rimuovere il listener
+    // Se la posizione è la pagina di login, distruggi il contesto
+    if (location.pathname === '/') {
+      resetUser();
+    }  
     return () => {
-     // window.removeEventListener('popstate', handlePopState);
     };
   }, [location]);
 
@@ -73,11 +64,11 @@ const App = () => (
 );
 
 // Componente di autenticazione
-const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
+const GoogleAuthComponent = () => {
   const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
 
 
-  const { user, setUser } = useUser(); 
+  const {user, setUser } = useUser();
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [loading, setLoading] = useState(false);
   const [simulated, setSimulated] = useState(0);
@@ -95,34 +86,26 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
 
 
   useEffect(() => {
-    // Listener per l'evento popstate
-   // const handlePopState = () => {
-      // Se la posizione è la pagina di login, distruggi il contesto
-      if (location.pathname === '/') {
-          // Stato per userData
-        setUserData({
-          name: "Simulated User",
-          emailFamily: "user@simulated.com",
-          email: "user@simulated.com",
-          token: null,
-          type: -1
-        });
-        setUserDataChild({
-          name: "Simulated child User",
-          emailFamily: "child@simulated.com",
-          email: "user@simulated.com",
-          token: null,
-          type: -1
-        });
-        setUser(null);
-      }
-   // };
+    if (location.pathname === '/') {
+      // Stato per userData
+      setUserData({
+        name: "Simulated User",
+        emailFamily: "user@simulated.com",
+        email: "user@simulated.com",
+        token: null,
+        type: -1
+      });
+      setUserDataChild({
+        name: "Simulated child User",
+        emailFamily: "child@simulated.com",
+        email: "user@simulated.com",
+        token: null,
+        type: -1
+      });
+      setUser(null);
+    }
 
-   // window.addEventListener('popstate', handlePopState);
-
-    // Cleanup per rimuovere il listener
     return () => {
-     // window.removeEventListener('popstate', handlePopState);
     };
   }, [location]);
 
@@ -138,10 +121,6 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-
-
-
 
   const [userData, setUserData] = useState({
     name: "Simulated User",
@@ -159,18 +138,6 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
     type: -1
   }); // Stato per userData
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const handleConfirm = ((typeSimulated: number, emailFather: string) => {
     console.log("Email confermata:", email);
     userData.email = emailFather;
@@ -185,16 +152,16 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
   let check = false;
   useEffect(() => {
     if (user) {
-    
+
       // Naviga solo quando `user` è stato aggiornato
       if (user.type === 2 && !check) {
 
-        navigateRouting(navigate, 'register', { });
+        navigateRouting(navigate, 'register', {});
         check = true;
       }
       else if ((user.type === 0 || user.type === 1) && !check) {
-         navigateRouting(navigate, 'activity', {});
-         check= false;
+        navigateRouting(navigate, 'activity', {});
+        check = false;
       }
     }
   }, [user]);
@@ -207,16 +174,12 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
     setOpen(false);
   };
 
-
-
-
   // Funzioni di gestione
   const handleOpenD = () => setOpenD(true);
   const handleCloseD = () => setOpenD(false);
   const handleEmailChange = (event: SelectChangeEvent) => {
     setEmail(event.target.value);
   };
-
 
   // Configura useGoogleLogin
   const login = useGoogleLogin({
@@ -231,8 +194,6 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
       console.error('Login Failed:', error);
     },
   });
-
-
 
   const handleLoginSuccessFake = (fakeResponse: any, type: number) => {
     const userType = type === 0 ? { ...userDataChild } : { ...userData }
@@ -249,34 +210,28 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
       console.log("Login simulato effettuato:", fakeResponse);
       showDialog(typeNew, false);
     })
-    //  
-
-
   };
 
   const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
     const userType = userDataGoogle ? { ...userDataGoogle, emailFamily: userDataGoogle.email } : type === 0 ? { ...userDataChild } : { ...userData }
     openHome({ ...userType, type: type }, googleAuth, setLoading)
-
   }
-
-
-
 
   const openHome = (userD: any, googleAuth: boolean, setLoading: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
     return getTypeUser(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
 
-
       switch (x?.testo?.typeUser) {
         case 0: {
+          setEmailLogin(userD.email);
           setSimulated(TypeUser.STANDARD);
           setUser({ ...userD, type: x.testo.typeUser });
-        //   navigateRouting(navigate, `activity`, {});
+          //   navigateRouting(navigate, `activity`, {});
           break;
         }
         case 1: {
+          setEmailLogin(userD.email);
           setSimulated(TypeUser.FAMILY);
           //  setUserData({ ...userD, email, type: x.testo.typeUser })
           handleOpenD();
@@ -296,8 +251,6 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
       }
     })
   }
-
-
 
   // Funzione per ottenere i dati utente
   const fetchUserData = async (accessToken: string) => {
@@ -355,9 +308,6 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
       {/* Google OAuth Provider */}
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <div>
-
-
-
           {!user ? (
             <><div id="text-box-email-family">
               <TextField
@@ -378,7 +328,6 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
                     gap: '12px',
                   }}
                 >
-
                   <div>
                     <Grid container spacing={2}>
                       {/* Prima riga: Pulsanti per simulare il login */}
@@ -459,10 +408,10 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
               <Routes>
                 <Route path="/" element={<App />} />
                 <Route path="/register" element={<Register setTitle={setTitle} />} />
-                <Route path="/activity" element={<Activity  setTitle={setTitle} />} />
+                <Route path="/activity" element={<Activity setTitle={setTitle} />} />
                 <Route path="/about" element={<About setTitle={setTitle} />} />
                 <Route path="/points" element={<Points setTitle={setTitle} />} />
-                <Route path="/operative" element={<Operative  setTitle={setTitle} />} />
+                <Route path="/operative" element={<Operative setTitle={setTitle} />} />
                 <Route path="/family" element={<Family setTitle={setTitle} />} />
               </Routes>
             </div>
@@ -474,7 +423,6 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
       {loading && <CircularProgress />}
     </>
   );
-
 };
 
 export const navigateRouting = (navigate: NavigateFunction, path: string, params: any) => {
