@@ -50,7 +50,7 @@ const Family: React.FC<{ setTitle:any }> = ({ setTitle}) => {
         user={user}
         message={message}
         handleClose={handleClose}
-        padding={paddingType}
+        navigate={useNavigate()}   
       >
         <FamilyContent
           user={user}
