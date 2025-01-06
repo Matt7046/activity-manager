@@ -114,6 +114,7 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
           token: null,
           type: -1
         });
+        setUser(null);
       }
    // };
 
