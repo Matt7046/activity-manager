@@ -12,6 +12,7 @@ import com.activityManager.dto.ResponseDTO;
 import com.activityManager.dto.UserDTO;
 import com.activityManager.mapper.PointsMapper;
 import com.activityManager.service.PointsService;
+import com.activityManager.service.RegisterService;
 import com.activityManager.trasversali.PointsUser;
 
 import java.util.ArrayList;
@@ -32,8 +33,9 @@ public class PointsController {
 
     @Autowired
     private PointsService pointsService;
+
     @Autowired
-    private EncryptDecryptConverter encryptDecryptConverter;
+    private RegisterService registerService;
 
     @PostMapping("")
     public ResponseDTO findByEmail(@RequestBody PointsDTO pointsDTO) {
@@ -78,7 +80,7 @@ public class PointsController {
     public ResponseEntity<ResponseDTO> getUserType(@RequestBody PointsDTO pointsDTO) {
         try {
             // Salva i dati e ottieni l'ID o l'oggetto salvato
-            Long itemId = pointsService.getUserType(pointsDTO);
+            Long itemId = registerService.getTypeUser(pointsDTO);
 
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(new UserDTO(itemId, null), HttpStatus.OK.value(), new ArrayList<>());
