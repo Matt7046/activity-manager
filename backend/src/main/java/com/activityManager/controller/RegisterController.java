@@ -69,27 +69,5 @@ public class RegisterController {
             ResponseDTO errorResponse = new ResponseDTO(new UserDTO(), HttpStatus.INTERNAL_SERVER_ERROR, errori);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(errorResponse);
         }
-    }
-
-    @PostMapping("/dati/standard")
-    public ResponseEntity<ResponseDTO> savePointsByTypeStandard(@RequestBody PointsDTO pointsDTO) {
-        try {
-            // Salva i dati e ottieni l'ID o l'oggetto salvato
-            Points itemId = pointsService.savePoints(pointsDTO, true);
-
-            // Crea una risposta
-            ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK.value(), new ArrayList<>());
-
-            // Ritorna una ResponseEntity con lo status HTTP
-            return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
-            List<String> errori = new ArrayList<>();
-            errori.add(e.getMessage());
-            errori.add(e.getLocalizedMessage());
-            ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR, errori);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(errorResponse);
-        }
-    }
+    }   
 }

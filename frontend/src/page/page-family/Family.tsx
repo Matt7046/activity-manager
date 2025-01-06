@@ -53,7 +53,6 @@ const Family: React.FC<{ setTitle:any }> = ({ setTitle}) => {
         navigate={useNavigate()}   
       >
         <FamilyContent
-          user={user}
           setMessage={setMessage}
           setOpen ={setOpen}
         />
