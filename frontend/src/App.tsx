@@ -95,6 +95,38 @@ const GoogleAuthComponent = ({ newLogin }: GoogleAuthComponentProps) => {
 
 
   useEffect(() => {
+    // Listener per l'evento popstate
+   // const handlePopState = () => {
+      // Se la posizione è la pagina di login, distruggi il contesto
+      if (location.pathname === '/') {
+          // Stato per userData
+        setUserData({
+          name: "Simulated User",
+          emailFamily: "user@simulated.com",
+          email: "user@simulated.com",
+          token: null,
+          type: -1
+        });
+        setUserDataChild({
+          name: "Simulated child User",
+          emailFamily: "child@simulated.com",
+          email: "user@simulated.com",
+          token: null,
+          type: -1
+        });
+      }
+   // };
+
+   // window.addEventListener('popstate', handlePopState);
+
+    // Cleanup per rimuovere il listener
+    return () => {
+     // window.removeEventListener('popstate', handlePopState);
+    };
+  }, [location]);
+
+
+  useEffect(() => {
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
     };
