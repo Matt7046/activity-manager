@@ -29,7 +29,6 @@ public class FamilyController {
     @PostMapping("/dati")
     public ResponseDTO savePointsByFamily(@RequestBody PointsDTO pointsDTO) throws Exception {
        
-            // Salva i dati e ottieni l'ID o l'oggetto salvato
             String email = pointsDTO.getEmailFamily();
             Points itemId = pointsService.savePoints(pointsDTO, true);
             PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(itemId);
@@ -37,10 +36,7 @@ public class FamilyController {
             .filter(point -> email.equals(point.getEmail()))
             .collect(Collectors.toList());
             PointsRDTO record = new PointsRDTO(filteredList.get(0).getPoints(),"I Points a disposizione sono: ".concat(filteredList.get(0).getPoints().toString()));
-            // Crea una risposta
             ResponseDTO response = new ResponseDTO(record, HttpStatus.OK.value(), new ArrayList<>());
-
-            // Ritorna una ResponseEntity con lo status HTTP
             return response;      
     }
 }
