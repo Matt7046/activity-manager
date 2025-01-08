@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,8 +27,8 @@ public class FamilyController {
     private PointsService pointsService;
 
     @PostMapping("/dati")
-    public ResponseEntity<ResponseDTO> savePointsByFamily(@RequestBody PointsDTO pointsDTO) {
-        try {
+    public ResponseDTO savePointsByFamily(@RequestBody PointsDTO pointsDTO) throws Exception {
+       
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             String email = pointsDTO.getEmailFamily();
             Points itemId = pointsService.savePoints(pointsDTO, true);
@@ -42,15 +41,6 @@ public class FamilyController {
             ResponseDTO response = new ResponseDTO(record, HttpStatus.OK.value(), new ArrayList<>());
 
             // Ritorna una ResponseEntity con lo status HTTP
-            return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
-            List<String> errori = new ArrayList<>();
-            errori.add(e.getMessage());
-            errori.add(e.getLocalizedMessage());
-            ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR, errori);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(errorResponse);
-        }
+            return response;      
     }
 }

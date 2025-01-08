@@ -10,7 +10,7 @@ public interface PointsCustomRepository {
 
     public Boolean saveUser(Points points) throws Exception;
     
-    Points savePointsByTypeStandard(Points points, Long usePoints, Boolean operation) throws Exception;
+    Points savePoints(Points points, Long usePoints, Boolean operation) throws Exception;
 
     Points getPointsByEmail(String email) throws Exception ;
 
