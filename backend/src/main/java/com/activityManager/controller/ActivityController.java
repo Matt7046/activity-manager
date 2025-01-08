@@ -8,6 +8,7 @@ import com.activityManager.dto.ActivityDTO;
 import com.activityManager.dto.LogActivityDTO;
 import com.activityManager.dto.PointsDTO;
 import com.activityManager.dto.ResponseDTO;
+import com.activityManager.exception.NotFoundException;
 import com.activityManager.mapper.ActivityMapper;
 import com.activityManager.mapper.LogActivityMapper;
 import com.activityManager.service.ActivityService;
@@ -51,30 +52,22 @@ public class ActivityController {
 
     @GetMapping("/{identificativo}")
     public ResponseDTO findByIdentificativo(@PathVariable String identificativo) {
-        List<String> errori = new ArrayList<>();
         Activity item = null; // Inizializza l'oggetto come null
-        ResponseDTO responseDTO;
+        ResponseDTO responseDTO = null;
 
-        try {
+      
             // Tentativo di trovare il documento
             item = activityService.findByIdentificativo(identificativo);
             if (item == null) {
-                throw new RuntimeException("Documento non trovato con identificativo: " + identificativo);
+                throw new NotFoundException("Documento non trovato con identificativo: " + identificativo);
             }
-        } catch (Exception e) {
-            // Gestione dell'errore: log e aggiunta dei dettagli
-            errori.add("Errore: " + e.getMessage());
-        }
+     
 
         if (item != null) {
             // Mappatura se l'oggetto è stato trovato
             ActivityDTO subDTO = ActivityMapper.INSTANCE.toDTO(item);
             responseDTO = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
-        } else {
-            // Risposta in caso di errore o elemento non trovato
-            ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND.value(), errori); // 404 con dettagli errore
-        }
+        } 
 
         return responseDTO;
     }
@@ -83,7 +76,7 @@ public class ActivityController {
     public ResponseDTO logActivityByEmail(@RequestBody PointsDTO pointsDTO) {
         ResponseDTO responseDTO = null;
         List<String> errori = new ArrayList<>();
-        try {
+     
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             Sort sort = Sort.by(Sort.Order.desc("date"));
             List<LogActivity> sub = activityService.logAttivitaByEmail(pointsDTO, sort);
@@ -94,11 +87,7 @@ public class ActivityController {
             responseDTO = new ResponseDTO(logAttivitaUnica, HttpStatus.OK.value(), new ArrayList<>());
 
             // Crea una risposta
-        } catch (Exception e) {
-            // Gestione dell'errore: log e aggiunta dei dettagli
-            errori.add("Errore: " + e.getMessage());
-        }
-
+        
         if (errori.size() > 0) {
             // Risposta in caso di errore o elemento non trovato
             ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
@@ -108,35 +97,20 @@ public class ActivityController {
     }
 
     @PostMapping("/dati")
-    public ResponseDTO savePointsAndLog(@RequestBody LogActivityDTO logActivityDTO) {
+    public ResponseDTO savePointsAndLog(@RequestBody LogActivityDTO logActivityDTO) throws Exception {
         ResponseDTO responseDTO = null;
-
-        List<String> errori = new ArrayList<>();
-        try {
+      
             PointsDTO pointsDTO = new PointsDTO();
             pointsDTO.setPoint(logActivityDTO.getPoints());
             pointsDTO.setEmail(logActivityDTO.getEmail());
             pointsDTO.setEmailFamily(logActivityDTO.getEmailFamily());
             pointsDTO.setUsePoints(logActivityDTO.getUsePoints());
             pointsService.savePoints(pointsDTO, false);
-
             LogActivity sub = activityService.saveLogActivity(logActivityDTO);
-
             LogActivityDTO dto = LogActivityMapper.INSTANCE.toDTO(sub);
             // Crea una risposta
-            responseDTO = new ResponseDTO(dto, HttpStatus.OK.value(), new ArrayList<>());
-        } catch (Exception e) {
-            // Gestione dell'errore: log e aggiunta dei dettagli
-            errori.add("Errore: " + e.getMessage());
-        }
-
-        if (errori.size() > 0) {
-            // Mappatura se l'oggetto è stato trovato
-            // Risposta in caso di errore o elemento non trovato
-            ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.INTERNAL_SERVER_ERROR.value(), errori);
-
-        }
+            responseDTO = new ResponseDTO(dto, HttpStatus.OK.value(), new ArrayList<>());        
+      
         return responseDTO;
     }
 

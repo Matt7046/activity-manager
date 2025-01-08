@@ -9,10 +9,8 @@ import com.activityManager.dto.UserDTO;
 import com.activityManager.service.PointsService;
 import com.activityManager.service.RegisterService;
 import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,8 +27,8 @@ public class RegisterController {
     private RegisterService registerService;
 
     @PostMapping("child")
-    public ResponseDTO getEmailChild(@RequestBody PointsDTO pointsDTO) {
-        try {
+    public ResponseDTO getEmailChild(@RequestBody PointsDTO pointsDTO) throws Exception {
+        
             // String[] texts = { "Ciao, mondo!", "Benvenuto in Java", "Programmazione è
             // divertente" };
             String email = pointsDTO.getEmail();
@@ -38,19 +36,12 @@ public class RegisterController {
 
             ResponseDTO response = new ResponseDTO(sub.getEmailFigli(), HttpStatus.OK.value(), new ArrayList<>());
             return response;
-        } catch (Exception e) {
-            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
-            List<String> errori = new ArrayList<>();
-            errori.add(e.getMessage());
-            errori.add(e.getLocalizedMessage());
-            ResponseDTO errorResponse = new ResponseDTO(new UserDTO(), HttpStatus.INTERNAL_SERVER_ERROR, errori);
-            return errorResponse;
-        }
+        
     }
 
     @PostMapping("/dati")
-    public ResponseEntity<ResponseDTO> saveUserByPoints(@RequestBody PointsDTO pointsDTO) {
-        try {
+    public ResponseDTO saveUserByPoints(@RequestBody PointsDTO pointsDTO) throws Exception {
+     
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             pointsDTO.setEmailFamily(pointsDTO.getEmail());
             Boolean itemId = registerService.saveUser(pointsDTO);
@@ -59,15 +50,8 @@ public class RegisterController {
             ResponseDTO response = new ResponseDTO(new UserDTO(null, itemId), HttpStatus.OK.value(), new ArrayList<>());
 
             // Ritorna una ResponseEntity con lo status HTTP
-            return ResponseEntity.ok(response);
+            return response;
 
-        } catch (Exception e) {
-            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
-            List<String> errori = new ArrayList<>();
-            errori.add(e.getMessage());
-            errori.add(e.getLocalizedMessage());
-            ResponseDTO errorResponse = new ResponseDTO(new UserDTO(), HttpStatus.INTERNAL_SERVER_ERROR, errori);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(errorResponse);
-        }
+        
     }   
 }

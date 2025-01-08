@@ -71,7 +71,7 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		return existingUser;
 	}
 
-	public Points savePointsByTypeStandard(Points pointsSave, Long usePoints, Boolean operation) throws Exception {
+	public Points savePoints(Points pointsSave, Long usePoints, Boolean operation) throws Exception {
 		// Verifica se esiste già un documento con l'identificativo
 		String emailCriypt = encryptDecryptConverter.convert(pointsSave.getEmailFamily());
 
