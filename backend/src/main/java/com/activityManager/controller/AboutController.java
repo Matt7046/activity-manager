@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.activityManager.dto.ActivityDTO;
 import com.activityManager.dto.ResponseDTO;
+import com.activityManager.exception.NotFoundException;
 import com.activityManager.service.ActivityService;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,19 +30,14 @@ public class AboutController {
         List<String> errori = new ArrayList<>();
         ResponseDTO responseDTO;
 
-        try {
-            item = ActivityService.deleteByIdentificativo(identificativo);
-            if (item.equals(0L)) {
-                throw new RuntimeException("Documento non trovato con identificativo: " + identificativo);
-            }
-            // Activity item = new Activity();
-
-        } catch (Exception e) {
-            errori.add(e.getMessage());
+        item = ActivityService.deleteByIdentificativo(identificativo);
+        if (item.equals(0L)) {
+            throw new NotFoundException("Documento non trovato con identificativo: " + identificativo);
         }
+
         ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
         subDTO.set_id(identificativo);
-        if (item !=null && !item.equals(0L)) {
+        if (item != null && !item.equals(0L)) {
             // Mappatura se l'oggetto è stato trovato
             responseDTO = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
         } else {
@@ -53,25 +49,12 @@ public class AboutController {
     }
 
     @PostMapping("/dati")
-    public ResponseEntity<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {
-        try {
+    public ResponseEntity<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {        
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             String itemId = ActivityService.saveActivity(activityDTO);
-
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK.value(), new ArrayList<>());
-
             // Ritorna una ResponseEntity con lo status HTTP
-            return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
-            List<String> errori = new ArrayList<>();
-            errori.add(e.getMessage());
-            errori.add(e.getLocalizedMessage());
-            ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR, errori);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(errorResponse);
-        }
+            return ResponseEntity.ok(response);       
     }
-
 }
