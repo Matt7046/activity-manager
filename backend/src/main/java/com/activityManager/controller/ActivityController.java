@@ -33,41 +33,31 @@ public class ActivityController {
 
     @Autowired
     private PointsService pointsService;
-   
+
     @PostMapping("")
     public ResponseDTO getActivities(@RequestBody PointsDTO pointsDTO) {
-
-        // String[] texts = { "Ciao, mondo!", "Benvenuto in Java", "Programmazione è
-        // divertente" };
-        String email = pointsDTO.getEmail();        
+        String email = pointsDTO.getEmail();
         List<Activity> sub = activityService.findAllByEmail(email);
-        // mapping
         List<ActivityDTO> subDTO = sub.stream()
                 .map(ActivityMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
-
         ResponseDTO response = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
         return response;
     }
 
     @GetMapping("/{identificativo}")
     public ResponseDTO findByIdentificativo(@PathVariable String identificativo) {
-        Activity item = null; // Inizializza l'oggetto come null
+        Activity item = null;
         ResponseDTO responseDTO = null;
-
-      
-            // Tentativo di trovare il documento
-            item = activityService.findByIdentificativo(identificativo);
-            if (item == null) {
-                throw new NotFoundException("Documento non trovato con identificativo: " + identificativo);
-            }
-     
+        item = activityService.findByIdentificativo(identificativo);
+        if (item == null) {
+            throw new NotFoundException("Documento non trovato con identificativo: " + identificativo);
+        }
 
         if (item != null) {
-            // Mappatura se l'oggetto è stato trovato
             ActivityDTO subDTO = ActivityMapper.INSTANCE.toDTO(item);
             responseDTO = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
-        } 
+        }
 
         return responseDTO;
     }
@@ -75,42 +65,30 @@ public class ActivityController {
     @PostMapping("/log")
     public ResponseDTO logActivityByEmail(@RequestBody PointsDTO pointsDTO) {
         ResponseDTO responseDTO = null;
-        List<String> errori = new ArrayList<>();
-     
-            // Salva i dati e ottieni l'ID o l'oggetto salvato
-            Sort sort = Sort.by(Sort.Order.desc("date"));
-            List<LogActivity> sub = activityService.logAttivitaByEmail(pointsDTO, sort);
-            List<LogActivityDTO> logAttivitaUnica = sub.stream()
-                    .map(LogActivityMapper.INSTANCE::toDTO) // Converte ogni elemento in ActivityDTO
-                    // .map(ActivityDTO::getLogAttivita) // Estrae il campo logAttivita
-                    .collect(Collectors.toList());
-            responseDTO = new ResponseDTO(logAttivitaUnica, HttpStatus.OK.value(), new ArrayList<>());
+        Sort sort = Sort.by(Sort.Order.desc("date"));
+        List<LogActivity> sub = activityService.logAttivitaByEmail(pointsDTO, sort);
+        List<LogActivityDTO> logAttivitaUnica = sub.stream()
+                .map(LogActivityMapper.INSTANCE::toDTO)
 
-            // Crea una risposta
-        
-        if (errori.size() > 0) {
-            // Risposta in caso di errore o elemento non trovato
-            ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.INTERNAL_SERVER_ERROR.value(), errori);
-        }
+                .collect(Collectors.toList());
+        responseDTO = new ResponseDTO(logAttivitaUnica, HttpStatus.OK.value(), new ArrayList<>());
         return responseDTO;
     }
 
     @PostMapping("/dati")
     public ResponseDTO savePointsAndLog(@RequestBody LogActivityDTO logActivityDTO) throws Exception {
         ResponseDTO responseDTO = null;
-      
-            PointsDTO pointsDTO = new PointsDTO();
-            pointsDTO.setPoint(logActivityDTO.getPoints());
-            pointsDTO.setEmail(logActivityDTO.getEmail());
-            pointsDTO.setEmailFamily(logActivityDTO.getEmailFamily());
-            pointsDTO.setUsePoints(logActivityDTO.getUsePoints());
-            pointsService.savePoints(pointsDTO, false);
-            LogActivity sub = activityService.saveLogActivity(logActivityDTO);
-            LogActivityDTO dto = LogActivityMapper.INSTANCE.toDTO(sub);
-            // Crea una risposta
-            responseDTO = new ResponseDTO(dto, HttpStatus.OK.value(), new ArrayList<>());        
-      
+
+        PointsDTO pointsDTO = new PointsDTO();
+        pointsDTO.setPoint(logActivityDTO.getPoints());
+        pointsDTO.setEmail(logActivityDTO.getEmail());
+        pointsDTO.setEmailFamily(logActivityDTO.getEmailFamily());
+        pointsDTO.setUsePoints(logActivityDTO.getUsePoints());
+        pointsService.savePoints(pointsDTO, false);
+        LogActivity sub = activityService.saveLogActivity(logActivityDTO);
+        LogActivityDTO dto = LogActivityMapper.INSTANCE.toDTO(sub);
+        responseDTO = new ResponseDTO(dto, HttpStatus.OK.value(), new ArrayList<>());
+
         return responseDTO;
     }
 

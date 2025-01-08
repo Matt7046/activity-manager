@@ -36,12 +36,8 @@ public class PointsController {
 
     @PostMapping("")
     public ResponseDTO findByEmail(@RequestBody PointsDTO pointsDTO) throws Exception {
-        List<String> errori = new ArrayList<>();
-        Points item = null; // Inizializza l'oggetto come null
-        ResponseDTO responseDTO = null;
-
-     
-            // Tentativo di trovare il documento
+        Points item = null; 
+        ResponseDTO responseDTO = null;     
             item = pointsService.getPointsByEmail(pointsDTO.getEmail());
             if (item == null) {
                 throw new NotFoundException("Documento non trovato con identificativo: " + pointsDTO.getEmail());
@@ -50,7 +46,6 @@ public class PointsController {
    
             if (item != null) {
                 String email = pointsDTO.getEmail();
-                // Mappatura se l'oggetto è stato trovato
                 PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(item);
                 List<PointsUser> filteredList = subDTO.getPoints().stream()
                 .filter(point -> email.equals(point.getEmail()))
@@ -65,12 +60,8 @@ public class PointsController {
     @PostMapping("/dati")
     public ResponseEntity<ResponseDTO> getUserType(@RequestBody PointsDTO pointsDTO) throws Exception {
         
-            // Salva i dati e ottieni l'ID o l'oggetto salvato
             Long itemId = registerService.getTypeUser(pointsDTO);
-            // Crea una risposta
             ResponseDTO response = new ResponseDTO(new UserDTO(itemId, null), HttpStatus.OK.value(), new ArrayList<>());
-
-            // Ritorna una ResponseEntity con lo status HTTP
             return ResponseEntity.ok(response);
         
     }
@@ -78,7 +69,6 @@ public class PointsController {
     @PostMapping("/dati/standard")
     public ResponseEntity<ResponseDTO> savePoints(@RequestBody PointsDTO pointsDTO) throws Exception {
         
-            // Salva i dati e ottieni l'ID o l'oggetto salvato
             String email = pointsDTO.getEmailFamily();
             Points itemId = pointsService.savePoints(pointsDTO, true);
             PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(itemId);
@@ -86,10 +76,7 @@ public class PointsController {
             .filter(point -> email.equals(point.getEmail()))
             .collect(Collectors.toList());
             PointsRDTO record = new PointsRDTO(filteredList.get(0).getPoints(),"I Points a disposizione sono: ".concat(filteredList.get(0).getPoints().toString()));
-            // Crea una risposta
             ResponseDTO response = new ResponseDTO(record, HttpStatus.OK.value(), new ArrayList<>());
-
-            // Ritorna una ResponseEntity con lo status HTTP
             return ResponseEntity.ok(response);
 
         
