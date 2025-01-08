@@ -8,6 +8,7 @@ import com.activityManager.dto.PointsDTO;
 import com.activityManager.dto.PointsRDTO;
 import com.activityManager.dto.ResponseDTO;
 import com.activityManager.dto.UserDTO;
+import com.activityManager.exception.NotFoundException;
 import com.activityManager.mapper.PointsMapper;
 import com.activityManager.service.PointsService;
 import com.activityManager.service.RegisterService;
@@ -34,23 +35,19 @@ public class PointsController {
     private RegisterService registerService;
 
     @PostMapping("")
-    public ResponseDTO findByEmail(@RequestBody PointsDTO pointsDTO) {
+    public ResponseDTO findByEmail(@RequestBody PointsDTO pointsDTO) throws Exception {
         List<String> errori = new ArrayList<>();
         Points item = null; // Inizializza l'oggetto come null
         ResponseDTO responseDTO = null;
 
-        try {
+     
             // Tentativo di trovare il documento
             item = pointsService.getPointsByEmail(pointsDTO.getEmail());
             if (item == null) {
-                throw new RuntimeException("Documento non trovato con identificativo: " + pointsDTO.getEmail());
-            }
-        } catch (Exception e) {
-            // Gestione dell'errore: log e aggiunta dei dettagli
-            errori.add("Errore: " + e.getMessage());
-        }
+                throw new NotFoundException("Documento non trovato con identificativo: " + pointsDTO.getEmail());
+            }     
 
-        try {
+   
             if (item != null) {
                 String email = pointsDTO.getEmail();
                 // Mappatura se l'oggetto è stato trovato
@@ -61,42 +58,26 @@ public class PointsController {
                 PointsRDTO record = new PointsRDTO(filteredList.get(0).getPoints(),"I Points a disposizione sono: ".concat(filteredList.get(0).getPoints().toString()));
 
                 responseDTO = new ResponseDTO(record, HttpStatus.OK.value(), new ArrayList<>());
-            } else {
-                // Risposta in caso di errore o elemento non trovato
-                ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
-                responseDTO = new ResponseDTO(subDTO, HttpStatus.NOT_FOUND.value(), errori); // 404 con dettagli errore
             }
-        } catch (Exception e) {
-        }
-
         return responseDTO;
     }
 
     @PostMapping("/dati")
-    public ResponseEntity<ResponseDTO> getUserType(@RequestBody PointsDTO pointsDTO) {
-        try {
+    public ResponseEntity<ResponseDTO> getUserType(@RequestBody PointsDTO pointsDTO) throws Exception {
+        
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             Long itemId = registerService.getTypeUser(pointsDTO);
-
             // Crea una risposta
             ResponseDTO response = new ResponseDTO(new UserDTO(itemId, null), HttpStatus.OK.value(), new ArrayList<>());
 
             // Ritorna una ResponseEntity con lo status HTTP
             return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
-            List<String> errori = new ArrayList<>();
-            errori.add(e.getMessage());
-            errori.add(e.getLocalizedMessage());
-            ResponseDTO errorResponse = new ResponseDTO(new UserDTO(), HttpStatus.INTERNAL_SERVER_ERROR, errori);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(errorResponse);
-        }
+        
     }
 
     @PostMapping("/dati/standard")
-    public ResponseEntity<ResponseDTO> savePointsByTypeStandard(@RequestBody PointsDTO pointsDTO) {
-        try {
+    public ResponseEntity<ResponseDTO> savePoints(@RequestBody PointsDTO pointsDTO) throws Exception {
+        
             // Salva i dati e ottieni l'ID o l'oggetto salvato
             String email = pointsDTO.getEmailFamily();
             Points itemId = pointsService.savePoints(pointsDTO, true);
@@ -111,13 +92,6 @@ public class PointsController {
             // Ritorna una ResponseEntity con lo status HTTP
             return ResponseEntity.ok(response);
 
-        } catch (Exception e) {
-            // Gestione degli errori: puoi personalizzarlo in base al tuo scenario
-            List<String> errori = new ArrayList<>();
-            errori.add(e.getMessage());
-            errori.add(e.getLocalizedMessage());
-            ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.INTERNAL_SERVER_ERROR, errori);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(errorResponse);
-        }
+        
     }
 }
