@@ -35,7 +35,7 @@ public class PointsService {
 
     public Points savePoints(PointsDTO pointsDTO, Boolean operation) throws Exception {
         Points points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
-        return pointsRepository.savePointsByTypeStandard(points, pointsDTO.getUsePoints(), operation);
+        return pointsRepository.savePoints(points, pointsDTO.getUsePoints(), operation);
     }
 
     public Points save(PointsDTO pointsDTO) throws Exception {
