@@ -7,6 +7,7 @@ import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react
 import './App.css';
 import Alert from './components/ms-alert/Alert';
 import { MenuLaterale } from './components/ms-drawer/Drawer';
+import { baseStore } from './general/BaseStore';
 import { getToken } from './general/service/AuthService';
 import { TypeUser, UserI } from './general/Utils';
 import About from './page/page-about/About';
@@ -18,7 +19,6 @@ import Points from './page/page-points/Points';
 import { getUserType as getTypeUser } from './page/page-points/service/PointsService';
 import Register from './page/page-register/Register';
 import { getEmailChild } from './page/page-register/service/RegisterService';
-import { baseStore } from './general/BaseStore';
 
 
 // Creazione del contesto per User
@@ -187,7 +187,7 @@ const GoogleAuthComponent = () => {
       const accessToken = codeResponse?.access_token;
       // Puoi usare l'access token per fare richieste all'API di Google
       baseStore.clearToken();
-      getToken({ email: 'user', password: 'user' }).then(tokenData => {
+      getToken({ email: 'user', password: 'qwertyuiop' }).then(tokenData => {
         fetchUserData(accessToken,tokenData);
       })
     },
@@ -293,7 +293,7 @@ const GoogleAuthComponent = () => {
   // Simulazione del login con Google
   const simulateLogin = (type: number) => {
     baseStore.clearToken();
-    getToken({ email: 'user', password: 'user' }).then(tokenData => {
+    getToken({ email: 'user', password: 'qwertyuiop' }).then(tokenData => {
       setSimulated(type);
       console.log("tokenData", tokenData);
       const fakeResponse = {
