@@ -44,7 +44,7 @@ const Operative: React.FC<{ setTitle: any }> = ({ setTitle }) => {
         message={message}
         user={user}
         handleClose={handleClose}
-        padding={paddingType}
+        navigate={useNavigate()}   
       >
         <OperativeContent
           user={user}

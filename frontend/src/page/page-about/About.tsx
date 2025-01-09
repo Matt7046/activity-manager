@@ -50,7 +50,7 @@ const About: React.FC<{ setTitle:any }> = ({setTitle}) => {
         user={user}
         message={message}
         handleClose={handleClose}
-        padding={paddingType}
+        navigate={useNavigate()}
       >
         <AboutContent
           user={user}
