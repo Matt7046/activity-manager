@@ -3,7 +3,6 @@ package com.activityManager.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.activityManager.data.Points;
-import com.activityManager.dto.ActivityDTO;
 import com.activityManager.dto.PointsDTO;
 import com.activityManager.dto.PointsRDTO;
 import com.activityManager.dto.ResponseDTO;

@@ -11,18 +11,14 @@ import { getToken } from './general/service/AuthService';
 import { TypeUser, UserI } from './general/Utils';
 import About from './page/page-about/About';
 import Activity from './page/page-activity/Activity';
-import activityStore from './page/page-activity/store/ActivityStore';
 import Family from './page/page-family/Family';
-import familyStore from './page/page-family/store/FamilyStore';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
-import operativeStore from './page/page-operative/store/OperativeStore';
 import Points from './page/page-points/Points';
 import { getUserType as getTypeUser } from './page/page-points/service/PointsService';
-import pointsStore from './page/page-points/store/PointsStore';
 import Register from './page/page-register/Register';
 import { getEmailChild } from './page/page-register/service/RegisterService';
-import registerStore from './page/page-register/store/RegisterStore';
+import { baseStore } from './general/BaseStore';
 
 
 // Creazione del contesto per User
@@ -98,14 +94,12 @@ const GoogleAuthComponent = () => {
         name: "Simulated User",
         emailFamily: "user@simulated.com",
         email: "user@simulated.com",
-        token: "user@simulated.com",
         type: TypeUser.STANDARD
       });
       setUserDataChild({
         name: "Simulated child User",
         emailFamily: "child@simulated.com",
         email: "user@simulated.com",
-        token: "child@simulated.com",
         type: TypeUser.FAMILY
       });
       setUser(null);
@@ -132,7 +126,6 @@ const GoogleAuthComponent = () => {
     name: "Simulated User",
     emailFamily: "user@simulated.com",
     email: "user@simulated.com",
-    token: "user@simulated.com",
     type: -1
   }); // Stato per userData
 
@@ -140,7 +133,6 @@ const GoogleAuthComponent = () => {
     name: "Simulated child User",
     emailFamily: "child@simulated.com",
     email: "user@simulated.com",
-    token: "child@simulated.com",
     type: -1
   }); // Stato per userData
 
@@ -205,14 +197,10 @@ const GoogleAuthComponent = () => {
     const userType = type === 0 ? { ...userDataChild } : { ...userData }
     const user = {
       ...userType,
-      token: fakeResponse.credential,
+   //   token: fakeResponse.credential,
       type: type
     };
-    activityStore.setToken(fakeResponse.credential);
-    pointsStore.setToken(fakeResponse.credential);
-    familyStore.setToken(fakeResponse.credential);
-    registerStore.setToken(fakeResponse.credential);
-    operativeStore.setToken(fakeResponse.credential);
+    baseStore.setToken(fakeResponse.credential);
     setUserData(user);
     getEmailChild(user).then((x: any) => {
       const emailChild = x?.testo ?? [];
@@ -300,7 +288,7 @@ const GoogleAuthComponent = () => {
 
   // Simulazione del login con Google
   const simulateLogin = (type: number) => {
-    activityStore.clearToken();
+    baseStore.clearToken();
     getToken({ email: 'user' }).then(tokenData => {
       setSimulated(type);
       console.log("tokenData", tokenData);
