@@ -98,14 +98,12 @@ const GoogleAuthComponent = () => {
         name: "Simulated User",
         emailFamily: "user@simulated.com",
         email: "user@simulated.com",
-        token: "user@simulated.com",
         type: TypeUser.STANDARD
       });
       setUserDataChild({
         name: "Simulated child User",
         emailFamily: "child@simulated.com",
         email: "user@simulated.com",
-        token: "child@simulated.com",
         type: TypeUser.FAMILY
       });
       setUser(null);
@@ -132,7 +130,6 @@ const GoogleAuthComponent = () => {
     name: "Simulated User",
     emailFamily: "user@simulated.com",
     email: "user@simulated.com",
-    token: "user@simulated.com",
     type: -1
   }); // Stato per userData
 
@@ -140,7 +137,6 @@ const GoogleAuthComponent = () => {
     name: "Simulated child User",
     emailFamily: "child@simulated.com",
     email: "user@simulated.com",
-    token: "child@simulated.com",
     type: -1
   }); // Stato per userData
 
@@ -205,7 +201,7 @@ const GoogleAuthComponent = () => {
     const userType = type === 0 ? { ...userDataChild } : { ...userData }
     const user = {
       ...userType,
-      token: fakeResponse.credential,
+   //   token: fakeResponse.credential,
       type: type
     };
     activityStore.setToken(fakeResponse.credential);
