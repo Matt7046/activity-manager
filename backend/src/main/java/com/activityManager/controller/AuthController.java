@@ -22,7 +22,7 @@ public class AuthController {
     @PostMapping("/token")
     public ResponseEntity<?> geToken(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getEmail())
+            new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
         );
         
         String token = JwtUtil.generateToken(authentication.getName()); // Genera il token JWT
