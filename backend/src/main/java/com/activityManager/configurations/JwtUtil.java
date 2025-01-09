@@ -1,31 +1,34 @@
-package com.activityManager;
+package com.activityManager.configurations;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.util.Date;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 
+@Component
 public class JwtUtil {
 
+    @Autowired
+    PropertiesKey propertiesKey;
+
     // Crea una chiave segreta in modo sicuro
-    protected static final SecretKey SECRET_KEY = new SecretKeySpec(
-        "this_is_a_very_long_secret_key_256bit".getBytes(), "HMACSHA256");
+  
     // Metodo per generare il token
-    public static String generateToken(String username) {
+    public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 ora
-                .signWith(SECRET_KEY) // Firma con la chiave segreta
+                .signWith(propertiesKey.getSecretKey()) // Firma con la chiave segreta
                 .compact();
     }
 
     // Metodo per validare il token
-    public static Claims validateToken(String token) {
+    public  Claims validateToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY) // Usa la stessa chiave per la validazione
+                .setSigningKey((propertiesKey.getSecretKey())) // Usa la stessa chiave per la validazione
                 .build()
                 .parseClaimsJws(token)
                 .getBody(); // Estrai il corpo del token
