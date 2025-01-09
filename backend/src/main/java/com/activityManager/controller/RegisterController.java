@@ -27,13 +27,10 @@ public class RegisterController {
     private RegisterService registerService;
 
     @PostMapping("child")
-    public ResponseDTO getEmailChild(@RequestBody PointsDTO pointsDTO) throws Exception {
-        
-            // String[] texts = { "Ciao, mondo!", "Benvenuto in Java", "Programmazione è
-            // divertente" };
+    public ResponseDTO getEmailChild(@RequestBody PointsDTO pointsDTO) throws Exception {        
+            
             String email = pointsDTO.getEmail();
-            Points sub = pointsService.getPointsByEmail(email); // mapping
-
+            Points sub = pointsService.getPointsByEmail(email);
             ResponseDTO response = new ResponseDTO(sub.getEmailFigli(), HttpStatus.OK.value(), new ArrayList<>());
             return response;
         
@@ -42,14 +39,9 @@ public class RegisterController {
     @PostMapping("/dati")
     public ResponseDTO saveUserByPoints(@RequestBody PointsDTO pointsDTO) throws Exception {
      
-            // Salva i dati e ottieni l'ID o l'oggetto salvato
             pointsDTO.setEmailFamily(pointsDTO.getEmail());
             Boolean itemId = registerService.saveUser(pointsDTO);
-
-            // Crea una risposta
             ResponseDTO response = new ResponseDTO(new UserDTO(null, itemId), HttpStatus.OK.value(), new ArrayList<>());
-
-            // Ritorna una ResponseEntity con lo status HTTP
             return response;
 
         

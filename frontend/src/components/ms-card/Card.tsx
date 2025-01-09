@@ -2,7 +2,7 @@ import { CardActions, CardContent, CardMedia, List, ListItem, Card as MuiCard, T
 import Grid from '@mui/material/Grid2';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Pulsante } from '../msbutton/Button';
+import { Pulsante } from '../ms-button/Button';
 
 
 export interface CardProps {
