@@ -6,8 +6,8 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { GoogleAuthComponentProps } from '.';
 import './App.css';
-import Alert from './components/msallert/Alert';
-import { MenuLaterale } from './components/msdrawer/Drawer';
+import Alert from './components/ms-alert/Alert';
+import { MenuLaterale } from './components/ms-drawer/Drawer';
 import { TypeUser, UserI } from './general/Utils';
 import About from './page/page-about/About';
 import Activity from './page/page-activity/Activity';
