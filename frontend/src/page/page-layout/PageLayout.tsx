@@ -8,7 +8,6 @@ import Alert from '../../components/ms-alert/Alert';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import { UserI } from '../../general/Utils';
 
-
 interface PageLayoutProps {
   children: React.ReactNode; // Contenuto specifico della maschera
   menuLaterale: MenuLaterale[][];
