@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { showMessage } from "../../App";
-import Button, { Pulsante } from "../../components/msbutton/Button";
+import Button, { Pulsante } from "../../components/ms-button/Button";
 import { FormErrorValues, HttpStatus, ResponseI, UserI, verifyForm } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivities, savePointsAndLog } from "../page-activity/service/ActivityService";

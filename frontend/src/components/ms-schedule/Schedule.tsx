@@ -1,9 +1,9 @@
 import Grid from '@mui/material/Grid2';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import Button, { Pulsante } from '../msbutton/Button';
-import Label from '../mslabel/label';
-import NameDisplay from '../msnamedisplay/NameDisplay';
+import Button, { Pulsante } from '../ms-button/Button';
+import Label from '../ms-label/Label';
+import NameDisplay from '../ms-namedisplay/NameDisplay';
 
 
 export interface MsSchedule {

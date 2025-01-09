@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { showMessage } from "../../App";
 import lizard from "../../assets/images/lizard.jpg"; // Percorso del file locale
 import points from "../../assets/images/points.jpg"; // Percorso del file locale
-import Button, { Pulsante } from "../../components/msbutton/Button";
-import CardGrid, { CardProps } from "../../components/mscard/card";
+import Button, { Pulsante } from "../../components/ms-button/Button";
+import CardGrid, { CardProps } from "../../components/ms-card/Card";
 import { HttpStatus, ResponseI, UserI } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { logActivityByEmail } from "../page-activity/service/ActivityService";
