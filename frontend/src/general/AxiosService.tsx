@@ -3,23 +3,28 @@ import { TypeMessage } from '../page/page-layout/PageLayout';
 import { Alert, HttpStatus } from './Utils';
 
 const apiUrl = process.env.REACT_APP_API_URL_LOCALE ; // Ottieni l'URL dal file .env
-
 // Configura l'istanza di Axios
-const apiClient = axios.create({
-  baseURL: apiUrl, // URL base dell'API
-  timeout: 20000,                     // Timeout in millisecondi
-  headers: {
-    'Content-Type': 'application/json', // Header predefinito
-    'Authorization': 'Bearer your-token-here' // Token opzionale
-  }
-});
+const apiClient = ()=>{
+  const token = localStorage.getItem('token');
+  const apiClient = axios.create({
+    baseURL: apiUrl, // URL base dell'API
+    timeout: 20000,   // Timeout in millisecondi
+    headers: {
+      'Content-Type': 'application/json', // Header predefinito
+      'Authorization': token ? `Bearer ${token}` : '', // Imposta il token se presente
+    }
+  });
+  return apiClient;
+}
+
+
 
 // Funzione per ottenere dati dall'API
 export const getData = async (endpoint: string, setLoading?: (loading: boolean) => void) => {
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
-    const response = await apiClient.get(endpoint);
+    const response = await apiClient().get(endpoint);
     return response.data; // Restituisce i dati della risposta
   } catch (error) {
     console.error('Errore durante la richiesta:', error);
@@ -32,11 +37,13 @@ export const getData = async (endpoint: string, setLoading?: (loading: boolean) 
 export const postData = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
   funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
+
+    
   showSuccess = showSuccess ?? false;
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
-    const response = await apiClient.post(endpoint, data);
+    const response = await apiClient().post(endpoint, data);
     const message: TypeMessage = {
       typeMessage: 'success'
     }
@@ -59,7 +66,7 @@ export const putData = async (endpoint: string, data: any, setLoading?: (loading
   setLoading(true);  // Mostra lo spinner prima della richiesta
   showSuccess = showSuccess ?? false;
   try {
-    const response = await apiClient.put(endpoint, data);
+    const response = await apiClient().put(endpoint, data);
     const message: TypeMessage = {
       typeMessage: 'success'
     }
@@ -83,7 +90,7 @@ export const deleteData = async (endpoint: string, setLoading?: (loading: boolea
     typeMessage: 'success'
   }
   try {
-    const response = await apiClient.delete(endpoint);
+    const response = await apiClient().delete(endpoint);
 
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
@@ -131,6 +138,7 @@ export const eseguiAlert = (funzioneMessage: (message?: TypeMessage) => void, me
   }
 }
 
+export const PATH_AUTH = 'auth'
 export const PATH_REGISTER = 'register';
 export const PATH_ACTIVITY = 'activity';
 export const PATH_ABOUT = 'about'
