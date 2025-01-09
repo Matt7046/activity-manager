@@ -1,8 +1,8 @@
 import { AlertColor, Box, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React from 'react';
-import Alert from '../../components/msallert/Alert';
-import Drawer, { MenuLaterale } from '../../components/msdrawer/Drawer';
+import Alert from '../../components/ms-alert/Alert';
+import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import { UserI } from '../../general/Utils';
 
 
