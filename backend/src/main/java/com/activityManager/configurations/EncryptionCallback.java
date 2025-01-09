@@ -1,4 +1,4 @@
-package com.activityManager;
+package com.activityManager.configurations;
 
 import java.util.stream.Collectors;
 
