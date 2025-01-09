@@ -3,7 +3,8 @@ package com.activityManager.repository.register;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import com.activityManager.EncryptDecryptConverter;
+
+import com.activityManager.configurations.EncryptDecryptConverter;
 import com.activityManager.data.Points;
 import com.activityManager.repository.points.PointsRepository;
 

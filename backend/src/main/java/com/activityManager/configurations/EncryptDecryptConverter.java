@@ -1,15 +1,18 @@
-package com.activityManager;
+package com.activityManager.configurations;
 
 import java.util.Base64;
 import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.SecretKey;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EncryptDecryptConverter implements Converter<String, String> {
 
-    private static final String SECRET_KEY = "1234567890123456"; // 16 byte per AES-128
+    
+    @Autowired
+    PropertiesKey propertiesKey;
     private static final String ALGORITHM = "AES";
 
     @Override
@@ -35,7 +38,7 @@ public class EncryptDecryptConverter implements Converter<String, String> {
 
     public  String encrypts(String data) throws Exception {
         Cipher cipher = Cipher.getInstance(ALGORITHM);
-        SecretKeySpec key = new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);
+        SecretKey key = propertiesKey.getSecretCryptKey();
         cipher.init(Cipher.ENCRYPT_MODE, key);
         byte[] encryptedData = cipher.doFinal(data.getBytes());
         return Base64.getEncoder().encodeToString(encryptedData);
@@ -44,7 +47,7 @@ public class EncryptDecryptConverter implements Converter<String, String> {
     // Decripta una stringa
     public  String decrypts(String encryptedData) throws Exception {
         Cipher cipher = Cipher.getInstance(ALGORITHM);
-        SecretKeySpec key = new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);
+        SecretKey key = propertiesKey.getSecretCryptKey();
         cipher.init(Cipher.DECRYPT_MODE, key);
         byte[] decodedData = Base64.getDecoder().decode(encryptedData);
         byte[] decryptedData = cipher.doFinal(decodedData);

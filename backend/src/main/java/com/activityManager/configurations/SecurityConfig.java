@@ -1,8 +1,8 @@
-package com.activityManager;
+package com.activityManager.configurations;
 
 import java.util.List;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,6 +28,8 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 @EnableWebFluxSecurity
 public class SecurityConfig implements WebFluxConfigurer {
 
+    @Autowired
+    PropertiesKey propertiesKey;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -67,7 +69,7 @@ public class SecurityConfig implements WebFluxConfigurer {
     }
     @Bean
     public ReactiveJwtDecoder jwtDecoder() {
-        return NimbusReactiveJwtDecoder.withSecretKey(JwtUtil.SECRET_KEY).build(); 
+        return NimbusReactiveJwtDecoder.withSecretKey(propertiesKey.getSecretKey()).build(); 
     }
 
  

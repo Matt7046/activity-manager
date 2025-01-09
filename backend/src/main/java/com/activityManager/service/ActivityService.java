@@ -3,7 +3,8 @@ package com.activityManager.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import com.activityManager.EncryptDecryptConverter;
+
+import com.activityManager.configurations.EncryptDecryptConverter;
 import com.activityManager.data.Activity;
 import com.activityManager.data.LogActivity;
 import com.activityManager.dto.ActivityDTO;
