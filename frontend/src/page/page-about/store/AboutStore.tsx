@@ -14,8 +14,8 @@ export class AboutStore extends BaseStore {
     return this;
   }
 }
-const activityStore = new AboutStore();
-export default activityStore;
+const aboutStore = new AboutStore();
+export default aboutStore;
 
 
 
