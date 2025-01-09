@@ -186,7 +186,10 @@ const GoogleAuthComponent = () => {
 
       const accessToken = codeResponse?.access_token;
       // Puoi usare l'access token per fare richieste all'API di Google
-      fetchUserData(accessToken);
+      baseStore.clearToken();
+      getToken({ email: 'user', password: 'user' }).then(tokenData => {
+        fetchUserData(accessToken,tokenData);
+      })
     },
     onError: (error) => {
       console.error('Login Failed:', error);
@@ -197,7 +200,7 @@ const GoogleAuthComponent = () => {
     const userType = type === 0 ? { ...userDataChild } : { ...userData }
     const user = {
       ...userType,
-   //   token: fakeResponse.credential,
+      //   token: fakeResponse.credential,
       type: type
     };
     baseStore.setToken(fakeResponse.credential);
@@ -252,8 +255,9 @@ const GoogleAuthComponent = () => {
   }
 
   // Funzione per ottenere i dati utente
-  const fetchUserData = async (accessToken: string) => {
+  const fetchUserData = async (accessToken: string, tokenData: any) => {
     try {
+      baseStore.setToken(tokenData.token);
       // Verifica che il token sia valido
       const tokenInfoResponse = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`);
       const tokenInfo = await tokenInfoResponse.json();
@@ -289,7 +293,7 @@ const GoogleAuthComponent = () => {
   // Simulazione del login con Google
   const simulateLogin = (type: number) => {
     baseStore.clearToken();
-    getToken({ email: 'user' }).then(tokenData => {
+    getToken({ email: 'user', password: 'user' }).then(tokenData => {
       setSimulated(type);
       console.log("tokenData", tokenData);
       const fakeResponse = {
