@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage, useUser } from "../../App";
-import Button, { Pulsante } from "../../components/msbutton/Button";
+import Button, { Pulsante } from "../../components/ms-button/Button";
 import { UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./Register.css";

@@ -1,7 +1,6 @@
-import { observer } from 'mobx-react';
 import BaseStore from '../../../general/BaseStore';
 
-export class AboutStore extends BaseStore {
+export class PointsStore extends BaseStore {
   
 
 
@@ -14,8 +13,8 @@ export class AboutStore extends BaseStore {
     return this;
   }
 }
-const activityStore = new AboutStore();
-export default activityStore;
+const pointsStore = new PointsStore();
+export default pointsStore;
 
 
 
