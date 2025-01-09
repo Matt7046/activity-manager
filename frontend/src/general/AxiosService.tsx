@@ -2,7 +2,7 @@ import axios from 'axios';
 import { TypeMessage } from '../page/page-layout/PageLayout';
 import { Alert, HttpStatus } from './Utils';
 
-const apiUrl = process.env.REACT_APP_API_URL_LOCALE ; // Ottieni l'URL dal file .env
+const apiUrl = process.env.REACT_APP_API_URL ; // Ottieni l'URL dal file .env
 
 // Configura l'istanza di Axios
 const apiClient = ()=>{
