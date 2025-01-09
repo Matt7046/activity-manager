@@ -1,44 +1,33 @@
-import { postData } from "../../../general/AxiosService";
+import { PATH_POINTS, postData } from "../../../general/AxiosService";
 import { UserI } from "../../../general/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
 
 
 
-export const findByEmail = async (user:UserI, funzioneMessage?:(message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
+export const findByEmail = async (user: UserI, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) => {
   try {
-    const path = `points`;
-    const data = await postData(path,user, setLoading, funzioneMessage); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
-    return data;
-  } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);  
-  }
-};
-
-export const getUserType = async (user: any, funzioneMessage?:(message?: TypeMessage)=>void , setLoading?:(loading: boolean)=>void) => {
-  try {
-    const path = `points/dati`;
+    const path = PATH_POINTS;
     const data = await postData(path, user, setLoading, funzioneMessage); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);  
+    console.error('Errore durante il recupero dei dati:', error);
   }
 };
 
-
-export const savePointsByTypeStandard = async (user: any, funzioneMessage?:(message?: TypeMessage)=>void , setLoading?:(loading: boolean)=>void,
-showSuccess?: boolean)=> {
+export const getUserType = async (user: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) => {
   try {
-    showSuccess = true;
-    const path = `points/dati/standard`;
-    const data = await postData(path, user, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
+
+    const path = PATH_POINTS + `/dati`;
+    const data = await postData(path, user, setLoading, funzioneMessage); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);  
+    console.error('Errore durante il recupero dei dati:', error);
   }
 };
+
+
 
 
 

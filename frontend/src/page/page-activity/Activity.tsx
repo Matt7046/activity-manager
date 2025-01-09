@@ -23,11 +23,11 @@ export interface ActivityLogI {
 
 }
 
-const Activity: React.FC<{setTitle:any }> = ({setTitle}) => {
+const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
-  
+
   setTitle("Section Activity");
-  const { user, setUser } = useUser(); 
+  const { user, setUser } = useUser();
   const [utente, setUtente] = useState<UserI>(user); // Stato iniziale vuoto
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user)
@@ -35,7 +35,7 @@ const Activity: React.FC<{setTitle:any }> = ({setTitle}) => {
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const [paddingType, setPaddingType] =  useState<number>(isVertical ? 0 : 5);
+  const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
 
 
   // default class Activity extends React.Component {
@@ -65,8 +65,8 @@ const Activity: React.FC<{setTitle:any }> = ({setTitle}) => {
       // Effettua la chiamata GET quando il componente è montato 
       // axios.
       //  .get('https://api.example.com/data') // URL dell'API]
-      const emailFind = user.emailFamily ? user.emailFamily: user.email;
-      fetchDataActivities({...user,email: emailFind}, (message: any) => showMessage(setOpen, setMessage, message))
+      const emailFind = user.emailFamily ? user.emailFamily : user.email;
+      fetchDataActivities({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message))
         .then((response) => {
           if (response) {
             setResponse(response.testo)
@@ -99,8 +99,8 @@ const Activity: React.FC<{setTitle:any }> = ({setTitle}) => {
         user={user}
         message={message}
         handleClose={handleClose}
-        padding={paddingType}
-      >
+        navigate={useNavigate()}      
+        >
         <ActivityContent
           responseSchedule={response}
           user={utente}
