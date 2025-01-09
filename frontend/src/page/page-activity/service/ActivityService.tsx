@@ -1,11 +1,12 @@
-import { getData, postData } from "../../../general/AxiosService";
+import { getData, PATH_ACTIVITY, postData } from "../../../general/AxiosService";
 import { ResponseI } from "../../../general/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
 import { ActivityLogI } from "../Activity";
 
 export const fetchDataActivities = async (pointsDTO: any,  funzioneMessage?:(message?: TypeMessage)=>void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
-    const data = await postData(`activity`, pointsDTO, setLoading, funzioneMessage); // Usa l'URL dinamico
+    const path = PATH_ACTIVITY;
+    const data = await postData(path, pointsDTO, setLoading, funzioneMessage); // Usa l'URL dinamico
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
@@ -17,7 +18,7 @@ export const fetchDataActivities = async (pointsDTO: any,  funzioneMessage?:(mes
 export const fetchDataActivityById = async (_id: string, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void) => {
   try {
     _id = _id ? _id : '-1';
-    const path = `activity/${_id}`;
+    const path = PATH_ACTIVITY + `/${_id}`;
     const data = await getData(path, setLoading); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
@@ -31,7 +32,8 @@ export const fetchDataActivityById = async (_id: string, funzioneErrore?: () => 
 
 export const logActivityByEmail = async (pointsDTO: any, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void) => {
   try {
-    const data = await postData(`activity/log`, pointsDTO, setLoading); // Usa l'URL dinamico
+    const path = PATH_ACTIVITY + `/log`;
+    const data = await postData(path, pointsDTO, setLoading); // Usa l'URL dinamico
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {

@@ -4,28 +4,27 @@ import { Box, FormControl, IconButton, Input, InputAdornment, InputLabel } from 
 import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
-import { showMessage } from "../../App";
+import { showMessage, useUser } from "../../App";
 import Button, { Pulsante } from "../../components/ms-button/Button";
-import { FormErrorValues, HttpStatus, ResponseI, UserI, verifyForm } from "../../general/Utils";
+import { FormErrorValues, HttpStatus, ResponseI, verifyForm } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
-import { findByEmail, savePointsByTypeStandard } from "../page-points/service/PointsService";
+import { findByEmail } from "../page-points/service/PointsService";
 import "./Family.css";
+import { savePointsByFamily } from './service/FamilyService';
 import familyStore from './store/FamilyStore';
 
 
 
 interface FamilyContentProps {
-  user: UserI;
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FamilyContent: React.FC<FamilyContentProps> = ({
-  user,
   setMessage,
   setOpen
 }) => {
-
+  const { user, setUser } = useUser();
   // Stato per i valori dei campi
   type FormValues = {
     [key: string]: number | undefined;
@@ -77,6 +76,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
           setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
           setIsLoading(false);
           familyStore.setPoints(response.testo.points); // Update the state with the new value
+          familyStore.setEmail(user.email); 
         }
       }
     })
@@ -102,10 +102,8 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
   };
 
-  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-  };
-
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {
+    familyStore.setEmail(event.target.value); // Updat
   };
 
 
@@ -124,7 +122,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const salvaRecord = (userData: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
     const pointsWithPlus = isPlusIcon ? formValues.newPoints : - formValues.newPoints!;
-    return savePointsByTypeStandard({ ...userData, usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
+    return savePointsByFamily({ ...userData, usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
       // setPoints(x.testo.points)
       familyStore.setPoints(parseInt(x?.testo.points)); // Update the state with the new value

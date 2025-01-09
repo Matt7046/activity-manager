@@ -36,7 +36,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   }
 
   const labelFamily = {
-    email: "Email  tutore",
+    email: "Email",
     emailFamily: user.type === 0 ? "Email" : "Email child",
   }
 

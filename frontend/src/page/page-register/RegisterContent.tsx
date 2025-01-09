@@ -9,7 +9,7 @@ import Button, { Pulsante } from "../../components/ms-button/Button";
 import { UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./Register.css";
-import { saveRegisterByPoints } from './service/RegisterService';
+import { saveUserByPoints } from './service/RegisterService';
 
 
 
@@ -99,7 +99,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     //  const utente = { email: userData.email, type: userData.type }
     const arrayDiOggetti = emailFigli.map(email => ({ email }));
     setUser(null);
-    return saveRegisterByPoints({ ...userData, emailFigli: emailFigli, points: arrayDiOggetti }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
+    return saveUserByPoints({ ...userData, emailFigli: emailFigli, points: arrayDiOggetti }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug     
       setTitle(''); 
       navigateRouting(navigate, ``, { newLogin : true })

@@ -1,6 +1,9 @@
-import { AlertColor, Box, TextField } from '@mui/material';
+import { AlertColor, Box, Button as ButtonMui, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { googleLogout } from '@react-oauth/google';
 import React from 'react';
+import { NavigateFunction } from 'react-router-dom';
+import { navigateRouting } from '../../App';
 import Alert from '../../components/ms-alert/Alert';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import { UserI } from '../../general/Utils';
@@ -13,7 +16,7 @@ interface PageLayoutProps {
   open: boolean;
   message: TypeMessage;
   handleClose: () => void;
-  padding: number; // Gestione padding dinamico
+  navigate: NavigateFunction; // Gestione padding dinamico
 }
 export interface TypeMessage {
   message?: string[];
@@ -27,13 +30,29 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   open,
   message,
   handleClose,
-  padding,
+  navigate,
 }) => {
+  
+   const logout = (): void =>{
+    googleLogout();
+    navigateRouting(navigate,'',{})  
+  }
+
   return (
     <>
-      <Box sx={{ padding: 0.5 }}>
+      <Box sx={{ paddingLeft: 0.5 }}>
         <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
           <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
+          <Box sx={{ paddingRight: 2 }}>
+          <ButtonMui
+            variant="contained"
+            color="primary"
+            onClick={() => logout()}
+            
+          >
+           Logout
+          </ButtonMui>
+          </Box>
         </Grid>
       </Box>
       {/* Mostra l'alert se open è true */}

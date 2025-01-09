@@ -1,31 +1,18 @@
-import { deleteData, postData } from "../../../general/AxiosService";
+import { PATH_FAMILY, postData } from "../../../general/AxiosService";
 import { TypeMessage } from "../../page-layout/PageLayout";
 
 
 
-export const deleteFamilyById = async (_id: string, funzioneMessage?:(message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
+export const savePointsByFamily = async (user: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void,
+  showSuccess?: boolean) => {
   try {
-    _id = _id ? _id : '-1';
-    const path = `Family/${_id}`;
-    const showSuccess = true;
-    const data = await deleteData(path, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
+    const path = PATH_FAMILY + `/dati`;
+    showSuccess = true; 
+    const data = await postData(path, user, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);    
-  }
-};
-
-
-export const saveFamilyById = async (family: any, funzioneMessage?:( message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
-  try {
-    const path = `family/dati`;
-    const showSuccess = true;
-    const data = await postData(path, family,setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
-    return data;
-  } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);   
+    console.error('Errore durante il recupero dei dati:', error);
   }
 };
 
