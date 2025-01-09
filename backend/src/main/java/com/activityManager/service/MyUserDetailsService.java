@@ -13,7 +13,7 @@ public class MyUserDetailsService implements UserDetailsService {
         // In questo esempio, ritorniamo un utente fittizio
         return User.builder()
             .username(email)
-            .password("{noop}"+ email) // Usa una password crittografata con BCrypts // Usa una password crittografata con BCrypt
+            .password("{noop}"+ "qwertyuiop") // Usa una password crittografata con BCrypts // Usa una password crittografata con BCrypt
             .roles("USER")
             .build();
     }

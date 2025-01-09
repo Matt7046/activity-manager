@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor // Genera un costruttore senza argomenti
 @AllArgsConstructor // Genera un costruttore con tutti i campi
 public class LoginRequest {
-    private String email;   
+    private String email;
+    private String password;   
 
     // Getter e Setter
 }
