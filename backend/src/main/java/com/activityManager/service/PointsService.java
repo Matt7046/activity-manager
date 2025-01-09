@@ -2,7 +2,8 @@ package com.activityManager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.activityManager.EncryptDecryptConverter;
+
+import com.activityManager.configurations.EncryptDecryptConverter;
 import com.activityManager.data.Points;
 import com.activityManager.dto.PointsDTO;
 import com.activityManager.mapper.PointsMapper;
