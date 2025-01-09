@@ -12,8 +12,15 @@ public class PropertiesKey {
     @Value("${app.secret.key}")
     private String secretKey;
 
+    @Value("${app.secret.crypt.key}")
+    private String secretCryptKey;
+
     public SecretKey getSecretKey() {
         // Converti la stringa letta in un SecretKey
         return new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
+    }
+
+    public SecretKey getSecretCryptKey() {
+        return new SecretKeySpec(secretCryptKey.getBytes(), "AES");
     }
 }
