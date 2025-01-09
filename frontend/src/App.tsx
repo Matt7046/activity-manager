@@ -5,18 +5,24 @@ import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/g
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
-import Alert from './components/msallert/Alert';
-import { MenuLaterale } from './components/msdrawer/Drawer';
+import Alert from './components/ms-alert/Alert';
+import { MenuLaterale } from './components/ms-drawer/Drawer';
+import { getToken } from './general/service/AuthService';
 import { TypeUser, UserI } from './general/Utils';
 import About from './page/page-about/About';
 import Activity from './page/page-activity/Activity';
+import activityStore from './page/page-activity/store/ActivityStore';
 import Family from './page/page-family/Family';
+import familyStore from './page/page-family/store/FamilyStore';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
+import operativeStore from './page/page-operative/store/OperativeStore';
 import Points from './page/page-points/Points';
 import { getUserType as getTypeUser } from './page/page-points/service/PointsService';
+import pointsStore from './page/page-points/store/PointsStore';
 import Register from './page/page-register/Register';
 import { getEmailChild } from './page/page-register/service/RegisterService';
+import registerStore from './page/page-register/store/RegisterStore';
 
 
 // Creazione del contesto per User
@@ -42,7 +48,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     // Se la posizione è la pagina di login, distruggi il contesto
     if (location.pathname === '/') {
       resetUser();
-    }  
+    }
     return () => {
     };
   }, [location]);
@@ -68,7 +74,7 @@ const GoogleAuthComponent = () => {
   const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
 
 
-  const {user, setUser } = useUser();
+  const { user, setUser } = useUser();
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [loading, setLoading] = useState(false);
   const [simulated, setSimulated] = useState(0);
@@ -92,15 +98,15 @@ const GoogleAuthComponent = () => {
         name: "Simulated User",
         emailFamily: "user@simulated.com",
         email: "user@simulated.com",
-        token: null,
-        type: -1
+        token: "user@simulated.com",
+        type: TypeUser.STANDARD
       });
       setUserDataChild({
         name: "Simulated child User",
         emailFamily: "child@simulated.com",
         email: "user@simulated.com",
-        token: null,
-        type: -1
+        token: "child@simulated.com",
+        type: TypeUser.FAMILY
       });
       setUser(null);
     }
@@ -126,7 +132,7 @@ const GoogleAuthComponent = () => {
     name: "Simulated User",
     emailFamily: "user@simulated.com",
     email: "user@simulated.com",
-    token: null,
+    token: "user@simulated.com",
     type: -1
   }); // Stato per userData
 
@@ -134,7 +140,7 @@ const GoogleAuthComponent = () => {
     name: "Simulated child User",
     emailFamily: "child@simulated.com",
     email: "user@simulated.com",
-    token: null,
+    token: "child@simulated.com",
     type: -1
   }); // Stato per userData
 
@@ -202,6 +208,11 @@ const GoogleAuthComponent = () => {
       token: fakeResponse.credential,
       type: type
     };
+    activityStore.setToken(fakeResponse.credential);
+    pointsStore.setToken(fakeResponse.credential);
+    familyStore.setToken(fakeResponse.credential);
+    registerStore.setToken(fakeResponse.credential);
+    operativeStore.setToken(fakeResponse.credential);
     setUserData(user);
     getEmailChild(user).then((x: any) => {
       const emailChild = x?.testo ?? [];
@@ -289,13 +300,18 @@ const GoogleAuthComponent = () => {
 
   // Simulazione del login con Google
   const simulateLogin = (type: number) => {
-    setSimulated(type);
-    const fakeResponse = {
-      credential: "fake-token-id",
-      clientId: "549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com",
-      select_by: "google",
-    };
-    handleLoginSuccessFake(fakeResponse, type);
+    activityStore.clearToken();
+    getToken({ email: 'user' }).then(tokenData => {
+      setSimulated(type);
+      console.log("tokenData", tokenData);
+      const fakeResponse = {
+        credential: tokenData.token,
+        clientId: "549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com",
+        select_by: "google",
+      };
+      handleLoginSuccessFake(fakeResponse, type);
+    })
+
   };
   const userLabel = user ? user.name : "Non autenticato"
   const label = 'Login ' + userLabel;

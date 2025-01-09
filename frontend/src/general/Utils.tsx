@@ -1,6 +1,6 @@
 import { NavigateFunction } from "react-router-dom";
 import { sezioniMenu, sezioniMenuIniziale } from "../App";
-import { MenuLaterale } from "../components/msdrawer/Drawer";
+import { MenuLaterale } from "../components/ms-drawer/Drawer";
 
 export const myDisplayer = ((some: string, value: string) => {
   if (document.getElementById(some)) {

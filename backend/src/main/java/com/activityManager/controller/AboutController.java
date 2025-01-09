@@ -28,12 +28,11 @@ public class AboutController {
         Long item = null;
         ResponseDTO responseDTO;
         item = ActivityService.deleteByIdentificativo(identificativo);
-        ActivityDTO subDTO = new ActivityDTO(); // Inizializza DTO vuoto
+        ActivityDTO subDTO = new ActivityDTO();
         subDTO.set_id(identificativo);
         if (item != null && !item.equals(0L)) {
             responseDTO = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
         } else {
-            // Risposta in caso di errore o elemento non trovato
             throw new NotFoundException("Documento non trovato con identificativo: " + identificativo);
         }
         return responseDTO;
@@ -42,11 +41,8 @@ public class AboutController {
 
     @PostMapping("/dati")
     public ResponseEntity<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {
-        // Salva i dati e ottieni l'ID o l'oggetto salvato
         String itemId = ActivityService.saveActivity(activityDTO);
-        // Crea una risposta
         ResponseDTO response = new ResponseDTO(itemId, HttpStatus.OK.value(), new ArrayList<>());
-        // Ritorna una ResponseEntity con lo status HTTP
         return ResponseEntity.ok(response);
     }
 }

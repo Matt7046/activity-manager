@@ -4,10 +4,9 @@ import { googleLogout } from '@react-oauth/google';
 import React from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { navigateRouting } from '../../App';
-import Alert from '../../components/msallert/Alert';
-import Drawer, { MenuLaterale } from '../../components/msdrawer/Drawer';
+import Alert from '../../components/ms-alert/Alert';
+import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import { UserI } from '../../general/Utils';
-
 
 interface PageLayoutProps {
   children: React.ReactNode; // Contenuto specifico della maschera
