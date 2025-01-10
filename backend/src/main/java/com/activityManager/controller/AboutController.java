@@ -2,6 +2,8 @@ package com.activityManager.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.activityManager.configurations.EncryptDecryptConverter;
 import com.activityManager.dto.ActivityDTO;
 import com.activityManager.dto.ResponseDTO;
 import com.activityManager.exception.NotFoundException;
@@ -23,8 +25,13 @@ public class AboutController {
     @Autowired
     private ActivityService ActivityService;
 
+    @Autowired
+	private EncryptDecryptConverter encryptDecryptConverter;
+
     @DeleteMapping("/{identificativo}")
-    public ResponseDTO deleteByIdentificativo(@PathVariable String identificativo) {
+    public ResponseDTO deleteByIdentificativo(@PathVariable String identificativo) throws Exception {
+
+        identificativo = encryptDecryptConverter.decrypts(identificativo);
         Long item = null;
         ResponseDTO responseDTO;
         item = ActivityService.deleteByIdentificativo(identificativo);
