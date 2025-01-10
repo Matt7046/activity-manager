@@ -9,7 +9,7 @@ import Alert from './components/ms-alert/Alert';
 import { MenuLaterale } from './components/ms-drawer/Drawer';
 import { baseStore } from './general/BaseStore';
 import { getToken } from './general/service/AuthService';
-import { TypeUser, UserI } from './general/Utils';
+import { ResponseI, TypeUser, UserI } from './general/Utils';
 import About from './page/page-about/About';
 import Activity from './page/page-activity/Activity';
 import Family from './page/page-family/Family';
@@ -205,8 +205,8 @@ const GoogleAuthComponent = () => {
     };
     baseStore.setToken(fakeResponse.credential);
     setUserData(user);
-    getEmailChild(user).then((x: any) => {
-      const emailChild = x?.testo ?? [];
+    getEmailChild(user).then((x: ResponseI|undefined) => {
+      const emailChild = x?.jsonText ?? [];
       setEmailOptions(emailChild);
       const typeNew = emailChild?.length > 0 ? type : 2;
       console.log("Login simulato effettuato:", fakeResponse);
@@ -224,11 +224,11 @@ const GoogleAuthComponent = () => {
     return getTypeUser(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
 
-      switch (x?.testo?.typeUser) {
+      switch (x?.jsonText?.typeUser) {
         case 0: {
           setEmailLogin(userD.email);
           setSimulated(TypeUser.STANDARD);
-          setUser({ ...userD, type: x.testo.typeUser });
+          setUser({ ...userD, type: x.jsonText.typeUser });
           //   navigateRouting(navigate, `activity`, {});
           break;
         }
@@ -241,7 +241,7 @@ const GoogleAuthComponent = () => {
         }
         case 2: {
           if (googleAuth === true) {
-            setUser({ ...userD, type: x.testo.typeUser });
+            setUser({ ...userD, type: x.jsonText.typeUser });
 
           }
           else {
@@ -257,7 +257,7 @@ const GoogleAuthComponent = () => {
   // Funzione per ottenere i dati utente
   const fetchUserData = async (accessToken: string, tokenData: any) => {
     try {
-      baseStore.setToken(tokenData?.token);
+      baseStore.setToken(tokenData?.jsonText?.token);
       // Verifica che il token sia valido
       const tokenInfoResponse = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`);
       const tokenInfo = await tokenInfoResponse.json();
@@ -275,8 +275,8 @@ const GoogleAuthComponent = () => {
       if (userDataResponse.ok) {
         const userDataGoogle = await userDataResponse.json();
         setEmailLogin(userDataGoogle.email);
-        getEmailChild(userDataGoogle).then((x: any) => {
-          const emailChild = x?.testo ?? [];
+        getEmailChild(user).then((x: ResponseI|undefined) => {
+          const emailChild = x?.jsonText ?? [];
           setEmailOptions(emailChild);
         })
         //setUser({ ...userData, type: 1 });
@@ -297,7 +297,7 @@ const GoogleAuthComponent = () => {
       setSimulated(type);
       console.log("tokenData", tokenData);
       const fakeResponse = {
-        credential: tokenData?.token,
+        credential: tokenData?.jsonText?.token,
         clientId: "549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com",
         select_by: "google",
       };
