@@ -15,16 +15,17 @@ interface ActivityContentProps {
   user: UserI;
   responseSchedule: any;
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ActivityContent: React.FC<ActivityContentProps> = ({
   user,
   responseSchedule,
-  setMessage
+  setMessage,
+  setOpen
 }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [loading, setLoading] = useState(false);
   const flex = isVertical ? 'flex-start' : 'flex-end';
@@ -45,12 +46,8 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-download',
     funzione: (_id: string) => findByIdentificativo({
-      _id: _id,
-      email: "",
-      point: 0,
-      numeroPunti: 0,
-      attivita: ""
-    }, () => showMessage(setOpen, setMessage)),
+      _id: _id   
+    }, (message) => showMessage(setOpen, setMessage, message)),
     nome: 'red',
     title: 'Carica sottotesto',
     configDialogPulsante: {message:'', showDialog:false}
@@ -82,12 +79,8 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
   const componentDidMount = (_id: string) => {
     // Effettua la chiamata GET quando il componente è montato
     findByIdentificativo({
-      _id: _id,
-      email: "",
-      point: 0,
-      numeroPunti: 0,
-      attivita: ""
-    }, () => showMessage(setOpen, setMessage), setLoading)
+      _id: _id 
+    }, (message) => showMessage(setOpen, setMessage, message), setLoading)
       .then((response) => {
         if (response?.status === HttpStatus.OK) {
           activityStore.setActivityById(_id, response.jsonText);
@@ -113,7 +106,6 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     handleClose: handleClose,
     schedule: responseSchedule,
     isVertical: isVertical,
-    open: open,
     pulsanti: pulsantiVisibili
   }
 
