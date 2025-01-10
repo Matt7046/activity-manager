@@ -8,7 +8,8 @@ import com.activityManager.dto.PointsRDTO;
 import com.activityManager.dto.ResponseDTO;
 import com.activityManager.mapper.PointsMapper;
 import com.activityManager.service.PointsService;
-import com.activityManager.trasversali.PointsUser;
+import com.activityManager.transversal.PointsUser;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
