@@ -107,7 +107,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
       return fetchDataActivities({ ...user, email: emailFind }).then((response: ResponseI | undefined) => {
         setIsLoadingO(false);
-        operativeStore.setActivity(response?.testo ?? []);
+        operativeStore.setActivity(response?.jsonText ?? []);
       })
     } catch (error) {
       console.error('Error fetching options:', error);
@@ -118,11 +118,11 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     try {
       const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-      findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
+      findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI|undefined) => {
         if (response) {
           if (response.status === HttpStatus.OK) {
             setIsLoading(false);
-            operativeStore.setPoints(response.testo.points);
+            operativeStore.setPoints(response.jsonText.points);
             console.log('Dati ricevuti:', response);
           }
         }

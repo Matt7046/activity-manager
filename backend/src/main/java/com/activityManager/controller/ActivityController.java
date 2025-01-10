@@ -45,13 +45,13 @@ public class ActivityController {
         return response;
     }
 
-    @GetMapping("/{identificativo}")
-    public ResponseDTO findByIdentificativo(@PathVariable String identificativo) {
+    @PostMapping("/find")
+    public ResponseDTO findByIdentificativo(@RequestBody PointsDTO pointsDTO) {
         Activity item = null;
         ResponseDTO responseDTO = null;
-        item = activityService.findByIdentificativo(identificativo);
+        item = activityService.findByIdentificativo(pointsDTO.get_id());
         if (item == null) {
-            throw new NotFoundException("Documento non trovato con identificativo: " + identificativo);
+            throw new NotFoundException("Documento non trovato con identificativo: " + pointsDTO.get_id());
         }
 
         if (item != null) {

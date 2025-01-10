@@ -1,10 +1,10 @@
 import { PATH_POINTS, postData } from "../../../general/AxiosService";
-import { UserI } from "../../../general/Utils";
+import { ResponseI, UserI } from "../../../general/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
 
 
 
-export const findByEmail = async (user: UserI, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) => {
+export const findByEmail = async (user: UserI, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const path = PATH_POINTS;
     const data = await postData(path, user, setLoading, funzioneMessage); // Endpoint dell'API
@@ -15,7 +15,7 @@ export const findByEmail = async (user: UserI, funzioneMessage?: (message?: Type
   }
 };
 
-export const getUserType = async (user: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) => {
+export const getUserType = async (user: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) : Promise<ResponseI | undefined>=> {
   try {
 
     const path = PATH_POINTS + `/dati`;

@@ -1,6 +1,9 @@
 package com.activityManager.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.activityManager.configurations.JwtUtil;
+import com.activityManager.dto.ResponseDTO;
 import com.activityManager.transversal.LoginRequest;
 import com.activityManager.transversal.LoginResponse;
 
@@ -25,11 +29,12 @@ public class AuthController {
     }
 
     @PostMapping("/token")
-    public ResponseEntity<?> geToken(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<ResponseDTO> geToken(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
         String token = jwtUtil.generateToken(authentication.getName()); // Genera il token JWT
-        return ResponseEntity.ok(new LoginResponse(token)); // Restituisci il token
+        ResponseDTO response = new ResponseDTO(new LoginResponse(token), HttpStatus.OK.value(), new ArrayList<>());
+        return ResponseEntity.ok(response);
     }
 }
