@@ -7,7 +7,7 @@ import Schedule, { MsSchedule } from "../../components/ms-schedule/Schedule";
 import { HttpStatus, TypeUser, UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./ActivityContent.css";
-import { fetchDataActivityById } from "./service/ActivityService";
+import { findByIdentificativo } from "./service/ActivityService";
 import activityStore from "./store/ActivityStore"; // Importa lo store
 
 
@@ -44,7 +44,13 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-download',
-    funzione: (_id: string) => fetchDataActivityById(_id, () => showMessage(setOpen, setMessage)),
+    funzione: (_id: string) => findByIdentificativo({
+      _id: _id,
+      email: "",
+      point: 0,
+      numeroPunti: 0,
+      attivita: ""
+    }, () => showMessage(setOpen, setMessage)),
     nome: 'red',
     title: 'Carica sottotesto',
     configDialogPulsante: {message:'', showDialog:false}
@@ -75,14 +81,20 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   const componentDidMount = (_id: string) => {
     // Effettua la chiamata GET quando il componente è montato
-    fetchDataActivityById(_id, () => showMessage(setOpen, setMessage), setLoading)
+    findByIdentificativo({
+      _id: _id,
+      email: "",
+      point: 0,
+      numeroPunti: 0,
+      attivita: ""
+    }, () => showMessage(setOpen, setMessage), setLoading)
       .then((response) => {
-        if (response.status === HttpStatus.OK) {
-          activityStore.setActivityById(_id, response.testo);
+        if (response?.status === HttpStatus.OK) {
+          activityStore.setActivityById(_id, response.jsonText);
           navigateRouting(navigate, `about`, { _id })
           console.log('Dati ricevuti:', response);
         } else {
-          setMessage({ message: response.errors, typeMessage: 'error' });
+          setMessage({ message: response?.errors, typeMessage: 'error' });
           setOpen(true);
         }
       })

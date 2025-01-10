@@ -188,7 +188,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
       email: emailFind
     }
     saveAboutByUser(testo, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
-      if (response?.testo) {
+      if (response?.jsonText) {
         navigateRouting(navigate, 'activity', {})
       }
     })

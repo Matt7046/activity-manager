@@ -69,7 +69,7 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
       fetchDataActivities({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message))
         .then((response) => {
           if (response) {
-            setResponse(response.testo)
+            setResponse(response.jsonText)
             caricamentoIniziale(response);
           }
         })
