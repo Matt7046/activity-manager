@@ -44,9 +44,10 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
     const response = await apiClient().post(endpoint, data);
-    response.data.status = response.data.status === undefined ? 200 : response.data.status;
+    response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
     const message: TypeMessage = {
-      typeMessage: 'success'
+      typeMessage:  response.data.status === HttpStatus.OK ? 'success' : 'error',
+      message : response.data.status === HttpStatus.OK ? null : response.data.errors,
     }
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta

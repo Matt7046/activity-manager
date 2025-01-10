@@ -16,17 +16,14 @@ export const fetchDataActivities = async (pointsDTO: any, funzioneMessage?: (mes
 };
 
 
-export const findByIdentificativo = async (pointsDTO: PointsI, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+export const findByIdentificativo = async (pointsDTO: PointsI,  funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const path = PATH_ACTIVITY + `/find`;
-    const data = await postData(path, pointsDTO, setLoading); // Endpoint dell'API
+    const data = await postData(path, pointsDTO, setLoading,funzioneMessage); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);
-    if (funzioneErrore) {
-      funzioneErrore();
-    }
+    console.error('Errore durante il recupero dei dati:', error);   
   }
 };
 
