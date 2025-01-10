@@ -20,23 +20,15 @@ const apiClient = () => {
 
 
 // Funzione per ottenere dati dall'API
-export const getData = async (endpoint: string,setLoading?: (loading: boolean) => void,
-funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
-) => {
-  showSuccess = showSuccess ?? false;
+export const getData = async (endpoint: string, setLoading?: (loading: boolean) => void) => {
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
     const response = await apiClient().get(endpoint);
-    response.data.status = response.data.status === undefined ? 200 : response.data.status;
-    const message: TypeMessage = {
-      typeMessage: 'success'
-    }
-    eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
-  } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { typeMessage: 'error', message: [Alert.SERVER_DOWN] }, showSuccess);
-    throw error;
+  } catch (error) {
+    console.error('Errore durante la richiesta:', error);
+    throw error; // Propaga l'errore al chiamante
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
   }

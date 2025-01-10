@@ -1,4 +1,5 @@
 import BaseStore from '../../../general/BaseStore';
+import { ResponseI } from '../../../general/Utils';
 import { ActivityI } from '../Activity';
 
 export class ActivityStore extends BaseStore {
@@ -13,8 +14,8 @@ export class ActivityStore extends BaseStore {
 
 
   
-  setAllActivity(response: any) {
-    const activity = response.testo.map((value: any)=>{
+  setAllActivity(response: ResponseI) {
+    const activity = response.jsonText.map((value: any)=>{
       return {_id : value._id, nome: value.nome, subTesto: value.subTesto};
     })
     this.activity = activity;

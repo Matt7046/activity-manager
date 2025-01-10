@@ -69,13 +69,13 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     window.addEventListener("resize", handleResize);
     const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-    findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
+    findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI|undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           const errors: FormErrorValues = verifyForm(formValues);
           setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
           setIsLoading(false);
-          familyStore.setPoints(response.testo.points); // Update the state with the new value
+          familyStore.setPoints(response.jsonText.points); // Update the state with the new value
           familyStore.setEmail(user.email); 
         }
       }
@@ -125,7 +125,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     return savePointsByFamily({ ...userData, usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
       // setPoints(x.testo.points)
-      familyStore.setPoints(parseInt(x?.testo.points)); // Update the state with the new value
+      familyStore.setPoints(parseInt(x?.jsonText.points)); // Update the state with the new value
 
 
       // navigateRouting(navigate, `activity`, {})
