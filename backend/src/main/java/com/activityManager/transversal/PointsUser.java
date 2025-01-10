@@ -1,4 +1,4 @@
-package com.activityManager.trasversali;
+package com.activityManager.transversal;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

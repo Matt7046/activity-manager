@@ -1,4 +1,4 @@
-package com.activityManager.repository.logAttivita;
+package com.activityManager.repository.logActivity;
 
 
 public interface LogActivityCustomRepository {
