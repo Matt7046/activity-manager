@@ -104,6 +104,7 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
         <ActivityContent
           responseSchedule={response}
           user={utente}
+          setOpen ={setOpen}
           setMessage={setMessage}
         />
       </PageLayout>
