@@ -2,7 +2,7 @@ package com.activityManager.dto;
 
 import java.util.List;
 
-import com.activityManager.trasversali.PointsUser;
+import com.activityManager.transversal.PointsUser;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
