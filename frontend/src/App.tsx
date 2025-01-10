@@ -187,7 +187,7 @@ const GoogleAuthComponent = () => {
       const accessToken = codeResponse?.access_token;
       // Puoi usare l'access token per fare richieste all'API di Google
       baseStore.clearToken();
-      getToken({ email: 'user', password: 'qwertyuiop' }).then(tokenData => {
+      getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message)).then(tokenData => {
         fetchUserData(accessToken,tokenData);
       })
     },
@@ -257,7 +257,7 @@ const GoogleAuthComponent = () => {
   // Funzione per ottenere i dati utente
   const fetchUserData = async (accessToken: string, tokenData: any) => {
     try {
-      baseStore.setToken(tokenData.token);
+      baseStore.setToken(tokenData?.token);
       // Verifica che il token sia valido
       const tokenInfoResponse = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`);
       const tokenInfo = await tokenInfoResponse.json();
@@ -293,11 +293,11 @@ const GoogleAuthComponent = () => {
   // Simulazione del login con Google
   const simulateLogin = (type: number) => {
     baseStore.clearToken();
-    getToken({ email: 'user', password: 'qwertyuiop' }).then(tokenData => {
+    getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message)).then(tokenData => {
       setSimulated(type);
       console.log("tokenData", tokenData);
       const fakeResponse = {
-        credential: tokenData.token,
+        credential: tokenData?.token,
         clientId: "549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com",
         select_by: "google",
       };
