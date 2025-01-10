@@ -10,7 +10,7 @@ export const myDisplayer = ((some: string, value: string) => {
 
 export interface ResponseI {
 
-  testo: any;
+  jsonText: any;
   status: any;
   errors: string[];
 
