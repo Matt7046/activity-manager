@@ -7,11 +7,11 @@ import PointsContent from './PointsContent';
 
 export interface PointsI {
   _id: string | undefined;
-  email: string;
+  email?: string;
   //points: number;
-  point: number;
-  numeroPunti: number;
-  attivita: string;
+  point?: number;
+  numeroPunti?: number;
+  attivita?: string;
   usePoints?: number;
 }
 
