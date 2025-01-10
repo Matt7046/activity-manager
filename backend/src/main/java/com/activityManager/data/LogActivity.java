@@ -7,7 +7,7 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document; 
     
-    @Document(collection = "logattivita") // Specifica la collezione nel database
+    @Document(collection = "logactivity") // Specifica la collezione nel database
     @Data // Genera getter, setter, toString, equals e hashCode
     @NoArgsConstructor // Genera un costruttore senza argomenti
     @AllArgsConstructor // Genera un costruttore con tutti i campi

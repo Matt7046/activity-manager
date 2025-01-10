@@ -13,7 +13,7 @@ import com.activityManager.dto.PointsDTO;
 import com.activityManager.mapper.ActivityMapper;
 import com.activityManager.mapper.LogActivityMapper;
 import com.activityManager.repository.activity.ActivityRepository;
-import com.activityManager.repository.logAttivita.LogActivityRepository;
+import com.activityManager.repository.logActivity.LogActivityRepository;
 
 import java.util.List;
 

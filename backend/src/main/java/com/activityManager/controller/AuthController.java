@@ -8,8 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.activityManager.configurations.JwtUtil;
-import com.activityManager.trasversali.LoginRequest;
-import com.activityManager.trasversali.LoginResponse;
+import com.activityManager.transversal.LoginRequest;
+import com.activityManager.transversal.LoginResponse;
 
 @RestController
 @RequestMapping("api/auth")

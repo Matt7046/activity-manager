@@ -7,7 +7,8 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import com.activityManager.trasversali.PointsUser;
+
+import com.activityManager.transversal.PointsUser;
 
 @Document(collection = "points") // Specifica la collezione nel database
 @Data // Genera getter, setter, toString, equals e hashCode
