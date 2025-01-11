@@ -28,6 +28,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.ok(errorResponse);
     }
 
+    @ExceptionHandler(DecryptException.class)
+    public ResponseEntity<ResponseDTO>  handleUserNotFound(DecryptException ex) {
+        List<String> errori = new ArrayList<>();
+        errori.add(ex.getMessage());
+        ResponseDTO errorResponse = new ResponseDTO(null, HttpStatus.FORBIDDEN, errori);
+        return ResponseEntity.ok(errorResponse);
+    }
+
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ResponseDTO>  handleAllExceptions(Exception ex) {
