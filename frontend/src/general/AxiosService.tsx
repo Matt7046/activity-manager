@@ -2,9 +2,9 @@ import axios from 'axios';
 import { TypeMessage } from '../page/page-layout/PageLayout';
 import { Alert, HttpStatus } from './Utils';
 
-const apiUrl = process.env.REACT_APP_API_URL_LOCALE ; // Ottieni l'URL dal file .env
+const apiUrl = process.env.REACT_APP_API_URL_LOCALE; // Ottieni l'URL dal file .env
 // Configura l'istanza di Axios
-const apiClient = ()=>{
+const apiClient = () => {
   const token = localStorage.getItem('token');
   const apiClient = axios.create({
     baseURL: apiUrl, // URL base dell'API
@@ -38,14 +38,16 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
   funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
 
-    
+
   showSuccess = showSuccess ?? false;
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
     const response = await apiClient().post(endpoint, data);
+    response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
     const message: TypeMessage = {
-      typeMessage: 'success'
+      typeMessage:  response.data.status === HttpStatus.OK ? 'success' : 'error',
+      message : response.data.status === HttpStatus.OK ? null : response.data.errors,
     }
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
@@ -67,6 +69,7 @@ export const putData = async (endpoint: string, data: any, setLoading?: (loading
   showSuccess = showSuccess ?? false;
   try {
     const response = await apiClient().put(endpoint, data);
+    response.data.status = response.data.status === undefined ? 200 : response.data.status;
     const message: TypeMessage = {
       typeMessage: 'success'
     }
@@ -91,7 +94,7 @@ export const deleteData = async (endpoint: string, setLoading?: (loading: boolea
   }
   try {
     const response = await apiClient().delete(endpoint);
-
+    response.data.status = response.data.status === undefined ? 200 : response.data.status;
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
@@ -110,9 +113,9 @@ export const showMessageForm = async (setLoading?: (loading: boolean) => void,
   showSuccess = showSuccess ?? false;
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
-  try {  
+  try {
     eseguiAlert(funzioneMessage!, { typeMessage: 'error', message: [Alert.SERVER_DOWN] }, showSuccess);
-    return  'ok'; // Restituisce i dati della risposta
+    return 'ok'; // Restituisce i dati della risposta
   } catch (error: any) {
     throw error;
   } finally {
@@ -122,7 +125,7 @@ export const showMessageForm = async (setLoading?: (loading: boolean) => void,
 
 
 export const eseguiAlert = (funzioneMessage: (message?: TypeMessage) => void, message: TypeMessage, showSuccess: boolean, response?: any) => {
- const messaggiAlert = message.message;
+  const messaggiAlert = message.message;
   response = response ?? { data: { status: HttpStatus.BAD_REQUEST, errors: messaggiAlert } }
 
   if (funzioneMessage) {

@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -45,13 +43,13 @@ public class ActivityController {
         return response;
     }
 
-    @GetMapping("/{identificativo}")
-    public ResponseDTO findByIdentificativo(@PathVariable String identificativo) {
+    @PostMapping("/find")
+    public ResponseDTO findByIdentificativo(@RequestBody PointsDTO pointsDTO) {
         Activity item = null;
         ResponseDTO responseDTO = null;
-        item = activityService.findByIdentificativo(identificativo);
+        item = activityService.findByIdentificativo(pointsDTO.get_id());
         if (item == null) {
-            throw new NotFoundException("Documento non trovato con identificativo: " + identificativo);
+            throw new NotFoundException("Documento non trovato con identificativo: " + pointsDTO.get_id());
         }
 
         if (item != null) {

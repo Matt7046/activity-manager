@@ -12,7 +12,6 @@ export interface MsSchedule {
   handleClose: () => void;  // La funzione handleClose non ha parametri e non ritorna nulla
   schedule: { _id: string; nome: string; subtesto: string }[]; // Array di oggetti con proprietà _id, nome e subtesto
   isVertical: boolean;  // La visibilità del bottone, un booleano
-  open: boolean;  // open è un booleano, per esempio per la visibilità di un dialogo
   pulsanti: Pulsante[];  // Array di oggetti Pulsante
 }
 
@@ -135,18 +134,12 @@ export const funzionalitaPulsanteRed = (item: any, pulsante: Pulsante, handleSub
   // Rimuove il valore inline
   if (check) {
     element.style.visibility = ""; // Rimuove il valore inline
-    pulsante.funzione(_id).then((response: { testo: { subTesto: string; }; }) => {
-
-      handleSubTestoUpdate(item._id, response.testo.subTesto);
-
-      // handleSubTestoUpdate
-      // setSubTesto(response.testo.subTesto);
+    pulsante.funzione(_id).then((response: { jsonText: { subTesto: string; }; }) => {
+      handleSubTestoUpdate(item._id, response.jsonText.subTesto);     
     })
   } else {
     element.style.visibility = "hidden"; // mette il valore inline
   }
-
-
   return check; // Aggiorna lo stato
 };
 
