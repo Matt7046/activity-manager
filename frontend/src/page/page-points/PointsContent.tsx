@@ -176,10 +176,10 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
   const getPoints = (): void => {
     const emailFind = user.emailFamily ? user.emailFamily: user.email;
-    findByEmail({...user, email: emailFind}, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI) => {
+    findByEmail({...user, email: emailFind}, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI|undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
-          setTesto(response.testo.numeroPunti)
+          setTesto(response.jsonText.numeroPunti)
           console.log('Dati ricevuti:', response);
         }
       }
@@ -188,10 +188,10 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const getLogAttivita = (userI: UserI, truncate: boolean): void => {
     const emailFind = user.emailFamily ? user.emailFamily: user.email;
 
-    logActivityByEmail({...userI, email: emailFind}, () => showMessage(setOpen, setMessage)).then((response: ResponseI) => {
+    logActivityByEmail({...userI, email: emailFind}, () => showMessage(setOpen, setMessage)).then((response: ResponseI|undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
-          let attivitaLog = response.testo;
+          let attivitaLog = response.jsonText;
           if (attivitaLog.length > 3) {
             attivitaLog = attivitaLog.slice(0, 3).concat({ log: '...' });
           }
@@ -199,7 +199,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
             setOpenDialog(true);
           }
           setTestoLogT(attivitaLog);
-          setTestoLog(response.testo)
+          setTestoLog(response.jsonText)
         }
       }
     })

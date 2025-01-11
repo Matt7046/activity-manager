@@ -1,9 +1,10 @@
-import { getData, PATH_ACTIVITY, postData } from "../../../general/AxiosService";
+import { PATH_ACTIVITY, postData } from "../../../general/AxiosService";
 import { ResponseI } from "../../../general/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
+import { PointsI } from "../../page-points/Points";
 import { ActivityLogI } from "../Activity";
 
-export const fetchDataActivities = async (pointsDTO: any,  funzioneMessage?:(message?: TypeMessage)=>void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+export const fetchDataActivities = async (pointsDTO: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const path = PATH_ACTIVITY;
     const data = await postData(path, pointsDTO, setLoading, funzioneMessage); // Usa l'URL dinamico
@@ -11,26 +12,22 @@ export const fetchDataActivities = async (pointsDTO: any,  funzioneMessage?:(mes
     return data;
   } catch (error) {
     console.error('Errore durante il recupero dei dati:', error);
-   }
-};
-
-
-export const fetchDataActivityById = async (_id: string, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void) => {
-  try {
-    _id = _id ? _id : '-1';
-    const path = PATH_ACTIVITY + `/${_id}`;
-    const data = await getData(path, setLoading); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
-    return data;
-  } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);
-    if (funzioneErrore) {
-      funzioneErrore();
-    }
   }
 };
 
-export const logActivityByEmail = async (pointsDTO: any, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void) => {
+
+export const findByIdentificativo = async (pointsDTO: PointsI,  funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+  try {
+    const path = PATH_ACTIVITY + `/find`;
+    const data = await postData(path, pointsDTO, setLoading,funzioneMessage); // Endpoint dell'API
+    console.log('Dati ricevuti:', data);
+    return data;
+  } catch (error) {
+    console.error('Errore durante il recupero dei dati:', error);   
+  }
+};
+
+export const logActivityByEmail = async (pointsDTO: any, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const path = PATH_ACTIVITY + `/log`;
     const data = await postData(path, pointsDTO, setLoading); // Usa l'URL dinamico
@@ -46,15 +43,15 @@ export const logActivityByEmail = async (pointsDTO: any, funzioneErrore?: () => 
 
 
 
-export const savePointsAndLog = async (activity: ActivityLogI, funzioneMessage?:(message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
+export const savePointsAndLog = async (activity: ActivityLogI, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const path = `activity/dati`;
     const showSuccess = true;
     const data = await postData(path, activity, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);    
+    console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);    
+    console.error('Errore durante il recupero dei dati:', error);
   }
 };
 

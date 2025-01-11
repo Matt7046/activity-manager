@@ -1,9 +1,10 @@
 import { deleteData, PATH_OPERATIVE, showMessageForm } from "../../../general/AxiosService";
+import { ResponseI } from "../../../general/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
 
 
 
-export const deleteOperativeById = async (_id: string, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void) => {
+export const deleteOperativeById = async (_id: string, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     _id = _id ? _id : '-1';
     const path = PATH_OPERATIVE + `/${_id}`;

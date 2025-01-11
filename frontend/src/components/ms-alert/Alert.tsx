@@ -27,7 +27,7 @@ const Alert: React.FC<CustomAlertProps> = ({ message, onClose }) => {
     // Automatic close after 5 seconds
     const timer = setTimeout(() => {
       onClose();
-    }, 4000);
+    }, 2500);
 
     // Clean up the timer when the component unmounts
     return () => clearTimeout(timer);
