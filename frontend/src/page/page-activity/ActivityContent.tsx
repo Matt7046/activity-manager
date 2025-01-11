@@ -7,7 +7,7 @@ import Schedule, { MsSchedule } from "../../components/ms-schedule/Schedule";
 import { HttpStatus, TypeUser, UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./ActivityContent.css";
-import { fetchDataActivityById } from "./service/ActivityService";
+import { findByIdentificativo } from "./service/ActivityService";
 import activityStore from "./store/ActivityStore"; // Importa lo store
 
 
@@ -15,16 +15,17 @@ interface ActivityContentProps {
   user: UserI;
   responseSchedule: any;
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ActivityContent: React.FC<ActivityContentProps> = ({
   user,
   responseSchedule,
-  setMessage
+  setMessage,
+  setOpen
 }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [loading, setLoading] = useState(false);
   const flex = isVertical ? 'flex-start' : 'flex-end';
@@ -44,7 +45,9 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-download',
-    funzione: (_id: string) => fetchDataActivityById(_id, () => showMessage(setOpen, setMessage)),
+    funzione: (_id: string) => findByIdentificativo({
+      _id: _id   
+    }, (message) => showMessage(setOpen, setMessage, message)),
     nome: 'red',
     title: 'Carica sottotesto',
     configDialogPulsante: {message:'', showDialog:false}
@@ -75,14 +78,16 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   const componentDidMount = (_id: string) => {
     // Effettua la chiamata GET quando il componente è montato
-    fetchDataActivityById(_id, () => showMessage(setOpen, setMessage), setLoading)
+    findByIdentificativo({
+      _id: _id 
+    }, (message) => showMessage(setOpen, setMessage, message), setLoading)
       .then((response) => {
-        if (response.status === HttpStatus.OK) {
-          activityStore.setActivityById(_id, response.testo);
+        if (response?.status === HttpStatus.OK) {
+          activityStore.setActivityById(_id, response.jsonText);
           navigateRouting(navigate, `about`, { _id })
           console.log('Dati ricevuti:', response);
         } else {
-          setMessage({ message: response.errors, typeMessage: 'error' });
+          setMessage({ message: response?.errors, typeMessage: 'error' });
           setOpen(true);
         }
       })
@@ -101,7 +106,6 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     handleClose: handleClose,
     schedule: responseSchedule,
     isVertical: isVertical,
-    open: open,
     pulsanti: pulsantiVisibili
   }
 
