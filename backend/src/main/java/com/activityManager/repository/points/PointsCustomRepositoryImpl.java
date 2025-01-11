@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Lazy;
 import com.activityManager.configurations.EncryptDecryptConverter;
 import com.activityManager.data.Points;
 import com.activityManager.exception.ArithmeticCustomException;
-import com.activityManager.exception.DecryptException;
 
 public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 
@@ -62,13 +61,8 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		if (existingUser == null) {
 			return new Points();
 		}
-		existingUser.setEmailFigli(existingUser.getEmailFigli().stream().map(x -> {
-			try {
-				return encryptDecryptConverter.decrypts(x);
-			} catch (Exception e) {
-			}
-			return x;
-		}).collect(Collectors.toList())); // Crittografa l'email
+		existingUser.setEmailFigli(existingUser.getEmailFigli().stream().map(x -> 			
+				encryptDecryptConverter.decrypts(x)).collect(Collectors.toList())); // Crittografa l'email
 
 		return existingUser;
 	}
@@ -102,7 +96,7 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		existingUser.setEmail(encryptDecryptConverter.decrypt(existingUser.getEmail()));
 		existingUser.setEmailFamily(encryptDecryptConverter.decrypt(existingUser.getEmailFamily()));
 		existingUser.setEmailFigli(existingUser.getEmailFigli().stream()
-				.map(figlio -> encryptDecryptConverter.decrypt(figlio))				
+				.map(figlio -> encryptDecryptConverter.decrypt(figlio))
 				.collect(Collectors.toList()));
 		pointsRepository.save(existingUser);
 		return existingUser;
