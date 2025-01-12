@@ -5,23 +5,18 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-
-import org.bouncycastle.asn1.ASN1OctetString;
-import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
-import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
-import org.bouncycastle.openssl.PEMKeyPair;
-import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.pqc.crypto.util.PrivateKeyFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.mongo.MongoClientSettingsBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.KeyStore;
@@ -29,15 +24,11 @@ import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
-
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509KeyManager;
 
 @Configuration
 public class MongoConfig {
@@ -45,14 +36,18 @@ public class MongoConfig {
     @Value("${mongo.uri}")
     private String mongoUri;
 
-    @Value("${mongo.tls.cert}")
-    private String certFilePath; // Il percorso al file PEM combinato
+    @Value("classpath:${mongo.tls.cert}")
+    private Resource certFilePathR; // Il percorso al file PEM combinato
 
-    @Value("${mongo.tls.key}")
-    private String certKeyFilePath; // Il percorso al file PEM combinato
+    @Value("classpath:${mongo.tls.key}")
+    private Resource certKeyFilePathR; // Il percorso al file PEM combinato
 
     @Bean
     public MongoClient mongoClient() throws Exception {
+
+        String certFilePath = certFilePathR.getURI().getPath();
+
+        // Leggi la chiave come stringa
         MongoClientSettings.Builder mongoClientSettingsBuilder = MongoClientSettings.builder();
 
         // Aggiungi le impostazioni TLS/SSL
@@ -75,16 +70,18 @@ public class MongoConfig {
     }
 
     private SSLContext getSslContext(String certFilePath) throws Exception {
+
+        // Leggi la chiave come stringa
         // Carica il certificato e la chiave privata dal file PEM
         KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         keyStore.load(null, null); // inizializza KeyStore vuoto
-
         // Leggi il file PEM con BouncyCastle
-        try (InputStream certInputStream = new FileInputStream(certFilePath)) {
-            PrivateKey privateKey = loadPrivateKey(certKeyFilePath);
+        try (InputStream inputStream = certFilePathR.getInputStream()) { // Leggi tutto il contenuto come stringa
+
+            PrivateKey privateKey = loadPrivateKey(certKeyFilePathR);
             // Aggiungi il certificato (se presente) e la chiave privata al KeyStore
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            X509Certificate certificate = (X509Certificate) certificateFactory.generateCertificate(certInputStream);
+            X509Certificate certificate = (X509Certificate) certificateFactory.generateCertificate(inputStream);
 
             keyStore.setKeyEntry("client-key", privateKey, null, new java.security.cert.Certificate[] { certificate });
         }
@@ -106,8 +103,9 @@ public class MongoConfig {
 
     @Bean
     public X509Certificate mongoClientCertificate() throws GeneralSecurityException, IOException {
+        // Leggi la chiave come stringa
         // Carica il certificato dal file PEM
-        try (InputStream certInputStream = new FileInputStream(certFilePath)) {
+        try (InputStream certInputStream = certFilePathR.getInputStream()) {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
             return (X509Certificate) certificateFactory.generateCertificate(certInputStream);
         }
@@ -121,22 +119,26 @@ public class MongoConfig {
         );
     }
 
-    public static PrivateKey loadPrivateKey(String pathToKeyFile) throws Exception {
+    public static PrivateKey loadPrivateKey(Resource pathToKeyFile) throws Exception {
         // Leggi il contenuto del file della chiave privata
-        FileInputStream keyFile = new FileInputStream(pathToKeyFile);
-        byte[] keyBytes = new byte[keyFile.available()];
-        keyFile.read(keyBytes);
-        keyFile.close();
+        try (InputStream keyFile = pathToKeyFile.getInputStream()) {
+            byte[] keyBytes = keyFile.readAllBytes();
+            keyFile.read(keyBytes);
+            keyFile.close();
 
-        // Decodifica la chiave privata in formato PEM (se è in formato PEM)
-        String keyString = new String(keyBytes);
-        keyString = keyString.replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "").replaceAll("\\s+", "");
-        byte[] decodedKey = Base64.getDecoder().decode(keyString);
+            // Decodifica la chiave privata in formato PEM (se è in formato PEM)
+            String keyString = new String(keyBytes);
 
-        // Crea la chiave privata da un oggetto PKCS8EncodedKeySpec
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");  // Usa "RSA" o "EC" a seconda del tipo di chiave
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decodedKey);
-        return keyFactory.generatePrivate(keySpec);
+            keyString = keyString.replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "")
+                    .replaceAll("\\s+", "");
+            byte[] decodedKey = Base64.getDecoder().decode(keyString);
+
+            // Crea la chiave privata da un oggetto PKCS8EncodedKeySpec
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA"); // Usa "RSA" o "EC" a seconda del tipo di chiave
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decodedKey);
+
+            return keyFactory.generatePrivate(keySpec);
+        }
     }
- 
+
 }
