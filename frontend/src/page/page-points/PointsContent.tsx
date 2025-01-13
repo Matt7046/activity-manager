@@ -7,7 +7,8 @@ import lizard from "../../assets/images/lizard.jpg"; // Percorso del file locale
 import points from "../../assets/images/points.jpg"; // Percorso del file locale
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps } from "../../components/ms-card/Card";
-import { HttpStatus, ResponseI, UserI } from "../../general/Utils";
+import { ButtonName, HttpStatus } from "../../general/Constant";
+import { ResponseI, UserI } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { logActivityByEmail } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
@@ -63,7 +64,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const pulsanteLog: Pulsante = {
     icona: 'fas fa-clipboard',
     funzione: () => getLogAttivita(user, true), // Passi la funzione direttamente
-    nome: 'blue',
+    nome:  ButtonName.BLUE,
     title: 'Log Attività',
     visibility: user ? true : false,
     configDialogPulsante: {message:'', showDialog:false}

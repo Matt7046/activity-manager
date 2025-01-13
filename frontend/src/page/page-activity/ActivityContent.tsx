@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage } from "../../App";
 import { Pulsante } from "../../components/ms-button/Button";
 import Schedule, { MsSchedule } from "../../components/ms-schedule/Schedule";
-import { HttpStatus, TypeUser, UserI } from "../../general/Utils";
+import { ButtonName, HttpStatus, SectionName, TypeAlertColor, TypeUser } from "../../general/Constant";
+import { UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./ActivityContent.css";
 import { findByIdentificativo } from "./service/ActivityService";
@@ -36,8 +37,8 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   const pulsanteNew: Pulsante = {
     icona: 'fas fa-plus',
-    funzione: () => navigateRouting(navigate, `about`, {}),
-    nome: 'new',
+    funzione: () => navigateRouting(navigate, SectionName.ABOUT, {}),
+    nome:  ButtonName.NEW,
     title: 'Nuovo documento',
     configDialogPulsante: {message:'', showDialog:false},
     disableButton : user.type === TypeUser.STANDARD
@@ -48,7 +49,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     funzione: (_id: string) => findByIdentificativo({
       _id: _id   
     }, (message) => showMessage(setOpen, setMessage, message)),
-    nome: 'red',
+    nome: ButtonName.RED,
     title: 'Carica sottotesto',
     configDialogPulsante: {message:'', showDialog:false}
   }
@@ -56,7 +57,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-eye',
     funzione: (_id: string) => openDetail(_id, () => componentDidMount(_id)), // Passi la funzione direttamente
-    nome: 'blue',
+    nome:  ButtonName.BLUE,
     title: 'Apri dettaglio',
     configDialogPulsante: {message:'', showDialog:false}
   }
@@ -84,10 +85,10 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
       .then((response) => {
         if (response?.status === HttpStatus.OK) {
           activityStore.setActivityById(_id, response.jsonText);
-          navigateRouting(navigate, `about`, { _id })
+          navigateRouting(navigate, SectionName.ABOUT, { _id })
           console.log('Dati ricevuti:', response);
         } else {
-          setMessage({ message: response?.errors, typeMessage: 'error' });
+          setMessage({ message: response?.errors, typeMessage: TypeAlertColor.ERROR });
           setOpen(true);
         }
       })
