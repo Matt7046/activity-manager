@@ -24,7 +24,7 @@ echo "mvn clean package completato"
 
 REM Punto 3: Apri una nuova console per npm start
 start cmd /k "cd ..\frontend && npm start"
-start cmd /k "cd ..\backend\jar && java -jar activityManager-1.5.jar
+start cmd /k "cd ..\backend\jar && java -jar activityManager-1.0.jar
 
 pause
 
