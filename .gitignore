@@ -35,4 +35,4 @@ node_modules
 backend/.vscode/
 
 # Ignora il file jar specifico
-backend/jar/activityManager-1.5.jar
+backend/jar/activityManager-1.0.jar
