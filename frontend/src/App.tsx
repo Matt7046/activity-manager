@@ -8,8 +8,9 @@ import './App.css';
 import Alert from './components/ms-alert/Alert';
 import { MenuLaterale } from './components/ms-drawer/Drawer';
 import { baseStore } from './general/BaseStore';
+import { LoginUser, SectionName, ServerMessage, TypeUser } from './general/Constant';
 import { getToken } from './general/service/AuthService';
-import { ResponseI, TypeUser, UserI } from './general/Utils';
+import { ResponseI, UserI } from './general/Utils';
 import About from './page/page-about/About';
 import Activity from './page/page-activity/Activity';
 import Family from './page/page-family/Family';
@@ -143,9 +144,6 @@ const GoogleAuthComponent = () => {
     userData.type = typeSimulated;
     setUser(userData);
     handleCloseD();
-    //navigateRouting(navigate, `activity`,{});
-
-    //saveUserData(userData, setLoading);
   });
   let check = false;
   useEffect(() => {
@@ -154,11 +152,11 @@ const GoogleAuthComponent = () => {
       // Naviga solo quando `user` è stato aggiornato
       if (user.type === 2 && !check) {
 
-        navigateRouting(navigate, 'register', {});
+        navigateRouting(navigate, SectionName.REGISTER, {});
         check = true;
       }
       else if ((user.type === 0 || user.type === 1) && !check) {
-        navigateRouting(navigate, 'activity', {});
+        navigateRouting(navigate, SectionName.ACTIVITY, {});
         check = false;
       }
     }
@@ -187,7 +185,7 @@ const GoogleAuthComponent = () => {
       const accessToken = codeResponse?.access_token;
       // Puoi usare l'access token per fare richieste all'API di Google
       baseStore.clearToken();
-      getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message)).then(tokenData => {
+      getToken({ email: LoginUser.USER, password: LoginUser.PASS }, (message: any) => showMessage(setOpen, setMessage, message)).then(tokenData => {
         fetchUserData(accessToken,tokenData);
       })
     },
@@ -229,13 +227,11 @@ const GoogleAuthComponent = () => {
           setEmailLogin(userD.email);
           setSimulated(TypeUser.STANDARD);
           setUser({ ...userD, type: x.jsonText.typeUser });
-          //   navigateRouting(navigate, `activity`, {});
           break;
         }
         case 1: {
           setEmailLogin(userD.email);
           setSimulated(TypeUser.FAMILY);
-          //  setUserData({ ...userD, email, type: x.testo.typeUser })
           handleOpenD();
           break;
         }
@@ -247,7 +243,6 @@ const GoogleAuthComponent = () => {
           else {
             setUser({ ...userData, type: 2 });
           }
-          //  navigateRouting(navigate, `register`, {})
         }
           break;
       }
@@ -433,7 +428,7 @@ const GoogleAuthComponent = () => {
   );
 };
 
-export const navigateRouting = (navigate: NavigateFunction, path: string, params: any) => {
+export const navigateRouting = (navigate: NavigateFunction, path: SectionName, params: any) => {
   navigate(`/${path}`, { state: params }); // Passa i parametri come stato
 };
 
@@ -462,7 +457,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
 }
 
 export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage) => {
-  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage } : { message: ['Il server non risponde'], typeMessage: 'error' };
+  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage } : { message: [ServerMessage.SERVER_DOWN], typeMessage: 'error' };
   setOpen(true);
   setMessage(messageBE);
 }
@@ -470,7 +465,7 @@ export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage
 export const sezioniMenu = (
   sezioni: MenuLaterale[][],
   navigate: NavigateFunction,
-  path: string,
+  path: SectionName,
   params: any,
   indice: number
 ): MenuLaterale[][] => {

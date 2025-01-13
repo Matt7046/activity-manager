@@ -3,8 +3,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
-import { AlertColor, Box, Card, CardContent, IconButton, Typography } from '@mui/material';
+import { Box, Card, CardContent, IconButton, Typography } from '@mui/material';
 import { useEffect } from 'react';
+import { TypeAlertColor } from '../../general/Constant';
 
 const icons = {
   success: <CheckCircleIcon color="success" />,
@@ -15,7 +16,7 @@ const icons = {
 
 interface CustomAlertProps {
   message: {
-    typeMessage?: AlertColor;
+    typeMessage?: TypeAlertColor;
     message?: string[];
   };
   onClose: () => void;
