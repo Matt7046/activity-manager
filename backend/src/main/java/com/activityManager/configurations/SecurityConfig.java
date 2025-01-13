@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
@@ -65,11 +66,10 @@ public class SecurityConfig implements WebFluxConfigurer {
                         .anyExchange().authenticated() // Richiedi autenticazione per tutte le altre richieste
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt() // Configura il decoder JWT automaticamente
+                .jwt(Customizer.withDefaults()) // Configura il decoder JWT automaticamente
                 )
-                .cors() // Abilita CORS
-                .and()
-                .csrf().disable(); // Disabilita CSRF per le API
+                .cors(Customizer.withDefaults())  // Abilita CORS            
+                .csrf(ServerHttpSecurity.CsrfSpec::disable);  // Disabilita CSRF per le API
 
         return http.build();
     }
