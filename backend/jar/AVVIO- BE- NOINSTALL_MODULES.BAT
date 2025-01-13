@@ -23,7 +23,7 @@ REM Punto 2: Conferma completamento del comando Maven
 echo "mvn clean package completato"
 
 REM Punto 3: Apri una nuova console
-start cmd /k "cd ..\backend\jar && java -jar activityManager-1.5.jar
+start cmd /k "cd ..\backend\jar && java -jar activityManager-1.0.jar
 
 pause
 

@@ -22,6 +22,6 @@ if %errorlevel% neq 0 (
 
 echo "mvn clean package completato"
 cd .\jar
-java -jar activityManager-1.5.jar
+java -jar activityManager-1.0.jar
 
 pause
