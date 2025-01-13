@@ -39,7 +39,7 @@ public class SecurityConfig implements WebFluxConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "https://webapp-tn6q.onrender.com") // Aggiungi http:// per
+                .allowedOrigins("http://localhost:3000") // Aggiungi http:// per
                                                                                              // localhost
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
