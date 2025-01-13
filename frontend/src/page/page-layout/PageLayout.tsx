@@ -1,4 +1,4 @@
-import { AlertColor, Box, Button as ButtonMui, TextField } from '@mui/material';
+import { Box, Button as ButtonMui, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { googleLogout } from '@react-oauth/google';
 import React from 'react';
@@ -6,6 +6,7 @@ import { NavigateFunction } from 'react-router-dom';
 import { navigateRouting } from '../../App';
 import Alert from '../../components/ms-alert/Alert';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
+import { SectionName, TypeAlertColor } from '../../general/Constant';
 import { UserI } from '../../general/Utils';
 
 interface PageLayoutProps {
@@ -19,7 +20,7 @@ interface PageLayoutProps {
 }
 export interface TypeMessage {
   message?: string[];
-  typeMessage?: AlertColor;
+  typeMessage?: TypeAlertColor;
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({
@@ -34,7 +35,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   
    const logout = (): void =>{
     googleLogout();
-    navigateRouting(navigate,'',{})  
+    navigateRouting(navigate,SectionName.ROOT,{})  
   }
 
   return (
