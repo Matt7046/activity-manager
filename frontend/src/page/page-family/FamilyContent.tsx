@@ -6,7 +6,8 @@ import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
 import { showMessage, useUser } from "../../App";
 import Button, { Pulsante } from "../../components/ms-button/Button";
-import { FormErrorValues, HttpStatus, ResponseI, verifyForm } from "../../general/Utils";
+import { ButtonName, HttpStatus } from '../../general/Constant';
+import { FormErrorValues, ResponseI, verifyForm } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail } from "../page-points/service/PointsService";
 import "./Family.css";
@@ -96,7 +97,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-solid fa-floppy-disk',
     funzione: () => salvaRecord(user), // Passi la funzione direttamente
-    nome: 'blue',
+    nome:  ButtonName.BLUE,
     disableButton: disableButtonSave,
     title: 'Salva',
     configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
