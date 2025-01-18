@@ -6,6 +6,7 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import Alert from './components/ms-alert/Alert';
+import BannerOpenSource from './components/ms-banner/Banner';
 import { MenuLaterale } from './components/ms-drawer/Drawer';
 import { baseStore } from './general/BaseStore';
 import { LoginUser, SectionName, ServerMessage, TypeUser } from './general/Constant';
@@ -18,6 +19,7 @@ import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
 import Points from './page/page-points/Points';
 import { getUserType as getTypeUser } from './page/page-points/service/PointsService';
+import PrivacyPolicy from './page/page-privacy-policy/PrivacyPolicy';
 import Register from './page/page-register/Register';
 import { getEmailChild } from './page/page-register/service/RegisterService';
 
@@ -46,6 +48,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     if (location.pathname === '/') {
       resetUser();
     }
+  
+ 
     return () => {
     };
   }, [location]);
@@ -83,12 +87,13 @@ const GoogleAuthComponent = () => {
   const [emailLogin, setEmailLogin] = useState(''); // Stato per l'email
   const location = useLocation();
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [hiddenLogin, setHiddenLogin] = useState<any>(false); // Stato utente
+  const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => { };
 
-  };
 
 
   useEffect(() => {
+    
     if (location.pathname === '/') {
       // Stato per userData
       setUserData({
@@ -105,7 +110,7 @@ const GoogleAuthComponent = () => {
       });
       setUser(null);
     }
-
+    setHiddenLogin(location.pathname === '/privacy-policy')
     return () => {
     };
   }, [location]);
@@ -307,8 +312,10 @@ const GoogleAuthComponent = () => {
       {open && (
         <Alert onClose={handleClose} message={message} />
       )}
-
-      {/* Google OAuth Provider */}
+            {!hiddenLogin && (  <BannerOpenSource />)}
+           <Routes>
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                </Routes>
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <div>
           {!user ? (
@@ -332,7 +339,8 @@ const GoogleAuthComponent = () => {
                   }}
                 >
                   <div>
-                    <Grid container spacing={2}>
+                  {!hiddenLogin && ( 
+                     <Grid container spacing={2}>
                       {/* Prima riga: Pulsanti per simulare il login */}
                       <Grid size={{ xs: 12, sm: 6 }}>
                         <ButtonMui
@@ -340,7 +348,7 @@ const GoogleAuthComponent = () => {
                           color="primary"
                           onClick={() => simulateLogin(TypeUser.STANDARD)}
                           fullWidth
-                        >
+                          >
                           Simula login utente base
                         </ButtonMui>
                       </Grid>
@@ -361,6 +369,7 @@ const GoogleAuthComponent = () => {
 
                       </Grid>
                     </Grid>
+                  )}
                   </div>
                 </div>
 
@@ -404,12 +413,16 @@ const GoogleAuthComponent = () => {
                   </Dialog>
                 </div>
               </div></>
-          ) : (
+          ) 
+          
+          
+          : (
             <div>
 
               <h2>{title}</h2>
               <Routes>
                 <Route path="/" element={<App />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/register" element={<Register setTitle={setTitle} />} />
                 <Route path="/activity" element={<Activity setTitle={setTitle} />} />
                 <Route path="/about" element={<About setTitle={setTitle} />} />
