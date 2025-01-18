@@ -11,7 +11,7 @@
 
     <groupId>com.activityManager</groupId>
     <artifactId>activityManager</artifactId>
-    <version>1.5</version>
+    <version>1.0</version>
     <name>webApp</name>
     <description>Demo project for Spring Boot</description>
 
@@ -46,6 +46,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
+       <dependency>
+    <groupId>org.bouncycastle</groupId>
+    <artifactId>bcprov-jdk15on</artifactId>
+    <version>1.70</version>
+</dependency>
+<dependency>
+    <groupId>org.bouncycastle</groupId>
+    <artifactId>bcpkix-jdk15on</artifactId>
+    <version>1.70</version>
+</dependency>
 
         <!-- Lombok for reducing boilerplate code -->
         <dependency>
