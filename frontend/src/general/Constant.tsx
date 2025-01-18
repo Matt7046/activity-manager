@@ -1,4 +1,5 @@
 export enum SectionName {
+  POLICY = `privacy-policy`,
   ACTIVITY = `activity`,
   ABOUT = `about`,
   POINTS = `points`,
