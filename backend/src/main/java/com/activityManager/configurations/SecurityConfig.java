@@ -1,6 +1,6 @@
 package com.activityManager.configurations;
 
-import java.beans.Customizer;
+import org.springframework.security.config.Customizer;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
