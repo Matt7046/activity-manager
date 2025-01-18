@@ -312,14 +312,16 @@ const GoogleAuthComponent = () => {
       {open && (
         <Alert onClose={handleClose} message={message} />
       )}
-            {!hiddenLogin && (  <BannerOpenSource />)}
+           
            <Routes>
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 </Routes>
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <div>
           {!user ? (
-            <><div id="text-box-email-family">
+            <>
+             {!hiddenLogin && (  <BannerOpenSource />)}
+            <div id="text-box-email-family">
               <TextField
                 id="emailFamily"
                 label=''
