@@ -61,6 +61,8 @@ public class SecurityConfig implements WebFluxConfigurer {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange(exchanges -> exchanges
+                .pathMatchers("/privacy-policy").permitAll() // Consenti accesso pubblico alla Privacy Policy
+
                         .pathMatchers("/api/auth/token").permitAll()
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permetti l'accesso pubblico a
                                                                              // "/api/auth/token"
