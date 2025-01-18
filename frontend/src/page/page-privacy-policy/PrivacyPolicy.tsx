@@ -53,8 +53,8 @@ const PrivacyPolicy: React.FC = () => {
       </ul>
       <p style={styles.text}>
         Per esercitare questi diritti, puoi contattarci all'indirizzo email:{" "}
-        <a href="mailto:matteo.santangelo@olorsdev.tech" style={styles.link}>
-        matteo.santangelo@olorsdev.tech
+        <a href="mailto:matteo.santangelo@colorsdev.tech" style={styles.link}>
+        matteo.santangelo@colorsdev.tech
         </a>.
       </p>
 
