@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { navigateRouting } from "../../App";
+import { SectionName } from "../../general/Constant";
 
 const BannerOpenSource: React.FC = () => {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate(); // Ottieni la funzione di navigazione
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,6 +20,11 @@ const BannerOpenSource: React.FC = () => {
     }
   };
 
+  const handleClick = () => {
+    navigateRouting(navigate, SectionName.POLICY, { newLogin: true })
+  
+  }
+
   return (
     <div style={styles.banner}>
       {isSubmitted ? (
@@ -25,19 +34,22 @@ const BannerOpenSource: React.FC = () => {
       ) : (
         <form onSubmit={handleSubmit} style={styles.form}>
           <label style={styles.text}>
-            Iscriviti per ricevere aggiornamenti sul nostro progetto open source. 
-            Tratteremo i tuoi dati personali esclusivamente per inviarti 
+            Iscriviti per ricevere aggiornamenti sul nostro progetto open source.
+            Tratteremo i tuoi dati personali esclusivamente per inviarti
             comunicazioni relative al progetto. Per maggiori dettagli, consulta la nostra{" "}
-            <a href="/privacy-policy" target="_blank" style={styles.link}>
+            <label onClick={handleClick} // Evento onClick per eseguire l'azione
+              style={styles.link}>
               Privacy Policy
-            </a>.
+
+            </label>
           </label>
-         
+
         </form>
       )}
     </div>
   );
 };
+
 
 const styles = {
   banner: {
