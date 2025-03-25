@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage, useUser } from "../../App";
 import Button, { Pulsante } from "../../components/ms-button/Button";
+import { SectionName } from '../../general/Constant';
 import { UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./Register.css";
@@ -102,7 +103,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     return saveUserByPoints({ ...userData, emailFigli: emailFigli, points: arrayDiOggetti }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug     
       setTitle(''); 
-      navigateRouting(navigate, ``, { newLogin : true })
+      navigateRouting(navigate, SectionName.ROOT, { newLogin : true })
     })
   }
   return (
