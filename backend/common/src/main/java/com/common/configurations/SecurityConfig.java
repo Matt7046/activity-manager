@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -37,11 +38,13 @@ public class SecurityConfig implements WebFluxConfigurer {
     @Autowired
     PropertiesKey propertiesKey;
 
+    @Value("${app.secret.crypt.user.key}")
+    private String secretKey;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-  
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "https://webapp-tn6q.onrender.com") // Aggiungi http:// per
+                .allowedOrigins("http://localhost:3000") // Aggiungi http:// per
                                                                                              // localhost
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
@@ -66,15 +69,15 @@ public class SecurityConfig implements WebFluxConfigurer {
                 .pathMatchers("/privacy-policy").permitAll() // Consenti accesso pubblico alla Privacy Policy
 
                         .pathMatchers("/api/auth/token").permitAll()
-                        .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permetti l'accesso pubblico a "/api/auth/token"
+                        .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permetti l'accesso pubblico a
+                                                                             // "/api/auth/token"
                         .anyExchange().authenticated() // Richiedi autenticazione per tutte le altre richieste
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt() // Configura il decoder JWT automaticamente
+                .jwt(Customizer.withDefaults()) // Configura il decoder JWT automaticamente
                 )
-                .cors() // Abilita CORS
-                .and()
-                .csrf().disable(); // Disabilita CSRF per le API      
+                .cors(Customizer.withDefaults())  // Abilita CORS            
+                .csrf(ServerHttpSecurity.CsrfSpec::disable);  // Disabilita CSRF per le API
 
         return http.build();
     }
@@ -102,6 +105,6 @@ public class SecurityConfig implements WebFluxConfigurer {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // Utilizza NoOpPasswordEncoder per password in chiaro
+        return new BCryptPasswordEncoder();
     }
 }
