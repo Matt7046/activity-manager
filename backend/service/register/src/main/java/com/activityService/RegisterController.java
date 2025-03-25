@@ -27,9 +27,6 @@ public class RegisterController {
         @Qualifier("webClientPoints")
         private WebClient webClientPoints;
 
-        @Value("${microservice.auth-token}")
-        private String internalAuthToken;
-
         @PostMapping("child")
         public Mono<ResponseDTO> getEmailChild(@RequestBody PointsDTO pointsDTO) {
             return webClientPoints.post()
