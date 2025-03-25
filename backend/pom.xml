@@ -1,127 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-
-    <groupId>com.activityManager</groupId>
-    <artifactId>activityManager</artifactId>
-    <version>1.5</version>
-    <name>webApp</name>
-    <description>Demo project for Spring Boot</description>
-
-    <properties>
-        <java.version>17</java.version>
-    </properties>
-
-    <dependencies>
-        <!-- Spring Boot Starter Dependencies -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-        </dependency>
-
-        <!-- Lombok for reducing boilerplate code -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- MapStruct for object mapping -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>1.5.5.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <version>1.5.5.Final</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-             <groupId>io.jsonwebtoken</groupId>
-             <artifactId>jjwt-api</artifactId>
-             <version>0.11.5</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>0.11.5</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.11.5</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- MongoDB Sync Driver -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <!-- Plugin per copiare il file .jar -->
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/../jar</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.build.directory}</directory>
-                                    <includes>
-                                        <include>*.jar</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+<project 
+    xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+  <modelVersion>4.0.0</modelVersion>
+  
+  <!-- Parent Spring Boot -->
+  <parent>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-parent</artifactId>
+      <version>3.4.0</version>
+      <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+  
+  <groupId>com.activityManager</groupId>
+  <artifactId>activityManager</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+  <name>activityManager</name>
+  <description>Demo project for Spring Boot</description>
+  
+  <properties>
+      <java.version>17</java.version>
+  </properties>
+  
+  <modules>
+      <module>common</module>
+      <module>repository</module>
+      <module>service/auth</module>
+      <module>service/activity</module>
+      <module>service/logActivity</module>
+      <module>service/about</module>
+      <module>service/register</module>
+      <module>service/points</module>
+      <module>service/family</module>
+  </modules>
+  
+  <!-- Rimuovi qui le dependency che riferiscono i moduli figli, ad esempio la dependency per common -->
+  <!-- In un POM aggregatore non è necessario dichiarare le dependency verso i moduli interni -->
+  <dependencies>
+      <!-- Qui puoi dichiarare eventuali dependency comuni a tutti i moduli, se necessario -->
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-webflux</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-security</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-data-mongodb</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.projectlombok</groupId>
+          <artifactId>lombok</artifactId>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.mapstruct</groupId>
+          <artifactId>mapstruct</artifactId>
+          <version>1.5.5.Final</version>
+      </dependency>
+      <dependency>
+          <groupId>org.mapstruct</groupId>
+          <artifactId>mapstruct-processor</artifactId>
+          <version>1.5.5.Final</version>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>io.jsonwebtoken</groupId>
+          <artifactId>jjwt-api</artifactId>
+          <version>0.11.5</version>
+      </dependency>
+      <dependency>
+          <groupId>io.jsonwebtoken</groupId>
+          <artifactId>jjwt-impl</artifactId>
+          <version>0.11.5</version>
+          <scope>runtime</scope>
+      </dependency>
+      <dependency>
+          <groupId>io.jsonwebtoken</groupId>
+          <artifactId>jjwt-jackson</artifactId>
+          <version>0.11.5</version>
+          <scope>runtime</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.mongodb</groupId>
+          <artifactId>mongodb-driver-sync</artifactId>
+      </dependency> 
+  </dependencies>
+  
+  <build>
+      <plugins>
+          <plugin>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-maven-plugin</artifactId>
+          </plugin>
+          <plugin>
+              <artifactId>maven-resources-plugin</artifactId>
+              <version>3.2.0</version>
+              <executions>
+                  <execution>
+                      <id>copy-jar</id>
+                      <phase>package</phase>
+                      <goals>
+                          <goal>copy-resources</goal>
+                      </goals>
+                      <configuration>
+                          <outputDirectory>${project.build.directory}/../jar</outputDirectory>
+                          <resources>
+                              <resource>
+                                  <directory>${project.build.directory}</directory>
+                                  <includes>
+                                      <include>*.jar</include>
+                                  </includes>
+                              </resource>
+                          </resources>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
+      </plugins>  
+  </build>
+  
 </project>
