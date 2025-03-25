@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/ms-button/Button";
-import { FormErrorValues, HttpStatus, ResponseI, UserI, verifyForm } from "../../general/Utils";
+import { ButtonName, HttpStatus } from "../../general/Constant";
+import { FormErrorValues, ResponseI, UserI, verifyForm } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivities, savePointsAndLog } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
@@ -135,7 +136,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const pulsanteSave: Pulsante = {
     icona: 'fas fa-save',
     funzione: () => handleButtonClick(),
-    nome: 'red',
+    nome:  ButtonName.RED,
     disableButton: disableButtonSave,
     title: 'Salva',
     configDialogPulsante: { message: "Vuoi salvare?", showDialog: true }

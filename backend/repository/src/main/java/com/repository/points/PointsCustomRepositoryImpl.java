@@ -1,6 +1,7 @@
 package com.repository.points;
 
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +24,19 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		List<Points> existPointsOnFigli = pointsRepository.findByOnFigli(email);
 		Points existPoints = pointsRepository.findByEmailOnEmail(email);
 		Long type;
-		if (existPoints != null) {
-			type = 1L;
-		} else if (existPointsOnFigli != null && !existPointsOnFigli.isEmpty()) {
-			type = 0L;
-		} else {
-			type = 2L; 
-		}
+		type = (isExistPointsValid(existPoints)) ? 1L
+				: isExistPointsOnFigliValid(existPointsOnFigli) ? 0L
+						: 2L;
 
 		return type;
+	}
+
+	private boolean isExistPointsValid(Object existPoints) {
+		return existPoints != null;
+	}
+
+	private boolean isExistPointsOnFigliValid(Collection<?> existPointsOnFigli) {
+		return existPointsOnFigli != null && !existPointsOnFigli.isEmpty();
 	}
 
 	public Boolean saveUser(Points pointsSave) throws Exception {
@@ -39,8 +44,8 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		if (pointsSave.getEmail() != null && !pointsSave.getEmailFigli().isEmpty()) {
 			newUSer = true;
 			pointsSave.setType(1L);
-			pointsSave.getPoints().stream()				
-					.forEach(point -> point.setPoints(100L)); 		
+			pointsSave.getPoints().stream()
+					.forEach(point -> point.setPoints(100L));
 			pointsRepository.save(pointsSave);
 		}
 		return newUSer;
@@ -57,13 +62,8 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		if (existingUser == null) {
 			return new Points();
 		}
-		existingUser.setEmailFigli(existingUser.getEmailFigli().stream().map(x -> {
-			try {
-				return encryptDecryptConverter.decrypts(x);
-			} catch (Exception e) {
-			}
-			return x;
-		}).collect(Collectors.toList())); // Crittografa l'email
+		existingUser.setEmailFigli(existingUser.getEmailFigli().stream().map(x -> 			
+				encryptDecryptConverter.decrypts(x)).collect(Collectors.toList())); // Crittografa l'email
 
 		return existingUser;
 	}
@@ -97,13 +97,7 @@ public class PointsCustomRepositoryImpl implements PointsCustomRepository {
 		existingUser.setEmail(encryptDecryptConverter.decrypt(existingUser.getEmail()));
 		existingUser.setEmailFamily(encryptDecryptConverter.decrypt(existingUser.getEmailFamily()));
 		existingUser.setEmailFigli(existingUser.getEmailFigli().stream()
-				.map(figlio -> {
-					try {
-						return encryptDecryptConverter.decrypt(figlio);
-					} catch (Exception e) {
-					}
-					return "";
-				})
+				.map(figlio -> encryptDecryptConverter.decrypt(figlio))
 				.collect(Collectors.toList()));
 		pointsRepository.save(existingUser);
 		return existingUser;
