@@ -206,7 +206,7 @@ const GoogleAuthComponent = () => {
     baseStore.setToken(fakeResponse.credential);
     setUserData(user);
     getEmailChild(user).then((x: ResponseI|undefined) => {
-      const emailChild = x?.jsonText ?? [];
+      const emailChild = x?.jsonText?.emailFigli ?? [];
       setEmailOptions(emailChild);
       const typeNew = emailChild?.length > 0 ? type : 2;
       console.log("Login simulato effettuato:", fakeResponse);
@@ -276,7 +276,7 @@ const GoogleAuthComponent = () => {
         const userDataGoogle = await userDataResponse.json();
         setEmailLogin(userDataGoogle.email);
         getEmailChild(user).then((x: ResponseI|undefined) => {
-          const emailChild = x?.jsonText ?? [];
+          const emailChild = x?.jsonText?.emailFigli ?? [];
           setEmailOptions(emailChild);
         })
         //setUser({ ...userData, type: 1 });

@@ -9,7 +9,7 @@ import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps } from "../../components/ms-card/Card";
 import { HttpStatus, ResponseI, UserI } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
-import { logActivityByEmail } from "../page-activity/service/ActivityService";
+import { logActivityByEmail } from "../page-activity/service/LogActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./PointsContent.css";
 import { findByEmail } from "./service/PointsService";
