@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { TypeMessage } from '../page/page-layout/PageLayout';
-import { Alert, HttpStatus } from './Utils';
+import { HttpStatus, ServerMessage, TypeAlertColor } from './Constant';
+import apiConfig, { ServiceName } from './service/ApiConfig';
 
 const apiClient = (serviceName: ServiceName) => {
   const token = localStorage.getItem('token');
