@@ -10,9 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 @Configuration
-public class WebClientConfig {
-    @Value("${microservice.auth-token}")
-    private String internalAuthToken;
+public class WebClientConfig { 
 
 @Bean
 public WebClient webClientRegister(WebClient.Builder builder) {
