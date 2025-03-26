@@ -1,6 +1,5 @@
 @echo off
-
-rem Elimina il file activityManager-1.0.jar se esiste
+rem Elimina il file .jar esistente (se necessario)
 cd ..\jar
 if exist activityManager-1.0.jar (
     del activityManager-1.0.jar
@@ -9,26 +8,26 @@ if exist activityManager-1.0.jar (
     echo File activityManager-1.0.jar non trovato.
 )
 
-rem Torna alla directory principale e esegui mvn clean package
+rem Torna alla directory principale e esegui mvn clean install
 cd ..\
-REM Punto 1: Esegui il comando Maven
-call mvn clean package
+echo Eseguendo mvn clean install...
+call mvn clean install
 if %errorlevel% neq 0 (
-    echo Errore durante mvn clean package
+    echo Errore durante mvn clean install.
+    pause
+    goto end
+)
+echo mvn clean install completato.
+
+rem Esegui Docker Compose
+echo Avvio dei container con Docker Compose...
+call docker-compose up --build
+if %errorlevel% neq 0 (
+    echo Errore durante docker-compose up --build.
     pause
     goto end
 )
 
-REM Punto 2: Conferma completamento del comando Maven
-echo "mvn clean package completato"
-
-REM Punto 3: Apri una nuova console
-start cmd /k "cd ..\backend\jar && java -jar activityManager-1.0.jar
-
-pause
-
 :end
-REM Mantieni aperta la console corrente
-echo "Script completato."
-
-
+echo Script completato.
+pause
