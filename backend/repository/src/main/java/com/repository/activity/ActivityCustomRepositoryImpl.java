@@ -18,16 +18,10 @@ public class ActivityCustomRepositoryImpl implements ActivityCustomRepository {
 
     public String saveActivity(Activity activity) {
         // Verifica se esiste già un documento con l'identificativo
-        Activity existingActivity = activity;
-        if (activity.get_id() != null) {
-            existingActivity = ActivityRepository.findByIdentificativo(activity.get_id());
-        }
-
         String emailCriypt = encryptDecryptConverter.convert(activity.getEmail());
         activity.setEmail(emailCriypt);
-        existingActivity = ActivityRepository.save(activity);
-
-        return existingActivity.get_id();// Restituisci l'ID aggiornato
+        activity = ActivityRepository.save(activity);
+        return activity.get_id();// Restituisci l'ID aggiornato
 
     }
 }
