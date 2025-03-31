@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
+import { TypeAlertColor } from '../../general/Constant';
 import { getMenuLaterale } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import AboutContent from './AboutContent';
@@ -13,16 +14,16 @@ export interface PointsI {
   attivita: string;
 }
 
-const About: React.FC<{ setTitle:any }> = ({setTitle}) => {
+const About: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
   setTitle("Section about");
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const { user, setUser } = useUser(); 
+  const { user, setUser } = useUser();
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const [paddingType, setPaddingType] =  useState<number>(isVertical ? 0 : 5);
+  const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
 
 
@@ -37,6 +38,29 @@ const About: React.FC<{ setTitle:any }> = ({setTitle}) => {
 
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const socket = new WebSocket("ws://notification-service:8088/notifications");
+    socket.onopen = () => {
+      console.log("Connected to WebSocket");
+    };
+
+    socket.onmessage = (event) => {
+      setOpen(true);
+      const typeMessage: TypeMessage = {
+        message: [event.data],
+        typeMessage: TypeAlertColor.INFO
+      }
+      setMessage(event.data);
+    };
+    socket.onclose = () => {
+      console.log("Disconnected from WebSocket");
+    };
+
+    return () => {
+      socket.close();
+    };
   }, []);
 
   const handleClose = () => {
@@ -55,7 +79,7 @@ const About: React.FC<{ setTitle:any }> = ({setTitle}) => {
         <AboutContent
           user={user}
           setMessage={setMessage}
-          setOpen ={setOpen}
+          setOpen={setOpen}
         />
       </PageLayout>
       <div>
