@@ -4,6 +4,7 @@ import { useUser } from '../../App';
 import { getMenuLaterale } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import FamilyContent from './FamilyContent';
+import { TypeAlertColor } from '../../general/Constant';
 
 export interface PointsI {
   _id: string | undefined;
@@ -38,6 +39,30 @@ const Family: React.FC<{ setTitle:any }> = ({ setTitle}) => {
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+   useEffect(() => {
+    const socket = new WebSocket("ws://notification-service:8088/ws/notifications");
+    socket.onopen = () => {
+          console.log("Connected to WebSocket");
+        };
+        socket.onmessage = (event) => {
+          setOpen(true);
+          const typeMessage: TypeMessage = {
+            message: [event.data],
+            typeMessage: TypeAlertColor.INFO
+          }
+          setMessage(event.data);
+        };
+    
+        socket.onclose = () => {
+          console.log("Disconnected from WebSocket");
+        };
+    
+        return () => {
+          socket.close();
+        };
+      }, []);
+  
 
   const handleClose = () => {
     setOpen(false);
