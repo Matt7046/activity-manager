@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = {
     "com.activityManager", 
     "com.repository", 
-    "com.activityManager.configurations",
+    "com.common.configurations",
     "com.activityService",
     "com.common"
 })

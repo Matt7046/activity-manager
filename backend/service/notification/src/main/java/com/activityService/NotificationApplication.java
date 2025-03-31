@@ -1,10 +1,7 @@
 package com.activityService;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@EnableMongoRepositories(basePackages = "com.repository.about")
 @SpringBootApplication(scanBasePackages = {
     "com.activityManager", 
     "com.repository", 
@@ -12,9 +9,9 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
     "com.activityService",
     "com.common"
 })
-public class AboutApplication {
+public class NotificationApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AboutApplication.class, args);
+        SpringApplication.run(NotificationApplication.class, args);
     }
 }

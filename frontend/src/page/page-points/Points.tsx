@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
+import { TypeAlertColor } from '../../general/Constant';
 import { getMenuLaterale } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import PointsContent from './PointsContent';
@@ -41,6 +42,29 @@ const Points: React.FC<{ setTitle:any }> = ({ setTitle}) => {
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+    useEffect(() => {
+      const socket = new WebSocket("ws://notification-service:8088/notifications");  
+      socket.onopen = () => {
+        console.log("Connected to WebSocket");
+      };
+      socket.onmessage = (event) => {
+        setOpen(true);
+        const typeMessage: TypeMessage = {
+          message: [event.data],
+          typeMessage: TypeAlertColor.INFO
+        }
+        setMessage(event.data);
+      };
+  
+      socket.onclose = () => {
+        console.log("Disconnected from WebSocket");
+      };
+  
+      return () => {
+        socket.close();
+      };
+    }, []);
 
   const handleClose = () => {
     setOpen(false);
