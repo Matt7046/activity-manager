@@ -1,15 +1,13 @@
 package com.activityService;
 
+import com.common.configurations.RabbitMQProducer;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.common.data.Points;
 import com.common.dto.PointsDTO;
 import com.common.dto.PointsRDTO;
 import com.common.dto.ResponseDTO;
-import com.common.mapper.PointsMapper;
 import com.common.transversal.PointsUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +18,18 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.management.Notification;
+
 @RestController
 @CrossOrigin(origins = "https://webapp-tn6q.onrender.com")
 @RequestMapping("api/family")
 public class FamilyController {
 
-        @Autowired
-        private FamilyService familyService;
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private RabbitMQProducer notificationPublisher;
+
 
         @PostMapping("/dati")
         public Mono<ResponseDTO> savePointsByFamily(@RequestBody PointsDTO pointsDTO) {
@@ -48,6 +51,7 @@ public class FamilyController {
                                                         "I Points a disposizione sono: "
                                                                         + filteredList.get(0).getPoints());
                                         // Creare il ResponseDTO finale
+                                        notificationPublisher.sendMessage("Punti aggiunti da " + pointsDTO.getEmail());
                                         ResponseDTO response = new ResponseDTO(record, HttpStatus.OK.value(),
                                                         new ArrayList<>());
                                         return Mono.just(response);
