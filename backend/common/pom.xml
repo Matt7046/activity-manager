@@ -25,6 +25,12 @@
 
     <!-- Aggiungi qui le dipendenze necessarie per il modulo common -->
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <version>3.1.0</version>
+        </dependency>
     
         <!-- Ad esempio, se usi Lombok -->
         <dependency>
