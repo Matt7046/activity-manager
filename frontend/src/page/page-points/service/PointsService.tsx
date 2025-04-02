@@ -28,6 +28,20 @@ export const getUserType = async (user: any, funzioneMessage?: (message?: TypeMe
   }
 };
 
+export const getEmailChild = async (userDTO: any, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+  try {
+    const path = PATH_POINTS + `/child`;
+    const data = await postData(ServiceName.POINTS, path, userDTO, setLoading); // Usa l'URL dinamico
+    console.log('Dati ricevuti:', data);
+    return data;
+  } catch (error) {
+    console.error('Errore durante il recupero dei dati:', error);
+    if (funzioneErrore) {
+      funzioneErrore();
+    }
+  }
+};
+
 
 
 
