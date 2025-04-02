@@ -32,10 +32,12 @@ public class WebSocketService implements WebSocketHandler {
     }
 
     public void sendNotification(String message) {
-        // Invia la notifica a tutte le sessioni WebSocket attive
+        System.out.println("instance message" +  " [x] Done in "
+                + message + "s"+ sessions.size());
         Flux.fromIterable(sessions)
-                .filter(WebSocketSession::isOpen)
+                .filter(WebSocketSession::isOpen) // **Filtra solo le sessioni aperte**
                 .flatMap(session -> session.send(Mono.just(session.textMessage(message))))
+                .doOnError(error -> System.err.println("Errore nell'invio della notifica: " + error.getMessage())) // **Gestisce errori**
                 .subscribe();
     }
 }
