@@ -26,7 +26,6 @@ public class AboutService {
                 .bodyValue(activityDTO)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    System.out.println("Errore 4xx ricevuto");
                     return Mono.error(new RuntimeException("Errore 4xx")); // Passa l'errore
                 })
                 .bodyToMono(new ParameterizedTypeReference<ResponseDTO>() {
@@ -43,7 +42,6 @@ public class AboutService {
                 .uri("/api/activity/toggle/{identificativo}", identificativo)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    System.out.println("Errore 4xx ricevuto" + clientResponse.statusCode());
                     return Mono.error(new RuntimeException("Errore 4xx" + clientResponse.statusCode()));
                 })
                 .bodyToMono(new ParameterizedTypeReference<ResponseDTO>() {

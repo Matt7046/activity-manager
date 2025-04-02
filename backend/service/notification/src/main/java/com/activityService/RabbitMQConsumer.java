@@ -19,7 +19,7 @@ public class RabbitMQConsumer {
 
     @RabbitListener(queues = "notifications.queue", ackMode = "MANUAL")
     public void receiveNotification(String message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
-        System.out.println("Ricevuta notifica: " + message);
+    
 
         // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
         try {
@@ -34,12 +34,9 @@ public class RabbitMQConsumer {
     public void receive(String in, int receiver) throws InterruptedException {
         StopWatch watch = new StopWatch();
         watch.start();
-        System.out.println("instance " + receiver + " [x] Received '" + in + "'");
         doWork(in);
         watch.stop();
-        System.out.println("instance " + receiver + " [x] Done in "
-                + watch.getTotalTimeSeconds() + "s");
-       webSocketService.sendNotification(in);
+        webSocketService.sendNotification(in);
     }
 
     private void doWork(String in) throws InterruptedException {
