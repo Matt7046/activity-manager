@@ -39,8 +39,7 @@ public class SecurityConfig implements WebFluxConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000") // Aggiungi http:// per
-                                                                                             // localhost
+                .allowedOrigins("http://localhost:3000", "http://localhost:3001")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true); // Aggiungi questo se invii cookie o header di autenticazione
@@ -62,8 +61,7 @@ public class SecurityConfig implements WebFluxConfigurer {
         http
                 .authorizeExchange(exchanges -> exchanges
                 .pathMatchers("/privacy-policy").permitAll() // Consenti accesso pubblico alla Privacy Policy
-
-                        .pathMatchers("/api/auth/token").permitAll()
+                                .pathMatchers("/ws/**").permitAll()                         .pathMatchers("/api/auth/token").permitAll()
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permetti l'accesso pubblico a
                                                                              // "/api/auth/token"
                         .anyExchange().authenticated() // Richiedi autenticazione per tutte le altre richieste

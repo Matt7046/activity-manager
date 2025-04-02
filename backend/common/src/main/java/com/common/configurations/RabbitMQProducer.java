@@ -1,5 +1,7 @@
 package com.common.configurations;
 
+import com.common.dto.NotificationDTO;
+import com.common.dto.ResponseDTO;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,6 @@ public class RabbitMQProducer {
 
     @Scheduled(fixedDelay = 1000, initialDelay = 500)
     public void sendMessage(String message) {
-        StringBuilder builder = new StringBuilder(message);
-        if (dots.getAndIncrement() == 3) {
-            dots.set(1);
-        }
-        for (int i = 0; i < dots.get(); i++) {
-            builder.append('.');
-        }
-        builder.append(count.incrementAndGet());
         template.convertAndSend("notification.exchange", "notification.family", message);
         System.out.println(" [x] Sent '" + message + "'");
     }

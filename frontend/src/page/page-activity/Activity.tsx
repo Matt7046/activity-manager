@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { showMessage, useUser } from '../../App';
-import { TypeAlertColor } from '../../general/Constant';
-import { getMenuLaterale, ResponseI, UserI } from '../../general/Utils';
+import { TypeAlertColor, TypeUser } from '../../general/Constant';
+import { FamilyNotificationI, getMenuLaterale, ResponseI, UserI } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import ActivityContent from './ActivityContent';
 import { fetchDataActivities } from './service/ActivityService';
@@ -61,28 +61,34 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   }, []); // Il secondo argomento vuoto ind ica che l'effetto dipenderà solo dal mount
 
   useEffect(() => {
-    const socket = new WebSocket("ws://notification-service:8088/ws/notifications");
-    socket.onopen = () => {
-      console.log("Connected to WebSocket");
-    };
-
-    socket.onmessage = (event) => {
-      setOpen(true);
-      const typeMessage: TypeMessage = {
-        message: [event.data],
-        typeMessage: TypeAlertColor.INFO
-      }
-      setMessage(event.data);
-    };
-
-    socket.onclose = () => {
-      console.log("Disconnected from WebSocket");
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, []);
+      const socket = new WebSocket("ws://localhost:8088/ws/notifications");
+      socket.onopen = () => {
+        console.log("Connected to WebSocket");
+      };
+      socket.onmessage = (event) => {
+        setOpen(true);  
+  
+        const familyNotification: FamilyNotificationI = JSON.parse(event.data);
+        console.log("notificationFamily"+familyNotification);
+      
+        if ( user.type === TypeUser.STANDARD && utente.emailFamily === familyNotification.emailFamily) {
+          const typeMessage: TypeMessage = {
+            message: [familyNotification.pointsNew],
+            typeMessage: TypeAlertColor.INFO
+          }
+          showMessage(setOpen, setMessage, typeMessage);       
+        }
+      };
+  
+      socket.onclose = () => {
+        console.log("Disconnected from WebSocket");
+      };
+  
+      return () => {
+        socket.close();
+      };
+    }, []);
+  
 
   const componentDidMount = () => {
     if (!hasFetchedData) {
