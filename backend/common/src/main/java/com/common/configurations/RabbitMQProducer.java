@@ -27,8 +27,7 @@ public class RabbitMQProducer {
 
     @Scheduled(fixedDelay = 1000, initialDelay = 500)
     public void sendMessage(String message) {
-        template.convertAndSend("notification.exchange", "notification.family", message);
-        System.out.println(" [x] Sent '" + message + "'");
+       template.convertAndSend("notification.exchange", "notification.family", message);
     }
 
 }
