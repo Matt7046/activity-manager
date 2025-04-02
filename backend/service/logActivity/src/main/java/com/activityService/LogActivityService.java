@@ -45,26 +45,19 @@ public class LogActivityService {
             .bodyValue(points)
             .retrieve()
             .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                System.out.println("Errore 4xx ricevuto");
                 return Mono.error(new RuntimeException("Errore 4xx")); // Passa l'errore
             })
             .bodyToMono(new ParameterizedTypeReference<ResponseDTO>() {})
             .doOnError(ex -> {
                 // Log error senza interrompere
                 System.err.println("Errore nella chiamata: " + ex.getMessage());
-            }).subscribe(
-            response -> {
-                System.out.println("Risposta ricevuta: " + response);
-                if (response != null && response.jsonText() != null) {
-                    System.out.println("Activity DTO: " + response.jsonText());
-                }
+            }).subscribe(response -> {
             },
             error -> {
-                // Qui ci entra SEMPRE se c'è errore
-                System.err.println("Errore nel subscribe: " + error.getMessage());
+   
             },
             () -> {
-                System.out.println("Chiamata completata");
+               
             }
         );
         
