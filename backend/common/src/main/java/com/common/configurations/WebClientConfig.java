@@ -19,7 +19,6 @@ public WebClient webClientRegister(WebClient.Builder builder) {
             ReactiveSecurityContextHolder.getContext()
                 .map(securityContext -> {
                     String token = (String) securityContext.getAuthentication().getCredentials();
-                    System.out.println("Token recuperato dal contesto di sicurezza2: " + token);
                     return ClientRequest.from(request)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .build();
@@ -40,7 +39,6 @@ public WebClient webClientRegister(WebClient.Builder builder) {
                     .map(securityContext -> {
                         Jwt token =  (Jwt) securityContext.getAuthentication().getCredentials();
                         String tokenValue = token.getTokenValue(); 
-                        System.out.println("Token recuperato dal contesto di sicurezza JWT: " + tokenValue);
                         return ClientRequest.from(request)
                             .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
                             .build();
@@ -59,7 +57,6 @@ public WebClient webClientRegister(WebClient.Builder builder) {
                 .map(securityContext -> {
                     Jwt token =  (Jwt) securityContext.getAuthentication().getCredentials();
                     String tokenValue = token.getTokenValue(); 
-                    System.out.println("Token recuperato dal contesto di sicurezza JWT: " + tokenValue);
                     return ClientRequest.from(request)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
                         .build();
@@ -78,7 +75,6 @@ public WebClient webClientRegister(WebClient.Builder builder) {
                 .map(securityContext -> {
                     Jwt token =  (Jwt) securityContext.getAuthentication().getCredentials();
                     String tokenValue = token.getTokenValue(); 
-                    System.out.println("Token recuperato dal contesto di sicurezza JWT: " + tokenValue);
                     return ClientRequest.from(request)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
                         .build();
@@ -97,7 +93,6 @@ public WebClient webClientRegister(WebClient.Builder builder) {
                 .map(securityContext -> {
                     Jwt token =  (Jwt) securityContext.getAuthentication().getCredentials();
                     String tokenValue = token.getTokenValue(); 
-                    System.out.println("Token recuperato dal contesto di sicurezza JWT: " + tokenValue);
                     return ClientRequest.from(request)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
                         .build();
@@ -116,7 +111,6 @@ public WebClient webClientRegister(WebClient.Builder builder) {
                 .map(securityContext -> {
                     Jwt token =  (Jwt) securityContext.getAuthentication().getCredentials();
                     String tokenValue = token.getTokenValue(); 
-                    System.out.println("Token recuperato dal contesto di sicurezza JWT: " + tokenValue);
                     return ClientRequest.from(request)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
                         .build();
