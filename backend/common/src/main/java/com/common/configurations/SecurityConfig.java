@@ -1,6 +1,5 @@
 package com.common.configurations;
 
-import java.beans.Customizer;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
@@ -40,10 +40,10 @@ public class SecurityConfig implements WebFluxConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         
         registry.addMapping("/**")
-        .allowedOrigins("https://webapp-tn6q.onrender.com")  // Aggiungi http:// per localhost
-        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true); // Aggiungi questo se invii cookie o header di autenticazione
+            .allowedOrigins("https://webapp-tn6q.onrender.com")  // Aggiungi http:// per localhost
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedHeaders("*")
+            .allowCredentials(true); // Aggiungi questo se invii cookie o header di autenticazione
     }
 
     @Bean
@@ -70,7 +70,7 @@ public class SecurityConfig implements WebFluxConfigurer {
                 .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(Customizer.withDefaults()) // Configura il decoder JWT automaticamente
                 )
-                .cors(Customizer.withDefaults())  // Abilita CORS            
+                .cors(Customizer.withDefaults())  // Abilita CORS
                 .csrf(ServerHttpSecurity.CsrfSpec::disable);  // Disabilita CSRF per le API
 
         return http.build();
