@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "type": "java",
+          "request": "attach",
+          "name": "🔍 Points Debug",
+          "hostName": "localhost",
+          "port": 5006,
+          "timeout": 30000
+      }
+  ]
+}

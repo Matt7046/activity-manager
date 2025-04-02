@@ -1,6 +1,7 @@
 import { NavigateFunction } from "react-router-dom";
 import { sezioniMenu, sezioniMenuIniziale } from "../App";
 import { MenuLaterale } from "../components/ms-drawer/Drawer";
+import { SectionName, TypeUser } from "./Constant";
 
 export const myDisplayer = ((some: string, value: string) => {
   if (document.getElementById(some)) {
@@ -14,6 +15,18 @@ export interface ResponseI {
   status: any;
   errors: string[];
 
+}
+
+export interface NotificationI {
+
+    email : string;
+     emailFamily : string;
+    serviceName : string;
+
+}
+
+export interface FamilyNotificationI extends NotificationI  {
+  pointsNew : string;
 }
 
 export interface UserI {
@@ -54,37 +67,18 @@ export const getMenuLaterale = (navigate: NavigateFunction, user: UserI): MenuLa
   const sezioniMenuI = sezioniMenuIniziale(user);
   let menuLaterale: MenuLaterale[][] = [];
   if (user.type === TypeUser.FAMILY || user.type === TypeUser.NEW_USER) {
-    menuLaterale = sezioniMenu(sezioniMenuI, navigate, `activity`, {}, 0);
-    menuLaterale = sezioniMenu(sezioniMenuI, navigate, `about`, {}, 1);
-    menuLaterale = sezioniMenu(sezioniMenuI, navigate, `points`, { email: user.email }, 2);
-    menuLaterale = sezioniMenu(sezioniMenuI, navigate, `operative`, { email: user.email }, 3);
-    menuLaterale = sezioniMenu(sezioniMenuI, navigate, `family`, { email: user.email }, 4);
+    menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.ACTIVITY, {}, 0);
+    menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.ABOUT, {}, 1);
+    menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.POINTS, { email: user.email }, 2);
+    menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.OPERATIVE, { email: user.email }, 3);
+    menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.FAMILY, { email: user.email }, 4);
   }
   if (user.type === TypeUser.STANDARD) {
-    menuLaterale = sezioniMenu(sezioniMenuI, navigate, `activity`, {}, 0);
-    menuLaterale = sezioniMenu(sezioniMenuI, navigate, `points`, { email: user.email }, 1);
-    menuLaterale = sezioniMenu(sezioniMenuI, navigate, `operative`, { email: user.email }, 2);
+    menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.ACTIVITY, {}, 0);
+    menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.POINTS, { email: user.email }, 1);
+    menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.OPERATIVE, { email: user.email }, 2);
   }
   return menuLaterale!;
 }
 
-export enum HttpStatus {
-  OK = 200,
-  CREATED = 201,
-  BAD_REQUEST = 400,
-  UNAUTHORIZED = 401,
-  FORBIDDEN = 403,
-  NOT_FOUND = 404,
-  INTERNAL_SERVER_ERROR = 500,
-}
-
-export enum TypeUser {
-  STANDARD = 0,
-  FAMILY = 1,
-  NEW_USER = 2
-}
-
-export enum Alert {
-  SERVER_DOWN = "Il server non risponde"
-}
 

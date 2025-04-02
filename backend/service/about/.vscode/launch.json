@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "type": "java",
+          "request": "attach",
+          "name": "🔍 About Debug",
+          "hostName": "localhost",
+          "port": 5007,
+          "timeout": 30000
+      }
+  ]
+}
