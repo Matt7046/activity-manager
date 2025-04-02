@@ -6,19 +6,21 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import Alert from './components/ms-alert/Alert';
+import BannerOpenSource from './components/ms-banner/Banner';
 import { MenuLaterale } from './components/ms-drawer/Drawer';
 import { baseStore } from './general/BaseStore';
+import { LoginUser, SectionName, ServerMessage, TypeUser } from './general/Constant';
 import { getToken } from './general/service/AuthService';
-import { ResponseI, TypeUser, UserI } from './general/Utils';
+import { ResponseI, UserI } from './general/Utils';
 import About from './page/page-about/About';
 import Activity from './page/page-activity/Activity';
 import Family from './page/page-family/Family';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
 import Points from './page/page-points/Points';
-import { getUserType as getTypeUser } from './page/page-points/service/PointsService';
+import { getEmailChild, getUserType as getTypeUser } from './page/page-points/service/PointsService';
+import PrivacyPolicy from './page/page-privacy-policy/PrivacyPolicy';
 import Register from './page/page-register/Register';
-import { getEmailChild } from './page/page-register/service/RegisterService';
 
 
 // Creazione del contesto per User
@@ -45,6 +47,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     if (location.pathname === '/') {
       resetUser();
     }
+  
+ 
     return () => {
     };
   }, [location]);
@@ -82,12 +86,13 @@ const GoogleAuthComponent = () => {
   const [emailLogin, setEmailLogin] = useState(''); // Stato per l'email
   const location = useLocation();
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [hiddenLogin, setHiddenLogin] = useState<any>(false); // Stato utente
+  const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => { };
 
-  };
 
 
   useEffect(() => {
+    
     if (location.pathname === '/') {
       // Stato per userData
       setUserData({
@@ -104,7 +109,7 @@ const GoogleAuthComponent = () => {
       });
       setUser(null);
     }
-
+    setHiddenLogin(location.pathname === '/privacy-policy')
     return () => {
     };
   }, [location]);
@@ -143,9 +148,6 @@ const GoogleAuthComponent = () => {
     userData.type = typeSimulated;
     setUser(userData);
     handleCloseD();
-    //navigateRouting(navigate, `activity`,{});
-
-    //saveUserData(userData, setLoading);
   });
   let check = false;
   useEffect(() => {
@@ -154,11 +156,11 @@ const GoogleAuthComponent = () => {
       // Naviga solo quando `user` è stato aggiornato
       if (user.type === 2 && !check) {
 
-        navigateRouting(navigate, 'register', {});
+        navigateRouting(navigate, SectionName.REGISTER, {});
         check = true;
       }
       else if ((user.type === 0 || user.type === 1) && !check) {
-        navigateRouting(navigate, 'activity', {});
+        navigateRouting(navigate, SectionName.ACTIVITY, {});
         check = false;
       }
     }
@@ -187,7 +189,7 @@ const GoogleAuthComponent = () => {
       const accessToken = codeResponse?.access_token;
       // Puoi usare l'access token per fare richieste all'API di Google
       baseStore.clearToken();
-      getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message)).then(tokenData => {
+      getToken({ email: LoginUser.USER, password: LoginUser.PASS }, (message: any) => showMessage(setOpen, setMessage, message)).then(tokenData => {
         fetchUserData(accessToken,tokenData);
       })
     },
@@ -206,7 +208,7 @@ const GoogleAuthComponent = () => {
     baseStore.setToken(fakeResponse.credential);
     setUserData(user);
     getEmailChild(user).then((x: ResponseI|undefined) => {
-      const emailChild = x?.jsonText ?? [];
+      const emailChild = x?.jsonText?.emailFigli ?? [];
       setEmailOptions(emailChild);
       const typeNew = emailChild?.length > 0 ? type : 2;
       console.log("Login simulato effettuato:", fakeResponse);
@@ -229,13 +231,11 @@ const GoogleAuthComponent = () => {
           setEmailLogin(userD.email);
           setSimulated(TypeUser.STANDARD);
           setUser({ ...userD, type: x.jsonText.typeUser });
-          //   navigateRouting(navigate, `activity`, {});
           break;
         }
         case 1: {
           setEmailLogin(userD.email);
           setSimulated(TypeUser.FAMILY);
-          //  setUserData({ ...userD, email, type: x.testo.typeUser })
           handleOpenD();
           break;
         }
@@ -247,7 +247,6 @@ const GoogleAuthComponent = () => {
           else {
             setUser({ ...userData, type: 2 });
           }
-          //  navigateRouting(navigate, `register`, {})
         }
           break;
       }
@@ -276,7 +275,7 @@ const GoogleAuthComponent = () => {
         const userDataGoogle = await userDataResponse.json();
         setEmailLogin(userDataGoogle.email);
         getEmailChild(user).then((x: ResponseI|undefined) => {
-          const emailChild = x?.jsonText ?? [];
+          const emailChild = x?.jsonText?.emailFigli ?? [];
           setEmailOptions(emailChild);
         })
         //setUser({ ...userData, type: 1 });
@@ -312,12 +311,16 @@ const GoogleAuthComponent = () => {
       {open && (
         <Alert onClose={handleClose} message={message} />
       )}
-
-      {/* Google OAuth Provider */}
+           
+           <Routes>
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                </Routes>
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <div>
           {!user ? (
-            <><div id="text-box-email-family">
+            <>
+             {!hiddenLogin && (  <BannerOpenSource />)}
+            <div id="text-box-email-family">
               <TextField
                 id="emailFamily"
                 label=''
@@ -337,7 +340,8 @@ const GoogleAuthComponent = () => {
                   }}
                 >
                   <div>
-                    <Grid container spacing={2}>
+                  {!hiddenLogin && ( 
+                     <Grid container spacing={2}>
                       {/* Prima riga: Pulsanti per simulare il login */}
                       <Grid size={{ xs: 12, sm: 6 }}>
                         <ButtonMui
@@ -345,7 +349,7 @@ const GoogleAuthComponent = () => {
                           color="primary"
                           onClick={() => simulateLogin(TypeUser.STANDARD)}
                           fullWidth
-                        >
+                          >
                           Simula login utente base
                         </ButtonMui>
                       </Grid>
@@ -366,6 +370,7 @@ const GoogleAuthComponent = () => {
 
                       </Grid>
                     </Grid>
+                  )}
                   </div>
                 </div>
 
@@ -409,12 +414,16 @@ const GoogleAuthComponent = () => {
                   </Dialog>
                 </div>
               </div></>
-          ) : (
+          ) 
+          
+          
+          : (
             <div>
 
               <h2>{title}</h2>
               <Routes>
                 <Route path="/" element={<App />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/register" element={<Register setTitle={setTitle} />} />
                 <Route path="/activity" element={<Activity setTitle={setTitle} />} />
                 <Route path="/about" element={<About setTitle={setTitle} />} />
@@ -433,7 +442,7 @@ const GoogleAuthComponent = () => {
   );
 };
 
-export const navigateRouting = (navigate: NavigateFunction, path: string, params: any) => {
+export const navigateRouting = (navigate: NavigateFunction, path: SectionName, params: any) => {
   navigate(`/${path}`, { state: params }); // Passa i parametri come stato
 };
 
@@ -462,7 +471,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
 }
 
 export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage) => {
-  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage } : { message: ['Il server non risponde'], typeMessage: 'error' };
+  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage } : { message: [ServerMessage.SERVER_DOWN], typeMessage: 'error' };
   setOpen(true);
   setMessage(messageBE);
 }
@@ -470,7 +479,7 @@ export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage
 export const sezioniMenu = (
   sezioni: MenuLaterale[][],
   navigate: NavigateFunction,
-  path: string,
+  path: SectionName,
   params: any,
   indice: number
 ): MenuLaterale[][] => {
