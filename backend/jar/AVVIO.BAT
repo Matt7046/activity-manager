@@ -1,27 +1,35 @@
 @echo off
 
-start cmd /c "cd ..\..\frontend && npm install && npm start"
 
-rem Elimina il file activityManager-1.5.jar se esiste
-cd ..\jar
-if exist activityManager-1.5.jar (
-    del activityManager-1.5.jar
-    echo File activityManager-1.5.jar eliminato.
-) else (
-    echo File activityManager-1.5.jar non trovato.
-)
+rem Torna alla directory principale e esegui mvn clean install
+cd ..
+cd ..
+cd frontend
 
-rem Torna alla directory principale e esegui mvn clean package
-cd ..\
-call mvn clean package
+call docker rm -f frontend 
+call docker build -t frontend:1.0.0 .
+call docker run -d --name frontend --network backend_app-network -p 3000:80 frontend:1.0.0  
+cd ..
+cd backend
+rem Avvia il backend eseguendo il JAR
+echo Avvio dei container con Docker Compose...
+call docker-compose up --build
 if %errorlevel% neq 0 (
-    echo Errore durante mvn clean package
+    echo Errore durante docker-compose up --build.
     pause
-    exit /b %errorlevel%
+    goto end
 )
 
-echo "mvn clean package completato"
-cd .\jar
-java -jar activityManager-1.5.jar
-
+:end
+echo Script completato.
 pause
+
+REM Punto 2: Conferma completamento del comando Maven
+echo "mvn clean install completato"
+pause
+
+:end
+REM Mantieni aperta la console corrente
+echo "Script completato."
+
+

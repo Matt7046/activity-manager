@@ -5,7 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage } from "../../App";
 import Button, { Pulsante } from "../../components/ms-button/Button";
-import { FormErrorValues, HttpStatus, TypeUser, UserI, verifyForm } from "../../general/Utils";
+import { ButtonName, HttpStatus, SectionName, TypeUser } from "../../general/Constant";
+import { FormErrorValues, UserI, verifyForm } from "../../general/Utils";
 import { ActivityI } from "../page-activity/Activity";
 import activityStore from "../page-activity/store/ActivityStore";
 import { TypeMessage } from "../page-layout/PageLayout";
@@ -109,7 +110,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-solid fa-trash',
     funzione: () => cancellaRecord(_id), // Passi la funzione direttamente
-    nome: 'red',
+    nome:  ButtonName.RED,
     title: 'Elimina',
     visibility: _id ? true : false,
     configDialogPulsante: { message: 'Vuoi eliminare il record?', showDialog: true }
@@ -120,7 +121,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
     icona: 'fas fa-solid fa-floppy-disk',
     funzione: () => handleButtonClick(), // Passi la funzione direttamente
     //disableButton: disableButtonSave,
-    nome: 'blue',
+    nome:  ButtonName.BLUE,
     title: 'Salva',
     configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
 
@@ -130,7 +131,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
     icona: 'fas fa-arrow-left',
     funzione: () => returnActivity(), // Passi la funzione direttamente
     //disableButton: disableButtonSave,
-    nome: 'return',
+    nome:  ButtonName.BACK,
     title: 'Ritorna',
     configDialogPulsante: { message: '', showDialog: false }
 
@@ -168,13 +169,13 @@ const AboutContent: React.FC<AboutContentProps> = ({
     deleteAboutById(_id, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
-          navigateRouting(navigate, 'activity', {})
+          navigateRouting(navigate, SectionName.ACTIVITY, {})
         }
       }
     })
   }
   const returnActivity = (): void => {
-    navigateRouting(navigate, 'activity', {})
+    navigateRouting(navigate, SectionName.ACTIVITY, {})
   }
 
   const salvaRecord = (_id: string): void => {
@@ -189,7 +190,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
     }
     saveAboutByUser(testo, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.jsonText) {
-        navigateRouting(navigate, 'activity', {})
+        navigateRouting(navigate, SectionName.ACTIVITY, {})
       }
     })
   }

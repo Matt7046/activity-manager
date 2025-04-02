@@ -1,17 +1,11 @@
-# Usa l'immagine di base di OpenJDK
-FROM openjdk:17-jdk-slim
+# Usa un'immagine di base di Docker
+FROM docker:19.03.12
 
-# Imposta la directory di lavoro nel contenitore
-WORKDIR /app
+# Installa Docker Compose
+RUN apk add --no-cache py3-pip && \
+    pip3 install docker-compose
 
-# Copia il JAR del progetto all'interno del contenitore
-COPY jar/activityManager-1.5.jar app.jar
+# Definisci il punto di partenza per il container
+ENTRYPOINT ["sh", "-c", "cd /path/to/activity-manager && docker-compose -f /path/to/backend/docker-compose.yml up"]
 
-# Espone la porta sulla quale l'applicazione Spring Boot è in ascolto (di default 8080)
-EXPOSE 8080
-
-# Aggiungi un'opzione per personalizzare gli argomenti di avvio
-ENV JAVA_OPTS=""
-
-# Esegui il JAR con eventuali opzioni passate
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# Aggiungi altre configurazioni se necessario

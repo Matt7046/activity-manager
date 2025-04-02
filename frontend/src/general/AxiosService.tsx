@@ -1,30 +1,30 @@
 import axios from 'axios';
 import { TypeMessage } from '../page/page-layout/PageLayout';
-import { Alert, HttpStatus } from './Utils';
+import { HttpStatus, ServerMessage, TypeAlertColor } from './Constant';
+import apiConfig, { ServiceName } from './service/ApiConfig';
 
-const apiUrl = process.env.REACT_APP_API_URL ; // Ottieni l'URL dal file .env
-// Configura l'istanza di Axios
-const apiClient = () => {
+const apiClient = (serviceName: ServiceName) => {
   const token = localStorage.getItem('token');
-  const apiClient = axios.create({
-    baseURL: apiUrl, // URL base dell'API
-    timeout: 20000,   // Timeout in millisecondi
+  const service = apiConfig[serviceName];
+
+  if (!service) throw new Error(`Service ${serviceName} not configured!`);
+
+  return axios.create({
+    baseURL: service.baseURL,
+    timeout: 20000,
     headers: {
-      'Content-Type': 'application/json', // Header predefinito
-      'Authorization': token ? `Bearer ${token}` : '', // Imposta il token se presente
-    }
+      'Content-Type': 'application/json',
+      'Authorization': token ? `Bearer ${token}` : '',
+    },
   });
-  return apiClient;
+
 }
-
-
-
-// Funzione per ottenere dati dall'API
-export const getData = async (endpoint: string, setLoading?: (loading: boolean) => void) => {
+  // Funzione per ottenere dati dall'API
+export const getData = async (serviceName: ServiceName,  endpoint: string, setLoading?: (loading: boolean) => void) => {
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
-    const response = await apiClient().get(endpoint);
+    const response = await apiClient(serviceName).get(endpoint);
     return response.data; // Restituisce i dati della risposta
   } catch (error) {
     console.error('Errore durante la richiesta:', error);
@@ -34,7 +34,7 @@ export const getData = async (endpoint: string, setLoading?: (loading: boolean) 
   }
 };
 
-export const postData = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
+export const postData = async (serviceName: ServiceName,  endpoint: string, data: any, setLoading?: (loading: boolean) => void,
   funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
 
@@ -43,16 +43,16 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
-    const response = await apiClient().post(endpoint, data);
+    const response = await apiClient(serviceName).post(endpoint, data);
     response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
     const message: TypeMessage = {
-      typeMessage:  response.data.status === HttpStatus.OK ? 'success' : 'error',
+      typeMessage:  response.data.status === HttpStatus.OK ? TypeAlertColor.SUCCESS : TypeAlertColor.ERROR ,
       message : response.data.status === HttpStatus.OK ? null : response.data.errors,
     }
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { typeMessage: 'error', message: [Alert.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -61,44 +61,44 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
 
 
 // Altri metodi (PUT, DELETE, ecc.)
-export const putData = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
+export const putData = async (serviceName: ServiceName, endpoint: string, data: any, setLoading?: (loading: boolean) => void,
   funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   showSuccess = showSuccess ?? false;
   try {
-    const response = await apiClient().put(endpoint, data);
+    const response = await apiClient(serviceName).put(endpoint, data);
     response.data.status = response.data.status === undefined ? 200 : response.data.status;
     const message: TypeMessage = {
-      typeMessage: 'success'
+      typeMessage: TypeAlertColor.SUCCESS 
     }
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { typeMessage: 'error', message: [Alert.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
   }
 };
 
-export const deleteData = async (endpoint: string, setLoading?: (loading: boolean) => void,
+export const deleteData = async (serviceName: ServiceName, endpoint: string, setLoading?: (loading: boolean) => void,
   funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   showSuccess = showSuccess ?? false;
   const message: TypeMessage = {
-    typeMessage: 'success'
+    typeMessage: TypeAlertColor.SUCCESS
   }
   try {
-    const response = await apiClient().delete(endpoint);
+    const response = await apiClient(serviceName).delete(endpoint);
     response.data.status = response.data.status === undefined ? 200 : response.data.status;
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { typeMessage: 'error', message: [Alert.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -114,7 +114,7 @@ export const showMessageForm = async (setLoading?: (loading: boolean) => void,
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
-    eseguiAlert(funzioneMessage!, { typeMessage: 'error', message: [Alert.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
     return 'ok'; // Restituisce i dati della risposta
   } catch (error: any) {
     throw error;
@@ -131,7 +131,7 @@ export const eseguiAlert = (funzioneMessage: (message?: TypeMessage) => void, me
   if (funzioneMessage) {
     message.message = response.data.errors;
     if (response.data.status !== HttpStatus.OK) {
-      message.typeMessage = 'error'
+      message.typeMessage = TypeAlertColor.ERROR 
     } else {
       message.message = ['Operazione avvenuta con successo']
     }
@@ -148,5 +148,8 @@ export const PATH_ABOUT = 'about'
 export const PATH_POINTS = 'points';
 export const PATH_OPERATIVE = 'operative';
 export const PATH_FAMILY = 'family';
+export const PATH_LOGACTIVITY = 'logactivity';
+
+
 
 
