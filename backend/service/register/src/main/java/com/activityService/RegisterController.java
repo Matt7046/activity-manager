@@ -35,7 +35,6 @@ public class RegisterController {
                                 .bodyValue(pointsDTO)
                                 .retrieve()
                                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                                        System.out.println("Errore 4xx ricevuto");
                                         return Mono.error(new RuntimeException("Errore 4xx")); // Passa l'errore
                                 })
                                 .bodyToMono(new ParameterizedTypeReference<ResponseDTO>() {
