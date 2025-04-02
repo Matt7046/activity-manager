@@ -27,22 +27,6 @@ public class RegisterController {
         @Qualifier("webClientPoints")
         private WebClient webClientPoints;
 
-        @PostMapping("child")
-        public Mono<ResponseDTO> getEmailChild(@RequestBody PointsDTO pointsDTO) {
-            return webClientPoints.post()
-                .uri("/api/points/child")
-                .bodyValue(pointsDTO)
-                .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    System.out.println("Errore 4xx ricevuto. Status Code: " + clientResponse.statusCode());
-                    return Mono.error(new RuntimeException("Errore 4xx"));
-                })
-                .bodyToMono(new ParameterizedTypeReference<ResponseDTO>() {})
-                .doOnError(ex -> {
-                    System.err.println("Errore nella chiamata: " + ex.getMessage());
-                });
-        }
-        
 
         @PostMapping("/dati")
         public Mono<ResponseDTO> saveUserByPoints(@RequestBody PointsDTO pointsDTO) {

@@ -18,10 +18,9 @@ import Family from './page/page-family/Family';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
 import Points from './page/page-points/Points';
-import { getUserType as getTypeUser } from './page/page-points/service/PointsService';
+import { getEmailChild, getUserType as getTypeUser } from './page/page-points/service/PointsService';
 import PrivacyPolicy from './page/page-privacy-policy/PrivacyPolicy';
 import Register from './page/page-register/Register';
-import { getEmailChild } from './page/page-register/service/RegisterService';
 
 
 // Creazione del contesto per User

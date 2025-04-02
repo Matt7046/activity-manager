@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../App';
-import { TypeAlertColor } from '../../general/Constant';
-import { getMenuLaterale } from '../../general/Utils';
+import { showMessage, useUser } from '../../App';
+import { TypeAlertColor, TypeUser } from '../../general/Constant';
+import { FamilyNotificationI, getMenuLaterale } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import AboutContent from './AboutContent';
 
@@ -41,19 +41,24 @@ const About: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   }, []);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://notification-service:8088/notifications");
+    const socket = new WebSocket("ws://localhost:8088/ws/notifications");
     socket.onopen = () => {
       console.log("Connected to WebSocket");
     };
-
     socket.onmessage = (event) => {
       setOpen(true);
-      const typeMessage: TypeMessage = {
-        message: [event.data],
-        typeMessage: TypeAlertColor.INFO
+
+      const familyNotification: FamilyNotificationI = JSON.parse(event.data);
+      console.log("notificationFamily" + familyNotification);
+      if (user.type === TypeUser.STANDARD && user.emailFamily === familyNotification.emailFamily) {
+        const typeMessage: TypeMessage = {
+          message: [familyNotification.pointsNew],
+          typeMessage: TypeAlertColor.INFO
+        }
+        showMessage(setOpen, setMessage, typeMessage);
       }
-      setMessage(event.data);
     };
+
     socket.onclose = () => {
       console.log("Disconnected from WebSocket");
     };

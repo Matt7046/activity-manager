@@ -17,6 +17,18 @@ export interface ResponseI {
 
 }
 
+export interface NotificationI {
+
+    email : string;
+     emailFamily : string;
+    serviceName : string;
+
+}
+
+export interface FamilyNotificationI extends NotificationI  {
+  pointsNew : string;
+}
+
 export interface UserI {
   _id: string | undefined;
   email: string;
