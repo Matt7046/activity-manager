@@ -23,10 +23,10 @@ public class RabbitMQConsumer {
 
         // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
         try {
-            Thread.sleep(20000); // 5 secondi
+           // Thread.sleep(20000); // 5 secondi
             receive(message, 0);
-            channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
-        } catch (InterruptedException | IOException e) {
+          //  channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

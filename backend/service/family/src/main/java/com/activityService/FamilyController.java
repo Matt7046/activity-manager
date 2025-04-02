@@ -1,6 +1,8 @@
 package com.activityService;
 
 import com.common.configurations.RabbitMQProducer;
+import com.common.dto.FamilyNotificationDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.common.dto.PointsDTO;
@@ -51,7 +53,16 @@ public class FamilyController {
                                                         "I Points a disposizione sono: "
                                                                         + filteredList.get(0).getPoints());
                                         // Creare il ResponseDTO finale
-                                        notificationPublisher.sendMessage("Punti aggiunti da " + pointsDTO.getEmail());
+                                        FamilyNotificationDTO dto = new FamilyNotificationDTO(pointsDTO.getUsePoints() + " Punti aggiunti da " + pointsDTO.getEmail() );
+                                        dto.setEmailFamily(pointsDTO.getEmailFamily());
+                                        dto.setEmail(pointsDTO.getEmail());
+                                        dto.setServiceName("familyService");
+                                    try {
+                                        String jsonMessage = new ObjectMapper().writeValueAsString(dto);
+                                        notificationPublisher.sendMessage(jsonMessage);
+                                    } catch (JsonProcessingException e) {
+                                        throw new RuntimeException(e);
+                                    }
                                         ResponseDTO response = new ResponseDTO(record, HttpStatus.OK.value(),
                                                         new ArrayList<>());
                                         return Mono.just(response);

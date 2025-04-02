@@ -7,6 +7,7 @@ export enum ServiceName {
   LOG_ACTIVITY = 'logActivityService',
   AUTH = 'authService',
   FAMILY = 'familyService',
+  NOTIFICATION= 'notificationService'
 }
 
 // Configurazione singola di un servizio
@@ -36,6 +37,9 @@ const apiConfig: Record<ServiceName, SingleServiceConfig> = {
   },
   familyService: {
     baseURL: process.env.REACT_APP_LOG_FAMILY_SERVICE_URL || 'http://localhost:8087/api',
+  },
+  notificationService: {
+    baseURL: process.env.REACT_APP_LOG_FAMILY_SERVICE_URL || 'http://localhost:8088/api',
   },
 };
 
