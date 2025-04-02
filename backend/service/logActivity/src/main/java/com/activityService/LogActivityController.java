@@ -60,7 +60,6 @@ public class LogActivityController {
                 .bodyValue(pointsDTO)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    System.out.println("Errore 4xx ricevuto");
                     return Mono.error(new RuntimeException("Errore 4xx"));
                 })
                 .bodyToMono(new ParameterizedTypeReference<ResponseDTO>() {})
