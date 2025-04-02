@@ -1,0 +1,187 @@
+version: '3.8'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  # Porta per la comunicazione con l'app
+      - "15672:15672" # Interfaccia di gestione web
+    environment:
+      - 'RABBITMQ_DEFAULT_PASS=password'
+      - 'RABBITMQ_DEFAULT_USER=username'
+    networks:
+      - app-network
+
+  register-service:
+    depends_on:
+      - rabbitmq
+    image: register-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/register/Dockerfile
+    ports:
+      - "8081:8080"
+      - "5005:5005"  # Porta per debug
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/register/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+    networks:
+      - app-network
+
+  about-service:
+    depends_on:
+      - rabbitmq
+    image: about-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/about/Dockerfile
+    ports:
+      - "8082:8080"
+      - "5007:5007"  # Porta per debug
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5007
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/family/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+    networks:
+      - app-network
+
+  points-service:
+    depends_on:
+      - rabbitmq
+    image: points-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/points/Dockerfile
+    ports:
+      - "8083:8080"
+      - "5006:5006"  # Porta per debug
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/points/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+    networks:
+      - app-network
+
+  activity-service:
+    depends_on:
+      - rabbitmq
+    image: activity-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/activity/Dockerfile
+    ports:
+      - "8084:8080"
+      - "5008:5008"  # Porta per debug
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5008
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/activity/src/main/resources/certificate:/app/certificate
+    networks:
+      - app-network
+
+  logactivity-service:
+    depends_on:
+      - rabbitmq
+    image: log-activity-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/logActivity/Dockerfile
+    ports:
+      - "8085:8080"
+      - "5009:5009"  # Porta per debug
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5009
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      -  ./service/logActivity/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+    networks:
+      - app-network
+
+  auth-service:
+    depends_on:
+      - rabbitmq
+    image: auth-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/auth/Dockerfile
+    ports:
+      - "8086:8080"
+      - "5010:5010"  # Porta per debug
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5010
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/auth/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+    networks:
+      - app-network
+
+  family-service:
+    depends_on:
+      - rabbitmq
+    image: family-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/family/Dockerfile
+    ports:
+      - "8087:8080"
+      - "5011:5011"  # Porta per debug
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5011
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/family/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+    networks:
+      - app-network
+
+  notification-service:
+    depends_on:
+      - rabbitmq
+    image: notification-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/notification/Dockerfile
+    ports:
+      - "8088:8080"
+      - "5012:5012"  # Porta per debug
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5012
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/notification/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

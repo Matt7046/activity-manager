@@ -1,1 +1,6 @@
-Nella cartella "backend\jar" è presente un file bat "AVVIO.bat" richiesto node versione maggiore della 14 e Java versione 17 e maven. In alternativa si puo' costruire l'immagine con docker dal file docker compose.
+#per compilare il front end
+docker build -t frontend:1.0.0 .
+docker rm -f frontend 
+docker run -d --name frontend --network backend_app-network -p 3000:80 frontend:1.0.0  
+#per compilare il backend
+docker-compose up --build 
