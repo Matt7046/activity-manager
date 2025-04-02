@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../App';
-import { getMenuLaterale } from '../../general/Utils';
+import { showMessage, useUser } from '../../App';
+import { TypeAlertColor, TypeUser } from '../../general/Constant';
+import { FamilyNotificationI, getMenuLaterale } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import FamilyContent from './FamilyContent';
 
@@ -13,16 +14,16 @@ export interface PointsI {
   attivita: string;
 }
 
-const Family: React.FC<{ setTitle:any }> = ({ setTitle}) => {
+const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
   setTitle("Section Family");
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const { user, setUser } = useUser(); 
+  const { user, setUser } = useUser();
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const [paddingType, setPaddingType] =  useState<number>(isVertical ? 0 : 5);
+  const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
 
 
@@ -39,6 +40,35 @@ const Family: React.FC<{ setTitle:any }> = ({ setTitle}) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    const socket = new WebSocket("ws://localhost:8088/ws/notifications");
+    socket.onopen = () => {
+      console.log("Connected to WebSocket");
+    };
+    socket.onmessage = (event) => {
+      setOpen(true);  
+
+      const familyNotification: FamilyNotificationI = JSON.parse(event.data);
+      console.log("notificationFamily"+familyNotification);
+        if (user.type === TypeUser.STANDARD && user.emailFamily === familyNotification.emailFamily) {
+              const typeMessage: TypeMessage = {
+                message: [familyNotification.pointsNew],
+                typeMessage: TypeAlertColor.INFO
+              }
+        showMessage(setOpen, setMessage, typeMessage);
+      }
+    };
+
+    socket.onclose = () => {
+      console.log("Disconnected from WebSocket");
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, []);
+
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -50,11 +80,11 @@ const Family: React.FC<{ setTitle:any }> = ({ setTitle}) => {
         user={user}
         message={message}
         handleClose={handleClose}
-        navigate={useNavigate()}   
+        navigate={useNavigate()}
       >
         <FamilyContent
           setMessage={setMessage}
-          setOpen ={setOpen}
+          setOpen={setOpen}
         />
       </PageLayout>
       <div>

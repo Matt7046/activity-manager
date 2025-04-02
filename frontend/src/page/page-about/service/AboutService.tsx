@@ -1,4 +1,5 @@
 import { deleteData, PATH_ABOUT, postData, showMessageForm } from "../../../general/AxiosService";
+import { ServiceName } from "../../../general/service/ApiConfig";
 import { TypeMessage } from "../../page-layout/PageLayout";
 
 
@@ -8,7 +9,7 @@ export const deleteAboutById = async (_id: string, funzioneMessage?:(message?: T
     _id = _id ? _id : '-1';
     const path = PATH_ABOUT + `/${_id}`;
     const showSuccess = true;
-    const data = await deleteData(path, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
+    const data = await deleteData(ServiceName.ABOUT,path,  setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
@@ -21,7 +22,7 @@ export const saveAboutByUser = async (about: any, funzioneMessage?:(message?: Ty
   try {
     const path = PATH_ABOUT + `/dati`;
     const showSuccess = true;
-    const data = await postData(path, about,setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
+    const data = await postData(ServiceName.ABOUT, path, about,setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
