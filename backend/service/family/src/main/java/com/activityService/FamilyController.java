@@ -17,12 +17,10 @@ import com.activityBusinessLogic.savePointsFamily.FamilySavePointsProcessor;
 public class FamilyController {
 
     @Autowired
-    private FamilySavePointsProcessor familySavePointsProcessor;
+    private FamilyStateMachineService familyStateMachineService;
 
-
-
-        @PostMapping("/dati")
-        public Mono<ResponseDTO> savePointsByFamily(@RequestBody PointsDTO pointsDTO) {
-                return familySavePointsProcessor.savePointsByFamily(pointsDTO);
-        }
+    @PostMapping("/dati")
+    public Mono<ResponseDTO> savePointsByFamily(@RequestBody PointsDTO pointsDTO) {
+        return familyStateMachineService.savePointsByFamily(pointsDTO);
+    }
 }
