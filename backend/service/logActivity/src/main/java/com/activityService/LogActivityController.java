@@ -69,14 +69,23 @@ public class LogActivityController {
     
         // Una volta completata la chiamata points, salva il log e crea la response
         return pointsResponseMono.flatMap(pointsResponse ->
-            Mono.fromCallable(() -> {
-                // Salva il log (chiamata sincrona; verrà eseguita su un thread separato grazie a Mono.fromCallable)
-                LogActivity sub = activityService.saveLogActivity(logActivityDTO);
-                // Converte l'oggetto salvato in LogActivityDTO
-                LogActivityDTO dto = LogActivityMapper.INSTANCE.toDTO(sub);
-                // Crea una ResponseDTO che contiene il dto e lo stato OK
-                return new ResponseDTO(dto, HttpStatus.OK.value(), new ArrayList<>());
-            })
+                Mono.fromCallable(() -> {
+                    try {
+                        LogActivity sub = activityService.saveLogActivity(logActivityDTO);
+                        LogActivityDTO dto = LogActivityMapper.INSTANCE.toDTO(sub);
+                        return new ResponseDTO(dto, HttpStatus.OK.value(), new ArrayList<>());
+                    } catch (Exception e) {
+                        // ❌ Se si verifica un errore, annulla l'operazione nel microservizio points
+                        webClientPoints.post()
+                                .uri("/api/points/dati/standard/rollback")  // Endpoint di compensazione
+                                .bodyValue(pointsDTO)
+                                .retrieve()
+                                .toBodilessEntity()
+                                .subscribe(); // Esegui senza bloccare
+
+                        throw e; // Rilancia l'eccezione per propagare l'errore
+                    }
+                })
         );
     }
 }
