@@ -28,7 +28,7 @@ public class LogActivityController {
     @Autowired
     private LogActivityService logActivityService;
     @Autowired
-    private PointsStateMachineService logActivitySavePointsService;
+    private PointsStateMachineService pointsStateMachineService;
 
     @Autowired
     @Qualifier("webClientPoints")
@@ -49,6 +49,6 @@ public class LogActivityController {
 
     @PostMapping("/dati")
     public Mono<ResponseDTO> savePointsAndLog(@RequestBody LogActivityDTO logActivityDTO) {
-        return logActivitySavePointsService.savePoints(logActivityDTO);
+        return pointsStateMachineService.savePoints(logActivityDTO);
     }
 }
