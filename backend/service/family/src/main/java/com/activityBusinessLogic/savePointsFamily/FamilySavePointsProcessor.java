@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,13 @@ public class FamilySavePointsProcessor {
     private RabbitMQProducer notificationPublisher;
     @Autowired
     private FamilyService familyService;
+
+    @Value("${app.rabbitmq.exchange}")
+    private String exchange;
+
+    @Value("${app.rabbitmq.routingKey}")
+    private String routingKey;
+    
     private final StateMachineFactory<State, Event> stateMachineFactory;
     public FamilySavePointsProcessor(StateMachineFactory<State, Event> stateMachineFactory) {
         this.stateMachineFactory = stateMachineFactory;
@@ -78,7 +86,7 @@ public class FamilySavePointsProcessor {
         dto.setMessage(dto.getPointsNew());
         try {
             String jsonMessage = new ObjectMapper().writeValueAsString(dto);
-            notificationPublisher.sendMessage(jsonMessage);
+            notificationPublisher.sendMessage(exchange, routingKey, jsonMessage);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
