@@ -24,7 +24,6 @@ public class WebSocketService implements WebSocketHandler {
         String emailID = extractEmailFromSession(session);
         session.getAttributes().put("id", emailID);
         sessions.add(session);
-        System.out.println("messageemailTest" + emailID);
         // Flux per ricevere messaggi dal client (opzionale, solo per logging)
         Flux<String> receive = session.receive()
                 .map(msg -> msg.getPayloadAsText());
@@ -42,19 +41,16 @@ public class WebSocketService implements WebSocketHandler {
         // Esegui il parsing per estrarre il parametro emailUserCurrent
         URI uri = session.getHandshakeInfo().getUri();
         String query = uri.getQuery();
-        System.out.println("messageemail1" + " " + query);
         return query.split("=")[1];
     }
 
 
     public void sendNotification(String emailReceive, String message) {
-        System.out.println("messageemail2: " + emailReceive);
 
         Flux.fromIterable(sessions)
                 .filter(session -> session.isOpen()
                         && emailReceive.equals(session.getAttributes().get("id")))
                 .flatMap(session -> {
-                    System.out.println("Invio notifica a sessione con email: " + session.getAttributes().get("id"));
                     return session.send(Mono.just(session.textMessage(message)));
                 })
                 .subscribe();
