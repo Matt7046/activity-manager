@@ -1,11 +1,8 @@
 package com.activityService;
 
-import com.common.dto.FamilyNotificationDTO;
 import com.common.dto.PointsDTO;
 import com.common.dto.PointsRDTO;
 import com.common.transversal.PointsUser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import com.common.dto.ResponseDTO;
