@@ -59,7 +59,8 @@ public class PointsController {
     public ResponseEntity<ResponseDTO> getUserType(@RequestBody PointsDTO pointsDTO) throws Exception {
 
         Long itemId = pointsService.getTypeUser(pointsDTO);
-        ResponseDTO response = new ResponseDTO(new UserDTO(itemId, null), HttpStatus.OK.value(),
+        String emailUserCurrent = itemId == 1  ? pointsDTO.getEmail(): pointsDTO.getEmailFamily();
+        ResponseDTO response = new ResponseDTO(new UserDTO(itemId, null,emailUserCurrent), HttpStatus.OK.value(),
                 new ArrayList<>());
         return ResponseEntity.ok(response);
 
@@ -96,7 +97,8 @@ public class PointsController {
 
             pointsDTO.setEmailFamily(pointsDTO.getEmail());
             Boolean itemId = pointsService.saveUser(pointsDTO);
-            ResponseDTO response = new ResponseDTO(new UserDTO(null, itemId),
+            String emailUserCurrent = pointsDTO.getType().equals(1L)  ? pointsDTO.getEmail(): pointsDTO.getEmailFamily();
+            ResponseDTO response = new ResponseDTO(new UserDTO(null, itemId, emailUserCurrent),
                     HttpStatus.OK.value(), new ArrayList<>());
             return response;
         });

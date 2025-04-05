@@ -74,6 +74,8 @@ public class FamilySavePointsProcessor {
         dto.setEmailFamily(pointsDTO.getEmailFamily());
         dto.setEmail(pointsDTO.getEmail());
         dto.setServiceName("familyService");
+        dto.setEmailUserReceive(pointsDTO.getEmailFamily());
+        dto.setMessage(dto.getPointsNew());
         try {
             String jsonMessage = new ObjectMapper().writeValueAsString(dto);
             notificationPublisher.sendMessage(jsonMessage);
