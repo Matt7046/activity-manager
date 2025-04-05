@@ -16,6 +16,9 @@ public class MyUserDetailsService implements UserDetailsService {
     @Value("${app.secret.crypt.user.key}")
     private String secretKey;
 
+    @Value("${app.security.roles}")
+    private String roles;
+
     @Override
     public UserDetails loadUserByUsername(String email) {
         // Logica per caricare l'utente dal database o dalla memoria
@@ -24,7 +27,7 @@ public class MyUserDetailsService implements UserDetailsService {
         return User.builder()
             .username(email)
             .password("{bcrypt}"+ encryptedPassword) // Usa una password crittografata con BCrypts // Usa una password crittografata con BCrypt
-            .roles("USER")
+            .roles(roles)
             .build();
     }
 }
