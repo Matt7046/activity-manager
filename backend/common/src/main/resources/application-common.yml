@@ -1,0 +1,23 @@
+# common/src/main/resources/application-common.yml
+spring:
+  application:
+    name: common-config
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: username
+    password: password
+
+mongo:
+  uri: mongodb+srv://cluster0.vmbf6.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&tls=true
+  tls:
+    cert: certificate/client.pem
+    key: certificate/client-key.pem
+
+app:
+  secret:
+    key: this_is_a_very_long_secret_key_256bit
+    crypt:
+      key: 1234567890123456
+      user:
+        key: qwertyuiop
