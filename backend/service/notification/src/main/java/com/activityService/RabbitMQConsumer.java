@@ -1,5 +1,9 @@
 package com.activityService;
 
+import com.common.dto.NotificationDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -18,25 +22,28 @@ public class RabbitMQConsumer {
 
 
     @RabbitListener(queues = "notifications.queue", ackMode = "MANUAL")
-    public void receiveNotification(String message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
-    
+    public void receiveNotification(String message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(message);
+        // Estrai il campo 'pointsNew' come un JsonNode e convertilo direttamente in String
+        String emailUserReceive = rootNode.path("emailUserReceive").asText();
         // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
         try {
-           // Thread.sleep(20000); // 5 secondi
-            receive(message, 0);
-          //  channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
+            // Thread.sleep(20000); // 5 secondi
+            receive(emailUserReceive, message, 0);
+            //  channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void receive(String in, int receiver) throws InterruptedException {
+    public void receive(String emailReceive, String in, int receiver) throws InterruptedException {
         StopWatch watch = new StopWatch();
         watch.start();
         doWork(in);
         watch.stop();
-        webSocketService.sendNotification(in);
+        webSocketService.sendNotification(emailReceive, in);
     }
 
     private void doWork(String in) throws InterruptedException {
