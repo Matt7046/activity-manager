@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { showMessage, useUser } from '../../App';
-import { TypeAlertColor, TypeUser } from '../../general/Constant';
+import { TypeAlertColor } from '../../general/Constant';
 import { FamilyNotificationI, getMenuLaterale } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import PointsContent from './PointsContent';
@@ -44,32 +44,31 @@ const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   }, []);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8088/ws/notifications");
-    socket.onopen = () => {
-      console.log("Connected to WebSocket");
-    };
-    socket.onmessage = (event) => {
-      setOpen(true);
-
-      const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-      console.log("notificationFamily" + familyNotification);
-      if (user.type === TypeUser.STANDARD && user.emailFamily === familyNotification.emailFamily) {
+      const socket = new WebSocket("ws://localhost:8088/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
+      socket.onopen = () => {
+        console.log("Connected to WebSocket");
+      };
+      socket.onmessage = (event) => {
+        setOpen(true);
+  
+        const familyNotification: FamilyNotificationI = JSON.parse(event.data);
+        console.log("notificationFamily" + familyNotification);
         const typeMessage: TypeMessage = {
-          message: [familyNotification.pointsNew],
+          message: [familyNotification.message],
           typeMessage: TypeAlertColor.INFO
         }
         showMessage(setOpen, setMessage, typeMessage);
-      }
-    };
-
-    socket.onclose = () => {
-      console.log("Disconnected from WebSocket");
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, []);
+      };
+  
+      socket.onclose = () => {
+        console.log("Disconnected from WebSocket");
+      };
+  
+      return () => {
+        socket.close();
+      };
+    }, []);
+  
 
 
   const handleClose = () => {

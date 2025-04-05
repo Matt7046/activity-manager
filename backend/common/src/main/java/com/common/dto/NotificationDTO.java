@@ -12,4 +12,7 @@ public class NotificationDTO implements InterfaceDTO {
     private String email;
     private String emailFamily;
     private String serviceName;
+    private String emailUserReceive;
+    private String message;
+
 }
