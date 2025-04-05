@@ -274,7 +274,7 @@ const GoogleAuthComponent = () => {
       if (userDataResponse.ok) {
         const userDataGoogle = await userDataResponse.json();
         setEmailLogin(userDataGoogle.email);
-        getEmailChild(user).then((x: ResponseI|undefined) => {
+        getEmailChild(userDataGoogle).then((x: ResponseI|undefined) => {
           const emailChild = x?.jsonText?.emailFigli ?? [];
           setEmailOptions(emailChild);
         })
