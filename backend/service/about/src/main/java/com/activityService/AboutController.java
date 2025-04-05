@@ -23,25 +23,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AboutController {
 
     @Autowired
-    private AboutService aboutService;  
+    private AboutService aboutService;
 
-    
+    @Autowired
+    private AboutStateMachineService aboutStateMachineService;
+
+
     @Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 
 
     @DeleteMapping("/{identificativo}")
-    public Mono<ResponseEntity<ResponseDTO>> deleteByIdentificativo(@PathVariable String identificativo) throws Exception {
+    public Mono<ResponseDTO> deleteByIdentificativo(@PathVariable String identificativo) throws Exception {
         identificativo = encryptDecryptConverter.decrypts(identificativo);   
-        return aboutService.callActivityDeleteService(identificativo)
-        .map(response -> ResponseEntity.ok(response))
-        .defaultIfEmpty(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+        return aboutStateMachineService.callActivityDeleteService(identificativo);
+
     }
     @PostMapping("/dati")
-    public Mono<ResponseEntity<ResponseDTO>> saveActivity(@RequestBody ActivityDTO activityDTO) {
-        
-        return aboutService.callActivitySaveService(activityDTO)
-                .map(response -> ResponseEntity.ok(response))
-                .defaultIfEmpty(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+    public Mono<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {
+        return aboutStateMachineService.callActivitySaveService(activityDTO);
+
     }
 }
