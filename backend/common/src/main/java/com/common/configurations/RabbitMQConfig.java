@@ -1,24 +1,26 @@
 package com.common.configurations;
 
-import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    private static final String EXCHANGE_NAME = "fanout-exchange";
 
-
-    @Bean
-    public FanoutExchange fanoutExchange() {
-        return new FanoutExchange(EXCHANGE_NAME);
-    }
+    @Value("${rabbit.exchange.name}")
+    private String exchangeName; 
 
     @Bean
-    public DirectExchange exchange() {
-        return new DirectExchange("notification.exchange");
+    public DirectExchange directExchange() {
+        return new DirectExchange(exchangeName);
     }
 
     @Bean
@@ -30,4 +32,5 @@ public class RabbitMQConfig {
     public Binding binding(Queue notificationQueue, DirectExchange exchange) {
         return BindingBuilder.bind(notificationQueue).to(exchange).with("notification.family");
     }
+
 }
