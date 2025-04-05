@@ -77,6 +77,18 @@ public class PointsController {
         });
     }
 
+    @PostMapping("/dati/standard/rollback")
+    public Mono<ResponseDTO> savePointsRollBack(@RequestBody PointsDTO pointsDTO) throws Exception {
+        return Mono.fromCallable(() -> {
+            Boolean operations = pointsDTO.getOperation() == null ? false : pointsDTO.getOperation();
+            Points points = pointsService.savePoints(pointsDTO, !operations);
+            PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(points);
+            ResponseDTO response = new ResponseDTO(subDTO, HttpStatus.OK.value(),
+                    new ArrayList<>());
+            return response;
+        });
+    }
+
     @PostMapping("/dati/user")
     public Mono<ResponseDTO> saveUserByPoints(@RequestBody PointsDTO pointsDTO) {
         // Una volta completata la chiamata points, salva il log e crea la response
