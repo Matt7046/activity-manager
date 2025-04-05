@@ -8,11 +8,13 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
     "com.repository.logActivity"
 })
 @SpringBootApplication(scanBasePackages = {
-    "com.activityManager", 
-    "com.repository", 
+    "com.activityManager",
+    "com.activityBusinessLogic",
+    "com.repository",
     "com.common.configurations",
     "com.activityService",
-    "com.common"
+    "com.common",
+
 })
 public class LogActivityApplication {
 
