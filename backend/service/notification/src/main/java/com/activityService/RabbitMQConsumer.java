@@ -1,19 +1,18 @@
 package com.activityService;
 
-import com.common.dto.NotificationDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
+
+import java.io.IOException;
+
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
-
-import java.io.IOException;
-
 @Component
 public class RabbitMQConsumer {
 
@@ -32,8 +31,10 @@ public class RabbitMQConsumer {
         try {
             // Thread.sleep(20000); // 5 secondi
             receive(emailUserReceive, message, 0);
-            //  channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
+            channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
         } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

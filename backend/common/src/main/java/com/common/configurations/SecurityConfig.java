@@ -36,10 +36,28 @@ public class SecurityConfig implements WebFluxConfigurer {
     @Value("${app.secret.crypt.user.key}")
     private String secretKey;
 
+    @Value("${app.address1}")
+    private String address1;
+
+    @Value("${app.address2}")
+    private String address2;
+    
+    @Value("${app.security.roles}")
+    private String roles;
+
+    @Value("${app.security.username}")
+    private String username;
+    
+    @Value("${app.security.crypt}")
+    private String crypt;
+
+    @Value("${app.page.address}")
+    private String policyAddress;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "http://localhost:3001")
+                .allowedOrigins(address1, address2)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true); // Aggiungi questo se invii cookie o header di autenticazione
@@ -48,10 +66,12 @@ public class SecurityConfig implements WebFluxConfigurer {
     @Bean
     public MapReactiveUserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         String encryptedPassword = passwordEncoder.encode(secretKey);
+        StringBuilder builder = new StringBuilder();
+        builder.append("{").append(crypt).append("}");
         UserDetails user = User.builder()
-                .username("user")
-                .password("{bcrypt}" + encryptedPassword) // Password crittografata
-                .roles("USER")
+                .username(username)
+                .password(builder.toString() + encryptedPassword) // Password crittografata
+                .roles(roles)
                 .build();
         return new MapReactiveUserDetailsService(user);
     }
@@ -60,7 +80,7 @@ public class SecurityConfig implements WebFluxConfigurer {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange(exchanges -> exchanges
-                .pathMatchers("/privacy-policy").permitAll() // Consenti accesso pubblico alla Privacy Policy
+                .pathMatchers(policyAddress).permitAll() // Consenti accesso pubblico alla Privacy Policy
                                 .pathMatchers("/ws/**").permitAll()                         .pathMatchers("/api/auth/token").permitAll()
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permetti l'accesso pubblico a
                                                                              // "/api/auth/token"
