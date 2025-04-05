@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.mongo.MongoClientSettingsBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +28,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 @Configuration
-public class MongoConfig {
+public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Value("${mongo.uri}")
     private String mongoUri;
@@ -38,7 +40,7 @@ public class MongoConfig {
     private String certKeyFilePath; // Il percorso al file PEM combinato
 
     @Bean
-    public MongoClient mongoClient() throws Exception {
+    public MongoClient mongoClient() {
         MongoClientSettings.Builder mongoClientSettingsBuilder = MongoClientSettings.builder();
 
         // Aggiungi le impostazioni TLS/SSL
@@ -56,8 +58,10 @@ public class MongoConfig {
         MongoClientSettings mongoClientSettings = mongoClientSettingsBuilder
                 .applyConnectionString(new ConnectionString(mongoUri))
                 .build();
-
-        return MongoClients.create(mongoClientSettings);
+                
+                MongoClient mongoClient =   MongoClients.create(mongoClientSettings);
+                    // Forza l'utilizzo del database 'demo'
+        return mongoClient;
     }
 
     private SSLContext getSslContext(String certFilePath) throws Exception {
@@ -124,5 +128,9 @@ public class MongoConfig {
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decodedKey);
         return keyFactory.generatePrivate(keySpec);
     }
- 
+
+    @Override
+    protected String getDatabaseName() {
+       return "demo";
+    }
 }
