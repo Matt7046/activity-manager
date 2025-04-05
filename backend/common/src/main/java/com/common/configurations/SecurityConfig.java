@@ -63,6 +63,7 @@ public class SecurityConfig implements WebFluxConfigurer {
                 .allowCredentials(true); // Aggiungi questo se invii cookie o header di autenticazione
     }
 
+
     @Bean
     public MapReactiveUserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         String encryptedPassword = passwordEncoder.encode(secretKey);
@@ -81,7 +82,8 @@ public class SecurityConfig implements WebFluxConfigurer {
         http
                 .authorizeExchange(exchanges -> exchanges
                 .pathMatchers(policyAddress).permitAll() // Consenti accesso pubblico alla Privacy Policy
-                                .pathMatchers("/ws/**").permitAll()                         .pathMatchers("/api/auth/token").permitAll()
+                                .pathMatchers("/ws/**").permitAll() 
+                                .pathMatchers(HttpMethod.POST,"/**").permitAll()
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permetti l'accesso pubblico a
                                                                              // "/api/auth/token"
                         .anyExchange().authenticated() // Richiedi autenticazione per tutte le altre richieste
