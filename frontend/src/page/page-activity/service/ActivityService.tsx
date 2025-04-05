@@ -7,7 +7,7 @@ import { ActivityLogI } from "../Activity";
 
 export const fetchDataActivities = async (pointsDTO: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
-    const path = PATH_ACTIVITY;
+    const path = PATH_ACTIVITY + '/activities'
     const data = await postData(ServiceName.ACTIVITY ,path, pointsDTO, setLoading, funzioneMessage); // Usa l'URL dinamico
     console.log('Dati ricevuti:', data);
     return data;

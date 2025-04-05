@@ -35,7 +35,7 @@ public class ActivityController {
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
-    @PostMapping("")
+    @PostMapping("/activities")
     public ResponseDTO getActivities(@RequestBody PointsDTO pointsDTO) {
         String email = pointsDTO.getEmail();
         List<Activity> sub = activityService.findAllByEmail(email);

@@ -44,31 +44,31 @@ const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   }, []);
 
   useEffect(() => {
-      const socket = new WebSocket("ws://localhost:8088/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
-      socket.onopen = () => {
-        console.log("Connected to WebSocket");
-      };
-      socket.onmessage = (event) => {
-        setOpen(true);
-  
-        const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-        console.log("notificationFamily" + familyNotification);
-        const typeMessage: TypeMessage = {
-          message: [familyNotification.message],
-          typeMessage: TypeAlertColor.INFO
-        }
-        showMessage(setOpen, setMessage, typeMessage);
-      };
-  
-      socket.onclose = () => {
-        console.log("Disconnected from WebSocket");
-      };
-  
-      return () => {
-        socket.close();
-      };
-    }, []);
-  
+    const socket = new WebSocket("http://notification-service:8080/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
+    socket.onopen = () => {
+      console.log("Connected to WebSocket");
+    };
+    socket.onmessage = (event) => {
+      setOpen(true);
+
+      const familyNotification: FamilyNotificationI = JSON.parse(event.data);
+      console.log("notificationFamily" + familyNotification);
+      const typeMessage: TypeMessage = {
+        message: [familyNotification.message],
+        typeMessage: TypeAlertColor.INFO
+      }
+      showMessage(setOpen, setMessage, typeMessage);
+    };
+
+    socket.onclose = () => {
+      console.log("Disconnected from WebSocket");
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, []);
+
 
 
   const handleClose = () => {
