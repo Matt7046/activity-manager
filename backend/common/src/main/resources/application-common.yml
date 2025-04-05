@@ -21,3 +21,23 @@ app:
       key: 1234567890123456
       user:
         key: qwertyuiop
+  algorith1: AES
+  algorith2: HmacSHA256
+  address1: https://webapp-tn6q.onrender.com
+  address2: https://webapp-tn6q.onrender.com
+  security:
+    roles: USER
+    username: user
+    crypt: bcrypt
+  page:
+    address: /privacy-policy
+    service:
+      about: http://about-service:8080
+      auth: http://auth-service:8080
+      activity: http://activity-service:8080
+      logactivity: http://log-activity-service:8080
+      points: http://points-service:8080
+      register: http://register-service:8080
+rabbit:
+  exchange:
+    name: notification-exchange

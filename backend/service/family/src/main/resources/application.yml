@@ -4,3 +4,7 @@ spring:
     import: optional:classpath:application-common.yml
   application:
     name: activityManager
+app:
+  rabbitmq:
+    exchange: notification-exchange
+    routingKey: notification.family

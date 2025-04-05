@@ -1,5 +1,6 @@
 package com.common.configurations;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -9,115 +10,124 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 @Configuration
-public class WebClientConfig { 
+public class WebClientConfig {
 
-@Bean
-public WebClient webClientRegister(WebClient.Builder builder) {
-    return builder
-        .baseUrl("http://register-service:8080")
-        .filter((request, next) -> 
-            ReactiveSecurityContextHolder.getContext()
-                .map(securityContext -> {
-                    String token = (String) securityContext.getAuthentication().getCredentials();
-                    return ClientRequest.from(request)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                        .build();
-                })
-                .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
-        )
-        .build();
-}
+    @Value("${app.page.service.auth}")
+    private String auth;
 
+    @Value("${app.page.service.activity}")
+    private String activity;
 
+    @Value("${app.page.service.logactivity}")
+    private String logactivity;
+
+    @Value("${app.page.service.register}")
+    private String register;
+
+    @Value("${app.page.service.points}")
+    private String points;
+
+    @Value("${app.page.service.about}")
+    private String about;
+
+    public WebClient webClientRegister(WebClient.Builder builder) {
+        return builder
+                .baseUrl(register)
+                .filter((request, next) -> ReactiveSecurityContextHolder.getContext()
+                        .map(securityContext -> {
+                            String token = (String) securityContext.getAuthentication().getCredentials();
+                            return ClientRequest.from(request)
+                                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                                    .build();
+                        })
+                        .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
+                )
+                .build();
+    }
 
     @Bean
     public WebClient webClientAbout(WebClient.Builder builder) {
         return builder
-                .baseUrl("http://about-service:8080") // Usa il nome del container se sei in Docker!
-                .filter((request, next) -> 
-                ReactiveSecurityContextHolder.getContext()
-                    .map(securityContext -> {
-                        Jwt token =  (Jwt) securityContext.getAuthentication().getCredentials();
-                        String tokenValue = token.getTokenValue(); 
-                        return ClientRequest.from(request)
-                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
-                            .build();
-                    })
-                    .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
-            )
-            .build();
+                .baseUrl(about) // Usa il nome del container se sei in Docker!
+                .filter((request, next) -> ReactiveSecurityContextHolder.getContext()
+                        .map(securityContext -> {
+                            Jwt token = (Jwt) securityContext.getAuthentication().getCredentials();
+                            String tokenValue = token.getTokenValue();
+                            return ClientRequest.from(request)
+                                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
+                                    .build();
+                        })
+                        .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
+                )
+                .build();
     }
 
     @Bean
     public WebClient webClientPoints(WebClient.Builder builder) {
         return builder
-        .baseUrl("http://points-service:8080")
-        .filter((request, next) -> 
-            ReactiveSecurityContextHolder.getContext()
-                .map(securityContext -> {
-                    Jwt token =  (Jwt) securityContext.getAuthentication().getCredentials();
-                    String tokenValue = token.getTokenValue(); 
-                    return ClientRequest.from(request)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
-                        .build();
-                })
-                .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
-        )
-        .build();
+                .baseUrl(points)
+                .filter((request, next) -> ReactiveSecurityContextHolder.getContext()
+                        .map(securityContext -> {
+                            Jwt token = (Jwt) securityContext.getAuthentication().getCredentials();
+                            String tokenValue = token.getTokenValue();
+                            return ClientRequest.from(request)
+                                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
+                                    .build();
+                        })
+                        .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
+                )
+                .build();
     }
 
     @Bean
     public WebClient webClientActivity(WebClient.Builder builder) {
         return builder
-                .baseUrl("http://activity-service:8080") // Usa il nome del container se sei in Docker!
-                .filter((request, next) -> 
-            ReactiveSecurityContextHolder.getContext()
-                .map(securityContext -> {
-                    Jwt token =  (Jwt) securityContext.getAuthentication().getCredentials();
-                    String tokenValue = token.getTokenValue(); 
-                    return ClientRequest.from(request)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
-                        .build();
-                })
-                .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
-        )
-        .build();
+                .baseUrl(activity) // Usa il nome del container se sei in Docker!
+                .filter((request, next) -> ReactiveSecurityContextHolder.getContext()
+                        .map(securityContext -> {
+                            Jwt token = (Jwt) securityContext.getAuthentication().getCredentials();
+                            String tokenValue = token.getTokenValue();
+                            return ClientRequest.from(request)
+                                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
+                                    .build();
+                        })
+                        .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
+                )
+                .build();
     }
 
     @Bean
     public WebClient webClientLogActivity(WebClient.Builder builder) {
         return builder
-                .baseUrl("http://log-activity-service:8080") // Usa il nome del container se sei in Docker!
-                .filter((request, next) -> 
-            ReactiveSecurityContextHolder.getContext()
-                .map(securityContext -> {
-                    Jwt token =  (Jwt) securityContext.getAuthentication().getCredentials();
-                    String tokenValue = token.getTokenValue(); 
-                    return ClientRequest.from(request)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
-                        .build();
-                })
-                .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
-        )
-        .build();
+                .baseUrl(logactivity) // Usa il nome del container se sei in Docker!
+                .filter((request, next) -> ReactiveSecurityContextHolder.getContext()
+                        .map(securityContext -> {
+                            Jwt token = (Jwt) securityContext.getAuthentication().getCredentials();
+                            String tokenValue = token.getTokenValue();
+                            return ClientRequest.from(request)
+                                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
+                                    .build();
+                        })
+                        .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
+                )
+                .build();
     }
 
     @Bean
     public WebClient webClientAuth(WebClient.Builder builder) {
         return builder
-                .baseUrl("http://auth-service:8080") // Usa il nome del container se sei in Docker!
-                .filter((request, next) -> 
-            ReactiveSecurityContextHolder.getContext()
-                .map(securityContext -> {
-                    Jwt token =  (Jwt) securityContext.getAuthentication().getCredentials();
-                    String tokenValue = token.getTokenValue(); 
-                    return ClientRequest.from(request)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
-                        .build();
-                })
-                .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
-        )
-        .build();
+                .baseUrl(auth) // Usa il nome del container se sei in Docker!
+                .filter((request, next) -> ReactiveSecurityContextHolder.getContext()
+                        .map(securityContext -> {
+                            Jwt token = (Jwt) securityContext.getAuthentication().getCredentials();
+                            String tokenValue = token.getTokenValue();
+                            return ClientRequest.from(request)
+                                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
+                                    .build();
+                        })
+                        .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
+                )
+                .build();
     }
 
 }
