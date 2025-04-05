@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.common.dto.ActivityDTO;
-import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
 
 import reactor.core.publisher.Mono;
@@ -20,35 +19,18 @@ public class AboutService {
     @Qualifier("webClientActivity")
     private WebClient webClientActivity;
 
+    @Autowired
+    private AboutStateMachineService aboutStateMachineService;
+
+
+
     public Mono<ResponseDTO> callActivitySaveService(ActivityDTO activityDTO) {
-        return webClientActivity.post()
-                .uri("/api/activity/dati")
-                .bodyValue(activityDTO)
-                .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    return Mono.error(new RuntimeException("Errore 4xx")); // Passa l'errore
-                })
-                .bodyToMono(new ParameterizedTypeReference<ResponseDTO>() {
-                })
-                .doOnError(ex -> {
-                    // Log error senza interrompere
-                    System.err.println("Errore nella chiamata: " + ex.getMessage());
-                });
+        return aboutStateMachineService.callActivitySaveService(activityDTO);
     }
 
     public Mono<ResponseDTO> callActivityDeleteService(String identificativo) {
 
-        return webClientActivity.delete()
-                .uri("/api/activity/toggle/{identificativo}", identificativo)
-                .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    return Mono.error(new RuntimeException("Errore 4xx" + clientResponse.statusCode()));
-                })
-                .bodyToMono(new ParameterizedTypeReference<ResponseDTO>() {
-                })
-                .doOnError(ex -> {
-                    System.err.println("Errore nella chiamata: " + ex.getMessage());
-                });
+        return aboutStateMachineService.callActivityDeleteService(identificativo);
     }
 
 }
