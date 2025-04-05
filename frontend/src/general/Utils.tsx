@@ -19,14 +19,15 @@ export interface ResponseI {
 
 export interface NotificationI {
 
-    email : string;
-     emailFamily : string;
-    serviceName : string;
+  email: string;
+  emailFamily: string;
+  serviceName: string;
+  message: string;
 
 }
 
-export interface FamilyNotificationI extends NotificationI  {
-  pointsNew : string;
+export interface FamilyNotificationI extends NotificationI {
+
 }
 
 export interface UserI {
