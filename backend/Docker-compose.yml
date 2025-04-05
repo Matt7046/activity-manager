@@ -14,6 +14,25 @@ services:
     networks:
       - app-network
 
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - register-service
+      - about-service
+      - points-service
+      - activity-service
+      - log-activity-service
+      - auth-service
+      - family-service
+      - notification-service
+    networks:
+      - app-network
+
   register-service:
     depends_on:
       - rabbitmq
@@ -21,11 +40,7 @@ services:
     build:
       context: ./
       dockerfile: service/register/Dockerfile
-    ports:
-      - "8081:8080"
-      - "5005:5005"  # Porta per debug
     environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=username
@@ -42,11 +57,7 @@ services:
     build:
       context: ./
       dockerfile: service/about/Dockerfile
-    ports:
-      - "8082:8080"
-      - "5007:5007"  # Porta per debug
     environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5007
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=username
@@ -63,11 +74,7 @@ services:
     build:
       context: ./
       dockerfile: service/points/Dockerfile
-    ports:
-      - "8083:8080"
-      - "5006:5006"  # Porta per debug
     environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=username
@@ -84,11 +91,7 @@ services:
     build:
       context: ./
       dockerfile: service/activity/Dockerfile
-    ports:
-      - "8084:8080"
-      - "5008:5008"  # Porta per debug
     environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5008
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=username
@@ -98,18 +101,14 @@ services:
     networks:
       - app-network
 
-  logactivity-service:
+  log-activity-service:
     depends_on:
       - rabbitmq
     image: log-activity-service:1.0.0
     build:
       context: ./
       dockerfile: service/logActivity/Dockerfile
-    ports:
-      - "8085:8080"
-      - "5009:5009"  # Porta per debug
     environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5009
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=username
@@ -119,18 +118,14 @@ services:
     networks:
       - app-network
 
-  auth-service:
+  auth-service:   
     depends_on:
       - rabbitmq
     image: auth-service:1.0.0
     build:
       context: ./
       dockerfile: service/auth/Dockerfile
-    ports:
-      - "8086:8080"
-      - "5010:5010"  # Porta per debug
     environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5010
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=username
@@ -147,11 +142,7 @@ services:
     build:
       context: ./
       dockerfile: service/family/Dockerfile
-    ports:
-      - "8087:8080"
-      - "5011:5011"  # Porta per debug
     environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5011
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=username
@@ -167,12 +158,8 @@ services:
     image: notification-service:1.0.0
     build:
       context: ./
-      dockerfile: service/notification/Dockerfile
-    ports:
-      - "8088:8080"
-      - "5012:5012"  # Porta per debug
+      dockerfile: service/notification/Dockerfile   
     environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5012
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=username
