@@ -84,6 +84,7 @@ const GoogleAuthComponent = () => {
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [emailOptions, setEmailOptions] = React.useState<string[]>([]); // Lo stato è un array di stringhe
   const [emailLogin, setEmailLogin] = useState(''); // Stato per l'email
+  const [emailUserCurrent, setEmailUserCurrent] = useState(''); // Stato per l'email
   const location = useLocation();
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [hiddenLogin, setHiddenLogin] = useState<any>(false); // Stato utente
@@ -99,13 +100,15 @@ const GoogleAuthComponent = () => {
         name: "Simulated User",
         emailFamily: "user@simulated.com",
         email: "user@simulated.com",
-        type: TypeUser.STANDARD
+        type: TypeUser.STANDARD,
+        emailUserCurrent: "user@simulated.com",
       });
       setUserDataChild({
         name: "Simulated child User",
         emailFamily: "child@simulated.com",
         email: "user@simulated.com",
-        type: TypeUser.FAMILY
+        type: TypeUser.FAMILY,
+        emailUserCurrent: "child@simulated.com",
       });
       setUser(null);
     }
@@ -131,21 +134,24 @@ const GoogleAuthComponent = () => {
     name: "Simulated User",
     emailFamily: "user@simulated.com",
     email: "user@simulated.com",
-    type: -1
+    type: -1,
+    emailUserCurrent : ''
   }); // Stato per userData
 
   const [userDataChild, setUserDataChild] = useState({
     name: "Simulated child User",
     emailFamily: "child@simulated.com",
     email: "user@simulated.com",
-    type: -1
+    type: -1,
+    emailUserCurrent : ''
   }); // Stato per userData
 
-  const handleConfirm = ((typeSimulated: number, emailFather: string) => {
+  const handleConfirm = ((typeSimulated: number, emailFather: string, emailUserCurrent: string) => {
     console.log("Email confermata:", email);
     userData.email = emailFather;
     userData.emailFamily = email;
     userData.type = typeSimulated;
+    userData.emailUserCurrent = emailUserCurrent;
     setUser(userData);
     handleCloseD();
   });
@@ -225,23 +231,24 @@ const GoogleAuthComponent = () => {
     //  const utente = { email: userData.email, type: userData.type }
     return getTypeUser(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
-
+      setEmailUserCurrent(x?.jsonText.emailUserCurrent );
       switch (x?.jsonText?.typeUser) {
         case 0: {
           setEmailLogin(userD.email);
           setSimulated(TypeUser.STANDARD);
-          setUser({ ...userD, type: x.jsonText.typeUser });
+          setUser({ ...userD, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
           break;
         }
         case 1: {
           setEmailLogin(userD.email);
           setSimulated(TypeUser.FAMILY);
+          //setUser({ ...userD, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
           handleOpenD();
           break;
         }
         case 2: {
           if (googleAuth === true) {
-            setUser({ ...userD, type: x.jsonText.typeUser });
+            setUser({ ...userD, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
 
           }
           else {
@@ -404,7 +411,7 @@ const GoogleAuthComponent = () => {
                         Annulla
                       </ButtonMui>
                       <ButtonMui
-                        onClick={() => handleConfirm(simulated, emailLogin)}
+                        onClick={() => handleConfirm(simulated, emailLogin, emailUserCurrent)}
                         color="primary"
                         disabled={!email} // Disabilita il pulsante se l'email è vuota
                       >
