@@ -24,24 +24,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class RegisterController {
 
         @Autowired
-        @Qualifier("webClientPoints")
-        private WebClient webClientPoints;
-
+        private UserStateMachineService userStateMachineService;
 
         @PostMapping("/dati")
         public Mono<ResponseDTO> saveUserByPoints(@RequestBody PointsDTO pointsDTO) {
-                return webClientPoints.post()
-                                .uri("/api/points/dati/user")
-                                .bodyValue(pointsDTO)
-                                .retrieve()
-                                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                                        return Mono.error(new RuntimeException("Errore 4xx")); // Passa l'errore
-                                })
-                                .bodyToMono(new ParameterizedTypeReference<ResponseDTO>() {
-                                })
-                                .doOnError(ex -> {
-                                        // Log error senza interrompere
-                                        System.err.println("Errore nella chiamata: " + ex.getMessage());
-                                });
+            return userStateMachineService.saveUserByPoints(pointsDTO);
         }
 }

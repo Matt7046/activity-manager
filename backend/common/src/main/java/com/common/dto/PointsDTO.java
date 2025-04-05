@@ -25,6 +25,14 @@ public class PointsDTO implements InterfaceDTO {
 	private List<String> emailFigli;
 	private Boolean operation;
 
+	public PointsDTO(LogActivityDTO logActivityDTO)
+	{
+		setPoint(logActivityDTO.getPoints());
+		setEmail(logActivityDTO.getEmail());
+		setEmailFamily(logActivityDTO.getEmailFamily());
+		setUsePoints(logActivityDTO.getUsePoints());
+	}
+
 	public void generaAttivita(String[] attivitaSvolte) {
 		setAttivita(attivitaSvolte.toString()
 				.replace("[", "[\"")
