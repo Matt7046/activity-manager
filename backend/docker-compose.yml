@@ -39,7 +39,7 @@ services:
     image: register-service:1.0.0
     build:
       context: ./
-      dockerfile: service/register/Dockerfile
+      dockerfile: service/register/dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -56,7 +56,7 @@ services:
     image: about-service:1.0.0
     build:
       context: ./
-      dockerfile: service/about/Dockerfile
+      dockerfile: service/about/dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -73,7 +73,7 @@ services:
     image: points-service:1.0.0
     build:
       context: ./
-      dockerfile: service/points/Dockerfile
+      dockerfile: service/points/dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -90,7 +90,7 @@ services:
     image: activity-service:1.0.0
     build:
       context: ./
-      dockerfile: service/activity/Dockerfile
+      dockerfile: service/activity/dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -107,7 +107,7 @@ services:
     image: log-activity-service:1.0.0
     build:
       context: ./
-      dockerfile: service/logActivity/Dockerfile
+      dockerfile: service/logActivity/dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -124,7 +124,7 @@ services:
     image: auth-service:1.0.0
     build:
       context: ./
-      dockerfile: service/auth/Dockerfile
+      dockerfile: service/auth/dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -141,7 +141,7 @@ services:
     image: family-service:1.0.0
     build:
       context: ./
-      dockerfile: service/family/Dockerfile
+      dockerfile: service/family/dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -158,7 +158,7 @@ services:
     image: notification-service:1.0.0
     build:
       context: ./
-      dockerfile: service/notification/Dockerfile   
+      dockerfile: service/notification/dockerfile   
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
