@@ -61,7 +61,7 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   }, []); // Il secondo argomento vuoto ind ica che l'effetto dipenderà solo dal mount
 
   useEffect(() => {
-    const socket = new WebSocket("http://notification-service:8080/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
+    const socket = new WebSocket("ws://localhost/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
     socket.onopen = () => {
       console.log("Connected to WebSocket");
     };
