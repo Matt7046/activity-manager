@@ -32,14 +32,32 @@ services:
       - notification-service
     networks:
       - app-network
+  common:
+    build:
+      context: ./  # Assicurati che il contesto di build punti alla cartella di `common`
+      dockerfile: common/Dockerfile
+    volumes:
+      - ~/.m2:/root/.m2  # Per avere accesso al repository Maven locale
+    networks:
+      - app-network
+  repository:
+    build:
+      context: ./  # Assicurati che il contesto di build punti alla cartella di `common`
+      dockerfile: repository/Dockerfile
+    volumes:
+      - ~/.m2:/root/.m2  # Per avere accesso al repository Maven locale
+    networks:
+      - app-network
 
   register-service:
     depends_on:
       - rabbitmq
+      - common
+      - repository
     image: register-service:1.0.0
     build:
       context: ./
-      dockerfile: service/register/dockerfile
+      dockerfile: service/register/Dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -53,10 +71,12 @@ services:
   about-service:
     depends_on:
       - rabbitmq
+      - common
+      - repository
     image: about-service:1.0.0
     build:
       context: ./
-      dockerfile: service/about/dockerfile
+      dockerfile: service/about/Dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -70,10 +90,12 @@ services:
   points-service:
     depends_on:
       - rabbitmq
+      - common
+      - repository
     image: points-service:1.0.0
     build:
       context: ./
-      dockerfile: service/points/dockerfile
+      dockerfile: service/points/Dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -87,10 +109,12 @@ services:
   activity-service:
     depends_on:
       - rabbitmq
+      - common
+      - repository
     image: activity-service:1.0.0
     build:
       context: ./
-      dockerfile: service/activity/dockerfile
+      dockerfile: service/activity/Dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -104,10 +128,12 @@ services:
   log-activity-service:
     depends_on:
       - rabbitmq
+      - common
+      - repository
     image: log-activity-service:1.0.0
     build:
       context: ./
-      dockerfile: service/logActivity/dockerfile
+      dockerfile: service/logActivity/Dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -121,10 +147,12 @@ services:
   auth-service:   
     depends_on:
       - rabbitmq
+      - common
+      - repository
     image: auth-service:1.0.0
     build:
       context: ./
-      dockerfile: service/auth/dockerfile
+      dockerfile: service/auth/Dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -138,10 +166,12 @@ services:
   family-service:
     depends_on:
       - rabbitmq
+      - common
+      - repository
     image: family-service:1.0.0
     build:
       context: ./
-      dockerfile: service/family/dockerfile
+      dockerfile: service/family/Dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
@@ -155,10 +185,12 @@ services:
   notification-service:
     depends_on:
       - rabbitmq
+      - common
+      - repository
     image: notification-service:1.0.0
     build:
       context: ./
-      dockerfile: service/notification/dockerfile   
+      dockerfile: service/notification/Dockerfile   
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
