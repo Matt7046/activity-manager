@@ -13,6 +13,7 @@ mongo:
   tls:
     cert: certificate/client.pem
     key: certificate/client-key.pem
+  database: demo
 
 app:
   secret:
