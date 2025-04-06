@@ -39,6 +39,9 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     @Value("${mongo.tls.key}")
     private String certKeyFilePath; // Il percorso al file PEM combinato
 
+    @Value("${mongo.database}")
+    private String database;
+
     @Bean
     public MongoClient mongoClient() {
         MongoClientSettings.Builder mongoClientSettingsBuilder = MongoClientSettings.builder();
@@ -131,6 +134,6 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Override
     protected String getDatabaseName() {
-       return "demoProd";
+       return database;
     }
 }
