@@ -1,5 +1,5 @@
 #per compilare il front end
-
+    docker network create backend_app-network || true
     docker build -t frontend:1.0.0 .
     docker rm -f frontend
 
