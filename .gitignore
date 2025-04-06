@@ -33,6 +33,3 @@ build/
 frontend/.vscode/
 node_modules
 backend/.vscode/
-
-# Ignora il file jar specifico
-backend/jar/activityManager-1.0.jar
