@@ -63,15 +63,8 @@ public class WebSocketService implements WebSocketHandler {
         String userSender = rootNode.path("userSender").asText();
         String message = rootNode.path("message").asText();
         // Ottenere la data come stringa
-        String dateSenderStr = rootNode.path("dateSender").asText();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date dateSender = null;
-        try {
-            dateSender = dateFormat.parse(dateSenderStr);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Gestire l'errore se il formato della data non è corretto
-        }
+        long dateSenderLong = rootNode.path("dateSender").longValue();
+        Date dateSender = new Date(dateSenderLong);
         Notification notification = new Notification();
         notification.setMessage(message);
         notification.setUserReceiver(userReceiver);
