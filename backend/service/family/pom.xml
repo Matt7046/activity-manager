@@ -10,7 +10,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>family Service</name>
+    <name>Family Service</name>
     <description>Microservizio family</description>
 
     <parent>
@@ -71,7 +71,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>3.1.0</version>
             <configuration>
-                <mainClass>com.activityService.FamilyApplication</mainClass>
+                <mainClass>com.familyService.FamilyApplication</mainClass>
             </configuration>
             <executions>
                 <execution>

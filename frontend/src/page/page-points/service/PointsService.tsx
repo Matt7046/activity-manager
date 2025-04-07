@@ -16,17 +16,6 @@ export const findByEmail = async (user: UserI, funzioneMessage?: (message?: Type
   }
 };
 
-export const getUserType = async (user: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) : Promise<ResponseI | undefined>=> {
-  try {
-
-    const path = PATH_POINTS + `/dati`;
-    const data = await postData(ServiceName.POINTS,path, user, setLoading, funzioneMessage); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
-    return data;
-  } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);
-  }
-};
 
 export const getEmailChild = async (userDTO: any, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
