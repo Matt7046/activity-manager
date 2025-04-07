@@ -1,5 +1,6 @@
 package com.activityService;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -9,11 +10,9 @@ import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
 import com.common.mapper.LogActivityMapper;
 import reactor.core.publisher.Mono;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
@@ -34,10 +33,12 @@ public class LogActivityController {
     @Qualifier("webClientPoints")
     private WebClient webClientPoints;
 
+    @Value("${order.type1}")
+    private String field;
 
     @PostMapping("/log")
     public ResponseDTO logActivityByEmail(@RequestBody PointsDTO pointsDTO) {
-        Sort sort = Sort.by(Sort.Order.desc("date"));
+        Sort sort = Sort.by(Sort.Order.desc(field));
         List<LogActivity> sub = logActivityService.logAttivitaByEmail(pointsDTO, sort);
         List<LogActivityDTO> logAttivitaUnica = sub.stream()
                 .map(LogActivityMapper.INSTANCE::toDTO)
