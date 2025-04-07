@@ -23,6 +23,7 @@ export interface NotificationI {
   message: string;
   userSender: string;
   userReceiver:string;
+  dateSender: Date;
 }
 
 export interface FamilyNotificationI extends NotificationI {
