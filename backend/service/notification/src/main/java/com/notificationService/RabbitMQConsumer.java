@@ -21,16 +21,12 @@ public class RabbitMQConsumer {
 
 
     @RabbitListener(queues = "notifications.queue", ackMode = "MANUAL")
-    public void receiveNotification(String message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
+    public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(message);
-        // Estrai il campo 'pointsNew' come un JsonNode e convertilo direttamente in String
-        String emailUserReceive = rootNode.path("emailUserReceive").asText();
-        // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
+             // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
         try {
             // Thread.sleep(20000); // 5 secondi
-            receive(emailUserReceive, message, 0);
+            receive(jsonMessage, 0);
             channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -39,12 +35,12 @@ public class RabbitMQConsumer {
         }
     }
 
-    public void receive(String emailReceive, String in, int receiver) throws InterruptedException {
+    public void receive(String in, int receiver) throws InterruptedException, JsonProcessingException {
         StopWatch watch = new StopWatch();
         watch.start();
         doWork(in);
         watch.stop();
-        webSocketService.sendNotification(emailReceive, in);
+        webSocketService.sendNotification(in);
     }
 
     private void doWork(String in) throws InterruptedException {
