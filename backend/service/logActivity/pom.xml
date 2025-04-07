@@ -10,7 +10,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>log activity Service</name>
+    <name>Log activity Service</name>
     <description>Microservizio logActivity</description>
 
     <parent>
@@ -77,7 +77,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>3.1.0</version>
             <configuration>
-                <mainClass>com.activityService.LogActivityApplication</mainClass>
+                <mainClass>com.logActivityService.LogActivityApplication</mainClass>
             </configuration>
             <executions>
                 <execution>
