@@ -17,7 +17,7 @@ public class EncryptDecryptConverter implements Converter<String, String> {
     PropertiesKey propertiesKey;
     @Value("${app.algorithm1}")
     private String alghorithm;
-    
+
     @Override
     public String convert(String source) {
         try {
