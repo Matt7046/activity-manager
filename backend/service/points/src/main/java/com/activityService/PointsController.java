@@ -1,5 +1,6 @@
 package com.activityService;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.common.data.Points;
@@ -30,13 +31,19 @@ public class PointsController {
     @Autowired
     private PointsService pointsService;
 
+    @Value("${error.document.notFound}")
+    private String errorDocument;
+
+    @Value("${error.document.points}")
+    private String message;
+
     @PostMapping("find")
     public ResponseDTO findByEmail(@RequestBody PointsDTO pointsDTO) throws Exception {
         Points item = null;
         ResponseDTO responseDTO = null;
         item = pointsService.getPointsByEmail(pointsDTO.getEmail());
         if (item == null) {
-            throw new NotFoundException("Documento non trovato con identificativo: " + pointsDTO.getEmail());
+            throw new NotFoundException(errorDocument + pointsDTO.getEmail());
         }
 
         if (item != null) {
@@ -46,7 +53,7 @@ public class PointsController {
                     .filter(point -> email.equals(point.getEmail()))
                     .collect(Collectors.toList());
             PointsRDTO record = new PointsRDTO(filteredList.get(0).getPoints(),
-                    "I Points a disposizione sono: ".concat(filteredList.get(0).getPoints().toString()));
+                    message.concat(filteredList.get(0).getPoints().toString()));
 
             responseDTO = new ResponseDTO(record, HttpStatus.OK.value(), new ArrayList<>());
         }
