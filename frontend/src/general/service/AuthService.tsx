@@ -1,9 +1,21 @@
 import { TypeMessage } from "../../page/page-layout/PageLayout";
 import { PATH_AUTH, postData } from "../AxiosService";
+import { ResponseI } from "../Utils";
 
 import { ServiceName } from "./ApiConfig";
 
 
+export const getUserType = async (user: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) : Promise<ResponseI | undefined>=> {
+  try {
+
+    const path = PATH_AUTH + `/dati`;
+    const data = await postData(ServiceName.POINTS,path, user, setLoading, funzioneMessage); // Endpoint dell'API
+    console.log('Dati ricevuti:', data);
+    return data;
+  } catch (error) {
+    console.error('Errore durante il recupero dei dati:', error);
+  }
+};
 
 export const getToken = async (about: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) => {
   try {
@@ -14,7 +26,7 @@ export const getToken = async (about: any, funzioneMessage?: (message?: TypeMess
     return data;
   } catch (error) {
     console.error('Errore durante il recupero dei dati:', error);
-  }
+  }  
 };
 
 
