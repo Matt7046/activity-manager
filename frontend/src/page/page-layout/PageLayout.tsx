@@ -41,12 +41,12 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openAnchor, setOpenAnchor] = useState(false);
-  const notify : NotificationI[] = [];
+  const notify: NotificationI[] = [];
   const [notifications, setNotifications] = useState(notify);
 
   const handleClickAnchor = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget); // Imposta il target del popover
-    getNotificationsByIdentificativo(user.emailUserCurrent,0 , 5).then((response: ResponseI) => {
+    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 5).then((response: ResponseI) => {
       setNotifications(response.jsonText);
       setOpenAnchor(true); // Mostra il popover
     })
@@ -106,6 +106,16 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                     {/* Seconda riga: inviato da */}
                     <Typography variant="body2" color="text.secondary">
                       Inviato da: {notification.userSender}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Data: {new Date(notification.dateSender).toLocaleString('it-IT', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                      })}
                     </Typography>
                   </Box>
                 ))}
