@@ -1,16 +1,14 @@
 import axios from 'axios';
 import { TypeMessage } from '../page/page-layout/PageLayout';
 import { HttpStatus, ServerMessage, TypeAlertColor } from './Constant';
-import apiConfig, { ServiceName } from './service/ApiConfig';
+import apiConfig from './service/ApiConfig';
 
-const apiClient = (serviceName: ServiceName) => {
+const apiClient = () => {
   const token = localStorage.getItem('token');
-  const service = apiConfig[serviceName];
 
-  if (!service) throw new Error(`Service ${serviceName} not configured!`);
 
   return axios.create({
-    baseURL: service.baseURL,
+    baseURL: apiConfig.baseURL,
     timeout: 20000,
     headers: {
       'Content-Type': 'application/json',
@@ -20,11 +18,11 @@ const apiClient = (serviceName: ServiceName) => {
 
 }
   // Funzione per ottenere dati dall'API
-export const getData = async (serviceName: ServiceName,  endpoint: string, setLoading?: (loading: boolean) => void) => {
+export const getData = async (endpoint: string, setLoading?: (loading: boolean) => void) => {
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
-    const response = await apiClient(serviceName).get(endpoint);
+    const response = await apiClient().get(endpoint);
     return response.data; // Restituisce i dati della risposta
   } catch (error) {
     console.error('Errore durante la richiesta:', error);
@@ -34,7 +32,7 @@ export const getData = async (serviceName: ServiceName,  endpoint: string, setLo
   }
 };
 
-export const postData = async (serviceName: ServiceName,  endpoint: string, data: any, setLoading?: (loading: boolean) => void,
+export const postData = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
   funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
 
@@ -43,7 +41,7 @@ export const postData = async (serviceName: ServiceName,  endpoint: string, data
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
-    const response = await apiClient(serviceName).post(endpoint, data);
+    const response = await apiClient().post(endpoint, data);
     response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
     const message: TypeMessage = {
       typeMessage:  response.data.status === HttpStatus.OK ? TypeAlertColor.SUCCESS : TypeAlertColor.ERROR ,
@@ -61,14 +59,14 @@ export const postData = async (serviceName: ServiceName,  endpoint: string, data
 
 
 // Altri metodi (PUT, DELETE, ecc.)
-export const putData = async (serviceName: ServiceName, endpoint: string, data: any, setLoading?: (loading: boolean) => void,
+export const putData = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
   funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   showSuccess = showSuccess ?? false;
   try {
-    const response = await apiClient(serviceName).put(endpoint, data);
+    const response = await apiClient().put(endpoint, data);
     response.data.status = response.data.status === undefined ? 200 : response.data.status;
     const message: TypeMessage = {
       typeMessage: TypeAlertColor.SUCCESS 
@@ -83,7 +81,7 @@ export const putData = async (serviceName: ServiceName, endpoint: string, data: 
   }
 };
 
-export const deleteData = async (serviceName: ServiceName, endpoint: string, setLoading?: (loading: boolean) => void,
+export const deleteData = async (endpoint: string, setLoading?: (loading: boolean) => void,
   funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
   setLoading = setLoading ?? (() => { });
@@ -93,7 +91,7 @@ export const deleteData = async (serviceName: ServiceName, endpoint: string, set
     typeMessage: TypeAlertColor.SUCCESS
   }
   try {
-    const response = await apiClient(serviceName).delete(endpoint);
+    const response = await apiClient().delete(endpoint);
     response.data.status = response.data.status === undefined ? 200 : response.data.status;
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
@@ -149,6 +147,7 @@ export const PATH_POINTS = 'points';
 export const PATH_OPERATIVE = 'operative';
 export const PATH_FAMILY = 'family';
 export const PATH_LOGACTIVITY = 'logactivity';
+export const PATH_NOTIFICATION = 'notification';
 
 
 
