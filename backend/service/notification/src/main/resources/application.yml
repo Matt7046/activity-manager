@@ -4,3 +4,8 @@ spring:
     import: optional:classpath:application-common.yml
   application:
     name: activityManager
+session:
+  attribute:
+    identification: "id"
+websocket:
+  path: "ws/notifications"

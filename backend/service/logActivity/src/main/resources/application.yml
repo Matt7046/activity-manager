@@ -4,3 +4,5 @@ spring:
     import: optional:classpath:application-common.yml
   application:
     name: activityManager
+order:
+  type1: "Date"

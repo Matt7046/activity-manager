@@ -1,5 +1,6 @@
 package com.activityService;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +32,9 @@ public class ActivityController {
     @Autowired
     private ActivityService activityService;
 
+    @Value("${error.document.notFound}")
+    private String errorDocument;
+
     
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
@@ -52,7 +56,7 @@ public class ActivityController {
         ResponseDTO responseDTO = null;
         item = activityService.findByIdentificativo(pointsDTO.get_id());
         if (item == null) {
-            throw new NotFoundException("Documento non trovato con identificativo: " + pointsDTO.get_id());
+            throw new NotFoundException(errorDocument + pointsDTO.get_id());
         }
 
         if (item != null) {
