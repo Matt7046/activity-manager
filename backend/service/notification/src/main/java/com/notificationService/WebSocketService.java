@@ -1,12 +1,21 @@
 package com.notificationService;
 
+import com.common.data.Notification;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.springframework.beans.factory.annotation.Value;
 
 @Service
@@ -17,6 +26,9 @@ public class WebSocketService implements WebSocketHandler {
     @Value("${session.attribute.identification}")
     private String identification;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public Mono<Void> handle(WebSocketSession session) {
         // Aggiunge la sessione quando si connette un client
@@ -24,8 +36,7 @@ public class WebSocketService implements WebSocketHandler {
         session.getAttributes().put(identification, emailID);
         sessions.add(session);
         // Flux per ricevere messaggi dal client (opzionale, solo per logging)
-        Flux<String> receive = session.receive()
-                .map(msg -> msg.getPayloadAsText());
+        Flux<String> receive = session.receive().map(msg -> msg.getPayloadAsText());
 
         // Quando il client si disconnette, rimuoviamo la sessione
         return receive.then(Mono.fromRunnable(() -> {
@@ -44,15 +55,32 @@ public class WebSocketService implements WebSocketHandler {
     }
 
 
-    public void sendNotification(String emailReceive, String message) {
-
-        Flux.fromIterable(sessions)
-                .filter(session -> session.isOpen()
-                        && emailReceive.equals(session.getAttributes().get(identification)))
-                .flatMap(session -> {
-                    return session.send(Mono.just(session.textMessage(message)));
-                })
-                .subscribe();
+    public void sendNotification(String jsonMessage) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(jsonMessage);
+        // Estrai il campo come un JsonNode e convertilo direttamente in String
+        String userReceiver = rootNode.path("userReceiver").asText();
+        String userSender = rootNode.path("userSender").asText();
+        String message = rootNode.path("message").asText();
+        // Ottenere la data come stringa
+        String dateSenderStr = rootNode.path("dateSender").asText();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date dateSender = null;
+        try {
+            dateSender = dateFormat.parse(dateSenderStr);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Gestire l'errore se il formato della data non è corretto
+        }
+        Notification notification = new Notification();
+        notification.setMessage(message);
+        notification.setUserReceiver(userReceiver);
+        notification.setUserSender(userSender);
+        notification.setDateSender(dateSender);
+        notificationService.saveNotification(notification);
+        Flux.fromIterable(sessions).filter(session -> session.isOpen() && userReceiver.equals(session.getAttributes().get(identification))).flatMap(session -> {
+            return session.send(Mono.just(session.textMessage(jsonMessage)));
+        }).subscribe();
     }
 }
 

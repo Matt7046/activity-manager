@@ -1,5 +1,4 @@
 import { PATH_REGISTER, postData } from "../../../general/AxiosService";
-import { ServiceName } from "../../../general/service/ApiConfig";
 import { TypeMessage } from "../../page-layout/PageLayout";
 
 
@@ -7,7 +6,7 @@ export const saveUserByPoints = async (register: any, funzioneMessage?: (message
   try {
     const path = PATH_REGISTER + `/dati`;
     const showSuccess = true;
-    const data = await postData(ServiceName.REGISTER, path, register, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
+    const data = await postData(path, register, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {

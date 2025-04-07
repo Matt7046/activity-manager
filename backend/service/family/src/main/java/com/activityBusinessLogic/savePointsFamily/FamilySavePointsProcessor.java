@@ -16,6 +16,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,11 +95,11 @@ public class FamilySavePointsProcessor {
         String message = pointsDTO.getUsePoints() < 0L ? messageRemove : messageAdd;
         builder.append(message).append(pointsDTO.getEmail());
         FamilyNotificationDTO dto = new FamilyNotificationDTO(builder.toString());
-        dto.setEmailFamily(pointsDTO.getEmailFamily());
-        dto.setEmail(pointsDTO.getEmail());
         dto.setServiceName(serviceName);
-        dto.setEmailUserReceive(pointsDTO.getEmailFamily());
+        dto.setUserReceiver(pointsDTO.getEmailFamily());
+        dto.setUserSender(pointsDTO.getEmail());
         dto.setMessage(dto.getPointsNew());
+        dto.setDateSender(new Date());
         try {
             String jsonMessage = new ObjectMapper().writeValueAsString(dto);
             notificationPublisher.sendMessage(exchange, routingKey, jsonMessage);

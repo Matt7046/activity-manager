@@ -1,12 +1,17 @@
 package com.notificationService;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+@EnableMongoRepositories(basePackages = {
+        "com.repository.notification",
+})
 @SpringBootApplication(scanBasePackages = {
-    "com.repository",
-    "com.common.configurations",
-    "com.notificationService",
-    "com.common"
+        "com.repository",
+        "com.common.configurations",
+        "com.notificationService",
+        "com.common"
 })
 public class NotificationApplication {
 

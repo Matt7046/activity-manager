@@ -1,5 +1,4 @@
 import { PATH_FAMILY, postData } from "../../../general/AxiosService";
-import { ServiceName } from "../../../general/service/ApiConfig";
 import { ResponseI } from "../../../general/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
 
@@ -10,7 +9,7 @@ export const savePointsByFamily = async (user: any, funzioneMessage?: (message?:
   try {
     const path = PATH_FAMILY + `/dati`;
     showSuccess = true; 
-    const data = await postData(ServiceName.FAMILY ,path, user, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
+    const data = await postData(path, user, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
