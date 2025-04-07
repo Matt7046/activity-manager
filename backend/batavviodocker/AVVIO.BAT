@@ -25,9 +25,13 @@ docker run -d --name frontend1 --network backend_app-network -p 3001:80 frontend
 
 
 @echo off
-echo Avvio dei container con Docker Compose...
+
 cd ..
 cd backend
+REM Fermare e rimuovere un container se esiste (backend)
+FOR /F %%i IN ('docker ps -aq -f "name=^backend$"') DO docker rm -f %%i
+
+echo Avvio dei container con Docker Compose...
 call docker-compose up --build
 
 
