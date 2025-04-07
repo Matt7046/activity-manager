@@ -22,8 +22,8 @@ app:
       key: 1234567890123456
       user:
         key: qwertyuiop
-  algorith1: AES
-  algorith2: HmacSHA256
+  algorithm1: AES
+  algorithm2: HmacSHA256
   address1: https://webapp-tn6q.onrender.com
   address2: https://webapp-tn6q.onrender.com
   security:
