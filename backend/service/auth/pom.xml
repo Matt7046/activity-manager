@@ -10,7 +10,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>auth Service</name>
+    <name>Auth Service</name>
     <description>Microservizio di autenticazione</description>
 
     <parent>
@@ -46,6 +46,12 @@
             <version>3.1.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.statemachine</groupId>
+            <artifactId>spring-statemachine-starter</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
         <!-- Per serializzazione/deserializzazione JSON -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -66,7 +72,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>3.1.0</version>
             <configuration>
-                <mainClass>com.activityService.AuthApplication</mainClass>
+                <mainClass>com.authService.AuthApplication</mainClass>
             </configuration>
             <executions>
                 <execution>
