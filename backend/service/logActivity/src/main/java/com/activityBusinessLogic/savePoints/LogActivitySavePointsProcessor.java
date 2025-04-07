@@ -1,6 +1,6 @@
 package com.activityBusinessLogic.savePoints;
 
-import com.activityService.LogActivityService;
+import com.logActivityService.LogActivityService;
 import com.common.data.LogActivity;
 import com.common.dto.LogActivityDTO;
 import com.common.dto.PointsDTO;

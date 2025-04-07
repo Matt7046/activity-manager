@@ -10,7 +10,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>register Service</name>
+    <name>Register Service</name>
     <description>Microservizio register</description>
 
     <parent>
@@ -73,7 +73,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>3.1.0</version>
             <configuration>
-                <mainClass>com.activityService.RegisterApplication</mainClass>
+                <mainClass>com.registerService.RegisterApplication</mainClass>
             </configuration>
             <executions>
                 <execution>
