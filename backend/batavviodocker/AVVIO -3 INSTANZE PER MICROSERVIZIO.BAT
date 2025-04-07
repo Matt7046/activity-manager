@@ -25,9 +25,13 @@ echo Avvio container frontend1 sulla porta 3001...
 docker run -d --name frontend1 --network backend_app-network -p 3001:80 frontend:1.0.0
 
 @echo off
-echo Avvio dei container con Docker Compose...
+
 cd ..
 cd backend
+REM Fermare e rimuovere un container se esiste (backend)
+FOR /F %%i IN ('docker ps -aq -f "name=^backend$"') DO docker rm -f %%i
+
+echo Avvio dei container con Docker Compose...
 call docker-compose up --scale activity-service=3 --scale register-service=3 --scale about-service=3 --scale points-service=3 --scale log-activity-service=3 --scale auth-service=3 --scale family-service=3 --scale notification-service=3
 
 
