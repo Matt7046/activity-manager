@@ -19,11 +19,10 @@ export interface ResponseI {
 
 export interface NotificationI {
 
-  email: string;
-  emailFamily: string;
   serviceName: string;
   message: string;
-
+  userSender: string;
+  userReceiver:string;
 }
 
 export interface FamilyNotificationI extends NotificationI {
@@ -35,6 +34,7 @@ export interface UserI {
   email: string;
   emailFamily: string;
   type: TypeUser
+  emailUserCurrent: string;
 }
 
 export const verifyForm = (formValues: any) => {
