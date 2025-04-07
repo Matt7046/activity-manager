@@ -4,3 +4,6 @@ spring:
     import: optional:classpath:application-common.yml
   application:
     name: activityManager
+error:
+  document:
+    notFound: 'Documento non trovato con identificativo: '
