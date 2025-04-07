@@ -2,14 +2,12 @@ import { TypeMessage } from "../../page/page-layout/PageLayout";
 import { PATH_AUTH, postData } from "../AxiosService";
 import { ResponseI } from "../Utils";
 
-import { ServiceName } from "./ApiConfig";
-
 
 export const getUserType = async (user: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) : Promise<ResponseI | undefined>=> {
   try {
 
     const path = PATH_AUTH + `/dati`;
-    const data = await postData(ServiceName.POINTS,path, user, setLoading, funzioneMessage); // Endpoint dell'API
+    const data = await postData(path, user, setLoading, funzioneMessage); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
@@ -21,7 +19,7 @@ export const getToken = async (about: any, funzioneMessage?: (message?: TypeMess
   try {
     const path = PATH_AUTH + `/token`;
     const showSuccess = true;
-    const data = await postData(ServiceName.AUTH, path, about, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
+    const data = await postData(path, about, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
     console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
