@@ -8,3 +8,10 @@ app:
   rabbitmq:
     exchange: notification-exchange
     routingKey: notification.family
+message:
+  document:
+    points: "I Points a disposizione sono: "
+    add: " Punti aggiunti da "
+    remove: " Punti sottratti da  "
+notification:
+  service: "familyService"

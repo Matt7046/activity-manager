@@ -24,7 +24,8 @@ public class FamilySavePointsProcessor {
 
     @Autowired
     @Qualifier("webClientPoints")
-    private WebClient webClientPoints;    ;
+    private WebClient webClientPoints;
+    ;
     @Autowired
     private RabbitMQProducer notificationPublisher;
     @Autowired
@@ -35,12 +36,23 @@ public class FamilySavePointsProcessor {
 
     @Value("${app.rabbitmq.routingKey}")
     private String routingKey;
-    
+
+    @Value("${message.document.add}")
+    private String messageAdd;
+
+    @Value("${message.document.remove}")
+    private String messageRemove;
+
+    @Value("${notification.service}")
+    private String serviceName;
+
+
+
     private final StateMachineFactory<State, Event> stateMachineFactory;
+
     public FamilySavePointsProcessor(StateMachineFactory<State, Event> stateMachineFactory) {
         this.stateMachineFactory = stateMachineFactory;
     }
-
 
     public Mono<ResponseDTO> savePointsByFamily(PointsDTO pointsDTO) {
         return Mono.fromCallable(() -> {
@@ -78,10 +90,13 @@ public class FamilySavePointsProcessor {
 
 
     private void inviaNotifica(PointsDTO pointsDTO) {
-        FamilyNotificationDTO dto = new FamilyNotificationDTO(pointsDTO.getUsePoints() + " Punti aggiunti da " + pointsDTO.getEmail());
+        StringBuilder builder = new StringBuilder(pointsDTO.getUsePoints().toString());
+        String message = pointsDTO.getUsePoints() < 0L ? messageRemove : messageAdd;
+        builder.append(message).append(pointsDTO.getEmail());
+        FamilyNotificationDTO dto = new FamilyNotificationDTO(builder.toString());
         dto.setEmailFamily(pointsDTO.getEmailFamily());
         dto.setEmail(pointsDTO.getEmail());
-        dto.setServiceName("familyService");
+        dto.setServiceName(serviceName);
         dto.setEmailUserReceive(pointsDTO.getEmailFamily());
         dto.setMessage(dto.getPointsNew());
         try {
