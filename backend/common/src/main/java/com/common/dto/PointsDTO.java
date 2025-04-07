@@ -32,12 +32,4 @@ public class PointsDTO implements InterfaceDTO {
 		setEmailFamily(logActivityDTO.getEmailFamily());
 		setUsePoints(logActivityDTO.getUsePoints());
 	}
-
-	public void generaAttivita(String[] attivitaSvolte) {
-		setAttivita(attivitaSvolte.toString()
-				.replace("[", "[\"")
-				.replace("]", "\"]")
-				.replace(", ", "\", \""));
-	}
-
 }

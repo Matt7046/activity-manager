@@ -34,10 +34,10 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     private String mongoUri;
 
     @Value("${mongo.tls.cert}")
-    private String certFilePath; // Il percorso al file PEM combinato
+    private String certFilePath; // Il percorso al file PEM CLIENT
 
     @Value("${mongo.tls.key}")
-    private String certKeyFilePath; // Il percorso al file PEM combinato
+    private String certKeyFilePath; // Il percorso al file PEM KEY
 
     @Value("${mongo.database}")
     private String database;
