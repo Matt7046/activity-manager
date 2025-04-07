@@ -110,7 +110,6 @@ public class SecurityConfig implements WebFluxConfigurer {
             PasswordEncoder encoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        // authProvider.setPasswordEncoder(encoder);
         return authProvider;
     }
 

@@ -15,10 +15,10 @@ public class PropertiesKey {
     @Value("${app.secret.crypt.key}")
     private String secretCryptKey;
 
-    @Value("${app.algorith1}")
+    @Value("${app.algorithm1}")
     private String algorith1;
 
-    @Value("${app.algorith2}")
+    @Value("${app.algorithm2}")
     private String algorith2;
 
     public SecretKey getSecretCryptKey() {
