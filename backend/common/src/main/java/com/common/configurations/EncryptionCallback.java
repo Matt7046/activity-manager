@@ -1,15 +1,12 @@
 package com.common.configurations;
 
 import java.util.stream.Collectors;
-
 import org.springframework.context.event.EventListener;
 import org.springframework.data.mongodb.core.mapping.event.AfterLoadEvent;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Component;
-
 import com.common.data.LogActivity;
 import com.common.data.Points;
-
 
 @Component
 public class EncryptionCallback {
