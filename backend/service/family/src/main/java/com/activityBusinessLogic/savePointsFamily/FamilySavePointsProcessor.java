@@ -1,6 +1,6 @@
 package com.activityBusinessLogic.savePointsFamily;
 
-import com.activityService.FamilyService;
+import com.familyService.FamilyService;
 import com.common.configurations.RabbitMQProducer;
 import com.common.dto.*;
 import com.common.transversal.PointsUser;
