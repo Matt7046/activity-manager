@@ -10,7 +10,7 @@ import BannerOpenSource from './components/ms-banner/Banner';
 import { MenuLaterale } from './components/ms-drawer/Drawer';
 import { baseStore } from './general/BaseStore';
 import { LoginUser, SectionName, ServerMessage, TypeUser } from './general/Constant';
-import { getToken } from './general/service/AuthService';
+import { getToken, getUserType } from './general/service/AuthService';
 import { ResponseI, UserI } from './general/Utils';
 import About from './page/page-about/About';
 import Activity from './page/page-activity/Activity';
@@ -18,7 +18,7 @@ import Family from './page/page-family/Family';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
 import Points from './page/page-points/Points';
-import { getEmailChild, getUserType as getTypeUser } from './page/page-points/service/PointsService';
+import { getEmailChild } from './page/page-points/service/PointsService';
 import PrivacyPolicy from './page/page-privacy-policy/PrivacyPolicy';
 import Register from './page/page-register/Register';
 
@@ -229,7 +229,7 @@ const GoogleAuthComponent = () => {
 
   const openHome = (userD: any, googleAuth: boolean, setLoading: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
-    return getTypeUser(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
+    return getUserType(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
       setEmailUserCurrent(x?.jsonText.emailUserCurrent );
       switch (x?.jsonText?.typeUser) {
