@@ -2,13 +2,10 @@ package com.aboutService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.common.configurations.EncryptDecryptConverter;
 import com.common.dto.ActivityDTO;
 import com.common.dto.ResponseDTO;
-
 import reactor.core.publisher.Mono;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
