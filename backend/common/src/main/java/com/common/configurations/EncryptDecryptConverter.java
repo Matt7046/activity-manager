@@ -4,6 +4,7 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +15,9 @@ public class EncryptDecryptConverter implements Converter<String, String> {
 
     @Autowired
     PropertiesKey propertiesKey;
-    private static final String ALGORITHM = "AES";
-
+    @Value("${app.algorithm1}")
+    private String alghorithm;
+    
     @Override
     public String convert(String source) {
         try {
@@ -40,7 +42,7 @@ public class EncryptDecryptConverter implements Converter<String, String> {
 
     public String encrypts(String data) throws DecryptException {
         try {
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            Cipher cipher = Cipher.getInstance(alghorithm);
             SecretKey key = propertiesKey.getSecretCryptKey();
             cipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] encryptedData = cipher.doFinal(data.getBytes());
@@ -53,7 +55,7 @@ public class EncryptDecryptConverter implements Converter<String, String> {
     // Decripta una stringa
     public String decrypts(String encryptedData) throws DecryptException {
         try {
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            Cipher cipher = Cipher.getInstance(alghorithm);
             SecretKey key = propertiesKey.getSecretCryptKey();
             cipher.init(Cipher.DECRYPT_MODE, key);
             byte[] decodedData = Base64.getDecoder().decode(encryptedData);
