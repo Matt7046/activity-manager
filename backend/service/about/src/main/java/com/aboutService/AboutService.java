@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import com.common.dto.ActivityDTO;
 import com.common.dto.ResponseDTO;
-
 import reactor.core.publisher.Mono;
 
 @Service
