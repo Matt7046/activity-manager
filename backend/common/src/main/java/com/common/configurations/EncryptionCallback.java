@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.event.AfterLoadEvent;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Component;
 import com.common.data.LogActivity;
-import com.common.data.Points;
+import com.common.data.Point;
 
 @Component
 public class EncryptionCallback {
@@ -22,7 +22,7 @@ public class EncryptionCallback {
     // Prima che il documento venga convertito e salvato nel DB
     @EventListener
     public <T> void handleBeforeConvert(BeforeConvertEvent<T> event) {
-        if (event.getSource() instanceof Points user) {
+        if (event.getSource() instanceof Point user) {
             try {
                 if (user.getEmail() != null) {
                     user.setEmail(encryptDecryptConverter.convert(user.getEmail())); // Crittografa l'email //
@@ -56,8 +56,8 @@ public class EncryptionCallback {
     @EventListener
     public void handleAfterLoad(AfterLoadEvent<?> event) {
         Object source = event.getSource(); // Ottieni l'oggetto generico
-        if (source instanceof Points) {
-            Points point = mongoConverter.read(Points.class, event.getSource());
+        if (source instanceof Point) {
+            Point point = mongoConverter.read(Point.class, event.getSource());
             try {
                 if (point.getEmail() != null) {
                     // Decrittografa l'email dopo il caricamento
