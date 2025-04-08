@@ -1,14 +1,15 @@
 package com.activityBusinessLogic.savePointsFamily;
 
+import com.common.data.OperationTypeLogFamily;
 import com.familyService.FamilyService;
 import com.common.configurations.RabbitMQProducer;
 import com.common.dto.*;
-import com.common.transversal.PointsUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.stereotype.Component;
@@ -16,8 +17,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -48,7 +49,6 @@ public class FamilySavePointsProcessor {
     private String serviceName;
 
 
-
     private final StateMachineFactory<State, Event> stateMachineFactory;
 
     public FamilySavePointsProcessor(StateMachineFactory<State, Event> stateMachineFactory) {
@@ -76,18 +76,46 @@ public class FamilySavePointsProcessor {
                 .retrieve()
                 .bodyToMono(ResponseDTO.class)
                 .flatMap(responseDTO -> Mono.fromCallable(() -> {
-                            PointsDTO subDTO = new ObjectMapper().convertValue(responseDTO.jsonText(), PointsDTO.class);
-                            List<PointsUser> filteredList = subDTO.getPoints().stream()
-                                    .filter(point -> email.equals(point.getEmail()))
-                                    .collect(Collectors.toList());
-
-                            inviaNotifica(pointsDTO);
-                            return familyService.savePointsByFamily(filteredList, subDTO);
-                        })
-                        .subscribeOn(Schedulers.boundedElastic()))
+                    PointsDTO subDTO = new ObjectMapper().convertValue(responseDTO.jsonText(), PointsDTO.class);
+                    return subDTO.getPoints().stream()
+                            .filter(point -> email.equals(point.getEmail()))
+                            .collect(Collectors.toList());
+                }).subscribeOn(Schedulers.boundedElastic()))
+                .flatMap(filteredList -> {
+                    inviaNotifica(pointsDTO);
+                   Mono<ResponseDTO> result =  saveLog(createLogFamily(pointsDTO));
+                    saveLogEvent();
+                    return result;
+                })
                 .doOnSuccess(res -> stateMachine.sendEvent(Event.SUCCESS))
-                .doOnError(error -> stateMachine.sendEvent(Event.ERROR));
+                .doOnError(error -> compensate(stateMachine, pointsDTO));
     }
+
+    private LogFamilyDTO createLogFamily(PointsDTO pointsDTO) {
+        LogFamilyDTO dto = new LogFamilyDTO();
+        dto.setDate(new Date());
+        OperationTypeLogFamily operations = pointsDTO.getUsePoints() < 0L ? OperationTypeLogFamily.FAMILY_REMOVE : OperationTypeLogFamily.FAMILY_ADD;
+        dto.setOperations(operations);
+        dto.setPerformedByEmail(pointsDTO.getEmailUserCurrent());
+        dto.setReceivedByEmail(pointsDTO.getEmailFamily());
+        return dto;
+    }
+
+    public Mono<ResponseDTO> saveLog(LogFamilyDTO logFamilyDTO) {
+        return Mono.fromCallable(() -> {
+            StateMachine<State, Event> stateMachine = stateMachineFactory.getStateMachine();
+            ResponseDTO sub = familyService.saveLogFamily(logFamilyDTO);
+            return sub;
+        });
+    }
+    public Mono<ResponseDTO> saveLogEvent() {
+        return Mono.fromCallable(() -> {
+            StateMachine<State, Event> stateMachine = stateMachineFactory.getStateMachine();
+            stateMachine.sendEvent(Event.SUCCESS);
+            return new ResponseDTO(Event.SUCCESS, HttpStatus.OK, new ArrayList<>()) ;
+        });
+    }
+
 
 
     private void inviaNotifica(PointsDTO pointsDTO) {
@@ -97,7 +125,7 @@ public class FamilySavePointsProcessor {
         FamilyNotificationDTO dto = new FamilyNotificationDTO(builder.toString());
         dto.setServiceName(serviceName);
         dto.setUserReceiver(pointsDTO.getEmailFamily());
-        dto.setUserSender(pointsDTO.getEmail());
+        dto.setUserSender(pointsDTO.getEmailUserCurrent());
         dto.setMessage(dto.getPointsNew());
         dto.setDateSender(new Date());
         try {
@@ -106,5 +134,15 @@ public class FamilySavePointsProcessor {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void compensate( StateMachine<State, Event> stateMachine,PointsDTO pointsDTO) {
+        webClientPoint.post()
+                .uri("/api/point/dati/standard/rollback")
+                .bodyValue(pointsDTO)
+                .retrieve()
+                .toBodilessEntity()
+                .subscribeOn(Schedulers.boundedElastic()); // Evita problemi di thread bloccanti
+        stateMachine.sendEvent(Event.COMPENSATED);
     }
 }
