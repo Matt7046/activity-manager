@@ -6,21 +6,21 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.common.data.Points;
+import com.common.data.Point;
 
 @Repository
-public interface PointRepository extends MongoRepository<Points, String>, PointCustomRepository {
+public interface PointRepository extends MongoRepository<Point, String>, PointCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario
-     List<Points>  findAll();
+     List<Point>  findAll();
 
      @Query("{'email': ?0, 'type': ?1}")
-    Points findByEmail(String email, Long type);
+    Point findByEmail(String email, Long type);
 
     @Query("{'emailFigli': {$in: [?0]}}")
-    List<Points> findByOnFigli(String email);
+    List<Point> findByOnFigli(String email);
     
     @Query("{'email': ?0}")
-    Points  findByEmailOnEmail(String email);
+    Point  findByEmailOnEmail(String email);
        
        
 }
