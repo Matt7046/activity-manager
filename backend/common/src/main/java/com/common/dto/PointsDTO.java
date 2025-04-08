@@ -24,6 +24,7 @@ public class PointsDTO implements InterfaceDTO {
 	private Long usePoints;
 	private List<String> emailFigli;
 	private Boolean operation;
+	private String emailUserCurrent;
 
 	public PointsDTO(LogActivityDTO logActivityDTO)
 	{
