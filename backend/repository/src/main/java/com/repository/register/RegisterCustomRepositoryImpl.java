@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Lazy;
 
 import com.common.configurations.EncryptDecryptConverter;
 import com.common.data.Points;
-import com.repository.points.PointsRepository;
+import com.repository.point.PointRepository;
 
 
 public class RegisterCustomRepositoryImpl implements RegisterCustomRepository {
 
 	@Lazy
 	@Autowired
-	private PointsRepository pointsRepository;
+	private PointRepository pointsRepository;
 	@Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 

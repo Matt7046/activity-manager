@@ -1,11 +1,11 @@
-package com.pointsService;
+package com.pointService;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.common.data.Points;
 import com.common.dto.PointsDTO;
-import com.common.dto.PointsRDTO;
+import com.common.dto.PointRDTO;
 import com.common.dto.ResponseDTO;
 import com.common.dto.UserDTO;
 import com.common.exception.NotFoundException;
@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("api/points")
-public class PointsController {
+@RequestMapping("api/point")
+public class PointController {
 
     @Autowired
-    private PointsService pointsService;
+    private PointService pointsService;
 
     @Value("${error.document.notFound}")
     private String errorDocument;
@@ -49,7 +49,7 @@ public class PointsController {
             List<PointsUser> filteredList = subDTO.getPoints().stream()
                     .filter(point -> email.equals(point.getEmail()))
                     .collect(Collectors.toList());
-            PointsRDTO record = new PointsRDTO(filteredList.get(0).getPoints(),
+            PointRDTO record = new PointRDTO(filteredList.get(0).getPoints(),
                     message.concat(filteredList.get(0).getPoints().toString()));
 
             responseDTO = new ResponseDTO(record, HttpStatus.OK.value(), new ArrayList<>());

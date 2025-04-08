@@ -22,8 +22,8 @@ import java.util.ArrayList;
 public class LogActivitySavePointsProcessor {
 
     @Autowired
-    @Qualifier("webClientPoints")
-    private WebClient webClientPoints;
+    @Qualifier("webClientPoint")
+    private WebClient webClientPoint;
     @Qualifier("webClientLogActivity")
     private WebClient webClientLogActivity;
     @Autowired
@@ -49,8 +49,8 @@ public class LogActivitySavePointsProcessor {
     private Mono<ResponseDTO> processPoints(StateMachine<State, Event> stateMachine, LogActivityDTO logActivityDTO) {
         PointsDTO pointsDTO = new PointsDTO(logActivityDTO);
 
-        return webClientPoints.post()
-                .uri("/api/points/dati/standard")
+        return webClientPoint.post()
+                .uri("/api/point/dati/standard")
                 .bodyValue(pointsDTO)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class)
@@ -74,8 +74,8 @@ public class LogActivitySavePointsProcessor {
 
 
     private void compensate( StateMachine<State, Event> stateMachine,PointsDTO pointsDTO) {
-        webClientPoints.post()
-                .uri("/api/points/dati/standard/rollback")
+        webClientPoint.post()
+                .uri("/api/point/dati/standard/rollback")
                 .bodyValue(pointsDTO)
                 .retrieve()
                 .toBodilessEntity()
