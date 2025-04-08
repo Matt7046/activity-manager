@@ -18,6 +18,8 @@ public class PointsAndLogStateMachineConfig extends EnumStateMachineConfigurerAd
                 .state(State.SAVE_POINTS)
                 .state(State.SAVE_LOG)
                 .state(State.COMPENSATE)
+                .state(State.SAVE_LOG_FAMILY)
+                .state(State.COMPENSATE_FAMILY)
                 .end(State.SUCCESS)
                 .end(State.FAILED);
     }
@@ -32,12 +34,22 @@ public class PointsAndLogStateMachineConfig extends EnumStateMachineConfigurerAd
                 .source(State.SAVE_POINTS).target(State.SAVE_LOG).event(Event.LOG_SAVED)
                 .and()
                 .withExternal()
-                .source(State.SAVE_LOG).target(State.SUCCESS).event(Event.SUCCESS)
+                .source(State.SAVE_LOG).target(State.SAVE_LOG_FAMILY).event(Event.LOG_FAMILY)
+                .and()
+                .withExternal()
+                .source(State.SAVE_LOG_FAMILY).target(State.SUCCESS).event(Event.SUCCESS)
                 .and()
                 .withExternal()
                 .source(State.SAVE_POINTS).target(State.COMPENSATE).event(Event.ERROR)
                 .and()
                 .withExternal()
-                .source(State.COMPENSATE).target(State.FAILED).event(Event.COMPENSATED);
+                .source(State.SAVE_LOG).target(State.COMPENSATE_FAMILY).event(Event.ERROR)
+                .and()
+                .withExternal()
+                .source(State.COMPENSATE).target(State.FAILED).event(Event.COMPENSATED)
+                .and()
+                .withExternal()
+                .source(State.COMPENSATE_FAMILY).target(State.FAILED).event(Event.COMPENSATED_FAMILY);
+
     }
 }
