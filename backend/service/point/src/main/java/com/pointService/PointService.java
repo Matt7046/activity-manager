@@ -1,4 +1,4 @@
-package com.pointsService;
+package com.pointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -6,14 +6,14 @@ import com.common.configurations.EncryptDecryptConverter;
 import com.common.data.Points;
 import com.common.dto.PointsDTO;
 import com.common.mapper.PointsMapper;
-import com.repository.points.PointsRepository;
+import com.repository.point.PointRepository;
 
 import java.util.List;
 
 @Service
-public class PointsService {
+public class PointService {
     @Autowired
-    private PointsRepository pointsRepository;
+    private PointRepository pointsRepository;
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 

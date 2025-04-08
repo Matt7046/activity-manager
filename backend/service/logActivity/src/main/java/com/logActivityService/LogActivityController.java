@@ -3,7 +3,6 @@ package com.logActivityService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
 import com.common.data.LogActivity;
 import com.common.dto.LogActivityDTO;
 import com.common.dto.PointsDTO;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,10 +26,6 @@ public class LogActivityController {
     private LogActivityService logActivityService;
     @Autowired
     private PointsStateMachineService pointsStateMachineService;
-
-    @Autowired
-    @Qualifier("webClientPoints")
-    private WebClient webClientPoints;
 
     @Value("${order.type1}")
     private String field;
