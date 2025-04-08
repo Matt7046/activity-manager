@@ -17,8 +17,8 @@ import reactor.core.scheduler.Schedulers;
 public class UserAuthPointsProcessor {
 
     @Autowired
-    @Qualifier("webClientPoints")
-    private WebClient webClientPoints;
+    @Qualifier("webClientPoint")
+    private WebClient webClientPoint;
 
     private final StateMachineFactory<State, Event> stateMachineFactory;
 
@@ -38,8 +38,8 @@ public class UserAuthPointsProcessor {
     }
 
     private Mono<ResponseDTO> processUser(StateMachine<State, Event> stateMachine, PointsDTO pointsDTO) {
-           return webClientPoints.post()
-                .uri("/api/points/dati")
+           return webClientPoint.post()
+                .uri("/api/point/dati")
                 .bodyValue(pointsDTO)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class)

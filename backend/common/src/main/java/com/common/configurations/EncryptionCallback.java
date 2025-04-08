@@ -1,7 +1,9 @@
 package com.common.configurations;
 
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.mongodb.core.mapping.event.AfterLoadEvent;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Component;
@@ -10,18 +12,17 @@ import com.common.data.Points;
 
 @Component
 public class EncryptionCallback {
+    @Autowired
+    private EncryptDecryptConverter encryptDecryptConverter;
 
-    private final EncryptDecryptConverter encryptDecryptConverter;
+    @Autowired
+    private MongoConverter mongoConverter;
 
-    public EncryptionCallback(EncryptDecryptConverter encryptDecryptConverter) {
-        this.encryptDecryptConverter = encryptDecryptConverter;
-    }
 
     // Prima che il documento venga convertito e salvato nel DB
     @EventListener
-    public void handleBeforeConvert(BeforeConvertEvent<?> event) {
-        if (event.getSource() instanceof Points) {
-            Points user = (Points) event.getSource();
+    public <T> void handleBeforeConvert(BeforeConvertEvent<T> event) {
+        if (event.getSource() instanceof Points user) {
             try {
                 if (user.getEmail() != null) {
                     user.setEmail(encryptDecryptConverter.convert(user.getEmail())); // Crittografa l'email //
@@ -39,8 +40,7 @@ public class EncryptionCallback {
                 e.printStackTrace();
             }
         }
-        if (event.getSource() instanceof LogActivity) {
-            LogActivity user = (LogActivity) event.getSource();
+        if (event.getSource() instanceof LogActivity user) {
             try {
                 if (user.getEmail() != null) {
                     user.setEmail(encryptDecryptConverter.convert(user.getEmail())); // Crittografa l'email prima del
@@ -53,30 +53,26 @@ public class EncryptionCallback {
         }
     }
 
-    // Dopo che il documento è stato caricato dal DB
     @EventListener
     public void handleAfterLoad(AfterLoadEvent<?> event) {
         Object source = event.getSource(); // Ottieni l'oggetto generico
-
         if (source instanceof Points) {
-            Points points = (Points) source; // Cast a Points
-
+            Points point = mongoConverter.read(Points.class, event.getSource());
             try {
-                if (points.getEmail() != null) {
+                if (point.getEmail() != null) {
                     // Decrittografa l'email dopo il caricamento
-                    points.setEmail(encryptDecryptConverter.decrypt(points.getEmail()));
+                    point.setEmail(encryptDecryptConverter.decrypt(point.getEmail()));
                 }
-                if (points.getEmailFamily() != null) {
+                if (point.getEmailFamily() != null) {
                     // Decrittografa l'email dopo il caricamento
-                    points.setEmailFamily(encryptDecryptConverter.decrypt(points.getEmailFamily()));
+                    point.setEmailFamily(encryptDecryptConverter.decrypt(point.getEmailFamily()));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         if (source instanceof LogActivity) {
-            LogActivity log = (LogActivity) source; // Cast a Points
-
+            LogActivity log = mongoConverter.read(LogActivity.class, event.getSource());
             try {
                 if (log.getEmail() != null) {
                     // Decrittografa l'email dopo il caricamento
