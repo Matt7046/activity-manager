@@ -1,6 +1,8 @@
 package com.familyService;
 
 import com.activityBusinessLogic.savePointsFamily.FamilySavePointsProcessor;
+import com.common.dto.LogActivityDTO;
+import com.common.dto.LogFamilyDTO;
 import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,5 +17,9 @@ public class FamilyStateMachineService {
 
     public Mono<ResponseDTO> savePointsByFamily(PointsDTO pointsDTO) {
         return familySavePointsProcessor.savePointsByFamily(pointsDTO);
+    }
+
+    public Mono<ResponseDTO> saveLog(LogFamilyDTO logFamilyDTO) {
+        return familySavePointsProcessor.saveLog(logFamilyDTO);
     }
 }

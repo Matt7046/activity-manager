@@ -14,6 +14,8 @@ import java.util.Date;
         private String _id;
         private String email;
         private String emailFamily;
+        private String emailUserCurrent;
+        private Long typeUser;
         private String log;
         private Date  date;
         private Long usePoints;
