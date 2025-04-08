@@ -1,8 +1,8 @@
-package com.repository.points;
+package com.repository.point;
 import java.util.List;
 import com.common.data.Points;
 
-public interface PointsCustomRepository {
+public interface PointCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario
     
     public Long getTypeUser(Points points) throws Exception;

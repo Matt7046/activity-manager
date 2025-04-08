@@ -1,4 +1,4 @@
-package com.repository.points;
+package com.repository.point;
 
 
 import java.util.Collection;
@@ -11,11 +11,11 @@ import com.common.configurations.EncryptDecryptConverter;
 import com.common.data.Points;
 import com.common.exception.ArithmeticCustomException;
 
-public class PointsCustomRepositoryImpl implements PointsCustomRepository {
+public class PointCustomRepositoryImpl implements PointCustomRepository {
 
 	@Lazy
 	@Autowired
-	private PointsRepository pointsRepository;
+	private PointRepository pointsRepository;
 	@Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 

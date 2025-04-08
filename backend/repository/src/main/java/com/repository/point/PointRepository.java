@@ -1,4 +1,4 @@
-package com.repository.points;
+package com.repository.point;
 
 
 import java.util.List;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.common.data.Points;
 
 @Repository
-public interface PointsRepository extends MongoRepository<Points, String>, PointsCustomRepository {
+public interface PointRepository extends MongoRepository<Points, String>, PointCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario
      List<Points>  findAll();
 
