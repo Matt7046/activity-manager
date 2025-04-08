@@ -10,11 +10,11 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.common.transversal.PointsUser;
 
-@Document(collection = "points") // Specifica la collezione nel database
+@Document(collection = "point") // Specifica la collezione nel database
 @Data // Genera getter, setter, toString, equals e hashCode
 @NoArgsConstructor // Genera un costruttore senza argomenti
 @AllArgsConstructor // Genera un costruttore con tutti i campi
-public class Points {
+public class Point {
     @Id
     private String _id;
     @Field("email")
