@@ -1,7 +1,7 @@
 package com.familyService;
 
 import com.common.dto.PointsDTO;
-import com.common.dto.PointsRDTO;
+import com.common.dto.PointRDTO;
 import com.common.transversal.PointsUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class FamilyService {
 
     public ResponseDTO savePointsByFamily(List<PointsUser> filteredList, PointsDTO pointsDTO) {
         // Creare l'oggetto PointsRDTO
-        PointsRDTO record = new PointsRDTO(
+        PointRDTO record = new PointRDTO(
                 filteredList.get(0).getPoints(),
                 message
                         + filteredList.get(0).getPoints());
