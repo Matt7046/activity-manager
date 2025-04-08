@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 public class FamilySavePointsProcessor {
 
     @Autowired
-    @Qualifier("webClientPoints")
-    private WebClient webClientPoints;
+    @Qualifier("webClientPoint")
+    private WebClient webClientPoint;
     ;
     @Autowired
     private RabbitMQProducer notificationPublisher;
@@ -70,8 +70,8 @@ public class FamilySavePointsProcessor {
         String email = pointsDTO.getEmailFamily();
         pointsDTO.setOperation(true);
 
-        return webClientPoints.post()
-                .uri("/api/points/dati/standard")
+        return webClientPoint.post()
+                .uri("/api/point/dati/standard")
                 .bodyValue(pointsDTO)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class)
