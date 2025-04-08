@@ -30,6 +30,10 @@ public class WebClientConfig {
     @Value("${app.page.service.about}")
     private String about;
 
+    @Value("${app.page.service.family}")
+    private String family;
+
+    @Bean
     public WebClient webClientRegister(WebClient.Builder builder) {
         return builder
                 .baseUrl(register)
@@ -129,5 +133,23 @@ public class WebClientConfig {
                 )
                 .build();
     }
+
+    @Bean
+    public WebClient webClientFamily(WebClient.Builder builder) {
+        return builder
+                .baseUrl(family) // Usa il nome del container se sei in Docker!
+                .filter((request, next) -> ReactiveSecurityContextHolder.getContext()
+                        .map(securityContext -> {
+                            Jwt token = (Jwt) securityContext.getAuthentication().getCredentials();
+                            String tokenValue = token.getTokenValue();
+                            return ClientRequest.from(request)
+                                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
+                                    .build();
+                        })
+                        .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
+                )
+                .build();
+    }
+
 
 }
