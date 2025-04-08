@@ -1,18 +1,18 @@
-package com.pointsService;
+package com.pointService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@EnableMongoRepositories(basePackages = "com.repository.points")
+@EnableMongoRepositories(basePackages = "com.repository.point")
 @SpringBootApplication(scanBasePackages = {
     "com.repository",
     "com.common.configurations",
-    "com.pointsService",
+    "com.pointService",
     "com.common"
 })
-public class PointsApplication {
+public class PointApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PointsApplication.class, args);
+        SpringApplication.run(PointApplication.class, args);
     }
 }
