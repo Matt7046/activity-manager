@@ -39,6 +39,7 @@ app:
       logactivity: http://log-activity-service:8080
       point: http://point-service:8080
       register: http://register-service:8080
+      family: http://family-service:8080
 rabbit:
   exchange:
     name: notification-exchange

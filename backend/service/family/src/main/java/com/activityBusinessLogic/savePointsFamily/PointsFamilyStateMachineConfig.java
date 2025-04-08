@@ -15,6 +15,8 @@ public class PointsFamilyStateMachineConfig extends EnumStateMachineConfigurerAd
                 .withStates()
                 .initial(State.START)
                 .state(State.SAVE_POINTS)
+                .state(State.SAVE_LOG)
+                .state(State.COMPENSATE)
                 .end(State.SUCCESS)
                 .end(State.FAILED);
     }
@@ -26,6 +28,15 @@ public class PointsFamilyStateMachineConfig extends EnumStateMachineConfigurerAd
                 .source(State.START).target(State.SAVE_POINTS).event(Event.PROCESS_POINTS)
                 .and()
                 .withExternal()
-                .source(State.SAVE_POINTS).target(State.FAILED).event(Event.ERROR);
+                .source(State.SAVE_POINTS).target(State.SAVE_LOG).event(Event.LOG_SAVED)
+                .and()
+                .withExternal()
+                .source(State.SAVE_LOG).target(State.SUCCESS).event(Event.SUCCESS)
+                .and()
+                .withExternal()
+                .source(State.SAVE_POINTS).target(State.COMPENSATE).event(Event.ERROR)
+                .and()
+                .withExternal()
+                .source(State.COMPENSATE).target(State.FAILED).event(Event.COMPENSATED);
     }
 }
