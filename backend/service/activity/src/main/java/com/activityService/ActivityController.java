@@ -34,7 +34,6 @@ public class ActivityController {
 
     @Value("${error.document.notFound}")
     private String errorDocument;
-
     
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
