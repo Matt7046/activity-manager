@@ -8,59 +8,59 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 import com.common.configurations.EncryptDecryptConverter;
-import com.common.data.Points;
+import com.common.data.Point;
 import com.common.exception.ArithmeticCustomException;
 
 public class PointCustomRepositoryImpl implements PointCustomRepository {
 
 	@Lazy
 	@Autowired
-	private PointRepository pointsRepository;
+	private PointRepository PointRepository;
 	@Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 
-	public Long getTypeUser(Points pointsSave) throws Exception {
-		String email = encryptDecryptConverter.convert(pointsSave.getEmailFamily());
-		List<Points> existPointsOnFigli = pointsRepository.findByOnFigli(email);
-		Points existPoints = pointsRepository.findByEmailOnEmail(email);
+	public Long getTypeUser(Point PointSave) throws Exception {
+		String email = encryptDecryptConverter.convert(PointSave.getEmailFamily());
+		List<Point> existPointOnFigli = PointRepository.findByOnFigli(email);
+		Point existPoint = PointRepository.findByEmailOnEmail(email);
 		Long type;
-		type = (isExistPointsValid(existPoints)) ? 1L
-				: isExistPointsOnFigliValid(existPointsOnFigli) ? 0L
+		type = (isExistPointValid(existPoint)) ? 1L
+				: isExistPointOnFigliValid(existPointOnFigli) ? 0L
 						: 2L;
 
 		return type;
 	}
 
-	private boolean isExistPointsValid(Object existPoints) {
-		return existPoints != null;
+	private boolean isExistPointValid(Object existPoint) {
+		return existPoint != null;
 	}
 
-	private boolean isExistPointsOnFigliValid(Collection<?> existPointsOnFigli) {
-		return existPointsOnFigli != null && !existPointsOnFigli.isEmpty();
+	private boolean isExistPointOnFigliValid(Collection<?> existPointOnFigli) {
+		return existPointOnFigli != null && !existPointOnFigli.isEmpty();
 	}
 
-	public Boolean saveUser(Points pointsSave) throws Exception {
+	public Boolean saveUser(Point PointSave) throws Exception {
 		Boolean newUSer = false;
-		if (pointsSave.getEmail() != null && !pointsSave.getEmailFigli().isEmpty()) {
+		if (PointSave.getEmail() != null && !PointSave.getEmailFigli().isEmpty()) {
 			newUSer = true;
-			pointsSave.setType(1L);
-			pointsSave.getPoints().stream()
+			PointSave.setType(1L);
+			PointSave.getPoints().stream()
 					.forEach(point -> point.setPoints(100L));
-			pointsRepository.save(pointsSave);
+			PointRepository.save(PointSave);
 		}
 		return newUSer;
 	}
 
-	public Points getPointsByEmail(String email) throws Exception {
+	public Point getPointByEmail(String email) throws Exception {
 		String emailCriypt = encryptDecryptConverter.convert(email);
 
-		Points existingUser = pointsRepository.findByEmailOnEmail(emailCriypt);
+		Point existingUser = PointRepository.findByEmailOnEmail(emailCriypt);
 		if (existingUser == null) {
-			List<Points> userList = pointsRepository.findByOnFigli(emailCriypt);
+			List<Point> userList = PointRepository.findByOnFigli(emailCriypt);
 			existingUser = !userList.isEmpty() ? userList.get(0) : null;
 		}
 		if (existingUser == null) {
-			return new Points();
+			return new Point();
 		}
 		existingUser.setEmailFigli(existingUser.getEmailFigli().stream().map(x -> 			
 				encryptDecryptConverter.decrypts(x)).collect(Collectors.toList())); // Crittografa l'email
@@ -68,47 +68,47 @@ public class PointCustomRepositoryImpl implements PointCustomRepository {
 		return existingUser;
 	}
 
-	public Points savePoints(Points pointsSave, Long usePoints, Boolean operation) throws Exception {
-		String emailCriypt = encryptDecryptConverter.convert(pointsSave.getEmailFamily());
+	public Point savePoint(Point PointSave, Long usePoint, Boolean operation) throws Exception {
+		String emailCriypt = encryptDecryptConverter.convert(PointSave.getEmailFamily());
 
-		Points existingUser = pointsRepository.findByEmailOnEmail(emailCriypt);
+		Point existingUser = PointRepository.findByEmailOnEmail(emailCriypt);
 		if (existingUser == null) {
-			List<Points> userList = pointsRepository.findByOnFigli(emailCriypt);
+			List<Point> userList = PointRepository.findByOnFigli(emailCriypt);
 			existingUser = !userList.isEmpty() ? userList.get(0) : null;
 		}
 
 		existingUser.getPoints().stream()
-				.filter(point -> pointsSave.getEmailFamily().equals(point.getEmail())) // Filtra per email
+				.filter(point -> PointSave.getEmailFamily().equals(point.getEmail())) // Filtra per email
 				.findFirst() // Trova il primo match
 				.ifPresent(point -> {
 					// Calcola i nuovi punti
-					Long updatedPoints = point.getPoints() + (operation ? usePoints : -usePoints);
+					Long updatedPoint = point.getPoints() + (operation ? usePoint : -usePoint);
 
 					// Verifica che i punti non siano negativi
-					if (updatedPoints < 0L) {
+					if (updatedPoint < 0L) {
 						throw new ArithmeticCustomException("I punti devono essere maggiori o uguali a zero.");
 					}
 
 					// Aggiorna i punti solo se la condizione è soddisfatta
-					point.setPoints(updatedPoints);
+					point.setPoints(updatedPoint);
 				});
 		// Aggiorna i punti per l'utente esistente
-		// existingUser.setPoints(new PointsUser(newPoints, emailCriypt));
+		// existingUser.setPoint(new PointUser(newPoint, emailCriypt));
 		existingUser.setEmail(encryptDecryptConverter.decrypt(existingUser.getEmail()));
 		existingUser.setEmailFamily(encryptDecryptConverter.decrypt(existingUser.getEmailFamily()));
 		existingUser.setEmailFigli(existingUser.getEmailFigli().stream()
 				.map(figlio -> encryptDecryptConverter.decrypt(figlio))
 				.collect(Collectors.toList()));
-		pointsRepository.save(existingUser);
+		PointRepository.save(existingUser);
 		return existingUser;
 
 	}
 
 	@Override
-	public List<Points> getPointsListByEmail(String email) throws Exception {
+	public List<Point> getPointsListByEmail(String email) throws Exception {
 		String emailCriypt = encryptDecryptConverter.convert(email);
 
-		List<Points> userList = pointsRepository.findByOnFigli(emailCriypt);
+		List<Point> userList = PointRepository.findByOnFigli(emailCriypt);
 		return userList;
 	}
 }

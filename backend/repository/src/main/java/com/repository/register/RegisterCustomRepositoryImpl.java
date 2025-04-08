@@ -3,11 +3,9 @@ package com.repository.register;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-
 import com.common.configurations.EncryptDecryptConverter;
-import com.common.data.Points;
+import com.common.data.Point;
 import com.repository.point.PointRepository;
-
 
 public class RegisterCustomRepositoryImpl implements RegisterCustomRepository {
 
@@ -17,10 +15,10 @@ public class RegisterCustomRepositoryImpl implements RegisterCustomRepository {
 	@Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 
-	public Long getTypeUser(Points pointsSave) throws Exception {
+	public Long getTypeUser(Point pointsSave) throws Exception {
 		String email = encryptDecryptConverter.convert(pointsSave.getEmailFamily());
-		List<Points> existPointsOnFigli = pointsRepository.findByOnFigli(email);
-		Points existPoints = pointsRepository.findByEmailOnEmail(email);
+		List<Point> existPointsOnFigli = pointsRepository.findByOnFigli(email);
+		Point existPoints = pointsRepository.findByEmailOnEmail(email);
 		Long type;
 		if (existPoints != null) {
 			type = 1L;
@@ -34,7 +32,7 @@ public class RegisterCustomRepositoryImpl implements RegisterCustomRepository {
 		return type;// Restituisci l'ID aggiornato
 	}
 
-	public Boolean saveUser(Points pointsSave) throws Exception {
+	public Boolean saveUser(Point pointsSave) throws Exception {
 		Boolean newUSer = false;
 		String email = encryptDecryptConverter.convert(pointsSave.getEmail());
 
