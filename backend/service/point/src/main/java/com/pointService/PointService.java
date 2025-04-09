@@ -34,10 +34,16 @@ public class PointService {
         return pointsRepository.getPointsListByEmail(email);
     }
 
-    public Point savePoint(PointsDTO pointsDTO, Boolean operation) throws Exception {
+    public Point savePoint(PointsDTO pointsDTO) throws Exception {
         Point points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
-        return pointsRepository.savePoint(points, pointsDTO.getUsePoints(), operation);
+        return pointsRepository.savePoint(points, pointsDTO.getUsePoints(), pointsDTO.getOperation());
     }
+
+    public Point rollbackSavePoint(PointsDTO pointsDTO) throws Exception {
+        Point points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
+        return pointsRepository.savePoint(points, pointsDTO.getUsePoints(), !pointsDTO.getOperation());
+    }
+
 
     public Point save(PointsDTO pointsDTO) throws Exception {
         Point sub = PointsMapper.INSTANCE.fromDTO(pointsDTO);
