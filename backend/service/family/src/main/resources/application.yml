@@ -6,8 +6,14 @@ spring:
     name: activityManager
 app:
   rabbitmq:
-    exchange: notification-exchange
-    routingKey: notification.family
+    notification:
+      exchange:
+        exchangeName: notification-exchange
+        routingKey: notification.family
+    point:
+      exchange:
+        exchangeName: point-exchange
+        routingKey: point.log.activity
 message:
   document:
     points: "I Points a disposizione sono: "
