@@ -25,7 +25,7 @@ public class FamilyController {
     }
 
     @PostMapping("/log")
-    public Mono<ResponseDTO> saveLog(@RequestBody LogFamilyDTO logFamilyDTO) {
-        return familyStateMachineService.saveLog(logFamilyDTO);
+    public Mono<ResponseDTO> saveLogFamily(@RequestBody LogFamilyDTO logFamilyDTO) {
+        return familyStateMachineService.saveLogFamily(logFamilyDTO);
     }
 }

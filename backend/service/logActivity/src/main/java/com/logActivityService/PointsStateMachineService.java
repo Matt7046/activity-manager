@@ -16,8 +16,4 @@ public class PointsStateMachineService {
     public Mono<ResponseDTO> savePoints(LogActivityDTO logActivityDTO) {
        return logActivityProcessor.savePoints(logActivityDTO);
     }
-
-    private Mono<ResponseDTO> saveLog(LogActivityDTO logActivityDTO) {
-        return logActivityProcessor.saveLog(logActivityDTO);
-    }
 }

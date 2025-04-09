@@ -1,6 +1,7 @@
 package com.activityBusinessLogic.savePointsFamily;
 
 import com.common.data.OperationTypeLogFamily;
+import com.common.exception.NotFoundException;
 import com.familyService.FamilyService;
 import com.common.configurations.RabbitMQProducer;
 import com.common.dto.*;
@@ -10,16 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 @Component
 public class FamilySavePointsProcessor {
@@ -33,11 +30,17 @@ public class FamilySavePointsProcessor {
     @Autowired
     private FamilyService familyService;
 
-    @Value("${app.rabbitmq.exchange}")
-    private String exchange;
+    @Value("${app.rabbitmq.notification.exchange.exchangeName}")
+    private String notificationExchange;
 
-    @Value("${app.rabbitmq.routingKey}")
-    private String routingKey;
+    @Value("${app.rabbitmq.notification.exchange.routingKey}")
+    private String notificationRoutingKey;
+
+    @Value("${app.rabbitmq.point.exchange.exchangeName}")
+    private String pointExchange;
+
+    @Value("${app.rabbitmq.point.exchange.routingKey}")
+    private String pointRoutingKey;
 
     @Value("${message.document.add}")
     private String messageAdd;
@@ -48,25 +51,13 @@ public class FamilySavePointsProcessor {
     @Value("${notification.service}")
     private String serviceName;
 
-
-    private final StateMachineFactory<State, Event> stateMachineFactory;
-
-    public FamilySavePointsProcessor(StateMachineFactory<State, Event> stateMachineFactory) {
-        this.stateMachineFactory = stateMachineFactory;
-    }
-
     public Mono<ResponseDTO> savePointsByFamily(PointsDTO pointsDTO) {
-        return Mono.fromCallable(() -> {
-                    StateMachine<State, Event> stateMachine = stateMachineFactory.getStateMachine();
-                    stateMachine.start();
-                    stateMachine.sendEvent(Event.PROCESS_POINTS);
-                    return stateMachine;
-                })
-                .subscribeOn(Schedulers.boundedElastic())  // ✅ Esegui in un thread separato
-                .flatMap(stateMachine -> processPoints(stateMachine, pointsDTO));
+
+        return processPoints(pointsDTO);
+
     }
 
-    private Mono<ResponseDTO> processPoints(StateMachine<State, Event> stateMachine, PointsDTO pointsDTO) {
+    private Mono<ResponseDTO> processPoints(PointsDTO pointsDTO) {
         String email = pointsDTO.getEmailFamily();
         pointsDTO.setOperation(true);
 
@@ -79,16 +70,13 @@ public class FamilySavePointsProcessor {
                     PointsDTO subDTO = new ObjectMapper().convertValue(responseDTO.jsonText(), PointsDTO.class);
                     return subDTO.getPoints().stream()
                             .filter(point -> email.equals(point.getEmail()))
-                            .collect(Collectors.toList());
+                            .findFirst();
                 }).subscribeOn(Schedulers.boundedElastic()))
-                .flatMap(filteredList -> {
+                .flatMap(point -> {
+                    saveLogFamily(createLogFamily(pointsDTO));
                     inviaNotifica(pointsDTO);
-                   Mono<ResponseDTO> result =  saveLog(createLogFamily(pointsDTO));
-                    saveLogEvent();
-                    return result;
-                })
-                .doOnSuccess(res -> stateMachine.sendEvent(Event.SUCCESS))
-                .doOnError(error -> compensate(stateMachine, pointsDTO));
+                    return Mono.just((new ResponseDTO(point,HttpStatus.OK.value(), new ArrayList<>())));
+                });
     }
 
     private LogFamilyDTO createLogFamily(PointsDTO pointsDTO) {
@@ -98,25 +86,22 @@ public class FamilySavePointsProcessor {
         dto.setOperations(operations);
         dto.setPerformedByEmail(pointsDTO.getEmailUserCurrent());
         dto.setReceivedByEmail(pointsDTO.getEmailFamily());
+        dto.setPoint(pointsDTO);
         return dto;
     }
 
-    public Mono<ResponseDTO> saveLog(LogFamilyDTO logFamilyDTO) {
-        return Mono.fromCallable(() -> {
-            StateMachine<State, Event> stateMachine = stateMachineFactory.getStateMachine();
-            ResponseDTO sub = familyService.saveLogFamily(logFamilyDTO);
-            return sub;
-        });
-    }
-    public Mono<ResponseDTO> saveLogEvent() {
-        return Mono.fromCallable(() -> {
-            StateMachine<State, Event> stateMachine = stateMachineFactory.getStateMachine();
-            stateMachine.sendEvent(Event.SUCCESS);
-            return new ResponseDTO(Event.SUCCESS, HttpStatus.OK, new ArrayList<>()) ;
-        });
-    }
+    public Mono<ResponseDTO> saveLogFamily(LogFamilyDTO logFamilyDTO) {
 
+            ResponseDTO sub = null;
+            try {
+                sub = familyService.saveLogFamily(logFamilyDTO);
+            } catch (Exception e) {
+                inviaNotifica(logFamilyDTO.getPoint(), pointRoutingKey);
+                throw new NotFoundException(e.getMessage());
+            }
+            return Mono.just(sub);
 
+    }
 
     private void inviaNotifica(PointsDTO pointsDTO) {
         StringBuilder builder = new StringBuilder(pointsDTO.getUsePoints().toString());
@@ -130,19 +115,19 @@ public class FamilySavePointsProcessor {
         dto.setDateSender(new Date());
         try {
             String jsonMessage = new ObjectMapper().writeValueAsString(dto);
-            notificationPublisher.sendMessage(exchange, routingKey, jsonMessage);
+            notificationPublisher.sendMessage(notificationExchange, notificationRoutingKey, jsonMessage);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void compensate( StateMachine<State, Event> stateMachine,PointsDTO pointsDTO) {
-        webClientPoint.post()
-                .uri("/api/point/dati/standard/rollback")
-                .bodyValue(pointsDTO)
-                .retrieve()
-                .toBodilessEntity()
-                .subscribeOn(Schedulers.boundedElastic()); // Evita problemi di thread bloccanti
-        stateMachine.sendEvent(Event.COMPENSATED);
+    private void inviaNotifica(InterfaceDTO dto, String routingKey) {
+        try {
+            String jsonMessage = new ObjectMapper().writeValueAsString(dto);
+            notificationPublisher.sendMessage(pointExchange, routingKey, jsonMessage);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }
