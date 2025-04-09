@@ -16,12 +16,19 @@ public class LogActivityService {
 
     @Autowired
     private LogActivityRepository logActivityRepository;
+
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
-    public LogActivity saveLogActivity(LogActivityDTO ActivityDTO) {
-        LogActivity sub = LogActivityMapper.INSTANCE.fromDTO(ActivityDTO);
+    public LogActivity saveLogActivity(LogActivityDTO activityDTO) {
+        LogActivity sub = LogActivityMapper.INSTANCE.fromDTO(activityDTO);
         return logActivityRepository.save(sub);
+    }
+
+    public LogActivity deleteLogActivity(LogActivityDTO activityDTO) {
+        LogActivity sub = LogActivityMapper.INSTANCE.fromDTO(activityDTO);
+        logActivityRepository.delete(sub);
+        return new LogActivity();
     }
 
     public List<LogActivity> logAttivitaByEmail(PointsDTO pointsDTO, Sort sort) {
