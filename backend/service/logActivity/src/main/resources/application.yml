@@ -6,3 +6,11 @@ spring:
     name: activityManager
 order:
   type1: "Date"
+app:
+  rabbitmq:
+    exchange:
+      point:
+        exchangeName: point-exchange
+        routingKey:
+          logActivity: point.log.activity
+          logFamily: point.log.family

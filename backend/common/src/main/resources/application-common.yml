@@ -42,4 +42,6 @@ app:
       family: http://family-service:8080
 rabbit:
   exchange:
-    name: notification-exchange
+    name:
+      notification: notification-exchange
+      point: point-exchange
