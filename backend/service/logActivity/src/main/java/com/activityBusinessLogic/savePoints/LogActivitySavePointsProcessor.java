@@ -1,18 +1,22 @@
 package com.activityBusinessLogic.savePoints;
 
+import com.common.configurations.RabbitMQProducer;
 import com.common.data.OperationTypeLogFamily;
-import com.common.dto.LogFamilyDTO;
-import com.logActivityService.LogActivityService;
-import com.common.data.LogActivity;
 import com.common.dto.LogActivityDTO;
+import com.common.dto.LogFamilyDTO;
 import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
+import com.common.dto.InterfaceDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.logActivityService.LogActivityService;
+import com.common.data.LogActivity;
 import com.common.mapper.LogActivityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.config.StateMachineFactory;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -31,105 +35,99 @@ public class LogActivitySavePointsProcessor {
     @Qualifier("webClientFamily")
     private WebClient webClientFamily;
     @Autowired
-    LogActivityService logActivityService;
-    private StateMachineFactory<State, Event> stateMachineFactory;
-
-    public LogActivitySavePointsProcessor(StateMachineFactory<State, Event> stateMachineFactory) {
-        this.stateMachineFactory = stateMachineFactory;
-    }
-
+    private LogActivityService logActivityService;
+    @Value("${app.rabbitmq.exchange.point.exchangeName}")
+    private String exchange;
+    @Value("${app.rabbitmq.exchange.point.routingKey.logActivity}")
+    private String routingKeyLogActivity;
+    @Value("${app.rabbitmq.exchange.point.routingKey.logFamily}")
+    private String routingKeyLogFamily;
+    @Autowired
+    private RabbitMQProducer notificationPublisher;
 
     public Mono<ResponseDTO> savePoints(LogActivityDTO logActivityDTO) {
-        return Mono.fromCallable(() -> {
-                    StateMachine<State, Event> stateMachine = stateMachineFactory.getStateMachine();
-                    stateMachine.start();
-                    stateMachine.sendEvent(Event.PROCESS_POINTS);
-                    return stateMachine;
-                })
-                .subscribeOn(Schedulers.boundedElastic())  // ✅ Esegui in un thread separato
-                .flatMap(stateMachine -> processPoints(stateMachine, logActivityDTO));
+        return processPoints(logActivityDTO);
     }
-    private Mono<ResponseDTO> processPoints(StateMachine<State, Event> stateMachine, LogActivityDTO logActivityDTO) {
+
+    private Mono<ResponseDTO> processPoints(LogActivityDTO logActivityDTO) {
         PointsDTO pointsDTO = new PointsDTO(logActivityDTO);
-        LogFamilyDTO logFamily = new LogFamilyDTO();
-        logFamily.setOperations(OperationTypeLogFamily.OPERATIVE);
-        logFamily.setDate(new Date());
-        logFamily.setPerformedByEmail(logActivityDTO.getEmailUserCurrent());
-        logFamily.setReceivedByEmail(logActivityDTO.getEmail());
+        pointsDTO.setOperation(false);
+        LogFamilyDTO logFamilyDTO = new LogFamilyDTO();
+        logFamilyDTO.setOperations(OperationTypeLogFamily.OPERATIVE);
+        logFamilyDTO.setDate(new Date());
+        logFamilyDTO.setPerformedByEmail(logActivityDTO.getEmailUserCurrent());
+        logFamilyDTO.setReceivedByEmail(logActivityDTO.getEmail());
         return webClientPoint.post()
                 .uri("/api/point/dati/standard")
                 .bodyValue(pointsDTO)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class)
                 .flatMap(response ->
-                        saveLog(logActivityDTO)
-                                .doOnSuccess(res -> stateMachine.sendEvent(Event.LOG_FAMILY))
-                                .doOnError(error -> compensate(stateMachine, pointsDTO))
-                                .subscribeOn(Schedulers.boundedElastic()))
-                .flatMap(response ->
-                        saveLogFamily(logFamily)
-                                .subscribeOn(Schedulers.boundedElastic())
-                                .doOnSuccess(res -> Mono.fromRunnable(() -> stateMachine.sendEvent(Event.SUCCESS))
-                                        .subscribeOn(Schedulers.boundedElastic())
-                                        .subscribe()
-                                )
-                                .doOnError(error -> compensate(stateMachine, pointsDTO))
-                                .thenReturn(response)
-                                .doOnError(error -> compensateFamily(stateMachine, pointsDTO))
-                                .subscribeOn(Schedulers.boundedElastic()));
-    }
-
-    private Mono<ResponseDTO> saveLogFamily(LogFamilyDTO logFamilyDTO) {
-        if (logFamilyDTO.getReceivedByEmail().equals(logFamilyDTO.getPerformedByEmail())) {
-            return Mono.just(new ResponseDTO(null, HttpStatus.OK, new ArrayList<>()));
-        }
-        return Mono.fromCallable(() -> stateMachineFactory.getStateMachine())
-                .flatMap(stateMachine ->
-                        webClientFamily.post()
-                                .uri("/api/family/log")
-                                .bodyValue(logFamilyDTO)
-                                .retrieve()
-                                .bodyToMono(ResponseDTO.class)
-                                .subscribeOn(Schedulers.boundedElastic())
-                );
-    }
-
-
-    public Mono<ResponseDTO> saveLog(LogActivityDTO logActivityDTO) {
-        return Mono.fromCallable(() -> {
-            StateMachine<State, Event> stateMachine = stateMachineFactory.getStateMachine();
-            LogActivity sub = logActivityService.saveLogActivity(logActivityDTO);
-            stateMachine.sendEvent(Event.LOG_FAMILY);
-            return new ResponseDTO(LogActivityMapper.INSTANCE.toDTO(sub), HttpStatus.OK.value(), new ArrayList<>());
-        });
-    }
-
-    private void compensate(StateMachine<State, Event> stateMachine, PointsDTO pointsDTO) {
-        webClientPoint.post()
-                .uri("/api/point/dati/standard/rollback")
-                .bodyValue(pointsDTO)
-                .retrieve()
-                .bodyToMono(ResponseDTO.class)
+                        saveLog(pointsDTO, logActivityDTO)
+                )
+                .subscribeOn(Schedulers.boundedElastic())
                 .flatMap(response -> {
-                    // Puoi fare log o qualsiasi altra cosa con `response`
-                    System.out.println("Rollback response: " + response);
-                    return Mono.just(response);
-                })
-                .doOnSuccess(res -> stateMachine.sendEvent(Event.COMPENSATED))
-                .doOnError(error -> {
-                    // Logging error
-                    System.err.println("Rollback failed: " + error.getMessage());
-                })
-                .subscribe(); // Avvia la catena reattiva
+                    logFamilyDTO.setPoint(pointsDTO);
+                    return saveLogFamily(response, logFamilyDTO)
+                            .subscribeOn(Schedulers.boundedElastic());
+                });
     }
 
-    private void compensateFamily(StateMachine<State, Event> stateMachine, PointsDTO pointsDTO) {
-        //compensate(stateMachine, pointsDTO);
-        Mono.fromCallable(() -> {
-                // CALL COMPENSATE FAMILY
-                    stateMachine.sendEvent(Event.COMPENSATED_FAMILY);
-                    return stateMachine;
+    private static void setPointToLogActivity(PointsDTO point, LogActivityDTO logActivityDTO) {
+       logActivityDTO.setPoint(point);
+    }
+
+    private Mono<ResponseDTO> saveLogFamily(ResponseDTO response, LogFamilyDTO logFamilyDTO) {
+        if (logFamilyDTO.getReceivedByEmail().equals(logFamilyDTO.getPerformedByEmail())) {
+            return Mono.just(new ResponseDTO(logFamilyDTO, HttpStatus.OK.value(), new ArrayList<>()));
+        }
+
+        return webClientFamily.post()
+                .uri("/api/family/log")
+                .bodyValue(logFamilyDTO)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, clientResponse ->
+                        clientResponse.bodyToMono(String.class)
+                                .flatMap(errorBody -> Mono.error(new RuntimeException("Errore HTTP: " + errorBody)))
+                )
+                .bodyToMono(ResponseDTO.class)
+                .doOnError(e -> {
+
+                })
+                .doOnSuccess(response1 -> {
+                    // Azioni con la response
+                    if (!response1.errors().isEmpty()) {
+                        inviaNotifica(logFamilyDTO.getPoint(), routingKeyLogActivity);
+                        ObjectMapper mapper = new ObjectMapper();
+                        LogActivityDTO dto = mapper.convertValue(response.jsonText(), LogActivityDTO.class);
+                        logActivityService.deleteLogActivity(dto);
+                    }
                 })
                 .subscribeOn(Schedulers.boundedElastic());
     }
+
+
+    public Mono<ResponseDTO> saveLog(PointsDTO point, LogActivityDTO logActivityDTO) {
+        setPointToLogActivity(point,logActivityDTO);
+        return Mono.fromCallable(() -> {
+            LogActivity sub = logActivityService.saveLogActivity(logActivityDTO);
+            return new ResponseDTO(LogActivityMapper.INSTANCE.toDTO(sub), HttpStatus.OK.value(), new ArrayList<>());
+        }).doOnError(response1 -> {
+            // Invia l'evento dopo il salvataggio del log in modo asincrono
+            Mono.fromRunnable(() -> {
+                inviaNotifica(logActivityDTO.getPoint(), routingKeyLogActivity);
+            }).subscribe();  // Avvia il runnable senza bloccare il flusso
+        });
+    }
+
+
+    private void inviaNotifica(InterfaceDTO dto, String routingKey) {
+        try {
+            String jsonMessage = new ObjectMapper().writeValueAsString(dto);
+            notificationPublisher.sendMessage(exchange, routingKey, jsonMessage);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
