@@ -1,6 +1,7 @@
 package com.common.dto;
 
 
+import com.common.data.Point;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.Date;
         private Date  date;
         private Long usePoints;
         private Long points;
+        private PointsDTO point;
     
     
 }
