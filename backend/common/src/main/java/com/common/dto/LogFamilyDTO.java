@@ -13,12 +13,12 @@ import java.util.Date;
 @NoArgsConstructor // Genera un costruttore senza argomenti
 @AllArgsConstructor // Genera un costruttore con tutti i campi
 public class LogFamilyDTO implements  InterfaceDTO {
-    @Id
     private String _id;
     private String performedByEmail;
     private String receivedByEmail;
     private String log;
     private Date  date;
     private OperationTypeLogFamily operations;
+    private PointsDTO point;
 
 }
