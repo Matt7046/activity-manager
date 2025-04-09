@@ -19,7 +19,7 @@ public class FamilyStateMachineService {
         return familySavePointsProcessor.savePointsByFamily(pointsDTO);
     }
 
-    public Mono<ResponseDTO> saveLog(LogFamilyDTO logFamilyDTO) {
-        return familySavePointsProcessor.saveLog(logFamilyDTO);
+    public Mono<ResponseDTO> saveLogFamily(LogFamilyDTO logFamilyDTO) {
+        return familySavePointsProcessor.saveLogFamily(logFamilyDTO);
     }
 }
