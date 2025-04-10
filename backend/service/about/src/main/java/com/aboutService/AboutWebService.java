@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 import com.saveActivityAbout.AboutSaveActivityProcessor;
 
 @Service
-public class AboutStateMachineService {
+public class AboutWebService {
 
     @Autowired
     private AboutSaveActivityProcessor aboutSaveActivityProcessor;
