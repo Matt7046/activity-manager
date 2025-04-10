@@ -4,3 +4,8 @@ spring:
     import: optional:classpath:application-common.yml
   application:
     name: activityManager
+message:
+  http:
+    error:
+      4xx: "Errore 4xx"
+

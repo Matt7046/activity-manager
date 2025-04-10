@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
-public class UserStateMachineService {
+public class UserWebService {
 
     @Autowired
     private RegisterSaveUserProcessor registerSaveUserProcessor;

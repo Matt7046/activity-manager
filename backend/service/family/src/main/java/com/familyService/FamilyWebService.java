@@ -1,7 +1,6 @@
 package com.familyService;
 
 import com.activityBusinessLogic.savePointsFamily.FamilySavePointsProcessor;
-import com.common.dto.LogActivityDTO;
 import com.common.dto.LogFamilyDTO;
 import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
-public class FamilyStateMachineService {
+public class FamilyWebService {
 
     @Autowired
     private FamilySavePointsProcessor familySavePointsProcessor;
