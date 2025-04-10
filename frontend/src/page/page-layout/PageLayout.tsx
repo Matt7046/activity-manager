@@ -3,12 +3,13 @@ import Grid from '@mui/material/Grid2';
 import { googleLogout } from '@react-oauth/google';
 import React, { useState } from 'react';
 import { NavigateFunction } from 'react-router-dom';
-import { navigateRouting } from '../../App';
+import { navigateRouting, showMessage } from '../../App';
 import Alert from '../../components/ms-alert/Alert';
+import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
-import { SectionName, TypeAlertColor } from '../../general/Constant';
+import { ButtonName, HttpStatus, SectionName, TypeAlertColor } from '../../general/Constant';
 import { NotificationI, ResponseI, UserI } from '../../general/Utils';
-import { getNotificationsByIdentificativo } from '../page-notification/service/NotificationService';
+import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 
 interface PageLayoutProps {
   children: React.ReactNode; // Contenuto specifico della maschera
@@ -43,6 +44,9 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const [openAnchor, setOpenAnchor] = useState(false);
   const notify: NotificationI[] = [];
   const [notifications, setNotifications] = useState(notify);
+  const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
+  const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio
+
 
   const handleClickAnchor = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget); // Imposta il target del popover
@@ -59,6 +63,32 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   };
 
 
+
+  const pulsanteNotification: Pulsante = {
+    icona: 'fas fa-check-circle',
+    funzione: () => saveReadNotification(), // Passi la funzione direttamente
+    //disableButton: disableButtonSave,
+    nome: ButtonName.BLUE,
+    title: 'Visualizzate',
+    configDialogPulsante: { message: '', showDialog: false }
+
+  };
+
+  const saveReadNotification = () => {
+    const notificationsStatusRead = notifications.map(x=> {      
+      x.status = "READ";
+      return x;    
+    });
+    saveNotification(notificationsStatusRead, (messageLayout?: TypeMessage) => showMessage(setOpenLayout, setMessageLayout, messageLayout)).then((response) => {
+      if (response) {
+        if (response.status === HttpStatus.OK) {
+        }
+      }
+    })
+  }
+
+
+
   const id = 'simple-popover';
 
   return (
@@ -66,6 +96,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       <Box sx={{ paddingLeft: 0.5 }}>
         <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
           <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
+      
           <Box sx={{ paddingRight: 2, display: 'flex', gap: 2 }}>
             <ButtonMui
               variant="contained"
@@ -117,8 +148,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                         second: '2-digit',
                       })}
                     </Typography>
+
+
                   </Box>
-                ))}
+                )
+                )}
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Button pulsanti={[pulsanteNotification]} />
+    </Box>
+
               </Box>
             </Popover>
           </Box>
