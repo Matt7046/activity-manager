@@ -7,6 +7,7 @@ import com.common.data.LogActivity;
 import com.common.dto.LogActivityDTO;
 import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
+import com.common.exception.ActivityHttpStatus;
 import com.common.mapper.LogActivityMapper;
 import reactor.core.publisher.Mono;
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -38,7 +38,7 @@ public class LogActivityController {
                 .map(LogActivityMapper.INSTANCE::toDTO)
 
                 .collect(Collectors.toList());
-        ResponseDTO response = new ResponseDTO(logAttivitaUnica, HttpStatus.OK.value(), new ArrayList<>());
+        ResponseDTO response = new ResponseDTO(logAttivitaUnica, ActivityHttpStatus.OK.value(), new ArrayList<>());
         return response;
     }
 

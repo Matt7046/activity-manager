@@ -45,3 +45,6 @@ rabbit:
     name:
       notification: notification-exchange
       point: point-exchange
+message:
+  error:
+    generic: "Errore generico"

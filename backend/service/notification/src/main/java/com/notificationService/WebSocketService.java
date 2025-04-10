@@ -1,6 +1,11 @@
 package com.notificationService;
 
 import com.common.data.Notification;
+import com.common.data.StatusNotification;
+import com.common.dto.NotificationDTO;
+import com.common.dto.PointsDTO;
+import com.common.dto.ResponseDTO;
+import com.common.mapper.NotificationMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,9 +15,11 @@ import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 import java.net.URI;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.springframework.beans.factory.annotation.Value;
 
 @Service
@@ -62,15 +69,34 @@ public class WebSocketService implements WebSocketHandler {
         // Ottenere la data come stringa
         long dateSenderLong = rootNode.path("dateSender").longValue();
         Date dateSender = new Date(dateSenderLong);
-        Notification notification = new Notification();
+        NotificationDTO notification = new NotificationDTO();
         notification.setMessage(message);
         notification.setUserReceiver(userReceiver);
         notification.setUserSender(userSender);
         notification.setDateSender(dateSender);
-        notificationService.saveNotification(notification);
-        Flux.fromIterable(sessions).filter(session -> session.isOpen() && userReceiver.equals(session.getAttributes().get(identification))).flatMap(session -> {
-            return session.send(Mono.just(session.textMessage(jsonMessage)));
-        }).subscribe();
+        notification.setStatus(StatusNotification.NOT_READ);
+        Mono<ResponseDTO> response = notificationService.saveNotification(notification);
+        Flux.fromIterable(sessions).filter(session -> session.isOpen() && userReceiver.equals(session.getAttributes().get(identification)))
+                .flatMap(session -> {
+                    response.flatMap(responseDTO ->
+                            saveNotificationStatusSend(session, responseDTO, objectMapper)
+                    ).subscribe();
+                    return session.send(Mono.just(session.textMessage(jsonMessage)));
+                }).subscribe();
+    }
+
+    private Mono<WebSocketSession> saveNotificationStatusSend(WebSocketSession session, ResponseDTO responseDTO, ObjectMapper objectMapper) {
+        try {
+            NotificationDTO notificationDTO = objectMapper.readValue(
+                    responseDTO.getJsonText().toString(),
+                    NotificationDTO.class
+            );
+            notificationDTO.setStatus(StatusNotification.SEND);
+            notificationService.saveNotification(notificationDTO);
+            return Mono.just(session);
+        } catch (JsonProcessingException e) {
+            return Mono.error(e);
+        }
     }
 }
 

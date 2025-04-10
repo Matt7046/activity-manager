@@ -6,6 +6,7 @@ import com.common.dto.LogActivityDTO;
 import com.common.dto.LogFamilyDTO;
 import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
+import com.common.exception.ActivityHttpStatus;
 import com.common.dto.InterfaceDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +46,7 @@ public class LogActivitySavePointsProcessor {
     @Autowired
     private RabbitMQProducer notificationPublisher;
 
+
     public Mono<ResponseDTO> savePoints(LogActivityDTO logActivityDTO) {
         return processPoints(logActivityDTO);
     }
@@ -73,45 +75,11 @@ public class LogActivitySavePointsProcessor {
                 });
     }
 
-    private static void setPointToLogActivity(PointsDTO point, LogActivityDTO logActivityDTO) {
-       logActivityDTO.setPoint(point);
-    }
-
-    private Mono<ResponseDTO> saveLogFamily(ResponseDTO response, LogFamilyDTO logFamilyDTO) {
-        if (logFamilyDTO.getReceivedByEmail().equals(logFamilyDTO.getPerformedByEmail())) {
-            return Mono.just(new ResponseDTO(logFamilyDTO, HttpStatus.OK.value(), new ArrayList<>()));
-        }
-
-        return webClientFamily.post()
-                .uri("/api/family/log")
-                .bodyValue(logFamilyDTO)
-                .retrieve()
-                .onStatus(HttpStatusCode::isError, clientResponse ->
-                        clientResponse.bodyToMono(String.class)
-                                .flatMap(errorBody -> Mono.error(new RuntimeException("Errore HTTP: " + errorBody)))
-                )
-                .bodyToMono(ResponseDTO.class)
-                .doOnError(e -> {
-
-                })
-                .doOnSuccess(response1 -> {
-                    // Azioni con la response
-                    if (!response1.errors().isEmpty()) {
-                        inviaNotifica(logFamilyDTO.getPoint(), routingKeyLogActivity);
-                        ObjectMapper mapper = new ObjectMapper();
-                        LogActivityDTO dto = mapper.convertValue(response.jsonText(), LogActivityDTO.class);
-                        logActivityService.deleteLogActivity(dto);
-                    }
-                })
-                .subscribeOn(Schedulers.boundedElastic());
-    }
-
-
     public Mono<ResponseDTO> saveLog(PointsDTO point, LogActivityDTO logActivityDTO) {
-        setPointToLogActivity(point,logActivityDTO);
+        logActivityDTO.setPoint(point);
         return Mono.fromCallable(() -> {
             LogActivity sub = logActivityService.saveLogActivity(logActivityDTO);
-            return new ResponseDTO(LogActivityMapper.INSTANCE.toDTO(sub), HttpStatus.OK.value(), new ArrayList<>());
+            return new ResponseDTO(LogActivityMapper.INSTANCE.toDTO(sub), ActivityHttpStatus.OK.value(), new ArrayList<>());
         }).doOnError(response1 -> {
             // Invia l'evento dopo il salvataggio del log in modo asincrono
             Mono.fromRunnable(() -> {
@@ -120,6 +88,27 @@ public class LogActivitySavePointsProcessor {
         });
     }
 
+    private Mono<ResponseDTO> saveLogFamily(ResponseDTO response, LogFamilyDTO logFamilyDTO) {
+        if (logFamilyDTO.getReceivedByEmail().equals(logFamilyDTO.getPerformedByEmail())) {
+            return Mono.just(new ResponseDTO(logFamilyDTO, ActivityHttpStatus.OK.value(), new ArrayList<>()));
+        }
+        StringBuilder builder = new StringBuilder();
+        return webClientFamily.post()
+                .uri("/api/family/log")
+                .bodyValue(logFamilyDTO)
+                .retrieve()
+                .bodyToMono(ResponseDTO.class)
+                .doOnSuccess(response1 -> {
+                    // Azioni con la response
+                    if (!response1.getErrors().isEmpty()) {
+                        inviaNotifica(logFamilyDTO.getPoint(), routingKeyLogActivity);
+                        ObjectMapper mapper = new ObjectMapper();
+                        LogActivityDTO dto = mapper.convertValue(response.getJsonText(), LogActivityDTO.class);
+                        logActivityService.deleteLogActivity(dto);
+                    }
+                })
+                .subscribeOn(Schedulers.boundedElastic());
+    }
 
     private void inviaNotifica(InterfaceDTO dto, String routingKey) {
         try {
