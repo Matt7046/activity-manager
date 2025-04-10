@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 import com.userAuth.UserAuthPointsProcessor;
 
 @Service
-public class UserStateMachineService {
+public class UserWebService {
 
     @Autowired
     private UserAuthPointsProcessor userAuthPointsProcessor;

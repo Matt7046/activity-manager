@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class RegisterController {
 
         @Autowired
-        private UserStateMachineService userStateMachineService;
+        private UserWebService userWebService;
 
         @PostMapping("/dati")
         public Mono<ResponseDTO> saveUserByPoints(@RequestBody PointsDTO pointsDTO) {
-            return userStateMachineService.saveUserByPoints(pointsDTO);
+            return userWebService.saveUserByPoints(pointsDTO);
         }
 }
