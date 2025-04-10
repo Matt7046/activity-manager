@@ -25,7 +25,7 @@ public class LogActivityController {
     @Autowired
     private LogActivityService logActivityService;
     @Autowired
-    private PointsStateMachineService pointsStateMachineService;
+    private PointsWebService pointsWebService;
 
     @Value("${order.type1}")
     private String field;
@@ -44,6 +44,6 @@ public class LogActivityController {
 
     @PostMapping("/dati")
     public Mono<ResponseDTO> savePointsAndLog(@RequestBody LogActivityDTO logActivityDTO) {
-        return pointsStateMachineService.savePoints(logActivityDTO);
+        return pointsWebService.savePoints(logActivityDTO);
     }
 }
