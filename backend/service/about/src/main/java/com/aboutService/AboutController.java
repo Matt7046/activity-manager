@@ -21,22 +21,22 @@ public class AboutController {
     private AboutService aboutService;
 
     @Autowired
-    private AboutStateMachineService aboutStateMachineService;
-
+	private EncryptDecryptConverter encryptDecryptConverter;
 
     @Autowired
-	private EncryptDecryptConverter encryptDecryptConverter;
+    private AboutWebService aboutWebService;
+
 
 
     @DeleteMapping("/{identificativo}")
     public Mono<ResponseDTO> deleteByIdentificativo(@PathVariable String identificativo) throws Exception {
         identificativo = encryptDecryptConverter.decrypts(identificativo);   
-        return aboutStateMachineService.callActivityDeleteService(identificativo);
+        return aboutWebService.callActivityDeleteService(identificativo);
 
     }
     @PostMapping("/dati")
     public Mono<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {
-        return aboutStateMachineService.callActivitySaveService(activityDTO);
+        return aboutWebService.callActivitySaveService(activityDTO);
 
     }
 }

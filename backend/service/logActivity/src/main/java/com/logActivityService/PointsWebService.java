@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
-public class PointsStateMachineService {
+public class PointsWebService {
 
     @Autowired
     private LogActivitySavePointsProcessor logActivityProcessor;

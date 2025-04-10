@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class FamilyController {
 
     @Autowired
-    private FamilyStateMachineService familyStateMachineService;
+    private FamilyWebService familyWebService;
 
     @PostMapping("/dati")
     public Mono<ResponseDTO> savePointsByFamily(@RequestBody PointsDTO pointsDTO) {
-        return familyStateMachineService.savePointsByFamily(pointsDTO);
+        return familyWebService.savePointsByFamily(pointsDTO);
     }
 
     @PostMapping("/log")
     public Mono<ResponseDTO> saveLogFamily(@RequestBody LogFamilyDTO logFamilyDTO) {
-        return familyStateMachineService.saveLogFamily(logFamilyDTO);
+        return familyWebService.saveLogFamily(logFamilyDTO);
     }
 }
