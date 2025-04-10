@@ -14,3 +14,6 @@ app:
         routingKey:
           logActivity: point.log.activity
           logFamily: point.log.family
+message:
+  http:
+    error: "Errore HTTP: "
