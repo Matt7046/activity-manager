@@ -7,6 +7,8 @@ import com.common.dto.NotificationDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 
 @Mapper
 public interface NotificationMapper {
@@ -14,10 +16,15 @@ public interface NotificationMapper {
 
     // Da Entity a DTO
     NotificationDTO toDTO(Notification notification);
-    
+
+    List<NotificationDTO> toDTO(List<Notification> notification);
 
     // Da DTO a Entity
     Notification fromDTO(NotificationDTO ActivityDto);
+
+
+    List<Notification> fromDTO(List<NotificationDTO> notification);
+
 }
 
 

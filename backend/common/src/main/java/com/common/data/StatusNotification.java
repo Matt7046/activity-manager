@@ -3,11 +3,11 @@ package com.common.data;
 
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
-public enum OperationTypeLogFamily {
-    OPERATIVE(1),
-    FAMILY_ADD(2),
-    FAMILY_REMOVE(3);
+@AllArgsConstructor // Genera un costruttore con tutti i campi
+public enum StatusNotification {
+    READ(1),
+    NOT_READ(2),
+    SEND(3);
 
     private final int value;
 
@@ -15,8 +15,8 @@ public enum OperationTypeLogFamily {
         return value;
     }
 
-    public static OperationTypeLogFamily fromValue(Integer code) {
-        for (OperationTypeLogFamily op : values()) {
+    public static StatusNotification fromValue(Integer code) {
+        for (StatusNotification op : values()) {
             if (op.value() == code) {
                 return op;
             }
