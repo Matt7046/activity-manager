@@ -24,6 +24,7 @@ export interface NotificationI {
   userSender: string;
   userReceiver:string;
   dateSender: Date;
+  status: string;
 }
 
 export interface FamilyNotificationI extends NotificationI {
