@@ -25,7 +25,7 @@ public class AuthController {
     JwtUtil jwtUtil;
 
     @Autowired
-    UserStateMachineService userStateMachineService;
+    UserWebService userWebService;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -42,6 +42,6 @@ public class AuthController {
     @PostMapping("/dati")
     public Mono<ResponseDTO> getUserType(@RequestBody PointsDTO pointsDTO) {
         // Una volta completata la chiamata points, salva il log e crea la response
-        return userStateMachineService.getUserType(pointsDTO);
+        return userWebService.getUserType(pointsDTO);
     }
 }

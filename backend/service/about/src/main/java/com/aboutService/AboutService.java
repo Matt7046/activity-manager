@@ -16,7 +16,7 @@ public class AboutService {
     private WebClient webClientActivity;
 
     @Autowired
-    private AboutStateMachineService aboutStateMachineService;
+    private AboutWebService aboutStateMachineService;
 
 
 
