@@ -5,12 +5,12 @@ import com.common.dto.PointRDTO;
 import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
 import com.common.dto.UserDTO;
+import com.common.exception.ActivityHttpStatus;
 import com.common.exception.NotFoundException;
 import com.common.mapper.PointsMapper;
 import com.common.transversal.PointsUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +52,7 @@ public class PointController {
             PointRDTO record = new PointRDTO(filteredList.get(0).getPoints(),
                     message.concat(filteredList.get(0).getPoints().toString()));
 
-            responseDTO = new ResponseDTO(record, HttpStatus.OK.value(), new ArrayList<>());
+            responseDTO = new ResponseDTO(record, ActivityHttpStatus.OK.value(), new ArrayList<>());
         }
             return responseDTO;
         });
@@ -63,7 +63,7 @@ public class PointController {
         return Mono.fromCallable(() -> {
         Long itemId = pointService.getTypeUser(pointsDTO);
         String emailUserCurrent = itemId == 1  ? pointsDTO.getEmail(): pointsDTO.getEmailFamily();
-        ResponseDTO response = new ResponseDTO(new UserDTO(itemId, null,emailUserCurrent), HttpStatus.OK.value(),
+        ResponseDTO response = new ResponseDTO(new UserDTO(itemId, null,emailUserCurrent), ActivityHttpStatus.OK.value(),
                 new ArrayList<>());
             return response;
         });
@@ -76,7 +76,7 @@ public class PointController {
             pointsDTO.setOperation(operations);
             Point points = pointService.savePoint(pointsDTO);
             PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(points);
-            ResponseDTO response = new ResponseDTO(subDTO, HttpStatus.OK.value(),
+            ResponseDTO response = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(),
                     new ArrayList<>());
             return response;
         });
@@ -92,7 +92,7 @@ public class PointController {
             Boolean itemId = pointService.saveUser(pointsDTO);
             String emailUserCurrent = pointsDTO.getType().equals(1L)  ? pointsDTO.getEmail(): pointsDTO.getEmailFamily();
             ResponseDTO response = new ResponseDTO(new UserDTO(null, itemId, emailUserCurrent),
-                    HttpStatus.OK.value(), new ArrayList<>());
+            ActivityHttpStatus.OK.value(), new ArrayList<>());
             return response;
         });
     }
@@ -103,7 +103,7 @@ public class PointController {
         String email = pointsDTO.getEmail();
         Point sub = pointService.getPointByEmail(email);
         PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(sub);
-        ResponseDTO response = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
+        ResponseDTO response = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
             return response;
         });
 

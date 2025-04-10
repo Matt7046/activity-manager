@@ -1,7 +1,10 @@
 package com.activityBusinessLogic.savePointsFamily;
 
 import com.common.data.OperationTypeLogFamily;
+import com.common.data.Point;
+import com.common.exception.ActivityHttpStatus;
 import com.common.exception.NotFoundException;
+import com.common.transversal.PointsUser;
 import com.familyService.FamilyService;
 import com.common.configurations.RabbitMQProducer;
 import com.common.dto.*;
@@ -10,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -67,15 +69,16 @@ public class FamilySavePointsProcessor {
                 .retrieve()
                 .bodyToMono(ResponseDTO.class)
                 .flatMap(responseDTO -> Mono.fromCallable(() -> {
-                    PointsDTO subDTO = new ObjectMapper().convertValue(responseDTO.jsonText(), PointsDTO.class);
+                    PointsDTO subDTO = new ObjectMapper().convertValue(responseDTO.getJsonText(), PointsDTO.class);
                     return subDTO.getPoints().stream()
                             .filter(point -> email.equals(point.getEmail()))
                             .findFirst();
                 }).subscribeOn(Schedulers.boundedElastic()))
-                .flatMap(point -> {
+                .flatMap(pointsUserOptional -> {
                     saveLogFamily(createLogFamily(pointsDTO));
                     inviaNotifica(pointsDTO);
-                    return Mono.just((new ResponseDTO(point,HttpStatus.OK.value(), new ArrayList<>())));
+                    PointsUser point = pointsUserOptional.orElse(null);
+                    return Mono.just((new ResponseDTO(point, ActivityHttpStatus.OK.value(), new ArrayList<>())));
                 });
     }
 

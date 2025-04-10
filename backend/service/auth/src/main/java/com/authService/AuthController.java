@@ -3,8 +3,8 @@ package com.authService;
 import java.util.ArrayList;
 
 import com.common.dto.PointsDTO;
+import com.common.exception.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,7 +35,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
         String token = jwtUtil.generateToken(authentication.getName()); // Genera il token JWT
-        ResponseDTO response = new ResponseDTO(new LoginResponse(token), HttpStatus.OK.value(), new ArrayList<>());
+        ResponseDTO response = new ResponseDTO(new LoginResponse(token), ActivityHttpStatus.OK.value(), new ArrayList<>());
         return ResponseEntity.ok(response);
     }
 
