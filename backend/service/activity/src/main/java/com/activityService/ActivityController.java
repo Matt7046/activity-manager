@@ -1,5 +1,6 @@
 package com.activityService;
 
+import com.common.exception.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +46,7 @@ public class ActivityController {
         List<ActivityDTO> subDTO = sub.stream()
                 .map(ActivityMapper.INSTANCE::toDTO)
                 .collect(Collectors.toList());
-        ResponseDTO response = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
+        ResponseDTO response = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
         return response;
     }
 
@@ -60,7 +61,7 @@ public class ActivityController {
 
         if (item != null) {
             ActivityDTO subDTO = ActivityMapper.INSTANCE.toDTO(item);
-            responseDTO = new ResponseDTO(subDTO, HttpStatus.OK.value(), new ArrayList<>());
+            responseDTO = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
         }
 
         return responseDTO;
@@ -69,14 +70,14 @@ public class ActivityController {
     @PostMapping("/dati")
     public Mono<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {
         return activityService.saveActivity(activityDTO)  // Ottieni il Mono<String>
-                .map(result -> new ResponseDTO(result, HttpStatus.OK.value(), new ArrayList<>()));  // Mappa il risultato in un ResponseDTO
+                .map(result -> new ResponseDTO(result, ActivityHttpStatus.OK.value(), new ArrayList<>()));  // Mappa il risultato in un ResponseDTO
     }
 
      @DeleteMapping("toggle/{identificativo}")
     public Mono<ResponseDTO> deleteByIdentificativo(@PathVariable String identificativo) throws Exception {
         identificativo = encryptDecryptConverter.decrypts(identificativo);   
         return Mono.just(activityService.deleteByIdentificativo(identificativo))
-        .map(result -> new ResponseDTO(result, HttpStatus.OK.value(), new ArrayList<>()));  // Mappa il risultato in un ResponseDTO
+        .map(result -> new ResponseDTO(result, ActivityHttpStatus.OK.value(), new ArrayList<>()));  // Mappa il risultato in un ResponseDTO
        
     }
 }
