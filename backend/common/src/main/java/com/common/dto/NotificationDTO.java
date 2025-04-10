@@ -2,6 +2,7 @@ package com.common.dto;
 
 import java.util.Date;
 
+import com.common.data.StatusNotification;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,10 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // Genera un costruttore con tutti i campi
 public class NotificationDTO implements InterfaceDTO {
 
+    private String _id;
     private String serviceName;
     private String userSender;
     private String userReceiver;
     private String message;
     private Date dateSender;
+    private StatusNotification Status;
 
 }
