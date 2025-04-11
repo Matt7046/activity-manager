@@ -11,6 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { observer } from 'mobx-react';
 import * as React from 'react';
+import './Drawer.css';
 
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
@@ -48,7 +49,10 @@ const Drawer = observer((props: {
     <div>
       {[props.anchor].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true, setStatoComponente, statoComponente)}>{props.nameMenu}
+          <Button
+            className="drawer-toggle-button"
+
+            onClick={toggleDrawer(anchor, true, setStatoComponente, statoComponente)}>{props.nameMenu}
           </Button>
           <SwipeableDrawer
             anchor={anchor}
@@ -69,26 +73,27 @@ const toggleDrawer = (
   open: boolean,
   setStatoComponente: React.Dispatch<React.SetStateAction<TypeAnchor>>, // Tipo corretto per il setter dello stato
   statoComponente: TypeAnchor
-) => 
-(event: React.KeyboardEvent | React.MouseEvent) => {
-  if (
-    event.type === 'keydown' &&
-    ((event as React.KeyboardEvent).key === 'Tab' || 
-     (event as React.KeyboardEvent).key === 'Shift')
-  ) {
-    return; // Se è un evento di tastiera con i tasti "Tab" o "Shift", esci senza fare nulla
-  }
+) =>
+  (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (
+      event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' ||
+        (event as React.KeyboardEvent).key === 'Shift')
+    ) {
+      return; // Se è un evento di tastiera con i tasti "Tab" o "Shift", esci senza fare nulla
+    }
 
-  setStatoComponente({ ...statoComponente, [anchor]: open }); // Aggiorna lo stato con il nuovo valore
-};
-
-
+    setStatoComponente({ ...statoComponente, [anchor]: open }); // Aggiorna lo stato con il nuovo valore
+  };
 
 
 
-const listaItem = (anchor: Anchor, sezioni: MenuLaterale[][], setStatoComponente:React.Dispatch<React.SetStateAction<TypeAnchor>>, statoComponente: TypeAnchor) => (
+
+
+const listaItem = (anchor: Anchor, sezioni: MenuLaterale[][], setStatoComponente: React.Dispatch<React.SetStateAction<TypeAnchor>>, statoComponente: TypeAnchor) => (
   <Box
-    sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+  className={`drawer-box ${anchor === 'top' || anchor === 'bottom' ? 'drawer-horizontal' : 'drawer-vertical'}`}
+
     role="presentation"
     onClick={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
     onKeyDown={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
@@ -100,14 +105,14 @@ const listaItem = (anchor: Anchor, sezioni: MenuLaterale[][], setStatoComponente
             {section.map((text, index) => (
               <ListItem key={text.testo} disablePadding>
                 <ListItemButton
+                  className="drawer-list-item"
                   onClick={() => {
                     if (text.funzione) {
                       text.funzione(); // Chiama la funzione associata a questo elemento
                     }
                   }}
                 >
-                  <ListItemIcon>
-                    {(sectionIndex * section.length + index) % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <ListItemIcon className="drawer-list-icon">                    {(sectionIndex * section.length + index) % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                   </ListItemIcon>
                   <ListItemText primary={text.testo} />
                 </ListItemButton>

@@ -46,9 +46,10 @@ const Schedule = observer((props: {
         {props.schedule.pulsanti.filter(
           (pulsante) => pulsante.nome.toUpperCase() === 'NEW'
         ).map((pulsante) => (
-          <Grid container justifyContent="space-between" alignItems="center" spacing={2} key="newButton">
+          <Grid container justifyContent="space-between" alignItems="center" spacing={2} key="newButton" 
+          className="new-button-container">
 
-            <Button
+            <Button 
               pulsanti={[{ ...pulsante },
               ]}
             />
