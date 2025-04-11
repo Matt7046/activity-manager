@@ -1,0 +1,50 @@
+/* Stile per il bottone che apre il menu */
+.drawer-toggle-button {
+  font-weight: bold;
+  margin: 10px;
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease;
+}
+
+.drawer-toggle-button:hover {
+  background-color: #1565c0;
+}
+
+
+/* Lista voci menu */
+.drawer-list-item {
+  transition: background-color 0.2s ease;
+}
+
+.drawer-list-item:hover {
+  background-color: #e3f2fd;
+}
+
+/* Divider più sottile e con margini */
+.drawer-divider {
+  margin: 10px 0;
+  height: 1px;
+  background-color: #cfd8dc;
+}
+
+/* Icone uniformi */
+.drawer-list-icon {
+  color: #1976d2;
+}
+
+.drawer-box {
+  background-color: #f9f9f9;
+  height: 100%;
+  padding: 10px 0;
+  overflow-y: auto;
+}
+
+.drawer-vertical {
+  width: 250px;
+}
+
+.drawer-horizontal {
+  width: auto;
+  min-width: 200px;
+}
