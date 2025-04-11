@@ -1,13 +1,17 @@
 package com.activityBusinessLogic.savePointsFamily;
 
+import com.common.configurations.NotificationComponent;
 import com.common.data.OperationTypeLogFamily;
+import com.common.dto.LogFamilyDTO;
+import com.common.dto.ResponseDTO;
+import com.common.dto.UserPointDTO;
+import com.common.dto.FamilyNotificationDTO;
 import com.common.exception.ActivityHttpStatus;
 import com.common.exception.NotFoundException;
 import com.common.transversal.PointsUser;
 import com.familyService.FamilyService;
 import com.common.configurations.RabbitMQProducer;
-import com.common.dto.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,7 +34,8 @@ public class FamilySavePointsProcessor {
     private RabbitMQProducer notificationPublisher;
     @Autowired
     private FamilyService familyService;
-
+    @Autowired
+    private NotificationComponent notificationComponent;
     @Value("${app.rabbitmq.notification.exchange.exchangeName}")
     private String notificationExchange;
 
@@ -98,14 +103,18 @@ public class FamilySavePointsProcessor {
             try {
                 sub = familyService.saveLogFamily(logFamilyDTO);
             } catch (Exception e) {
-                inviaNotifica(logFamilyDTO.getPoint(), pointRoutingKey);
+                notificationComponent.inviaNotifica(logFamilyDTO.getPoint(),pointExchange, pointRoutingKey);
                 throw new NotFoundException(e.getMessage());
             }
             return Mono.just(sub);
-
     }
 
     private void inviaNotifica(UserPointDTO userPointDTO) {
+        FamilyNotificationDTO dto = getFamilyNotificationDTO(userPointDTO);
+        notificationComponent.inviaNotifica(dto,notificationExchange,notificationRoutingKey);
+    }
+
+    private FamilyNotificationDTO getFamilyNotificationDTO(UserPointDTO userPointDTO) {
         StringBuilder builder = new StringBuilder(userPointDTO.getUsePoints().toString());
         String message = userPointDTO.getUsePoints() < 0L ? messageRemove : messageAdd;
         builder.append(message).append(userPointDTO.getEmail());
@@ -115,21 +124,6 @@ public class FamilySavePointsProcessor {
         dto.setUserSender(userPointDTO.getEmailUserCurrent());
         dto.setMessage(dto.getPointsNew());
         dto.setDateSender(new Date());
-        try {
-            String jsonMessage = new ObjectMapper().writeValueAsString(dto);
-            notificationPublisher.sendMessage(notificationExchange, notificationRoutingKey, jsonMessage);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return dto;
     }
-
-    private void inviaNotifica(InterfaceDTO dto, String routingKey) {
-        try {
-            String jsonMessage = new ObjectMapper().writeValueAsString(dto);
-            notificationPublisher.sendMessage(pointExchange, routingKey, jsonMessage);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }
