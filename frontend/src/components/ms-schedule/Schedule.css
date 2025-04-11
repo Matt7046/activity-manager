@@ -1,0 +1,33 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.col-display {
+  margin-bottom: 1px;
+}
+
+.label-container {
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0 10px;
+}
+
+.label-text {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.custom-separator {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  margin: 8px 0;
+}

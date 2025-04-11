@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Button, { Pulsante } from '../ms-button/Button';
 import Label from '../ms-label/Label';
 import NameDisplay from '../ms-namedisplay/NameDisplay';
-
+import './Schedule.css';
 
 export interface MsSchedule {
   justifyContent?: string;
