@@ -2,7 +2,7 @@ package com.authService;
 
 import java.util.ArrayList;
 
-import com.common.dto.PointsDTO;
+import com.common.dto.UserPointDTO;
 import com.common.exception.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +40,8 @@ public class AuthController {
     }
 
     @PostMapping("/dati")
-    public Mono<ResponseDTO> getUserType(@RequestBody PointsDTO pointsDTO) {
+    public Mono<ResponseDTO> getUserType(@RequestBody UserPointDTO userPointDTO) {
         // Una volta completata la chiamata points, salva il log e crea la response
-        return userWebService.getUserType(pointsDTO);
+        return userWebService.getUserType(userPointDTO);
     }
 }

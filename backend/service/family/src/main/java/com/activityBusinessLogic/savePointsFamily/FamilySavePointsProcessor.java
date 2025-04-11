@@ -1,7 +1,6 @@
 package com.activityBusinessLogic.savePointsFamily;
 
 import com.common.data.OperationTypeLogFamily;
-import com.common.data.Point;
 import com.common.exception.ActivityHttpStatus;
 import com.common.exception.NotFoundException;
 import com.common.transversal.PointsUser;
@@ -53,43 +52,43 @@ public class FamilySavePointsProcessor {
     @Value("${notification.service}")
     private String serviceName;
 
-    public Mono<ResponseDTO> savePointsByFamily(PointsDTO pointsDTO) {
+    public Mono<ResponseDTO> savePointsByFamily(UserPointDTO userPointDTO) {
 
-        return processPoints(pointsDTO);
+        return processPoints(userPointDTO);
 
     }
 
-    private Mono<ResponseDTO> processPoints(PointsDTO pointsDTO) {
-        String email = pointsDTO.getEmailFamily();
-        pointsDTO.setOperation(true);
+    private Mono<ResponseDTO> processPoints(UserPointDTO userPointDTO) {
+        String email = userPointDTO.getEmailFamily();
+        userPointDTO.setOperation(true);
 
         return webClientPoint.post()
                 .uri("/api/point/dati/standard")
-                .bodyValue(pointsDTO)
+                .bodyValue(userPointDTO)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class)
                 .flatMap(responseDTO -> Mono.fromCallable(() -> {
-                    PointsDTO subDTO = new ObjectMapper().convertValue(responseDTO.getJsonText(), PointsDTO.class);
+                    UserPointDTO subDTO = new ObjectMapper().convertValue(responseDTO.getJsonText(), UserPointDTO.class);
                     return subDTO.getPoints().stream()
                             .filter(point -> email.equals(point.getEmail()))
                             .findFirst();
                 }).subscribeOn(Schedulers.boundedElastic()))
                 .flatMap(pointsUserOptional -> {
-                    saveLogFamily(createLogFamily(pointsDTO));
-                    inviaNotifica(pointsDTO);
+                    saveLogFamily(createLogFamily(userPointDTO));
+                    inviaNotifica(userPointDTO);
                     PointsUser point = pointsUserOptional.orElse(null);
                     return Mono.just((new ResponseDTO(point, ActivityHttpStatus.OK.value(), new ArrayList<>())));
                 });
     }
 
-    private LogFamilyDTO createLogFamily(PointsDTO pointsDTO) {
+    private LogFamilyDTO createLogFamily(UserPointDTO userPointDTO) {
         LogFamilyDTO dto = new LogFamilyDTO();
         dto.setDate(new Date());
-        OperationTypeLogFamily operations = pointsDTO.getUsePoints() < 0L ? OperationTypeLogFamily.FAMILY_REMOVE : OperationTypeLogFamily.FAMILY_ADD;
+        OperationTypeLogFamily operations = userPointDTO.getUsePoints() < 0L ? OperationTypeLogFamily.FAMILY_REMOVE : OperationTypeLogFamily.FAMILY_ADD;
         dto.setOperations(operations);
-        dto.setPerformedByEmail(pointsDTO.getEmailUserCurrent());
-        dto.setReceivedByEmail(pointsDTO.getEmailFamily());
-        dto.setPoint(pointsDTO);
+        dto.setPerformedByEmail(userPointDTO.getEmailUserCurrent());
+        dto.setReceivedByEmail(userPointDTO.getEmailFamily());
+        dto.setPoint(userPointDTO);
         return dto;
     }
 
@@ -106,14 +105,14 @@ public class FamilySavePointsProcessor {
 
     }
 
-    private void inviaNotifica(PointsDTO pointsDTO) {
-        StringBuilder builder = new StringBuilder(pointsDTO.getUsePoints().toString());
-        String message = pointsDTO.getUsePoints() < 0L ? messageRemove : messageAdd;
-        builder.append(message).append(pointsDTO.getEmail());
+    private void inviaNotifica(UserPointDTO userPointDTO) {
+        StringBuilder builder = new StringBuilder(userPointDTO.getUsePoints().toString());
+        String message = userPointDTO.getUsePoints() < 0L ? messageRemove : messageAdd;
+        builder.append(message).append(userPointDTO.getEmail());
         FamilyNotificationDTO dto = new FamilyNotificationDTO(builder.toString());
         dto.setServiceName(serviceName);
-        dto.setUserReceiver(pointsDTO.getEmailFamily());
-        dto.setUserSender(pointsDTO.getEmailUserCurrent());
+        dto.setUserReceiver(userPointDTO.getEmailFamily());
+        dto.setUserSender(userPointDTO.getEmailUserCurrent());
         dto.setMessage(dto.getPointsNew());
         dto.setDateSender(new Date());
         try {

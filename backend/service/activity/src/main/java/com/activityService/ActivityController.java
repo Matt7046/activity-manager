@@ -1,5 +1,6 @@
 package com.activityService;
 
+import com.common.dto.UserPointDTO;
 import com.common.exception.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.common.configurations.EncryptDecryptConverter;
 import com.common.data.Activity;
 import com.common.dto.ActivityDTO;
-import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
 
 import com.common.exception.NotFoundException;
@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,8 +39,8 @@ public class ActivityController {
     EncryptDecryptConverter encryptDecryptConverter;
 
     @PostMapping("/activities")
-    public ResponseDTO getActivities(@RequestBody PointsDTO pointsDTO) {
-        String email = pointsDTO.getEmail();
+    public ResponseDTO getActivities(@RequestBody UserPointDTO userPointDTO) {
+        String email = userPointDTO.getEmail();
         List<Activity> sub = activityService.findAllByEmail(email);
         List<ActivityDTO> subDTO = sub.stream()
                 .map(ActivityMapper.INSTANCE::toDTO)
@@ -51,12 +50,12 @@ public class ActivityController {
     }
 
     @PostMapping("/find")
-    public ResponseDTO findByIdentificativo(@RequestBody PointsDTO pointsDTO) {
+    public ResponseDTO findByIdentificativo(@RequestBody UserPointDTO userPointDTO) {
         Activity item = null;
         ResponseDTO responseDTO = null;
-        item = activityService.findByIdentificativo(pointsDTO.get_id());
+        item = activityService.findByIdentificativo(userPointDTO.get_id());
         if (item == null) {
-            throw new NotFoundException(errorDocument + pointsDTO.get_id());
+            throw new NotFoundException(errorDocument + userPointDTO.get_id());
         }
 
         if (item != null) {

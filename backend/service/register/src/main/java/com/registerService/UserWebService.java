@@ -1,6 +1,6 @@
 package com.registerService;
 
-import com.common.dto.PointsDTO;
+import com.common.dto.UserPointDTO;
 import com.common.dto.ResponseDTO;
 import com.saveUserRegister.RegisterSaveUserProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ public class UserWebService {
     @Autowired
     private RegisterSaveUserProcessor registerSaveUserProcessor;
 
-    public Mono<ResponseDTO> saveUserByPoints(PointsDTO pointsDTO) {
-       return registerSaveUserProcessor.saveUserByPoints(pointsDTO);
+    public Mono<ResponseDTO> saveUserByPoints(UserPointDTO userPointDTO) {
+       return registerSaveUserProcessor.saveUserByPoints(userPointDTO);
     }
 }
