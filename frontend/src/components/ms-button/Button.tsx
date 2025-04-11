@@ -1,6 +1,8 @@
 import { Button as ButtonMui, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
+import './Button.css'; // Importa il file CSS
+
 
 export interface Pulsante {
   icona: string;
@@ -57,13 +59,7 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
   }, []);
 
   return (
-    <div
-      className="col-button-container"
-      style={{
-        display: 'flex',
-        gap: '12px',
-      }}
-    >
+    <div className="col-button-container">
       {props.pulsanti.map((button, index) => (
         <div key={index} className="col-button">
           <ButtonMui 
@@ -71,41 +67,29 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
             className={button.nome === 'red' ? 'button-red' : 'button-blue'}
             title={button.title}
             onClick={() => handleClickOpen(button.funzione, button.configDialogPulsante)} // Apri il dialog con la funzione specifica
-            sx={{
-              opacity: button.disableButton ? 0.3 : 1,
-              pointerEvents: button.disableButton ? 'none' : 'auto',
-              cursor: button.disableButton ? 'not-allowed' : 'pointer',
-              border: button.disableButton ? '1px solid lightgrey' : 'initial',
-              color: '#000',  // Colore nero  
-              borderRadius: '12px',
-              transition: 'all 0.3s ease',
-              '&:hover': {
-                backgroundColor: button.nome === 'red' ? '#ef4444' : '#4338ca',
-                boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
-                transform: 'translateY(-2px)',
-              },
-            }}         
+            disabled={button.disableButton}
+            
           >
             <i className={button.icona}></i>
           </ButtonMui>
         </div>
       ))}
       <Dialog
-      open={open}
-      onClose={handleClose}
-      PaperProps={{
-        sx: {
-          opacity: 1,
-          pointerEvents: 'auto',
-          cursor: 'pointer',
-          border: 'initial',
-          color: '#fff',  // Puoi cambiare questo con il colore che preferisci
-          borderRadius: '50px',
-          backgroundColor: '#d1d1d1', // Impostato il colore di sfondo a un grigio scuro
-        },
-      }}
-    >
-<DialogTitle sx={{ color: '#000000' }}>Conferma azione</DialogTitle>
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          sx: {
+            opacity: 1,
+            pointerEvents: 'auto',
+            cursor: 'pointer',
+            border: 'initial',
+            color: '#fff',  // Puoi cambiare questo con il colore che preferisci
+            borderRadius: '50px',
+            backgroundColor: '#d1d1d1', // Impostato il colore di sfondo a un grigio scuro
+          },
+        }}
+      >
+        <DialogTitle sx={{ color: '#000000' }}>Conferma azione</DialogTitle>
         <DialogContent>
           <DialogContentText>
             {messageTitle}
