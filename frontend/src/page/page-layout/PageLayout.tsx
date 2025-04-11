@@ -1,4 +1,4 @@
-import { Box, Divider, Popover, TextField, Typography } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { googleLogout } from '@react-oauth/google';
 import React, { useState } from 'react';
@@ -7,6 +7,7 @@ import { navigateRouting, showMessage } from '../../App';
 import Alert from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
+import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
 import { ButtonName, HttpStatus, SectionName, TypeAlertColor } from '../../general/Constant';
 import { NotificationI, ResponseI, UserI } from '../../general/Utils';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
@@ -40,17 +41,33 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     navigateRouting(navigate, SectionName.ROOT, {})
   }
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openAnchor, setOpenAnchor] = useState(false);
   const notify: NotificationI[] = [];
   const [notifications, setNotifications] = useState(notify);
+  const [popoverNotifications, setPopoverNotifications] = useState<PopoverNotification[]>([]);
   const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio
 
 
-  const handleClickAnchor = () => {
+  const handleClickAnchor = () => {   
     getNotificationsByIdentificativo(user.emailUserCurrent, 0, 5).then((response: ResponseI) => {
       setNotifications(response.jsonText);
+      const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
+        const popoverNotification = {
+          message: x.message,
+          subText: ['Inviato da: ' + x.userSender, 'data: ' +new Date(x.dateSender).toLocaleString('it-IT', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          })]
+        }
+        return popoverNotification;
+
+      });
+      setPopoverNotifications(popover);
       setOpenAnchor(true); // Mostra il popover
     })
 
@@ -63,13 +80,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
 
 
+
+
   const pulsanteNotification: Pulsante = {
     icona: 'fas fa-check-circle',
     funzione: () => saveReadNotification(), // Passi la funzione direttamente
     //disableButton: disableButtonSave,
     nome: ButtonName.BLUE,
     title: 'Visualizzate',
-    configDialogPulsante: { message: '', showDialog: false }
+    configDialogPulsante: { message: 'Vuoi impostate le notifiche come lette?', showDialog: true }
 
   };
 
@@ -107,6 +126,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
   const id = 'simple-popover';
 
+
   return (
     <>
       <Box sx={{ paddingLeft: 0.5 }}>
@@ -118,63 +138,10 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             <Button pulsanti={[pulsanteLogout]} />
             {/* Area notifica */}
             <Popover
-             slotProps={{
-              paper: {
-                sx: {
-                  opacity:  1,
-                  pointerEvents:  'auto',
-                  cursor: 'pointer',
-                  border: 'initial',
-                  color: '#fff',
-                  borderRadius: '50px',
-                
-                },
-              },
-            }}
-              id={id}
-              open={openAnchor}
-              anchorEl={anchorEl}
-              onClose={handleCloseAnchor}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-            >
-              {/* Contenuto del popover */}
-              <Box sx={{ padding: 2 }}>
-                {notifications.map((notification, index) => (
-                  <Box key={index} sx={{ marginBottom: 2 }}>
-                    {/* Prima riga: messaggio */}
-                    <Typography variant="body1" color="text.primary">
-                      {notification.message}
-                    </Typography>
-
-                    {/* Separatore */}
-                    <Divider sx={{ my: 1 }} />
-
-                    {/* Seconda riga: inviato da */}
-                    <Typography variant="body2" color="text.secondary">
-                      Inviato da: {notification.userSender}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Data: {new Date(notification.dateSender).toLocaleString('it-IT', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                      })}
-                    </Typography>
-
-
-                  </Box>
-                )
-                )}
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button pulsanti={[pulsanteNotification]} />
-                </Box>
-              </Box>
+              notifications={popoverNotifications}
+              openAnchor={openAnchor}
+              handleCloseAnchor={handleCloseAnchor}
+              pulsanteNotification={pulsanteNotification}>
             </Popover>
           </Box>
         </Grid>
