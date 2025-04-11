@@ -10,7 +10,6 @@ import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivities, savePointsAndLog } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail } from "../page-points/service/PointsService";
-import "./Operative.css";
 import { showMessageOperativeForm } from "./service/OperativeService";
 import operativeStore from "./store/OperativeStore";
 

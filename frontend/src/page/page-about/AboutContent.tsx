@@ -10,7 +10,6 @@ import { FormErrorValues, UserI, verifyForm } from "../../general/Utils";
 import { ActivityI } from "../page-activity/Activity";
 import activityStore from "../page-activity/store/ActivityStore";
 import { TypeMessage } from "../page-layout/PageLayout";
-import "./About.css";
 import { deleteAboutById, saveAboutByUser, showMessageAboutForm } from "./service/AboutService";
 
 interface AboutContentProps {
