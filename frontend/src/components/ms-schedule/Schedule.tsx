@@ -3,7 +3,6 @@ import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import Button, { Pulsante } from '../ms-button/Button';
 import Label from '../ms-label/Label';
-import NameDisplay from '../ms-namedisplay/NameDisplay';
 import './Schedule.css';
 
 export interface MsSchedule {
@@ -106,7 +105,7 @@ const Schedule = observer((props: {
             <React.Fragment key={item._id}>
 
               <div className="col-display">
-                <NameDisplay value={item.nome} identificativo={item._id} />
+                <Label text={item.nome} _id={item._id} />
               </div>
 
               <Grid container justifyContent={props.schedule.justifyContent} spacing={2} style={{ height: '30px' }}>
