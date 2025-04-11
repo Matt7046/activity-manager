@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data // Genera getter, setter, toString, equals e hashCode
 @NoArgsConstructor // Genera un costruttore senza argomenti
 @AllArgsConstructor // Genera un costruttore con tutti i campi
-public class PointsDTO implements InterfaceDTO {
+public class UserPointDTO implements InterfaceDTO {
 
 	private String _id; // Identificatore unico
 	private String email;
@@ -26,7 +26,7 @@ public class PointsDTO implements InterfaceDTO {
 	private Boolean operation;
 	private String emailUserCurrent;
 
-	public PointsDTO(LogActivityDTO logActivityDTO)
+	public UserPointDTO(LogActivityDTO logActivityDTO)
 	{
 		setPoint(logActivityDTO.getPoints());
 		setEmail(logActivityDTO.getEmail());

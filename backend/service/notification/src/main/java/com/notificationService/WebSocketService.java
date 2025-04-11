@@ -1,11 +1,8 @@
 package com.notificationService;
 
-import com.common.data.Notification;
 import com.common.data.StatusNotification;
 import com.common.dto.NotificationDTO;
-import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
-import com.common.mapper.NotificationMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

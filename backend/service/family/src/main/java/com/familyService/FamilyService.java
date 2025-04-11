@@ -23,7 +23,7 @@ public class FamilyService {
     @Autowired
     private FamilyRepository repository;
 
-    public ResponseDTO savePointsByFamily(List<PointsUser> filteredList, PointsDTO pointsDTO) {
+    public ResponseDTO savePointsByFamily(List<PointsUser> filteredList, UserPointDTO userPointDTO) {
         // Creare l'oggetto PointsRDTO
         PointRDTO record = new PointRDTO(
                 filteredList.get(0).getPoints(),

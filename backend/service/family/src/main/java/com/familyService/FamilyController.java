@@ -1,9 +1,9 @@
 package com.familyService;
 
 import com.common.dto.LogFamilyDTO;
+import com.common.dto.UserPointDTO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
 import reactor.core.publisher.Mono;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,8 @@ public class FamilyController {
     private FamilyWebService familyWebService;
 
     @PostMapping("/dati")
-    public Mono<ResponseDTO> savePointsByFamily(@RequestBody PointsDTO pointsDTO) {
-        return familyWebService.savePointsByFamily(pointsDTO);
+    public Mono<ResponseDTO> savePointsByFamily(@RequestBody UserPointDTO userPointDTO) {
+        return familyWebService.savePointsByFamily(userPointDTO);
     }
 
     @PostMapping("/log")

@@ -1,6 +1,8 @@
 package com.common.configurations;
 
 import java.util.stream.Collectors;
+
+import com.common.data.UserPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
@@ -8,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.event.AfterLoadEvent;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Component;
 import com.common.data.LogActivity;
-import com.common.data.Point;
 
 @Component
 public class EncryptionCallback {
@@ -22,17 +23,17 @@ public class EncryptionCallback {
     // Prima che il documento venga convertito e salvato nel DB
     @EventListener
     public <T> void handleBeforeConvert(BeforeConvertEvent<T> event) {
-        if (event.getSource() instanceof Point user) {
+        if (event.getSource() instanceof UserPoint userPoint) {
             try {
-                if (user.getEmail() != null) {
-                    user.setEmail(encryptDecryptConverter.convert(user.getEmail())); // Crittografa l'email //
+                if (userPoint.getEmail() != null) {
+                    userPoint.setEmail(encryptDecryptConverter.convert(userPoint.getEmail())); // Crittografa l'email //
                                                                                      // salvataggio
                 }
-                if (user.getEmailFamily() != null) {
-                    user.setEmailFamily(encryptDecryptConverter.convert(user.getEmailFamily())); // Crittografa l'email
+                if (userPoint.getEmailFamily() != null) {
+                    userPoint.setEmailFamily(encryptDecryptConverter.convert(userPoint.getEmailFamily())); // Crittografa l'email
                 }
-                if (user.getEmailFigli() != null) {
-                    user.setEmailFigli(user.getEmailFigli().stream().map(email -> {
+                if (userPoint.getEmailFigli() != null) {
+                    userPoint.setEmailFigli(userPoint.getEmailFigli().stream().map(email -> {
                         return encryptDecryptConverter.convert(email);
                     }).collect(Collectors.toList())); // Crittografa l'email
                 }
@@ -56,16 +57,16 @@ public class EncryptionCallback {
     @EventListener
     public void handleAfterLoad(AfterLoadEvent<?> event) {
         Object source = event.getSource(); // Ottieni l'oggetto generico
-        if (source instanceof Point) {
-            Point point = mongoConverter.read(Point.class, event.getSource());
+        if (source instanceof UserPoint) {
+            UserPoint userPoint = mongoConverter.read(UserPoint.class, event.getSource());
             try {
-                if (point.getEmail() != null) {
+                if (userPoint.getEmail() != null) {
                     // Decrittografa l'email dopo il caricamento
-                    point.setEmail(encryptDecryptConverter.decrypt(point.getEmail()));
+                    userPoint.setEmail(encryptDecryptConverter.decrypt(userPoint.getEmail()));
                 }
-                if (point.getEmailFamily() != null) {
+                if (userPoint.getEmailFamily() != null) {
                     // Decrittografa l'email dopo il caricamento
-                    point.setEmailFamily(encryptDecryptConverter.decrypt(point.getEmailFamily()));
+                    userPoint.setEmailFamily(encryptDecryptConverter.decrypt(userPoint.getEmailFamily()));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

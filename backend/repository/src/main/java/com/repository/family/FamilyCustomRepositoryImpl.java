@@ -1,7 +1,7 @@
 package com.repository.family;
 
 import com.common.configurations.EncryptDecryptConverter;
-import com.common.data.Point;
+import com.common.data.UserPoint;
 import com.repository.point.PointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -16,10 +16,10 @@ public class FamilyCustomRepositoryImpl implements FamilyCustomRepository {
 	@Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 
-	public Long getTypeUser(Point pointsSave) throws Exception {
+	public Long getTypeUser(UserPoint pointsSave) throws Exception {
 		String email = encryptDecryptConverter.convert(pointsSave.getEmailFamily());
-		List<Point> existPointsOnFigli = pointsRepository.findByOnFigli(email);
-		Point existPoints = pointsRepository.findByEmailOnEmail(email);
+		List<UserPoint> existPointsOnFigli = pointsRepository.findByOnFigli(email);
+		UserPoint existPoints = pointsRepository.findByEmailOnEmail(email);
 		Long type;
 		if (existPoints != null) {
 			type = 1L;
@@ -33,7 +33,7 @@ public class FamilyCustomRepositoryImpl implements FamilyCustomRepository {
 		return type;// Restituisci l'ID aggiornato
 	}
 
-	public Boolean saveUser(Point pointsSave) throws Exception {
+	public Boolean saveUser(UserPoint pointsSave) throws Exception {
 		Boolean newUSer = false;
 		String email = encryptDecryptConverter.convert(pointsSave.getEmail());
 

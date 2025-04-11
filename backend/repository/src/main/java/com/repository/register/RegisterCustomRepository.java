@@ -1,12 +1,12 @@
 package com.repository.register;
 
-import com.common.data.Point;
+import com.common.data.UserPoint;
 
 public interface RegisterCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario
     
-    public Long getTypeUser(Point points) throws Exception;
+    public Long getTypeUser(UserPoint points) throws Exception;
 
-    public Boolean saveUser(Point points) throws Exception;  
+    public Boolean saveUser(UserPoint points) throws Exception;
 
 }
