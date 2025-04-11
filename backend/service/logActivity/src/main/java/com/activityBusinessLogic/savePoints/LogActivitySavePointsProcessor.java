@@ -2,12 +2,9 @@ package com.activityBusinessLogic.savePoints;
 
 import com.common.configurations.RabbitMQProducer;
 import com.common.data.OperationTypeLogFamily;
-import com.common.dto.LogActivityDTO;
-import com.common.dto.LogFamilyDTO;
-import com.common.dto.PointsDTO;
-import com.common.dto.ResponseDTO;
+import com.common.dto.*;
+import com.common.dto.UserPointDTO;
 import com.common.exception.ActivityHttpStatus;
-import com.common.dto.InterfaceDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.logActivityService.LogActivityService;
@@ -16,8 +13,6 @@ import com.common.mapper.LogActivityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -52,8 +47,8 @@ public class LogActivitySavePointsProcessor {
     }
 
     private Mono<ResponseDTO> processPoints(LogActivityDTO logActivityDTO) {
-        PointsDTO pointsDTO = new PointsDTO(logActivityDTO);
-        pointsDTO.setOperation(false);
+        UserPointDTO userPointDTO = new UserPointDTO(logActivityDTO);
+        userPointDTO.setOperation(false);
         LogFamilyDTO logFamilyDTO = new LogFamilyDTO();
         logFamilyDTO.setOperations(OperationTypeLogFamily.OPERATIVE);
         logFamilyDTO.setDate(new Date());
@@ -61,21 +56,21 @@ public class LogActivitySavePointsProcessor {
         logFamilyDTO.setReceivedByEmail(logActivityDTO.getEmail());
         return webClientPoint.post()
                 .uri("/api/point/dati/standard")
-                .bodyValue(pointsDTO)
+                .bodyValue(userPointDTO)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class)
                 .flatMap(response ->
-                        saveLog(pointsDTO, logActivityDTO)
+                        saveLog(userPointDTO, logActivityDTO)
                 )
                 .subscribeOn(Schedulers.boundedElastic())
                 .flatMap(response -> {
-                    logFamilyDTO.setPoint(pointsDTO);
+                    logFamilyDTO.setPoint(userPointDTO);
                     return saveLogFamily(response, logFamilyDTO)
                             .subscribeOn(Schedulers.boundedElastic());
                 });
     }
 
-    public Mono<ResponseDTO> saveLog(PointsDTO point, LogActivityDTO logActivityDTO) {
+    public Mono<ResponseDTO> saveLog(UserPointDTO point, LogActivityDTO logActivityDTO) {
         logActivityDTO.setPoint(point);
         return Mono.fromCallable(() -> {
             LogActivity sub = logActivityService.saveLogActivity(logActivityDTO);

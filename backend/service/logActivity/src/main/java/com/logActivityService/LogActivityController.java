@@ -1,11 +1,11 @@
 package com.logActivityService;
 
+import com.common.dto.UserPointDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.common.data.LogActivity;
 import com.common.dto.LogActivityDTO;
-import com.common.dto.PointsDTO;
 import com.common.dto.ResponseDTO;
 import com.common.exception.ActivityHttpStatus;
 import com.common.mapper.LogActivityMapper;
@@ -31,9 +31,9 @@ public class LogActivityController {
     private String field;
 
     @PostMapping("/log")
-    public ResponseDTO logActivityByEmail(@RequestBody PointsDTO pointsDTO) {
+    public ResponseDTO logActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
         Sort sort = Sort.by(Sort.Order.desc(field));
-        List<LogActivity> sub = logActivityService.logAttivitaByEmail(pointsDTO, sort);
+        List<LogActivity> sub = logActivityService.logAttivitaByEmail(userPointDTO, sort);
         List<LogActivityDTO> logAttivitaUnica = sub.stream()
                 .map(LogActivityMapper.INSTANCE::toDTO)
 
