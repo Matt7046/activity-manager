@@ -1,5 +1,5 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { Button as ButtonMui, CircularProgress, SelectChangeEvent, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react
 import './App.css';
 import Alert from './components/ms-alert/Alert';
 import BannerOpenSource from './components/ms-banner/Banner';
+import DialogEmail from './components/ms-dialog-email/DialogEmail';
 import { MenuLaterale } from './components/ms-drawer/Drawer';
 import { baseStore } from './general/BaseStore';
 import { LoginUser, SectionName, ServerMessage, TypeUser } from './general/Constant';
@@ -47,8 +48,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     if (location.pathname === '/') {
       resetUser();
     }
-  
- 
+
+
     return () => {
     };
   }, [location]);
@@ -93,7 +94,7 @@ const GoogleAuthComponent = () => {
 
 
   useEffect(() => {
-    
+
     if (location.pathname === '/') {
       // Stato per userData
       setUserData({
@@ -135,7 +136,7 @@ const GoogleAuthComponent = () => {
     emailFamily: "user@simulated.com",
     email: "user@simulated.com",
     type: -1,
-    emailUserCurrent : ''
+    emailUserCurrent: ''
   }); // Stato per userData
 
   const [userDataChild, setUserDataChild] = useState({
@@ -143,7 +144,7 @@ const GoogleAuthComponent = () => {
     emailFamily: "child@simulated.com",
     email: "user@simulated.com",
     type: -1,
-    emailUserCurrent : ''
+    emailUserCurrent: ''
   }); // Stato per userData
 
   const handleConfirm = ((typeSimulated: number, emailFather: string, emailUserCurrent: string) => {
@@ -154,6 +155,7 @@ const GoogleAuthComponent = () => {
     userData.emailUserCurrent = emailUserCurrent;
     setUser(userData);
     handleCloseD();
+
   });
   let check = false;
   useEffect(() => {
@@ -196,7 +198,7 @@ const GoogleAuthComponent = () => {
       // Puoi usare l'access token per fare richieste all'API di Google
       baseStore.clearToken();
       getToken({ email: LoginUser.USER, password: LoginUser.PASS }, (message: any) => showMessage(setOpen, setMessage, message)).then(tokenData => {
-        fetchUserData(accessToken,tokenData);
+        fetchUserData(accessToken, tokenData);
       })
     },
     onError: (error) => {
@@ -213,7 +215,7 @@ const GoogleAuthComponent = () => {
     };
     baseStore.setToken(fakeResponse.credential);
     setUserData(user);
-    getEmailChild(user).then((x: ResponseI|undefined) => {
+    getEmailChild(user).then((x: ResponseI | undefined) => {
       const emailChild = x?.jsonText?.emailFigli ?? [];
       setEmailOptions(emailChild);
       const typeNew = emailChild?.length > 0 ? type : 2;
@@ -231,7 +233,7 @@ const GoogleAuthComponent = () => {
     //  const utente = { email: userData.email, type: userData.type }
     return getUserType(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
-      setEmailUserCurrent(x?.jsonText.emailUserCurrent );
+      setEmailUserCurrent(x?.jsonText.emailUserCurrent);
       switch (x?.jsonText?.typeUser) {
         case 0: {
           setEmailLogin(userD.email);
@@ -281,7 +283,7 @@ const GoogleAuthComponent = () => {
       if (userDataResponse.ok) {
         const userDataGoogle = await userDataResponse.json();
         setEmailLogin(userDataGoogle.email);
-        getEmailChild(userDataGoogle).then((x: ResponseI|undefined) => {
+        getEmailChild(userDataGoogle).then((x: ResponseI | undefined) => {
           const emailChild = x?.jsonText?.emailFigli ?? [];
           setEmailOptions(emailChild);
         })
@@ -318,25 +320,25 @@ const GoogleAuthComponent = () => {
       {open && (
         <Alert onClose={handleClose} message={message} />
       )}
-           
-           <Routes>
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                </Routes>
+
+      <Routes>
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+      </Routes>
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <div>
           {!user ? (
             <>
-             {!hiddenLogin && (  <BannerOpenSource />)}
-            <div id="text-box-email-family">
-              <TextField
-                id="emailFamily"
-                label=''
-                variant="standard"
-                value={label} // Collega il valore allo stato
-                onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
-                fullWidth
-                disabled={true} />
-            </div><div>
+              {!hiddenLogin && (<BannerOpenSource />)}
+              <div id="text-box-email-family">
+                <TextField
+                  id="emailFamily"
+                  label=''
+                  variant="standard"
+                  value={label} // Collega il valore allo stato
+                  onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
+                  fullWidth
+                  disabled={true} />
+              </div><div>
                 <div
                   className="col-button-container"
                   style={{
@@ -347,99 +349,74 @@ const GoogleAuthComponent = () => {
                   }}
                 >
                   <div>
-                  {!hiddenLogin && ( 
-                     <Grid container spacing={2}>
-                      {/* Prima riga: Pulsanti per simulare il login */}
-                      <Grid size={{ xs: 12, sm: 6 }}>
-                        <ButtonMui
-                          variant="contained"
-                          color="primary"
-                          onClick={() => simulateLogin(TypeUser.STANDARD)}
-                          fullWidth
+                    {!hiddenLogin && (
+                      <Grid container spacing={2}>
+                        {/* Prima riga: Pulsanti per simulare il login */}
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                          <ButtonMui
+                            variant="contained"
+                            color="primary"
+                            onClick={() => simulateLogin(TypeUser.STANDARD)}
+                            fullWidth
                           >
-                          Simula login utente base
-                        </ButtonMui>
-                      </Grid>
-                      <Grid size={{ xs: 12, sm: 6 }}>
-                        <ButtonMui
-                          variant="contained"
-                          color="primary"
-                          onClick={() => simulateLogin(TypeUser.FAMILY)}
-                          fullWidth
-                        >
-                          Simula login controllo parentale
-                        </ButtonMui>
-                      </Grid>
+                            Simula login utente base
+                          </ButtonMui>
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 6 }}>
+                          <ButtonMui
+                            variant="contained"
+                            color="primary"
+                            onClick={() => simulateLogin(TypeUser.FAMILY)}
+                            fullWidth
+                          >
+                            Simula login controllo parentale
+                          </ButtonMui>
+                        </Grid>
 
-                      {/* Seconda riga: Pulsante di login reale */}
-                      <Grid size={{ xs: 12 }}>
-                        <GoogleLogin onSuccess={() => login()} onError={logOut} />
+                        {/* Seconda riga: Pulsante di login reale */}
+                        <Grid size={{ xs: 12 }}>
+                          <GoogleLogin onSuccess={() => login()} onError={logOut} />
 
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  )}
+                    )}
                   </div>
                 </div>
 
                 <div>
-
-
                   {/* Dialog */}
-                  <Dialog open={openD} onClose={handleCloseD}>
-                    <DialogTitle>Inserisci email del figlio </DialogTitle>
-                    <DialogContent>
-                      <InputLabel>Email</InputLabel>
-                      <Select
-                        value={email}
-                        onChange={(event) => handleEmailChange(event)}
-                        label="Email"
-                        autoWidth
-                        sx={{ width: '100%', minWidth: '300px' }} // Imposta una larghezza di almeno la larghezza di uno smartphone
-
-                      >
-                        {
-
-                          emailOptions?.map((option) => (
-                            <MenuItem key={option} value={option}>
-                              {option}
-                            </MenuItem>
-                          ))}
-                      </Select>
-                    </DialogContent>
-                    <DialogActions>
-                      <ButtonMui onClick={handleCloseD} color="secondary">
-                        Annulla
-                      </ButtonMui>
-                      <ButtonMui
-                        onClick={() => handleConfirm(simulated, emailLogin, emailUserCurrent)}
-                        color="primary"
-                        disabled={!email} // Disabilita il pulsante se l'email è vuota
-                      >
-                        Conferma
-                      </ButtonMui>
-                    </DialogActions>
-                  </Dialog>
+                  <DialogEmail
+                    openD={openD}
+                    handleCloseD={handleCloseD}
+                    emailOptions={emailOptions}
+                    handleEmailChange={handleEmailChange}
+                    handleConfirm={handleConfirm}
+                    email={email}               
+                    simulated={simulated} 
+                    emailLogin = {emailLogin}
+                    emailUserCurrent={emailUserCurrent}
+                  />
                 </div>
               </div></>
-          ) 
-          
-          
-          : (
-            <div>
+          )
 
-              <h2>{title}</h2>
-              <Routes>
-                <Route path="/" element={<App />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/register" element={<Register setTitle={setTitle} />} />
-                <Route path="/activity" element={<Activity setTitle={setTitle} />} />
-                <Route path="/about" element={<About setTitle={setTitle} />} />
-                <Route path="/points" element={<Points setTitle={setTitle} />} />
-                <Route path="/operative" element={<Operative setTitle={setTitle} />} />
-                <Route path="/family" element={<Family setTitle={setTitle} />} />
-              </Routes>
-            </div>
-          )}
+
+            : (
+              <div>
+
+                <h2>{title}</h2>
+                <Routes>
+                  <Route path="/" element={<App />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/register" element={<Register setTitle={setTitle} />} />
+                  <Route path="/activity" element={<Activity setTitle={setTitle} />} />
+                  <Route path="/about" element={<About setTitle={setTitle} />} />
+                  <Route path="/points" element={<Points setTitle={setTitle} />} />
+                  <Route path="/operative" element={<Operative setTitle={setTitle} />} />
+                  <Route path="/family" element={<Family setTitle={setTitle} />} />
+                </Routes>
+              </div>
+            )}
         </div>
       </GoogleOAuthProvider>
 

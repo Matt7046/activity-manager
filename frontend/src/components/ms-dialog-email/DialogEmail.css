@@ -1,0 +1,54 @@
+/* EmailDialog.css */
+
+/* Stile per il Dialog */
+.dialog-container {
+  border-radius: 10px;
+  min-width: 400px; /* Imposta una larghezza minima per il dialog */
+}
+
+/* Titolo del Dialog */
+.dialog-title {
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Stile per i bottoni all'interno del Dialog */
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Stile per il Select (campo email) */
+.dialog-select {
+  border-radius: 10px;
+  width: 100%;
+  min-width: 300px;
+  margin-top: 10px;
+}
+
+/* Stile per il bottone "Conferma" */
+.button-confirm {
+  background-color: #4338ca;
+  color: white;
+  border-radius: 12px;
+  &:hover {
+    background-color: #3b29b3;
+  }
+}
+
+/* Aggiungi questa classe nel tuo file CSS */
+.dialog-container .MuiDialog-paper {
+  border-radius: 50px;  /* Arrotonda i bordi */
+}
+
+/* Stile per il bottone "Annulla" */
+.button-cancel {
+  background-color: #ef4444;
+  color: white;
+  border-radius: 12px;
+  &:hover {
+    background-color: #dc2626;
+  }
+}
