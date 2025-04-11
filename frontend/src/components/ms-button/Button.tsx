@@ -66,26 +66,46 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
     >
       {props.pulsanti.map((button, index) => (
         <div key={index} className="col-button">
-          <button
+          <ButtonMui 
             id={`button-${index}`}
             className={button.nome === 'red' ? 'button-red' : 'button-blue'}
             title={button.title}
             onClick={() => handleClickOpen(button.funzione, button.configDialogPulsante)} // Apri il dialog con la funzione specifica
-            style={{
-              backgroundColor: button.disableButton ? 'initial' : 'initial',
-              color: button.disableButton ? 'initial' : 'initial',
+            sx={{
               opacity: button.disableButton ? 0.3 : 1,
               pointerEvents: button.disableButton ? 'none' : 'auto',
               cursor: button.disableButton ? 'not-allowed' : 'pointer',
               border: button.disableButton ? '1px solid lightgrey' : 'initial',
-            }}
+              color: '#000',  // Colore nero  
+              borderRadius: '12px',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                backgroundColor: button.nome === 'red' ? '#ef4444' : '#4338ca',
+                boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
+                transform: 'translateY(-2px)',
+              },
+            }}         
           >
             <i className={button.icona}></i>
-          </button>
+          </ButtonMui>
         </div>
       ))}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Conferma azione</DialogTitle>
+      <Dialog
+      open={open}
+      onClose={handleClose}
+      PaperProps={{
+        sx: {
+          opacity: 1,
+          pointerEvents: 'auto',
+          cursor: 'pointer',
+          border: 'initial',
+          color: '#fff',  // Puoi cambiare questo con il colore che preferisci
+          borderRadius: '50px',
+          backgroundColor: '#d1d1d1', // Impostato il colore di sfondo a un grigio scuro
+        },
+      }}
+    >
+<DialogTitle sx={{ color: '#000000' }}>Conferma azione</DialogTitle>
         <DialogContent>
           <DialogContentText>
             {messageTitle}

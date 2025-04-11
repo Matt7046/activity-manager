@@ -1,4 +1,4 @@
-import { Box, Button as ButtonMui, Divider, Popover, TextField, Typography } from '@mui/material';
+import { Box, Divider, Popover, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { googleLogout } from '@react-oauth/google';
 import React, { useState } from 'react';
@@ -48,8 +48,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio
 
 
-  const handleClickAnchor = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget); // Imposta il target del popover
+  const handleClickAnchor = () => {
     getNotificationsByIdentificativo(user.emailUserCurrent, 0, 5).then((response: ResponseI) => {
       setNotifications(response.jsonText);
       setOpenAnchor(true); // Mostra il popover
@@ -75,9 +74,9 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   };
 
   const saveReadNotification = () => {
-    const notificationsStatusRead = notifications.map(x=> {      
+    const notificationsStatusRead = notifications.map(x => {
       x.status = "READ";
-      return x;    
+      return x;
     });
     saveNotification(notificationsStatusRead, (messageLayout?: TypeMessage) => showMessage(setOpenLayout, setMessageLayout, messageLayout)).then((response) => {
       if (response) {
@@ -88,6 +87,23 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   }
 
 
+  const pulsanteNotifiche: Pulsante = {
+    icona: 'fas fa-clipboard',
+    funzione: (event) => handleClickAnchor(), // Passi la funzione direttamente
+    nome: ButtonName.BLUE,
+    title: 'Notifiche',
+    visibility: user ? true : false,
+    configDialogPulsante: { message: '', showDialog: false }
+  };
+
+  const pulsanteLogout: Pulsante = {
+    icona: 'fas fa-sign-out-alt',
+    funzione: () => logout(), // Passi la funzione direttamente
+    nome: ButtonName.RED,
+    title: 'Logout',
+    visibility: user ? true : false,
+    configDialogPulsante: { message: '', showDialog: false }
+  };
 
   const id = 'simple-popover';
 
@@ -96,23 +112,25 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       <Box sx={{ paddingLeft: 0.5 }}>
         <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
           <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
-      
+
           <Box sx={{ paddingRight: 2, display: 'flex', gap: 2 }}>
-            <ButtonMui
-              variant="contained"
-              color="primary"
-              onClick={handleClickAnchor}            >
-              Notifiche
-            </ButtonMui>
-            <ButtonMui
-              variant="contained"
-              color="primary"
-              onClick={() => logout()}
-            >
-              Logout
-            </ButtonMui>
+            <Button pulsanti={[pulsanteNotifiche]} />
+            <Button pulsanti={[pulsanteLogout]} />
             {/* Area notifica */}
             <Popover
+             slotProps={{
+              paper: {
+                sx: {
+                  opacity:  1,
+                  pointerEvents:  'auto',
+                  cursor: 'pointer',
+                  border: 'initial',
+                  color: '#fff',
+                  borderRadius: '50px',
+                
+                },
+              },
+            }}
               id={id}
               open={openAnchor}
               anchorEl={anchorEl}
@@ -153,10 +171,9 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                   </Box>
                 )
                 )}
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-      <Button pulsanti={[pulsanteNotification]} />
-    </Box>
-
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button pulsanti={[pulsanteNotification]} />
+                </Box>
               </Box>
             </Popover>
           </Box>
