@@ -1,6 +1,6 @@
 package com.userAuth;
 
-import com.common.dto.PointsDTO;
+import com.common.dto.UserPointDTO;
 import com.common.dto.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,14 +16,14 @@ public class UserAuthPointsProcessor {
     @Qualifier("webClientPoint")
     private WebClient webClientPoint;
 
-    public Mono<ResponseDTO> getUserType(PointsDTO pointsDTO) {
-        return  processUser(pointsDTO);
+    public Mono<ResponseDTO> getUserType(UserPointDTO userPointDTO) {
+        return  processUser(userPointDTO);
     }
 
-    private Mono<ResponseDTO> processUser(PointsDTO pointsDTO) {
+    private Mono<ResponseDTO> processUser(UserPointDTO userPointDTO) {
            return webClientPoint.post()
                 .uri("/api/point/dati")
-                .bodyValue(pointsDTO)
+                .bodyValue(userPointDTO)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class)
                 .flatMap(responseDTO -> Mono.fromCallable(() -> responseDTO)
