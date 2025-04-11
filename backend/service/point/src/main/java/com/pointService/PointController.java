@@ -1,8 +1,8 @@
 package com.pointService;
 
-import com.common.data.Point;
+import com.common.data.UserPoint;
 import com.common.dto.PointRDTO;
-import com.common.dto.PointsDTO;
+import com.common.dto.UserPointDTO;
 import com.common.dto.ResponseDTO;
 import com.common.dto.UserDTO;
 import com.common.exception.ActivityHttpStatus;
@@ -34,18 +34,18 @@ public class PointController {
     private String message;
 
     @PostMapping("find")
-    public  Mono<ResponseDTO> findByEmail(@RequestBody PointsDTO pointsDTO) throws Exception {
+    public  Mono<ResponseDTO> findByEmail(@RequestBody UserPointDTO userPointDTO) throws Exception {
         return Mono.fromCallable(() -> {
-        Point item = null;
+        UserPoint item = null;
         ResponseDTO responseDTO = null;
-        item = pointService.getPointByEmail(pointsDTO.getEmail());
+        item = pointService.getPointByEmail(userPointDTO.getEmail());
         if (item == null) {
-            throw new NotFoundException(errorDocument + pointsDTO.getEmail());
+            throw new NotFoundException(errorDocument + userPointDTO.getEmail());
         }
 
         if (item != null) {
-            String email = pointsDTO.getEmail();
-            PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(item);
+            String email = userPointDTO.getEmail();
+            UserPointDTO subDTO = PointsMapper.INSTANCE.toDTO(item);
             List<PointsUser> filteredList = subDTO.getPoints().stream()
                     .filter(point -> email.equals(point.getEmail()))
                     .collect(Collectors.toList());
@@ -59,10 +59,10 @@ public class PointController {
     }
 
     @PostMapping("/dati")
-    public Mono<ResponseDTO>  getUserType(@RequestBody PointsDTO pointsDTO) throws Exception {
+    public Mono<ResponseDTO>  getUserType(@RequestBody UserPointDTO userPointDTO) throws Exception {
         return Mono.fromCallable(() -> {
-        Long itemId = pointService.getTypeUser(pointsDTO);
-        String emailUserCurrent = itemId == 1  ? pointsDTO.getEmail(): pointsDTO.getEmailFamily();
+        Long itemId = pointService.getTypeUser(userPointDTO);
+        String emailUserCurrent = itemId == 1  ? userPointDTO.getEmail(): userPointDTO.getEmailFamily();
         ResponseDTO response = new ResponseDTO(new UserDTO(itemId, null,emailUserCurrent), ActivityHttpStatus.OK.value(),
                 new ArrayList<>());
             return response;
@@ -70,12 +70,12 @@ public class PointController {
     }
 
     @PostMapping("/dati/standard")
-    public Mono<ResponseDTO> savePoints(@RequestBody PointsDTO pointsDTO) throws Exception {
+    public Mono<ResponseDTO> savePoints(@RequestBody UserPointDTO userPointDTO) throws Exception {
         return Mono.fromCallable(() -> {
-            Boolean operations = pointsDTO.getOperation() == null ? false : pointsDTO.getOperation();
-            pointsDTO.setOperation(operations);
-            Point points = pointService.savePoint(pointsDTO);
-            PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(points);
+            Boolean operations = userPointDTO.getOperation() == null ? false : userPointDTO.getOperation();
+            userPointDTO.setOperation(operations);
+            UserPoint points = pointService.savePoint(userPointDTO);
+            UserPointDTO subDTO = PointsMapper.INSTANCE.toDTO(points);
             ResponseDTO response = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(),
                     new ArrayList<>());
             return response;
@@ -84,13 +84,13 @@ public class PointController {
 
 
     @PostMapping("/dati/user")
-    public Mono<ResponseDTO> saveUserByPoints(@RequestBody PointsDTO pointsDTO) {
+    public Mono<ResponseDTO> saveUserByPoints(@RequestBody UserPointDTO userPointDTO) {
         // Una volta completata la chiamata points, salva il log e crea la response
         return Mono.fromCallable(() -> {
 
-            pointsDTO.setEmailFamily(pointsDTO.getEmail());
-            Boolean itemId = pointService.saveUser(pointsDTO);
-            String emailUserCurrent = pointsDTO.getType().equals(1L)  ? pointsDTO.getEmail(): pointsDTO.getEmailFamily();
+            userPointDTO.setEmailFamily(userPointDTO.getEmail());
+            Boolean itemId = pointService.saveUser(userPointDTO);
+            String emailUserCurrent = userPointDTO.getType().equals(1L)  ? userPointDTO.getEmail(): userPointDTO.getEmailFamily();
             ResponseDTO response = new ResponseDTO(new UserDTO(null, itemId, emailUserCurrent),
             ActivityHttpStatus.OK.value(), new ArrayList<>());
             return response;
@@ -98,11 +98,11 @@ public class PointController {
     }
 
     @PostMapping("child")
-    public Mono<ResponseDTO>  getEmailChild(@RequestBody PointsDTO pointsDTO) throws Exception {
+    public Mono<ResponseDTO>  getEmailChild(@RequestBody UserPointDTO userPointDTO) throws Exception {
         return Mono.fromCallable(() -> {
-        String email = pointsDTO.getEmail();
-        Point sub = pointService.getPointByEmail(email);
-        PointsDTO subDTO = PointsMapper.INSTANCE.toDTO(sub);
+        String email = userPointDTO.getEmail();
+        UserPoint sub = pointService.getPointByEmail(email);
+        UserPointDTO subDTO = PointsMapper.INSTANCE.toDTO(sub);
         ResponseDTO response = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
             return response;
         });

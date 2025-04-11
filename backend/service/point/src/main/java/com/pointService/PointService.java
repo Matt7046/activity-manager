@@ -1,10 +1,10 @@
 package com.pointService;
+import com.common.data.UserPoint;
+import com.common.dto.UserPointDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.common.configurations.EncryptDecryptConverter;
-import com.common.data.Point;
-import com.common.dto.PointsDTO;
 import com.common.mapper.PointsMapper;
 import com.repository.point.PointRepository;
 
@@ -17,48 +17,48 @@ public class PointService {
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
-    public List<Point> findAll() {
+    public List<UserPoint> findAll() {
         return pointsRepository.findAll();
     }
 
-    public Point findByEmail(String identificativo, Long type) {
+    public UserPoint findByEmail(String identificativo, Long type) {
 
         return pointsRepository.findByEmail(identificativo, type);
     }
 
-    public Point getPointByEmail(String email) throws Exception {
+    public UserPoint getPointByEmail(String email) throws Exception {
         return pointsRepository.getPointByEmail(email);
     }
 
-    public List<Point> getPointsListByEmail(String email) throws Exception {
+    public List<UserPoint> getPointsListByEmail(String email) throws Exception {
         return pointsRepository.getPointsListByEmail(email);
     }
 
-    public Point savePoint(PointsDTO pointsDTO) throws Exception {
-        Point points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
-        return pointsRepository.savePoint(points, pointsDTO.getUsePoints(), pointsDTO.getOperation());
+    public UserPoint savePoint(UserPointDTO userPointDTO) throws Exception {
+        UserPoint points = PointsMapper.INSTANCE.fromDTO(userPointDTO);
+        return pointsRepository.savePoint(points, userPointDTO.getUsePoints(), userPointDTO.getOperation());
     }
 
-    public Point rollbackSavePoint(PointsDTO pointsDTO) throws Exception {
-        Point points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
-        return pointsRepository.savePoint(points, pointsDTO.getUsePoints(), !pointsDTO.getOperation());
+    public UserPoint rollbackSavePoint(UserPointDTO userPointDTO) throws Exception {
+        UserPoint points = PointsMapper.INSTANCE.fromDTO(userPointDTO);
+        return pointsRepository.savePoint(points, userPointDTO.getUsePoints(), !userPointDTO.getOperation());
     }
 
 
-    public Point save(PointsDTO pointsDTO) throws Exception {
-        Point sub = PointsMapper.INSTANCE.fromDTO(pointsDTO);
+    public UserPoint save(UserPointDTO userPointDTO) throws Exception {
+        UserPoint sub = PointsMapper.INSTANCE.fromDTO(userPointDTO);
 
         return pointsRepository.save(sub);
     }
 
-       public Boolean saveUser(PointsDTO pointsDTO) throws Exception {
-        Point points = PointsMapper.INSTANCE.fromDTO(pointsDTO);
+       public Boolean saveUser(UserPointDTO userPointDTO) throws Exception {
+        UserPoint points = PointsMapper.INSTANCE.fromDTO(userPointDTO);
         return pointsRepository.saveUser(points);
     }  
 
     
-	public Long getTypeUser(PointsDTO pointsSave) throws Exception {
-        Point points = PointsMapper.INSTANCE.fromDTO(pointsSave);
+	public Long getTypeUser(UserPointDTO pointsSave) throws Exception {
+        UserPoint points = PointsMapper.INSTANCE.fromDTO(pointsSave);
         return  pointsRepository.getTypeUser(points);
     }
 
