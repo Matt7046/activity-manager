@@ -1,5 +1,6 @@
 package com.activityBusinessLogic.savePoints;
 
+import com.common.configurations.NotificationComponent;
 import com.common.configurations.RabbitMQProducer;
 import com.common.data.OperationTypeLogFamily;
 import com.common.dto.*;
@@ -32,14 +33,16 @@ public class LogActivitySavePointsProcessor {
     private WebClient webClientFamily;
     @Autowired
     private LogActivityService logActivityService;
+    @Autowired
+    private RabbitMQProducer notificationPublisher;
+    @Autowired
+    private NotificationComponent notificationComponent;
     @Value("${app.rabbitmq.exchange.point.exchangeName}")
-    private String exchange;
+    private String exchangePoint;
     @Value("${app.rabbitmq.exchange.point.routingKey.logActivity}")
     private String routingKeyLogActivity;
     @Value("${app.rabbitmq.exchange.point.routingKey.logFamily}")
     private String routingKeyLogFamily;
-    @Autowired
-    private RabbitMQProducer notificationPublisher;
 
 
     public Mono<ResponseDTO> savePoints(LogActivityDTO logActivityDTO) {
@@ -78,7 +81,7 @@ public class LogActivitySavePointsProcessor {
         }).doOnError(response1 -> {
             // Invia l'evento dopo il salvataggio del log in modo asincrono
             Mono.fromRunnable(() -> {
-                inviaNotifica(logActivityDTO.getPoint(), routingKeyLogActivity);
+                notificationComponent.inviaNotifica(logActivityDTO.getPoint(), exchangePoint, routingKeyLogActivity);
             }).subscribe();  // Avvia il runnable senza bloccare il flusso
         });
     }
@@ -96,7 +99,7 @@ public class LogActivitySavePointsProcessor {
                 .doOnSuccess(response1 -> {
                     // Azioni con la response
                     if (!response1.getErrors().isEmpty()) {
-                        inviaNotifica(logFamilyDTO.getPoint(), routingKeyLogActivity);
+                        notificationComponent.inviaNotifica(logFamilyDTO.getPoint(), exchangePoint, routingKeyLogActivity);
                         ObjectMapper mapper = new ObjectMapper();
                         LogActivityDTO dto = mapper.convertValue(response.getJsonText(), LogActivityDTO.class);
                         logActivityService.deleteLogActivity(dto);
@@ -104,14 +107,6 @@ public class LogActivitySavePointsProcessor {
                 })
                 .subscribeOn(Schedulers.boundedElastic());
     }
-
-    private void inviaNotifica(InterfaceDTO dto, String routingKey) {
-        try {
-            String jsonMessage = new ObjectMapper().writeValueAsString(dto);
-            notificationPublisher.sendMessage(exchange, routingKey, jsonMessage);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }
+
+
