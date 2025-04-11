@@ -64,11 +64,11 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const pulsanteLog: Pulsante = {
     icona: 'fas fa-clipboard',
     funzione: () => getLogAttivita(user, true), // Passi la funzione direttamente
-    nome:  ButtonName.BLUE,
+    nome: ButtonName.BLUE,
     title: 'Log Attività',
     visibility: user ? true : false,
-    configDialogPulsante: {message:'', showDialog:false}
-  };    
+    configDialogPulsante: { message: '', showDialog: false }
+  };
   const logsPerPage = 8; // Numero di log per pagina
   const [page, setPage] = useState(1);
   // Gestisce il cambiamento della pagina
@@ -77,7 +77,9 @@ const PointsContent: React.FC<PointsContentProps> = ({
   };
   const children = (
     <React.Fragment>
-      <Button pulsanti={[pulsanteLog]} />
+      <Grid container justifyContent="flex-end" spacing={2} sx={{ marginTop: 2 }}>
+       <Button pulsanti={[pulsanteLog]} />
+   
       <Dialog
         onClose={handleCloseDialog}
         aria-labelledby="customized-dialog-title"
@@ -104,7 +106,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
             <>
               <Grid container spacing={2}>
                 {testoLog.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
-                   <Grid size={{ xs: 12, sm: 6 }} key={index} >
+                  <Grid size={{ xs: 12, sm: 6 }} key={index} >
                     <Card
                       sx={{
                         borderRadius: 4,
@@ -145,8 +147,9 @@ const PointsContent: React.FC<PointsContentProps> = ({
         </DialogContent>
         <DialogActions />
       </Dialog>
+      </Grid>
     </React.Fragment>
-  );  
+  );
 
   const children2 =
     <React.Fragment>
@@ -176,8 +179,8 @@ const PointsContent: React.FC<PointsContentProps> = ({
   // Crea l'array dei pulsanti in base all'orientamento
 
   const getPoints = (): void => {
-    const emailFind = user.emailFamily ? user.emailFamily: user.email;
-    findByEmail({...user, email: emailFind}, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI|undefined) => {
+    const emailFind = user.emailFamily ? user.emailFamily : user.email;
+    findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           setTesto(response.jsonText.numeroPunti)
@@ -187,9 +190,9 @@ const PointsContent: React.FC<PointsContentProps> = ({
     })
   }
   const getLogAttivita = (userI: UserI, truncate: boolean): void => {
-    const emailFind = user.emailFamily ? user.emailFamily: user.email;
+    const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-    logActivityByEmail({...userI, email: emailFind}, () => showMessage(setOpen, setMessage)).then((response: ResponseI|undefined) => {
+    logActivityByEmail({ ...userI, email: emailFind }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           let attivitaLog = response.jsonText;
