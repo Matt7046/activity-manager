@@ -133,7 +133,7 @@ export const eseguiAlert = (funzioneMessage: (message?: TypeMessage) => void, me
     } else {
       message.message = ['Operazione avvenuta con successo']
     }
-    if (message.typeMessage === 'error' || (message.typeMessage === 'success' && showSuccess === true)) {
+    if (message.typeMessage === TypeAlertColor.ERROR || (message.typeMessage === TypeAlertColor.SUCCESS && showSuccess === true)) {
       funzioneMessage(message);
     }
   }
