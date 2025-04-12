@@ -113,7 +113,7 @@ const Schedule = observer((props: {
                 <Button pulsanti={pulsanti} />
               </Grid>
               <div id={`rowHidden-${item._id}`} style={{ gridColumn: 'span 12' }}>
-                <Label _id={item._id} text={subTesti[item._id]} visibility={isVertical && visibilitySubTesto ? 'hidden' : undefined} />
+                <Label _id={item._id} text={subTesti[item._id] ?subTesti[item._id] :"-" } visibility={isVertical && visibilitySubTesto ? 'hidden' : undefined} />
               </div>
 
               {/* Separatore */}
