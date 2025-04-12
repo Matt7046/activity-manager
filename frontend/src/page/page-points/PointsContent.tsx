@@ -144,21 +144,28 @@ const PointsContent: React.FC<PointsContentProps> = ({
     ;
   const cardsData: CardProps[] = [
     {
-      _id: 'card1',     
+      _id: 'card1',
       text: [testo],
       img: points,
       title: "Points",
-     // className: 'card-point', 
+      // className: 'card-point', 
       pulsanti: [],
       children: children2,
     },
     {
 
-      _id: 'card2',   
-      text: testoLogT.map((x) => x.log),
+      _id: 'card2',
+      text: testoLogT.map((x) => {
+
+        if (x.usePoints) {
+          return x.log + ': ' + x.usePoints + " point"
+        }
+        return x.log;
+
+      }),
       img: lizard,
-      title: "Log Activity",     
-    //  className: 'card-point',
+      title: "Log Activity",
+      //  className: 'card-point',
       pulsanti: [],
       children: children,
     }
