@@ -79,7 +79,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
               {/* Prima riga: Pulsanti per simulare il login */}
               <Grid size={{ xs: 12, sm: 11 }}>
                 <div className="col-display">
-                  <Label text={"LOG ACTIVITY"} _id={"logActivity"}className='col-display' />
+                  <Label text={"LOG ACTIVITY"} _id={"logActivity"} className='col-display' />
                 </div>
               </Grid>
               <Grid size={{ xs: 12, sm: 1 }}>
@@ -89,7 +89,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
                   className="icon-button" >
                   <CloseIcon />
                 </IconButton>
-              </Grid>          
+              </Grid>
             </Grid>
           </DialogTitle>
           <DialogContent dividers>
@@ -144,19 +144,23 @@ const PointsContent: React.FC<PointsContentProps> = ({
     ;
   const cardsData: CardProps[] = [
     {
-      _id: 'card1',
-      text: [testo], title: "Points", img: lizard,
-      pulsanti: [], // Puoi aggiungere pulsanti qui se necessario
-      children: children2
+      _id: 'card1',     
+      text: [testo],
+      img: points,
+      title: "Points",
+     // className: 'card-point', 
+      pulsanti: [],
+      children: children2,
     },
     {
 
-      _id: 'card2',
-      children: children,
+      _id: 'card2',   
       text: testoLogT.map((x) => x.log),
-      title: "Log Activity",
-      img: points,
-      pulsanti: [] // Puoi aggiungere pulsanti qui se necessario
+      img: lizard,
+      title: "Log Activity",     
+    //  className: 'card-point',
+      pulsanti: [],
+      children: children,
     }
   ];
 
@@ -180,8 +184,8 @@ const PointsContent: React.FC<PointsContentProps> = ({
       if (response) {
         if (response.status === HttpStatus.OK) {
           let attivitaLog = response.jsonText;
-          if (attivitaLog.length > 3) {
-            attivitaLog = attivitaLog.slice(0, 3).concat({ log: '...' });
+          if (attivitaLog.length > 8) {
+            attivitaLog = attivitaLog.slice(0, 8).concat({ log: '...' });
           }
           if (truncate) {
             setOpenDialog(true);

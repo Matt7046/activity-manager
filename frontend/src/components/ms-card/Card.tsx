@@ -3,9 +3,8 @@ import {
   CardContent,
   CardMedia,
   List,
-  ListItem,
   Card as MuiCard,
-  Typography,
+  Typography
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { observer } from 'mobx-react';
@@ -28,7 +27,7 @@ const CardComponent = observer((props: CardProps) => {
   return (
     <MuiCard className="card">
       <CardMedia
-        className="card-media"
+        className={props.className ? props.className : 'card-media'}
         image={props.img}
         title={props.title}
       />
@@ -39,9 +38,9 @@ const CardComponent = observer((props: CardProps) => {
         {props.text.length > 1 ? (
           <List>
             {props.text.map((item, index) => (
-              <ListItem key={index} className="card-list-item">
+               <Typography key={index} className="card-list-item">
                 - {item}
-              </ListItem>
+                </Typography>
             ))}
           </List>
         ) : (
@@ -64,7 +63,7 @@ const CardGrid = ({ cardsData }: { cardsData: CardProps[] }) => {
     <Grid container spacing={2} alignItems="stretch">
       {cardsData.map((cardData) => (
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={cardData._id}>
-          <CardComponent {...cardData} />
+          <CardComponent {...cardData}  />
         </Grid>
       ))}
     </Grid>
