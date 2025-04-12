@@ -48,6 +48,7 @@ const Register: React.FC<{ setTitle: (title: string)=>void}> = ({ setTitle }) =>
         setMessage={setMessage}
         setOpen={setOpen}
         setTitle={setTitle}
+        isVertical={isVertical}
       />
     </>
   );
