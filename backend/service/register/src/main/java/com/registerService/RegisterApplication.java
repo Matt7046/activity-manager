@@ -4,9 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
-        "com.saveUserRegister",
-        "com.repository",
-        "com.common.configurations",
         "com.registerService",
         "com.common"
 })

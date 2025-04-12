@@ -8,8 +8,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
         "com.repository.notification",
 })
 @SpringBootApplication(scanBasePackages = {
-        "com.repository",
-        "com.common.configurations",
         "com.notificationService",
         "com.common"
 })
