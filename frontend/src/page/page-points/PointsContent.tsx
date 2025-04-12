@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close';
 import { Box, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Pagination, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from "react";
@@ -7,6 +8,7 @@ import lizard from "../../assets/images/lizard.jpg"; // Percorso del file locale
 import points from "../../assets/images/points.jpg"; // Percorso del file locale
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps } from "../../components/ms-card/Card";
+import Label from '../../components/ms-label/Label';
 import { ButtonName, HttpStatus } from "../../general/Constant";
 import { ResponseI, UserI } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
@@ -14,7 +16,6 @@ import { logActivityByEmail } from "../page-activity/service/LogActivityService"
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./PointsContent.css";
 import { findByEmail } from "./service/PointsService";
-
 
 interface PointsContentProps {
   user: UserI;
@@ -36,25 +37,18 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const [testo, setTesto] = useState('');
   const [testoLog, setTestoLog] = useState([] as ActivityLogI[]);
   const [testoLogT, setTestoLogT] = useState([] as ActivityLogI[]);
-
+  const [inizialLoad, setInitialLoad] = useState<boolean>(true);
 
   useEffect(() => {
     getPoints();
     getLogAttivita(user, false);
-
     // Pulisci il listener al dismount
-    return () => {};
-  }, []);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+    return () => { };
+  }, [inizialLoad]);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
   }
-
-
 
   const pulsanteLog: Pulsante = {
     icona: 'fas fa-clipboard',
@@ -73,75 +67,72 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const children = (
     <React.Fragment>
       <Grid container justifyContent="flex-end" spacing={2} sx={{ marginTop: 2 }}>
-       <Button pulsanti={[pulsanteLog]} />
-   
-      <Dialog
-        onClose={handleCloseDialog}
-        aria-labelledby="customized-dialog-title"
-        open={openDialog}
-      >
-        <DialogTitle id="customized-dialog-title" sx={{ m: 0, p: 2 }}>
-          Log Activity
-          <IconButton
-            aria-label="close"
-            onClick={handleCloseDialog}
-            sx={(theme) => ({
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              color: theme.palette.grey[500],
-            })}
-          >
-            ✖️
-          </IconButton>
-        </DialogTitle>
-        <DialogContent dividers>
-          {/* Aggiungi la paginazione per i log */}
-          {testoLog.length > 0 ? (
-            <>
-              <Grid container spacing={2}>
-                {testoLog.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
-                  <Grid size={{ xs: 12, sm: 6 }} key={index} >
-                    <Card
-                      sx={{
-                        borderRadius: 4,
-                        boxShadow: 3,
-                        overflow: 'hidden',
-                        backgroundColor: '#f9f9f9',
-                      }}
-                    >
-                      <CardContent>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
-                          Data: {new Date(item.date).toLocaleDateString()}
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
-                          Use Points: {item.usePoints}
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                          Description: {item.log}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ))}
+        <Button pulsanti={[pulsanteLog]} />
+
+        <Dialog
+          onClose={handleCloseDialog}
+          aria-labelledby="customized-dialog-title"
+          open={openDialog}
+        >
+          <DialogTitle id="customized-dialog-title" sx={{ m: 0, p: 2 }}>
+            <Grid container spacing={2}>
+              {/* Prima riga: Pulsanti per simulare il login */}
+              <Grid size={{ xs: 12, sm: 11 }}>
+                <div className="col-display">
+                  <Label text={"LOG ACTIVITY"} _id={"logActivity"}className='col-display' />
+                </div>
               </Grid>
-              {/* Paginazione per i log */}
-              <Pagination
-                count={Math.ceil(testoLog.length / logsPerPage)}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
-                sx={{ marginTop: 2, display: 'flex', justifyContent: 'center' }}
-              />
-            </>
-          ) : (
-            <Typography variant="body2" sx={{ color: 'text.secondary', mt: 2 }}>
-              Nessun dato disponibile.
-            </Typography>
-          )}
-        </DialogContent>
-        <DialogActions />
-      </Dialog>
+              <Grid size={{ xs: 12, sm: 1 }}>
+                <IconButton
+                  aria-label="close"
+                  onClick={handleCloseDialog}
+                  className="icon-button" >
+                  <CloseIcon />
+                </IconButton>
+              </Grid>          
+            </Grid>
+          </DialogTitle>
+          <DialogContent dividers>
+            {/* Aggiungi la paginazione per i log */}
+            {testoLog.length > 0 ? (
+              <>
+                <Grid container spacing={2}>
+                  {testoLog.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
+                    <Grid size={{ xs: 12, sm: 6 }} key={index} >
+                      <Card>
+
+                        <CardContent>
+                          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
+                            Data: {new Date(item.date).toLocaleDateString()}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+                            Use Points: {item.usePoints}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            Description: {item.log}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+                {/* Paginazione per i log */}
+                <Pagination
+                  count={Math.ceil(testoLog.length / logsPerPage)}
+                  page={page}
+                  onChange={handlePageChange}
+                  color="primary"
+                  sx={{ marginTop: 2, display: 'flex', justifyContent: 'center' }}
+                />
+              </>
+            ) : (
+              <Typography variant="body2" sx={{ color: 'text.secondary', mt: 2 }}>
+                Nessun dato disponibile.
+              </Typography>
+            )}
+          </DialogContent>
+          <DialogActions />
+        </Dialog>
       </Grid>
     </React.Fragment>
   );
@@ -168,8 +159,6 @@ const PointsContent: React.FC<PointsContentProps> = ({
       pulsanti: [] // Puoi aggiungere pulsanti qui se necessario
     }
   ];
-
-
 
   // Crea l'array dei pulsanti in base all'orientamento
 
@@ -203,8 +192,6 @@ const PointsContent: React.FC<PointsContentProps> = ({
       }
     })
   }
-
-
 
   return (
     <>
