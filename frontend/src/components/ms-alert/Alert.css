@@ -1,0 +1,67 @@
+.card-alert-success {
+    display: flex;
+    background-color: #f9f9f9;
+    align-items: 'center';
+    border-radius: 100px!important;
+    width: 400px
+  }
+.card-alert-error {
+    display: flex;
+    background-color: #f9f9f9;
+    align-items: 'center';
+    border-radius: 100px!important;
+  }
+.card-content {
+    flex-grow: 1
+}
+.text-center-success {
+    text-align : center;
+    color: green;
+}
+
+.text-center-error {
+    text-align : center;
+    color: red;
+}
+
+.text-center-warning {
+    text-align : center;
+    color: yellow;
+}
+
+.text-center-info {
+    text-align : center;
+    color:blue;
+}
+  
+  .message-wrapper {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+  }
+  
+  .icon-container {
+    margin-right: 16px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .message-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .message-title {
+    text-transform: capitalize;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .message-text {
+    margin-bottom: 4px;
+  }
+  
+  .close-button {
+    padding: 8px;
+  }
+  
