@@ -20,6 +20,7 @@ interface PointsContentProps {
   user: UserI;
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isVertical: boolean;
 }
 
 
@@ -27,6 +28,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
   user,
   setMessage,
   setOpen,
+  isVertical
 }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
@@ -36,19 +38,12 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const [testoLogT, setTestoLogT] = useState([] as ActivityLogI[]);
 
 
-  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-
   useEffect(() => {
     getPoints();
     getLogAttivita(user, false);
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
 
     // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {};
   }, []);
 
   const handleClose = () => {

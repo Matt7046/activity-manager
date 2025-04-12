@@ -17,21 +17,20 @@ interface OperativeContentProps {
   user: UserI;
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: any;
+  isVertical: boolean;
 }
 
 const OperativeContent: React.FC<OperativeContentProps> = ({
   user,
   setMessage,
-  setOpen
+  setOpen,
+  isVertical
 }) => {
 
   const location = useLocation();
-  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingO, setIsLoadingO] = useState(true);
   const [disableButtonSave, setDisableButtonSave] = useState(true);
-  const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
-
 
   // Stato per i valori dei campi
   type FormValues = {
@@ -58,15 +57,10 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     }
     fetchOptions();
     fetchPoints();
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-
-    };
-
-    window.addEventListener("resize", handleResize);
+   
 
     // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {};
   }, []);
 
   useEffect(() => {
@@ -83,10 +77,8 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
     // Procedi solo se non ci sono errori
     if (Object.keys(errors).filter((key) => errors[key] === true).length === 0) {
-      console.log('Form submitted:', formValues);
       saveActivity(user); // Chiama la funzione per salvare i dati
     } else {
-      console.log('Validation errors:', errors);
       const erroriCampi = Object.keys(formErrors).filter((key) => errors[key] === true);
       let errorFields: string[] = [];
       if (erroriCampi.length > 0) {
@@ -123,7 +115,6 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
           if (response.status === HttpStatus.OK) {
             setIsLoading(false);
             operativeStore.setPoints(response.jsonText.points);
-            console.log('Dati ricevuti:', response);
           }
         }
       })
