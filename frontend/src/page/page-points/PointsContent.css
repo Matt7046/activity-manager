@@ -1,9 +1,0 @@
-.col-display {
-  /* Assicurati che il contenitore sia corretto */
-  display: flex;
-  align-items: center;
-  margin: 10px 0;
-  font-size: 32px; /* Aumenta la dimensione del testo */
-  font-weight: bold; /* Facoltativo: rende il testo più spesso */
-  color: #333; /* Puoi cambiare il colore del testo */
-}
