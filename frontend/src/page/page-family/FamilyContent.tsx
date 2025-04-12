@@ -18,11 +18,13 @@ import familyStore from './store/FamilyStore';
 interface FamilyContentProps {
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isVertical: boolean;
 }
 
 const FamilyContent: React.FC<FamilyContentProps> = ({
   setMessage,
-  setOpen
+  setOpen,
+  isVertical
 }) => {
   const { user, setUser } = useUser();
   // Stato per i valori dei campi
@@ -44,8 +46,6 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     newPoints: "Aggiungi points"
   }
 
-  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  //const [newPoints, setNewPoints] = useState<number>(100);
   const [isPlusIcon, setIsPlusIcon] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -62,11 +62,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     setIsPlusIcon((prev) => !prev);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
+  useEffect(() => {  
     const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
     findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI|undefined) => {
@@ -83,7 +79,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
 
 
     // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {};
   }, []);
 
   useEffect(() => {
