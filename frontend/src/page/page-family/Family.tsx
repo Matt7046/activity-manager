@@ -84,6 +84,7 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
         <FamilyContent
           setMessage={setMessage}
           setOpen={setOpen}
+          isVertical={isVertical}
         />
       </PageLayout>
       <div>
