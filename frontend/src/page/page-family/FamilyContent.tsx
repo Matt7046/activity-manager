@@ -48,6 +48,8 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
 
   const [isPlusIcon, setIsPlusIcon] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [inizialLoad, setInitialLoad] = useState<boolean>(true);
+
 
 
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -80,7 +82,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
 
     // Pulisci il listener al dismount
     return () => {};
-  }, []);
+  }, [inizialLoad]);
 
   useEffect(() => {
     const errors: FormErrorValues = verifyForm(formValues);

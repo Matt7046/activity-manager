@@ -31,8 +31,8 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingO, setIsLoadingO] = useState(true);
   const [disableButtonSave, setDisableButtonSave] = useState(true);
+  const [inizialLoad, setInitialLoad] = useState<boolean>(true);
 
-  // Stato per i valori dei campi
   type FormValues = {
     [key: string]: string | undefined;
   };
@@ -46,6 +46,12 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     points: true,
   });
 
+  useEffect(() => {   
+    fetchOptions();
+    fetchPoints();  
+    return () => {};
+  }, [inizialLoad]);
+
   useEffect(() => {
     const errors: FormErrorValues = verifyForm(formValues);
     setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
@@ -55,19 +61,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     else {
       operativeStore.setEmailField(user.emailFamily);
     }
-    fetchOptions();
-    fetchPoints();
-   
-
-    // Pulisci il listener al dismount
-    return () => {};
-  }, []);
-
-  useEffect(() => {
-    const errors: FormErrorValues = verifyForm(formValues);
-    setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
-    // Puoi aggiungere altre azioni da eseguire quando formValues cambia
-  }, [formValues]); // Dipendenza su formValues
+  }, [formValues]); 
 
 
 
@@ -75,9 +69,8 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     const errors: FormErrorValues = verifyForm(formValues);
     setFormErrors(errors);
 
-    // Procedi solo se non ci sono errori
     if (Object.keys(errors).filter((key) => errors[key] === true).length === 0) {
-      saveActivity(user); // Chiama la funzione per salvare i dati
+      saveActivity(user);
     } else {
       const erroriCampi = Object.keys(formErrors).filter((key) => errors[key] === true);
       let errorFields: string[] = [];
@@ -90,7 +83,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   };
 
   const handleChangePoints = (event: React.ChangeEvent<HTMLInputElement>) => {
-    operativeStore.setPoints(parseInt(event.target.value)); // Aggiorna lo stato con il valore inserito
+    operativeStore.setPoints(parseInt(event.target.value)); 
   };
 
   const fetchOptions = () => {
@@ -137,14 +130,9 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const clickCombobox = (selectedValue: string) => {
 
     // Imposta il valore selezionato nel combobox
-    //setComboBoxValue(selectedValue);
     setFormValues({ ...formValues, activity: selectedValue })
-
-
-
     // Trova l'attività selezionata tramite l'ID
     const selectedActivity = operativeStore.activity.find(item => item._id === selectedValue);
-
     // Se l'attività non è trovata, mostra un errore
     if (!selectedActivity) {
       console.error('Activity not found');
