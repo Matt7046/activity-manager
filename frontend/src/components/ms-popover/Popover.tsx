@@ -3,6 +3,8 @@ import Button, { Pulsante } from '../ms-button/Button';
 
 import { Divider } from '@mui/material';
 import React from 'react';
+import "./Popover.css";
+
 
 export interface PopoverNotification {
   message: string | undefined;
@@ -28,18 +30,13 @@ const PopoverComponent: React.FC<PopoverComponentProps> = ({
 }) => {
   return (
     <Popover
+      className='popover-prop'
       slotProps={{
         paper: {
-          sx: {
-            opacity: 1,
-            pointerEvents: 'auto',
-            cursor: 'pointer',
-            border: 'initial',
-            color: '#fff',
-            borderRadius: '50px',
-          },
+          className: 'popover-paper',
         },
       }}
+
       id="popover-notifications"
       open={openAnchor}
       anchorEl={anchorEl}
@@ -56,16 +53,16 @@ const PopoverComponent: React.FC<PopoverComponentProps> = ({
               {notification.message}
             </Typography>
 
-            <Divider sx={{ my: 1 }} />
-            
-              {notification.subText.slice(0, 5).map((subTextOne, index) => (
+            <Divider />
 
-                <><Typography variant="body2" color="text.secondary">
-                  {subTextOne}
-                </Typography><Divider sx={{ my: 1 }} /></>
+            {notification.subText.slice(0, 5).map((subTextOne, index) => (
 
-              ))}
-        
+              <><Typography variant="body2" color="text.secondary">
+                {subTextOne}
+              </Typography><Divider /></>
+
+            ))}
+
           </Box>
         ))}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>

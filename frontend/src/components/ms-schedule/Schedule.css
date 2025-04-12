@@ -6,8 +6,15 @@
 }
 
 .col-display {
-  margin-bottom: 1px;
+  /* Assicurati che il contenitore sia corretto */
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 18px; /* Aumenta la dimensione del testo */
+  font-weight: bold; /* Facoltativo: rende il testo più spesso */
+  color: #333; /* Puoi cambiare il colore del testo */
 }
+
 
 .label-container {
   max-width: 100%;

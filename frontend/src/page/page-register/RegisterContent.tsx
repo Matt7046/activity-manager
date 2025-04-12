@@ -82,7 +82,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
   return (
     <>
       <div className="row">
-        <Box sx={{ padding: 2 }}>
+        <Box>
           <div>
             <div id="text-box-email" style={{ marginTop: '16px' }}>
               <TextField
