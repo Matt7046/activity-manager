@@ -120,18 +120,11 @@ const GoogleAuthComponent = () => {
     if (location.pathname === '/') {
       // Stato per userData
       setCurrentUser({
-        name: "Simulated User",
-        emailFamily: "user@simulated.com",
-        email: "user@simulated.com",
-        type: TypeUser.STANDARD,
-        emailUserCurrent: "user@simulated.com",
-      });
-      setCurrentUser({
-        name: "Simulated child User",
-        emailFamily: "child@simulated.com",
-        email: "user@simulated.com",
-        type: TypeUser.FAMILY,
-        emailUserCurrent: "child@simulated.com",
+        name: "",
+        emailFamily: "",
+        email: "",
+        type: -1,
+        emailUserCurrent: ""
       });
       setUser(null);
     }
