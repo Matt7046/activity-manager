@@ -36,10 +36,10 @@ export enum ServerMessage {
 }
 
 export enum TypeAlertColor {
-  SUCCESS = 'success',
-  INFO = 'info',
-  WARNING = 'warning',
-  ERROR = 'error'
+  SUCCESS = 'SUCCESS',
+  INFO = 'INFO',
+  WARNING = 'WARNING',
+  ERROR = 'ERROR'
 }
 
 export enum ButtonName {

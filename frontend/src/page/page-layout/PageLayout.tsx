@@ -11,6 +11,8 @@ import Popover, { PopoverNotification } from '../../components/ms-popover/Popove
 import { ButtonName, HttpStatus, SectionName, TypeAlertColor } from '../../general/Constant';
 import { NotificationI, ResponseI, UserI } from '../../general/Utils';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
+import "./PageLayout.css";
+
 
 interface PageLayoutProps {
   children: React.ReactNode; // Contenuto specifico della maschera
@@ -49,13 +51,13 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio
 
 
-  const handleClickAnchor = () => {   
+  const handleClickAnchor = () => {
     getNotificationsByIdentificativo(user.emailUserCurrent, 0, 5).then((response: ResponseI) => {
       setNotifications(response.jsonText);
       const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
         const popoverNotification = {
           message: x.message,
-          subText: ['Inviato da: ' + x.userSender, 'data: ' +new Date(x.dateSender).toLocaleString('it-IT', {
+          subText: ['Inviato da: ' + x.userSender, 'data: ' + new Date(x.dateSender).toLocaleString('it-IT', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',
@@ -146,11 +148,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           </Box>
         </Grid>
       </Box>
-      {/* Mostra l'alert se open è true */}
-      {open && (
-        <Alert onClose={handleClose} message={message} />
-      )}
-
+      <Grid container justifyContent="flex-end" className="layout-alert">
+        {open && (
+          <Alert onClose={handleClose} message={message} />
+        )}
+      </Grid>
       <div className="row">
         <Box sx={{ padding: 2 }}>
           <div id="text-box-email">
