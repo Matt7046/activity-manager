@@ -25,7 +25,7 @@ const Schedule = observer((props: {
   const handleSubTestoUpdate = (itemId: string, subTesto: string) => {
     setSubTesti((prev) => ({
       ...prev,
-      [itemId]: subTesto, // Imposta subTesto per il dato specifico
+      [itemId]: "- " + subTesto, // Imposta subTesto per il dato specifico
     }));
   };
   useEffect(() => {
@@ -109,7 +109,7 @@ const Schedule = observer((props: {
                 <Label text={item.nome} _id={item._id} />
               </div>
 
-              <Grid container justifyContent={props.schedule.justifyContent} spacing={2} style={{ height: '30px' }}>
+              <Grid container justifyContent={props.schedule.justifyContent} spacing={2} style={{ height: '10px' }}>
                 <Button pulsanti={pulsanti} />
               </Grid>
               <div id={`rowHidden-${item._id}`} style={{ gridColumn: 'span 12' }}>
