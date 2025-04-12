@@ -158,7 +158,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
       text: testoLogT.map((x) => {
 
         if (x.usePoints) {
-          return x.log + ': ' + x.usePoints + " point"
+          return x.log + ': ' + x.usePoints + " points"
         }
         return x.log;
 
