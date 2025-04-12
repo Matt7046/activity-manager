@@ -16,18 +16,23 @@ interface AboutContentProps {
   user: UserI;
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isVertical: boolean;
 }
 
 const AboutContent: React.FC<AboutContentProps> = ({
   user,
   setMessage,
-  setOpen
+  setOpen,
+  isVertical
 }) => {
 
   const location = useLocation();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
+  const [disableButtonSave, setDisableButtonSave] = useState<boolean>();
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
-  const [disableButtonSave, setDisableButtonSave] = useState(true);
+  const [disableButtonDelete, setDisableButtonDelete] = useState<boolean>(_id === null || _id === undefined);
+
+
   let testoOld = activityStore.activity.find((x) => _id === x._id);
   const activityLabel: ActivityI = {
     _id: undefined,
@@ -41,7 +46,6 @@ const AboutContent: React.FC<AboutContentProps> = ({
   }
 
   testoOld = activityLabel;
-  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [subTesto, setSubTesto] = useState(activityStore.activity.find((x) => _id === x._id)?.subTesto);
 
   // Stato per i valori dei campi
@@ -60,27 +64,12 @@ const AboutContent: React.FC<AboutContentProps> = ({
     points: true,
   });
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-    };
-    const errors: FormErrorValues = verifyForm(formValues);
-    setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
-
-    window.addEventListener("resize", handleResize);
-    // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   // Effetto per catturare i cambiamenti di formValues
   useEffect(() => {
     const errors: FormErrorValues = verifyForm(formValues);
     setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
     // Puoi aggiungere altre azioni da eseguire quando formValues cambia
   }, [formValues]); // Dipendenza su formValues
-
-
-
 
 
   const handleButtonClick = () => {
@@ -109,7 +98,8 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-solid fa-trash',
     funzione: () => cancellaRecord(_id), // Passi la funzione direttamente
-    nome:  ButtonName.RED,
+    disableButton: disableButtonDelete,
+    nome: ButtonName.RED,
     title: 'Elimina',
     visibility: _id ? true : false,
     configDialogPulsante: { message: 'Vuoi eliminare il record?', showDialog: true }
@@ -119,8 +109,8 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-solid fa-floppy-disk',
     funzione: () => handleButtonClick(), // Passi la funzione direttamente
-    //disableButton: disableButtonSave,
-    nome:  ButtonName.BLUE,
+    disableButton: disableButtonSave,
+    nome: ButtonName.BLUE,
     title: 'Salva',
     configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
 
@@ -130,7 +120,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
     icona: 'fas fa-arrow-left',
     funzione: () => returnActivity(), // Passi la funzione direttamente
     //disableButton: disableButtonSave,
-    nome:  ButtonName.BACK,
+    nome: ButtonName.BACK,
     title: 'Ritorna',
     configDialogPulsante: { message: '', showDialog: false }
 
@@ -189,6 +179,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
     }
     saveAboutByUser(testo, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.jsonText) {
+        setDisableButtonDelete(false);
         navigateRouting(navigate, SectionName.ACTIVITY, {})
       }
     })
@@ -254,11 +245,11 @@ const AboutContent: React.FC<AboutContentProps> = ({
           </div>
 
           {/* Pulsanti */}
-            <Grid container justifyContent="space-between" spacing={2} sx={{ marginTop: 2 }}>
-              <Button pulsanti={[pulsanteReturn]} />
-           
-              <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
-            </Grid>
+          <Grid container justifyContent="space-between" spacing={2} sx={{ marginTop: 2 }}>
+            <Button pulsanti={[pulsanteReturn]} />
+
+            <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
+          </Grid>
         </Box >
       </div>
     </>
