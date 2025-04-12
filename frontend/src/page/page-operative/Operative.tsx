@@ -77,6 +77,7 @@ const Operative: React.FC<{ setTitle: any }> = ({ setTitle }) => {
           user={user}
           setMessage={setMessage}
           setOpen={setOpen}
+          isVertical={isVertical}
         />
       </PageLayout>
       <div>

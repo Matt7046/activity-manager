@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage } from "../../App";
 import { Pulsante } from "../../components/ms-button/Button";
@@ -17,17 +17,18 @@ interface ActivityContentProps {
   responseSchedule: any;
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isVertical: boolean;
 }
 
 const ActivityContent: React.FC<ActivityContentProps> = ({
   user,
   responseSchedule,
   setMessage,
-  setOpen
+  setOpen,
+  isVertical
 }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [loading, setLoading] = useState(false);
   const flex = isVertical ? 'flex-start' : 'flex-end';
 
@@ -56,7 +57,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-eye',
-    funzione: (_id: string) => openDetail(_id, () => componentDidMount(_id)), // Passi la funzione direttamente
+    funzione: (_id: string) => openDetail(_id, () => findActivityByIdentificativo(_id)), // Passi la funzione direttamente
     nome:  ButtonName.BLUE,
     title: 'Apri dettaglio',
     configDialogPulsante: {message:'', showDialog:false}
@@ -64,20 +65,9 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   // const pulsantiVisibili = isVertical ? [pulsanteNew, pulsanteBlue] : [pulsanteNew, pulsanteRed, pulsanteBlue]
   const pulsantiVisibili = [pulsanteNew, pulsanteRed, pulsanteBlue]
+ 
 
-  useEffect(() => {
-
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const componentDidMount = (_id: string) => {
+  const findActivityByIdentificativo = (_id: string) => {
     // Effettua la chiamata GET quando il componente è montato
     findByIdentificativo({
       _id: _id 

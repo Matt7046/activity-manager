@@ -26,21 +26,14 @@ const About: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
 
-
-  useEffect(() => {
-
+  
+   useEffect(() => {
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
       setPaddingType(window.innerHeight > window.innerWidth ? 0 : 5);
     };
 
     window.addEventListener("resize", handleResize);
-
-    // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
     const socket = new WebSocket("ws://localhost/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
     socket.onopen = () => {
       console.log("Connected to WebSocket");
@@ -83,6 +76,7 @@ const About: React.FC<{ setTitle: any }> = ({ setTitle }) => {
           user={user}
           setMessage={setMessage}
           setOpen={setOpen}
+          isVertical={isVertical}
         />
       </PageLayout>
       <div>
