@@ -2,7 +2,7 @@ package com.common.dto;
 
 import java.util.List;
 
-import com.common.transversal.PointsUser;
+import com.common.authDTO.PointsUser;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
