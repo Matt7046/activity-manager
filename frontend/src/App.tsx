@@ -81,30 +81,52 @@ const GoogleAuthComponent = () => {
   const [simulated, setSimulated] = useState(0);
   const [title, setTitle] = useState("Activity manager");
   const [openD, setOpenD] = useState(false); // Stato per la dialog
-  const [email, setEmail] = useState(''); // Stato per l'email
+  const [emailConfirmDialog, setEmailConfirmDialog] = useState(''); // Stato per l'email
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [emailOptions, setEmailOptions] = React.useState<string[]>([]); // Lo stato è un array di stringhe
   const [emailLogin, setEmailLogin] = useState(''); // Stato per l'email
-  const [emailUserCurrent, setEmailUserCurrent] = useState(''); // Stato per l'email
   const location = useLocation();
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [hiddenLogin, setHiddenLogin] = useState<any>(false); // Stato utente
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => { };
 
+  const [currentUser, setCurrentUser] = useState({
+    name: "",
+    emailFamily: "",
+    email: "",
+    type: -1,
+    emailUserCurrent: ""
+  });
 
+  //FAKE LOGIN
+  const [userDataFake, setUserDataFake] = useState({
+    name: "Simulated User",
+    emailFamily: "user@simulated.com",
+    email: "user@simulated.com",
+    type: TypeUser.STANDARD,
+    emailUserCurrent: "user@simulated.com"
+  }); // Stato per userData
+  //FAKE LOGIN
+  const [userDataChildFake, setUserDataChildFake] = useState({
+    name: "Simulated child User",
+    emailFamily: "child@simulated.com",
+    email: "user@simulated.com",
+    type: TypeUser.FAMILY,
+    emailUserCurrent: "child@simulated.com"
+  }); // Stato per userData
 
   useEffect(() => {
 
     if (location.pathname === '/') {
       // Stato per userData
-      setUserData({
+      setCurrentUser({
         name: "Simulated User",
         emailFamily: "user@simulated.com",
         email: "user@simulated.com",
         type: TypeUser.STANDARD,
         emailUserCurrent: "user@simulated.com",
       });
-      setUserDataChild({
+      setCurrentUser({
         name: "Simulated child User",
         emailFamily: "child@simulated.com",
         email: "user@simulated.com",
@@ -131,29 +153,15 @@ const GoogleAuthComponent = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const [userData, setUserData] = useState({
-    name: "Simulated User",
-    emailFamily: "user@simulated.com",
-    email: "user@simulated.com",
-    type: -1,
-    emailUserCurrent: ''
-  }); // Stato per userData
 
-  const [userDataChild, setUserDataChild] = useState({
-    name: "Simulated child User",
-    emailFamily: "child@simulated.com",
-    email: "user@simulated.com",
-    type: -1,
-    emailUserCurrent: ''
-  }); // Stato per userData
 
-  const handleConfirm = ((typeSimulated: number, emailFather: string, emailUserCurrent: string) => {
-    console.log("Email confermata:", email);
-    userData.email = emailFather;
-    userData.emailFamily = email;
-    userData.type = typeSimulated;
-    userData.emailUserCurrent = emailUserCurrent;
-    setUser(userData);
+  const handleConfirm = ((typeSimulated: number, emailUserCurrent: string) => {
+    console.log("Email confermata:", emailConfirmDialog);
+    currentUser.email = emailLogin;
+    currentUser.emailFamily = emailConfirmDialog;
+    currentUser.type = typeSimulated;
+    currentUser.emailUserCurrent = emailUserCurrent;
+    setUser(currentUser);
     handleCloseD();
 
   });
@@ -186,7 +194,7 @@ const GoogleAuthComponent = () => {
   const handleOpenD = () => setOpenD(true);
   const handleCloseD = () => setOpenD(false);
   const handleEmailChange = (event: SelectChangeEvent) => {
-    setEmail(event.target.value);
+    setEmailConfirmDialog(event.target.value);
   };
 
   // Configura useGoogleLogin
@@ -207,14 +215,14 @@ const GoogleAuthComponent = () => {
   });
 
   const handleLoginSuccessFake = (fakeResponse: any, type: number) => {
-    const userType = type === 0 ? { ...userDataChild } : { ...userData }
+    const currentUser = type === 0 ? { ...userDataChildFake } : { ...userDataFake }
     const user = {
-      ...userType,
+      ...currentUser,
       //   token: fakeResponse.credential,
       type: type
     };
     baseStore.setToken(fakeResponse.credential);
-    setUserData(user);
+    setCurrentUser(user);
     const message = { message: [ServerMessage.SERVER_DOWN], typeMessage: TypeAlertColor.ERROR };
     getEmailChild(user, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x: ResponseI | undefined) => {
       const emailChild = x?.jsonText?.emailFigli ?? [];
@@ -226,36 +234,34 @@ const GoogleAuthComponent = () => {
   };
 
   const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
-    const userType = userDataGoogle ? { ...userDataGoogle, emailFamily: userDataGoogle.email } : type === 0 ? { ...userDataChild } : { ...userData }
-    openHome({ ...userType, type: type }, googleAuth, setLoading)
+    const currentUser = googleAuth ? { ...userDataGoogle, emailFamily: userDataGoogle.email } : type === 0 ? { ...userDataChildFake } : { ...userDataFake }
+    openHome({ ...currentUser, type: type }, googleAuth, setLoading)
   }
 
-  const openHome = (userD: any, googleAuth: boolean, setLoading: any): Promise<any> => {
-    //  const utente = { email: userData.email, type: userData.type }
-    return getUserType(userD, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
+  const openHome = (currentUser: any, googleAuth: boolean, setLoading: any): Promise<any> => {
+    return getUserType(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
-      setEmailUserCurrent(x?.jsonText.emailUserCurrent);
+      setEmailLogin(x?.jsonText.emailUserCurrent);
       switch (x?.jsonText?.typeUser) {
-        case 0: {
-          setEmailLogin(userD.email);
+        case TypeUser.STANDARD: {
+          setEmailLogin(currentUser.email);
           setSimulated(TypeUser.STANDARD);
-          setUser({ ...userD, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
+          setUser({ ...currentUser, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
           break;
         }
-        case 1: {
-          setEmailLogin(userD.email);
+        case TypeUser.FAMILY: {
+          setEmailLogin(currentUser.email);
           setSimulated(TypeUser.FAMILY);
-          //setUser({ ...userD, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
           handleOpenD();
           break;
         }
-        case 2: {
+        case TypeUser.NEW_USER: {
           if (googleAuth === true) {
-            setUser({ ...userD, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
+            setUser({ ...currentUser, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
 
           }
           else {
-            setUser({ ...userData, type: 2 });
+            setUser({ ...currentUser, type: 2 });
           }
         }
           break;
@@ -289,7 +295,7 @@ const GoogleAuthComponent = () => {
           setEmailOptions(emailChild);
         })
         //setUser({ ...userData, type: 1 });
-        setUserData(userDataGoogle);
+        setCurrentUser(userDataGoogle);
         showDialog(1, true, userDataGoogle);
       } else {
         console.error('Failed to fetch user data:', userDataResponse.status);
@@ -393,16 +399,13 @@ const GoogleAuthComponent = () => {
                     emailOptions={emailOptions}
                     handleEmailChange={handleEmailChange}
                     handleConfirm={handleConfirm}
-                    email={email}
+                    email={emailConfirmDialog}
                     simulated={simulated}
-                    emailLogin={emailLogin}
-                    emailUserCurrent={emailUserCurrent}
+                    emailUserCurrent={emailLogin}
                   />
                 </div>
               </div></>
           )
-
-
             : (
               <div>
 
