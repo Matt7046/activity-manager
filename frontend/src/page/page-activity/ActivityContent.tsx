@@ -32,8 +32,8 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
   const [loading, setLoading] = useState(false);
   const flex = isVertical ? 'flex-start' : 'flex-end';
 
-  const openDetail = (_id: string, componentDidMount: any): void => {
-    componentDidMount(_id)
+  const openDetail = (_id: string, findActivityByIdentificativo:  (_id: string ) => void): void => {
+    findActivityByIdentificativo(_id)
   }
 
   const pulsanteNew: Pulsante = {
