@@ -37,7 +37,7 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
-
+  const [activitySchedule, setActivitySchedule] = useState<boolean>(true);
 
   // default class Activity extends React.Component {
 
@@ -45,10 +45,11 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
 
   useEffect(() => {
-    // Questo codice verrà eseguito dopo che il componente è stato montato
-    getActivities();
-    //window.addEventListener('resize', handleResize);
+    getActivities(); 
+    return () =>{};
+  }, [activitySchedule]); 
 
+  useEffect(() => {
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
       setPaddingType(window.innerHeight > window.innerWidth ? 0 : 5);
@@ -56,11 +57,6 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
     window.addEventListener("resize", handleResize);
 
-    // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []); // Il secondo argomento vuoto ind ica che l'effetto dipenderà solo dal mount
-
-  useEffect(() => {
     const socket = new WebSocket("ws://localhost/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
     socket.onopen = () => {
       console.log("Connected to WebSocket");
@@ -82,6 +78,7 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
     };
 
     return () => {
+      window.removeEventListener("resize", handleResize)
       socket.close();
     };
   }, []);

@@ -30,20 +30,13 @@ const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
 
   useEffect(() => {
-
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
       setPaddingType(window.innerHeight > window.innerWidth ? 0 : 5);
 
     };
-
     window.addEventListener("resize", handleResize);
 
-    // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
     const socket = new WebSocket("ws://localhost/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
     socket.onopen = () => {
       console.log("Connected to WebSocket");
@@ -65,6 +58,7 @@ const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
     };
 
     return () => {
+      window.removeEventListener("resize", handleResize)
       socket.close();
     };
   }, []);
