@@ -200,31 +200,32 @@ const AboutContent: React.FC<AboutContentProps> = ({
               disabled={true}
             />
           </div>
-
-          <div id="text-box">
-            <TextField
-              id="activity"
-              label={testoOld.nome}
-              variant="standard"
-              value={formValues.activity} // Collega il valore allo stato
-              onChange={handleChangeActivity} // Aggiorna lo stato quando cambia
-              fullWidth
-              required={true}
-            />
-          </div>
-          <div id="text-box">
-            <TextField
-              id="points"
-              label={'Points'}
-              variant="standard"
-              value={formValues.points} // Collega il valore allo stato
-              onChange={handleChangePoints} // Aggiorna lo stato quando cambia
-              fullWidth
-              type="number"
-              disabled={user.type === TypeUser.STANDARD}
-              required={true}
-            />
-          </div>
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                id="activity"
+                label={testoOld.nome}
+                variant="standard"
+                value={formValues.activity} // Collega il valore allo stato
+                onChange={handleChangeActivity} // Aggiorna lo stato quando cambia
+                fullWidth
+                required={true}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                id="points"
+                label={'Points'}
+                variant="standard"
+                value={formValues.points} // Collega il valore allo stato
+                onChange={handleChangePoints} // Aggiorna lo stato quando cambia
+                fullWidth
+                type="number"
+                disabled={user.type === TypeUser.STANDARD}
+                required={true}
+              />
+            </Grid>
+          </Grid>
           <div id="text-box-sub-testo" style={{ marginTop: '16px' }}>
             <TextField
               id="subTesto"
