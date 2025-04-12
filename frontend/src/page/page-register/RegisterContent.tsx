@@ -2,7 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Box, Button as ButtonMui } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage, useUser } from "../../App";
 import Button, { Pulsante } from "../../components/ms-button/Button";
@@ -19,6 +19,7 @@ interface RegisterContentProps {
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setTitle: (title: string) => void;
+  isVertical:boolean;
 
 }
 
@@ -27,7 +28,8 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
   setMessage,
   setOpen,
   setTitle,
-}) => {
+  isVertical
+  }) => {
   const { setUser } = useUser(); //
   const location = useLocation();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
@@ -38,7 +40,6 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     points: "Points"
   }
 
-  const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [emailFigli, setEmailFigli] = useState<string[]>(['child@simulated.com']);
 
   // Funzione per gestire il cambio di valore
@@ -53,21 +54,9 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     setEmailFigli([...emailFigli, ""]); // Aggiungi un nuovo elemento vuoto
   };
 
-
-
   const addField = () => {
     handleAddEmailField();
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
 
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-solid fa-floppy-disk',
@@ -79,22 +68,6 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
 
   const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
   };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  useEffect(() => {
-
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Pulisci il listener al dismount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const salvaRecord = (userData: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
