@@ -46,7 +46,7 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
   useEffect(() => {
     // Questo codice verrà eseguito dopo che il componente è stato montato
-    componentDidMount();
+    getActivities();
     //window.addEventListener('resize', handleResize);
 
     const handleResize = () => {
@@ -88,7 +88,7 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
 
 
-  const componentDidMount = () => {
+  const getActivities = () => {
     if (!hasFetchedData) {
       hasFetchedData = true;
       // Effettua la chiamata GET quando il componente è montato 
@@ -135,6 +135,7 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
           user={utente}
           setOpen={setOpen}
           setMessage={setMessage}
+          isVertical ={isVertical}
         />
       </PageLayout>
       <div>
