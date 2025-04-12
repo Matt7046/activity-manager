@@ -5,8 +5,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @EnableMongoRepositories(basePackages = "com.repository.point")
 @SpringBootApplication(scanBasePackages = {
-    "com.repository",
-    "com.common.configurations",
     "com.pointService",
     "com.common"
 })
