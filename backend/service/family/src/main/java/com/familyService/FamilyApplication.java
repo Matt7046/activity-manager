@@ -8,9 +8,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
         "com.repository.family",
 })
 @SpringBootApplication(scanBasePackages = {
-        "com.activityBusinessLogic",
-        "com.repository",
-        "com.common.configurations",
         "com.familyService",
         "com.common"
 })
