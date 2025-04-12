@@ -10,7 +10,7 @@ import BannerOpenSource from './components/ms-banner/Banner';
 import DialogEmail from './components/ms-dialog-email/DialogEmail';
 import { MenuLaterale } from './components/ms-drawer/Drawer';
 import { baseStore } from './general/BaseStore';
-import { LoginUser, SectionName, ServerMessage, TypeUser } from './general/Constant';
+import { LoginUser, SectionName, ServerMessage, TypeAlertColor, TypeUser } from './general/Constant';
 import { getToken, getUserType } from './general/service/AuthService';
 import { ResponseI, UserI } from './general/Utils';
 import About from './page/page-about/About';
@@ -215,7 +215,8 @@ const GoogleAuthComponent = () => {
     };
     baseStore.setToken(fakeResponse.credential);
     setUserData(user);
-    getEmailChild(user).then((x: ResponseI | undefined) => {
+    const message = { message: [ServerMessage.SERVER_DOWN], typeMessage: TypeAlertColor.ERROR };
+    getEmailChild(user, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x: ResponseI | undefined) => {
       const emailChild = x?.jsonText?.emailFigli ?? [];
       setEmailOptions(emailChild);
       const typeNew = emailChild?.length > 0 ? type : 2;
@@ -231,7 +232,7 @@ const GoogleAuthComponent = () => {
 
   const openHome = (userD: any, googleAuth: boolean, setLoading: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
-    return getUserType(userD, () => showMessage(setOpen, setMessage), setLoading).then((x) => {
+    return getUserType(userD, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug
       setEmailUserCurrent(x?.jsonText.emailUserCurrent);
       switch (x?.jsonText?.typeUser) {
@@ -301,7 +302,7 @@ const GoogleAuthComponent = () => {
   // Simulazione del login con Google
   const simulateLogin = (type: number) => {
     baseStore.clearToken();
-    getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message)).then(tokenData => {
+    getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
       setSimulated(type);
       console.log("tokenData", tokenData);
       const fakeResponse = {
@@ -317,10 +318,11 @@ const GoogleAuthComponent = () => {
   const label = 'Login ' + userLabel;
   return (
     <>
-      {open && (
-        <Alert onClose={handleClose} message={message} />
-      )}
-
+      <Grid container justifyContent="flex-end" className="layout-alert">
+        {open && (
+          <Alert onClose={handleClose} message={message} />
+        )}
+      </Grid>
       <Routes>
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       </Routes>
@@ -391,9 +393,9 @@ const GoogleAuthComponent = () => {
                     emailOptions={emailOptions}
                     handleEmailChange={handleEmailChange}
                     handleConfirm={handleConfirm}
-                    email={email}               
-                    simulated={simulated} 
-                    emailLogin = {emailLogin}
+                    email={email}
+                    simulated={simulated}
+                    emailLogin={emailLogin}
                     emailUserCurrent={emailUserCurrent}
                   />
                 </div>
@@ -454,11 +456,15 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
   }
 }
 
-export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage) => {
+export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage, onlyError?: boolean) => {
   const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage } : { message: [ServerMessage.SERVER_DOWN], typeMessage: 'error' };
-  setOpen(true);
+  if (!onlyError || onlyError && message?.typeMessage === TypeAlertColor.ERROR) {
+    setOpen(true);
+  }
   setMessage(messageBE);
 }
+
+
 
 export const sezioniMenu = (
   sezioni: MenuLaterale[][],
