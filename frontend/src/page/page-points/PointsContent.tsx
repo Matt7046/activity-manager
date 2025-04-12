@@ -207,7 +207,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
   return (
     <>
       <div className="row">
-        <Box sx={{ padding: 2 }}>
+        <Box >
           <div id="cardData">
             <CardGrid cardsData={cardsData} />
           </div>
