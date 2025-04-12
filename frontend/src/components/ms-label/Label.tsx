@@ -6,7 +6,9 @@ type Visibility = 'visible' | 'hidden' | 'collapse' | undefined;
 interface LabelProps {
   _id: string;
   text: string;
-  handleClick?: () => void;
+  htmlFor?: string;
+  onClick?: () => void;
+  className?: string;
   isUnderlined?: boolean;
   visibility?: Visibility;
 }
@@ -21,9 +23,9 @@ const Label = observer((props: LabelProps) => {
     <div className="label-container" key={props._id}>
       <label
         id={`label-${props._id}`}
-        htmlFor={`label-${props._id}`}
-        className="label-text"
-        onClick={props.handleClick}
+        htmlFor={ props.htmlFor}
+        className={ props.htmlFor}
+        onClick={props.onClick}
         style={style}
       >
         {props.text}
