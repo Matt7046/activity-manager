@@ -12,10 +12,23 @@ import React from 'react';
 import { Pulsante } from '../ms-button/Button';
 import './Card.css'; // <-- Import del CSS
 
+export interface CardText {
+  textLeftTitle: string;
+  textRightTitle?: string;
+  text: CardTextAlign[]
+}
+
+export interface CardTextAlign {
+  textLeft: string;
+  textRight?: string;
+
+}
+
+
 export interface CardProps {
   children?: React.ReactNode;
   _id: string;
-  text: string[];
+  text: CardText;
   title: string;
   img: string;
   pulsanti: Pulsante[];
@@ -24,6 +37,13 @@ export interface CardProps {
 }
 
 const CardComponent = observer((props: CardProps) => {
+  const propsCard = { ...props };
+  if (propsCard.text.text.length > 8) {
+    let cardTextAlign = propsCard.text.text.slice(0, 8);
+    cardTextAlign = cardTextAlign.concat({ textLeft: '...' });
+    propsCard.text.text = cardTextAlign;
+  }
+
   return (
     <MuiCard className="card">
       <CardMedia
@@ -31,29 +51,48 @@ const CardComponent = observer((props: CardProps) => {
         image={props.img}
         title={props.title}
       />
-      <CardContent style={{ flexGrow: 1 }}>
+      <CardContent className='card-content'>
         <Typography gutterBottom variant="h5" component="div" className="card-title">
           {props.title}
         </Typography>
-        {props.text.length > 1 ? (
-          <List>
-            {props.text.map((item, index) => (
-               <Typography key={index} className="card-list-item">
-                - {item}
+        <List className='list-body'>
+          <Grid container className="card-header-row" justifyContent="space-between" alignItems="center">
+            <Grid size={{ xs: 6, sm: 6 }}>
+              <Typography className="card-header-text">
+                {propsCard.text.text.length > 0 ? propsCard.text.textLeftTitle : ''}
+              </Typography>
+            </Grid>
+            {propsCard.text.text.length > 0 && propsCard.text.text[0].textRight && (
+              <Grid size={{ xs: 6, sm: 6 }}>
+                <Typography className="card-header-text">
+                  {propsCard.text.textRightTitle}
                 </Typography>
-            ))}
-          </List>
-        ) : (
-          <Typography variant="body2" className="card-text-secondary">
-            {props.text}
-          </Typography>
-        )}
+              </Grid>
+            )}
+          </Grid>
+
+          {propsCard.text.text.map((item: CardTextAlign, index: number) => (
+            <Grid container key={index} justifyContent="space-between" alignItems="center">
+              <Grid size={{ xs: item.textRight ? 6 : 12, sm: item.textRight ? 6 : 12 }}>
+                <Typography className="card-list-item">{item.textLeft}</Typography>
+              </Grid>
+              {item.textRight && (
+                <Grid size={{ xs: 6, sm: 6 }}>
+                  <Typography className="card-list-item">{item.textRight}</Typography>
+                </Grid>
+              )}
+            </Grid>
+          ))}
+        </List>
+
+
+        <CardActions className="card-actions-bottom">
+          <Grid container justifyContent="flex-end" spacing={2}>
+            <div>{props.children}</div>
+          </Grid>
+        </CardActions>
       </CardContent>
-      <CardActions>
-        <Grid container justifyContent="flex-end" spacing={2}>
-          <div>{props.children}</div>
-        </Grid>
-      </CardActions>
+
     </MuiCard>
   );
 });
@@ -63,7 +102,7 @@ const CardGrid = ({ cardsData }: { cardsData: CardProps[] }) => {
     <Grid container spacing={2} alignItems="stretch">
       {cardsData.map((cardData) => (
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={cardData._id}>
-          <CardComponent {...cardData}  />
+          <CardComponent {...cardData} />
         </Grid>
       ))}
     </Grid>
