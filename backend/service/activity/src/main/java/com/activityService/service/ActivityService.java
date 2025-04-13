@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import com.common.dto.ActivityDTO;
+import com.common.dto.activity.ActivityDTO;
 import com.common.mapper.ActivityMapper;
 import com.repository.activity.ActivityRepository;
-import com.common.configurations.EncryptDecryptConverter;
-import com.common.data.Activity;
+import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.data.activity.Activity;
 
 
 import reactor.core.publisher.Mono;

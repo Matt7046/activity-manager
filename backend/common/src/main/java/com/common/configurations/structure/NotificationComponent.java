@@ -1,6 +1,7 @@
-package com.common.configurations;
+package com.common.configurations.structure;
 
-import com.common.dto.InterfaceDTO;
+import com.common.configurations.rabbitmq.RabbitMQProducer;
+import com.common.dto.structure.InterfaceDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

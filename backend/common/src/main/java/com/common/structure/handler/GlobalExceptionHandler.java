@@ -1,15 +1,18 @@
-package com.common.exception;
+package com.common.structure.handler;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.common.structure.status.ActivityHttpStatus;
+import com.common.structure.exception.ArithmeticCustomException;
+import com.common.structure.exception.DecryptException;
+import com.common.structure.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.common.dto.ResponseDTO;
+import com.common.dto.structure.ResponseDTO;
 
 
 @ControllerAdvice
