@@ -9,7 +9,7 @@ import { FormErrorValues, ResponseI, UserI, verifyForm } from "../../general/Uti
 import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivities, savePointsAndLog } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
-import { findByEmail } from "../page-points/service/PointsService";
+import { findByEmail } from "../page-user-point/service/UserPointService";
 import { showMessageOperativeForm } from "./service/OperativeService";
 import operativeStore from "./store/OperativeStore";
 

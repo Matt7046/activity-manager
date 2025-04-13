@@ -9,7 +9,7 @@ import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus } from '../../general/Constant';
 import { FormErrorValues, ResponseI, verifyForm } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
-import { findByEmail } from "../page-points/service/PointsService";
+import { findByEmail } from "../page-user-point/service/UserPointService";
 import { savePointsByFamily } from './service/FamilyService';
 import familyStore from './store/FamilyStore';
 

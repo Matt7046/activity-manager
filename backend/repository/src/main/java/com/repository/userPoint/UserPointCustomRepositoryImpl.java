@@ -1,4 +1,4 @@
-package com.repository.point;
+package com.repository.userPoint;
 
 
 import java.util.Collection;
@@ -12,11 +12,11 @@ import org.springframework.context.annotation.Lazy;
 import com.common.configurations.EncryptDecryptConverter;
 import com.common.exception.ArithmeticCustomException;
 
-public class PointCustomRepositoryImpl implements PointCustomRepository {
+public class UserPointCustomRepositoryImpl implements UserPointCustomRepository {
 
 	@Lazy
 	@Autowired
-	private PointRepository PointRepository;
+	private UserPointRepository PointRepository;
 	@Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 

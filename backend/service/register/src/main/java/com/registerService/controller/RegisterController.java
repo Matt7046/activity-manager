@@ -1,6 +1,6 @@
 package com.registerService.controller;
 
-import com.registerService.service.UserWebService;
+import com.registerService.processor.RegisterSaveUserProcessor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.common.dto.UserPointDTO;
@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class RegisterController {
 
         @Autowired
-        private UserWebService userWebService;
+        private RegisterSaveUserProcessor registerSaveUserProcessor;
 
         @PostMapping("/dati")
         public Mono<ResponseDTO> saveUserByPoints(@RequestBody UserPointDTO userPointDTO) {
-            return userWebService.saveUserByPoints(userPointDTO);
+            return registerSaveUserProcessor.saveUserByPoints(userPointDTO);
         }
 }

@@ -19,10 +19,12 @@ public class AboutWebService {
     private WebClient webClientActivity;
     @Value("${message.http.error.4xx}")
     private String error4xx;
+    @Value("${app.page.path.activity}")
+    private String activityPath;
 
     public Mono<ResponseDTO> processDeleteActivity(String identificativo) {
         return webClientActivity.delete()
-                .uri("/api/activity/toggle/{identificativo}", identificativo)
+                .uri(activityPath+"/toggle/{identificativo}", identificativo)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
                     return Mono.error(new RuntimeException("Errore 4xx")); // Passa l'errore
@@ -34,7 +36,7 @@ public class AboutWebService {
 
     public Mono<ResponseDTO> processSaveActivity(ActivityDTO activityDTO) {
         return webClientActivity.post()
-                .uri("/api/activity/dati")
+                .uri(activityPath+"/dati")
                 .bodyValue(activityDTO)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
