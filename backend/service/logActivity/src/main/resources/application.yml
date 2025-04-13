@@ -5,7 +5,7 @@ spring:
   application:
     name: activityManager
 order:
-  type1: "Date"
+  type1: "date"
 app:
   rabbitmq:
     exchange:
@@ -17,3 +17,4 @@ app:
 message:
   http:
     error: "Errore HTTP: "
+

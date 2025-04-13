@@ -1,7 +1,7 @@
 package com.aboutService.controller;
 
-import com.aboutService.service.AboutService;
-import com.aboutService.service.AboutWebService;
+import com.aboutService.processor.AboutDeleteActivityProcessor;
+import com.aboutService.processor.AboutSaveActivityProcessor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.common.configurations.EncryptDecryptConverter;
@@ -20,25 +20,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AboutController {
 
     @Autowired
-    private AboutService aboutService;
-
-    @Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 
     @Autowired
-    private AboutWebService aboutWebService;
-
+    private AboutSaveActivityProcessor aboutSaveActivityProcessor;
+    @Autowired
+    private AboutDeleteActivityProcessor aboutDeleteActivityProcessor;
 
 
     @DeleteMapping("/{identificativo}")
     public Mono<ResponseDTO> deleteByIdentificativo(@PathVariable String identificativo) throws Exception {
         identificativo = encryptDecryptConverter.decrypts(identificativo);   
-        return aboutWebService.callActivityDeleteService(identificativo);
+        return aboutDeleteActivityProcessor.callActivityDeleteService(identificativo);
 
     }
     @PostMapping("/dati")
     public Mono<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {
-        return aboutWebService.callActivitySaveService(activityDTO);
+        return aboutSaveActivityProcessor.callActivitySaveService(activityDTO);
 
     }
 }
