@@ -3,12 +3,12 @@ package com.logActivityService.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import com.common.dto.LogActivityDTO;
-import com.common.dto.UserPointDTO;
+import com.common.dto.activity.LogActivityDTO;
+import com.common.dto.user.UserPointDTO;
 import com.common.mapper.LogActivityMapper;
 import com.repository.logActivity.LogActivityRepository;
-import com.common.configurations.EncryptDecryptConverter;
-import com.common.data.LogActivity;
+import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.data.activity.LogActivity;
 import java.util.List;
 
 @Service
