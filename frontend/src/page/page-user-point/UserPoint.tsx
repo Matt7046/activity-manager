@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { showMessage, useUser } from '../../App';
-import { TypeAlertColor } from '../../general/Constant';
+import { TypeAlertColor, TypeUser } from '../../general/Constant';
 import { FamilyNotificationI, getMenuLaterale } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import PointsContent from './UserPointContent';
@@ -18,10 +18,11 @@ export interface UserPointsI {
 
 const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
-  setTitle("Sezione informazioni utente");
+  const { user, setUser } = useUser();
+  const title = user.type === TypeUser.FAMILY ? ' (tutorato)' : ''
+  setTitle("Sezione informazioni utente" + title);
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const { user, setUser } = useUser();
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
