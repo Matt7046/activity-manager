@@ -10,6 +10,18 @@ export enum SectionName {
 }
 
 
+export enum SectionNameDesc {
+  POLICY = `privacy-policy`,
+  ACTIVITY = `Attività`,
+  ABOUT = `Informazioni attivtà`,
+  POINTS = `Informazioni utente`,
+  OPERATIVE = `Operatività`,
+  FAMILY = `Famiglia`,
+  REGISTER = `Registazione`,
+  ROOT = ''
+}
+
+
 export enum HttpStatus {
   OK = 200,
   CREATED = 201,
