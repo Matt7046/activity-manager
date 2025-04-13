@@ -1,7 +1,8 @@
-package com.common.configurations;
+package com.common.configurations.config;
 
 import java.util.List;
 
+import com.common.configurations.structure.PropertiesKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

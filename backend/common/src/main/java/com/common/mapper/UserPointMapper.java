@@ -1,10 +1,10 @@
 package com.common.mapper;
 
-import com.common.dto.UserPointDTO;
+import com.common.dto.user.UserPointDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.common.data.UserPoint;
+import com.common.data.user.UserPoint;
 
 @Mapper
 public interface UserPointMapper {

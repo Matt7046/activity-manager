@@ -1,9 +1,7 @@
 package com.common.mapper;
 
-import com.common.data.Activity;
-import com.common.data.Notification;
-import com.common.dto.ActivityDTO;
-import com.common.dto.NotificationDTO;
+import com.common.data.notification.Notification;
+import com.common.dto.notification.NotificationDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

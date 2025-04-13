@@ -1,7 +1,9 @@
-package com.common.dto;
+package com.common.dto.user;
 
 import java.util.List;
 
+import com.common.dto.structure.InterfaceDTO;
+import com.common.dto.activity.LogActivityDTO;
 import com.common.dto.auth.PointsUser;
 
 import lombok.AllArgsConstructor;
