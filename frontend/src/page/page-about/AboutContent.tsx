@@ -215,7 +215,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 id="points"
-                label={'Points'}
+                label={'Punti'}
                 variant="standard"
                 value={formValues.points} // Collega il valore allo stato
                 onChange={handleChangePoints} // Aggiorna lo stato quando cambia
