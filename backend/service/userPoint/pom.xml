@@ -6,12 +6,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.activityManager</groupId>
-    <artifactId>point-service</artifactId>
+    <artifactId>user-point-service</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Point Service</name>
-    <description>Microservizio point</description>
+    <name>UserPoint Service</name>
+    <description>Microservizio UserPoint</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -67,7 +67,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>3.1.0</version>
             <configuration>
-               <mainClass>com.pointService.PointApplication</mainClass>
+               <mainClass>com.userPointService.UserPointApplication</mainClass>
             </configuration>
             <executions>
                 <execution>

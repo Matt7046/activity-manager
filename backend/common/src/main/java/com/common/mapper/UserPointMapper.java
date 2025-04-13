@@ -7,8 +7,8 @@ import org.mapstruct.factory.Mappers;
 import com.common.data.UserPoint;
 
 @Mapper
-public interface PointsMapper {
-    PointsMapper INSTANCE = Mappers.getMapper(PointsMapper.class);
+public interface UserPointMapper {
+    UserPointMapper INSTANCE = Mappers.getMapper(UserPointMapper.class);
 
     // Da Entity a DTO
     UserPointDTO toDTO(UserPoint points) throws Exception;

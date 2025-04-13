@@ -16,8 +16,8 @@ import { logActivityByEmail } from "../page-activity/service/LogActivityService"
 import { FamilyLogI } from '../page-family/Family';
 import { logFamilyByEmail } from '../page-family/service/FamilyService';
 import { TypeMessage } from "../page-layout/PageLayout";
-import "./PointsContent.css";
-import { findByEmail } from "./service/PointsService";
+import "./UserPointContent.css";
+import { findByEmail } from "./service/UserPointService";
 
 interface PointsContentProps {
   user: UserI;
