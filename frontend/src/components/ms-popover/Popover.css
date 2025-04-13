@@ -32,6 +32,35 @@
   pointer-events: auto;
   cursor: pointer;
   border: initial;
-  color: #fff;
+  color: #e52d2d;
+  background-color: #e52d2d;
   border-radius: 50px;
+}
+
+
+
+.popover-box {
+  padding: 16px;
+  border-radius: 50px;
+}
+
+.notification-box {
+  margin-bottom: 16px;
+}
+
+.notification-message {
+  color: #bb0707; /* oppure usa var(--mui-palette-text-primary) se hai CSS variables */
+}
+
+.notification-subtext {
+  color: gray; /* oppure text.secondary se lo vuoi con più contrasto */
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.custom-popover .MuiPaper-root {
+  border-radius: 45px;
 }
