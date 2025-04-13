@@ -1,9 +1,7 @@
 package com.common.mapper;
 
-import com.common.data.LogFamily;
-import com.common.data.Notification;
-import com.common.dto.LogFamilyDTO;
-import com.common.dto.NotificationDTO;
+import com.common.data.family.LogFamily;
+import com.common.dto.family.LogFamilyDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

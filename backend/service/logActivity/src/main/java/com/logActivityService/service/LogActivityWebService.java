@@ -1,8 +1,8 @@
 package com.logActivityService.service;
 
-import com.common.dto.LogFamilyDTO;
-import com.common.dto.UserPointDTO;
-import com.common.dto.ResponseDTO;
+import com.common.dto.family.LogFamilyDTO;
+import com.common.dto.user.UserPointDTO;
+import com.common.dto.structure.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,14 +1,14 @@
 package com.userPointService.controller;
 
-import com.common.data.UserPoint;
-import com.common.dto.PointRDTO;
-import com.common.dto.UserPointDTO;
-import com.common.dto.ResponseDTO;
-import com.common.dto.UserDTO;
-import com.common.exception.ActivityHttpStatus;
-import com.common.exception.NotFoundException;
+import com.common.data.user.UserPoint;
+import com.common.dto.user.PointRDTO;
+import com.common.dto.user.UserPointDTO;
+import com.common.dto.structure.ResponseDTO;
+import com.common.dto.user.UserDTO;
+import com.common.structure.status.ActivityHttpStatus;
+import com.common.structure.exception.NotFoundException;
 import com.common.mapper.UserPointMapper;
-import com.common.authDTO.PointsUser;
+import com.common.dto.auth.PointsUser;
 import com.userPointService.service.UserPointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

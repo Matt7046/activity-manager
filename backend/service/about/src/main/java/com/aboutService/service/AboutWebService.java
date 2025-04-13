@@ -1,7 +1,7 @@
 package com.aboutService.service;
 
-import com.common.dto.ActivityDTO;
-import com.common.dto.ResponseDTO;
+import com.common.dto.activity.ActivityDTO;
+import com.common.dto.structure.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
