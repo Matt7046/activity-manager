@@ -89,7 +89,7 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
           },
         }}
       >
-        <DialogTitle sx={{ color: '#000000' }}>Conferma azione</DialogTitle>
+        <DialogTitle >Conferma azione</DialogTitle>
         <DialogContent>
           <DialogContentText>
             {messageTitle}

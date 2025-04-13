@@ -14,22 +14,26 @@
 .card-content {
     flex-grow: 1
 }
-.text-center-success {
+.text-message {
+  text-align : center;
+}
+
+.text-up-message-success {
     text-align : center;
     color: green;
 }
 
-.text-center-error {
+.text-up-message-error {
     text-align : center;
     color: red;
 }
 
-.text-center-warning {
+.text-up-message-warning {
     text-align : center;
     color: yellow;
 }
 
-.text-center-info {
+.text-up-message-info {
     text-align : center;
     color:blue;
 }
