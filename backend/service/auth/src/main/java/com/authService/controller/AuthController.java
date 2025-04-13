@@ -2,7 +2,7 @@ package com.authService.controller;
 
 import java.util.ArrayList;
 
-import com.authService.service.UserWebService;
+import com.authService.processor.UserAuthPointsProcessor;
 import com.common.dto.UserPointDTO;
 import com.common.exception.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-
 import com.common.configurations.JwtUtil;
 import com.common.dto.ResponseDTO;
 import com.common.authDTO.LoginRequest;
 import com.common.authDTO.LoginResponse;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -26,7 +28,7 @@ public class AuthController {
     JwtUtil jwtUtil;
 
     @Autowired
-    UserWebService userWebService;
+    UserAuthPointsProcessor processor;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -43,6 +45,6 @@ public class AuthController {
     @PostMapping("/dati")
     public Mono<ResponseDTO> getUserType(@RequestBody UserPointDTO userPointDTO) {
         // Una volta completata la chiamata points, salva il log e crea la response
-        return userWebService.getUserType(userPointDTO);
+        return processor.getUserType(userPointDTO);
     }
 }

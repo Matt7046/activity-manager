@@ -1,9 +1,9 @@
-package com.pointService.rabbitmq;
+package com.userPointService.rabbitmq;
 
 import com.common.dto.UserPointDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pointService.service.PointService;
+import com.userPointService.service.UserPointService;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -16,7 +16,7 @@ import org.springframework.util.StopWatch;
 public class RabbitMQRollbackLogActivityConsumer {
 
     @Autowired
-    private PointService pointService;
+    private UserPointService userPointService;
 
     @RabbitListener(queues = "notifications.log.point.queue", ackMode = "MANUAL")
     public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
@@ -41,7 +41,7 @@ public class RabbitMQRollbackLogActivityConsumer {
         StopWatch watch = new StopWatch();
         watch.start();
         doWork(in);
-        pointService.rollbackSavePoint(userPointDTO);
+        userPointService.rollbackSavePoint(userPointDTO);
         watch.stop();
 
     }

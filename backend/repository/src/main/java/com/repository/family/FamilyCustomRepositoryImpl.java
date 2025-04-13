@@ -2,7 +2,7 @@ package com.repository.family;
 
 import com.common.configurations.EncryptDecryptConverter;
 import com.common.data.UserPoint;
-import com.repository.point.PointRepository;
+import com.repository.userPoint.UserPointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
@@ -12,7 +12,7 @@ public class FamilyCustomRepositoryImpl implements FamilyCustomRepository {
 
 	@Lazy
 	@Autowired
-	private PointRepository pointsRepository;
+	private UserPointRepository pointsRepository;
 	@Autowired
 	private EncryptDecryptConverter encryptDecryptConverter;
 

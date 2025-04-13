@@ -19,7 +19,7 @@ export interface FamilyLogI {
 
 const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
-  setTitle("Section Family");
+  setTitle("Sezione famiglia");
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { user, setUser } = useUser();

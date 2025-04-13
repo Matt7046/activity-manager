@@ -4,9 +4,9 @@ import { showMessage, useUser } from '../../App';
 import { TypeAlertColor } from '../../general/Constant';
 import { FamilyNotificationI, getMenuLaterale } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
-import PointsContent from './PointsContent';
+import PointsContent from './UserPointContent';
 
-export interface PointsI {
+export interface UserPointsI {
   _id: string | undefined;
   email?: string;
   //points: number;
@@ -18,7 +18,7 @@ export interface PointsI {
 
 const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
-  setTitle("Sezione Punti");
+  setTitle("Sezione informazioni utente");
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { user, setUser } = useUser();

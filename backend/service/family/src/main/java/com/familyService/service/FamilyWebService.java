@@ -6,6 +6,7 @@ import com.common.dto.ResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -18,10 +19,13 @@ public class FamilyWebService {
     @Autowired
     @Qualifier("webClientPoint")
     private WebClient webClientPoint;
+    @Value("${app.page.path.userpoint}")
+    private String userPointPath;
+
 
     public Mono<Optional<PointsUser>> savePointsByFamily(UserPointDTO userPointDTO) {
          return webClientPoint.post()
-                .uri("/api/point/dati/standard")
+                .uri(userPointPath+"/dati/standard")
                 .bodyValue(userPointDTO)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class)

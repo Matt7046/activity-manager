@@ -3,17 +3,30 @@ package com.authService.service;
 import com.common.dto.UserPointDTO;
 import com.common.dto.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import com.authService.processor.UserAuthPointsProcessor;
+import reactor.core.scheduler.Schedulers;
 
 @Service
 public class UserWebService {
 
     @Autowired
-    private UserAuthPointsProcessor userAuthPointsProcessor;
+    @Qualifier("webClientPoint")
+    private WebClient webClientPoint;
+    @Value("${app.page.path.userpoint}")
+    private String userPointPath;
 
-    public Mono<ResponseDTO> getUserType(UserPointDTO userPointDTO) {
-       return userAuthPointsProcessor.getUserType(userPointDTO);
+    public Mono<ResponseDTO> processUser(UserPointDTO userPointDTO) {
+        return webClientPoint.post()
+                .uri(userPointPath+"/dati")
+                .bodyValue(userPointDTO)
+                .retrieve()
+                .bodyToMono(ResponseDTO.class)
+                .flatMap(responseDTO -> Mono.fromCallable(() -> responseDTO)
+                        .subscribeOn(Schedulers.boundedElastic()));
     }
 }
