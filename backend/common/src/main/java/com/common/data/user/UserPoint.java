@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.common.authDTO.PointsUser;
+import com.common.dto.auth.PointsUser;
 
 @Document(collection = "userpoint") // Specifica la collezione nel database
 @Data // Genera getter, setter, toString, equals e hashCode
