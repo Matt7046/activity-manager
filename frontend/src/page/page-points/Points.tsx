@@ -18,7 +18,7 @@ export interface PointsI {
 
 const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
-  setTitle("Section Points");
+  setTitle("Sezione Punti");
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { user, setUser } = useUser();
