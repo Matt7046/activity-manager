@@ -10,26 +10,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.logActivityService.service.LogActivityService;
 import com.common.data.LogActivity;
 import com.common.mapper.LogActivityMapper;
+import com.logActivityService.service.LogActivityWebService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Component
-public class LogActivitySavePointsProcessor {
+public class LogActivityProcessor {
 
     @Autowired
-    @Qualifier("webClientPoint")
-    private WebClient webClientPoint;
-    @Autowired
-    @Qualifier("webClientFamily")
-    private WebClient webClientFamily;
+    private LogActivityWebService logActivityWebService;
     @Autowired
     private LogActivityService logActivityService;
     @Autowired
@@ -44,6 +40,10 @@ public class LogActivitySavePointsProcessor {
     private String routingKeyLogFamily;
 
 
+    public List<LogActivity> logAttivitaByEmail(UserPointDTO userPointDTO, Sort sort) {
+        return logActivityService.logAttivitaByEmail(userPointDTO, sort);
+    }
+
     public Mono<ResponseDTO> savePoints(LogActivityDTO logActivityDTO) {
         return processPoints(logActivityDTO);
     }
@@ -56,11 +56,7 @@ public class LogActivitySavePointsProcessor {
         logFamilyDTO.setDate(new Date());
         logFamilyDTO.setPerformedByEmail(logActivityDTO.getEmailUserCurrent());
         logFamilyDTO.setReceivedByEmail(logActivityDTO.getEmail());
-        return webClientPoint.post()
-                .uri("/api/point/dati/standard")
-                .bodyValue(userPointDTO)
-                .retrieve()
-                .bodyToMono(ResponseDTO.class)
+        return logActivityWebService.savePoints(userPointDTO)
                 .flatMap(response ->
                         saveLog(userPointDTO, logActivityDTO)
                 )
@@ -90,11 +86,7 @@ public class LogActivitySavePointsProcessor {
             return Mono.just(new ResponseDTO(logFamilyDTO, ActivityHttpStatus.OK.value(), new ArrayList<>()));
         }
         StringBuilder builder = new StringBuilder();
-        return webClientFamily.post()
-                .uri("/api/family/log")
-                .bodyValue(logFamilyDTO)
-                .retrieve()
-                .bodyToMono(ResponseDTO.class)
+        return logActivityWebService.saveLogFamily(logFamilyDTO)
                 .doOnSuccess(response1 -> {
                     // Azioni con la response
                     if (!response1.getErrors().isEmpty()) {

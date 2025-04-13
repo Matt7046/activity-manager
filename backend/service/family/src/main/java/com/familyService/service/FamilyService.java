@@ -8,11 +8,11 @@ import com.common.authDTO.PointsUser;
 import com.repository.family.FamilyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 @Service
 public class FamilyService {
@@ -43,4 +43,15 @@ public class FamilyService {
                 new ArrayList<>());
         return response;
     }
+
+    public ResponseDTO getLogFamily(UserPointDTO user, Sort sort) {
+
+      List<LogFamily> familyList = repository.findLogByEmail(user.getEmail(), sort);
+        List<LogFamilyDTO> logFamilyDTOList =  familyList.stream()
+                .map(LogFamilyMapper.INSTANCE::toDTO) .collect(Collectors.toList());
+        ResponseDTO response = new ResponseDTO(logFamilyDTOList, ActivityHttpStatus.OK.value(),
+                new ArrayList<>());
+        return response;
+    }
+
 }
