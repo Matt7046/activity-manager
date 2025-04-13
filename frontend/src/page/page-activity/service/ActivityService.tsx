@@ -1,10 +1,10 @@
 import { PATH_ACTIVITY, postData } from "../../../general/AxiosService";
 import { ResponseI } from "../../../general/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
-import { PointsI } from "../../page-points/Points";
+import { UserPointsI } from "../../page-user-point/UserPoint";
 import { ActivityLogI } from "../Activity";
 
-export const fetchDataActivities = async (pointsDTO: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+export const fetchDataActivities = async (pointsDTO: UserPointsI, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const path = PATH_ACTIVITY + '/activities'
     const data = await postData(path, pointsDTO, setLoading, funzioneMessage); // Usa l'URL dinamico
@@ -16,7 +16,7 @@ export const fetchDataActivities = async (pointsDTO: any, funzioneMessage?: (mes
 };
 
 
-export const findByIdentificativo = async (pointsDTO: PointsI,  funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+export const findByIdentificativo = async (pointsDTO: UserPointsI,  funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const path = PATH_ACTIVITY + `/find`;
     const data = await postData(path, pointsDTO, setLoading,funzioneMessage); // Endpoint dell'API
