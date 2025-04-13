@@ -1,4 +1,4 @@
-package com.common.dto;
+package com.common.dto.structure;
 import java.util.ArrayList;
 import java.util.List;
 

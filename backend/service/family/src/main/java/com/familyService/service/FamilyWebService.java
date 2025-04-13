@@ -1,8 +1,8 @@
 package com.familyService.service;
 
-import com.common.authDTO.PointsUser;
-import com.common.dto.UserPointDTO;
-import com.common.dto.ResponseDTO;
+import com.common.dto.auth.PointsUser;
+import com.common.dto.user.UserPointDTO;
+import com.common.dto.structure.ResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

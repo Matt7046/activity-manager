@@ -1,6 +1,6 @@
 package com.repository.family;
 
-import com.common.data.UserPoint;
+import com.common.data.user.UserPoint;
 
 public interface FamilyCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario

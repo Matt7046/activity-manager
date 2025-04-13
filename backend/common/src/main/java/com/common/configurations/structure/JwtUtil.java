@@ -1,4 +1,4 @@
-package com.common.configurations;
+package com.common.configurations.structure;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

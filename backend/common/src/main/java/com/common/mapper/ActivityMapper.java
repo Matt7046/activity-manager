@@ -3,8 +3,8 @@ package com.common.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import com.common.data.Activity;
-import com.common.dto.ActivityDTO;
+import com.common.data.activity.Activity;
+import com.common.dto.activity.ActivityDTO;
 
 
 

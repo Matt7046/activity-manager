@@ -1,4 +1,4 @@
-package com.common.configurations;
+package com.common.configurations.structure;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;

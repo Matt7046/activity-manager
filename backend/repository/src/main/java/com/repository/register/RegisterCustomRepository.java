@@ -1,6 +1,6 @@
 package com.repository.register;
 
-import com.common.data.UserPoint;
+import com.common.data.user.UserPoint;
 
 public interface RegisterCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario

@@ -2,10 +2,10 @@ package com.repository.register;
 
 import java.util.List;
 
-import com.common.data.UserPoint;
+import com.common.data.user.UserPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import com.common.configurations.EncryptDecryptConverter;
+import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.repository.userPoint.UserPointRepository;
 
 public class RegisterCustomRepositoryImpl implements RegisterCustomRepository {

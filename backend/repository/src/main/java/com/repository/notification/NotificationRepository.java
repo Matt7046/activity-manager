@@ -1,6 +1,6 @@
 package com.repository.notification;
 
-import com.common.data.Notification;
+import com.common.data.notification.Notification;
 
 import java.util.List;
 

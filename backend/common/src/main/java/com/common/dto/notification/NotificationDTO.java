@@ -1,8 +1,9 @@
-package com.common.dto;
+package com.common.dto.notification;
 
 import java.util.Date;
 
-import com.common.data.StatusNotification;
+import com.common.data.notification.StatusNotification;
+import com.common.dto.structure.InterfaceDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

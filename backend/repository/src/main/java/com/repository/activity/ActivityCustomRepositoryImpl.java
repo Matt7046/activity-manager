@@ -4,8 +4,8 @@ package com.repository.activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
-import com.common.configurations.EncryptDecryptConverter;
-import com.common.data.Activity;
+import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.data.activity.Activity;
 
 public class ActivityCustomRepositoryImpl implements ActivityCustomRepository {
 

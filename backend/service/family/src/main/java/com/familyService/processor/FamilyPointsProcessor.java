@@ -1,16 +1,16 @@
 package com.familyService.processor;
 
-import com.common.configurations.NotificationComponent;
-import com.common.data.OperationTypeLogFamily;
-import com.common.dto.LogFamilyDTO;
-import com.common.dto.ResponseDTO;
-import com.common.dto.UserPointDTO;
-import com.common.dto.FamilyNotificationDTO;
-import com.common.exception.ActivityHttpStatus;
-import com.common.exception.NotFoundException;
-import com.common.authDTO.PointsUser;
+import com.common.configurations.structure.NotificationComponent;
+import com.common.data.family.OperationTypeLogFamily;
+import com.common.dto.family.LogFamilyDTO;
+import com.common.dto.structure.ResponseDTO;
+import com.common.dto.user.UserPointDTO;
+import com.common.dto.family.FamilyNotificationDTO;
+import com.common.structure.status.ActivityHttpStatus;
+import com.common.structure.exception.NotFoundException;
+import com.common.dto.auth.PointsUser;
 import com.familyService.service.FamilyService;
-import com.common.configurations.RabbitMQProducer;
+import com.common.configurations.rabbitmq.RabbitMQProducer;
 import com.familyService.service.FamilyWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

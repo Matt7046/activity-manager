@@ -2,9 +2,9 @@ package com.common.mapper;
 
 import org.mapstruct.factory.Mappers;
 
-import com.common.data.LogActivity;
-import com.common.dto.ActivityDTO;
-import com.common.dto.LogActivityDTO;
+import com.common.data.activity.LogActivity;
+import com.common.dto.activity.ActivityDTO;
+import com.common.dto.activity.LogActivityDTO;
 
 import org.mapstruct.*;
 

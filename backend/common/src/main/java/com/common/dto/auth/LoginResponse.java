@@ -1,8 +1,8 @@
-package com.common.authDTO;
+package com.common.dto.auth;
 
 
 
-import com.common.dto.InterfaceDTO;
+import com.common.dto.structure.InterfaceDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
