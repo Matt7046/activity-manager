@@ -9,7 +9,7 @@ import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
 import { ButtonName, HttpStatus, SectionName, TypeAlertColor } from '../../general/Constant';
-import { getDateString, NotificationI, ResponseI, UserI } from '../../general/Utils';
+import { getDateStringRegularFormat, NotificationI, ResponseI, UserI } from '../../general/Utils';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
 
@@ -57,7 +57,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
         const popoverNotification = {
           message: x.message,
-          subText: ['Inviato da: ' + x.userSender, 'data: ' + getDateString(x.dateSender)]    
+          subText: ['Inviato da: ' + x.userSender, 'data: ' + getDateStringRegularFormat(x.dateSender)]    
            
         }
         return popoverNotification;
