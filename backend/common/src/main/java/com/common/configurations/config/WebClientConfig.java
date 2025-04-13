@@ -1,4 +1,4 @@
-package com.common.configurations;
+package com.common.configurations.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -1,18 +1,18 @@
 package com.activityService.controller;
 
 import com.activityService.service.ActivityService;
-import com.common.dto.UserPointDTO;
-import com.common.exception.ActivityHttpStatus;
+import com.common.dto.user.UserPointDTO;
+import com.common.structure.status.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.common.configurations.EncryptDecryptConverter;
-import com.common.data.Activity;
-import com.common.dto.ActivityDTO;
-import com.common.dto.ResponseDTO;
+import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.data.activity.Activity;
+import com.common.dto.activity.ActivityDTO;
+import com.common.dto.structure.ResponseDTO;
 
-import com.common.exception.NotFoundException;
+import com.common.structure.exception.NotFoundException;
 import com.common.mapper.ActivityMapper;
 
 import reactor.core.publisher.Mono;

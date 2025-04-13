@@ -1,5 +1,6 @@
-package com.common.dto;
+package com.common.dto.activity;
 
+import com.common.dto.structure.InterfaceDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.common.data;
+package com.common.data.notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.common.exception;
+package com.common.structure.status;
 
 import lombok.AllArgsConstructor;
 
