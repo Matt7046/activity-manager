@@ -1,10 +1,13 @@
 package com.familyService.service;
 
-import com.common.data.LogFamily;
-import com.common.dto.*;
-import com.common.exception.ActivityHttpStatus;
+import com.common.data.family.LogFamily;
+import com.common.dto.structure.ResponseDTO;
+import com.common.dto.user.PointRDTO;
+import com.common.dto.user.UserPointDTO;
+import com.common.structure.status.ActivityHttpStatus;
+import com.common.dto.family.LogFamilyDTO;
 import com.common.mapper.LogFamilyMapper;
-import com.common.authDTO.PointsUser;
+import com.common.dto.auth.PointsUser;
 import com.repository.family.FamilyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
