@@ -158,7 +158,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           <div id="text-box-email">
             <TextField
               id="emailFamily"
-              label='Child Email'
+              label= {user.emailUserCurrent=== user.emailFamily ? 'email di registrazione' : 'Email tutelato'}
               variant="standard"
               value={user.emailFamily} // Collega il valore allo stato
               // onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia

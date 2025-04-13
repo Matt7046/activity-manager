@@ -27,13 +27,13 @@ interface CustomAlertProps {
 const classNameByTypeMessage = (typeMessage: TypeAlertColor|undefined) => {
   switch(typeMessage) {
     case TypeAlertColor.SUCCESS:
-      return 'text-center-success';
+      return 'text-up-message-success';
     case TypeAlertColor.ERROR:
-      return 'text-center-error';
+      return 'text-up-message-error';
     case TypeAlertColor.INFO:
-      return 'text-center-info';
+      return 'text-up-message-info';
     case TypeAlertColor.WARNING:
-      return 'text-center-warning';
+      return 'text-up-message-warning';
     default:
       return '';
   }
@@ -78,9 +78,9 @@ const Alert: React.FC<CustomAlertProps> = ({ message, onClose }) => {
 
         {message?.message?.map((msg, index) => (
           <Typography
+          className='text-message'
             key={index}
-            variant="body2"
-            sx={{ textAlign: 'center' }}
+            variant="body2"         
           >
             {msg}
           </Typography>

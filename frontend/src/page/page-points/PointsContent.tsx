@@ -7,7 +7,7 @@ import { showMessage } from "../../App";
 import lizard from "../../assets/images/lizard.jpg"; // Percorso del file locale
 import points from "../../assets/images/points.jpg"; // Percorso del file locale
 import Button, { Pulsante } from "../../components/ms-button/Button";
-import CardGrid, { CardProps } from "../../components/ms-card/Card";
+import CardGrid, { CardProps, CardText, CardTextAlign } from "../../components/ms-card/Card";
 import Label from '../../components/ms-label/Label';
 import { ButtonName, HttpStatus } from "../../general/Constant";
 import { ResponseI, UserI } from "../../general/Utils";
@@ -36,7 +36,6 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const [openDialog, setOpenDialog] = useState(false); // Controlla la visibilità del messaggio
   const [testo, setTesto] = useState('');
   const [testoLog, setTestoLog] = useState([] as ActivityLogI[]);
-  const [testoLogT, setTestoLogT] = useState([] as ActivityLogI[]);
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
 
   useEffect(() => {
@@ -66,7 +65,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
   };
   const children = (
     <React.Fragment>
-      <Grid container justifyContent="flex-end" spacing={2} sx={{ marginTop: 2 }}>
+      <Grid container justifyContent="flex-end" spacing={2} >
         <Button pulsanti={[pulsanteLog]} />
 
         <Dialog
@@ -74,15 +73,15 @@ const PointsContent: React.FC<PointsContentProps> = ({
           aria-labelledby="customized-dialog-title"
           open={openDialog}
         >
-          <DialogTitle id="customized-dialog-title" sx={{ m: 0, p: 2 }}>
+          <DialogTitle id="customized-dialog-title">
             <Grid container spacing={2}>
               {/* Prima riga: Pulsanti per simulare il login */}
-              <Grid size={{ xs: 12, sm: 11 }}>
+              <Grid size={{ xs: 11, sm: 11 }}>
                 <div className="col-display">
                   <Label text={"LOG ACTIVITY"} _id={"logActivity"} className='col-display' />
                 </div>
               </Grid>
-              <Grid size={{ xs: 12, sm: 1 }}>
+              <Grid size={{ xs: 1, sm: 1 }}>
                 <IconButton
                   aria-label="close"
                   onClick={handleCloseDialog}
@@ -99,16 +98,16 @@ const PointsContent: React.FC<PointsContentProps> = ({
                 <Grid container spacing={2}>
                   {testoLog.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
                     <Grid size={{ xs: 12, sm: 6 }} key={index} >
-                      <Card>
+                      <Card >
 
-                        <CardContent>
-                          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
+                        <CardContent className='text-card-point'>
+                          <Typography variant="subtitle1">
                             Data: {new Date(item.date).toLocaleDateString()}
                           </Typography>
-                          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+                          <Typography variant="body2" className='text-message-point-body'>
                             Use Points: {item.usePoints}
                           </Typography>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                          <Typography variant="body2" classes='text-message-point-body'>
                             Description: {item.log}
                           </Typography>
                         </CardContent>
@@ -142,10 +141,42 @@ const PointsContent: React.FC<PointsContentProps> = ({
       <Button pulsanti={[]} />
     </React.Fragment>
     ;
+
+
+
+  const CardTextAlign: CardTextAlign = {
+
+    textLeft: testo
+  }
+
+  const textAlign1: CardTextAlign[] = [CardTextAlign]
+
+  const cardText1: CardText = {
+    textLeftTitle: 'Descrizione',
+    text: textAlign1
+  }
+
+
+  const textAlign2: CardTextAlign[] = testoLog.map((x) => {
+
+    return {
+
+      textLeft: x.log,
+      textRight: x.usePoints + " points"
+    }
+  });
+
+  const cardText2: CardText = {
+    textLeftTitle: 'Activity',
+    textRightTitle: 'Use Points',
+    text: textAlign2
+  }
+
+
   const cardsData: CardProps[] = [
     {
       _id: 'card1',
-      text: [testo],
+      text: cardText1,
       img: points,
       title: "Points",
       // className: 'card-point', 
@@ -155,14 +186,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
     {
 
       _id: 'card2',
-      text: testoLogT.map((x) => {
-
-        if (x.usePoints) {
-          return x.log + ': ' + x.usePoints + " points"
-        }
-        return x.log;
-
-      }),
+      text: cardText2,
       img: lizard,
       title: "Log Activity",
       //  className: 'card-point',
@@ -196,8 +220,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
           }
           if (truncate) {
             setOpenDialog(true);
-          }
-          setTestoLogT(attivitaLog);
+          }         
           setTestoLog(response.jsonText)
         }
       }

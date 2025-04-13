@@ -7,10 +7,9 @@ interface EmailDialogProps {
   handleCloseD: () => void;
   emailOptions: string[];
   handleEmailChange: (event: SelectChangeEvent) => void;
-  handleConfirm: (simulated: any, emailLogin: string, emailUserCurrent: string) => void;
+  handleConfirm: (simulated: any,emailUserCurrent: string) => void;
   email: string;
   simulated: any;
-  emailLogin: string;
   emailUserCurrent: string;
 }
 
@@ -22,7 +21,6 @@ const DialogEmail: React.FC<EmailDialogProps> = ({
   handleConfirm,
   email,
   simulated,
-  emailLogin,
   emailUserCurrent
 }) => {
   return (
@@ -49,7 +47,7 @@ const DialogEmail: React.FC<EmailDialogProps> = ({
           Annulla
         </ButtonMui>
         <ButtonMui
-          onClick={() => handleConfirm(simulated, emailLogin, emailUserCurrent)}
+          onClick={() => handleConfirm(simulated, emailUserCurrent)}
           className="button-confirm"
           color="primary"
           disabled={!email} // Disabilita il pulsante se l'email è vuota
