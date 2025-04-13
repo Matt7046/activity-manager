@@ -1,11 +1,11 @@
 package com.userPointService.service;
-import com.common.data.UserPoint;
-import com.common.dto.UserPointDTO;
+import com.common.data.user.UserPoint;
+import com.common.dto.user.UserPointDTO;
 import com.common.mapper.UserPointMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.common.configurations.EncryptDecryptConverter;
+import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.repository.userPoint.UserPointRepository;
 
 import java.util.List;

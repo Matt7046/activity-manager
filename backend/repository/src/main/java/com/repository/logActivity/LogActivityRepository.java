@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.common.data.LogActivity;
+import com.common.data.activity.LogActivity;
 
 @Repository
 public interface LogActivityRepository extends MongoRepository<LogActivity, String>, LogActivityCustomRepository {

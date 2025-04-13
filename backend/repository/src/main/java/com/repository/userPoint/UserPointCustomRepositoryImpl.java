@@ -5,12 +5,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.common.data.UserPoint;
+import com.common.data.user.UserPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
-import com.common.configurations.EncryptDecryptConverter;
-import com.common.exception.ArithmeticCustomException;
+import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.structure.exception.ArithmeticCustomException;
 
 public class UserPointCustomRepositoryImpl implements UserPointCustomRepository {
 

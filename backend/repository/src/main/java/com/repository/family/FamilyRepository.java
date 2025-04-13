@@ -1,7 +1,6 @@
 package com.repository.family;
 
-import com.common.data.LogActivity;
-import com.common.data.LogFamily;
+import com.common.data.family.LogFamily;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;

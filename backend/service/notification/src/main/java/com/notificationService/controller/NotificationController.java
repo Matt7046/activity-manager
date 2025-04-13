@@ -1,12 +1,12 @@
 package com.notificationService.controller;
 
-import com.common.data.Notification;
-import com.common.dto.NotificationDTO;
+import com.common.data.notification.Notification;
+import com.common.dto.notification.NotificationDTO;
 import com.notificationService.service.NotificationService;
 import org.springframework.web.bind.annotation.*;
-import com.common.configurations.EncryptDecryptConverter;
-import com.common.dto.ResponseDTO;
-import com.common.exception.ActivityHttpStatus;
+import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.dto.structure.ResponseDTO;
+import com.common.structure.status.ActivityHttpStatus;
 
 import reactor.core.publisher.Mono;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,14 +1,16 @@
 package com.logActivityService.processor;
 
-import com.common.configurations.NotificationComponent;
-import com.common.configurations.RabbitMQProducer;
-import com.common.data.OperationTypeLogFamily;
-import com.common.dto.*;
-import com.common.dto.UserPointDTO;
-import com.common.exception.ActivityHttpStatus;
+import com.common.configurations.structure.NotificationComponent;
+import com.common.configurations.rabbitmq.RabbitMQProducer;
+import com.common.data.family.OperationTypeLogFamily;
+import com.common.dto.activity.LogActivityDTO;
+import com.common.dto.structure.ResponseDTO;
+import com.common.dto.user.UserPointDTO;
+import com.common.structure.status.ActivityHttpStatus;
+import com.common.dto.family.LogFamilyDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.logActivityService.service.LogActivityService;
-import com.common.data.LogActivity;
+import com.common.data.activity.LogActivity;
 import com.common.mapper.LogActivityMapper;
 import com.logActivityService.service.LogActivityWebService;
 import org.springframework.beans.factory.annotation.Autowired;

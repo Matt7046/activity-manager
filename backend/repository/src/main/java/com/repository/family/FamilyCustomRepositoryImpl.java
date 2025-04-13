@@ -1,7 +1,7 @@
 package com.repository.family;
 
-import com.common.configurations.EncryptDecryptConverter;
-import com.common.data.UserPoint;
+import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.data.user.UserPoint;
 import com.repository.userPoint.UserPointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

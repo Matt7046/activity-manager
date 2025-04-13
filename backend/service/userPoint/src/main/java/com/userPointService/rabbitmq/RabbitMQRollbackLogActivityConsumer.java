@@ -1,6 +1,6 @@
 package com.userPointService.rabbitmq;
 
-import com.common.dto.UserPointDTO;
+import com.common.dto.user.UserPointDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.userPointService.service.UserPointService;

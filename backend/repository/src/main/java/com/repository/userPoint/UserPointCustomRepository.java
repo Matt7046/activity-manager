@@ -1,6 +1,6 @@
 package com.repository.userPoint;
 import java.util.List;
-import com.common.data.UserPoint;
+import com.common.data.user.UserPoint;
 
 public interface UserPointCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario

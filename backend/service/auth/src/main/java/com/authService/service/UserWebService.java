@@ -1,14 +1,13 @@
 package com.authService.service;
 
-import com.common.dto.UserPointDTO;
-import com.common.dto.ResponseDTO;
+import com.common.dto.user.UserPointDTO;
+import com.common.dto.structure.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import com.authService.processor.UserAuthPointsProcessor;
 import reactor.core.scheduler.Schedulers;
 
 @Service
