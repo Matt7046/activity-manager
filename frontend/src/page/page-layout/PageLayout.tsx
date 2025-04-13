@@ -57,7 +57,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
         const popoverNotification = {
           message: x.message,
-          subText: ['Inviato da: ' + x.userSender, 'data: ' + getDateString(x.userSender)]    
+          subText: ['Inviato da: ' + x.userSender, 'data: ' + getDateString(x.dateSender)]    
            
         }
         return popoverNotification;
