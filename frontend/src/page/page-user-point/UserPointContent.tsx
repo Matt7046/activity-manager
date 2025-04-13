@@ -102,7 +102,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
               {/* Prima riga: Pulsanti per simulare il login */}
               <Grid size={{ xs: 11, sm: 11 }}>
                 <div className="col-display">
-                  <Label text={"LOG ACTIVITY"} _id={"logActivity"} className='col-display' />
+                  <Label text={"LOG ATTIVITA'"} _id={"logActivity"} className='col-display' />
                 </div>
               </Grid>
               <Grid size={{ xs: 1, sm: 1 }}>
@@ -175,7 +175,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
               {/* Prima riga: Pulsanti per simulare il login */}
               <Grid size={{ xs: 11, sm: 11 }}>
                 <div className="col-display">
-                  <Label text={"LOG FAMILY"} _id={"logFamily"} className='col-display' />
+                  <Label text={"LOG FAMIGLIA"} _id={"logFamily"} className='col-display' />
                 </div>
               </Grid>
               <Grid size={{ xs: 1, sm: 1 }}>
