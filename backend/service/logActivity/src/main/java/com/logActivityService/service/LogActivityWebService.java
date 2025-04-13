@@ -5,6 +5,7 @@ import com.common.dto.UserPointDTO;
 import com.common.dto.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -20,9 +21,15 @@ public class LogActivityWebService {
     @Qualifier("webClientFamily")
     private WebClient webClientFamily;
 
+    @Value("${app.page.path.userpoint}")
+    private String userPointPath;
+
+    @Value("${app.page.path.family}")
+    private String familyPath;
+
     public Mono<ResponseDTO> savePoints(UserPointDTO userPointDTO) {
         return webClientPoint.post()
-                .uri("/api/point/dati/standard")
+                .uri(userPointPath+"/dati/standard")
                 .bodyValue(userPointDTO)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class);
@@ -30,7 +37,7 @@ public class LogActivityWebService {
     }
     public Mono<ResponseDTO> saveLogFamily(LogFamilyDTO logFamilyDTO) {
         return webClientFamily.post()
-                .uri("/api/family/log")
+                .uri(familyPath+"/log")
                 .bodyValue(logFamilyDTO)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class);

@@ -33,7 +33,7 @@
       <module>service/logActivity</module>
       <module>service/about</module>
       <module>service/register</module>
-      <module>service/point</module>
+      <module>service/userPoint</module>
       <module>service/family</module>
       <module>service/notification</module>
   </modules>

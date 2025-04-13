@@ -9,7 +9,7 @@ import { FormErrorValues, ResponseI, UserI, verifyForm } from "../../general/Uti
 import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivities, savePointsAndLog } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
-import { findByEmail } from "../page-points/service/PointsService";
+import { findByEmail } from "../page-user-point/service/UserPointService";
 import { showMessageOperativeForm } from "./service/OperativeService";
 import operativeStore from "./store/OperativeStore";
 
@@ -174,6 +174,9 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     return <p>Caricamento...</p>; // Mostra un loader mentre i dati vengono caricati
   }
 
+  const activityDes = 'Attività *';
+  const puntiDes = 'Punti';
+
   return (
     <>
       <div className="row">
@@ -195,7 +198,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <FormControl sx={{ marginTop: '16px', width: '100%' }} variant="standard">
-                <InputLabel htmlFor="filled-points">{'Points'}</InputLabel>
+                <InputLabel htmlFor="filled-points">{puntiDes}</InputLabel>
                 <Input
                   id="filled-adornment-points"
                   value={operativeStore.points} // Collega il valore allo stato
@@ -209,14 +212,13 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
             <Grid size={{ xs: 12, sm: 6 }}>
               {/* Campo combobox */}
               <FormControl fullWidth margin="normal">
-                <InputLabel id="select-label">
-                  Activity<span > *</span>
+                <InputLabel id="select-label">{activityDes}
                 </InputLabel>
                 <Select
                   labelId="select-label"
                   value={formValues.activity}
                   onChange={(e) => clickCombobox(e.target.value)}
-                  label="Activity"
+                  label="Attività"
                   required={true}
                 >
                   {operativeStore.activity.map((option) => (
@@ -233,7 +235,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
               {/* Campo numerico */}
               <FormControl fullWidth >
                 <TextField
-                  label="Points Activity"
+                  label="Punti attività"
                   type="number"
                   value={operativeStore.pointsField}
                   onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
