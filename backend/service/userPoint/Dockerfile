@@ -10,6 +10,6 @@ ENV JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,add
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 # Copia il JAR generato (modifica il nome se necessario)
-COPY --from=build /app/service/point/target/point-service-1.0.0.jar app.jar
+COPY --from=build /app/service/userPoint/target/user-point-service-1.0.0.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
