@@ -1,14 +1,14 @@
 package com.logActivityService.controller;
 
-import com.common.dto.UserPointDTO;
+import com.common.dto.user.UserPointDTO;
 import com.logActivityService.processor.LogActivityProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.common.data.LogActivity;
-import com.common.dto.LogActivityDTO;
-import com.common.dto.ResponseDTO;
-import com.common.exception.ActivityHttpStatus;
+import com.common.data.activity.LogActivity;
+import com.common.dto.activity.LogActivityDTO;
+import com.common.dto.structure.ResponseDTO;
+import com.common.structure.status.ActivityHttpStatus;
 import com.common.mapper.LogActivityMapper;
 import reactor.core.publisher.Mono;
 import java.util.ArrayList;

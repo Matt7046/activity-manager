@@ -1,13 +1,13 @@
 package com.familyService.controller;
 
-import com.common.dto.LogFamilyDTO;
-import com.common.dto.UserPointDTO;
+import com.common.dto.family.LogFamilyDTO;
+import com.common.dto.user.UserPointDTO;
 import com.familyService.processor.FamilyPointsProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.common.dto.ResponseDTO;
+import com.common.dto.structure.ResponseDTO;
 import reactor.core.publisher.Mono;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
