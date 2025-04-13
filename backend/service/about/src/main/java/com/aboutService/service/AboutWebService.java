@@ -2,26 +2,46 @@ package com.aboutService.service;
 
 import com.common.dto.ActivityDTO;
 import com.common.dto.ResponseDTO;
-import com.aboutService.processor.AboutDeleteActivityProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import com.aboutService.processor.AboutSaveActivityProcessor;
+import reactor.core.scheduler.Schedulers;
 
 @Service
 public class AboutWebService {
 
     @Autowired
-    private AboutSaveActivityProcessor aboutSaveActivityProcessor;
-    @Autowired
-    private AboutDeleteActivityProcessor aboutDeleteActivityProcessor;
+    @Qualifier("webClientActivity")
+    private WebClient webClientActivity;
+    @Value("${message.http.error.4xx}")
+    private String error4xx;
 
-
-    public Mono<ResponseDTO> callActivitySaveService(ActivityDTO activityDTO) {
-       return aboutSaveActivityProcessor.callActivitySaveService(activityDTO);
+    public Mono<ResponseDTO> processDeleteActivity(String identificativo) {
+        return webClientActivity.delete()
+                .uri("/api/activity/toggle/{identificativo}", identificativo)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                    return Mono.error(new RuntimeException("Errore 4xx")); // Passa l'errore
+                })
+                .bodyToMono(ResponseDTO.class)
+                .flatMap(responseDTO -> Mono.fromCallable(() -> responseDTO)
+                        .subscribeOn(Schedulers.boundedElastic()));
     }
 
-    public Mono<ResponseDTO> callActivityDeleteService(String identificativo) {
-        return aboutDeleteActivityProcessor.callActivityDeleteService(identificativo);
+    public Mono<ResponseDTO> processSaveActivity(ActivityDTO activityDTO) {
+        return webClientActivity.post()
+                .uri("/api/activity/dati")
+                .bodyValue(activityDTO)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                    return Mono.error(new RuntimeException(error4xx)); // Passa l'errore
+                })
+                .bodyToMono(ResponseDTO.class)
+                .flatMap(responseDTO -> Mono.fromCallable(() -> responseDTO)
+                        .subscribeOn(Schedulers.boundedElastic()));
     }
 }

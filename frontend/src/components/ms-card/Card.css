@@ -63,3 +63,6 @@
   background-color: rgba(210, 209, 209, 0.25);
   /* grigio neutro trasparente */
 }
+.list-body{
+  min-height: 250px;
+}
