@@ -66,7 +66,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
     visibility: user ? true : false,
     configDialogPulsante: { message: '', showDialog: false }
   };
-  
+
   const pulsanteLogFamily: Pulsante = {
     icona: 'fas fa-clipboard',
     funzione: () => getLogFamily(user, true), // Passi la funzione direttamente
@@ -125,14 +125,23 @@ const PointsContent: React.FC<PointsContentProps> = ({
                       <Card >
 
                         <CardContent className='text-card-point'>
-                          <Typography variant="subtitle1">
-                            {'Data: '+ getDateStringExtendsFormat(item.date)}
+                          <Typography variant="subtitle1"className='text-message-point-title'>
+                            {'Data: '}
+                          </Typography>
+                          <Typography variant="subtitle1" className='text-message-point-body'>
+                            {getDateStringExtendsFormat(item.date)}
+                          </Typography>
+                          <Typography variant="body2" className='text-message-point-title'>
+                            {'Punti usati: '}
                           </Typography>
                           <Typography variant="body2" className='text-message-point-body'>
-                            {'Use Points: '+ item.usePoints}
+                            {item.usePoints}
                           </Typography>
-                          <Typography variant="body2" classes='text-message-point-body'>
-                            {'Description: '+ item.log}
+                          <Typography variant="body2" className='text-message-point-title'>
+                            {'Descrizione: '}
+                          </Typography>
+                          <Typography variant="body2" className='text-message-point-body'>
+                            {item.log}
                           </Typography>
                         </CardContent>
                       </Card>
@@ -145,11 +154,11 @@ const PointsContent: React.FC<PointsContentProps> = ({
                   page={page}
                   onChange={handlePageChange}
                   color="primary"
-                  sx={{ marginTop: 2, display: 'flex', justifyContent: 'center' }}
+                  className='pagination-activity'
                 />
               </>
             ) : (
-              <Typography variant="body2" sx={{ color: 'text.secondary', mt: 2 }}>
+              <Typography variant="body2">
                 {'Nessun dato disponibile.'}
               </Typography>
             )}
@@ -198,7 +207,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
                       <Card >
 
                         <CardContent className='text-card-point'>
-                          <Typography variant="subtitle1"  className='text-message-point-title'>
+                          <Typography variant="subtitle1" className='text-message-point-title'>
                             {'Data: '}
                           </Typography>
                           <Typography variant="subtitle1">
