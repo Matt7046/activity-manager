@@ -71,7 +71,10 @@ const CardComponent = observer((props: CardProps) => {
             )}
           </Grid>
 
-          {propsCard.text.text.map((item: CardTextAlign, index: number) => (
+          {(propsCard.text.text.length > 0
+            ? propsCard.text.text
+            : [{ textLeft: "", textRight: "" }]
+          ).map((item: CardTextAlign, index: number) => (
             <Grid container key={index} justifyContent="space-between" alignItems="center">
               <Grid size={{ xs: item.textRight ? 6 : 12, sm: item.textRight ? 6 : 12 }}>
                 <Typography className="card-list-item">{item.textLeft}</Typography>

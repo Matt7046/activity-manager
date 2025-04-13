@@ -4,6 +4,21 @@ import { TypeMessage } from "../../page-layout/PageLayout";
 
 
 
+export const logFamilyByEmail = async (pointsDTO: any, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+  try {
+    const path = PATH_FAMILY + `/log/tutor`;
+    const data = await postData(path, pointsDTO, setLoading); // Usa l'URL dinamico
+    console.log('Dati ricevuti:', data);
+    return data;
+  } catch (error) {
+    console.error('Errore durante il recupero dei dati:', error);
+    if (funzioneErrore) {
+      funzioneErrore();
+    }
+  }
+};
+
+
 export const savePointsByFamily = async (user: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void,
   showSuccess?: boolean): Promise<ResponseI | undefined> => {
   try {
@@ -15,5 +30,6 @@ export const savePointsByFamily = async (user: any, funzioneMessage?: (message?:
   } catch (error) {
     console.error('Errore durante il recupero dei dati:', error);
   }
+
 };
 

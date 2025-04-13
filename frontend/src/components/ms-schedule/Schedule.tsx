@@ -46,10 +46,10 @@ const Schedule = observer((props: {
         {props.schedule.pulsanti.filter(
           (pulsante) => pulsante.nome.toUpperCase() === 'NEW'
         ).map((pulsante) => (
-          <Grid container justifyContent="space-between" alignItems="center" spacing={2} key="newButton" 
-          className="new-button-container">
+          <Grid container justifyContent="space-between" alignItems="center" spacing={2} key="newButton"
+            className="new-button-container">
 
-            <Button 
+            <Button
               pulsanti={[{ ...pulsante },
               ]}
             />
@@ -113,11 +113,11 @@ const Schedule = observer((props: {
                 <Button pulsanti={pulsanti} />
               </Grid>
               <div id={`rowHidden-${item._id}`} style={{ gridColumn: 'span 12' }}>
-                <Label _id={item._id} text={subTesti[item._id] ?subTesti[item._id] :"-" } visibility={isVertical && visibilitySubTesto ? 'hidden' : undefined} />
+                <Label _id={item._id} text={subTesti[item._id] ? subTesti[item._id] : isVertical ? '' : "-"} visibility={isVertical && visibilitySubTesto ? 'hidden' : undefined} />
               </div>
 
               {/* Separatore */}
-              <hr className="custom-separator" />
+              <hr className= {isVertical ? 'custom-separator-vertical' : 'custom-separator-horizontal'} />
             </React.Fragment>
           );
         })}
@@ -135,7 +135,7 @@ export const funzionalitaPulsanteRed = (item: any, pulsante: Pulsante, handleSub
   if (check) {
     element.style.visibility = ""; // Rimuove il valore inline
     pulsante.funzione(_id).then((response: { jsonText: { subTesto: string; }; }) => {
-      handleSubTestoUpdate(item._id, response.jsonText.subTesto);     
+      handleSubTestoUpdate(item._id, response.jsonText.subTesto);
     })
   } else {
     element.style.visibility = "hidden"; // mette il valore inline

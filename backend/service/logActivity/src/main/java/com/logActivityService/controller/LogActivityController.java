@@ -1,8 +1,7 @@
 package com.logActivityService.controller;
 
 import com.common.dto.UserPointDTO;
-import com.logActivityService.service.LogActivityService;
-import com.logActivityService.service.PointsWebService;
+import com.logActivityService.processor.LogActivityProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,9 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class LogActivityController {
 
     @Autowired
-    private LogActivityService logActivityService;
-    @Autowired
-    private PointsWebService pointsWebService;
+    private LogActivityProcessor logActivityProcessor;
+
 
     @Value("${order.type1}")
     private String field;
@@ -35,7 +33,7 @@ public class LogActivityController {
     @PostMapping("/log")
     public ResponseDTO logActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
         Sort sort = Sort.by(Sort.Order.desc(field));
-        List<LogActivity> sub = logActivityService.logAttivitaByEmail(userPointDTO, sort);
+        List<LogActivity> sub = logActivityProcessor.logAttivitaByEmail(userPointDTO, sort);
         List<LogActivityDTO> logAttivitaUnica = sub.stream()
                 .map(LogActivityMapper.INSTANCE::toDTO)
 
@@ -46,6 +44,6 @@ public class LogActivityController {
 
     @PostMapping("/dati")
     public Mono<ResponseDTO> savePointsAndLog(@RequestBody LogActivityDTO logActivityDTO) {
-        return pointsWebService.savePoints(logActivityDTO);
+        return logActivityProcessor.savePoints(logActivityDTO);
     }
 }

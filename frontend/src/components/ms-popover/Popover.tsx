@@ -30,14 +30,8 @@ const PopoverComponent: React.FC<PopoverComponentProps> = ({
 }) => {
   return (
     <Popover
-      className='popover-prop'
-      slotProps={{
-        paper: {
-          className: 'popover-paper',
-        },
-      }}
-
       id="popover-notifications"
+      className="custom-popover"
       open={openAnchor}
       anchorEl={anchorEl}
       onClose={handleCloseAnchor}
@@ -46,30 +40,31 @@ const PopoverComponent: React.FC<PopoverComponentProps> = ({
         horizontal: 'left',
       }}
     >
-      <Box sx={{ padding: 2 }}>
+      <Box className="popover-box">
         {notifications.map((notification, index) => (
-          <Box key={index} sx={{ marginBottom: 2 }}>
-            <Typography variant="body1" color="text.primary">
+          <Box key={index} className="notification-box">
+            <Typography variant="body1" className="notification-message">
               {notification.message}
             </Typography>
 
             <Divider />
 
             {notification.subText.slice(0, 5).map((subTextOne, index) => (
-
-              <><Typography variant="body2" color="text.secondary">
-                {subTextOne}
-              </Typography><Divider /></>
-
+              <React.Fragment key={index}>
+                <Typography variant="body2" className="notification-subtext">
+                  {subTextOne}
+                </Typography>
+                <Divider />
+              </React.Fragment>
             ))}
-
           </Box>
         ))}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Box className="button-container">
           <Button pulsanti={[pulsanteNotification]} />
         </Box>
       </Box>
     </Popover>
+
   );
 };
 
