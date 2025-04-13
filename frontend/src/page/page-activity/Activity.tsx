@@ -27,7 +27,7 @@ export interface ActivityLogI {
 const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
 
-  setTitle("Section Activity");
+  setTitle("Sezione attività");
   const { user, setUser } = useUser();
   const [utente, setUtente] = useState<UserI>(user); // Stato iniziale vuoto
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
