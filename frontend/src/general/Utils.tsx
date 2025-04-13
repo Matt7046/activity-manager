@@ -85,7 +85,7 @@ export const getMenuLaterale = (navigate: NavigateFunction, user: UserI): MenuLa
 }
 
 
-export const getDateString = (data: Date): string => {
+export const getDateStringExtendsFormat = (data: Date): string => {
 
   return new Date(data).toLocaleString('it-IT', {
     day: '2-digit',
@@ -96,5 +96,11 @@ export const getDateString = (data: Date): string => {
     second: '2-digit'
   })
 }
+
+export const getDateStringRegularFormat = (data: Date): string => {
+
+  return new Date(data).toLocaleDateString();
+}
+
 
 
