@@ -1,14 +1,16 @@
-package com.common.configurations;
+package com.common.configurations.encrypt;
 
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+
+import com.common.configurations.structure.PropertiesKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import com.common.exception.DecryptException;
+import com.common.structure.exception.DecryptException;
 
 @Component
 public class EncryptDecryptConverter implements Converter<String, String> {

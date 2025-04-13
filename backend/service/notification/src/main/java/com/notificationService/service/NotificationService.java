@@ -1,9 +1,9 @@
 package com.notificationService.service;
 
-import com.common.data.Notification;
-import com.common.dto.NotificationDTO;
-import com.common.dto.ResponseDTO;
-import com.common.exception.ActivityHttpStatus;
+import com.common.data.notification.Notification;
+import com.common.dto.notification.NotificationDTO;
+import com.common.dto.structure.ResponseDTO;
+import com.common.structure.status.ActivityHttpStatus;
 import com.common.mapper.NotificationMapper;
 import com.repository.notification.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
-package com.common.dto;
+package com.common.dto.family;
 
+import com.common.dto.notification.NotificationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.common.configurations;
+package com.common.configurations.structure;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
