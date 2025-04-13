@@ -22,7 +22,7 @@ services:
     depends_on:
       - register-service
       - about-service
-      - point-service
+      - user-point-service
       - activity-service
       - log-activity-service
       - auth-service
@@ -73,13 +73,13 @@ services:
     networks:
       - app-network
 
-  point-service:
+  user-point-service:
     depends_on:
       - rabbitmq
-    image: point-service:1.0.0
+    image: user-point-service:1.0.0
     build:
       context: ./ 
-      dockerfile: service/point/Dockerfile
+      dockerfile: service/userPoint/Dockerfile
     ports:
       - "8083:8080"
       - "5006:5006"
@@ -90,7 +90,7 @@ services:
       - SPRING_RABBITMQ_USERNAME=username
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
-      - ./service/point/src/main/resources/certificate:/app/certificate
+      - ./service/userPoint/src/main/resources/certificate:/app/certificate
     networks:
       - app-network
 

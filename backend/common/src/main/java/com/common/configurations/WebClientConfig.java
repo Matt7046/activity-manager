@@ -24,8 +24,8 @@ public class WebClientConfig {
     @Value("${app.page.service.register}")
     private String register;
 
-    @Value("${app.page.service.point}")
-    private String point;
+    @Value("${app.page.service.userpoint}")
+    private String userpoint;
 
     @Value("${app.page.service.about}")
     private String about;
@@ -69,7 +69,7 @@ public class WebClientConfig {
     @Bean
     public WebClient webClientPoint(WebClient.Builder builder) {
         return builder
-                .baseUrl(point)
+                .baseUrl(userpoint)
                 .filter((request, next) -> ReactiveSecurityContextHolder.getContext()
                         .map(securityContext -> {
                             Jwt token = (Jwt) securityContext.getAuthentication().getCredentials();

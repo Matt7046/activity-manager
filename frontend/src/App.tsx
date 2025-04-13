@@ -18,10 +18,10 @@ import Activity from './page/page-activity/Activity';
 import Family from './page/page-family/Family';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
-import Points from './page/page-points/Points';
-import { getEmailChild } from './page/page-points/service/PointsService';
 import PrivacyPolicy from './page/page-privacy-policy/PrivacyPolicy';
 import Register from './page/page-register/Register';
+import { getEmailChild } from './page/page-user-point/service/UserPointService';
+import Points from './page/page-user-point/UserPoint';
 
 
 // Creazione del contesto per User
