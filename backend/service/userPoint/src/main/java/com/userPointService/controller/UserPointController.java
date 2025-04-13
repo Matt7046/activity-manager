@@ -1,4 +1,4 @@
-package com.pointService.controller;
+package com.userPointService.controller;
 
 import com.common.data.UserPoint;
 import com.common.dto.PointRDTO;
@@ -7,9 +7,9 @@ import com.common.dto.ResponseDTO;
 import com.common.dto.UserDTO;
 import com.common.exception.ActivityHttpStatus;
 import com.common.exception.NotFoundException;
-import com.common.mapper.PointsMapper;
+import com.common.mapper.UserPointMapper;
 import com.common.authDTO.PointsUser;
-import com.pointService.service.PointService;
+import com.userPointService.service.UserPointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/point")
-public class PointController {
+@RequestMapping("api/userpoint")
+public class UserPointController {
 
     @Autowired
-    private PointService pointService;
+    private UserPointService userPointService;
 
     @Value("${error.document.notFound}")
     private String errorDocument;
@@ -39,14 +39,14 @@ public class PointController {
         return Mono.fromCallable(() -> {
         UserPoint item = null;
         ResponseDTO responseDTO = null;
-        item = pointService.getPointByEmail(userPointDTO.getEmail());
+        item = userPointService.getPointByEmail(userPointDTO.getEmail());
         if (item == null) {
             throw new NotFoundException(errorDocument + userPointDTO.getEmail());
         }
 
         if (item != null) {
             String email = userPointDTO.getEmail();
-            UserPointDTO subDTO = PointsMapper.INSTANCE.toDTO(item);
+            UserPointDTO subDTO = UserPointMapper.INSTANCE.toDTO(item);
             List<PointsUser> filteredList = subDTO.getPoints().stream()
                     .filter(point -> email.equals(point.getEmail()))
                     .collect(Collectors.toList());
@@ -62,7 +62,7 @@ public class PointController {
     @PostMapping("/dati")
     public Mono<ResponseDTO>  getUserType(@RequestBody UserPointDTO userPointDTO) throws Exception {
         return Mono.fromCallable(() -> {
-        Long itemId = pointService.getTypeUser(userPointDTO);
+        Long itemId = userPointService.getTypeUser(userPointDTO);
         String emailUserCurrent = itemId == 1  ? userPointDTO.getEmail(): userPointDTO.getEmailFamily();
         ResponseDTO response = new ResponseDTO(new UserDTO(itemId, null,emailUserCurrent), ActivityHttpStatus.OK.value(),
                 new ArrayList<>());
@@ -75,8 +75,8 @@ public class PointController {
         return Mono.fromCallable(() -> {
             Boolean operations = userPointDTO.getOperation() == null ? false : userPointDTO.getOperation();
             userPointDTO.setOperation(operations);
-            UserPoint points = pointService.savePoint(userPointDTO);
-            UserPointDTO subDTO = PointsMapper.INSTANCE.toDTO(points);
+            UserPoint points = userPointService.savePoint(userPointDTO);
+            UserPointDTO subDTO = UserPointMapper.INSTANCE.toDTO(points);
             ResponseDTO response = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(),
                     new ArrayList<>());
             return response;
@@ -90,7 +90,7 @@ public class PointController {
         return Mono.fromCallable(() -> {
 
             userPointDTO.setEmailFamily(userPointDTO.getEmail());
-            Boolean itemId = pointService.saveUser(userPointDTO);
+            Boolean itemId = userPointService.saveUser(userPointDTO);
             String emailUserCurrent = userPointDTO.getType().equals(1L)  ? userPointDTO.getEmail(): userPointDTO.getEmailFamily();
             ResponseDTO response = new ResponseDTO(new UserDTO(null, itemId, emailUserCurrent),
             ActivityHttpStatus.OK.value(), new ArrayList<>());
@@ -102,8 +102,8 @@ public class PointController {
     public Mono<ResponseDTO>  getEmailChild(@RequestBody UserPointDTO userPointDTO) throws Exception {
         return Mono.fromCallable(() -> {
         String email = userPointDTO.getEmail();
-        UserPoint sub = pointService.getPointByEmail(email);
-        UserPointDTO subDTO = PointsMapper.INSTANCE.toDTO(sub);
+        UserPoint sub = userPointService.getPointByEmail(email);
+        UserPointDTO subDTO = UserPointMapper.INSTANCE.toDTO(sub);
         ResponseDTO response = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
             return response;
         });

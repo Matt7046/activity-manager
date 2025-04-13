@@ -10,7 +10,7 @@ import BannerOpenSource from './components/ms-banner/Banner';
 import DialogEmail from './components/ms-dialog-email/DialogEmail';
 import { MenuLaterale } from './components/ms-drawer/Drawer';
 import { baseStore } from './general/BaseStore';
-import { LoginUser, SectionName, ServerMessage, TypeAlertColor, TypeUser } from './general/Constant';
+import { LoginUser, SectionName, SectionNameDesc, ServerMessage, TypeAlertColor, TypeUser } from './general/Constant';
 import { getToken, getUserType } from './general/service/AuthService';
 import { ResponseI, UserI } from './general/Utils';
 import About from './page/page-about/About';
@@ -18,10 +18,10 @@ import Activity from './page/page-activity/Activity';
 import Family from './page/page-family/Family';
 import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
-import Points from './page/page-points/Points';
-import { getEmailChild } from './page/page-points/service/PointsService';
 import PrivacyPolicy from './page/page-privacy-policy/PrivacyPolicy';
 import Register from './page/page-register/Register';
+import { getEmailChild } from './page/page-user-point/service/UserPointService';
+import Points from './page/page-user-point/UserPoint';
 
 
 // Creazione del contesto per User
@@ -432,21 +432,21 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
   if (user.type === TypeUser.FAMILY || user.type === TypeUser.NEW_USER) {
     return [
       [
-        { funzione: null, testo: 'Activity' },
-        { funzione: null, testo: 'About' },
-        { funzione: null, testo: 'Points' },
-        { funzione: null, testo: 'Operative' },
+        { funzione: null, testo: SectionNameDesc.ACTIVITY },
+        { funzione: null, testo: SectionNameDesc.ABOUT },
+        { funzione: null, testo: SectionNameDesc.POINTS },
+        { funzione: null, testo: SectionNameDesc.OPERATIVE },
       ],
       [
-        { funzione: null, testo: 'Family' }
+        { funzione: null, testo: SectionNameDesc.FAMILY }
       ]
     ];
   } else {
     return [
       [
-        { funzione: null, testo: 'Activity' },
-        { funzione: null, testo: 'Points' },
-        { funzione: null, testo: 'Operative' },
+        { funzione: null, testo: SectionNameDesc.ACTIVITY },
+        { funzione: null, testo: SectionNameDesc.POINTS },
+        { funzione: null, testo: SectionNameDesc.OPERATIVE },
       ]
     ];
   }
