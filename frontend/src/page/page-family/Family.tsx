@@ -6,12 +6,15 @@ import { FamilyNotificationI, getMenuLaterale } from '../../general/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import FamilyContent from './FamilyContent';
 
-export interface PointsI {
-  _id: string | undefined;
-  email: string;
-  points: number;
-  numeroPunti: number;
-  attivita: string;
+
+
+export interface FamilyLogI {
+  _id?: string;
+  performedByEmail: string;
+  receivedByEmail: string;
+  date: Date;
+  operations: string;
+
 }
 
 const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
@@ -25,6 +28,9 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
+
+
+  
 
 
   useEffect(() => {

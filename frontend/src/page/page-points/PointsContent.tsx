@@ -10,9 +10,11 @@ import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps, CardText, CardTextAlign } from "../../components/ms-card/Card";
 import Label from '../../components/ms-label/Label';
 import { ButtonName, HttpStatus } from "../../general/Constant";
-import { ResponseI, UserI } from "../../general/Utils";
+import { getDateString, ResponseI, UserI } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { logActivityByEmail } from "../page-activity/service/LogActivityService";
+import { FamilyLogI } from '../page-family/Family';
+import { logFamilyByEmail } from '../page-family/service/FamilyService';
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./PointsContent.css";
 import { findByEmail } from "./service/PointsService";
@@ -35,12 +37,15 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const [openDialog, setOpenDialog] = useState(false); // Controlla la visibilità del messaggio
   const [testo, setTesto] = useState('');
-  const [testoLog, setTestoLog] = useState([] as ActivityLogI[]);
+  const [testoLog, setTestoLog] = useState<ActivityLogI[]>([]);
+  const [testoLogFamily, setTestoLogFamily] = useState<FamilyLogI[]>([]);
+
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
 
   useEffect(() => {
     getPoints();
     getLogAttivita(user, false);
+    getLogFamily(user, false);
     // Pulisci il listener al dismount
     return () => { };
   }, [inizialLoad]);
@@ -167,9 +172,24 @@ const PointsContent: React.FC<PointsContentProps> = ({
   });
 
   const cardText2: CardText = {
-    textLeftTitle: 'Activity',
-    textRightTitle: 'Use Points',
+    textLeftTitle: 'Attività',
+    textRightTitle: 'Punti usati',
     text: textAlign2
+  }
+
+  const textAlign3: CardTextAlign[] = testoLogFamily.map((x) => {
+
+    return {
+
+      textLeft: getDateString(x.date),
+      textRight: x.operations
+    }
+  });
+
+  const cardText3: CardText = {
+    textLeftTitle: 'Data',
+    textRightTitle: 'Operazione',
+    text: textAlign3
   }
 
 
@@ -178,7 +198,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
       _id: 'card1',
       text: cardText1,
       img: points,
-      title: "Points",
+      title: "Punti",
       // className: 'card-point', 
       pulsanti: [],
       children: children2,
@@ -188,10 +208,20 @@ const PointsContent: React.FC<PointsContentProps> = ({
       _id: 'card2',
       text: cardText2,
       img: lizard,
-      title: "Log Activity",
+      title: "Log Attività",
       //  className: 'card-point',
       pulsanti: [],
       children: children,
+    },
+    {
+
+      _id: 'card3',
+      text: cardText3,
+      img: lizard,
+      title: "Log Famiglia",
+      //  className: 'card-point',
+      pulsanti: [],
+      children: children2,
     }
   ];
 
@@ -220,12 +250,32 @@ const PointsContent: React.FC<PointsContentProps> = ({
           }
           if (truncate) {
             setOpenDialog(true);
-          }         
+          }
           setTestoLog(response.jsonText)
         }
       }
     })
   }
+
+  const getLogFamily = (userI: UserI, truncate: boolean): void => {
+    const emailFind = user.emailFamily ? user.emailFamily : user.email;
+
+    logFamilyByEmail({ ...userI, email: emailFind }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
+      if (response) {
+        if (response.status === HttpStatus.OK) {
+          let attivitaLog = response.jsonText;
+          if (attivitaLog.length > 8) {
+            attivitaLog = attivitaLog.slice(0, 8).concat({ log: '...' });
+          }
+          if (truncate) {
+            setOpenDialog(true);
+          }
+          setTestoLogFamily(response.jsonText)
+        }
+      }
+    })
+  }
+
 
   return (
     <>

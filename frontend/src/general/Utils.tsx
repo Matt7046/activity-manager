@@ -21,8 +21,8 @@ export interface NotificationI {
 
   serviceName: string;
   message: string;
-  userSender: string;
-  userReceiver:string;
+  userSender: Date;
+  userReceiver: Date;
   dateSender: Date;
   status: string;
 }
@@ -82,6 +82,19 @@ export const getMenuLaterale = (navigate: NavigateFunction, user: UserI): MenuLa
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.OPERATIVE, { email: user.email }, 2);
   }
   return menuLaterale!;
+}
+
+
+export const getDateString = (data: Date): string => {
+
+  return new Date(data).toLocaleString('it-IT', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
 }
 
 

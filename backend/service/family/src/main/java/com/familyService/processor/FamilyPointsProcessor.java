@@ -11,25 +11,20 @@ import com.common.exception.NotFoundException;
 import com.common.authDTO.PointsUser;
 import com.familyService.service.FamilyService;
 import com.common.configurations.RabbitMQProducer;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.familyService.service.FamilyWebService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 import java.util.ArrayList;
 import java.util.Date;
 
 @Component
-public class FamilySavePointsProcessor {
+public class FamilyPointsProcessor {
 
     @Autowired
-    @Qualifier("webClientPoint")
-    private WebClient webClientPoint;
-    ;
+    private FamilyWebService familyWebService;
     @Autowired
     private RabbitMQProducer notificationPublisher;
     @Autowired
@@ -66,18 +61,7 @@ public class FamilySavePointsProcessor {
     private Mono<ResponseDTO> processPoints(UserPointDTO userPointDTO) {
         String email = userPointDTO.getEmailFamily();
         userPointDTO.setOperation(true);
-
-        return webClientPoint.post()
-                .uri("/api/point/dati/standard")
-                .bodyValue(userPointDTO)
-                .retrieve()
-                .bodyToMono(ResponseDTO.class)
-                .flatMap(responseDTO -> Mono.fromCallable(() -> {
-                    UserPointDTO subDTO = new ObjectMapper().convertValue(responseDTO.getJsonText(), UserPointDTO.class);
-                    return subDTO.getPoints().stream()
-                            .filter(point -> email.equals(point.getEmail()))
-                            .findFirst();
-                }).subscribeOn(Schedulers.boundedElastic()))
+        return familyWebService.savePointsByFamily(userPointDTO)
                 .flatMap(pointsUserOptional -> {
                     saveLogFamily(createLogFamily(userPointDTO));
                     inviaNotifica(userPointDTO);
@@ -125,5 +109,9 @@ public class FamilySavePointsProcessor {
         dto.setMessage(dto.getPointsNew());
         dto.setDateSender(new Date());
         return dto;
+    }
+
+    public  Mono<ResponseDTO> logFamilyByEmail(UserPointDTO userPointDTO, Sort sort) {
+        return  Mono.just(familyService.getLogFamily(userPointDTO, sort));
     }
 }
