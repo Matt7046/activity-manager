@@ -21,3 +21,5 @@ message:
     remove: " Punti sottratti da  "
 notification:
   service: "familyService"
+order:
+  type1: "date"
