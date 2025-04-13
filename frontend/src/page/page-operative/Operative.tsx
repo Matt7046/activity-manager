@@ -9,7 +9,7 @@ import OperativeContent from './OperativeContent';
 
 const Operative: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
-  setTitle("Section Operative");
+  setTitle("Sezione Operativa");
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { user, setUser } = useUser();
