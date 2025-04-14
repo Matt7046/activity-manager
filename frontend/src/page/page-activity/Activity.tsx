@@ -124,8 +124,10 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
         open={open}
         user={user}
         message={message}
+        isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}
+   
       >
         <ActivityContent
           responseSchedule={response}
@@ -134,10 +136,7 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
           setMessage={setMessage}
           isVertical ={isVertical}
         />
-      </PageLayout>
-      <div>
-        {/* Contenuto aggiuntivo, se necessario */}
-      </div>
+      </PageLayout>    
     </>
   );
 }

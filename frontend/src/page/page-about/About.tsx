@@ -69,6 +69,7 @@ const About: React.FC<{ setTitle: any }> = ({ setTitle }) => {
         open={open}
         user={user}
         message={message}
+        isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}
       >
@@ -78,10 +79,7 @@ const About: React.FC<{ setTitle: any }> = ({ setTitle }) => {
           setOpen={setOpen}
           isVertical={isVertical}
         />
-      </PageLayout>
-      <div>
-        {/* Contenuto aggiuntivo, se necessario */}
-      </div>
+      </PageLayout> 
     </>
   );
 };

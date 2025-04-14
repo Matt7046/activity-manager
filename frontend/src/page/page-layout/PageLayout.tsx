@@ -16,10 +16,11 @@ import "./PageLayout.css";
 
 interface PageLayoutProps {
   children: React.ReactNode; // Contenuto specifico della maschera
-  menuLaterale: MenuLaterale[][];
+  menuLaterale?: MenuLaterale[][];
   user: UserI;
   open: boolean;
   message: TypeMessage;
+  isVertical: boolean;
   handleClose: () => void;
   navigate: NavigateFunction; // Gestione padding dinamico
 }
@@ -34,6 +35,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   menuLaterale,
   open,
   message,
+  isVertical,
   handleClose,
   navigate,
 }) => {
@@ -57,8 +59,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
         const popoverNotification = {
           message: x.message,
-          subText: ['Inviato da: ' + x.userSender, 'data: ' + getDateStringRegularFormat(x.dateSender)]    
-           
+          subText: ['Inviato da: ' + x.userSender, 'data: ' + getDateStringRegularFormat(x.dateSender)]
+
         }
         return popoverNotification;
 
@@ -125,47 +127,86 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
   return (
     <>
-      <Box sx={{ paddingLeft: 0.5 }}>
-        <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-          <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
+      <Box className="box-layout">
+        {isVertical ? (
+          <>
+            {/* Riga 1: Menu + Pulsanti */}
+            <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
+              {menuLaterale && menuLaterale.length > 0 && (
+                <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
+              )}
+              <Box className='box-layout-right-button'>
+                <Button pulsanti={[pulsanteNotifiche]} />
+                <Button pulsanti={[pulsanteLogout]} />
+                <Popover
+                  notifications={popoverNotifications}
+                  openAnchor={openAnchor}
+                  handleCloseAnchor={handleCloseAnchor}
+                  pulsanteNotification={pulsanteNotification}
+                />
+              </Box>
+            </Grid>
 
-          <Box sx={{ paddingRight: 2, display: 'flex', gap: 2 }}>
-            <Button pulsanti={[pulsanteNotifiche]} />
-            <Button pulsanti={[pulsanteLogout]} />
-            {/* Area notifica */}
-            <Popover
-              notifications={popoverNotifications}
-              openAnchor={openAnchor}
-              handleCloseAnchor={handleCloseAnchor}
-              pulsanteNotification={pulsanteNotification}>
-            </Popover>
-          </Box>
-        </Grid>
-      </Box>
-      <Grid container justifyContent="flex-end" className="layout-alert">
-        {open && (
-          <Alert onClose={handleClose} message={message} />
+            {/* Riga 2: Email */}
+            <Grid container>
+              <Box className="box-layout-text-vertical">
+                <TextField
+                  id="emailFamily"
+                  label={
+                    user.emailUserCurrent === user.emailFamily
+                      ? 'email di registrazione'
+                      : 'Email tutelato'
+                  }
+                  variant="standard"
+                  value={user.emailFamily}
+                  fullWidth
+                  disabled
+                />
+              </Box>
+            </Grid>
+          </>
+        ) : (
+          // Layout orizzontale
+          <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
+            {menuLaterale && menuLaterale.length > 0 && (
+              <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
+            )}
+            <Box className="box-layout-text">
+              <TextField
+                id="emailFamily"
+                label={
+                  user.emailUserCurrent === user.emailFamily
+                    ? 'email di registrazione'
+                    : 'Email tutelato'
+                }
+                variant="standard"
+                value={user.emailFamily}
+                fullWidth
+                disabled
+              />
+            </Box>
+            <Box className='box-layout-right-button'>
+              <Button pulsanti={[pulsanteNotifiche]} />
+              <Button pulsanti={[pulsanteLogout]} />
+              <Popover
+                notifications={popoverNotifications}
+                openAnchor={openAnchor}
+                handleCloseAnchor={handleCloseAnchor}
+                pulsanteNotification={pulsanteNotification}
+              />
+            </Box>
+          </Grid>
         )}
+      </Box>
+
+      <Grid container justifyContent="flex-end" className="layout-alert">
+        {open && <Alert onClose={handleClose} message={message} />}
       </Grid>
-      <div className="row">
-        <Box sx={{ padding: 2 }}>
-          <div id="text-box-email">
-            <TextField
-              id="emailFamily"
-              label= {user.emailUserCurrent=== user.emailFamily ? 'email di registrazione' : 'Email tutelato'}
-              variant="standard"
-              value={user.emailFamily} // Collega il valore allo stato
-              // onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
-              fullWidth
-              disabled={true} />
-          </div>
-        </Box>
 
-      </div>
       {children}
-
     </>
   );
+
 }
 
 export default PageLayout;

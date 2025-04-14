@@ -13,7 +13,7 @@ export enum SectionName {
 export enum SectionNameDesc {
   POLICY = `privacy-policy`,
   ACTIVITY = `Attività`,
-  ABOUT = `Informazioni attivtà`,
+  ABOUT = `Informazioni attività`,
   POINTS = `Informazioni utente`,
   OPERATIVE = `Operatività`,
   FAMILY = `Famiglia`,
