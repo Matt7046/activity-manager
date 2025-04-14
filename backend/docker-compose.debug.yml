@@ -21,7 +21,6 @@ services:
       - "80:80"
     depends_on:
       - register-service
-      - about-service
       - user-point-service
       - activity-service
       - log-activity-service
@@ -49,27 +48,6 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/register/src/main/resources/certificate:/app/certificate
-    networks:
-      - app-network
-
-  about-service:
-    depends_on:
-      - rabbitmq
-    image: about-service:1.0.0
-    build:
-      context: ./ 
-      dockerfile: service/about/Dockerfile
-    ports:
-      - "8082:8080"
-      - "5007:5007"
-    environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5007
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
-    volumes:
-      - ./service/family/src/main/resources/certificate:/app/certificate
     networks:
       - app-network
 
