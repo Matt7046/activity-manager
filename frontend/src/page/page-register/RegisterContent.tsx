@@ -1,15 +1,14 @@
-import AddIcon from '@mui/icons-material/Add';
-import { Box, Button as ButtonMui } from "@mui/material";
+import RemoveIcon from '@mui/icons-material/Remove';
+import { Box, IconButton, Input, InputAdornment } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import TextField from '@mui/material/TextField';
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage, useUser } from "../../App";
 import Button, { Pulsante } from "../../components/ms-button/Button";
-import { SectionName } from '../../general/Constant';
+import { ButtonName, SectionName } from '../../general/Constant';
 import { UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
-import "./Register.css";
+import "./RegisterContent.css";
 import { saveUserByPoints } from './service/RegisterService';
 
 
@@ -19,7 +18,7 @@ interface RegisterContentProps {
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setTitle: (title: string) => void;
-  isVertical:boolean;
+  isVertical: boolean;
 
 }
 
@@ -29,7 +28,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
   setOpen,
   setTitle,
   isVertical
-  }) => {
+}) => {
   const { setUser } = useUser(); //
   const location = useLocation();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
@@ -39,7 +38,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     emailFiglio: "Email Figlio",
     points: "Points"
   }
-
+  const [isRemoveIcon, setIsRemoveIcon] = useState(true);
   const [emailFigli, setEmailFigli] = useState<string[]>(['child@simulated.com']);
 
   // Funzione per gestire il cambio di valore
@@ -58,12 +57,33 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     handleAddEmailField();
   };
 
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
+  const toggleIcon = (indexToRemove: number) => {
+    setEmailFigli(prevEmails => prevEmails.filter((_, i) => i !== indexToRemove));
+  };
+
+  const pulsanteNew: Pulsante = {
+    icona: 'fas fa-plus',
+    funzione: () => addField(),
+    nome: ButtonName.NEW,
+    title: 'Nuovo tutorato',
+    configDialogPulsante: { message: 'Vuoi aggiungere un tutorato?', showDialog: true }
+  };
+
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-solid fa-floppy-disk',
     funzione: () => salvaRecord(user), // Passi la funzione direttamente
     nome: 'blue',
     title: 'Salva',
-    configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
+    configDialogPulsante: { message: 'Vuoi registrarti?', showDialog: true }
   };
 
   const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,67 +95,43 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     setUser(null);
     return saveUserByPoints({ ...userData, emailFigli: emailFigli, points: arrayDiOggetti }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
       console.log('User Data:', x); // Logga i dati utente per il debug     
-      setTitle(''); 
-      navigateRouting(navigate, SectionName.ROOT, { newLogin : true })
+      setTitle('');
+      navigateRouting(navigate, SectionName.ROOT, { newLogin: true })
     })
   }
   return (
     <>
-      <div className="row">
-        <Box>
-          <div>
-            <div id="text-box-email" style={{ marginTop: '16px' }}>
-              <TextField
-                id="email"
-                label={labelRegister.email}
-                variant="standard"
-                value={user.email} // Collega il valore allo stato
-                onChange={handleChangeEmail} // Aggiorna lo stato quando cambia
-                fullWidth
-                disabled={true}
-                multiline
-                rows={10} // Numero di righe visibili per il campo
-                InputLabelProps={{
-                  style: {
-                    whiteSpace: 'normal', // Permette al testo di andare a capo
-                    wordWrap: 'break-word', // Interrompe le parole lunghe
-                  },
-                }}
-              />
-            </div>
-            {emailFigli.map((email, index) => (
-              <div key={index} style={{ marginBottom: "16px" }}>
-                <TextField
-                  id={`emailRegister-${index}`}
-                  label={`Email ${index + 1}`}
-                  variant="standard"
-                  value={email} // Collega il valore allo stato
-                  onChange={(e) => handleChangeEmailRegister(index, e.target.value)} // Aggiorna lo stato quando cambia
-                  fullWidth
-                />
-              </div>
-            ))}
+      <Box>
+        {emailFigli.map((email, index) => (
+          <Box className= 'box-child'> 
 
-            <ButtonMui
-              variant="contained"
-              color="primary"
-              onClick={addField}
-              style={{
-                marginTop: '10px',
-                width: '40px', // Imposta una larghezza fissa più piccola
-                height: '40px', // Mantieni l'altezza invariata
-                minWidth: 'unset', // Impedisce al pulsante di espandersi oltre la larghezza definita
-              }}
-            >
-              <AddIcon />
-            </ButtonMui>
-          </div>
-        </Box>
-        {/* Pulsanti */}
-        <Grid container justifyContent="flex-end" spacing={2}>
-          <Button pulsanti={[pulsanteBlue]} />
-        </Grid>
-      </div>
+            <><Input
+              id="filled-adornment-new-points"
+              fullWidth
+              value={email} // Collega il valore allo stato
+              onChange={(e) => handleChangeEmailRegister(index, e.target.value)} // Aggiorna lo stato quando cambia
+              type={'string'}
+              startAdornment={<InputAdornment position="start">
+                <IconButton
+                  aria-label={'Add points'}
+                  onClick={(e) => toggleIcon(index)}
+                  onMouseDown={handleMouseDownPassword}
+                  onMouseUp={handleMouseUpPassword}
+                  edge="end"
+                >
+                  {<RemoveIcon />}
+                </IconButton>
+              </InputAdornment>} />
+            </>
+          </Box>
+        ))}
+
+      </Box>
+      <Grid container justifyContent="flex-end" spacing={2} className='button-right'>
+
+        <Button pulsanti={[pulsanteNew]} />
+        <Button pulsanti={[pulsanteBlue]} />
+      </Grid>
     </>
   );
 }
