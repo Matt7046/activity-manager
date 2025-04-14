@@ -61,7 +61,7 @@ const Alert: React.FC<CustomAlertProps> = ({ message, onClose }) => {
 
       <CardContent className='card-content'>
         <Grid container justifyContent="space-between" spacing={2}>
-          <Box sx={{ mr: 2 }}>
+          <Box className ='box-alert'>
             {message.typeMessage && icons[message.typeMessage]}
           </Box>
           <Typography

@@ -10,7 +10,9 @@ import { FormErrorValues, UserI, verifyForm } from "../../general/Utils";
 import { ActivityI } from "../page-activity/Activity";
 import activityStore from "../page-activity/store/ActivityStore";
 import { TypeMessage } from "../page-layout/PageLayout";
+import "./AboutContent.css";
 import { deleteAboutById, saveAboutByUser, showMessageAboutForm } from "./service/AboutService";
+
 
 interface AboutContentProps {
   user: UserI;
@@ -187,72 +189,58 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   return (
     <>
-      <div className="row">
-        <Box sx={{ padding: 2 }}>
-          <div id="text-box-email-family">
+      <Box className='box-about'>
+        <TextField
+          id="emailFamily"
+          label={labelFamily.email}
+          variant="standard"
+          value={user.email} // Collega il valore allo stato
+          onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
+          fullWidth
+          disabled={true}
+        />
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
-              id="emailFamily"
-              label={labelFamily.email}
+              id="activity"
+              label={testoOld.nome}
               variant="standard"
-              value={user.email} // Collega il valore allo stato
-              onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
+              value={formValues.activity} // Collega il valore allo stato
+              onChange={handleChangeActivity} // Aggiorna lo stato quando cambia
               fullWidth
-              disabled={true}
+              required={true}
             />
-          </div>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
-                id="activity"
-                label={testoOld.nome}
-                variant="standard"
-                value={formValues.activity} // Collega il valore allo stato
-                onChange={handleChangeActivity} // Aggiorna lo stato quando cambia
-                fullWidth
-                required={true}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
-                id="points"
-                label={'Punti'}
-                variant="standard"
-                value={formValues.points} // Collega il valore allo stato
-                onChange={handleChangePoints} // Aggiorna lo stato quando cambia
-                fullWidth
-                type="number"
-                disabled={user.type === TypeUser.STANDARD}
-                required={true}
-              />
-            </Grid>
           </Grid>
-          <div id="text-box-sub-testo" style={{ marginTop: '16px' }}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
-              id="subTesto"
-              label={testoOld.subTesto}
+              id="points"
+              label={'Punti'}
               variant="standard"
-              value={subTesto} // Collega il valore allo stato
-              onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia
+              value={formValues.points} // Collega il valore allo stato
+              onChange={handleChangePoints} // Aggiorna lo stato quando cambia
               fullWidth
-              multiline
-              rows={10} // Numero di righe visibili per il campo
-              InputLabelProps={{
-                style: {
-                  whiteSpace: 'normal', // Permette al testo di andare a capo
-                  wordWrap: 'break-word', // Interrompe le parole lunghe
-                },
-              }}
+              type="number"
+              disabled={user.type === TypeUser.STANDARD}
+              required={true}
             />
-          </div>
-
-          {/* Pulsanti */}
-          <Grid container justifyContent="space-between" spacing={2} sx={{ marginTop: 2 }}>
-            <Button pulsanti={[pulsanteReturn]} />
-
-            <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
           </Grid>
-        </Box >
-      </div>
+        </Grid>
+        <TextField
+          id="subTesto"
+          label={testoOld.subTesto}
+          variant="standard"
+          value={subTesto} // Collega il valore allo stato
+          onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia
+          fullWidth
+          multiline
+          rows={10} // Numero di righe visibili per il campo
+         />
+        <Grid container justifyContent="space-between" spacing={2}>
+          <Button pulsanti={[pulsanteReturn]} />
+
+          <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
+        </Grid>
+      </Box >
     </>
   );
 }
