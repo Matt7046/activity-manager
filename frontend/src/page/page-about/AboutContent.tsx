@@ -8,10 +8,10 @@ import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus, SectionName, TypeUser } from "../../general/Constant";
 import { FormErrorValues, UserI, verifyForm } from "../../general/Utils";
 import { ActivityI } from "../page-activity/Activity";
+import { deleteAboutById, saveAboutByUser, showMessageAboutForm } from "../page-activity/service/ActivityService";
 import activityStore from "../page-activity/store/ActivityStore";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./AboutContent.css";
-import { deleteAboutById, saveAboutByUser, showMessageAboutForm } from "./service/AboutService";
 
 
 interface AboutContentProps {
