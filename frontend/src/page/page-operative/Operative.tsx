@@ -70,6 +70,7 @@ const Operative: React.FC<{ setTitle: any }> = ({ setTitle }) => {
         open={open}
         message={message}
         user={user}
+        isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}
       >

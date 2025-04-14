@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
-import { TypeMessage } from '../page-layout/PageLayout';
+import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import RegisterContent from './RegisterContent';
 
 export interface PointsI {
@@ -12,11 +12,11 @@ export interface PointsI {
   attivita: string;
 }
 
-const Register: React.FC<{ setTitle: (title: string)=>void}> = ({ setTitle }) => {
+const Register: React.FC<{ setTitle: (title: string) => void }> = ({ setTitle }) => {
 
   const location = useLocation();
   setTitle("Section register");
-  const { user, setUser } = useUser(); 
+  const { user, setUser } = useUser();
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
@@ -42,14 +42,22 @@ const Register: React.FC<{ setTitle: (title: string)=>void}> = ({ setTitle }) =>
   };
   return (
     <>
-
-      <RegisterContent
+      <PageLayout
+        open={open}
+        message={message}
         user={user}
-        setMessage={setMessage}
-        setOpen={setOpen}
-        setTitle={setTitle}
         isVertical={isVertical}
-      />
+        handleClose={handleClose}
+        navigate={useNavigate()}
+      >
+        <RegisterContent
+          user={user}
+          setMessage={setMessage}
+          setOpen={setOpen}
+          setTitle={setTitle}
+          isVertical={isVertical}
+        />
+      </PageLayout>
     </>
   );
 };
