@@ -27,10 +27,7 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
-  const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
-
-
-  
+  const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe  
 
 
   useEffect(() => {
@@ -84,6 +81,7 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
         open={open}
         user={user}
         message={message}
+        isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}
       >
@@ -92,10 +90,7 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
           setOpen={setOpen}
           isVertical={isVertical}
         />
-      </PageLayout>
-      <div>
-        {/* Contenuto aggiuntivo, se necessario */}
-      </div>
+      </PageLayout> 
     </>
   );
 };

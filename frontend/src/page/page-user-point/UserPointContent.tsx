@@ -10,7 +10,7 @@ import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps, CardText, CardTextAlign } from "../../components/ms-card/Card";
 import Label from '../../components/ms-label/Label';
 import { ButtonName, HttpStatus } from "../../general/Constant";
-import { getDateStringRegularFormat, getDateStringExtendsFormat, ResponseI, UserI } from "../../general/Utils";
+import { getDateStringExtendsFormat, getDateStringRegularFormat, ResponseI, UserI } from "../../general/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { logActivityByEmail } from "../page-activity/service/LogActivityService";
 import { FamilyLogI } from '../page-family/Family';
@@ -242,11 +242,11 @@ const PointsContent: React.FC<PointsContentProps> = ({
                   page={page}
                   onChange={handlePageChange}
                   color="primary"
-                  sx={{ marginTop: 2, display: 'flex', justifyContent: 'center' }}
+                  className='pagination-card'                
                 />
               </>
             ) : (
-              <Typography variant="body2" sx={{ color: 'text.secondary', mt: 2 }}>
+              <Typography variant="body2">
                 {'Nessun dato disponibile.'}
               </Typography>
             )}

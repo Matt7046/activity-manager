@@ -10,6 +10,7 @@ import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivities, savePointsAndLog } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail } from "../page-user-point/service/UserPointService";
+import "./OperativeContent.css";
 import { showMessageOperativeForm } from "./service/OperativeService";
 import operativeStore from "./store/OperativeStore";
 
@@ -46,10 +47,10 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     points: true,
   });
 
-  useEffect(() => {   
+  useEffect(() => {
     fetchOptions();
-    fetchPoints();  
-    return () => {};
+    fetchPoints();
+    return () => { };
   }, [inizialLoad]);
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     else {
       operativeStore.setEmailField(user.emailFamily);
     }
-  }, [formValues]); 
+  }, [formValues]);
 
 
 
@@ -83,7 +84,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   };
 
   const handleChangePoints = (event: React.ChangeEvent<HTMLInputElement>) => {
-    operativeStore.setPoints(parseInt(event.target.value)); 
+    operativeStore.setPoints(parseInt(event.target.value));
   };
 
   const fetchOptions = () => {
@@ -103,7 +104,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     try {
       const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-      findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI|undefined) => {
+      findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI | undefined) => {
         if (response) {
           if (response.status === HttpStatus.OK) {
             setIsLoading(false);
@@ -119,7 +120,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const pulsanteSave: Pulsante = {
     icona: 'fas fa-save',
     funzione: () => handleButtonClick(),
-    nome:  ButtonName.RED,
+    nome: ButtonName.RED,
     disableButton: disableButtonSave,
     title: 'Salva',
     configDialogPulsante: { message: "Vuoi salvare?", showDialog: true }
@@ -179,8 +180,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
   return (
     <>
-      <div className="row">
-        <Box sx={{ padding: 2 }}>
+        <Box className ='box-operative-content'>
           <Grid container spacing={2}>
             {/* Prima riga */}
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -197,7 +197,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
               </FormControl>
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <FormControl sx={{ marginTop: '16px', width: '100%' }} variant="standard">
+              <FormControl className="form-control-operative" variant="standard">
                 <InputLabel htmlFor="filled-points">{puntiDes}</InputLabel>
                 <Input
                   id="filled-adornment-points"
@@ -253,8 +253,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
             <Button pulsanti={[pulsanteSave]} />
 
           </Grid>
-        </Box>
-      </div>
+        </Box>  
     </>
   );
 
