@@ -9,8 +9,7 @@ import { UserI } from "../../general/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./ActivityContent.css";
 import { findByIdentificativo } from "./service/ActivityService";
-import activityStore from "./store/ActivityStore"; // Importa lo store
-
+import activityStore from "./store/ActivityStore";
 
 interface ActivityContentProps {
   user: UserI;
@@ -103,15 +102,11 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
   // Crea l'array dei pulsanti in base all'orientamento
 
   return (
-    <>
-      <div className="row">
-        <Box sx={{ padding: 2 }}>
-          <div id="schedule">
+    <>    
+        <Box className='box-activity'>         
             <Schedule
-              schedule={scheduler} />
-          </div>
-        </Box>
-      </div>
+              schedule={scheduler} />        
+        </Box>     
     </>
   );
 };
