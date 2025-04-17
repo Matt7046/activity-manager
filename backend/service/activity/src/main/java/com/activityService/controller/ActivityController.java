@@ -1,5 +1,6 @@
 package com.activityService.controller;
 
+import com.activityService.processor.ActivityProcessor;
 import com.activityService.service.ActivityService;
 import com.common.dto.user.UserPointDTO;
 import com.common.structure.status.ActivityHttpStatus;
@@ -31,53 +32,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ActivityController {
 
     @Autowired
-    private ActivityService activityService;
-
-    @Value("${error.document.notFound}")
-    private String errorDocument;
-    
-    @Autowired
-    EncryptDecryptConverter encryptDecryptConverter;
+    private ActivityProcessor processor;
 
     @PostMapping("/activities")
-    public ResponseDTO getActivities(@RequestBody UserPointDTO userPointDTO) {
-        String email = userPointDTO.getEmail();
-        List<Activity> sub = activityService.findAllByEmail(email);
-        List<ActivityDTO> subDTO = sub.stream()
-                .map(ActivityMapper.INSTANCE::toDTO)
-                .collect(Collectors.toList());
-        ResponseDTO response = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
-        return response;
+    public Mono<ResponseDTO> getActivities(@RequestBody UserPointDTO userPointDTO) {
+       return processor.getActivities(userPointDTO);
     }
 
     @PostMapping("/find")
-    public ResponseDTO findByIdentificativo(@RequestBody UserPointDTO userPointDTO) {
-        Activity item = null;
-        ResponseDTO responseDTO = null;
-        item = activityService.findByIdentificativo(userPointDTO.get_id());
-        if (item == null) {
-            throw new NotFoundException(errorDocument + userPointDTO.get_id());
-        }
-
-        if (item != null) {
-            ActivityDTO subDTO = ActivityMapper.INSTANCE.toDTO(item);
-            responseDTO = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
-        }
-
-        return responseDTO;
+    public Mono<ResponseDTO> findByIdentificativo(@RequestBody UserPointDTO userPointDTO) {
+        return processor.findByIdentificativo(userPointDTO);
     }
 
     @PostMapping("/dati")
     public Mono<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {
-        return activityService.saveActivity(activityDTO)  // Ottieni il Mono<String>
-                .map(result -> new ResponseDTO(result, ActivityHttpStatus.OK.value(), new ArrayList<>()));  // Mappa il risultato in un ResponseDTO
+        return processor.saveActivity(activityDTO); // Mappa il risultato in un ResponseDTO
     }
 
      @DeleteMapping("toggle/{identificativo}")
     public Mono<ResponseDTO> deleteByIdentificativo(@PathVariable String identificativo) throws Exception {
-        identificativo = encryptDecryptConverter.decrypts(identificativo);   
-        return Mono.just(activityService.deleteByIdentificativo(identificativo))
-        .map(result -> new ResponseDTO(result, ActivityHttpStatus.OK.value(), new ArrayList<>()));  // Mappa il risultato in un ResponseDTO
+         return processor.deleteByIdentificativo(identificativo);// Mappa il risultato in un ResponseDTO
        
     }
 }

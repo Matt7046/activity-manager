@@ -1,6 +1,6 @@
 import { TypeMessage } from "../../page/page-layout/PageLayout";
-import { PATH_AUTH, postData } from "../AxiosService";
-import { ResponseI } from "../Utils";
+import { ResponseI } from "../structure/Utils";
+import { PATH_AUTH, postData } from "./AxiosService";
 
 
 export const getUserType = async (user: any, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) : Promise<ResponseI | undefined>=> {

@@ -1,6 +1,7 @@
 package com.authService.processor;
 
 import com.authService.service.UserWebService;
+import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.dto.user.UserPointDTO;
 import com.common.dto.structure.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ public class UserAuthPointsProcessor {
     @Autowired
     UserWebService userWebService;
 
-    public Mono<ResponseDTO> getUserType(UserPointDTO userPointDTO) {
+   public Mono<ResponseDTO> getUserType(UserPointDTO userPointDTO) {
         return  userWebService.processUser(userPointDTO);
     }
 }
