@@ -22,6 +22,11 @@ export enum SectionNameDesc {
 }
 
 
+export enum IMAGE {
+  SERVER = 'https://res.cloudinary.com/dzxtjigpc/image/'
+}
+
+
 export enum HttpStatus {
   OK = 200,
   CREATED = 201,

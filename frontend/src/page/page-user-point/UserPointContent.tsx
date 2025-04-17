@@ -104,14 +104,14 @@ const PointsContent: React.FC<PointsContentProps> = ({
     }
 
     return upload(image, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
-      userPoint.nameImage = response?.jsonText.url;
-      const url: string = response?.jsonText.url
+      const url: string = response?.jsonText.url;
+      const fileName = url.substring(url.lastIndexOf('upload/'));
+      userPoint.nameImage = fileName;
       return saveUserImage(userPoint, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
         if (response) {
           setChangePoint(!changePoint);
-        }
- 
-        return url;
+        } 
+        return fileName;
       })
     })
 
