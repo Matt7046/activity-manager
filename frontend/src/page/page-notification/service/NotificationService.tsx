@@ -1,5 +1,5 @@
-import { getData, PATH_NOTIFICATION, postData } from "../../../general/AxiosService";
-import { NotificationI, ResponseI } from "../../../general/Utils";
+import { getData, PATH_NOTIFICATION, postData } from "../../../general/service/AxiosService";
+import { NotificationI, ResponseI } from "../../../general/structure/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
 
 

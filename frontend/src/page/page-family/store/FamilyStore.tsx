@@ -1,5 +1,5 @@
 import { action, makeObservable, observable } from 'mobx';
-import BaseStore from '../../../general/BaseStore';
+import BaseStore from '../../../general/structure/BaseStore';
 
 export class FamilyStore extends BaseStore {
 

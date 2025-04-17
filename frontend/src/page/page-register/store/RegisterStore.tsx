@@ -1,4 +1,4 @@
-import BaseStore from '../../../general/BaseStore';
+import BaseStore from '../../../general/structure/BaseStore';
 
 export class RegisterStore extends BaseStore {
   

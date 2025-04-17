@@ -44,7 +44,7 @@ public class FamilyCustomRepositoryImpl implements FamilyCustomRepository {
 					// .filter(point -> emailCrypt.equals(point.email())) // Filtra per email
 					// .findFirst() // Trova il primo match
 					.forEach(point -> point.setPoints(100L)); // Aggior
-			// pointsSave.setPoints(new PointsUser(100L, email));
+			// pointsSave.setPoints(new Point(100L, email));
 			pointsRepository.save(pointsSave);
 
 		}

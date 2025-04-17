@@ -19,6 +19,7 @@ services:
     ports:
       - "80:80"
     depends_on:
+      - image-service
       - register-service
       - user-point-service
       - activity-service
@@ -144,6 +145,23 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/notification/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+    networks:
+      - app-network
+
+  image-service:
+    depends_on:
+      - rabbitmq
+    image: image-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/image/Dockerfile
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/image/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
     networks:
       - app-network
 
