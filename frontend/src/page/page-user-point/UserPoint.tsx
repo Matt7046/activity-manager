@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { showMessage, useUser } from '../../App';
-import { TypeAlertColor, TypeUser } from '../../general/Constant';
-import { FamilyNotificationI, getMenuLaterale } from '../../general/Utils';
+import { TypeAlertColor, TypeUser } from '../../general/structure/Constant';
+import { FamilyNotificationI, getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import PointsContent from './UserPointContent';
 
@@ -14,13 +14,29 @@ export interface UserPointsI {
   numeroPunti?: number;
   attivita?: string;
   usePoints?: number;
+  nameImage?: string;
+}
+
+
+export interface ImageI {
+
+  file: FormData;
+  width: number;
+  height: number;
+
+}
+
+
+export interface NameImageI {
+
+  name: string;
 }
 
 const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
   const { user, setUser } = useUser();
   const title = user.type === TypeUser.FAMILY ? ' (tutorato)' : ''
-  setTitle("Sezione informazioni utente" + title);
+ // setTitle("Sezione informazioni utente" + title);
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
@@ -29,6 +45,9 @@ const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
 
+
+
+  
 
   useEffect(() => {
     const handleResize = () => {

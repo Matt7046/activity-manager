@@ -6,7 +6,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import { Box, Card, CardContent, IconButton, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect } from 'react';
-import { TypeAlertColor } from '../../general/Constant';
+import { TypeAlertColor } from '../../general/structure/Constant';
 import "./Alert.css";
 
 const icons = {

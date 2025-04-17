@@ -54,3 +54,8 @@ rabbit:
 message:
   error:
     generic: "Errore generico"
+cloudinary:
+  cloud_name: dzxtjigpc
+  api_key: 793323621769757
+  api_secret: Prx1G26HHyxr-WSKzyvkmjfNzqA
+

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { showMessage, useUser } from '../../App';
-import { TypeAlertColor } from '../../general/Constant';
-import { FamilyNotificationI, getMenuLaterale } from '../../general/Utils';
+import { TypeAlertColor } from '../../general/structure/Constant';
+import { FamilyNotificationI, getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import FamilyContent from './FamilyContent';
 

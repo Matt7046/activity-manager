@@ -8,8 +8,8 @@ import Alert from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
-import { ButtonName, HttpStatus, SectionName, TypeAlertColor } from '../../general/Constant';
-import { getDateStringRegularFormat, NotificationI, ResponseI, UserI } from '../../general/Utils';
+import { ButtonName, HttpStatus, SectionName, TypeAlertColor } from '../../general/structure/Constant';
+import { getDateStringRegularFormat, NotificationI, ResponseI, UserI } from '../../general/structure/Utils';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
 

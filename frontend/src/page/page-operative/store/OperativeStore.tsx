@@ -1,5 +1,5 @@
 import { makeObservable, observable } from 'mobx';
-import BaseStore from '../../../general/BaseStore';
+import BaseStore from '../../../general/structure/BaseStore';
 import { ActivityI } from '../../page-activity/Activity';
 
 export class OperativeStore extends BaseStore {
