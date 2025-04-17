@@ -123,33 +123,35 @@ public class UserPointCustomRepositoryImpl implements UserPointCustomRepository 
                 .map(figlio -> encryptDecryptConverter.decrypt(figlio))
                 .collect(Collectors.toList()));
         List<Point> updatedPoints = existingUserPoint.getPoints().stream()
-                .map(point -> {
-                    if (point.getEmail().equals(encryptDecryptConverter.convert(userPointSave.getEmailFamily()))) {
-                        boolean anyMatch = false;
-                        List<String> updatedNames = new ArrayList<>();
-                        if (point.getNameImage() != null) {
-                            updatedNames = point.getNameImage().stream()
-                                    .map(x -> verifyNameImage(x, userPointSave)
-                                            ? userPointSave.getNameImage()
-                                            : x)
-                                    .collect(Collectors.toList());
-                            // Se nessun elemento è stato sostituito, aggiungiamo il nuovo nome
-                            anyMatch = point.getNameImage().stream()
-                                    .anyMatch(x -> verifyNameImage(x, userPointSave));
-                        }
-                        if (!anyMatch) {
-                            updatedNames.add(userPointSave.getNameImage());
-                        }
-                        point.setNameImage(updatedNames);
-                    }
-                    return point;
-                })
+                .map(point ->  ovverideNameImage(userPointSave, point))
                 .collect(Collectors.toList());
 
         existingUserPoint.setPoints(updatedPoints);
         PointRepository.save(existingUserPoint);
         return existingUserPoint;
 
+    }
+
+    private Point ovverideNameImage(UserPoint userPointSave, Point point) {
+        if (point.getEmail().equals(encryptDecryptConverter.convert(userPointSave.getEmailFamily()))) {
+            boolean anyMatch = false;
+            List<String> updatedNames = new ArrayList<>();
+            if (point.getNameImage() != null) {
+                updatedNames = point.getNameImage().stream()
+                        .map(x -> verifyNameImage(x, userPointSave)
+                                ? userPointSave.getNameImage()
+                                : x)
+                        .collect(Collectors.toList());
+                // Se nessun elemento è stato sostituito, aggiungiamo il nuovo nome
+                anyMatch = point.getNameImage().stream()
+                        .anyMatch(x -> verifyNameImage(x, userPointSave));
+            }
+            if (!anyMatch) {
+                updatedNames.add(userPointSave.getNameImage());
+            }
+            point.setNameImage(updatedNames);
+        }
+        return point;
     }
 
     private boolean verifyNameImage(String x, UserPoint userPointSave) {
