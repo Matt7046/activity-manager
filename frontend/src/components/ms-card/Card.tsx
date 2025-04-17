@@ -10,6 +10,7 @@ import {
 import Grid from '@mui/material/Grid2';
 import { observer } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { IMAGE } from '../../general/structure/Constant';
 import { Pulsante } from '../ms-button/Button';
 import './Card.css'; // <-- Import del CSS
 
@@ -58,7 +59,7 @@ const CardComponent = observer((props: CardProps) => {
   const propsCard = { ...props };
   useEffect(() => {
     if (props.img) {
-      setImage(`${props.img}`);
+      setImage(IMAGE.SERVER + props.img);
     }
   }, [props.img]);
 
@@ -105,8 +106,8 @@ const CardComponent = observer((props: CardProps) => {
       formData.append("height", "200");
       formData.append("extension", extension);
       // Passa l'oggetto imageDTO alla funzione loadImage
-      loadImage(formData).then(url=>{
-        setImage(url);
+      loadImage(formData).then(url => {
+        setImage(IMAGE.SERVER + url);
       })
     } else {
       alert("Seleziona un file prima di inviare.");
