@@ -1,4 +1,4 @@
-import { PATH_REGISTER, postData } from "../../../general/AxiosService";
+import { PATH_REGISTER, postData } from "../../../general/service/AxiosService";
 import { TypeMessage } from "../../page-layout/PageLayout";
 
 

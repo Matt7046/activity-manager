@@ -13,9 +13,8 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copia il JAR dalla fase di build
-
+COPY --from=build /app/service/auth/target/auth-service-1.0.0.jar app.jar
 # Espone la porta (scegli la porta che hai configurato per Activity, esempio 8082)
 EXPOSE 8086
-
 # Comando per avviare l'app
 ENTRYPOINT ["java", "-jar", "app.jar"]

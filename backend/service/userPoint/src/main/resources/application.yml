@@ -7,4 +7,4 @@ spring:
 error:
   document:
     notFound: "Documento non trovato con identificativo: "
-    points: "I Points a disposizione sono: "
+    points: "I Point a disposizione sono: "
