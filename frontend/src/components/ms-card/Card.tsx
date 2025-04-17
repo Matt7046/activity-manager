@@ -11,7 +11,6 @@ import Grid from '@mui/material/Grid2';
 import { observer } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { IMAGE } from '../../general/structure/Constant';
-import { Pulsante } from '../ms-button/Button';
 import './Card.css'; // <-- Import del CSS
 
 export interface CardText {
@@ -34,7 +33,6 @@ export interface CardProps {
   title: string;
   img: string;
   loadImage: (...args: any[]) => Promise<string>
-  pulsanti: Pulsante[];
   className?: string;
   handleClick?: () => void;
 }
@@ -58,10 +56,10 @@ const CardComponent = observer((props: CardProps) => {
 
   const propsCard = { ...props };
   useEffect(() => {
-    if (props.img) {
-      setImage(IMAGE.SERVER + props.img);
+  if (propsCard.img) {
+      setImage(IMAGE.SERVER + propsCard.img);
     }
-  }, [props.img]);
+  }, [propsCard.img]);
 
   if (propsCard.text.text.length > 8) {
     let cardTextAlign = propsCard.text.text.slice(0, 8);
@@ -179,7 +177,7 @@ const CardComponent = observer((props: CardProps) => {
 
         <CardActions className="card-actions-bottom">
           <Grid container justifyContent="flex-end" spacing={2}>
-            <div>{props.children}</div>
+             <div>{props.children}</div>
           </Grid>
         </CardActions>
       </CardContent>
