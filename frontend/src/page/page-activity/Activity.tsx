@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { showMessage, useUser } from '../../App';
-import { TypeAlertColor } from '../../general/Constant';
-import { FamilyNotificationI, getMenuLaterale, ResponseI, UserI } from '../../general/Utils';
+import { TypeAlertColor } from '../../general/structure/Constant';
+import { FamilyNotificationI, getMenuLaterale, ResponseI, UserI } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import ActivityContent from './ActivityContent';
 import { fetchDataActivities } from './service/ActivityService';
@@ -27,7 +27,7 @@ export interface ActivityLogI {
 const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
 
-  setTitle("Sezione attività");
+  //setTitle("Sezione attività");
   const { user, setUser } = useUser();
   const [utente, setUtente] = useState<UserI>(user); // Stato iniziale vuoto
   const navigate = useNavigate(); // Ottieni la funzione di navigazione

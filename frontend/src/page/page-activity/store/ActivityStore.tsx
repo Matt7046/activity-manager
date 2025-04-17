@@ -1,5 +1,5 @@
-import BaseStore from '../../../general/BaseStore';
-import { ResponseI } from '../../../general/Utils';
+import BaseStore from '../../../general/structure/BaseStore';
+import { ResponseI } from '../../../general/structure/Utils';
 import { ActivityI } from '../Activity';
 
 export class ActivityStore extends BaseStore {

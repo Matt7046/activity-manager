@@ -4,8 +4,6 @@ import com.common.dto.user.UserPointDTO;
 import com.common.mapper.UserPointMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.repository.userPoint.UserPointRepository;
 
 import java.util.List;
@@ -14,8 +12,6 @@ import java.util.List;
 public class UserPointService {
     @Autowired
     private UserPointRepository pointsRepository;
-    @Autowired
-    EncryptDecryptConverter encryptDecryptConverter;
 
     public List<UserPoint> findAll() {
         return pointsRepository.findAll();
@@ -62,8 +58,8 @@ public class UserPointService {
         return  pointsRepository.getTypeUser(points);
     }
 
-
-
-    
-
+    public UserPoint saveUserImage(UserPointDTO userPointDTO) throws Exception {
+        UserPoint points = UserPointMapper.INSTANCE.fromDTO(userPointDTO);
+        return pointsRepository.saveUserImage(points);
+    }
 }
