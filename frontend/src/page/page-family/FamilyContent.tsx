@@ -42,8 +42,8 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const labelFamily = {
     email: "Email",
     //emailFamily: "Email",
-    points: "Points",
-    newPoints: "Aggiungi points"
+    points: "Punti",
+    newPoints: "Operazione sui punti"
   }
 
   const [isPlusIcon, setIsPlusIcon] = useState(true);
@@ -159,7 +159,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
           {/* Campo New Points */}
           <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl fullWidth variant="standard">
-              <InputLabel htmlFor="filled-adornment-new-points">New Points</InputLabel>
+              <InputLabel htmlFor="filled-adornment-new-points">{labelFamily.newPoints}</InputLabel>
               <Input
                 id="filled-adornment-new-points"
                 value={formValues.newPoints} // Collega il valore allo stato
