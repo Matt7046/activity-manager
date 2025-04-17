@@ -36,7 +36,7 @@ const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
   const { user, setUser } = useUser();
   const title = user.type === TypeUser.FAMILY ? ' (tutorato)' : ''
- // setTitle("Sezione informazioni utente" + title);
+  setTitle("Sezione informazioni utente" + title);
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
