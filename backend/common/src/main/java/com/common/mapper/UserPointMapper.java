@@ -6,7 +6,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.common.data.user.UserPoint;
 
-@Mapper
+@Mapper(uses = {PointMapper.class})
 public interface UserPointMapper {
     UserPointMapper INSTANCE = Mappers.getMapper(UserPointMapper.class);
 
