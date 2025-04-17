@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { TypeMessage } from '../page/page-layout/PageLayout';
-import { HttpStatus, ServerMessage, TypeAlertColor } from './Constant';
-import apiConfig from './service/ApiConfig';
+import { TypeMessage } from '../../page/page-layout/PageLayout';
+import apiConfig from '../structure/ApiConfig';
+import { HttpStatus, ServerMessage, TypeAlertColor } from '../structure/Constant';
 
 const apiClient = () => {
   const token = localStorage.getItem('token');
@@ -11,7 +11,7 @@ const apiClient = () => {
     baseURL: apiConfig.baseURL,
     timeout: 20000,
     headers: {
-      'Content-Type': 'application/json',
+      //'Content-Type': 'application/json',
       'Authorization': token ? `Bearer ${token}` : '',
     },
   });
@@ -56,6 +56,37 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
   }
 };
+
+export const postDataFormData = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
+  funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
+) => {
+  const config = {
+    headers: {
+        'content-type': 'multipart/form-data'
+    }
+}
+
+  showSuccess = showSuccess ?? false;
+  setLoading = setLoading ?? (() => { });
+  setLoading(true);  // Mostra lo spinner prima della richiesta
+  try {
+    const response = await apiClient().post(endpoint, data,config);
+    response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
+    const message: TypeMessage = {
+      typeMessage:  response.data.status === HttpStatus.OK ? TypeAlertColor.SUCCESS : TypeAlertColor.ERROR ,
+      message : response.data.status === HttpStatus.OK ? null : response.data.errors,
+    }
+    eseguiAlert(funzioneMessage!, message, showSuccess, response);
+    return response.data; // Restituisce i dati della risposta
+  } catch (error: any) {
+    eseguiAlert(funzioneMessage!, { typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    throw error;
+  } finally {
+    setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
+  }
+};
+
+
 
 
 // Altri metodi (PUT, DELETE, ecc.)
@@ -138,7 +169,7 @@ export const eseguiAlert = (funzioneMessage: (message?: TypeMessage) => void, me
     }
   }
 }
-
+export const PATH_IMAGE = 'image'
 export const PATH_AUTH = 'auth'
 export const PATH_REGISTER = 'register';
 export const PATH_ACTIVITY = 'activity';

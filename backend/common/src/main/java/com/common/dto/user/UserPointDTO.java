@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.common.dto.structure.InterfaceDTO;
 import com.common.dto.activity.LogActivityDTO;
-import com.common.dto.auth.PointsUser;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,24 +14,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // Genera un costruttore con tutti i campi
 public class UserPointDTO implements InterfaceDTO {
 
-	private String _id; // Identificatore unico
-	private String email;
-	private String emailFamily;
-	private List<PointsUser>  points;
-	private Long point;
-	private Long type;
-	private String numeroPunti;
-	private String attivita;
-	private Long usePoints;
-	private List<String> emailFigli;
-	private Boolean operation;
-	private String emailUserCurrent;
+    private String _id; // Identificatore unico
+    private String email;
+    private String emailFamily;
+    private List<PointDTO> points;
+    private Long point;
+    private Long type;
+    private String numeroPunti;
+    private String attivita;
+    private Long usePoints;
+    private List<String> emailFigli;
+    private Boolean operation;
+    private String emailUserCurrent;
+    private String nameImage;
 
-	public UserPointDTO(LogActivityDTO logActivityDTO)
-	{
-		setPoint(logActivityDTO.getPoints());
-		setEmail(logActivityDTO.getEmail());
-		setEmailFamily(logActivityDTO.getEmailFamily());
-		setUsePoints(logActivityDTO.getUsePoints());
-	}
+    public UserPointDTO(LogActivityDTO logActivityDTO) {
+        setPoint(logActivityDTO.getPoints());
+        setEmail(logActivityDTO.getEmail());
+        setEmailFamily(logActivityDTO.getEmailFamily());
+        setUsePoints(logActivityDTO.getUsePoints());
+    }
 }

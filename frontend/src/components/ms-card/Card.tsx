@@ -1,4 +1,5 @@
 import {
+  CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
@@ -8,7 +9,7 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { observer } from 'mobx-react';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Pulsante } from '../ms-button/Button';
 import './Card.css'; // <-- Import del CSS
 
@@ -31,25 +32,111 @@ export interface CardProps {
   text: CardText;
   title: string;
   img: string;
+  loadImage: (...args: any[]) => Promise<string>
   pulsanti: Pulsante[];
   className?: string;
   handleClick?: () => void;
 }
 
+
+export interface NameFile {
+  name?: string;
+  change: boolean
+}
+
+
+let selectedFile: File | undefined;
+
+
 const CardComponent = observer((props: CardProps) => {
+
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [image, setImage] = useState<string>();
+
   const propsCard = { ...props };
+  useEffect(() => {
+    if (props.img) {
+      setImage(`${props.img}`);
+    }
+  }, [props.img]);
+
   if (propsCard.text.text.length > 8) {
     let cardTextAlign = propsCard.text.text.slice(0, 8);
     cardTextAlign = cardTextAlign.concat({ textLeft: '...' });
     propsCard.text.text = cardTextAlign;
   }
 
+
+
+  // Funzione chiamata quando si clicca su CardActionArea
+  const handleClickOpen = (props: CardProps) => {
+    // Crea una funzione che utilizza esempioFunzione con loadImage e selectedFile
+    creaFormData(props.loadImage, selectedFile)
+
+
+    // Esegui resizeImage, passando la funzione loadImage come primo parametro
+    //  resizeImage(props.loadImage);
+  };
+
+
+  // Gestisce la selezione del file
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      console.log('File selezionato:', file);
+    }
+    selectedFile = file;
+    handleClickOpen(props);
+  };
+
+  // Funzione che sostituisce il primo parametro di loadImage con imageDTO
+  const creaFormData = (loadImage: (imageDTO: FormData) => Promise<string>, selectedFile: File | undefined) => {
+    console.log("selectedFile:", selectedFile);
+
+    if (selectedFile) {
+      const fileName = selectedFile?.name;
+      const extension = fileName?.substring(fileName.lastIndexOf('.'));
+      // Crea l'oggetto imageDTO
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+      formData.append("width", "400");
+      formData.append("height", "200");
+      formData.append("extension", extension);
+      // Passa l'oggetto imageDTO alla funzione loadImage
+      loadImage(formData).then(url=>{
+        setImage(url);
+      })
+    } else {
+      alert("Seleziona un file prima di inviare.");
+    }
+  };
+
+  const getNameFile = (img: any, selectedFile: File | undefined) => {
+    const fileName = selectedFile?.name;
+    const extension = fileName?.substring(fileName.lastIndexOf('.'));
+    return img + extension;
+  }
+
   return (
     <MuiCard className="card">
-      <CardMedia
-        className={props.className ? props.className : 'card-media'}
-        image={props.img}
-        title={props.title}
+      <CardActionArea onClick={() => {
+        fileInputRef.current?.click();
+      }
+      }>
+        <CardMedia
+          className={props.className ?? 'card-media'}
+          image={image}
+          title={props.title}
+        />
+      </CardActionArea>
+      <input
+        id="file-upload"
+        type="file"
+        hidden
+        ref={fileInputRef}
+        onChange={(e) => handleFileChange(e)}
       />
       <CardContent className='card-content'>
         <Typography gutterBottom variant="h5" component="div" className="card-title">
@@ -99,6 +186,7 @@ const CardComponent = observer((props: CardProps) => {
     </MuiCard>
   );
 });
+
 
 const CardGrid = ({ cardsData }: { cardsData: CardProps[] }) => {
   return (

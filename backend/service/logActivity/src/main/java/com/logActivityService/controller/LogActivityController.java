@@ -31,7 +31,7 @@ public class LogActivityController {
     private String field;
 
     @PostMapping("/log")
-    public ResponseDTO logActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
+    public Mono<ResponseDTO>logActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
         Sort sort = Sort.by(Sort.Order.desc(field));
         List<LogActivity> sub = logActivityProcessor.logAttivitaByEmail(userPointDTO, sort);
         List<LogActivityDTO> logAttivitaUnica = sub.stream()
@@ -39,7 +39,7 @@ public class LogActivityController {
 
                 .collect(Collectors.toList());
         ResponseDTO response = new ResponseDTO(logAttivitaUnica, ActivityHttpStatus.OK.value(), new ArrayList<>());
-        return response;
+        return Mono.just(response);
     }
 
     @PostMapping("/dati")

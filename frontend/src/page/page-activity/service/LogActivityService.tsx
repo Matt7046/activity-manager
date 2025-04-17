@@ -1,5 +1,5 @@
-import { PATH_ACTIVITY, PATH_LOGACTIVITY, postData } from "../../../general/AxiosService";
-import { ResponseI } from "../../../general/Utils";
+import { PATH_ACTIVITY, PATH_LOGACTIVITY, postData } from "../../../general/service/AxiosService";
+import { ResponseI } from "../../../general/structure/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
 import { UserPointsI } from "../../page-user-point/UserPoint";
 import { ActivityLogI } from "../Activity";
