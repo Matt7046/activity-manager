@@ -38,6 +38,12 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.34.0</version>
+        </dependency>
+
         <!-- Altre dipendenze comuni, se necessarie -->
     </dependencies>
 <build>
