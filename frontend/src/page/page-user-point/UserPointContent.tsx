@@ -4,20 +4,20 @@ import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { showMessage } from "../../App";
-import lizard from "../../assets/images/lizard.jpg"; // Percorso del file locale
-import points from "../../assets/images/points.jpg"; // Percorso del file locale
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps, CardText, CardTextAlign } from "../../components/ms-card/Card";
 import Label from '../../components/ms-label/Label';
-import { ButtonName, HttpStatus } from "../../general/Constant";
-import { getDateStringExtendsFormat, getDateStringRegularFormat, ResponseI, UserI } from "../../general/Utils";
+import { upload } from '../../general/service/ImageService';
+import { ButtonName, HttpStatus } from "../../general/structure/Constant";
+import { getDateStringExtendsFormat, getDateStringRegularFormat, ResponseI, UserI } from "../../general/structure/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { logActivityByEmail } from "../page-activity/service/LogActivityService";
 import { FamilyLogI } from '../page-family/Family';
 import { logFamilyByEmail } from '../page-family/service/FamilyService';
 import { TypeMessage } from "../page-layout/PageLayout";
+import { findByEmail, saveUserImage } from "./service/UserPointService";
+import { NameImageI, UserPointsI } from './UserPoint';
 import "./UserPointContent.css";
-import { findByEmail } from "./service/UserPointService";
 
 interface PointsContentProps {
   user: UserI;
@@ -40,15 +40,24 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const [testo, setTesto] = useState('');
   const [testoLog, setTestoLog] = useState<ActivityLogI[]>([]);
   const [testoLogFamily, setTestoLogFamily] = useState<FamilyLogI[]>([]);
+  const [logCard, setLogCard] = useState<boolean>(false);
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
+  const [changePoint, setChangePoint] = useState<boolean>();
+  const [cardData, setCardData] = useState<CardProps[]>([]);
 
   useEffect(() => {
-    getPoints();
-    getLogAttivita(user, false);
-    getLogFamily(user, false);
-    // Pulisci il listener al dismount
+    getLogAttivita(user, false).then((response: void) => {
+      getLogFamily(user, false);
+    })
     return () => { };
   }, [inizialLoad]);
+
+  useEffect(() => {
+    if (logCard === true)
+      getPoints();
+    return () => { };
+  }, [logCard]);
+
 
   const handleCloseDialogLogFamily = () => {
     setOpenDialogLogFamily(false);
@@ -81,6 +90,32 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
+
+  const saveImage = (_id: string, image: FormData, userPoint: UserPointsI, width?: number, height?: number): Promise<string> => {
+    userPoint.nameImage = _id + image.get("extension");
+    image.append("nameImage", _id);
+    if (width) {
+      image.delete("width");
+      image.append("width", width.toString());
+    }
+    if (height) {
+      image.delete("height");
+      image.append("height", height.toString());
+    }
+
+    return upload(image, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
+      userPoint.nameImage = response?.jsonText.url;
+      const url: string = response?.jsonText.url
+      return saveUserImage(userPoint, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
+        if (response) {
+          setChangePoint(!changePoint);
+        }
+ 
+        return url;
+      })
+    })
+
+  }
 
   const children1 =
     <React.Fragment>
@@ -125,7 +160,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
                       <Card >
 
                         <CardContent className='text-card-point'>
-                          <Typography variant="subtitle1"className='text-message-point-title'>
+                          <Typography variant="subtitle1" className='text-message-point-title'>
                             {'Data: '}
                           </Typography>
                           <Typography variant="subtitle1" className='text-message-point-body'>
@@ -242,7 +277,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
                   page={page}
                   onChange={handlePageChange}
                   color="primary"
-                  className='pagination-card'                
+                  className='pagination-card'
                 />
               </>
             ) : (
@@ -257,79 +292,8 @@ const PointsContent: React.FC<PointsContentProps> = ({
     </React.Fragment>
   );
 
-  const CardTextAlign: CardTextAlign = {
-
-    textLeft: testo
-  }
-
-  const textAlign1: CardTextAlign[] = [CardTextAlign]
-
-  const cardText1: CardText = {
-    textLeftTitle: 'Descrizione',
-    text: textAlign1
-  }
 
 
-  const textAlign2: CardTextAlign[] = testoLog.map((x) => {
-
-    return {
-
-      textLeft: x.log,
-      textRight: x.usePoints + " points"
-    }
-  });
-
-  const cardText2: CardText = {
-    textLeftTitle: 'Attività',
-    textRightTitle: 'Punti usati',
-    text: textAlign2
-  }
-
-  const textAlign3: CardTextAlign[] = testoLogFamily.map((x) => {
-    return {
-      textLeft: getDateStringRegularFormat(x.date),
-      textRight: x.operations
-    }
-  });
-
-  const cardText3: CardText = {
-    textLeftTitle: 'Data',
-    textRightTitle: 'Operazione',
-    text: textAlign3
-  }
-
-
-  const cardsData: CardProps[] = [
-    {
-      _id: 'card1',
-      text: cardText1,
-      img: points,
-      title: "Punti",
-      // className: 'card-point', 
-      pulsanti: [],
-      children: children1,
-    },
-    {
-
-      _id: 'card2',
-      text: cardText2,
-      img: lizard,
-      title: "Log Attività",
-      //  className: 'card-point',
-      pulsanti: [],
-      children: children2,
-    },
-    {
-
-      _id: 'card3',
-      text: cardText3,
-      img: lizard,
-      title: "Log Famiglia",
-      //  className: 'card-point',
-      pulsanti: [],
-      children: children3,
-    }
-  ];
 
   // Crea l'array dei pulsanti in base all'orientamento
 
@@ -338,16 +302,100 @@ const PointsContent: React.FC<PointsContentProps> = ({
     findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
-          setTesto(response.jsonText.numeroPunti)
+          setTesto(response.jsonText.numeroPunti);
+          const nameImage: NameImageI[] = response.jsonText.nameImage.map((x: string) => {
+            return { name: x };
+          }
+          )
+          // Completa l'array fino a 3 elementi con { name: '' }
+          while (nameImage.length < 3) {
+            nameImage.push({ name: '' });
+          }
+          const CardTextAlign: CardTextAlign = {
+
+            textLeft: response.jsonText.numeroPunti
+          }
+
+          const textAlign1: CardTextAlign[] = [CardTextAlign]
+
+          const cardText1: CardText = {
+            textLeftTitle: 'Descrizione',
+            text: textAlign1
+          }
+
+
+          const textAlign2: CardTextAlign[] = testoLog.map((x) => {
+
+            return {
+
+              textLeft: x.log,
+              textRight: x.usePoints + " points"
+            }
+          });
+
+          const cardText2: CardText = {
+            textLeftTitle: 'Attività',
+            textRightTitle: 'Punti usati',
+            text: textAlign2
+          }
+
+          const textAlign3: CardTextAlign[] = testoLogFamily.map((x) => {
+            return {
+              textLeft: getDateStringRegularFormat(x.date),
+              textRight: x.operations
+            }
+          });
+
+          const cardText3: CardText = {
+            textLeftTitle: 'Data',
+            textRightTitle: 'Operazione',
+            text: textAlign3
+          }
+
+
+          const cardsDataId: string[] = ["userPointCard1", "userPointCard2", "userPointCard3"]
+
+          const cardProps: CardProps[] = [
+            {
+              _id: cardsDataId[0],
+              text: cardText1,
+              img: nameImage[0].name,
+              title: "Punti",
+              loadImage: (image: FormData) => saveImage(cardsDataId[0], image, user),
+              pulsanti: [],
+              children: children1,
+            },
+            {
+
+              _id: cardsDataId[1],
+              text: cardText2,
+              img: nameImage[1].name,
+              title: "Log Attività",
+              loadImage: (image: FormData) => saveImage(cardsDataId[1], image, user),
+              pulsanti: [],
+              children: children2,
+            },
+            {
+
+              _id: cardsDataId[2],
+              text: cardText3,
+              img: nameImage[2].name,
+              title: "Log Famiglia",
+              loadImage: (image: FormData) => saveImage(cardsDataId[2], image, user),
+              pulsanti: [],
+              children: children3,
+            }
+          ];
+          setCardData(cardProps);
           console.log('Dati ricevuti:', response);
         }
       }
     })
   }
-  const getLogAttivita = (userI: UserI, truncate: boolean): void => {
+  const getLogAttivita = (userI: UserI, truncate: boolean): Promise<void> => {
     const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-    logActivityByEmail({ ...userI, email: emailFind }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
+    return logActivityByEmail({ ...userI, email: emailFind }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           let attivitaLog = response.jsonText;
@@ -358,15 +406,18 @@ const PointsContent: React.FC<PointsContentProps> = ({
             setOpenDialogLogActivity(true);
           }
           setTestoLog(response.jsonText)
+
         }
       }
     })
   }
 
-  const getLogFamily = (userI: UserI, truncate: boolean): void => {
+
+
+  const getLogFamily = (userI: UserI, truncate: boolean): Promise<void> => {
     const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-    logFamilyByEmail({ ...userI, email: emailFind }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
+    return logFamilyByEmail({ ...userI, email: emailFind }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           let attivitaLog = response.jsonText;
@@ -377,6 +428,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
             setOpenDialogLogFamily(true);
           }
           setTestoLogFamily(response.jsonText)
+          setLogCard(true)
         }
       }
     })
@@ -388,7 +440,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
       <div className="row">
         <Box >
           <div id="cardData">
-            <CardGrid cardsData={cardsData} />
+            <CardGrid cardsData={cardData} />
           </div>
         </Box>
       </div>

@@ -2,13 +2,14 @@ package com.familyService.processor;
 
 import com.common.configurations.structure.NotificationComponent;
 import com.common.data.family.OperationTypeLogFamily;
+import com.common.dto.auth.Point;
 import com.common.dto.family.LogFamilyDTO;
 import com.common.dto.structure.ResponseDTO;
+import com.common.dto.user.PointDTO;
 import com.common.dto.user.UserPointDTO;
 import com.common.dto.family.FamilyNotificationDTO;
 import com.common.structure.status.ActivityHttpStatus;
 import com.common.structure.exception.NotFoundException;
-import com.common.dto.auth.PointsUser;
 import com.familyService.service.FamilyService;
 import com.common.configurations.rabbitmq.RabbitMQProducer;
 import com.familyService.service.FamilyWebService;
@@ -65,7 +66,7 @@ public class FamilyPointsProcessor {
                 .flatMap(pointsUserOptional -> {
                     saveLogFamily(createLogFamily(userPointDTO));
                     inviaNotifica(userPointDTO);
-                    PointsUser point = pointsUserOptional.orElse(null);
+                    PointDTO point = pointsUserOptional.orElse(null);
                     return Mono.just((new ResponseDTO(point, ActivityHttpStatus.OK.value(), new ArrayList<>())));
                 });
     }
