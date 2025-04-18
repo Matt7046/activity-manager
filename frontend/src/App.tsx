@@ -79,7 +79,6 @@ const GoogleAuthComponent = () => {
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [loading, setLoading] = useState(false);
   const [simulated, setSimulated] = useState(0);
-  const [title, setTitle] = useState("Activity manager");
   const [openD, setOpenD] = useState(false); // Stato per la dialog
   const [emailConfirmDialog, setEmailConfirmDialog] = useState(''); // Stato per l'email
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
@@ -390,8 +389,6 @@ const GoogleAuthComponent = () => {
           )
             : (
               <div>
-
-                <h2>{title}</h2>
                 <Routes>
                   <Route path="/" element={<App />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
