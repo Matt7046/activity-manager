@@ -1,15 +1,17 @@
-package com.activityService;
+package com;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @EnableMongoRepositories(basePackages = {
-    "com.repository.activity",
+        "com.repository.activity",
+        "com.repository.logActivity"
 })
 @SpringBootApplication(scanBasePackages = {
-    "com.activityService",
-    "com.common"
+        "com.activityService",
+        "com.logActivityService",
+        "com.common"
 })
 public class ActivityApplication {
 

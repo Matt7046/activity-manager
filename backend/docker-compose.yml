@@ -22,7 +22,6 @@ services:
       - image-service
       - user-point-service
       - activity-service
-      - log-activity-service
       - auth-service
       - family-service
       - notification-service
@@ -60,23 +59,6 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/activity/src/main/resources/certificate:/app/certificate
-    networks:
-      - app-network
-
-  log-activity-service:
-    depends_on:
-      - rabbitmq
-    image: log-activity-service:1.0.0
-    build:
-      context: ./
-      dockerfile: service/logActivity/Dockerfile
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
-    volumes:
-      -  ./service/logActivity/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
     networks:
       - app-network
 
