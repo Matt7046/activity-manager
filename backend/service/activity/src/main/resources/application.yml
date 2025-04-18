@@ -5,5 +5,19 @@ spring:
   application:
     name: activityManager
 error:
+  http: "Errore HTTP: "
   document:
     notFound: 'Documento non trovato con identificativo: '
+
+
+
+order:
+  type1: "date"
+app:
+  rabbitmq:
+    exchange:
+      point:
+        exchangeName: point-exchange
+        routingKey:
+          logActivity: point.log.activity
+          logFamily: point.log.family
