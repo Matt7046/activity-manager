@@ -1,5 +1,5 @@
 import { Button as ButtonMui, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import './DialogEmail.css'; // Importa il file CSS
 
 interface EmailDialogProps {
@@ -7,7 +7,7 @@ interface EmailDialogProps {
   handleCloseD: () => void;
   emailOptions: string[];
   handleEmailChange: (event: SelectChangeEvent) => void;
-  handleConfirm: (simulated: any,emailUserCurrent: string) => void;
+  handleConfirm: (simulated: any, emailUserCurrent: string) => void;
   email: string;
   simulated: any;
   emailUserCurrent: string;
@@ -23,9 +23,11 @@ const DialogEmail: React.FC<EmailDialogProps> = ({
   simulated,
   emailUserCurrent
 }) => {
+
+  const [title, setTitle] = useState('SCEGLI EMAIL DEL TUTORATO');
   return (
-    <Dialog open={openD} onClose={handleCloseD} className="dialog-container">
-      <DialogTitle className="dialog-title">Inserisci email del figlio</DialogTitle>
+    <Dialog open={openD} onClose={handleCloseD} className="dialog-button">
+      <DialogTitle className="dialog-title">{title}</DialogTitle>
       <DialogContent>
         <InputLabel>Email</InputLabel>
         <Select

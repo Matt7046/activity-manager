@@ -22,6 +22,8 @@ export interface configDialogPulsante {
 const Button = observer((props: { pulsanti: Pulsante[] }) => {
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState('CONFERMA OPERAZIONE');
+
   const [currentFunction, setCurrentFunction] = useState<(() => any) | null>(null);
   const [messageTitle, setMessageTitle] = useState<string>('');
 
@@ -75,22 +77,14 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
         </div>
       ))}
       <Dialog
+      className='dialog-button'
         open={open}
-        onClose={handleClose}
-        PaperProps={{
-          sx: {
-            opacity: 1,
-            pointerEvents: 'auto',
-            cursor: 'pointer',
-            border: 'initial',
-            color: '#fff',  // Puoi cambiare questo con il colore che preferisci
-            borderRadius: '50px',
-            backgroundColor: '#d1d1d1', // Impostato il colore di sfondo a un grigio scuro
-          },
-        }}
+        onClose={handleClose}      
+ 
       >
-        <DialogTitle >Conferma azione</DialogTitle>
-        <DialogContent>
+        <DialogTitle className='dialog-title' >{title}
+          </DialogTitle>
+        <DialogContent> 
           <DialogContentText>
             {messageTitle}
           </DialogContentText>
