@@ -17,9 +17,9 @@ export interface FamilyLogI {
 
 }
 
-const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
+const Family: React.FC<{}> = ({ }) => {
 
-  setTitle("Sezione famiglia");
+
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { user, setUser } = useUser();
@@ -28,6 +28,7 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe  
+  const [title, setTitle] = useState<string>("Sezione famiglia");
 
 
   useEffect(() => {
@@ -74,6 +75,7 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   return (
     <>
       <PageLayout
+        title={title}
         menuLaterale={menuLaterale}
         open={open}
         user={user}
@@ -87,7 +89,7 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
           setOpen={setOpen}
           isVertical={isVertical}
         />
-      </PageLayout> 
+      </PageLayout>
     </>
   );
 };

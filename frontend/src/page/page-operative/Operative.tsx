@@ -7,11 +7,10 @@ import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import OperativeContent from './OperativeContent';
 
 
-const Operative: React.FC<{ setTitle: any }> = ({ setTitle }) => {
+const Operative: React.FC<{}> = ({ }) => {
   const { user, setUser } = useUser();
-  const title = user.type === TypeUser.FAMILY ? ' (tutorato)': ''
-  setTitle("Sezione Operativa" + title);
-
+  const subTitle = user.type === TypeUser.FAMILY ? ' (tutorato)' : ''
+  const [title, setTitle] = useState<string>("Sezione operativa" + subTitle);
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
@@ -63,6 +62,7 @@ const Operative: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   return (
     <>
       <PageLayout
+        title={title}
         menuLaterale={menuLaterale}
         open={open}
         message={message}

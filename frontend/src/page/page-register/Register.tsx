@@ -12,10 +12,10 @@ export interface PointsI {
   attivita: string;
 }
 
-const Register: React.FC<{ setTitle: (title: string) => void }> = ({ setTitle }) => {
+const Register: React.FC<{}> = ({ }) => {
 
   const location = useLocation();
-  setTitle("Section register");
+  const [title, setTitle] = useState<string>("Sezione registrazione");
   const { user, setUser } = useUser();
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
@@ -43,6 +43,7 @@ const Register: React.FC<{ setTitle: (title: string) => void }> = ({ setTitle })
   return (
     <>
       <PageLayout
+        title={title}
         open={open}
         message={message}
         user={user}
