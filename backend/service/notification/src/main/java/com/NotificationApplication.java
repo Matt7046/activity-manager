@@ -1,19 +1,19 @@
-package com.familyService;
+package com;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @EnableMongoRepositories(basePackages = {
-        "com.repository.family",
+        "com.repository.notification",
 })
 @SpringBootApplication(scanBasePackages = {
-        "com.familyService",
+        "com.notificationService",
         "com.common"
 })
-public class FamilyApplication {
+public class NotificationApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FamilyApplication.class, args);
+        SpringApplication.run(NotificationApplication.class, args);
     }
 }
