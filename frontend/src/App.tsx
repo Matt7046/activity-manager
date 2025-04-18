@@ -149,7 +149,6 @@ const GoogleAuthComponent = () => {
 
 
   const handleConfirm = ((typeSimulated: number, emailUserCurrent: string) => {
-    console.log("Email confermata:", emailConfirmDialog);
     currentUser.email = emailLogin;
     currentUser.emailFamily = emailConfirmDialog;
     currentUser.type = typeSimulated;
@@ -193,7 +192,6 @@ const GoogleAuthComponent = () => {
   // Configura useGoogleLogin
   const login = useGoogleLogin({
     onSuccess: (codeResponse: any) => {
-      console.log('Login Success:', codeResponse);
 
       const accessToken = codeResponse?.access_token;
       // Puoi usare l'access token per fare richieste all'API di Google
@@ -221,7 +219,6 @@ const GoogleAuthComponent = () => {
       const emailChild = x?.jsonText?.emailFigli ?? [];
       setEmailOptions(emailChild);
       const typeNew = emailChild?.length > 0 ? type : 2;
-      console.log("Login simulato effettuato:", fakeResponse);
       showDialog(typeNew, false);
     })
   };
@@ -233,7 +230,6 @@ const GoogleAuthComponent = () => {
 
   const openHome = (currentUser: any, googleAuth: boolean, setLoading: any): Promise<any> => {
     return getUserType(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
-      console.log('User Data:', x); // Logga i dati utente per il debug
       setEmailLogin(x?.jsonText.emailUserCurrent);
       switch (x?.jsonText?.typeUser) {
         case TypeUser.STANDARD: {
@@ -303,7 +299,6 @@ const GoogleAuthComponent = () => {
     baseStore.clearToken();
     getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
       setSimulated(type);
-      console.log("tokenData", tokenData);
       const fakeResponse = {
         credential: tokenData?.jsonText?.token,
         clientId: "549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com",

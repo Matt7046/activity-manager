@@ -80,10 +80,8 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
     // Procedi solo se non ci sono errori
     if (Object.keys(errors).filter((key) => errors[key] === true).length === 0) {
-      console.log('Form submitted:', formValues);
       salvaRecord(_id); // Chiama la funzione per salvare i dati
     } else {
-      console.log('Validation errors:', errors);
       const erroriCampi = Object.keys(formErrors).filter((key) => errors[key] === true);
       let errorFields: string[] = [];
       if (erroriCampi.length > 0) {

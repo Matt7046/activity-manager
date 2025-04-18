@@ -82,18 +82,13 @@ const CardComponent = observer((props: CardProps) => {
 
   // Gestisce la selezione del file
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      console.log('File selezionato:', file);
-    }
+    const file = event.target.files?.[0];   
     selectedFile = file;
     handleClickOpen(props);
   };
 
   // Funzione che sostituisce il primo parametro di loadImage con imageDTO
   const creaFormData = (loadImage: (imageDTO: FormData) => Promise<string>, selectedFile: File | undefined) => {
-    console.log("selectedFile:", selectedFile);
-
     if (selectedFile) {
       const fileName = selectedFile?.name;
       const extension = fileName?.substring(fileName.lastIndexOf('.'));
