@@ -8,10 +8,8 @@ export const showMessageOperativeForm = async (funzioneMessage?: (message?: Type
   try {
     const showSuccess = true;
     const data = await showMessageForm(setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);
   }
 };
 
