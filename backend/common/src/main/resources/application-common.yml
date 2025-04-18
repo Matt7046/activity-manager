@@ -13,7 +13,7 @@ mongo:
   tls:
     cert: certificate/client.pem
     key: certificate/client-key.pem
-  database: demoProd
+  database: demo
 
 app:
   secret:
@@ -24,8 +24,8 @@ app:
         key: qwertyuiop
   algorithm1: AES
   algorithm2: HmacSHA256
-  address1: https://webapp-tn6q.onrender.com
-  address2: https://webapp-tn6q.onrender.com
+  address1: http://localhost:3000
+  address2: http://localhost:3001
   security:
     roles: USER
     username: user
@@ -33,11 +33,13 @@ app:
   page:
     address: /privacy-policy
     service:
+      image: http://image-service:8080
       auth: http://auth-service:8080
       activity: http://activity-service:8080
       userpoint: http://user-point-service:8080
       family: http://family-service:8080
     path:
+      image: /api/image
       auth: /api/auth
       activity: /api/activity
       logactivity: /api/logactivity
