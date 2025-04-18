@@ -112,7 +112,7 @@ const Schedule = observer((props: {
               <Grid container justifyContent={props.schedule.justifyContent} spacing={2} style={{ height: '10px' }}>
                 <Button pulsanti={pulsanti} />
               </Grid>
-              <div id={`rowHidden-${item._id}`} style={{ gridColumn: 'span 12' }}>
+              <div id={`rowHidden-${item._id}`}>
                 <Label _id={item._id} text={subTesti[item._id] ? subTesti[item._id] : isVertical ? '' : "-"} visibility={isVertical && visibilitySubTesto ? 'hidden' : undefined} />
               </div>
 

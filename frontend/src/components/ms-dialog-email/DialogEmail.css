@@ -52,3 +52,30 @@
     background-color: #dc2626;
   }
 }
+
+/* Bottoni dentro il dialog */
+.dialog-button .MuiPaper-root {
+  padding: 12px 32px;
+  font-weight: 600;
+  opacity: 1;
+  cursor: pointer;
+  border: none;
+  color: #ffffff;
+  border-radius: 35px;
+  background: linear-gradient(135deg, #bccbbc, #5f665f); /* verde sfumato */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dialog-button .MuiPaper-root:hover {
+  background: linear-gradient(135deg, rgba(19, 160, 71, 0.95), rgba(102, 187, 106, 0.95));
+  transform: scale(1.03);
+  
+}
+
+.dialog-button .MuiPaper-root:active {
+  transform: scale(0.98);
+}
+
+.dialog-title {
+  color:blueviolet
+}
