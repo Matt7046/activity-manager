@@ -2,6 +2,7 @@ package com.familyService.service;
 
 import java.util.Optional;
 
+import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.dto.auth.Point;
 import com.common.dto.user.PointDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class FamilyWebService {
     private WebClient webClientPoint;
     @Value("${app.page.path.userpoint}")
     private String userPointPath;
+    @Autowired
+    private EncryptDecryptConverter encryptDecryptConverter;
+
 
 
     public Mono<Optional<PointDTO>> savePointsByFamily(UserPointDTO userPointDTO) {
@@ -36,7 +40,7 @@ public class FamilyWebService {
                 .flatMap(responseDTO -> Mono.fromCallable(() -> {
                     UserPointDTO subDTO = new ObjectMapper().convertValue(responseDTO.getJsonText(), UserPointDTO.class);
                     return subDTO.getPoints().stream()
-                            .filter(point -> userPointDTO.getEmailFamily().equals(point.getEmail()))
+                            .filter(point -> encryptDecryptConverter.convert(userPointDTO.getEmailFamily()).equals(point.getEmail()))
                             .findFirst();
                 }).subscribeOn(Schedulers.boundedElastic()));
     }

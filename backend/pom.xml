@@ -32,7 +32,6 @@
       <module>service/auth</module>
       <module>service/activity</module>
       <module>service/logActivity</module>
-      <module>service/register</module>
       <module>service/userPoint</module>
       <module>service/family</module>
       <module>service/notification</module>
