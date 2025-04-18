@@ -37,14 +37,12 @@ app:
       activity: http://activity-service:8080
       logactivity: http://log-activity-service:8080
       userpoint: http://user-point-service:8080
-      register: http://register-service:8080
       family: http://family-service:8080
     path:
       auth: /api/auth
       activity: /api/activity
       logactivity: /api/logactivity
       userpoint: /api/userpoint
-      register: /api/register
       family: /api/family
 rabbit:
   exchange:

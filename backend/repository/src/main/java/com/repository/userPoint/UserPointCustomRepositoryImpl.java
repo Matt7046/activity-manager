@@ -80,8 +80,11 @@ public class UserPointCustomRepositoryImpl implements UserPointCustomRepository 
             existingUserPoint = !userPointList.isEmpty() ? userPointList.get(0) : null;
         }
 
-        existingUserPoint.getPoints().stream()
-                .filter(point -> userPointSave.getEmailFamily().equals(point.getEmail())) // Filtra per email
+         existingUserPoint.getPoints().stream()
+                .filter(point -> {
+                    assert emailCriypt != null;
+                    return emailCriypt.equals(point.getEmail());
+                }) // Filtra per email
                 .findFirst() // Trova il primo match
                 .ifPresent(point -> {
                     // Calcola i nuovi punti

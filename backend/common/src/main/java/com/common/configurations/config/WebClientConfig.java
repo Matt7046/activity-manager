@@ -21,30 +21,12 @@ public class WebClientConfig {
     @Value("${app.page.service.logactivity}")
     private String logactivity;
 
-    @Value("${app.page.service.register}")
-    private String register;
-
     @Value("${app.page.service.userpoint}")
     private String userpoint;   
 
     @Value("${app.page.service.family}")
     private String family;
 
-    @Bean
-    public WebClient webClientRegister(WebClient.Builder builder) {
-        return builder
-                .baseUrl(register)
-                .filter((request, next) -> ReactiveSecurityContextHolder.getContext()
-                        .map(securityContext -> {
-                            String token = (String) securityContext.getAuthentication().getCredentials();
-                            return ClientRequest.from(request)
-                                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                                    .build();
-                        })
-                        .flatMap(next::exchange) // Continua la chiamata dopo aver aggiunto il token
-                )
-                .build();
-    } 
 
     @Bean
     public WebClient webClientPoint(WebClient.Builder builder) {
