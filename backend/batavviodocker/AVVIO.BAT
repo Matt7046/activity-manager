@@ -12,7 +12,7 @@ if exist "node_modules" (
 ) else (
     echo La cartella node_modules non esiste.
     echo Procedo con l'esecuzione di npm install...
-    npm install
+    call npm install
 )
 
 docker network create app-network
