@@ -184,7 +184,7 @@ const CardComponent = observer((props: CardProps) => {
 
 const CardGrid = ({ cardsData }: { cardsData: CardProps[] }) => {
   return (
-    <Grid container spacing={2} alignItems="stretch">
+    <Grid container spacing={2} alignItems="stretch" className= 'grid-card-data'>
       {cardsData.map((cardData) => (
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={cardData._id}>
           <CardComponent {...cardData} />

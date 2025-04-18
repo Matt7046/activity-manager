@@ -32,12 +32,11 @@ export interface NameImageI {
   name: string;
 }
 
-const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
+const Points: React.FC<{}> = ({ }) => {
 
   const { user, setUser } = useUser();
-  const title = user.type === TypeUser.FAMILY ? ' (tutorato)' : ''
-  setTitle("Sezione informazioni utente" + title);
-
+  const subTitle = user.type === TypeUser.FAMILY ? ' (tutorato)' : ''
+  const [title, setTitle] = useState<string>("Sezione informazioni utente"+subTitle);
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
@@ -47,7 +46,7 @@ const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
 
 
-  
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -89,6 +88,8 @@ const Points: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   return (
     <>
       <PageLayout
+
+        title={title}
         menuLaterale={menuLaterale}
         open={open}
         message={message}

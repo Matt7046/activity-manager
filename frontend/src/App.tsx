@@ -401,12 +401,12 @@ const GoogleAuthComponent = () => {
                 <Routes>
                   <Route path="/" element={<App />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/register" element={<Register setTitle={setTitle} />} />
-                  <Route path="/activity" element={<Activity setTitle={setTitle} />} />
-                  <Route path="/about" element={<About setTitle={setTitle} />} />
-                  <Route path="/points" element={<Points setTitle={setTitle} />} />
-                  <Route path="/operative" element={<Operative setTitle={setTitle} />} />
-                  <Route path="/family" element={<Family setTitle={setTitle} />} />
+                  <Route path="/register" element={<Register  />} />
+                  <Route path="/activity" element={<Activity />} />
+                  <Route path="/about" element={<About  />} />
+                  <Route path="/points" element={<Points />} />
+                  <Route path="/operative" element={<Operative />} />
+                  <Route path="/family" element={<Family/>} />
                 </Routes>
               </div>
             )}
