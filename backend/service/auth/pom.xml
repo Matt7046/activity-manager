@@ -66,7 +66,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>3.1.0</version>
             <configuration>
-                <mainClass>com.authService.AuthApplication</mainClass>
+                <mainClass>com.AuthApplication</mainClass>
             </configuration>
             <executions>
                 <execution>
