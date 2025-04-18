@@ -14,10 +14,9 @@ export interface PointsI {
   attivita: string;
 }
 
-const About: React.FC<{ setTitle: any }> = ({ setTitle }) => {
+const About: React.FC<{  }> = ({  }) => {
 
-  setTitle("Sezione informazioni attività");
-
+  const [title, setTitle] = useState<string>("Sezione informazioni attività");
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { user, setUser } = useUser();
   const menuLaterale = getMenuLaterale(navigate, user);
@@ -26,8 +25,8 @@ const About: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
 
-  
-   useEffect(() => {
+
+  useEffect(() => {
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
       setPaddingType(window.innerHeight > window.innerWidth ? 0 : 5);
@@ -62,6 +61,7 @@ const About: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   return (
     <>
       <PageLayout
+        title={title}
         menuLaterale={menuLaterale}
         open={open}
         user={user}
@@ -76,7 +76,7 @@ const About: React.FC<{ setTitle: any }> = ({ setTitle }) => {
           setOpen={setOpen}
           isVertical={isVertical}
         />
-      </PageLayout> 
+      </PageLayout>
     </>
   );
 };
