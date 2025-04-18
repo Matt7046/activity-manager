@@ -8,7 +8,6 @@ export const upload = async (image: FormData, funzioneMessage?: (message?: TypeM
   try {
     const path = PATH_IMAGE+ `/upload`;
     const data = await postData(path, image, setLoading, funzioneMessage); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
     console.error('Errore durante il recupero dei dati:', error);
