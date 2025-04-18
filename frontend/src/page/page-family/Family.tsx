@@ -46,13 +46,11 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   useEffect(() => {
     const socket = new WebSocket("ws://localhost/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
     socket.onopen = () => {
-      console.log("Connected to WebSocket");
     };
     socket.onmessage = (event) => {
       setOpen(true);
 
       const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-      console.log("notificationFamily" + familyNotification);
       const typeMessage: TypeMessage = {
         message: [familyNotification.message],
         typeMessage: TypeAlertColor.INFO
@@ -61,7 +59,6 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
     };
 
     socket.onclose = () => {
-      console.log("Disconnected from WebSocket");
     };
 
     return () => {
