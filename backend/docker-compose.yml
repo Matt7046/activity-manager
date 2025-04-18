@@ -20,7 +20,6 @@ services:
       - "80:80"
     depends_on:
       - image-service
-      - register-service
       - user-point-service
       - activity-service
       - log-activity-service
@@ -29,23 +28,7 @@ services:
       - notification-service
     networks:
       - app-network
-  register-service:
-    depends_on:
-      - rabbitmq
-    image: register-service:1.0.0
-    build:
-      context: ./
-      dockerfile: service/register/Dockerfile
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
-    volumes:
-      - ./service/register/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
-    networks:
-      - app-network
-
+      
   user-point-service:
     depends_on:
       - rabbitmq  

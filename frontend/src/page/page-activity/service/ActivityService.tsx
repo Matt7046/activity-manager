@@ -46,7 +46,7 @@ export const deleteAboutById = async (_id: string, funzioneMessage?:(message?: T
 };
 
 
-export const saveAboutByUser = async (about: any, funzioneMessage?:(message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
+export const saveActivity = async (about: any, funzioneMessage?:(message?: TypeMessage)=>void, setLoading?:(loading: boolean)=>void) => {
   try {
     const path = PATH_ACTIVITY + `/dati`;
     const showSuccess = true;

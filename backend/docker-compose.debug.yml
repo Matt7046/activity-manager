@@ -20,34 +20,12 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - register-service
       - user-point-service
       - activity-service
       - log-activity-service
       - auth-service
       - family-service
       - notification-service
-    networks:
-      - app-network
-
-  register-service:
-    depends_on:
-      - rabbitmq
-    image: register-service:1.0.0
-    build:
-      context: ./ 
-      dockerfile: service/register/Dockerfile
-    ports:
-      - "8081:8080"
-      - "5005:5005"  # Porta per debug
-    environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
-    volumes:
-      - ./service/register/src/main/resources/certificate:/app/certificate
     networks:
       - app-network
 
