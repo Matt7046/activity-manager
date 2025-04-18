@@ -6,10 +6,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage, useUser } from "../../App";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, SectionName } from '../../general/structure/Constant';
-import { UserI } from "../../general/structure/Utils";
+import { ResponseI, UserI } from "../../general/structure/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
+import { saveUser } from '../page-user-point/service/UserPointService';
 import "./RegisterContent.css";
-import { saveUserByPoints } from './service/RegisterService';
 
 
 
@@ -93,8 +93,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     //  const utente = { email: userData.email, type: userData.type }
     const arrayDiOggetti = emailFigli.map(email => ({ email }));
     setUser(null);
-    return saveUserByPoints({ ...userData, emailFigli: emailFigli, points: arrayDiOggetti }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
-      setTitle('');
+    return saveUser({ ...userData, emailFigli: emailFigli, points: arrayDiOggetti }, (message: any) => showMessage(setOpen, setMessage, message)).then((x: ResponseI) => {
       navigateRouting(navigate, SectionName.ROOT, { newLogin: true })
     })
   }
