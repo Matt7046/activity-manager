@@ -116,15 +116,9 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   };
 
   const salvaRecord = (userData: any): Promise<any> => {
-    //  const utente = { email: userData.email, type: userData.type }
     const pointsWithPlus = isPlusIcon ? formValues.newPoints : - formValues.newPoints!;
     return savePointsByFamily({ ...userData, usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
-      console.log('User Data:', x); // Logga i dati utente per il debug
-      // setPoints(x.testo.points)
       familyStore.setPoints(parseInt(x?.jsonText.points)); // Update the state with the new value
-
-
-      // navigateRouting(navigate, `activity`, {})
     })
   }
   return (
