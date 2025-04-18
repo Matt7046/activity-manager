@@ -24,10 +24,10 @@ export interface ActivityLogI {
 
 }
 
-const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
+const Activity: React.FC<{  }> = ({ }) => {
 
 
-  setTitle("Sezione attività");
+  const [title, setTitle] = useState<string>("Sezione attività");
   const { user, setUser } = useUser();
   const [utente, setUtente] = useState<UserI>(user); // Stato iniziale vuoto
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
@@ -45,9 +45,9 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
 
   useEffect(() => {
-    getActivities(); 
-    return () =>{};
-  }, [activitySchedule]); 
+    getActivities();
+    return () => { };
+  }, [activitySchedule]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -59,13 +59,11 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
 
     const socket = new WebSocket("ws://localhost/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
     socket.onopen = () => {
-      console.log("Connected to WebSocket");
     };
     socket.onmessage = (event) => {
       setOpen(true);
 
       const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-      console.log("notificationFamily" + familyNotification);
       const typeMessage: TypeMessage = {
         message: [familyNotification.message],
         typeMessage: TypeAlertColor.INFO
@@ -74,7 +72,6 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
     };
 
     socket.onclose = () => {
-      console.log("Disconnected from WebSocket");
     };
 
     return () => {
@@ -120,6 +117,7 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   return (
     <>
       <PageLayout
+        title={title}
         menuLaterale={menuLaterale}
         open={open}
         user={user}
@@ -127,16 +125,16 @@ const Activity: React.FC<{ setTitle: any }> = ({ setTitle }) => {
         isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}
-   
+
       >
         <ActivityContent
           responseSchedule={response}
           user={utente}
           setOpen={setOpen}
           setMessage={setMessage}
-          isVertical ={isVertical}
+          isVertical={isVertical}
         />
-      </PageLayout>    
+      </PageLayout>
     </>
   );
 }
