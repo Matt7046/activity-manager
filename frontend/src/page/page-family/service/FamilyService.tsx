@@ -8,10 +8,8 @@ export const logFamilyByEmail = async (pointsDTO: any, funzioneErrore?: () => vo
   try {
     const path = PATH_FAMILY + `/log/tutor`;
     const data = await postData(path, pointsDTO, setLoading); // Usa l'URL dinamico
-    console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);
     if (funzioneErrore) {
       funzioneErrore();
     }
@@ -25,10 +23,8 @@ export const savePointsByFamily = async (user: any, funzioneMessage?: (message?:
     const path = PATH_FAMILY + `/dati`;
     showSuccess = true; 
     const data = await postData(path, user, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);
   }
 
 };

@@ -17,9 +17,9 @@ export interface FamilyLogI {
 
 }
 
-const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
+const Family: React.FC<{}> = ({ }) => {
 
-  setTitle("Sezione famiglia");
+
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { user, setUser } = useUser();
@@ -28,6 +28,7 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe  
+  const [title, setTitle] = useState<string>("Sezione famiglia");
 
 
   useEffect(() => {
@@ -46,13 +47,11 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   useEffect(() => {
     const socket = new WebSocket("ws://localhost/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
     socket.onopen = () => {
-      console.log("Connected to WebSocket");
     };
     socket.onmessage = (event) => {
       setOpen(true);
 
       const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-      console.log("notificationFamily" + familyNotification);
       const typeMessage: TypeMessage = {
         message: [familyNotification.message],
         typeMessage: TypeAlertColor.INFO
@@ -61,7 +60,6 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
     };
 
     socket.onclose = () => {
-      console.log("Disconnected from WebSocket");
     };
 
     return () => {
@@ -77,6 +75,7 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
   return (
     <>
       <PageLayout
+        title={title}
         menuLaterale={menuLaterale}
         open={open}
         user={user}
@@ -90,7 +89,7 @@ const Family: React.FC<{ setTitle: any }> = ({ setTitle }) => {
           setOpen={setOpen}
           isVertical={isVertical}
         />
-      </PageLayout> 
+      </PageLayout>
     </>
   );
 };

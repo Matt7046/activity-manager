@@ -7,6 +7,7 @@ import { navigateRouting, showMessage } from '../../App';
 import Alert from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
+import Label from '../../components/ms-label/Label';
 import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
 import { ButtonName, HttpStatus, SectionName, TypeAlertColor } from '../../general/structure/Constant';
 import { getDateStringRegularFormat, NotificationI, ResponseI, UserI } from '../../general/structure/Utils';
@@ -15,6 +16,7 @@ import "./PageLayout.css";
 
 
 interface PageLayoutProps {
+  title: string
   children: React.ReactNode; // Contenuto specifico della maschera
   menuLaterale?: MenuLaterale[][];
   user: UserI;
@@ -30,6 +32,7 @@ export interface TypeMessage {
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({
+  title,
   children,
   user,
   menuLaterale,
@@ -131,7 +134,10 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         {isVertical ? (
           <>
             {/* Riga 1: Menu + Pulsanti */}
+            <Label _id={'title'} text={title}></Label>
             <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
+
+
               {menuLaterale && menuLaterale.length > 0 && (
                 <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
               )}
@@ -166,36 +172,34 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             </Grid>
           </>
         ) : (
-          // Layout orizzontale
-          <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-            {menuLaterale && menuLaterale.length > 0 && (
-              <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
-            )}
-            <Box className="box-layout-text">
-              <TextField
-                id="emailFamily"
-                label={
-                  user.emailUserCurrent === user.emailFamily
+          <>
+
+            <Label _id={'title'} text={title}></Label>
+            <Grid container justifyContent="space-between" alignItems="center" spacing={2} className='grid-menu'>
+              {menuLaterale && menuLaterale.length > 0 && (
+                <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
+              )}
+              <Box className="box-layout-text">
+                <TextField
+                  id="emailFamily"
+                  label={user.emailUserCurrent === user.emailFamily
                     ? 'email di registrazione'
-                    : 'Email tutelato'
-                }
-                variant="standard"
-                value={user.emailFamily}
-                fullWidth
-                disabled
-              />
-            </Box>
-            <Box className='box-layout-right-button'>
-              <Button pulsanti={[pulsanteNotifiche]} />
-              <Button pulsanti={[pulsanteLogout]} />
-              <Popover
-                notifications={popoverNotifications}
-                openAnchor={openAnchor}
-                handleCloseAnchor={handleCloseAnchor}
-                pulsanteNotification={pulsanteNotification}
-              />
-            </Box>
-          </Grid>
+                    : 'Email tutelato'}
+                  variant="standard"
+                  value={user.emailFamily}
+                  fullWidth
+                  disabled />
+              </Box>
+              <Box className='box-layout-right-button'>
+                <Button pulsanti={[pulsanteNotifiche]} />
+                <Button pulsanti={[pulsanteLogout]} />
+                <Popover
+                  notifications={popoverNotifications}
+                  openAnchor={openAnchor}
+                  handleCloseAnchor={handleCloseAnchor}
+                  pulsanteNotification={pulsanteNotification} />
+              </Box>
+            </Grid></>
         )}
       </Box>
 

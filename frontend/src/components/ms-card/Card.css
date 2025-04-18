@@ -4,7 +4,6 @@
   justify-content: space-between;
   min-height: 600px;
   max-height: 600px;
-
   /* 4 * 4px */
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -22,6 +21,7 @@
 
 .card-content {
   border-radius: 106px;
+
   /* 4 * 4px */
 
 }
@@ -34,8 +34,6 @@
 .card-list-item {
   margin-bottom: 1px;
   /* Riduci il margine inferiore */
-
-  padding: 0px;
 }
 
 .card-text-secondary {
@@ -49,9 +47,9 @@
 .card-header-row {
   background-color: rgba(255, 0, 0, 0.1);
   /* rosso trasparente */
-  padding: 8px 12px;
   border-radius: 4px;
   margin-bottom: 8px;
+  
 }
 
 .card-header-text {
@@ -65,4 +63,7 @@
 }
 .list-body{
   min-height: 250px;
+}
+.grid-card-data{
+  padding-left: 20px;
 }

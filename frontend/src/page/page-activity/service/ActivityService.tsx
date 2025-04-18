@@ -8,10 +8,8 @@ export const fetchDataActivities = async (pointsDTO: UserPointsI, funzioneMessag
   try {
     const path = PATH_ACTIVITY + '/activities'
     const data = await postData(path, pointsDTO, setLoading, funzioneMessage); // Usa l'URL dinamico
-    console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);
   }
 };
 
@@ -20,10 +18,8 @@ export const findByIdentificativo = async (pointsDTO: UserPointsI,  funzioneMess
   try {
     const path = PATH_ACTIVITY + `/find`;
     const data = await postData(path, pointsDTO, setLoading,funzioneMessage); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);   
   }
 };
 
@@ -32,10 +28,8 @@ export const savePointsAndLog = async (activity: ActivityLogI, funzioneMessage?:
     const path = `logactivity/dati`;
     const showSuccess = true;
     const data = await postData(path, activity, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);
   }
 };
 
@@ -46,10 +40,8 @@ export const deleteAboutById = async (_id: string, funzioneMessage?:(message?: T
     const path = PATH_ACTIVITY +'/toggle'+ `/${_id}`;
     const showSuccess = true;
     const data = await deleteData(path,  setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);    
   }
 };
 
@@ -59,10 +51,8 @@ export const saveAboutByUser = async (about: any, funzioneMessage?:(message?: Ty
     const path = PATH_ACTIVITY + `/dati`;
     const showSuccess = true;
     const data = await postData(path, about,setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);   
   }
 };
 
@@ -70,10 +60,8 @@ export const showMessageAboutForm = async (funzioneMessage?:(message?: TypeMessa
   try {  
     const showSuccess = true;
     const data = await showMessageForm(setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
-    console.log('Dati ricevuti:', data);
     return data;
   } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);   
   }
 };
 

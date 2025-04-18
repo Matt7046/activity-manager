@@ -94,7 +94,6 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     const arrayDiOggetti = emailFigli.map(email => ({ email }));
     setUser(null);
     return saveUserByPoints({ ...userData, emailFigli: emailFigli, points: arrayDiOggetti }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
-      console.log('User Data:', x); // Logga i dati utente per il debug     
       setTitle('');
       navigateRouting(navigate, SectionName.ROOT, { newLogin: true })
     })
