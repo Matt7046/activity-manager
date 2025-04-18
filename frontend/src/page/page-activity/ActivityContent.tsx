@@ -75,7 +75,6 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
         if (response?.status === HttpStatus.OK) {
           activityStore.setActivityById(_id, response.jsonText);
           navigateRouting(navigate, SectionName.ABOUT, { _id })
-          console.log('Dati ricevuti:', response);
         } else {
           setMessage({ message: response?.errors, typeMessage: TypeAlertColor.ERROR });
           setOpen(true);

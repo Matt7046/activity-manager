@@ -70,32 +70,15 @@ const PointsContent: React.FC<PointsContentProps> = ({
   useEffect(() => {
     if (cardData.length > 0) {
       const cardProps: CardProps[] = [
-        {
-          _id: cardsDataId[0],
-          text: cardData[0].text,
-          img: nameImage[0].name,
-          title: "Punti",
-          loadImage: (image: FormData) => saveImage(cardsDataId[0], image, user),
+        {...cardData[0],         
           children: renderChildren1(),
         },
-        {
-
-          _id: cardsDataId[1],
-          text: cardData[1].text,
-          img: nameImage[1].name,
-          title: "Log Attività",
-          loadImage: (image: FormData) => saveImage(cardsDataId[1], image, user),
-          children: renderChildren2(openDialogLogActivity, handleCloseDialogLogActivity),
+        {...cardData[1],         
+          children: renderChildren2(openDialogLogActivity),
         },
-        {
-
-          _id: cardsDataId[2],
-          text: cardData[2].text,
-          img: nameImage[2].name,
-          title: "Log Famiglia",
-          loadImage: (image: FormData) => saveImage(cardsDataId[2], image, user),
-          children: renderChildren3(false, handleCloseDialogLogFamily),
-        }
+        {...cardData[2],         
+          children: renderChildren3(false),
+        },
       ];
       setCardData(cardProps);
     }
@@ -106,32 +89,15 @@ const PointsContent: React.FC<PointsContentProps> = ({
   useEffect(() => {
     if (cardData.length > 0) {
       const cardProps: CardProps[] = [
-        {
-          _id: cardsDataId[0],
-          text: cardData[0].text,
-          img: nameImage[0].name,
-          title: "Punti",
-          loadImage: (image: FormData) => saveImage(cardsDataId[0], image, user),
+        {...cardData[0],         
           children: renderChildren1(),
         },
-        {
-
-          _id: cardsDataId[1],
-          text: cardData[1].text,
-          img: nameImage[1].name,
-          title: "Log Attività",
-          loadImage: (image: FormData) => saveImage(cardsDataId[1], image, user),
-          children: renderChildren2(false, handleCloseDialogLogActivity),
+        {...cardData[1],         
+          children: renderChildren2(false),
         },
-        {
-
-          _id: cardsDataId[2],
-          text: cardData[2].text,
-          img: nameImage[2].name,
-          title: "Log Famiglia",
-          loadImage: (image: FormData) => saveImage(cardsDataId[2], image, user),
-          children: renderChildren3(openDialogLogFamily, handleCloseDialogLogFamily),
-        }
+        {...cardData[2],         
+          children: renderChildren3(openDialogLogFamily),
+        },
       ];
       setCardData(cardProps);
     }
@@ -143,12 +109,12 @@ const PointsContent: React.FC<PointsContentProps> = ({
     </React.Fragment>
   )
 
-  const renderChildren2 = (open: boolean, onClose: () => void) => (
+  const renderChildren2 = (open: boolean) => (
     <React.Fragment>
       <Grid container justifyContent="flex-end" spacing={2} >
         <Button pulsanti={[pulsanteLog]} />
         <Dialog
-          onClose={onClose}
+          onClose={handleCloseDialogLogActivity}
           aria-labelledby="customized-dialog-title"
           open={open}
         >
@@ -224,13 +190,13 @@ const PointsContent: React.FC<PointsContentProps> = ({
     </React.Fragment>
   );
 
-  const renderChildren3 = (open: boolean, onClose: () => void) => (
+  const renderChildren3 = (open: boolean) => (
     <React.Fragment>
       <Grid container justifyContent="flex-end" spacing={2} >
         <Button pulsanti={[pulsanteLogFamily]} />
 
         <Dialog
-          onClose={onClose}
+          onClose={handleCloseDialogLogFamily}
           aria-labelledby="customized-dialog-title"
           open={open}
         >
@@ -396,10 +362,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
             nameImage.push({ name: '' });
           }
 
-
-
           const CardTextAlign: CardTextAlign = {
-
             textLeft: response.jsonText.numeroPunti
           }
 
@@ -410,13 +373,12 @@ const PointsContent: React.FC<PointsContentProps> = ({
             text: textAlign1
           }
 
-
           const textAlign2: CardTextAlign[] = testoLog.map((x) => {
 
             return {
 
               textLeft: x.log,
-              textRight: x.usePoints + " points"
+              textRight: x.usePoints + " point"
             }
           });
 
@@ -439,9 +401,6 @@ const PointsContent: React.FC<PointsContentProps> = ({
             text: textAlign3
           }
 
-
-
-
           const cardProps: CardProps[] = [
             {
               _id: cardsDataId[0],
@@ -458,7 +417,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
               img: nameImage[1].name,
               title: "Log Attività",
               loadImage: (image: FormData) => saveImage(cardsDataId[1], image, user),
-              children: renderChildren2(false, handleCloseDialogLogActivity),
+              children: renderChildren2(false),
             },
             {
 
@@ -467,11 +426,10 @@ const PointsContent: React.FC<PointsContentProps> = ({
               img: nameImage[2].name,
               title: "Log Famiglia",
               loadImage: (image: FormData) => saveImage(cardsDataId[2], image, user),
-              children: renderChildren3(false, handleCloseDialogLogFamily),
+              children: renderChildren3(false),
             }
           ];
           setCardData(cardProps);
-          console.log('Dati ricevuti:', response);
           return cardData;
         }
       }
