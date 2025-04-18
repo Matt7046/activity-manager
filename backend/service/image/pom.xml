@@ -71,7 +71,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>3.1.0</version>
             <configuration>
-                <mainClass>com.imageService.ImageApplication</mainClass>
+                <mainClass>com.ImageApplication</mainClass>
             </configuration>
             <executions>
                 <execution>
