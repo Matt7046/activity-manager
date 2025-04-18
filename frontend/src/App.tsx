@@ -336,13 +336,7 @@ const GoogleAuthComponent = () => {
                   disabled={true} />
               </div><div>
                 <div
-                  className="col-button-container"
-                  style={{
-                    gridColumn: 'span 2',
-                    display: 'flex',
-                    gridTemplateColumns: '2fr 1fr',
-                    gap: '12px',
-                  }}
+                  className="col-button-container"                 
                 >
                   <div>
                     {!hiddenLogin && (
