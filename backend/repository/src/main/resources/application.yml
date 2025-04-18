@@ -4,4 +4,7 @@ spring:
     import: optional:classpath:application-common.yml
   application:
     name: activityManager
+error:
+  document:
+    arithmetic: I punti devono essere maggiori o uguali a zero.
 

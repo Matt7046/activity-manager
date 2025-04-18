@@ -7,16 +7,15 @@ import com.common.data.user.UserPoint;
 public interface UserPointCustomRepository {
     // Puoi aggiungere metodi personalizzati se necessario
 
-    public Long getTypeUser(UserPoint userPoint) throws Exception;
+    Long getTypeUser(UserPoint userPoint);
 
-    public Boolean saveUser(UserPoint userPoint) throws Exception;
+    Boolean saveUser(UserPoint userPoint) ;
 
-    UserPoint savePoint(UserPoint userPoint, Long usePoints, Boolean operation) throws Exception;
+    UserPoint savePoint(UserPoint userPoint, Long usePoints, Boolean operation);
 
-    UserPoint getPointByEmail(String email) throws Exception;
+    UserPoint getPointByEmail(String email);
 
+    List<UserPoint> getPointsListByEmail(String email);
 
-    List<UserPoint> getPointsListByEmail(String email) throws Exception;
-
-    UserPoint saveUserImage(UserPoint point) throws Exception;
+    UserPoint saveUserImage(UserPoint point);
 }

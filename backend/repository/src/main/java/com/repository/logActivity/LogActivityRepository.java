@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.common.data.activity.LogActivity;
 
 @Repository
-public interface LogActivityRepository extends MongoRepository<LogActivity, String>, LogActivityCustomRepository {
+public interface LogActivityRepository extends MongoRepository<LogActivity, String> {
   
      @Query("{'email': ?0}")
      List<LogActivity> findLogByEmail(String email,Sort sort);
