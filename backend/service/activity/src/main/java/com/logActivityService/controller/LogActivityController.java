@@ -3,6 +3,8 @@ package com.logActivityService.controller;
 import com.common.dto.user.UserPointDTO;
 import com.logActivityService.processor.LogActivityProcessor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.common.data.activity.LogActivity;
@@ -26,20 +28,9 @@ public class LogActivityController {
     @Autowired
     private LogActivityProcessor logActivityProcessor;
 
-
-    @Value("${order.type1}")
-    private String field;
-
     @PostMapping("/log")
-    public Mono<ResponseDTO>logActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
-        Sort sort = Sort.by(Sort.Order.desc(field));
-        List<LogActivity> sub = logActivityProcessor.logAttivitaByEmail(userPointDTO, sort);
-        List<LogActivityDTO> logAttivitaUnica = sub.stream()
-                .map(LogActivityMapper.INSTANCE::toDTO)
-
-                .collect(Collectors.toList());
-        ResponseDTO response = new ResponseDTO(logAttivitaUnica, ActivityHttpStatus.OK.value(), new ArrayList<>());
-        return Mono.just(response);
+    public Mono<ResponseDTO> logActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
+        return  logActivityProcessor.logAttivitaByEmail(userPointDTO);
     }
 
     @PostMapping("/dati")

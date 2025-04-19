@@ -4,15 +4,12 @@ import { TypeMessage } from "../../page-layout/PageLayout";
 
 
 
-export const logFamilyByEmail = async (pointsDTO: any, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+export const getLogFamilyByEmail = async (pointsDTO: any,funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const path = PATH_FAMILY + `/log/tutor`;
     const data = await postData(path, pointsDTO, setLoading); // Usa l'URL dinamico
     return data;
-  } catch (error) {
-    if (funzioneErrore) {
-      funzioneErrore();
-    }
+  } catch (error) {   
   }
 };
 

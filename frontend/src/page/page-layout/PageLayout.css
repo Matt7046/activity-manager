@@ -14,6 +14,7 @@
 
 .box-layout-text-vertical {
     width: 100%;
+    padding-left: 10px;
 }
 
 .box-layout-right-button {
