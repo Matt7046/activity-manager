@@ -37,6 +37,9 @@ export interface UserI {
   emailFamily: string;
   type: TypeUser
   emailUserCurrent: string;
+  page?: number;
+  size?: number;
+  field?: string
 }
 
 export const verifyForm = (formValues: any) => {

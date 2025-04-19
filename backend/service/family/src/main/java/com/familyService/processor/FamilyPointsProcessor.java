@@ -15,6 +15,8 @@ import com.common.configurations.rabbitmq.RabbitMQProducer;
 import com.familyService.service.FamilyWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -112,7 +114,10 @@ public class FamilyPointsProcessor {
         return dto;
     }
 
-    public  Mono<ResponseDTO> logFamilyByEmail(UserPointDTO userPointDTO, Sort sort) {
-        return  Mono.just(familyService.getLogFamily(userPointDTO, sort));
+    public  Mono<ResponseDTO> logFamilyByEmail(UserPointDTO userPointDTO) {
+        Integer page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
+        Integer size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
+        return Mono.just(familyService.getLogFamily(userPointDTO, pageable));
     }
 }
