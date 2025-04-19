@@ -11,9 +11,9 @@ import { upload } from '../../general/service/ImageService';
 import { ButtonName, HttpStatus } from "../../general/structure/Constant";
 import { getDateStringExtendsFormat, getDateStringRegularFormat, ResponseI, UserI } from "../../general/structure/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
-import { logActivityByEmail } from "../page-activity/service/LogActivityService";
+import { getLogActivityByEmail } from '../page-activity/service/LogActivityService';
 import { FamilyLogI } from '../page-family/Family';
-import { logFamilyByEmail } from '../page-family/service/FamilyService';
+import { getLogFamilyByEmail } from '../page-family/service/FamilyService';
 import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail, saveUserImage } from "./service/UserPointService";
 import { NameImageI, UserPointsI } from './UserPoint';
@@ -42,6 +42,8 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const [testo, setTesto] = useState('');
   const [testoLog, setTestoLog] = useState<ActivityLogI[]>([]);
   const [testoLogFamily, setTestoLogFamily] = useState<FamilyLogI[]>([]);
+  const [testoLogUnpaged, setTestoLogUnpaged] = useState<ActivityLogI[]>([]);
+  const [testoLogFamilyUnpaged, setTestoLogFamilyUnpaged] = useState<FamilyLogI[]>([]);
   const [logCard, setLogCard] = useState<boolean>(false);
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
   const [changePoint, setChangePoint] = useState<boolean>();
@@ -70,13 +72,16 @@ const PointsContent: React.FC<PointsContentProps> = ({
   useEffect(() => {
     if (cardData.length > 0) {
       const cardProps: CardProps[] = [
-        {...cardData[0],         
+        {
+          ...cardData[0],
           children: renderChildren1(),
         },
-        {...cardData[1],         
+        {
+          ...cardData[1],
           children: renderChildren2(openDialogLogActivity),
         },
-        {...cardData[2],         
+        {
+          ...cardData[2],
           children: renderChildren3(false),
         },
       ];
@@ -89,13 +94,16 @@ const PointsContent: React.FC<PointsContentProps> = ({
   useEffect(() => {
     if (cardData.length > 0) {
       const cardProps: CardProps[] = [
-        {...cardData[0],         
+        {
+          ...cardData[0],
           children: renderChildren1(),
         },
-        {...cardData[1],         
+        {
+          ...cardData[1],
           children: renderChildren2(false),
         },
-        {...cardData[2],         
+        {
+          ...cardData[2],
           children: renderChildren3(openDialogLogFamily),
         },
       ];
@@ -121,7 +129,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
           <DialogTitle id="customized-dialog-title">
             <Grid container spacing={2}>
               {/* Prima riga: Pulsanti per simulare il login */}
-              <Grid size={{ xs: 11, sm: 11 }}>
+              <Grid size={{ xs: 10, sm: 11 }}>
                 <div className="col-display">
                   <Label text={"LOG ATTIVITA'"} _id={"logActivity"} className='col-display' />
                 </div>
@@ -138,10 +146,10 @@ const PointsContent: React.FC<PointsContentProps> = ({
           </DialogTitle>
           <DialogContent dividers>
             {/* Aggiungi la paginazione per i log */}
-            {testoLog.length > 0 ? (
+            {testoLogUnpaged.length > 0 ? (
               <>
                 <Grid container spacing={2}>
-                  {testoLog.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
+                  {testoLogUnpaged.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
                     <Grid size={{ xs: 12, sm: 6 }} key={index} >
                       <Card >
 
@@ -171,7 +179,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
                 </Grid>
                 {/* Paginazione per i log */}
                 <Pagination
-                  count={Math.ceil(testoLog.length / logsPerPage)}
+                  count={Math.ceil(testoLogUnpaged.length / logsPerPage)}
                   page={page}
                   onChange={handlePageChange}
                   color="primary"
@@ -192,7 +200,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
   const renderChildren3 = (open: boolean) => (
     <React.Fragment>
-      <Grid container justifyContent="flex-end" spacing={2} >
+      <Grid container justifyContent="flex-end" >
         <Button pulsanti={[pulsanteLogFamily]} />
 
         <Dialog
@@ -203,7 +211,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
           <DialogTitle id="customized-dialog-title-family">
             <Grid container spacing={2}>
               {/* Prima riga: Pulsanti per simulare il login */}
-              <Grid size={{ xs: 11, sm: 11 }}>
+              <Grid size={{ xs: 10, sm: 11 }}>
                 <div className="col-display">
                   <Label text={"LOG FAMIGLIA"} _id={"logFamily"} className='col-display' />
                 </div>
@@ -220,10 +228,10 @@ const PointsContent: React.FC<PointsContentProps> = ({
           </DialogTitle>
           <DialogContent dividers>
             {/* Aggiungi la paginazione per i log */}
-            {testoLogFamily.length > 0 ? (
+            {testoLogFamilyUnpaged.length > 0 ? (
               <>
                 <Grid container spacing={2}>
-                  {testoLogFamily.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
+                  {testoLogFamilyUnpaged.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
                     <Grid size={{ xs: 12, sm: 6 }} key={index} >
                       <Card >
 
@@ -259,7 +267,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
                 </Grid>
                 {/* Paginazione per i log */}
                 <Pagination
-                  count={Math.ceil(testoLog.length / logsPerPage)}
+                  count={Math.ceil(testoLogFamilyUnpaged.length / logsPerPage)}
                   page={page}
                   onChange={handlePageChange}
                   color="primary"
@@ -291,7 +299,6 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const pulsanteLog: Pulsante = {
     icona: 'fas fa-clipboard',
     funzione: () => {
-      setOpenDialogLogActivity(true); // prova a forzarlo
       getLogAttivita(user, true);
 
     },
@@ -438,10 +445,18 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const getLogAttivita = (userI: UserI, openDialog: boolean): Promise<void> => {
     const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-    return logActivityByEmail({ ...userI, email: emailFind }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
+    const page = 0;
+    const size = 10;
+    const field = 'date';
+    const unpaged = openDialog;
+    return getLogActivityByEmail({ ...userI, email: emailFind, page, size, field, unpaged }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
-          setTestoLog(response.jsonText)
+          if (unpaged) {
+            setTestoLogUnpaged(response.jsonText)
+          } else {
+            setTestoLog(response.jsonText)
+          }
           setOpenDialogLogActivity(openDialog);
 
         }
@@ -453,16 +468,22 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
   const getLogFamily = (userI: UserI, openDialog: boolean): Promise<void> => {
     const emailFind = user.emailFamily ? user.emailFamily : user.email;
-
-    return logFamilyByEmail({ ...userI, email: emailFind }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
+    const page = 0;
+    const size = 10;
+    const field = 'date';
+    const unpaged = openDialog;
+    return getLogFamilyByEmail({ ...userI, email: emailFind, page, size, field, unpaged }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
-          setTestoLogFamily(response.jsonText)
+          if (unpaged) {
+            setTestoLogFamilyUnpaged(response.jsonText)
+          } else {
+            setTestoLogFamily(response.jsonText)
+          }
           if (!openDialog) {
             setLogCard(true)
-          } else {
-            setOpenDialogLogFamily(true);
           }
+          setOpenDialogLogFamily(openDialog);
         }
       }
     })

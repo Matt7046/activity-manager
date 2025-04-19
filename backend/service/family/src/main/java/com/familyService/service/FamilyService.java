@@ -9,6 +9,7 @@ import com.common.mapper.LogFamilyMapper;
 import com.repository.family.FamilyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -34,9 +35,9 @@ public class FamilyService {
         return response;
     }
 
-    public ResponseDTO getLogFamily(UserPointDTO user, Sort sort) {
+    public ResponseDTO getLogFamily(UserPointDTO user, Pageable pageable) {
 
-      List<LogFamily> familyList = repository.findLogByEmail(user.getEmail(), sort);
+      List<LogFamily> familyList = repository.findLogByEmail(user.getEmail(), pageable);
         List<LogFamilyDTO> logFamilyDTOList =  familyList.stream()
                 .map(LogFamilyMapper.INSTANCE::toDTO) .collect(Collectors.toList());
         ResponseDTO response = new ResponseDTO(logFamilyDTOList, ActivityHttpStatus.OK.value(),

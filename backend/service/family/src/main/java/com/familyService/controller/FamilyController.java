@@ -4,6 +4,8 @@ import com.common.dto.family.LogFamilyDTO;
 import com.common.dto.user.UserPointDTO;
 import com.familyService.processor.FamilyPointsProcessor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,9 +24,6 @@ public class FamilyController {
     @Autowired
     private FamilyPointsProcessor familyPointsProcessor;
 
-    @Value("${order.type1}")
-    private String field;
-
     @PostMapping("/dati")
     public Mono<ResponseDTO> savePointsByFamily(@RequestBody UserPointDTO userPointDTO) {
         return familyPointsProcessor.savePointsByFamily(userPointDTO);
@@ -36,9 +35,7 @@ public class FamilyController {
     }
 
     @PostMapping("/log/tutor")
-    public Mono<ResponseDTO> logActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
-        Sort sort = Sort.by(Sort.Order.desc(field));
-        return familyPointsProcessor.logFamilyByEmail(userPointDTO, sort);
-
+    public Mono<ResponseDTO> getLogActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
+        return familyPointsProcessor.logFamilyByEmail(userPointDTO);
     }
 }

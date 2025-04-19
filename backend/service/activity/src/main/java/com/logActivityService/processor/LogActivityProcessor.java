@@ -15,6 +15,8 @@ import com.common.mapper.LogActivityMapper;
 import com.logActivityService.service.LogActivityWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -22,6 +24,7 @@ import reactor.core.scheduler.Schedulers;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class LogActivityProcessor {
@@ -42,8 +45,14 @@ public class LogActivityProcessor {
     private String routingKeyLogFamily;
 
 
-    public List<LogActivity> logAttivitaByEmail(UserPointDTO userPointDTO, Sort sort) {
-        return logActivityService.logAttivitaByEmail(userPointDTO, sort);
+    public Mono<ResponseDTO> logAttivitaByEmail(UserPointDTO userPointDTO) {
+        Integer page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
+        Integer size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
+        List<LogActivityDTO> logAttivitaUnica =  logActivityService.logAttivitaByEmail(userPointDTO, pageable).stream()
+                .map(LogActivityMapper.INSTANCE::toDTO)
+                .collect(Collectors.toList());
+        return Mono.just(new ResponseDTO(logAttivitaUnica, ActivityHttpStatus.OK.value(), new ArrayList<>()));
     }
 
     public Mono<ResponseDTO> savePoints(LogActivityDTO logActivityDTO) {

@@ -175,7 +175,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           <>
 
             <Label _id={'title'} text={title}></Label>
-            <Grid container justifyContent="space-between" alignItems="center" spacing={2} className='grid-menu'>
+            <Grid container justifyContent="space-between" alignItems="center" className='grid-menu'>
               {menuLaterale && menuLaterale.length > 0 && (
                 <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
               )}
