@@ -1,4 +1,9 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // Points
+import GroupIcon from '@mui/icons-material/Group'; // 
+import InfoIcon from '@mui/icons-material/Info'; // About
+import ListAltIcon from '@mui/icons-material/ListAlt'; // Activity
+import SettingsIcon from '@mui/icons-material/Settings'; // Operative
 import { Button as ButtonMui, CircularProgress, SelectChangeEvent, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
@@ -416,23 +421,52 @@ export const navigateRouting = (navigate: NavigateFunction, path: SectionName, p
 
 export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
   if (user.type === TypeUser.FAMILY || user.type === TypeUser.NEW_USER) {
-    return [
-      [
-        { funzione: null, testo: SectionNameDesc.ACTIVITY },
-        { funzione: null, testo: SectionNameDesc.ABOUT },
-        { funzione: null, testo: SectionNameDesc.POINTS },
-        { funzione: null, testo: SectionNameDesc.OPERATIVE },
-      ],
-      [
-        { funzione: null, testo: SectionNameDesc.FAMILY }
-      ]
+      return [
+        [
+          {
+            funzione: null,
+            testo: SectionNameDesc.ACTIVITY,
+            icon: ListAltIcon
+          },
+          {
+            funzione: null,
+            testo: SectionNameDesc.ABOUT,
+            icon: InfoIcon
+          },
+          {
+            funzione: null,
+            testo: SectionNameDesc.POINTS,
+            icon: EmojiEventsIcon
+          },
+          {
+            funzione: null,
+            testo: SectionNameDesc.OPERATIVE,
+            icon: SettingsIcon
+          },
+        ],
+        [
+          {
+            funzione: null,
+            testo: SectionNameDesc.FAMILY,
+            icon: GroupIcon
+          }
+        ]      
     ];
   } else {
     return [
       [
-        { funzione: null, testo: SectionNameDesc.ACTIVITY },
-        { funzione: null, testo: SectionNameDesc.POINTS },
-        { funzione: null, testo: SectionNameDesc.OPERATIVE },
+        {
+          funzione: null, testo: SectionNameDesc.ACTIVITY,
+          icon: ListAltIcon
+        },
+        {
+          funzione: null, testo: SectionNameDesc.POINTS,
+          icon: EmojiEventsIcon
+        },
+        {
+          funzione: null, testo: SectionNameDesc.OPERATIVE,
+          icon: SettingsIcon
+        },
       ]
     ];
   }

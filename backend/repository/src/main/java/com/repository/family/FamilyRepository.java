@@ -1,6 +1,7 @@
 package com.repository.family;
 
 import com.common.data.family.LogFamily;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -12,6 +13,6 @@ import java.util.List;
 public interface FamilyRepository extends MongoRepository<LogFamily, String>, FamilyCustomRepository {
 
     @Query("{'receivedByEmail': ?0}")
-    List<LogFamily> findLogByEmail(String email, Sort sort);
+    List<LogFamily> findLogByEmail(String email, Pageable pageable);
        
 }

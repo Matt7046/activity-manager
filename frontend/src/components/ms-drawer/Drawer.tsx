@@ -1,5 +1,3 @@
-import MailIcon from '@mui/icons-material/Mail';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -8,6 +6,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
+import { SvgIconTypeMap } from '@mui/material/SvgIcon';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { observer } from 'mobx-react';
 import * as React from 'react';
@@ -19,6 +19,7 @@ type Anchor = 'top' | 'left' | 'bottom' | 'right';
 export interface MenuLaterale {
   funzione: ((...args: unknown[]) => unknown) | null; // Può essere una funzione o `null`
   testo: string
+  icon: OverridableComponent<SvgIconTypeMap<{}, "svg">>
 }
 
 export interface TypeAnchor {
@@ -92,7 +93,7 @@ const toggleDrawer = (
 
 const listaItem = (anchor: Anchor, sezioni: MenuLaterale[][], setStatoComponente: React.Dispatch<React.SetStateAction<TypeAnchor>>, statoComponente: TypeAnchor) => (
   <Box
-  className={`drawer-box ${anchor === 'top' || anchor === 'bottom' ? 'drawer-horizontal' : 'drawer-vertical'}`}
+    className={`drawer-box ${anchor === 'top' || anchor === 'bottom' ? 'drawer-horizontal' : 'drawer-vertical'}`}
 
     role="presentation"
     onClick={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
@@ -102,19 +103,20 @@ const listaItem = (anchor: Anchor, sezioni: MenuLaterale[][], setStatoComponente
       {sezioni.map((section, sectionIndex) => (
         <div key={sectionIndex}>
           <List>
-            {section.map((text, index) => (
-              <ListItem key={text.testo} disablePadding>
+            {section.map((menulaterale, index) => (
+              <ListItem key={menulaterale.testo} disablePadding>
                 <ListItemButton
                   className="drawer-list-item"
                   onClick={() => {
-                    if (text.funzione) {
-                      text.funzione(); // Chiama la funzione associata a questo elemento
+                    if (menulaterale.funzione) {
+                      menulaterale.funzione(); // Chiama la funzione associata a questo elemento
                     }
                   }}
                 >
-                  <ListItemIcon className="drawer-list-icon">                    {(sectionIndex * section.length + index) % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <ListItemIcon className="drawer-list-icon">
+                  {menulaterale.icon && <menulaterale.icon />} {/* Usa l'icona dinamica */}
                   </ListItemIcon>
-                  <ListItemText primary={text.testo} />
+                  <ListItemText primary={menulaterale.testo} />
                 </ListItemButton>
               </ListItem>
             ))}

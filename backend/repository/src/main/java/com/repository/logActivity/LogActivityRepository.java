@@ -4,6 +4,7 @@ package com.repository.logActivity;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -15,7 +16,7 @@ import com.common.data.activity.LogActivity;
 public interface LogActivityRepository extends MongoRepository<LogActivity, String> {
   
      @Query("{'email': ?0}")
-     List<LogActivity> findLogByEmail(String email,Sort sort);
+     List<LogActivity> findLogByEmail(String email, Pageable pageable);
         
         
        

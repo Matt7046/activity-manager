@@ -3,6 +3,7 @@
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
+  padding-left: 8px;
 }
 
 .col-display {
