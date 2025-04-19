@@ -6,6 +6,18 @@ cd..
 cd..
 
 cd frontend
+if exist "node_modules" (
+    echo La cartella node_modules esiste.
+) else (
+    echo La cartella node_modules non esiste.
+    echo Procedo con l'esecuzione di npm install...
+    call npm install
+    if %errorlevel% neq 0 (
+        echo Errore durante npm install con codice %errorlevel%.
+        pause
+    
+    )
+)
 
 docker network create app-network
 echo Build dell'immagine...
