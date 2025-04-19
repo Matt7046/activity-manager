@@ -1,6 +1,7 @@
 package com.logActivityService.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.common.dto.activity.LogActivityDTO;
@@ -31,7 +32,7 @@ public class LogActivityService {
         return new LogActivity();
     }
 
-    public List<LogActivity> logAttivitaByEmail(UserPointDTO userPointDTO, Sort sort) {
-        return logActivityRepository.findLogByEmail(encryptDecryptConverter.convert(userPointDTO.getEmail()), sort);
+    public List<LogActivity> logAttivitaByEmail(UserPointDTO userPointDTO,  Pageable pageable) {
+        return logActivityRepository.findLogByEmail(encryptDecryptConverter.convert(userPointDTO.getEmail()), pageable);
     }
 }

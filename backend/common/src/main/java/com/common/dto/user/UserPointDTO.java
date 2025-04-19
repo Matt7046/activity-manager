@@ -26,7 +26,10 @@ public class UserPointDTO implements InterfaceDTO {
     private List<String> emailFigli;
     private Boolean operation;
     private String emailUserCurrent;
-    private String nameImage;
+    private Integer page;
+    private Integer size;
+    private String field;
+    private Boolean unpaged;
 
     public UserPointDTO(LogActivityDTO logActivityDTO) {
         setPoint(logActivityDTO.getPoints());
