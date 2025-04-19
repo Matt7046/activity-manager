@@ -5,7 +5,15 @@ rem Torna alla directory principale e esegui mvn clean install
 cd..
 cd..
 
+
 cd frontend
+if exist "node_modules" (
+    echo La cartella node_modules esiste.
+) else (
+    echo La cartella node_modules non esiste.
+    echo Procedo con l'esecuzione di npm install...
+    call npm install
+)
 
 docker network create app-network
 echo Build dell'immagine...
