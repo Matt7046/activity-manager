@@ -4,27 +4,28 @@ import { googleLogout } from '@react-oauth/google';
 import React, { useState } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { navigateRouting, showMessage } from '../../App';
-import Alert from '../../components/ms-alert/Alert';
+import Alert, { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import Label from '../../components/ms-label/Label';
 import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
 import { ButtonName, HttpStatus, SectionName, TypeAlertColor } from '../../general/structure/Constant';
-import { getDateStringRegularFormat, NotificationI, ResponseI, UserI } from '../../general/structure/Utils';
+import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
+import { SocketURL } from '../../general/structure/SocketUrl';
+import { FamilyNotificationI, getDateStringRegularFormat, NotificationI, ResponseI, UserI } from '../../general/structure/Utils';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
 
 
 interface PageLayoutProps {
   title: string
-  children: React.ReactNode; // Contenuto specifico della maschera
-  menuLaterale?: MenuLaterale[][];
   user: UserI;
-  open: boolean;
-  message: TypeMessage;
+  menuLaterale?: MenuLaterale[][];
+  alertConfig : AlertConfig
   isVertical: boolean;
   handleClose: () => void;
   navigate: NavigateFunction; // Gestione padding dinamico
+  children: React.ReactNode; // Contenuto specifico della maschera
 }
 export interface TypeMessage {
   message?: string[];
@@ -36,8 +37,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   children,
   user,
   menuLaterale,
-  open,
-  message,
+  alertConfig,  
   isVertical,
   handleClose,
   navigate,
@@ -53,7 +53,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const [notifications, setNotifications] = useState(notify);
   const [popoverNotifications, setPopoverNotifications] = useState<PopoverNotification[]>([]);
   const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
-  const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio
+  const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio  
+  const socketFamilyPoint = SocketFamilyPoint.getInstance(user, SocketURL.NOTIFICATION + user.emailUserCurrent );
 
 
   const handleClickAnchor = () => {
@@ -77,6 +78,17 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   // Funzione per chiudere il popover
   const handleCloseAnchor = () => {
     setOpenAnchor(false); // Nasconde il popover
+  };
+
+  socketFamilyPoint.getSocket().onmessage = (event) => {
+
+
+    const familyNotification: FamilyNotificationI = JSON.parse(event.data);
+    const typeMessage: TypeMessage = {
+      message: [familyNotification.message],
+      typeMessage: TypeAlertColor.INFO
+    }
+    showMessage(alertConfig.setOpen, alertConfig.setMessage, typeMessage);
   };
 
 
@@ -125,7 +137,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     configDialogPulsante: { message: '', showDialog: false }
   };
 
-  const id = 'simple-popover';
 
 
   return (
@@ -204,7 +215,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       </Box>
 
       <Grid container justifyContent="flex-end" className="layout-alert">
-        {open && <Alert onClose={handleClose} message={message} />}
+        {alertConfig.open && <Alert onClose={handleClose} message={alertConfig.message} />}
       </Grid>
 
       {children}
