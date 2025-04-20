@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { showMessage, useUser } from '../../App';
-import { TypeAlertColor, TypeUser } from '../../general/structure/Constant';
-import { FamilyNotificationI, getMenuLaterale } from '../../general/structure/Utils';
+import { useUser } from '../../App';
+import { TypeUser } from '../../general/structure/Constant';
+import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import OperativeContent from './OperativeContent';
 
@@ -31,28 +31,6 @@ const Operative: React.FC<{}> = ({ }) => {
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  useEffect(() => {
-    const socket = new WebSocket("ws://localhost/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
-    socket.onopen = () => {
-    };
-    socket.onmessage = (event) => {
-      setOpen(true);
-
-      const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-      const typeMessage: TypeMessage = {
-        message: [familyNotification.message],
-        typeMessage: TypeAlertColor.INFO
-      }
-      showMessage(setOpen, setMessage, typeMessage);
-    };
-
-    socket.onclose = () => {
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, []);
 
 
   const handleClose = () => {
@@ -64,8 +42,7 @@ const Operative: React.FC<{}> = ({ }) => {
       <PageLayout
         title={title}
         menuLaterale={menuLaterale}
-        open={open}
-        message={message}
+        alertConfig={{open,setOpen,message,setMessage}}
         user={user}
         isVertical={isVertical}
         handleClose={handleClose}
@@ -73,8 +50,7 @@ const Operative: React.FC<{}> = ({ }) => {
       >
         <OperativeContent
           user={user}
-          setMessage={setMessage}
-          setOpen={setOpen}
+          alertConfig={{open,setOpen,message,setMessage}}
           isVertical={isVertical}
         />
       </PageLayout>

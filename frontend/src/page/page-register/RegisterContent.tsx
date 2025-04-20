@@ -4,10 +4,10 @@ import Grid from '@mui/material/Grid2';
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { navigateRouting, showMessage, useUser } from "../../App";
+import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, SectionName } from '../../general/structure/Constant';
 import { ResponseI, UserI } from "../../general/structure/Utils";
-import { TypeMessage } from "../page-layout/PageLayout";
 import { saveUser } from '../page-user-point/service/UserPointService';
 import "./RegisterContent.css";
 
@@ -15,8 +15,7 @@ import "./RegisterContent.css";
 
 interface RegisterContentProps {
   user: UserI;
-  setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  alertConfig:AlertConfig,
   setTitle: (title: string) => void;
   isVertical: boolean;
 
@@ -24,8 +23,7 @@ interface RegisterContentProps {
 
 const RegisterContent: React.FC<RegisterContentProps> = ({
   user,
-  setMessage,
-  setOpen,
+  alertConfig,
   setTitle,
   isVertical
 }) => {
@@ -93,7 +91,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     //  const utente = { email: userData.email, type: userData.type }
     const arrayDiOggetti = emailFigli.map(email => ({ email }));
     setUser(null);
-    return saveUser({ ...userData, emailFigli: emailFigli, points: arrayDiOggetti }, (message: any) => showMessage(setOpen, setMessage, message)).then((x: ResponseI) => {
+    return saveUser({ ...userData, emailFigli: emailFigli, points: arrayDiOggetti }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((x: ResponseI) => {
       navigateRouting(navigate, SectionName.ROOT, { newLogin: true })
     })
   }
