@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { showMessage, useUser } from '../../App';
-import { TypeAlertColor, TypeUser } from '../../general/structure/Constant';
-import { FamilyNotificationI, getMenuLaterale } from '../../general/structure/Utils';
+import { useUser } from '../../App';
+import { TypeUser } from '../../general/structure/Constant';
+import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import PointsContent from './UserPointContent';
 
@@ -56,26 +56,10 @@ const Points: React.FC<{}> = ({ }) => {
     };
     window.addEventListener("resize", handleResize);
 
-    const socket = new WebSocket("ws://localhost/ws/notifications?emailUserCurrent=" + user.emailUserCurrent);
-    socket.onopen = () => {
-    };
-    socket.onmessage = (event) => {
-      setOpen(true);
-
-      const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-      const typeMessage: TypeMessage = {
-        message: [familyNotification.message],
-        typeMessage: TypeAlertColor.INFO
-      }
-      showMessage(setOpen, setMessage, typeMessage);
-    };
-
-    socket.onclose = () => {
-    };
+   
 
     return () => {
       window.removeEventListener("resize", handleResize)
-      socket.close();
     };
   }, []);
 
@@ -91,8 +75,7 @@ const Points: React.FC<{}> = ({ }) => {
 
         title={title}
         menuLaterale={menuLaterale}
-        open={open}
-        message={message}
+        alertConfig={{open,setOpen,message,setMessage}}
         user={user}
         isVertical={isVertical}
         handleClose={handleClose}
@@ -100,8 +83,7 @@ const Points: React.FC<{}> = ({ }) => {
       >
         <PointsContent
           user={user}
-          setMessage={setMessage}
-          setOpen={setOpen}
+          alertConfig={{open,setOpen,message,setMessage}}
           isVertical={isVertical}
         />
       </PageLayout>

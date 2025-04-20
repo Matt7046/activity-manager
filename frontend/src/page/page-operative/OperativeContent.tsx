@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { showMessage } from "../../App";
+import { AlertConfig } from "../../components/ms-alert/Alert";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus } from "../../general/structure/Constant";
 import { FormErrorValues, ResponseI, UserI, verifyForm } from "../../general/structure/Utils";
@@ -16,15 +17,13 @@ import operativeStore from "./store/OperativeStore";
 
 interface OperativeContentProps {
   user: UserI;
-  setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
-  setOpen: any;
+  alertConfig:AlertConfig,
   isVertical: boolean;
 }
 
 const OperativeContent: React.FC<OperativeContentProps> = ({
   user,
-  setMessage,
-  setOpen,
+  alertConfig,
   isVertical
 }) => {
 
@@ -79,7 +78,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
         errorFields = ["I valori invalidi sono:"].concat(erroriCampi);
 
       }
-      showMessageOperativeForm((message?: TypeMessage) => showMessage(setOpen, setMessage, { ...message, message: errorFields }));
+      showMessageOperativeForm((message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, { ...message, message: errorFields }));
     }
   };
 
@@ -104,7 +103,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     try {
       const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-      findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI | undefined) => {
+      findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((response: ResponseI | undefined) => {
         if (response) {
           if (response.status === HttpStatus.OK) {
             setIsLoading(false);
@@ -166,7 +165,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     };
 
     // Salva il log dell'attività
-    savePointsAndLog(activityLog, (message?: TypeMessage) => showMessage(setOpen, setMessage, message))
+    savePointsAndLog(activityLog, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
       .then((response: ResponseI | undefined) => {
         fetchPoints();
       })

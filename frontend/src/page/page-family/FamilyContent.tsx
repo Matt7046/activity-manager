@@ -5,10 +5,10 @@ import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
 import { showMessage, useUser } from "../../App";
+import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus } from '../../general/structure/Constant';
 import { FormErrorValues, ResponseI, verifyForm } from "../../general/structure/Utils";
-import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail } from "../page-user-point/service/UserPointService";
 import "./FamilyContent.css";
 import { savePointsByFamily } from './service/FamilyService';
@@ -16,14 +16,12 @@ import familyStore from './store/FamilyStore';
 
 
 interface FamilyContentProps {
-  setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  alertConfig:AlertConfig
   isVertical: boolean;
 }
 
 const FamilyContent: React.FC<FamilyContentProps> = ({
-  setMessage,
-  setOpen,
+  alertConfig,
   isVertical
 }) => {
   const { user, setUser } = useUser();
@@ -66,7 +64,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   useEffect(() => {
     const emailFind = user.emailFamily ? user.emailFamily : user.email;
 
-    findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI | undefined) => {
+    findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           const errors: FormErrorValues = verifyForm(formValues);
@@ -112,12 +110,12 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   };
 
   const handleClose = () => {
-    setOpen(false);
+    alertConfig.setOpen(false);
   };
 
   const salvaRecord = (userData: any): Promise<any> => {
     const pointsWithPlus = isPlusIcon ? formValues.newPoints : - formValues.newPoints!;
-    return savePointsByFamily({ ...userData, usePoints: pointsWithPlus }, (message: any) => showMessage(setOpen, setMessage, message)).then((x) => {
+    return savePointsByFamily({ ...userData, usePoints: pointsWithPlus }, (message: any) => showMessage(alertConfig.setOpen,alertConfig.setMessage, message)).then((x) => {
       familyStore.setPoints(parseInt(x?.jsonText.points)); // Update the state with the new value
     })
   }

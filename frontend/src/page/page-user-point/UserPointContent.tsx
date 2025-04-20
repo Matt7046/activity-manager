@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { showMessage } from "../../App";
+import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps, CardText, CardTextAlign } from "../../components/ms-card/Card";
 import Label from '../../components/ms-label/Label';
@@ -14,23 +15,20 @@ import { ActivityLogI } from "../page-activity/Activity";
 import { getLogActivityByEmail } from '../page-activity/service/LogActivityService';
 import { FamilyLogI } from '../page-family/Family';
 import { getLogFamilyByEmail } from '../page-family/service/FamilyService';
-import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail, saveUserImage } from "./service/UserPointService";
 import { NameImageI, UserPointsI } from './UserPoint';
 import "./UserPointContent.css";
 
 interface PointsContentProps {
   user: UserI;
-  setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  alertConfig: AlertConfig;
   isVertical: boolean;
 }
 
 
 const PointsContent: React.FC<PointsContentProps> = ({
   user,
-  setMessage,
-  setOpen,
+  alertConfig,
   isVertical
 }) => {
 
@@ -335,11 +333,11 @@ const PointsContent: React.FC<PointsContentProps> = ({
       image.append("height", height.toString());
     }
 
-    return upload(image, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
+    return upload(image, () => showMessage(alertConfig.setOpen, alertConfig.setMessage)).then((response: ResponseI | undefined) => {
       const url: string = response?.jsonText.url;
       const fileName = url.substring(url.lastIndexOf('upload/'));
       userPoint.nameImage = fileName;
-      return saveUserImage(userPoint, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
+      return saveUserImage(userPoint, () => showMessage(alertConfig.setOpen, alertConfig.setMessage)).then((response: ResponseI | undefined) => {
         if (response) {
           setChangePoint(!changePoint);
         }
@@ -355,7 +353,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
   const getPoints = (): Promise<CardProps[] | undefined> => {
     const emailFind = user.emailFamily ? user.emailFamily : user.email;
-    return findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message)).then((response: ResponseI | undefined) => {
+    return findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           setTesto(response.jsonText.numeroPunti);
@@ -449,7 +447,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
     const size = 10;
     const field = 'date';
     const unpaged = openDialog;
-    return getLogActivityByEmail({ ...userI, email: emailFind, page, size, field, unpaged }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
+    return getLogActivityByEmail({ ...userI, email: emailFind, page, size, field, unpaged }, () => showMessage(alertConfig.setOpen, alertConfig.setMessage)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           if (unpaged) {
@@ -472,7 +470,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
     const size = 10;
     const field = 'date';
     const unpaged = openDialog;
-    return getLogFamilyByEmail({ ...userI, email: emailFind, page, size, field, unpaged }, () => showMessage(setOpen, setMessage)).then((response: ResponseI | undefined) => {
+    return getLogFamilyByEmail({ ...userI, email: emailFind, page, size, field, unpaged }, () => showMessage(alertConfig.setOpen, alertConfig.setMessage)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
           if (unpaged) {
