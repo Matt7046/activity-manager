@@ -7,6 +7,7 @@ import { Box, Card, CardContent, IconButton, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect } from 'react';
 import { TypeAlertColor } from '../../general/structure/Constant';
+import { TypeMessage } from '../../page/page-layout/PageLayout';
 import "./Alert.css";
 
 const icons = {
@@ -16,6 +17,13 @@ const icons = {
   ERROR: <ErrorIcon color="error" />,
   INFO: <InfoIcon color="info" />,
 };
+
+export interface AlertConfig {
+  open: boolean;
+  message: TypeMessage;
+  setOpen: (open: boolean) => void;
+  setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>
+}
 
 interface CustomAlertProps {
   message: {
