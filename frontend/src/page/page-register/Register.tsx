@@ -44,8 +44,7 @@ const Register: React.FC<{}> = ({ }) => {
     <>
       <PageLayout
         title={title}
-        open={open}
-        message={message}
+        alertConfig={{open,setOpen,message,setMessage}}
         user={user}
         isVertical={isVertical}
         handleClose={handleClose}
@@ -53,8 +52,7 @@ const Register: React.FC<{}> = ({ }) => {
       >
         <RegisterContent
           user={user}
-          setMessage={setMessage}
-          setOpen={setOpen}
+          alertConfig={{open,setOpen,message,setMessage}}
           setTitle={setTitle}
           isVertical={isVertical}
         />
