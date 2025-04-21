@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class FamilyPointsProcessor {
@@ -63,9 +65,7 @@ public class FamilyPointsProcessor {
     private String serviceName;
 
     public Mono<ResponseDTO> savePointsByFamily(UserPointDTO userPointDTO) {
-
         return processPoints(userPointDTO);
-
     }
 
     private Mono<ResponseDTO> processPoints(UserPointDTO userPointDTO) {
@@ -79,6 +79,33 @@ public class FamilyPointsProcessor {
                 });
     }
 
+    public Mono<ResponseDTO> saveLogFamily(LogFamilyDTO logFamilyDTO) {
+        try {
+            LogFamily family = logFamilyMapper.fromDTO(logFamilyDTO);
+            family = familyService.saveLogFamily(family);
+            logFamilyDTO = logFamilyMapper.toDTO(family);
+            ResponseDTO response = new ResponseDTO(logFamilyDTO, ActivityHttpStatus.OK.value(),
+                    new ArrayList<>());
+            return Mono.just(response);
+        } catch (Exception e) {
+            notificationComponent.inviaNotifica(logFamilyDTO.getPoint(), pointExchange, pointRoutingKey);
+            throw new NotFoundException(e.getMessage());
+        }
+    }
+
+    public Mono<ResponseDTO> logFamilyByEmail(UserPointDTO userPointDTO) throws Exception {
+        Integer page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
+        Integer size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
+        UserPoint userPoint = userPointMapper.fromDTO(userPointDTO);
+        List<LogFamily> familyList = familyService.getLogFamily(userPoint, pageable);
+        List<LogFamilyDTO> logFamilyDTOList = familyList.stream()
+                .map(logFamilyMapper::toDTO).collect(Collectors.toList());
+        ResponseDTO response = new ResponseDTO(logFamilyDTOList, ActivityHttpStatus.OK.value(),
+                new ArrayList<>());
+        return Mono.just(response);
+    }
+
     private LogFamilyDTO createLogFamily(UserPointDTO userPointDTO) {
         LogFamilyDTO dto = new LogFamilyDTO();
         dto.setDate(new Date());
@@ -89,28 +116,6 @@ public class FamilyPointsProcessor {
         dto.setPoint(userPointDTO);
         return dto;
     }
-
-    public Mono<ResponseDTO> saveLogFamily(LogFamilyDTO logFamilyDTO) {
-
-            ResponseDTO sub = null;
-            try {
-                LogFamily family = logFamilyMapper.fromDTO(logFamilyDTO);
-                family = familyService.saveLogFamily(family);
-                logFamilyDTO = logFamilyMapper.toDTO(family);
-                ResponseDTO response = new ResponseDTO(logFamilyDTO, ActivityHttpStatus.OK.value(),
-                        new ArrayList<>());
-                return Mono.just(response);
-            } catch (Exception e) {
-                notificationComponent.inviaNotifica(logFamilyDTO.getPoint(),pointExchange, pointRoutingKey);
-                throw new NotFoundException(e.getMessage());
-            }
-    }
-
-    private void inviaNotifica(UserPointDTO userPointDTO) {
-        FamilyNotificationDTO dto = getFamilyNotificationDTO(userPointDTO);
-        notificationComponent.inviaNotifica(dto,notificationExchange,notificationRoutingKey);
-    }
-
     private FamilyNotificationDTO getFamilyNotificationDTO(UserPointDTO userPointDTO) {
         StringBuilder builder = new StringBuilder(userPointDTO.getUsePoints().toString());
         String message = userPointDTO.getUsePoints() < 0L ? messageRemove : messageAdd;
@@ -124,11 +129,10 @@ public class FamilyPointsProcessor {
         return dto;
     }
 
-    public  Mono<ResponseDTO> logFamilyByEmail(UserPointDTO userPointDTO) throws Exception {
-        Integer page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
-        Integer size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
-        UserPoint userPoint = userPointMapper.fromDTO(userPointDTO);
-        return Mono.just(familyService.getLogFamily(userPoint, pageable));
+    private void inviaNotifica(UserPointDTO userPointDTO) {
+        FamilyNotificationDTO dto = getFamilyNotificationDTO(userPointDTO);
+        notificationComponent.inviaNotifica(dto, notificationExchange, notificationRoutingKey);
     }
+
+
 }
