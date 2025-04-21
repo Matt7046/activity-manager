@@ -4,13 +4,6 @@ import { useUser } from '../../App';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import RegisterContent from './RegisterContent';
 
-export interface PointsI {
-  _id: string | undefined;
-  email: string;
-  points: number;
-  numeroPunti: number;
-  attivita: string;
-}
 
 const Register: React.FC<{}> = ({ }) => {
 
