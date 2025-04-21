@@ -1,7 +1,6 @@
 package com.userPointService.service;
 
 import com.common.confProperties.ArithmeticProperties;
-import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.user.UserPoint;
 import com.common.dto.auth.Point;
 import com.common.structure.exception.ArithmeticCustomException;
@@ -19,9 +18,6 @@ public class UserPointService {
     private UserPointRepository userPointRepository;
 
     @Autowired
-    private EncryptDecryptConverter encryptDecryptConverter;
-
-    @Autowired
     private ArithmeticProperties arithmeticProperties;
 
     public List<UserPoint> findAll() {
@@ -32,18 +28,15 @@ public class UserPointService {
         return userPointRepository.findByEmail(identificativo, type);
     }
 
-    public UserPoint getPointByEmail(String emailCriypt) {
-        UserPoint existingUserPoint = userPointRepository.findByEmailOnEmail(emailCriypt);
+    public UserPoint getPointByEmail(UserPoint userPoint) {
+        UserPoint existingUserPoint = userPointRepository.findByEmailOnEmail(userPoint.getEmail());
         if (existingUserPoint == null) {
-            List<UserPoint> userPointList = userPointRepository.findByOnFigli(emailCriypt);
+            List<UserPoint> userPointList = userPointRepository.findByOnFigli(userPoint.getEmail());
             existingUserPoint = !userPointList.isEmpty() ? userPointList.get(0) : null;
         }
         if (existingUserPoint == null) {
             return new UserPoint();
         }
-        existingUserPoint.setEmailFigli(existingUserPoint.getEmailFigli().stream().map(x ->
-                encryptDecryptConverter.decrypt(x)).collect(Collectors.toList())); // Crittografa l'email
-
         return existingUserPoint;
     }
 
@@ -67,7 +60,6 @@ public class UserPointService {
                     }
                     point.setPoints(updatedPoint);
                 });
-        existingUserPoint = decryptExistingUserPoint(existingUserPoint);
         userPointRepository.save(existingUserPoint);
         return existingUserPoint;
     }
@@ -95,9 +87,7 @@ public class UserPointService {
     public UserPoint saveUserImage(UserPoint userPoint) throws Exception {
 
         UserPoint existingUserPoint = userPointRepository.findFirstMatchByEmailOrFigli(userPoint.getEmailFamily());
-        userPoint.setEmailFamily(encryptDecryptConverter.decrypt(userPoint.getEmailFamily()));
         assert existingUserPoint != null;
-        existingUserPoint =decryptExistingUserPoint(existingUserPoint);
         List<Point> updatedPoints = existingUserPoint.getPointFigli().stream()
                 .map(point -> ovverideNameImage(userPoint, point))
                 .collect(Collectors.toList());
@@ -106,17 +96,7 @@ public class UserPointService {
     }
 
 
-    private UserPoint decryptExistingUserPoint(UserPoint existingUserPoint) {
-        existingUserPoint.setEmail(encryptDecryptConverter.decrypt(existingUserPoint.getEmail()));
-        existingUserPoint.setEmailFamily(encryptDecryptConverter.decrypt(existingUserPoint.getEmailFamily()));
-        existingUserPoint.setEmailFigli(existingUserPoint.getEmailFigli().stream()
-                .map(figlio -> encryptDecryptConverter.decrypt(figlio))
-                .collect(Collectors.toList()));
-        existingUserPoint.setPointFigli(existingUserPoint.getPointFigli().stream()
-                .peek(point -> point.setEmail(encryptDecryptConverter.decrypt(point.getEmail())))
-                .collect(Collectors.toList()));
-        return existingUserPoint;
-    }
+
 
     private Point ovverideNameImage(UserPoint userPointSave, Point point) {
         if (!userPointSave.getEmailFamily().equals(point.getEmail())) {

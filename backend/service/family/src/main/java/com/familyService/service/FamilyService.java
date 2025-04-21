@@ -1,6 +1,7 @@
 package com.familyService.service;
 
 import com.common.data.family.LogFamily;
+import com.common.data.user.UserPoint;
 import com.common.dto.structure.ResponseDTO;
 import com.common.dto.user.UserPointDTO;
 import com.common.structure.status.ActivityHttpStatus;
@@ -25,21 +26,20 @@ public class FamilyService {
     @Autowired
     private FamilyRepository repository;
 
-    public ResponseDTO saveLogFamily(LogFamilyDTO logFamilyDTO) {
+    @Autowired
+    private LogFamilyMapper logFamilyMapper;
 
-        LogFamily family = LogFamilyMapper.INSTANCE.fromDTO(logFamilyDTO);
-        family = repository.save(family);
-        logFamilyDTO = LogFamilyMapper.INSTANCE.toDTO(family);
-        ResponseDTO response = new ResponseDTO(logFamilyDTO, ActivityHttpStatus.OK.value(),
-                new ArrayList<>());
-        return response;
+    public LogFamily saveLogFamily(LogFamily family) {
+
+        ;
+        return  repository.save(family);
+
     }
 
-    public ResponseDTO getLogFamily(UserPointDTO user, Pageable pageable) {
-
+    public ResponseDTO getLogFamily(UserPoint user, Pageable pageable) {
       List<LogFamily> familyList = repository.findLogByEmail(user.getEmail(), pageable);
         List<LogFamilyDTO> logFamilyDTOList =  familyList.stream()
-                .map(LogFamilyMapper.INSTANCE::toDTO) .collect(Collectors.toList());
+                .map(logFamilyMapper::toDTO) .collect(Collectors.toList());
         ResponseDTO response = new ResponseDTO(logFamilyDTOList, ActivityHttpStatus.OK.value(),
                 new ArrayList<>());
         return response;

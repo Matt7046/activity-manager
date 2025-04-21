@@ -1,8 +1,11 @@
 package com.notificationService.service;
 
+import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.data.notification.Notification;
 import com.common.data.notification.StatusNotification;
 import com.common.dto.notification.NotificationDTO;
 import com.common.dto.structure.ResponseDTO;
+import com.common.mapper.NotificationMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,12 +33,18 @@ public class WebSocketService implements WebSocketHandler {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    EncryptDecryptConverter encryptDecryptConverter;
+
     @Override
     public Mono<Void> handle(WebSocketSession session) {
         // Aggiunge la sessione quando si connette un client
         String emailID = extractEmailFromSession(session);
         session.getAttributes().put(identification, emailID);
         sessions.add(session);
+        session.closeStatus().doOnTerminate(() -> {
+            sessions.remove(session);
+        }).subscribe(); // Im
         // Flux per ricevere messaggi dal client (opzionale, solo per logging)
         Flux<String> receive = session.receive().map(msg -> msg.getPayloadAsText());
 
@@ -66,34 +75,25 @@ public class WebSocketService implements WebSocketHandler {
         // Ottenere la data come stringa
         long dateSenderLong = rootNode.path("dateSender").longValue();
         Date dateSender = new Date(dateSenderLong);
-        NotificationDTO notification = new NotificationDTO();
+        Notification notification = new Notification();
         notification.setMessage(message);
-        notification.setUserReceiver(userReceiver);
-        notification.setUserSender(userSender);
+        notification.setUserReceiver(encryptDecryptConverter.convert(userReceiver));
+        notification.setUserSender(encryptDecryptConverter.convert(userSender));
         notification.setDateSender(dateSender);
         notification.setStatus(StatusNotification.NOT_READ);
-        Mono<ResponseDTO> response = notificationService.saveNotification(notification);
-        Flux.fromIterable(sessions).filter(session -> session.isOpen() && userReceiver.equals(session.getAttributes().get(identification)))
+        Notification response = notificationService.saveNotification(notification);
+        Flux.fromIterable(sessions).filter(
+                        session -> session.isOpen() && userReceiver.equals(session.getAttributes().get(identification)))
                 .flatMap(session -> {
-                    response.flatMap(responseDTO ->
-                            saveNotificationStatusSend(session, responseDTO, objectMapper)
-                    ).subscribe();
+                    saveNotificationStatusSend(session, response, objectMapper);
                     return session.send(Mono.just(session.textMessage(jsonMessage)));
                 }).subscribe();
     }
 
-    private Mono<WebSocketSession> saveNotificationStatusSend(WebSocketSession session, ResponseDTO responseDTO, ObjectMapper objectMapper) {
-        try {
-            NotificationDTO notificationDTO = objectMapper.readValue(
-                    responseDTO.getJsonText().toString(),
-                    NotificationDTO.class
-            );
-            notificationDTO.setStatus(StatusNotification.SEND);
-            notificationService.saveNotification(notificationDTO);
-            return Mono.just(session);
-        } catch (JsonProcessingException e) {
-            return Mono.error(e);
-        }
+    private Mono<WebSocketSession> saveNotificationStatusSend(WebSocketSession session, Notification notification, ObjectMapper objectMapper) {
+        notification.setStatus(StatusNotification.SEND);
+        notificationService.saveNotification(notification);
+        return Mono.just(session);
     }
 }
 

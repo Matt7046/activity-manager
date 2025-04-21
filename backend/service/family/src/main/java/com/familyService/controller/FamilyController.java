@@ -35,7 +35,7 @@ public class FamilyController {
     }
 
     @PostMapping("/log/tutor")
-    public Mono<ResponseDTO> getLogActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
+    public Mono<ResponseDTO> getLogActivityByEmail(@RequestBody UserPointDTO userPointDTO) throws Exception {
         return familyPointsProcessor.logFamilyByEmail(userPointDTO);
     }
 }

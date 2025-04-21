@@ -26,9 +26,9 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public Mono<ResponseDTO> getToken( Authentication authentication) {
-        String token = jwtUtil.generateToken(authentication.getName()); // Genera il token JWT
-        ResponseDTO response = new ResponseDTO(new LoginResponse(token), ActivityHttpStatus.OK.value(), new ArrayList<>());
-        return Mono.just(response);
+    public LoginResponse getToken( Authentication authentication) {
+        String token = jwtUtil.generateToken(authentication.getName());
+        return new LoginResponse(token);// Genera il token JWT
+
     }
 }

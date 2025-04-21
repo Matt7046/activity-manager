@@ -1,7 +1,7 @@
 import { Box, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { googleLogout } from '@react-oauth/google';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { navigateRouting, showMessage } from '../../App';
 import Alert, { AlertConfig } from '../../components/ms-alert/Alert';
@@ -79,28 +79,39 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const handleCloseAnchor = () => {
     setOpenAnchor(false); // Nasconde il popover
   };
+  const socketRef = useRef<WebSocket | null>(null);
 
+  const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-    useEffect(() => {
-      
-        socketFamilyPoint.getSocket().onmessage = (event) => {
-
-
-          const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-          const typeMessage: TypeMessage = {
-            message: [familyNotification.message],
-            typeMessage: TypeAlertColor.INFO
-          }
-          showMessage(alertConfig.setOpen, alertConfig.setMessage, typeMessage);
-        };
+  useEffect(() => {
+    socketRef.current = socketFamilyPoint.getSocket();
+    // Ping ogni 30 secondi
+    pingIntervalRef.current = setInterval(() => {
+      if (socketFamilyPoint.getSocket().readyState === WebSocket.OPEN) {
+        socketFamilyPoint.getSocket().send("ping");
+      }
+    }, 30000);
+      socketFamilyPoint.getSocket().onmessage = (event) => {
+        console.log("Messaggio ricevuto:", event.data);
+        const familyNotification: FamilyNotificationI = JSON.parse(event.data);
+        const typeMessage: TypeMessage = {
+          message: [familyNotification.message],
+          typeMessage: TypeAlertColor.INFO
+        }
+        showMessage(alertConfig.setOpen, alertConfig.setMessage, typeMessage);
+      };
+      socketFamilyPoint.getSocket().onclose = () => {
+        console.warn("WebSocket chiuso");
+      };
   
-      return () => { };
+  
+      return () => {
+        socketFamilyPoint.getSocket().close();
+        if (pingIntervalRef.current) {
+          clearInterval(pingIntervalRef.current);
+        }
+      };
     }, []);
-
- 
-
-
-
 
 
   const pulsanteNotification: Pulsante = {
