@@ -40,10 +40,10 @@ public class ActivityService {
         return activityRepository.deleteByIdentificativo(identificativo);
     }
 
-    public Mono<String> saveActivity(ActivityDTO activityDTO) {
+    public String saveActivity(ActivityDTO activityDTO) {
         Activity activityToSave = activityMapper.fromDTO(activityDTO);
         Activity result = activityRepository.save(activityToSave); // Supponiamo che restituisca una String
-        return Mono.just(result.get_id());
+        return result.get_id();
     }
 
     public Activity save(ActivityDTO ActivityDTO) {
