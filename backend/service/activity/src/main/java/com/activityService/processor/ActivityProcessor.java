@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +41,7 @@ public class ActivityProcessor {
         ResponseDTO response = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
         return Mono.just(response);
     }
+
     public Mono<ResponseDTO> findByIdentificativo(UserPointDTO userPointDTO) {
         Activity item = null;
         ResponseDTO responseDTO = null;
@@ -55,14 +57,14 @@ public class ActivityProcessor {
         return Mono.just(responseDTO);
     }
 
-    public Mono<ResponseDTO> saveActivity( ActivityDTO activityDTO) {
+    public Mono<ResponseDTO> saveActivity(ActivityDTO activityDTO) {
         String emailCriypt = encryptDecryptConverter.convert(activityDTO.getEmail());
         activityDTO.setEmail(emailCriypt);
-        return activityService.saveActivity(activityDTO)  // Ottieni il Mono<String>
-                .map(result -> new ResponseDTO(result, ActivityHttpStatus.OK.value(), new ArrayList<>()));  // Mappa il risultato in un ResponseDTO
+        String _id = activityService.saveActivity(activityDTO);  // Ottieni il Mono<String>
+        return Mono.just(new ResponseDTO(_id, ActivityHttpStatus.OK.value(), new ArrayList<>()));
     }
 
-    public Mono<ResponseDTO> deleteByIdentificativo(String identificativo)  {
+    public Mono<ResponseDTO> deleteByIdentificativo(String identificativo) {
         identificativo = encryptDecryptConverter.decrypt(identificativo);
         return Mono.just(activityService.deleteByIdentificativo(identificativo))
                 .map(result -> new ResponseDTO(result, ActivityHttpStatus.OK.value(), new ArrayList<>()));  // Mappa il risultato in un ResponseDTO

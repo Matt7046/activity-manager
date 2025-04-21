@@ -20,7 +20,6 @@ public class ImageController {
 
     @PostMapping("/upload" )
     public Mono<ResponseDTO> upload(@ModelAttribute ImageDTO image) throws IOException {
-        Mono<ResponseDTO> result = imageProcessor.uploadImage(image);
-        return result;
+        return imageProcessor.uploadImage(image);
     }
 }
