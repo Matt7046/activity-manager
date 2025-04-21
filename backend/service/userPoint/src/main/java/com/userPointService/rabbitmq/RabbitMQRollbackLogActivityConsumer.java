@@ -23,7 +23,7 @@ public class RabbitMQRollbackLogActivityConsumer {
     private UserPointService userPointService;
 
     @Autowired
-    private EncryptDecryptConverter encryptDecryptConverter;
+    private UserPointMapper userPointMapper;
 
     @RabbitListener(queues = "notifications.log.point.queue", ackMode = "MANUAL")
     public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
@@ -48,8 +48,7 @@ public class RabbitMQRollbackLogActivityConsumer {
         StopWatch watch = new StopWatch();
         watch.start();
         doWork(in);
-        UserPoint userPointSave = UserPointMapper.INSTANCE.fromDTO(userPointDTO);
-        userPointSave.setEmailFamily(encryptDecryptConverter.convert(userPointSave.getEmailFamily()));
+        UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);
         userPointService.rollbackSavePoint(userPointSave);
         watch.stop();
 
