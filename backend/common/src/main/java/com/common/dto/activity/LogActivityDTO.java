@@ -20,7 +20,7 @@ import java.util.Date;
         private Long typeUser;
         private String log;
         private Date  date;
-        private Long usePoints;
+        private Integer usePoints;
         private Long points;
         private UserPointDTO point;
     

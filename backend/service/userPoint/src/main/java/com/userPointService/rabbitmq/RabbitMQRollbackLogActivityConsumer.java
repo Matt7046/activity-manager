@@ -1,6 +1,8 @@
 package com.userPointService.rabbitmq;
 
+import com.common.data.user.UserPoint;
 import com.common.dto.user.UserPointDTO;
+import com.common.mapper.UserPointMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.userPointService.service.UserPointService;
@@ -11,12 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
+import com.common.configurations.encrypt.EncryptDecryptConverter;
+
 
 @Component
 public class RabbitMQRollbackLogActivityConsumer {
 
     @Autowired
     private UserPointService userPointService;
+
+    @Autowired
+    private EncryptDecryptConverter encryptDecryptConverter;
 
     @RabbitListener(queues = "notifications.log.point.queue", ackMode = "MANUAL")
     public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
@@ -41,7 +48,9 @@ public class RabbitMQRollbackLogActivityConsumer {
         StopWatch watch = new StopWatch();
         watch.start();
         doWork(in);
-        userPointService.rollbackSavePoint(userPointDTO);
+        UserPoint userPointSave = UserPointMapper.INSTANCE.fromDTO(userPointDTO);
+        userPointSave.setEmailFamily(encryptDecryptConverter.convert(userPointSave.getEmailFamily()));
+        userPointService.rollbackSavePoint(userPointSave);
         watch.stop();
 
     }

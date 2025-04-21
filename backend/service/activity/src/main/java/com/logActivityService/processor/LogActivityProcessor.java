@@ -6,6 +6,7 @@ import com.common.data.family.OperationTypeLogFamily;
 import com.common.dto.activity.LogActivityDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.dto.user.UserPointDTO;
+import com.common.mapper.LogActivityToUserPointMapper;
 import com.common.structure.status.ActivityHttpStatus;
 import com.common.dto.family.LogFamilyDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,7 +61,7 @@ public class LogActivityProcessor {
     }
 
     private Mono<ResponseDTO> processPoints(LogActivityDTO logActivityDTO) {
-        UserPointDTO userPointDTO = new UserPointDTO(logActivityDTO);
+        UserPointDTO userPointDTO = LogActivityToUserPointMapper.INSTANCE.toChange(logActivityDTO);
         userPointDTO.setOperation(false);
         LogFamilyDTO logFamilyDTO = new LogFamilyDTO();
         logFamilyDTO.setOperations(OperationTypeLogFamily.OPERATIVE);

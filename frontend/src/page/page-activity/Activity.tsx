@@ -64,7 +64,7 @@ const Activity: React.FC<{  }> = ({ }) => {
 
   const getActivities = () => {
     if (!hasFetchedData) {
-      hasFetchedData = true;
+      hasFetchedData = true
       // Effettua la chiamata GET quando il componente è montato 
       // axios.
       //  .get('https://api.example.com/data') // URL dell'API]
