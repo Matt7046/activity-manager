@@ -18,10 +18,10 @@ import java.util.List;
 public class ActivityService {
     @Autowired
     private ActivityRepository activityRepository;
-
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
-
+    @Autowired
+    ActivityMapper activityMapper;
     @Autowired
     @Qualifier("webClientActivity")
     private WebClient webClientActivity;
@@ -41,14 +41,13 @@ public class ActivityService {
     }
 
     public Mono<String> saveActivity(ActivityDTO activityDTO) {
-        Activity activityToSave = ActivityMapper.INSTANCE.fromDTO(activityDTO);
+        Activity activityToSave = activityMapper.fromDTO(activityDTO);
         Activity result = activityRepository.save(activityToSave); // Supponiamo che restituisca una String
         return Mono.just(result.get_id());
     }
 
     public Activity save(ActivityDTO ActivityDTO) {
-        Activity sub = ActivityMapper.INSTANCE.fromDTO(ActivityDTO);
-
+        Activity sub = activityMapper.fromDTO(ActivityDTO);
         return activityRepository.save(sub);
     }
 

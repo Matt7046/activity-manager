@@ -1,13 +1,16 @@
 package com.familyService.processor;
 
 import com.common.configurations.structure.NotificationComponent;
+import com.common.data.family.LogFamily;
 import com.common.data.family.OperationTypeLogFamily;
-import com.common.dto.auth.Point;
+import com.common.data.user.UserPoint;
 import com.common.dto.family.LogFamilyDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.dto.user.PointDTO;
 import com.common.dto.user.UserPointDTO;
 import com.common.dto.family.FamilyNotificationDTO;
+import com.common.mapper.LogFamilyMapper;
+import com.common.mapper.UserPointMapper;
 import com.common.structure.status.ActivityHttpStatus;
 import com.common.structure.exception.NotFoundException;
 import com.familyService.service.FamilyService;
@@ -32,6 +35,10 @@ public class FamilyPointsProcessor {
     private RabbitMQProducer notificationPublisher;
     @Autowired
     private FamilyService familyService;
+    @Autowired
+    private LogFamilyMapper logFamilyMapper;
+    @Autowired
+    private UserPointMapper userPointMapper;
     @Autowired
     private NotificationComponent notificationComponent;
     @Value("${app.rabbitmq.notification.exchange.exchangeName}")
@@ -62,7 +69,6 @@ public class FamilyPointsProcessor {
     }
 
     private Mono<ResponseDTO> processPoints(UserPointDTO userPointDTO) {
-        String email = userPointDTO.getEmailFamily();
         userPointDTO.setOperation(true);
         return familyWebService.savePointsByFamily(userPointDTO)
                 .flatMap(pointsUserOptional -> {
@@ -88,12 +94,16 @@ public class FamilyPointsProcessor {
 
             ResponseDTO sub = null;
             try {
-                sub = familyService.saveLogFamily(logFamilyDTO);
+                LogFamily family = logFamilyMapper.fromDTO(logFamilyDTO);
+                family = familyService.saveLogFamily(family);
+                logFamilyDTO = logFamilyMapper.toDTO(family);
+                ResponseDTO response = new ResponseDTO(logFamilyDTO, ActivityHttpStatus.OK.value(),
+                        new ArrayList<>());
+                return Mono.just(response);
             } catch (Exception e) {
                 notificationComponent.inviaNotifica(logFamilyDTO.getPoint(),pointExchange, pointRoutingKey);
                 throw new NotFoundException(e.getMessage());
             }
-            return Mono.just(sub);
     }
 
     private void inviaNotifica(UserPointDTO userPointDTO) {
@@ -114,10 +124,11 @@ public class FamilyPointsProcessor {
         return dto;
     }
 
-    public  Mono<ResponseDTO> logFamilyByEmail(UserPointDTO userPointDTO) {
+    public  Mono<ResponseDTO> logFamilyByEmail(UserPointDTO userPointDTO) throws Exception {
         Integer page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
         Integer size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
-        return Mono.just(familyService.getLogFamily(userPointDTO, pageable));
+        UserPoint userPoint = userPointMapper.fromDTO(userPointDTO);
+        return Mono.just(familyService.getLogFamily(userPoint, pageable));
     }
 }
