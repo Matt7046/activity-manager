@@ -16,15 +16,22 @@ export const findByEmail = async (user: UserI, funzioneMessage?: (message?: Type
 
 
 
-export const getEmailChild = async (userDTO: any, funzioneErrore?: () => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+export const getEmailChild = async (userDTO: any,funzioneMessage?: (message?: TypeMessage)  => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const path = PATH_USER_POINT + `/child`;
     const data = await postData(path, userDTO, setLoading); // Usa l'URL dinamico
     return data;
-  } catch (error) {
-    if (funzioneErrore) {
-      funzioneErrore();
-    }
+  } catch (error) {   
+  }
+};
+
+
+export const getTypeUser = async (userDTO: any,funzioneMessage?: (message?: TypeMessage)  => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+  try {
+    const path = PATH_USER_POINT + `/dati`;
+    const data = await postData(path, userDTO, setLoading); // Usa l'URL dinamico
+    return data;
+  } catch (error) {   
   }
 };
 
