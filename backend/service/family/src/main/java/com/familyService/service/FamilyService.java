@@ -29,20 +29,11 @@ public class FamilyService {
     @Autowired
     private LogFamilyMapper logFamilyMapper;
 
-    public LogFamily saveLogFamily(LogFamily family) {
-
-        ;
+    public LogFamily saveLogFamily(LogFamily family) {        ;
         return  repository.save(family);
-
     }
 
-    public ResponseDTO getLogFamily(UserPoint user, Pageable pageable) {
-      List<LogFamily> familyList = repository.findLogByEmail(user.getEmail(), pageable);
-        List<LogFamilyDTO> logFamilyDTOList =  familyList.stream()
-                .map(logFamilyMapper::toDTO) .collect(Collectors.toList());
-        ResponseDTO response = new ResponseDTO(logFamilyDTOList, ActivityHttpStatus.OK.value(),
-                new ArrayList<>());
-        return response;
+    public List<LogFamily> getLogFamily(UserPoint user, Pageable pageable) {
+        return repository.findLogByEmail(user.getEmail(), pageable);
     }
-
 }
