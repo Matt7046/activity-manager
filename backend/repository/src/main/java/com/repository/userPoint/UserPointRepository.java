@@ -25,11 +25,7 @@ public interface UserPointRepository extends MongoRepository<UserPoint, String> 
     @Query("{'email': ?0}")
     UserPoint findByEmailOnEmail(String email);
 
-    @Aggregation(pipeline = {
-            "{ $match: { $or: [ { 'email': ?0 }, { 'emailFigli': ?0 } ] } }",
-            "{ $sort: { email: -1 } }",  // forza i risultati con email al primo posto (priorità a 'email')
-            "{ $limit: 1 }"
-    })
+    @Query(value = "{ '$or': [ { 'email': ?0 }, {'emailFigli': {$in: [?0]}} ] }")
     UserPoint findFirstMatchByEmailOrFigli(String email);
        
        
