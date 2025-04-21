@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.common.data.activity.Activity;
 
 @Repository
-public interface ActivityRepository extends MongoRepository<Activity, String>, ActivityCustomRepository {
+public interface ActivityRepository extends MongoRepository<Activity, String> {
     // Puoi aggiungere metodi personalizzati se necessario
      List<Activity>  findAll();
 

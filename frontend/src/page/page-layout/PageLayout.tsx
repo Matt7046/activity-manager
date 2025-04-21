@@ -1,7 +1,7 @@
 import { Box, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { googleLogout } from '@react-oauth/google';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { navigateRouting, showMessage } from '../../App';
 import Alert, { AlertConfig } from '../../components/ms-alert/Alert';
@@ -80,16 +80,24 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     setOpenAnchor(false); // Nasconde il popover
   };
 
-  socketFamilyPoint.getSocket().onmessage = (event) => {
+
+    useEffect(() => {
+      
+        socketFamilyPoint.getSocket().onmessage = (event) => {
 
 
-    const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-    const typeMessage: TypeMessage = {
-      message: [familyNotification.message],
-      typeMessage: TypeAlertColor.INFO
-    }
-    showMessage(alertConfig.setOpen, alertConfig.setMessage, typeMessage);
-  };
+          const familyNotification: FamilyNotificationI = JSON.parse(event.data);
+          const typeMessage: TypeMessage = {
+            message: [familyNotification.message],
+            typeMessage: TypeAlertColor.INFO
+          }
+          showMessage(alertConfig.setOpen, alertConfig.setMessage, typeMessage);
+        };
+  
+      return () => { };
+    }, []);
+
+ 
 
 
 

@@ -42,8 +42,8 @@ public class ActivityService {
 
     public Mono<String> saveActivity(ActivityDTO activityDTO) {
         Activity activityToSave = ActivityMapper.INSTANCE.fromDTO(activityDTO);
-        String result = activityRepository.saveActivity(activityToSave); // Supponiamo che restituisca una String
-        return Mono.just(result);
+        Activity result = activityRepository.save(activityToSave); // Supponiamo che restituisca una String
+        return Mono.just(result.get_id());
     }
 
     public Activity save(ActivityDTO ActivityDTO) {

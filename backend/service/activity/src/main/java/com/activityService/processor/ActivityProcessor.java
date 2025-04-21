@@ -53,6 +53,8 @@ public class ActivityProcessor {
     }
 
     public Mono<ResponseDTO> saveActivity( ActivityDTO activityDTO) {
+        String emailCriypt = encryptDecryptConverter.convert(activityDTO.getEmail());
+        activityDTO.setEmail(emailCriypt);
         return activityService.saveActivity(activityDTO)  // Ottieni il Mono<String>
                 .map(result -> new ResponseDTO(result, ActivityHttpStatus.OK.value(), new ArrayList<>()));  // Mappa il risultato in un ResponseDTO
     }

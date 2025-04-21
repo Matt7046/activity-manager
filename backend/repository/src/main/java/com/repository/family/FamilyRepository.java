@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FamilyRepository extends MongoRepository<LogFamily, String>, FamilyCustomRepository {
+public interface FamilyRepository extends MongoRepository<LogFamily, String> {
 
     @Query("{'receivedByEmail': ?0}")
     List<LogFamily> findLogByEmail(String email, Pageable pageable);

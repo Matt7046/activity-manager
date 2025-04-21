@@ -30,6 +30,7 @@ public class UserPointDTO implements InterfaceDTO {
     private Integer size;
     private String field;
     private Boolean unpaged;
+    private String nameImage;
 
     public UserPointDTO(LogActivityDTO logActivityDTO) {
         setPoint(logActivityDTO.getPoints());

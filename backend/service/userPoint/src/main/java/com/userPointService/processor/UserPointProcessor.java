@@ -17,6 +17,7 @@ import com.common.configurations.encrypt.EncryptDecryptConverter;
 import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class UserPointProcessor {
@@ -76,6 +77,7 @@ public class UserPointProcessor {
 
     public Mono<ResponseDTO> getUserType(UserPointDTO userPointDTO) throws Exception {
          return Mono.fromCallable(() -> {
+
             Long itemId = userPointService.getTypeUser(userPointDTO);
             String emailUserCurrent = itemId == 1 ? userPointDTO.getEmail() : userPointDTO.getEmailFamily();
             ResponseDTO response = new ResponseDTO(new UserDTO(itemId, null, emailUserCurrent), ActivityHttpStatus.OK.value(),
