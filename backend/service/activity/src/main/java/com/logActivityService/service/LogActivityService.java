@@ -17,17 +17,20 @@ public class LogActivityService {
 
     @Autowired
     private LogActivityRepository logActivityRepository;
+    @Autowired
+    private LogActivityMapper logActivityMapper;
+
 
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
     public LogActivity saveLogActivity(LogActivityDTO activityDTO) {
-        LogActivity sub = LogActivityMapper.INSTANCE.fromDTO(activityDTO);
+        LogActivity sub = logActivityMapper.fromDTO(activityDTO);
         return logActivityRepository.save(sub);
     }
 
     public LogActivity deleteLogActivity(LogActivityDTO activityDTO) {
-        LogActivity sub = LogActivityMapper.INSTANCE.fromDTO(activityDTO);
+        LogActivity sub = logActivityMapper.fromDTO(activityDTO);
         logActivityRepository.delete(sub);
         return new LogActivity();
     }

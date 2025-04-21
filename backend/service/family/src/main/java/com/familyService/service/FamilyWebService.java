@@ -26,10 +26,6 @@ public class FamilyWebService {
     private WebClient webClientPoint;
     @Value("${app.page.path.userpoint}")
     private String userPointPath;
-    @Autowired
-    private EncryptDecryptConverter encryptDecryptConverter;
-
-
 
     public Mono<Optional<PointDTO>> savePointsByFamily(UserPointDTO userPointDTO) {
          return webClientPoint.post()
@@ -40,7 +36,7 @@ public class FamilyWebService {
                 .flatMap(responseDTO -> Mono.fromCallable(() -> {
                     UserPointDTO subDTO = new ObjectMapper().convertValue(responseDTO.getJsonText(), UserPointDTO.class);
                     return subDTO.getPointFigli().stream()
-                            .filter(point -> encryptDecryptConverter.convert(userPointDTO.getEmailFamily()).equals(point.getEmail()))
+                            .filter(point -> userPointDTO.getEmailFamily().equals(point.getEmail()))
                             .findFirst();
                 }).subscribeOn(Schedulers.boundedElastic()));
     }

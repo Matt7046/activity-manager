@@ -1,16 +1,11 @@
 package com.notificationService.service;
 
 import com.common.data.notification.Notification;
-import com.common.dto.notification.NotificationDTO;
-import com.common.dto.structure.ResponseDTO;
-import com.common.structure.status.ActivityHttpStatus;
 import com.common.mapper.NotificationMapper;
 import com.repository.notification.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,24 +14,18 @@ public class NotificationService {
     @Autowired
     private NotificationRepository repository;
 
-    public Mono<ResponseDTO> saveNotification(NotificationDTO notification) {
-        Notification entity = NotificationMapper.INSTANCE.fromDTO(notification);
-        entity = repository.save(entity);
-        NotificationDTO dto = NotificationMapper.INSTANCE.toDTO(entity);
-        ResponseDTO response = new ResponseDTO(dto, ActivityHttpStatus.OK.value(),
-                new ArrayList<>());
-        return Mono.just(response);
+    @Autowired
+    private NotificationMapper notificationMapper;
+
+    public Notification saveNotification(Notification notification) {
+        notification = repository.save(notification);
+        return notification;
 
     }
 
-    public Mono<ResponseDTO> saveNotificationList(List<NotificationDTO> notification) {
-        List<Notification> entity = NotificationMapper.INSTANCE.fromDTO(notification);
-        entity = repository.saveAll(entity);
-        List<NotificationDTO> dtoList = NotificationMapper.INSTANCE.toDTO(entity);
-        ResponseDTO response = new ResponseDTO(dtoList, ActivityHttpStatus.OK.value(),
-                new ArrayList<>());
-        return Mono.just(response);
+    public List<Notification> saveNotificationList(List<Notification> notification) {
 
+        return repository.saveAll(notification);
     }
 
 
