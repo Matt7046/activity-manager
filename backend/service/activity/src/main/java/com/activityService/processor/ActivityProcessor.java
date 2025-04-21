@@ -60,7 +60,7 @@ public class ActivityProcessor {
     }
 
     public Mono<ResponseDTO> deleteByIdentificativo(String identificativo)  {
-        identificativo = encryptDecryptConverter.decrypts(identificativo);
+        identificativo = encryptDecryptConverter.decrypt(identificativo);
         return Mono.just(activityService.deleteByIdentificativo(identificativo))
                 .map(result -> new ResponseDTO(result, ActivityHttpStatus.OK.value(), new ArrayList<>()));  // Mappa il risultato in un ResponseDTO
 

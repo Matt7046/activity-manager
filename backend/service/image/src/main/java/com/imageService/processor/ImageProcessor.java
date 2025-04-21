@@ -20,7 +20,7 @@ public class ImageProcessor {
 
 
     public Mono<ResponseDTO> uploadImage(ImageDTO imageDTO ) throws IOException {
-        imageDTO.setNameImage(encryptDecryptConverter.decrypts(imageDTO.getNameImage()));
+        imageDTO.setNameImage(encryptDecryptConverter.decrypt(imageDTO.getNameImage()));
         return imageService.uploadImage(imageDTO);
     }
 }

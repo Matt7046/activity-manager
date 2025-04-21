@@ -55,7 +55,7 @@ public class EncryptDecryptConverter implements Converter<String, String> {
     }
 
     // Decripta una stringa
-    public String decrypts(String encryptedData) throws DecryptException {
+    private String decrypts(String encryptedData) throws DecryptException {
         try {
             Cipher cipher = Cipher.getInstance(alghorithm);
             SecretKey key = propertiesKey.getSecretCryptKey();

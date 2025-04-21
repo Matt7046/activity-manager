@@ -3,11 +3,11 @@ package com.common.dto.user;
 import java.util.List;
 
 import com.common.dto.structure.InterfaceDTO;
-import com.common.dto.activity.LogActivityDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @Data // Genera getter, setter, toString, equals e hashCode
 @NoArgsConstructor // Genera un costruttore senza argomenti
@@ -17,12 +17,10 @@ public class UserPointDTO implements InterfaceDTO {
     private String _id; // Identificatore unico
     private String email;
     private String emailFamily;
-    private List<PointDTO> points;
-    private Long point;
-    private Long type;
+    private Integer type;
+    private List<PointDTO> pointFigli;
     private String numeroPunti;
-    private String attivita;
-    private Long usePoints;
+    private Integer usePoints;
     private List<String> emailFigli;
     private Boolean operation;
     private String emailUserCurrent;
@@ -32,10 +30,5 @@ public class UserPointDTO implements InterfaceDTO {
     private Boolean unpaged;
     private String nameImage;
 
-    public UserPointDTO(LogActivityDTO logActivityDTO) {
-        setPoint(logActivityDTO.getPoints());
-        setEmail(logActivityDTO.getEmail());
-        setEmailFamily(logActivityDTO.getEmailFamily());
-        setUsePoints(logActivityDTO.getUsePoints());
-    }
+
 }

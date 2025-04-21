@@ -91,7 +91,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     //  const utente = { email: userData.email, type: userData.type }
     const arrayDiOggetti = emailFigli.map(email => ({ email }));
     setUser(null);
-    return saveUser({ ...userData, emailFigli: emailFigli, points: arrayDiOggetti }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((x: ResponseI) => {
+    return saveUser({ ...userData, emailFigli: emailFigli, pointFigli: arrayDiOggetti }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((x: ResponseI) => {
       navigateRouting(navigate, SectionName.ROOT, { newLogin: true })
     })
   }

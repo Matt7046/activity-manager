@@ -4,7 +4,9 @@ import com.common.dto.auth.Point;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,11 +21,15 @@ public class UserPoint {
     private String _id;
     @Field("email")
     private String email;
-    private List<Point>  points;
+    private List<Point> pointFigli;
     private Long type;
     @Field("emailfamily")
-    private String emailFamily;  
+    private String emailFamily;
     private List<String> emailFigli;
     @Transient
     private String nameImage;
+    @Transient
+    private Boolean operation;
+    @Transient
+    private Integer usePoints;
 }

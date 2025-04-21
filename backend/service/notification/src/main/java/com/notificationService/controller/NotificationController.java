@@ -27,7 +27,7 @@ public class NotificationController {
 
     @GetMapping("all/{identificativo}/{page}/{size}")
     public Mono<ResponseDTO> getNotificationsByIdentificativo(@PathVariable String identificativo, @PathVariable Integer page, @PathVariable Integer size) throws Exception {
-        identificativo = encryptDecryptConverter.decrypts(identificativo);
+        identificativo = encryptDecryptConverter.decrypt(identificativo);
         List<Notification> notificationList = notificationService.getLatestNotifications(identificativo,page,size );
         ResponseDTO response = new ResponseDTO(notificationList, ActivityHttpStatus.OK.value(),
                 new ArrayList<>());

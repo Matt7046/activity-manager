@@ -9,10 +9,7 @@ import PointsContent from './UserPointContent';
 export interface UserPointsI {
   _id: string | undefined;
   email?: string;
-  //points: number;
-  point?: number;
   numeroPunti?: number;
-  attivita?: string;
   usePoints?: number;
   nameImage?: string;
 }

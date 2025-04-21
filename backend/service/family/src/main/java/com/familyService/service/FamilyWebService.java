@@ -39,7 +39,7 @@ public class FamilyWebService {
                 .bodyToMono(ResponseDTO.class)
                 .flatMap(responseDTO -> Mono.fromCallable(() -> {
                     UserPointDTO subDTO = new ObjectMapper().convertValue(responseDTO.getJsonText(), UserPointDTO.class);
-                    return subDTO.getPoints().stream()
+                    return subDTO.getPointFigli().stream()
                             .filter(point -> encryptDecryptConverter.convert(userPointDTO.getEmailFamily()).equals(point.getEmail()))
                             .findFirst();
                 }).subscribeOn(Schedulers.boundedElastic()));
