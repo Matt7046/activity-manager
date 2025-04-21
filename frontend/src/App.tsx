@@ -14,7 +14,7 @@ import Alert from './components/ms-alert/Alert';
 import BannerOpenSource from './components/ms-banner/Banner';
 import DialogEmail from './components/ms-dialog-email/DialogEmail';
 import { MenuLaterale } from './components/ms-drawer/Drawer';
-import { getToken, getUserType } from './general/service/AuthService';
+import { getToken } from './general/service/AuthService';
 import { baseStore } from './general/structure/BaseStore';
 import { LoginUser, SectionName, SectionNameDesc, ServerMessage, TypeAlertColor, TypeUser } from './general/structure/Constant';
 import { ResponseI, UserI } from './general/structure/Utils';
@@ -25,7 +25,7 @@ import { TypeMessage } from './page/page-layout/PageLayout';
 import Operative from './page/page-operative/Operative';
 import PrivacyPolicy from './page/page-privacy-policy/PrivacyPolicy';
 import Register from './page/page-register/Register';
-import { getEmailChild } from './page/page-user-point/service/UserPointService';
+import { getEmailChild, getTypeUser } from './page/page-user-point/service/UserPointService';
 import Points from './page/page-user-point/UserPoint';
 
 
@@ -233,7 +233,7 @@ const GoogleAuthComponent = () => {
   }
 
   const openHome = (currentUser: any, googleAuth: boolean, setLoading: any): Promise<any> => {
-    return getUserType(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
+    return getTypeUser(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
       setEmailLogin(x?.jsonText.emailUserCurrent);
       switch (x?.jsonText?.typeUser) {
         case TypeUser.STANDARD: {
