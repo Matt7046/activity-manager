@@ -357,10 +357,11 @@ const PointsContent: React.FC<PointsContentProps> = ({
       if (response) {
         if (response.status === HttpStatus.OK) {
           setTesto(response.jsonText.numeroPunti);
-          const nameImage: NameImageI[] = response.jsonText.nameImage.map((x: string) => {
+          let nameImage: NameImageI[] = response.jsonText.nameImage?.map((x: string) => {
             return { name: x };
           }
           )
+          nameImage = nameImage ? nameImage : [];
           setNameImage(nameImage);
           // Completa l'array fino a 3 elementi con { name: '' }
           while (nameImage.length < 3) {
