@@ -41,7 +41,7 @@ public class UserPointController {
 
     @PostMapping("/dati")
     public Mono<ResponseDTO> getUserType(@RequestBody UserPointDTO userPointDTO) throws Exception {
-        return processor.getUserType(userPointDTO);
+        return processor.getTypeUser(userPointDTO);
     }
 
     @PostMapping("/dati/user")

@@ -5,13 +5,6 @@ import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import AboutContent from './AboutContent';
 
-export interface PointsI {
-  _id: string | undefined;
-  email: string;
-  point: number;
-  numeroPunti: number;
-  attivita: string;
-}
 
 const About: React.FC<{  }> = ({  }) => {
 

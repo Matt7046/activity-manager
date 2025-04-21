@@ -4,8 +4,6 @@ import com.common.confProperties.ArithmeticProperties;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.user.UserPoint;
 import com.common.dto.auth.Point;
-import com.common.dto.user.UserPointDTO;
-import com.common.mapper.UserPointMapper;
 import com.common.structure.exception.ArithmeticCustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +29,10 @@ public class UserPointService {
     }
 
     public UserPoint findByEmail(String identificativo, Long type) {
-
         return userPointRepository.findByEmail(identificativo, type);
     }
 
-    public UserPoint getPointByEmail(String email) {
-        String emailCriypt = encryptDecryptConverter.convert(email);
-
+    public UserPoint getPointByEmail(String emailCriypt) {
         UserPoint existingUserPoint = userPointRepository.findByEmailOnEmail(emailCriypt);
         if (existingUserPoint == null) {
             List<UserPoint> userPointList = userPointRepository.findByOnFigli(emailCriypt);
@@ -47,33 +42,25 @@ public class UserPointService {
             return new UserPoint();
         }
         existingUserPoint.setEmailFigli(existingUserPoint.getEmailFigli().stream().map(x ->
-                encryptDecryptConverter.decrypts(x)).collect(Collectors.toList())); // Crittografa l'email
+                encryptDecryptConverter.decrypt(x)).collect(Collectors.toList())); // Crittografa l'email
 
         return existingUserPoint;
     }
 
-    public List<UserPoint> getPointsListByEmail(String email) throws Exception {
-        String emailCriypt = encryptDecryptConverter.convert(email);
-        List<UserPoint> userPointList = userPointRepository.findByOnFigli(emailCriypt);
-        return userPointList;
-    }
+    public UserPoint savePoint(UserPoint userPoint){
 
-    public UserPoint savePoint(UserPointDTO userPointDTO) throws Exception {
-        UserPoint userPointSave = UserPointMapper.INSTANCE.fromDTO(userPointDTO);
-        String emailCriypt = encryptDecryptConverter.convert(userPointSave.getEmailFamily());
-
-        UserPoint existingUserPoint = userPointRepository.findByEmailOnEmail(emailCriypt);
+        UserPoint existingUserPoint = userPointRepository.findByEmailOnEmail(userPoint.getEmailFamily());
         if (existingUserPoint == null) {
-            List<UserPoint> userPointList = userPointRepository.findByOnFigli(emailCriypt);
+            List<UserPoint> userPointList = userPointRepository.findByOnFigli(userPoint.getEmailFamily());
             existingUserPoint = !userPointList.isEmpty() ? userPointList.get(0) : null;
         }
 
         assert existingUserPoint != null;
-        existingUserPoint.getPoints().stream()
-                .filter(point -> emailCriypt != null && emailCriypt.equals(point.getEmail()))
+        existingUserPoint.getPointFigli().stream()
+                .filter(point -> userPoint.getEmailFamily() != null && userPoint.getEmailFamily().equals(point.getEmail()))
                 .findFirst()
                 .ifPresent(point -> {
-                    long delta = userPointDTO.getOperation() ? userPointDTO.getUsePoints() : -userPointDTO.getUsePoints();
+                    long delta = userPoint.getOperation() ? userPoint.getUsePoints() : -userPoint.getUsePoints();
                     long updatedPoint = point.getPoints() + delta;
                     if (updatedPoint < 0) {
                         throw new ArithmeticCustomException(arithmeticProperties.getArithmetic());
@@ -85,35 +72,19 @@ public class UserPointService {
         return existingUserPoint;
     }
 
-    public UserPoint rollbackSavePoint(UserPointDTO userPointDTO) throws Exception {
-        userPointDTO.setOperation(!userPointDTO.getOperation());
-        return savePoint(userPointDTO);
+    public UserPoint rollbackSavePoint(UserPoint userPoint)  {
+        userPoint.setOperation(!userPoint.getOperation());
+        return savePoint(userPoint);
     }
 
-    public UserPoint save(UserPointDTO userPointDTO) throws Exception {
-        UserPoint sub = UserPointMapper.INSTANCE.fromDTO(userPointDTO);
-        return userPointRepository.save(sub);
-    }
-
-    public Boolean saveUser(UserPointDTO userPointDTO) throws Exception {
-        UserPoint userPointSave = UserPointMapper.INSTANCE.fromDTO(userPointDTO);
-        Boolean newUSer = false;
-        if (userPointSave.getEmail() != null && !userPointSave.getEmailFigli().isEmpty()) {
-            newUSer = true;
-            userPointSave.setType(1L);
-            userPointSave.getPoints()
-                    .forEach(point -> point.setPoints(100L));
-            userPointRepository.save(userPointSave);
-        }
-        return newUSer;
+    public UserPoint saveUser(UserPoint userPoint) {
+           return userPointRepository.save(userPoint);
     }
 
 
-    public Long getTypeUser(UserPointDTO pointsSave) throws Exception {
-        UserPoint points = UserPointMapper.INSTANCE.fromDTO(pointsSave);
-        String email = encryptDecryptConverter.convert(pointsSave.getEmailFamily());
-        List<UserPoint> existUserPointOnFigli = userPointRepository.findByOnFigli(email);
-        UserPoint existUserPoint = userPointRepository.findByEmailOnEmail(email);
+    public Long getTypeUser(UserPoint point)  {
+        List<UserPoint> existUserPointOnFigli = userPointRepository.findByOnFigli(point.getEmailFamily());
+        UserPoint existUserPoint = userPointRepository.findByEmailOnEmail(point.getEmailFamily());
         return Optional.ofNullable(existUserPoint)
                 .map(p -> 1L)
                 .orElseGet(() ->
@@ -121,18 +92,19 @@ public class UserPointService {
                 );
     }
 
-    public UserPoint saveUserImage(UserPointDTO userPointDTO) throws Exception {
-        UserPoint points = UserPointMapper.INSTANCE.fromDTO(userPointDTO);
-        String emailCriypt = encryptDecryptConverter.convert(userPointDTO.getEmailFamily());
-        UserPoint existingUserPoint = userPointRepository.findFirstMatchByEmailOrFigli(emailCriypt);
+    public UserPoint saveUserImage(UserPoint userPoint) throws Exception {
+
+        UserPoint existingUserPoint = userPointRepository.findFirstMatchByEmailOrFigli(userPoint.getEmailFamily());
+        userPoint.setEmailFamily(encryptDecryptConverter.decrypt(userPoint.getEmailFamily()));
         assert existingUserPoint != null;
         existingUserPoint =decryptExistingUserPoint(existingUserPoint);
-        List<Point> updatedPoints = existingUserPoint.getPoints().stream()
-                .map(point -> ovverideNameImage(points, point))
+        List<Point> updatedPoints = existingUserPoint.getPointFigli().stream()
+                .map(point -> ovverideNameImage(userPoint, point))
                 .collect(Collectors.toList());
-        existingUserPoint.setPoints(updatedPoints);
+        existingUserPoint.setPointFigli(updatedPoints);
         return userPointRepository.save(existingUserPoint);
     }
+
 
     private UserPoint decryptExistingUserPoint(UserPoint existingUserPoint) {
         existingUserPoint.setEmail(encryptDecryptConverter.decrypt(existingUserPoint.getEmail()));
@@ -140,15 +112,14 @@ public class UserPointService {
         existingUserPoint.setEmailFigli(existingUserPoint.getEmailFigli().stream()
                 .map(figlio -> encryptDecryptConverter.decrypt(figlio))
                 .collect(Collectors.toList()));
-        existingUserPoint.setPoints(existingUserPoint.getPoints().stream()
+        existingUserPoint.setPointFigli(existingUserPoint.getPointFigli().stream()
                 .peek(point -> point.setEmail(encryptDecryptConverter.decrypt(point.getEmail())))
                 .collect(Collectors.toList()));
         return existingUserPoint;
     }
 
-
     private Point ovverideNameImage(UserPoint userPointSave, Point point) {
-        if (!point.getEmail().equals(userPointSave.getEmailFamily())) {
+        if (!userPointSave.getEmailFamily().equals(point.getEmail())) {
             return point;
         }
         List<String> existingNames = Optional.ofNullable(point.getNameImage()).orElse(new ArrayList<>());

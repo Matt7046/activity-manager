@@ -37,8 +37,8 @@ public class EncryptionCallback {
                             encryptDecryptConverter.convert(email)
                     ).collect(Collectors.toList())); // Crittografa l'email
                 }
-                if (userPoint.getPoints() != null) {
-                    userPoint.setPoints(userPoint.getPoints().stream().peek(point -> point.setEmail(encryptDecryptConverter.convert(point.getEmail()))).collect(Collectors.toList()));
+                if (userPoint.getPointFigli() != null) {
+                    userPoint.setPointFigli(userPoint.getPointFigli().stream().peek(point -> point.setEmail(encryptDecryptConverter.convert(point.getEmail()))).collect(Collectors.toList()));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -71,8 +71,8 @@ public class EncryptionCallback {
                     // Decrittografa l'email dopo il caricamento
                     userPoint.setEmailFamily(encryptDecryptConverter.decrypt(userPoint.getEmailFamily()));
                 }
-                if (userPoint.getPoints() != null) {
-                    userPoint.setPoints(userPoint.getPoints().stream().peek(point -> point.setEmail(encryptDecryptConverter.decrypt(point.getEmail()))).collect(Collectors.toList()));
+                if (userPoint.getPointFigli() != null) {
+                    userPoint.setPointFigli(userPoint.getPointFigli().stream().peek(point -> point.setEmail(encryptDecryptConverter.decrypt(point.getEmail()))).collect(Collectors.toList()));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
