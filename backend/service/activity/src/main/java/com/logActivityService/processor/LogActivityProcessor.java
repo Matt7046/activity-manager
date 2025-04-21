@@ -38,6 +38,10 @@ public class LogActivityProcessor {
     private RabbitMQProducer notificationPublisher;
     @Autowired
     private NotificationComponent notificationComponent;
+    @Autowired
+    private LogActivityToUserPointMapper logActivityToUserPointMapper;
+    @Autowired
+    private LogActivityMapper logActivityMapper;
     @Value("${app.rabbitmq.exchange.point.exchangeName}")
     private String exchangePoint;
     @Value("${app.rabbitmq.exchange.point.routingKey.logActivity}")
@@ -51,7 +55,7 @@ public class LogActivityProcessor {
         Integer size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
         List<LogActivityDTO> logAttivitaUnica =  logActivityService.logAttivitaByEmail(userPointDTO, pageable).stream()
-                .map(LogActivityMapper.INSTANCE::toDTO)
+                .map(logActivityMapper::toDTO)
                 .collect(Collectors.toList());
         return Mono.just(new ResponseDTO(logAttivitaUnica, ActivityHttpStatus.OK.value(), new ArrayList<>()));
     }
@@ -61,7 +65,7 @@ public class LogActivityProcessor {
     }
 
     private Mono<ResponseDTO> processPoints(LogActivityDTO logActivityDTO) {
-        UserPointDTO userPointDTO = LogActivityToUserPointMapper.INSTANCE.toChange(logActivityDTO);
+        UserPointDTO userPointDTO = logActivityToUserPointMapper.toChange(logActivityDTO);
         userPointDTO.setOperation(false);
         LogFamilyDTO logFamilyDTO = new LogFamilyDTO();
         logFamilyDTO.setOperations(OperationTypeLogFamily.OPERATIVE);
@@ -84,7 +88,7 @@ public class LogActivityProcessor {
         logActivityDTO.setPoint(point);
         return Mono.fromCallable(() -> {
             LogActivity sub = logActivityService.saveLogActivity(logActivityDTO);
-            return new ResponseDTO(LogActivityMapper.INSTANCE.toDTO(sub), ActivityHttpStatus.OK.value(), new ArrayList<>());
+            return new ResponseDTO(logActivityMapper.toDTO(sub), ActivityHttpStatus.OK.value(), new ArrayList<>());
         }).doOnError(response1 -> {
             // Invia l'evento dopo il salvataggio del log in modo asincrono
             Mono.fromRunnable(() -> {

@@ -29,18 +29,18 @@ public class UserPointController {
 
 
     @PostMapping("find")
-    public Mono<ResponseDTO> findByEmail(@RequestBody UserPointDTO userPointDTO) throws Exception {
+    public Mono<ResponseDTO> findByEmail(@RequestBody UserPointDTO userPointDTO)  {
         return processor.findByEmail(userPointDTO);
 
     }
 
     @PostMapping("child")
-    public Mono<ResponseDTO> getEmailChild(@RequestBody UserPointDTO userPointDTO) throws Exception {
+    public Mono<ResponseDTO> getEmailChild(@RequestBody UserPointDTO userPointDTO) {
         return processor.getEmailChild(userPointDTO);
     }
 
     @PostMapping("/dati")
-    public Mono<ResponseDTO> getUserType(@RequestBody UserPointDTO userPointDTO) throws Exception {
+    public Mono<ResponseDTO> getTypeUser(@RequestBody UserPointDTO userPointDTO)  {
         return processor.getTypeUser(userPointDTO);
     }
 
@@ -51,13 +51,13 @@ public class UserPointController {
 
 
     @PostMapping("/dati/user/operation")
-    public Mono<ResponseDTO> savePoints(@RequestBody UserPointDTO userPointDTO) throws Exception {
+    public Mono<ResponseDTO> savePoints(@RequestBody UserPointDTO userPointDTO) {
         return processor.savePoints(userPointDTO);
 
     }
 
     @PostMapping("/dati/user/image")
-    public Mono<ResponseDTO> saveUserImage(@RequestBody UserPointDTO userPointDTO) throws Exception {
+    public Mono<ResponseDTO> saveUserImage(@RequestBody UserPointDTO userPointDTO)  {
         return processor.saveUserImage(userPointDTO);
     }
 

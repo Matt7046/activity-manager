@@ -22,6 +22,9 @@ public class ActivityProcessor {
     @Autowired
     private ActivityService activityService;
 
+    @Autowired
+    private ActivityMapper activityMapper;
+
     @Value("${error.document.notFound}")
     private String errorDocument;
 
@@ -32,7 +35,7 @@ public class ActivityProcessor {
         String email = userPointDTO.getEmail();
         List<Activity> sub = activityService.findAllByEmail(email);
         List<ActivityDTO> subDTO = sub.stream()
-                .map(ActivityMapper.INSTANCE::toDTO)
+                .map(activityMapper::toDTO)
                 .collect(Collectors.toList());
         ResponseDTO response = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
         return Mono.just(response);
@@ -46,7 +49,7 @@ public class ActivityProcessor {
         }
 
         if (item != null) {
-            ActivityDTO subDTO = ActivityMapper.INSTANCE.toDTO(item);
+            ActivityDTO subDTO = activityMapper.toDTO(item);
             responseDTO = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
         }
         return Mono.just(responseDTO);
