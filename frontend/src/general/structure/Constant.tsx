@@ -6,6 +6,7 @@ export enum SectionName {
   OPERATIVE = `operative`,
   FAMILY = `family`,
   REGISTER = `register`,
+  HOME = 'home',
   ROOT = ''
 }
 
