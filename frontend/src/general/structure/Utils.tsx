@@ -1,6 +1,6 @@
 import { NavigateFunction } from "react-router-dom";
-import { sezioniMenu, sezioniMenuIniziale } from "../../App";
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
+import { sezioniMenu, sezioniMenuIniziale } from "../../page/page-home/HomeContent";
 import { SectionName, TypeUser } from "./Constant";
 
 export const myDisplayer = ((some: string, value: string) => {
@@ -72,14 +72,14 @@ export type FormErrorValues = {
 export const getMenuLaterale = (navigate: NavigateFunction, user: UserI): MenuLaterale[][] => {
   const sezioniMenuI = sezioniMenuIniziale(user);
   let menuLaterale: MenuLaterale[][] = [];
-  if (user.type === TypeUser.FAMILY || user.type === TypeUser.NEW_USER) {
+  if (user?.type === TypeUser.FAMILY || user?.type === TypeUser.NEW_USER) {
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.ACTIVITY, {}, 0);
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.ABOUT, {}, 1);
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.POINTS, { email: user.email }, 2);
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.OPERATIVE, { email: user.email }, 3);
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.FAMILY, { email: user.email }, 4);
   }
-  if (user.type === TypeUser.STANDARD) {
+  if (user?.type === TypeUser.STANDARD) {
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.ACTIVITY, {}, 0);
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.POINTS, { email: user.email }, 1);
     menuLaterale = sezioniMenu(sezioniMenuI, navigate, SectionName.OPERATIVE, { email: user.email }, 2);

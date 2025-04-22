@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { navigateRouting } from "../../App";
 import { SectionName } from "../../general/structure/Constant";
+import { navigateRouting } from "../../page/page-home/HomeContent";
 import "./Banner.css"; // <-- Importa il CSS
 
 const BannerOpenSource: React.FC = () => {

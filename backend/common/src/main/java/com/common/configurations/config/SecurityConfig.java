@@ -52,8 +52,11 @@ public class SecurityConfig implements WebFluxConfigurer {
     @Value("${app.security.crypt}")
     private String crypt;
 
-    @Value("${app.page.address}")
+    @Value("${app.page.address.policy}")
     private String policyAddress;
+
+    @Value("${app.page.address.home}")
+    private String homeAddress;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -84,7 +87,8 @@ public class SecurityConfig implements WebFluxConfigurer {
         http
                 .authorizeExchange(exchanges -> exchanges
                 .pathMatchers(policyAddress).permitAll() // Consenti accesso pubblico alla Privacy Policy
-                                .pathMatchers("/ws/**").permitAll() 
+                                .pathMatchers(homeAddress).permitAll()
+                                .pathMatchers("/ws/**").permitAll()
                                 .pathMatchers(HttpMethod.POST,"/**").permitAll()
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permetti l'accesso pubblico a
                                                                              // "/api/auth/token"

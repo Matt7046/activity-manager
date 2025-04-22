@@ -3,7 +3,6 @@ import { Box, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTit
 import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { showMessage } from "../../App";
 import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps, CardText, CardTextAlign } from "../../components/ms-card/Card";
@@ -15,6 +14,7 @@ import { ActivityLogI } from "../page-activity/Activity";
 import { getLogActivityByEmail } from '../page-activity/service/LogActivityService';
 import { FamilyLogI } from '../page-family/Family';
 import { getLogFamilyByEmail } from '../page-family/service/FamilyService';
+import { showMessage } from "../page-home/HomeContent";
 import { findByEmail, saveUserImage } from "./service/UserPointService";
 import { NameImageI, UserPointsI } from './UserPoint';
 import "./UserPointContent.css";
