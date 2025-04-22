@@ -3,11 +3,13 @@ import { Box, IconButton, Input, InputAdornment } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { navigateRouting, showMessage, useUser } from "../../App";
+
+import { useUser } from '../../App';
 import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, SectionName } from '../../general/structure/Constant';
 import { ResponseI, UserI } from "../../general/structure/Utils";
+import { navigateRouting, showMessage } from "../page-home/HomeContent";
 import { saveUser } from '../page-user-point/service/UserPointService';
 import "./RegisterContent.css";
 

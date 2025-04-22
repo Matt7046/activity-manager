@@ -1,20 +1,25 @@
 // socketSingleton.ts
 import { UserI } from "./Utils";
 
-class  Socket {
+class Socket {
   private static instance: Socket | null = null;
   private webSocket: WebSocket;
 
-  public constructor(user: UserI, url:string) {
+  public constructor(user: UserI, url: string) {
     console.log("WebSocket inizializzato per", user.emailUserCurrent);
     this.webSocket = new WebSocket(url);
   }
 
-  static getInstance(user: UserI, url:string): Socket {
+  static getInstance(user: UserI, url: string): Socket {
+    if (user === undefined || user === null) {
+      Socket.instance?.webSocket?.close();
+    }
     if (!Socket.instance) {
       Socket.instance = new Socket(user, url);
     }
     return Socket.instance;
+
+
   }
 
   getSocket(): WebSocket {

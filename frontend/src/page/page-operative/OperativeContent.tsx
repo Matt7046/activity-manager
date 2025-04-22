@@ -2,13 +2,13 @@ import { Box, FormControl, Input, InputLabel, MenuItem, Select, TextField } from
 import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { showMessage } from "../../App";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus } from "../../general/structure/Constant";
 import { FormErrorValues, ResponseI, UserI, verifyForm } from "../../general/structure/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivities, savePointsAndLog } from "../page-activity/service/ActivityService";
+import { showMessage } from "../page-home/HomeContent";
 import { TypeMessage } from "../page-layout/PageLayout";
 import { findByEmail } from "../page-user-point/service/UserPointService";
 import "./OperativeContent.css";

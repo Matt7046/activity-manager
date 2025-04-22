@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { showMessage, useUser } from '../../App';
-import { getMenuLaterale, ResponseI, UserI } from '../../general/structure/Utils';
+import { useUser } from '../../App';
+import { getMenuLaterale, ResponseI } from '../../general/structure/Utils';
+import { showMessage } from '../page-home/HomeContent';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import ActivityContent from './ActivityContent';
 import { fetchDataActivities } from './service/ActivityService';
@@ -28,7 +29,6 @@ const Activity: React.FC<{  }> = ({ }) => {
 
   const [title, setTitle] = useState<string>("Sezione attività");
   const { user, setUser } = useUser();
-  const [utente, setUtente] = useState<UserI>(user); // Stato iniziale vuoto
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user)
   const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
@@ -108,7 +108,7 @@ const Activity: React.FC<{  }> = ({ }) => {
       >
         <ActivityContent
           responseSchedule={response}
-          user={utente}
+          user={user}
           alertConfig={{open,setOpen,message,setMessage}}
           isVertical={isVertical}
         />

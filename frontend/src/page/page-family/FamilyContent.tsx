@@ -4,11 +4,12 @@ import { Box, FormControl, IconButton, Input, InputAdornment, InputLabel } from 
 import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
-import { showMessage, useUser } from "../../App";
+import { useUser } from '../../App';
 import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus } from '../../general/structure/Constant';
 import { FormErrorValues, ResponseI, verifyForm } from "../../general/structure/Utils";
+import { showMessage } from "../page-home/HomeContent";
 import { findByEmail } from "../page-user-point/service/UserPointService";
 import "./FamilyContent.css";
 import { savePointsByFamily } from './service/FamilyService';
