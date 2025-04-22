@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { navigateRouting, showMessage } from "../../App";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import { Pulsante } from "../../components/ms-button/Button";
 import Schedule, { MsSchedule } from "../../components/ms-schedule/Schedule";
 import { ButtonName, HttpStatus, SectionName, TypeUser } from "../../general/structure/Constant";
 import { UserI } from "../../general/structure/Utils";
+import { navigateRouting, showMessage } from "../page-home/HomeContent";
 import "./ActivityContent.css";
 import { findByIdentificativo } from "./service/ActivityService";
 import activityStore from "./store/ActivityStore";
@@ -40,7 +40,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     nome: ButtonName.NEW,
     title: 'Nuovo documento',
     configDialogPulsante: { message: '', showDialog: false },
-    disableButton: user.type === TypeUser.STANDARD
+    disableButton: user?.type === TypeUser.STANDARD
   };;
 
   const pulsanteRed: Pulsante = {

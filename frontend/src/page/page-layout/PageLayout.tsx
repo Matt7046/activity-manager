@@ -3,7 +3,6 @@ import Grid from '@mui/material/Grid2';
 import { googleLogout } from '@react-oauth/google';
 import React, { useEffect, useRef, useState } from 'react';
 import { NavigateFunction } from 'react-router-dom';
-import { navigateRouting, showMessage } from '../../App';
 import Alert, { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
@@ -13,6 +12,7 @@ import { ButtonName, HttpStatus, SectionName, TypeAlertColor } from '../../gener
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
 import { SocketURL } from '../../general/structure/SocketUrl';
 import { FamilyNotificationI, getDateStringRegularFormat, NotificationI, ResponseI, UserI } from '../../general/structure/Utils';
+import { navigateRouting, showMessage } from '../page-home/HomeContent';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
 
@@ -54,7 +54,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const [popoverNotifications, setPopoverNotifications] = useState<PopoverNotification[]>([]);
   const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio  
-  const socketFamilyPoint = SocketFamilyPoint.getInstance(user, SocketURL.NOTIFICATION + user.emailUserCurrent );
+  const socketFamilyPoint = SocketFamilyPoint.getInstance(user, SocketURL.NOTIFICATION + user?.emailUserCurrent );
 
 
   const handleClickAnchor = () => {
@@ -165,15 +165,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           <>
             {/* Riga 1: Menu + Pulsanti */}
             <Label _id={'title'} text={title}></Label>
-            <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
+            <Grid container justifyContent= {!user?.emailUserCurrent ? 'flex-end': 'space-between' } alignItems="center" spacing={2}>
 
 
               {menuLaterale && menuLaterale.length > 0 && (
                 <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
               )}
               <Box className='box-layout-right-button'>
-                <Button pulsanti={[pulsanteNotifiche]} />
-                <Button pulsanti={[pulsanteLogout]} />
+              {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
+              <Button pulsanti={[pulsanteLogout]} />
                 <Popover
                   notifications={popoverNotifications}
                   openAnchor={openAnchor}
@@ -187,14 +187,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             <Grid container>
               <Box className="box-layout-text-vertical">
                 <TextField
+                className={!user?.emailUserCurrent ? 'hidden-email' : ''}
                   id="emailFamily"
                   label={
-                    user.emailUserCurrent === user.emailFamily
+                    user?.emailUserCurrent === user?.emailFamily
                       ? 'email di registrazione'
                       : 'Email tutelato'
                   }
                   variant="standard"
-                  value={user.emailFamily}
+                  value={user?.emailFamily}
                   fullWidth
                   disabled
                 />
@@ -212,16 +213,17 @@ const PageLayout: React.FC<PageLayoutProps> = ({
               <Box className="box-layout-text">
                 <TextField
                   id="emailFamily"
-                  label={user.emailUserCurrent === user.emailFamily
+                  className={!user?.emailUserCurrent ? 'hidden-email' : ''}
+                  label={user?.emailUserCurrent === user?.emailFamily
                     ? 'email di registrazione'
                     : 'Email tutelato'}
                   variant="standard"
-                  value={user.emailFamily}
+                  value={user?.emailFamily}
                   fullWidth
                   disabled />
               </Box>
               <Box className='box-layout-right-button'>
-                <Button pulsanti={[pulsanteNotifiche]} />
+              {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
                 <Button pulsanti={[pulsanteLogout]} />
                 <Popover
                   notifications={popoverNotifications}

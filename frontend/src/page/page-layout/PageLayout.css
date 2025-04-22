@@ -17,6 +17,10 @@
     padding-left: 10px;
 }
 
+.hidden-email {
+    visibility: hidden;
+  }
+
 .box-layout-right-button {
     padding-right: 15px;
     display: flex;

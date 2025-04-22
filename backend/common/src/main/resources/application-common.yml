@@ -31,7 +31,9 @@ app:
     username: user
     crypt: bcrypt
   page:
-    address: /privacy-policy
+    address:
+      policy: /privacy-policy
+      home: /home
     service:
       image: http://image-service:8080
       auth: http://auth-service:8080
