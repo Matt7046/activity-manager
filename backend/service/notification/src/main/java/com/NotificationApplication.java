@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @EnableMongoRepositories(basePackages = {
-        "com.repository.notification",
+        "com.notificationService.repository",
 })
 @SpringBootApplication(scanBasePackages = {
         "com.notificationService",

@@ -27,14 +27,9 @@
     <dependencies>
       <dependency>
         <groupId>com.activityManager</groupId>
-    <artifactId>common</artifactId>
-    <version>1.0</version>
-</dependency>
-  <dependency>
-    <groupId>com.activityManager</groupId>
-    <artifactId>repository</artifactId>
-    <version>1.0</version>
-</dependency>
+        <artifactId>common</artifactId>
+        <version>1.0</version>
+      </dependency>
         <!-- Dipendenze di base -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

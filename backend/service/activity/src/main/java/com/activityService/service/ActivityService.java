@@ -6,12 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.common.dto.activity.ActivityDTO;
 import com.common.mapper.ActivityMapper;
-import com.repository.activity.ActivityRepository;
+import com.activityService.repository.ActivityRepository;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.activity.Activity;
 
 
-import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Service
