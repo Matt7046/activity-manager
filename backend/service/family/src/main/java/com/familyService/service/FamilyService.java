@@ -2,20 +2,14 @@ package com.familyService.service;
 
 import com.common.data.family.LogFamily;
 import com.common.data.user.UserPoint;
-import com.common.dto.structure.ResponseDTO;
-import com.common.dto.user.UserPointDTO;
-import com.common.structure.status.ActivityHttpStatus;
-import com.common.dto.family.LogFamilyDTO;
 import com.common.mapper.LogFamilyMapper;
-import com.repository.family.FamilyRepository;
+import com.familyService.repository.FamilyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FamilyService {

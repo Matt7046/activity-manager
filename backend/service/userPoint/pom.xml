@@ -26,16 +26,11 @@
 
     <dependencies>
         <!-- Dipendenze di base -->
-            <dependency>
-    <groupId>com.activityManager</groupId>
-    <artifactId>common</artifactId>
-    <version>1.0</version>
-</dependency>
-            <dependency>
-    <groupId>com.activityManager</groupId>
-    <artifactId>repository</artifactId>
-    <version>1.0</version>
-</dependency>
+       <dependency>
+            <groupId>com.activityManager</groupId>
+            <artifactId>common</artifactId>
+           <version>1.0</version>
+       </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
