@@ -8,4 +8,4 @@ error:
   document:
     notFound: "Documento non trovato con identificativo: "
     points: "I Point a disposizione sono: "
-
+    arithmetic: I punti devono essere maggiori o uguali a zero.

@@ -1,8 +1,7 @@
-package com.repository.family;
+package com.familyService.repository;
 
 import com.common.data.family.LogFamily;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;

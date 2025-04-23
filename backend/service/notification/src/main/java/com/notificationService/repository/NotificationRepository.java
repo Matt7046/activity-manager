@@ -1,4 +1,4 @@
-package com.repository.notification;
+package com.notificationService.repository;
 
 import com.common.data.notification.Notification;
 

@@ -1,4 +1,4 @@
-package com.repository.activity;
+package com.activityService.repository;
 
 
 

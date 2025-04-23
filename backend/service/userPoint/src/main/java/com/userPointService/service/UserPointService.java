@@ -1,12 +1,12 @@
 package com.userPointService.service;
 
-import com.common.confProperties.ArithmeticProperties;
 import com.common.data.user.UserPoint;
 import com.common.dto.auth.Point;
 import com.common.structure.exception.ArithmeticCustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.repository.userPoint.UserPointRepository;
+import com.userPointService.repository.UserPointRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,8 +17,8 @@ public class UserPointService {
     @Autowired
     private UserPointRepository userPointRepository;
 
-    @Autowired
-    private ArithmeticProperties arithmeticProperties;
+    @Value("${error.document.arithmetic}")
+    private String arithmeticProperties;
 
     public List<UserPoint> findAll() {
         return userPointRepository.findAll();
@@ -56,7 +56,7 @@ public class UserPointService {
                     long delta = userPoint.getOperation() ? userPoint.getUsePoints() : -userPoint.getUsePoints();
                     long updatedPoint = point.getPoints() + delta;
                     if (updatedPoint < 0) {
-                        throw new ArithmeticCustomException(arithmeticProperties.getArithmetic());
+                        throw new ArithmeticCustomException(arithmeticProperties);
                     }
                     point.setPoints(updatedPoint);
                 });
