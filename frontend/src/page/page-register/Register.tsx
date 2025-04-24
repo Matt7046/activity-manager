@@ -38,7 +38,6 @@ const Register: React.FC<{}> = ({ }) => {
       <PageLayout
         title={title}
         alertConfig={{open,setOpen,message,setMessage}}
-        user={user}
         isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}
