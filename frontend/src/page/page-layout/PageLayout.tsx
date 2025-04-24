@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid2';
 import { googleLogout } from '@react-oauth/google';
 import React, { useEffect, useRef, useState } from 'react';
 import { NavigateFunction } from 'react-router-dom';
+import { useUser } from '../../App';
 import Alert, { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
@@ -11,7 +12,7 @@ import Popover, { PopoverNotification } from '../../components/ms-popover/Popove
 import { ButtonName, HttpStatus, SectionName, TypeAlertColor } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
 import { SocketURL } from '../../general/structure/SocketUrl';
-import { FamilyNotificationI, getDateStringRegularFormat, NotificationI, ResponseI, UserI } from '../../general/structure/Utils';
+import { FamilyNotificationI, getDateStringRegularFormat, NotificationI, ResponseI } from '../../general/structure/Utils';
 import { navigateRouting, showMessage } from '../page-home/HomeContent';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
@@ -19,9 +20,8 @@ import "./PageLayout.css";
 
 interface PageLayoutProps {
   title: string
-  user: UserI;
   menuLaterale?: MenuLaterale[][];
-  alertConfig : AlertConfig
+  alertConfig: AlertConfig
   isVertical: boolean;
   handleClose: () => void;
   navigate: NavigateFunction; // Gestione padding dinamico
@@ -35,16 +35,17 @@ export interface TypeMessage {
 const PageLayout: React.FC<PageLayoutProps> = ({
   title,
   children,
-  user,
   menuLaterale,
-  alertConfig,  
+  alertConfig,
   isVertical,
   handleClose,
   navigate,
 }) => {
-
+  const { user , setUser } = useUser();
   const logout = (): void => {
     googleLogout();
+
+    setUser(null);
     navigateRouting(navigate, SectionName.ROOT, {})
   }
 
@@ -54,7 +55,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const [popoverNotifications, setPopoverNotifications] = useState<PopoverNotification[]>([]);
   const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio  
-  const socketFamilyPoint = SocketFamilyPoint.getInstance(user, SocketURL.NOTIFICATION + user?.emailUserCurrent );
+  const socketFamilyPoint = SocketFamilyPoint.getInstance(user, SocketURL.NOTIFICATION + user?.emailUserCurrent);
 
 
   const handleClickAnchor = () => {
@@ -91,27 +92,29 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         socketFamilyPoint.getSocket().send("ping");
       }
     }, 30000);
-      socketFamilyPoint.getSocket().onmessage = (event) => {
-        console.log("Messaggio ricevuto:", event.data);
-        const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-        const typeMessage: TypeMessage = {
-          message: [familyNotification.message],
-          typeMessage: TypeAlertColor.INFO
-        }
-        showMessage(alertConfig.setOpen, alertConfig.setMessage, typeMessage);
-      };
-      socketFamilyPoint.getSocket().onclose = () => {
-        console.warn("WebSocket chiuso");
-      };
+    socketFamilyPoint.getSocket().onmessage = (event) => {
+      console.log("Messaggio ricevuto:", event.data);
+      const familyNotification: FamilyNotificationI = JSON.parse(event.data);
+      const typeMessage: TypeMessage = {
+        message: [familyNotification.message],
+        typeMessage: TypeAlertColor.INFO
+      }
+      showMessage(alertConfig.setOpen, alertConfig.setMessage, typeMessage);
+    };
+    socketFamilyPoint.getSocket().onclose = () => {
+      console.warn("WebSocket chiuso");
+    };
+
+
+    return () => {
+      socketFamilyPoint.getSocket()?.close();
+      if (pingIntervalRef.current) {
+        clearInterval(pingIntervalRef.current);
+      }
+    };
+  }, []);
+
   
-  
-      return () => {
-        socketFamilyPoint.getSocket().close();
-        if (pingIntervalRef.current) {
-          clearInterval(pingIntervalRef.current);
-        }
-      };
-    }, []);
 
 
   const pulsanteNotification: Pulsante = {
@@ -165,15 +168,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           <>
             {/* Riga 1: Menu + Pulsanti */}
             <Label _id={'title'} text={title}></Label>
-            <Grid container justifyContent= {!user?.emailUserCurrent ? 'flex-end': 'space-between' } alignItems="center" spacing={2}>
+            <Grid container justifyContent={!user?.emailUserCurrent ? 'flex-end' : 'space-between'} alignItems="center" spacing={2}>
 
 
               {menuLaterale && menuLaterale.length > 0 && (
                 <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
               )}
               <Box className='box-layout-right-button'>
-              {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
-              <Button pulsanti={[pulsanteLogout]} />
+                {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
+                <Button pulsanti={[pulsanteLogout]} />
                 <Popover
                   notifications={popoverNotifications}
                   openAnchor={openAnchor}
@@ -187,7 +190,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             <Grid container>
               <Box className="box-layout-text-vertical">
                 <TextField
-                className={!user?.emailUserCurrent ? 'hidden-email' : ''}
+                  className={!user?.emailUserCurrent ? 'hidden-email' : ''}
                   id="emailFamily"
                   label={
                     user?.emailUserCurrent === user?.emailFamily
@@ -223,7 +226,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                   disabled />
               </Box>
               <Box className='box-layout-right-button'>
-              {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
+                {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
                 <Button pulsanti={[pulsanteLogout]} />
                 <Popover
                   notifications={popoverNotifications}
