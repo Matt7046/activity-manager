@@ -53,7 +53,6 @@ const Family: React.FC<{}> = ({ }) => {
         title={title}
         menuLaterale={menuLaterale}
         alertConfig={{open,setOpen,message,setMessage}}
-        user={user}
         isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}

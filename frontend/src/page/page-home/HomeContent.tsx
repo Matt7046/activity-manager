@@ -30,7 +30,7 @@ interface UserProviderProps {
 // Componente principale, avvolto da GoogleOAuthProvider
 const HomeContent = () => (
   <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
-      <GoogleAuthComponent />
+    <GoogleAuthComponent />
   </GoogleOAuthProvider>
 );
 
@@ -38,7 +38,7 @@ const HomeContent = () => (
 const GoogleAuthComponent = () => {
   const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
 
- 
+
   const { user, setUser } = useUser();
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [loading, setLoading] = useState(false);
@@ -52,6 +52,7 @@ const GoogleAuthComponent = () => {
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [hiddenLogin, setHiddenLogin] = useState<any>(false); // Stato utente
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => { };
+  let check = false;
 
   const [currentUser, setCurrentUser] = useState({
     name: "",
@@ -90,11 +91,28 @@ const GoogleAuthComponent = () => {
         emailUserCurrent: ""
       });
       setUser(null);
+      check = true;
     }
     setHiddenLogin(location.pathname === '/privacy-policy')
     return () => {
     };
   }, [location]);
+  useEffect(() => {
+    if (user) {
+
+      // Naviga solo quando `user` è stato aggiornato
+      if (user.type === 2 && !check) {
+
+        navigateRouting(navigate, SectionName.REGISTER, {});
+        check = true;
+      }
+      else if ((user.type === 0 || user.type === 1) && !check) {
+        navigateRouting(navigate, SectionName.ACTIVITY, {});
+        check = false;
+      }
+    }
+  }, [user]);
+
 
 
   useEffect(() => {
@@ -120,22 +138,6 @@ const GoogleAuthComponent = () => {
     handleCloseD();
 
   });
-  let check = false;
-  useEffect(() => {
-    if (user) {
-
-      // Naviga solo quando `user` è stato aggiornato
-      if (user.type === 2 && !check) {
-
-        navigateRouting(navigate, SectionName.REGISTER, {});
-        check = true;
-      }
-      else if ((user.type === 0 || user.type === 1) && !check) {
-        navigateRouting(navigate, SectionName.ACTIVITY, {});
-        check = false;
-      }
-    }
-  }, [user]);
 
   // Funzione di logout
   const logOut = () => {
@@ -285,71 +287,71 @@ const GoogleAuthComponent = () => {
       </Routes>
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <div>
-          
-            <>
-             
-              <div id="text-box-email-family">
-                <TextField
-                  id="emailFamily"
-                  label=''
-                  variant="standard"
-                  value={label} // Collega il valore allo stato
-                  onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
-                  fullWidth
-                  disabled={true} />
-              </div><div>
-                <div
-                  className="col-button-container"                 
-                >
-                  <div>
-                    {!hiddenLogin && (
-                      <Grid container spacing={2}>
-                        {/* Prima riga: Pulsanti per simulare il login */}
-                        <Grid size={{ xs: 12, sm: 6 }}>
-                          <ButtonMui
-                            variant="contained"
-                            color="primary"
-                            onClick={() => simulateLogin(TypeUser.STANDARD)}
-                            fullWidth
-                          >
-                            Simula login utente base
-                          </ButtonMui>
-                        </Grid>
-                        <Grid size={{ xs: 12, sm: 6 }}>
-                          <ButtonMui
-                            variant="contained"
-                            color="primary"
-                            onClick={() => simulateLogin(TypeUser.FAMILY)}
-                            fullWidth
-                          >
-                            Simula login controllo parentale
-                          </ButtonMui>
-                        </Grid>
 
-                        {/* Seconda riga: Pulsante di login reale */}
-                        <Grid size={{ xs: 12 }}>
-                          <GoogleLogin onSuccess={() => login()} onError={logOut} />
+          <>
 
-                        </Grid>
-                      </Grid>
-                    )}
-                  </div>
-                </div>
-
+            <div id="text-box-email-family">
+              <TextField
+                id="emailFamily"
+                label=''
+                variant="standard"
+                value={label} // Collega il valore allo stato
+                onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
+                fullWidth
+                disabled={true} />
+            </div><div>
+              <div
+                className="col-button-container"
+              >
                 <div>
-                  {/* Dialog */}
-                  <DialogEmail
-                    openD={openD}
-                    handleCloseD={handleCloseD}
-                    emailOptions={emailOptions}
-                    handleEmailChange={handleEmailChange}
-                    handleConfirm={handleConfirm}
-                    email={emailConfirmDialog}
-                    simulated={simulated}
-                    emailUserCurrent={emailLogin}
-                  />
+                  {!hiddenLogin && (
+                    <Grid container spacing={2}>
+                      {/* Prima riga: Pulsanti per simulare il login */}
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <ButtonMui
+                          variant="contained"
+                          color="primary"
+                          onClick={() => simulateLogin(TypeUser.STANDARD)}
+                          fullWidth
+                        >
+                          Simula login utente base
+                        </ButtonMui>
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <ButtonMui
+                          variant="contained"
+                          color="primary"
+                          onClick={() => simulateLogin(TypeUser.FAMILY)}
+                          fullWidth
+                        >
+                          Simula login controllo parentale
+                        </ButtonMui>
+                      </Grid>
+
+                      {/* Seconda riga: Pulsante di login reale */}
+                      <Grid size={{ xs: 12 }}>
+                        <GoogleLogin onSuccess={() => login()} onError={logOut} />
+
+                      </Grid>
+                    </Grid>
+                  )}
                 </div>
-              </div></>      
+              </div>
+
+              <div>
+                {/* Dialog */}
+                <DialogEmail
+                  openD={openD}
+                  handleCloseD={handleCloseD}
+                  emailOptions={emailOptions}
+                  handleEmailChange={handleEmailChange}
+                  handleConfirm={handleConfirm}
+                  email={emailConfirmDialog}
+                  simulated={simulated}
+                  emailUserCurrent={emailLogin}
+                />
+              </div>
+            </div></>
         </div>
       </GoogleOAuthProvider>
 
@@ -364,40 +366,40 @@ export const navigateRouting = (navigate: NavigateFunction, path: SectionName, p
 };
 
 export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
-  if(user=== undefined || user===null){
+  if (user === undefined || user === null) {
     return [[]];
   }
   if (user?.type === TypeUser.FAMILY || user.type === TypeUser.NEW_USER) {
-      return [
-        [
-          {
-            funzione: null,
-            testo: SectionNameDesc.ACTIVITY,
-            icon: ListAltIcon
-          },
-          {
-            funzione: null,
-            testo: SectionNameDesc.ABOUT,
-            icon: InfoIcon
-          },
-          {
-            funzione: null,
-            testo: SectionNameDesc.POINTS,
-            icon: EmojiEventsIcon
-          },
-          {
-            funzione: null,
-            testo: SectionNameDesc.OPERATIVE,
-            icon: SettingsIcon
-          },
-        ],
-        [
-          {
-            funzione: null,
-            testo: SectionNameDesc.FAMILY,
-            icon: GroupIcon
-          }
-        ]      
+    return [
+      [
+        {
+          funzione: null,
+          testo: SectionNameDesc.ACTIVITY,
+          icon: ListAltIcon
+        },
+        {
+          funzione: null,
+          testo: SectionNameDesc.ABOUT,
+          icon: InfoIcon
+        },
+        {
+          funzione: null,
+          testo: SectionNameDesc.POINTS,
+          icon: EmojiEventsIcon
+        },
+        {
+          funzione: null,
+          testo: SectionNameDesc.OPERATIVE,
+          icon: SettingsIcon
+        },
+      ],
+      [
+        {
+          funzione: null,
+          testo: SectionNameDesc.FAMILY,
+          icon: GroupIcon
+        }
+      ]
     ];
   } else {
     return [
