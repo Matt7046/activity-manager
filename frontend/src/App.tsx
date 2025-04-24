@@ -38,11 +38,7 @@ const App = () => (
 
 // Componente di autenticazione
 const AppComponent = () => {
-  const { user, setUser } = useUser();
   const location = useLocation();
-
-  const userLabel = user ? user.name : "Non autenticato"
-  const label = 'Login ' + userLabel;
   if (location.pathname === '/') {
     return (
       <Presentation> </Presentation>
@@ -60,6 +56,5 @@ const AppComponent = () => {
       <Route path="/family" element={<Family />} />
     </Routes>);
 };
-
 
 export default App;
