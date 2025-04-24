@@ -6,7 +6,7 @@ class Socket {
   private webSocket: WebSocket;
 
   public constructor(user: UserI, url: string) {
-    console.log("WebSocket inizializzato per", user.emailUserCurrent);
+    console.log("WebSocket inizializzato per", user?.emailUserCurrent);
     this.webSocket = new WebSocket(url);
   }
 

@@ -1,0 +1,92 @@
+.card-alert-success {
+    display: flex;
+    align-items: 'center';
+    border-radius: 100px!important;
+    width: 400px!important;;
+    padding: 12px 32px!important;;
+    font-weight: 600!important;;
+    opacity: 1!important;;
+    cursor: pointer!important;;
+    border: none!important;;
+    color: black!important;;
+    border-radius: 35px!important;;
+    background: linear-gradient(135deg, #bccbbc, #5f665f)!important;; /* verde sfumato */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)!important;;
+  }
+.card-alert-error {
+    display: flex;
+    background-color: #f9f9f9;
+    align-items: 'center';
+    border-radius: 100px!important;
+  }
+.card-content {
+    flex-grow: 1
+}
+.text-message {
+  text-align : center;
+}
+
+.text-up-message-success {
+    text-align : center;
+    color: green;
+}
+
+.text-up-message-error {
+    text-align : center;
+    color: red;
+}
+
+.text-up-message-warning {
+    text-align : center;
+    color: yellow;
+}
+
+.text-up-message-info {
+    text-align : center;
+    color:blue;
+}
+  
+  .message-wrapper {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+  }
+  
+  .icon-container {
+    margin-right: 16px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .message-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .message-title {
+    text-transform: capitalize;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .message-text {
+    margin-bottom: 4px;
+  }
+  
+  .close-button {
+    padding: 8px;
+  }
+
+  /* Bottoni dentro il dialog */
+.card-alert-success {
+  padding: 12px 32px;
+  font-weight: 600;
+  opacity: 1;
+  cursor: pointer;
+  border: none;
+  color: #ffffff;
+  border-radius: 35px;
+  background: linear-gradient(135deg, #bccbbc, #5f665f); /* verde sfumato */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+  
