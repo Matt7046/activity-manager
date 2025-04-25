@@ -41,7 +41,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   handleClose,
   navigate,
 }) => {
-  const { user , setUser } = useUser();
+  const { user, setUser } = useUser();
   const logout = (): void => {
     googleLogout();
 
@@ -114,7 +114,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     };
   }, []);
 
-  
+
 
 
   const pulsanteNotification: Pulsante = {
@@ -189,19 +189,18 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             {/* Riga 2: Email */}
             <Grid container>
               <Box className="box-layout-text-vertical">
-                <TextField
-                  className={!user?.emailUserCurrent ? 'hidden-email' : ''}
-                  id="emailFamily"
-                  label={
-                    user?.emailUserCurrent === user?.emailFamily
+              {user?.emailUserCurrent ? (
+                  <TextField
+                    id="emailFamily"
+                    label={user?.emailUserCurrent === user?.emailFamily
                       ? 'email di registrazione'
-                      : 'Email tutelato'
-                  }
-                  variant="standard"
-                  value={user?.emailFamily}
-                  fullWidth
-                  disabled
-                />
+                      : 'Email tutelato'}
+                    variant="standard"
+                    value={user?.emailFamily}
+                    fullWidth
+                    disabled
+                  />
+                ) : null}
               </Box>
             </Grid>
           </>
@@ -214,16 +213,18 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                 <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
               )}
               <Box className="box-layout-text">
-                <TextField
-                  id="emailFamily"
-                  className={!user?.emailUserCurrent ? 'hidden-email' : ''}
-                  label={user?.emailUserCurrent === user?.emailFamily
-                    ? 'email di registrazione'
-                    : 'Email tutelato'}
-                  variant="standard"
-                  value={user?.emailFamily}
-                  fullWidth
-                  disabled />
+                {user?.emailUserCurrent ? (
+                  <TextField
+                    id="emailFamily"
+                    label={user?.emailUserCurrent === user?.emailFamily
+                      ? 'email di registrazione'
+                      : 'Email tutelato'}
+                    variant="standard"
+                    value={user?.emailFamily}
+                    fullWidth
+                    disabled
+                  />
+                ) : null}
               </Box>
               <Box className='box-layout-right-button'>
                 {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
