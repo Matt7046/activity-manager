@@ -49,5 +49,6 @@
  
 }
 .new-button-container {
+  padding-top: 20px;
   padding-bottom: 16px; /* o qualsiasi valore ti serva, es. 1rem, 20px, etc */
 }

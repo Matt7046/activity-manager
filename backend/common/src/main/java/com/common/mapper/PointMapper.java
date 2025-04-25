@@ -20,24 +20,30 @@ public abstract class PointMapper {
     EncryptDecryptConverter encryptDecryptConverter;
 
     // Da Entity a DTO
-    public abstract UserPointDTO toDTO(UserPoint points) throws Exception;
+    public abstract PointDTO toDTO(Point points);
 
 
     // Da DTO a Entity
-    public abstract UserPoint fromDTO(UserPointDTO userPointDto) throws Exception;
+    public abstract Point fromDTO(PointDTO userPointDto);
 
 
     @AfterMapping
-    protected void decryptEmail(Point point, @MappingTarget PointDTO dto) {
+    protected void decryptField(Point point, @MappingTarget PointDTO dto) {
         if (dto.getEmail() != null) {
             dto.setEmail(encryptDecryptConverter.decrypt(point.getEmail()));
+        }
+        if (dto.getPassword() != null) {
+            dto.setPassword(encryptDecryptConverter.decrypt(point.getPassword()));
         }
     }
 
     @AfterMapping
-    protected void encryptEmail(PointDTO dto, @MappingTarget Point point) {
+    protected void decryptField(PointDTO dto, @MappingTarget Point point) {
         if (point.getEmail() != null) {
             point.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
+        }
+        if (point.getPassword() != null) {
+            point.setPassword(encryptDecryptConverter.convert(dto.getPassword()));
         }
     }
 }

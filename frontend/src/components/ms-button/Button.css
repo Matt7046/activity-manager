@@ -10,25 +10,17 @@
 
 /* Pulsante rosso */
 .button-red {
-
-  /* background-color: red; Colore di sfondo rosso */
- /*  color: white;          Colore del testo bianco */
- border-radius: 12px;   /* Bordi arrotondati */
-  padding: 10px 20px;    /* Spaziatura interna */
-  font-size: 16px;       /* Dimensione del testo */
-  cursor: pointer;       /* Cambia il cursore al passaggio */
-  transition: background-color 0.3s ease; /* Effetto al passaggio */
-  max-width: 90px; /* Larghezza massima */
-  min-width: 50px; /* Larghezza minima */
-  width: 100%; /* Si adatta allo spazio disponibile */
-  box-shadow: rgba(187, 44, 44, 0.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: rgba(187, 44, 44, 0.35) 0 -25px 18px -14px inset, rgba(44, 187, 99, .25) 0 1px 2px, rgba(44, 187, 99, .25) 0 2px 4px, rgba(44, 187, 99, .25) 0 4px 8px, rgba(44, 187, 99, .25) 0 8px 16px, rgba(44, 187, 99, .25) 0 16px 32px;
   transform: scale(1.05) rotate(-1deg);
 }
 
 
 .button-red:hover {
   background-color: #d52a2a;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
 }
 
@@ -41,21 +33,19 @@
 
 /* Pulsante blu */
 .button-blue {
-  border-radius: 12px;   /* Bordi arrotondati */
-  padding: 10px 20px;    /* Spaziatura interna */
-  font-size: 16px;       /* Dimensione del testo */
-  cursor: pointer;       /* Cambia il cursore al passaggio */
-  transition: background-color 0.3s ease; /* Effetto al passaggio */
-  max-width: 90px; /* Larghezza massima */
-  min-width: 50px; /* Larghezza minima */
-  width: 100%; /* Si adatta allo spazio disponibile */ 
-  box-shadow: rgba(44, 53, 187, 0.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+  border-radius: 12px;
+  /* Bordi arrotondati */
+  cursor: pointer;
+  /* Cambia il cursore al passaggio */
+  transition: background-color 0.3s ease;
+  /* Effetto al passaggio */
+  box-shadow: rgba(44, 53, 187, 0.35) 0 -25px 18px -14px inset, rgba(44, 187, 99, .25) 0 1px 2px, rgba(44, 187, 99, .25) 0 2px 4px, rgba(44, 187, 99, .25) 0 4px 8px, rgba(44, 187, 99, .25) 0 8px 16px, rgba(44, 187, 99, .25) 0 16px 32px;
   transform: scale(1.05) rotate(-1deg);
 }
 
 .button-blue:hover {
   background-color: #2f2d87;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
 }
 
@@ -81,7 +71,8 @@
   border: none;
   color: #ffffff;
   border-radius: 35px;
-  background: linear-gradient(135deg, #bccbbc, #5f665f); /* verde sfumato */
+  background: linear-gradient(135deg, #bccbbc, #5f665f);
+  /* verde sfumato */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -95,5 +86,5 @@
 }
 
 .dialog-title {
-  color:blueviolet
+  color: #dc2626 !important;
 }

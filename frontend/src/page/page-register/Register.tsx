@@ -41,6 +41,7 @@ const Register: React.FC<{}> = ({ }) => {
         isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}
+        hiddenEmail={true}
       >
         <RegisterContent
           user={user}
