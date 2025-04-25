@@ -4,7 +4,7 @@ import GroupIcon from '@mui/icons-material/Group'; //
 import InfoIcon from '@mui/icons-material/Info'; // About
 import ListAltIcon from '@mui/icons-material/ListAlt'; // Activity
 import SettingsIcon from '@mui/icons-material/Settings'; // Operative
-import { Button as ButtonMui, CircularProgress, SelectChangeEvent, TextField } from '@mui/material';
+import { Box, Button as ButtonMui, CircularProgress, Paper, SelectChangeEvent, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import React, { ReactNode, useEffect, useState } from 'react';
@@ -52,6 +52,9 @@ const GoogleAuthComponent = () => {
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [hiddenLogin, setHiddenLogin] = useState<any>(false); // Stato utente
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => { };
+  const [loginBase, setLoginBase] = useState('Simula login utente base'); // Stato per l'email
+  const [loginParentale, setLoginParentale] = useState('Simula login parentale'); // Stato per l'email
+
   let check = false;
 
   const [currentUser, setCurrentUser] = useState({
@@ -275,90 +278,95 @@ const GoogleAuthComponent = () => {
   };
   const userLabel = user ? user.name : "Non autenticato"
   const label = 'Login ' + userLabel;
+
   return (
     <>
-      <Grid container justifyContent="flex-end" className="layout-alert">
+      {/* Alert */}
+      <Grid container justifyContent="flex-end" className="layout-alert" sx={{ mt: 2 }}>
         {open && (
           <Alert onClose={handleClose} message={message} />
         )}
       </Grid>
+
+      {/* Route Privacy Policy */}
       <Routes>
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       </Routes>
+
+      {/* Google OAuth & Main Login Box */}
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
-        <div>
-
-          <>
-
-            <div id="text-box-email-family">
+        <Box display="flex" justifyContent="center" mt={6} px={2}>
+          <Paper elevation={3} sx={{ padding: 4, maxWidth: 500, width: '100%' }}>
+            {/* Email TextField */}
+            <Box mb={3}>
               <TextField
                 id="emailFamily"
-                label=''
+                label="Email famiglia"
                 variant="standard"
-                value={label} // Collega il valore allo stato
-                onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
+                value={label}
+                onChange={handleChangeEmailFamily}
                 fullWidth
-                disabled={true} />
-            </div><div>
-              <div
-                className="col-button-container"
-              >
-                <div>
-                  {!hiddenLogin && (
-                    <Grid container spacing={2}>
-                      {/* Prima riga: Pulsanti per simulare il login */}
-                      <Grid size={{ xs: 12, sm: 6 }}>
-                        <ButtonMui
-                          variant="contained"
-                          color="primary"
-                          onClick={() => simulateLogin(TypeUser.STANDARD)}
-                          fullWidth
-                        >
-                          Simula login utente base
-                        </ButtonMui>
-                      </Grid>
-                      <Grid size={{ xs: 12, sm: 6 }}>
-                        <ButtonMui
-                          variant="contained"
-                          color="primary"
-                          onClick={() => simulateLogin(TypeUser.FAMILY)}
-                          fullWidth
-                        >
-                          Simula login controllo parentale
-                        </ButtonMui>
-                      </Grid>
+                disabled
+              />
+            </Box>
 
-                      {/* Seconda riga: Pulsante di login reale */}
-                      <Grid size={{ xs: 12 }}>
-                        <GoogleLogin onSuccess={() => login()} onError={logOut} />
+            {/* Buttons: Login Simulation and Google Login */}
+            {!hiddenLogin && (
+              <Grid container spacing={2}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <ButtonMui
+                    variant="contained"
+                    color="primary"
+                    onClick={() => simulateLogin(TypeUser.STANDARD)}
+                    fullWidth
+                  >
+                    {loginBase}
+                  </ButtonMui>
+                </Grid>
 
-                      </Grid>
-                    </Grid>
-                  )}
-                </div>
-              </div>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <ButtonMui
+                    variant="contained"
+                    color="primary"
+                    onClick={() => simulateLogin(TypeUser.FAMILY)}
+                    fullWidth
+                  >
+                    {loginParentale}
+                  </ButtonMui>
+                </Grid>
 
-              <div>
-                {/* Dialog */}
-                <DialogEmail
-                  openD={openD}
-                  handleCloseD={handleCloseD}
-                  emailOptions={emailOptions}
-                  handleEmailChange={handleEmailChange}
-                  handleConfirm={handleConfirm}
-                  email={emailConfirmDialog}
-                  simulated={simulated}
-                  emailUserCurrent={emailLogin}
-                />
-              </div>
-            </div></>
-        </div>
+                <Grid size={{ xs: 12 }}>
+                  <Box display="flex" justifyContent="center">
+                    <GoogleLogin onSuccess={() => login()} onError={logOut} />
+                  </Box>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* Dialog */}
+            <DialogEmail
+              openD={openD}
+              handleCloseD={handleCloseD}
+              emailOptions={emailOptions}
+              handleEmailChange={handleEmailChange}
+              handleConfirm={handleConfirm}
+              email={emailConfirmDialog}
+              simulated={simulated}
+              emailUserCurrent={emailLogin}
+            />
+          </Paper>
+        </Box>
       </GoogleOAuthProvider>
 
-      {/* Mostra il loader se loading è true */}
-      {loading && <CircularProgress />}
+      {/* Loader */}
+      {loading && (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
+      )}
     </>
   );
+
 };
 
 export const navigateRouting = (navigate: NavigateFunction, path: SectionName, params: any) => {
