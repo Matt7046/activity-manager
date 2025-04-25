@@ -1,92 +1,39 @@
-.card-alert-success {
-    display: flex;
-    align-items: 'center';
-    border-radius: 100px!important;
-    width: 400px!important;;
-    padding: 12px 32px!important;;
-    font-weight: 600!important;;
-    opacity: 1!important;;
-    cursor: pointer!important;;
-    border: none!important;;
-    color: black!important;;
-    border-radius: 35px!important;;
-    background: linear-gradient(135deg, #bccbbc, #5f665f)!important;; /* verde sfumato */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)!important;;
-  }
-.card-alert-error {
-    display: flex;
-    background-color: #f9f9f9;
-    align-items: 'center';
-    border-radius: 100px!important;
-  }
-.card-content {
-    flex-grow: 1
-}
-.text-message {
-  text-align : center;
+.welcome-container {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 4rem auto;
 }
 
-.text-up-message-success {
-    text-align : center;
-    color: green;
+.welcome-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
-.text-up-message-error {
-    text-align : center;
-    color: red;
+.welcome-subtitle {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 1.5rem;
 }
 
-.text-up-message-warning {
-    text-align : center;
-    color: yellow;
-}
-
-.text-up-message-info {
-    text-align : center;
-    color:blue;
-}
-  
-  .message-wrapper {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-  }
-  
-  .icon-container {
-    margin-right: 16px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .message-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .message-title {
-    text-transform: capitalize;
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
-  
-  .message-text {
-    margin-bottom: 4px;
-  }
-  
-  .close-button {
-    padding: 8px;
-  }
-
-  /* Bottoni dentro il dialog */
-.card-alert-success {
-  padding: 12px 32px;
-  font-weight: 600;
-  opacity: 1;
-  cursor: pointer;
+.welcome-button {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  background-color: #007BFF;
+  color: #fff;
   border: none;
-  color: #ffffff;
-  border-radius: 35px;
-  background: linear-gradient(135deg, #bccbbc, #5f665f); /* verde sfumato */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
-  
+
+.welcome-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
