@@ -1,42 +1,13 @@
-.App {
-  text-align: center;
+
+.welcome-container1 {
+
+  color: hwb(211 80% 12%);
+  max-width: 5000px; /* Mantiene la larghezza massima */
+  margin-left: auto; /* Centra orizzontalmente se la larghezza è inferiore a max-width */
+  margin-right: auto; /* Centra orizzontalmente se la larghezza è inferiore a max-width */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Se vuoi che gli elementi interni siano centrati orizzontalmente nel contenitore */
+.welcome-container1 > * {
+  width: 100%; /* Fai in modo che gli elementi figli occupino tutta la larghezza */
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-
-
-}
-
-

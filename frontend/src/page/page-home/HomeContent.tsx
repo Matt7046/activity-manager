@@ -20,6 +20,8 @@ import { ResponseI, UserI } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
 import PrivacyPolicy from '../page-privacy-policy/PrivacyPolicy';
 import { getEmailChild, getTypeUser } from '../page-user-point/service/UserPointService';
+import "./HomeContent.css";
+
 
 
 // Componente UserProvider che gestisce lo stato di `user`
@@ -294,7 +296,9 @@ const GoogleAuthComponent = () => {
 
       {/* Google OAuth & Main Login Box */}
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
-        <Box display="flex" justifyContent="center" mt={6} px={2}>
+        <Box display="flex" justifyContent="center" mt={6} px={2}  className="welcome-container1"
+       
+      >
           <Paper elevation={3} sx={{ padding: 4, maxWidth: 600, width: '100%' }}>
             {/* Email TextField */}
             <Box mb={3}>
