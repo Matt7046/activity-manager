@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SectionName } from '../../general/structure/Constant';
 import { navigateRouting } from '../../page/page-home/HomeContent';
+import BannerOpenSource from '../ms-banner/Banner';
 import "./Presentation.css";
 
 
@@ -19,6 +20,7 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
   const navigate = useNavigate();
 
   return (
+    <><BannerOpenSource></BannerOpenSource>
     <Box
       className="welcome-container"
       display="flex"
@@ -44,7 +46,7 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
       >
         {testoButton}
       </Button>
-    </Box>
+    </Box></>
   );
 }
 
