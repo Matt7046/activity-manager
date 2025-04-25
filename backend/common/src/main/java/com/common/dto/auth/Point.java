@@ -15,6 +15,7 @@ public class Point {
     Long points;
     @Field("email")
     String email;
+    String password;
     List<String> nameImage;
 
 }

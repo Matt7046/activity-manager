@@ -23,6 +23,7 @@ interface PageLayoutProps {
   menuLaterale?: MenuLaterale[][];
   alertConfig: AlertConfig
   isVertical: boolean;
+  hiddenEmail?: boolean;
   handleClose: () => void;
   navigate: NavigateFunction; // Gestione padding dinamico
   children: React.ReactNode; // Contenuto specifico della maschera
@@ -33,11 +34,13 @@ export interface TypeMessage {
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({
+
   title,
   children,
   menuLaterale,
   alertConfig,
   isVertical,
+  hiddenEmail,
   handleClose,
   navigate,
 }) => {
@@ -189,7 +192,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             {/* Riga 2: Email */}
             <Grid container>
               <Box className="box-layout-text-vertical">
-              {user?.emailUserCurrent ? (
+             
+                {user?.emailUserCurrent && hiddenEmail!==true ? (
                   <TextField
                     id="emailFamily"
                     label={user?.emailUserCurrent === user?.emailFamily
@@ -213,7 +217,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                 <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
               )}
               <Box className="box-layout-text">
-                {user?.emailUserCurrent ? (
+                {user?.emailUserCurrent && hiddenEmail!==true ? (
                   <TextField
                     id="emailFamily"
                     label={user?.emailUserCurrent === user?.emailFamily

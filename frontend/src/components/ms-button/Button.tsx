@@ -90,10 +90,10 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <ButtonMui onClick={handleClose} color="secondary">
+          <ButtonMui onClick={handleClose} color="error">
             Annulla
           </ButtonMui>
-          <ButtonMui onClick={handleConfirm} color="primary">
+          <ButtonMui onClick={handleConfirm} >
             Conferma
           </ButtonMui>
         </DialogActions>

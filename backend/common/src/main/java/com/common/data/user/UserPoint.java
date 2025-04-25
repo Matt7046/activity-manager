@@ -21,6 +21,7 @@ public class UserPoint {
     private String _id;
     @Field("email")
     private String email;
+    private String password;
     private List<Point> pointFigli;
     private Long type;
     @Field("emailfamily")

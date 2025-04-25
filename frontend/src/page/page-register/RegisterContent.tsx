@@ -1,9 +1,10 @@
 import RemoveIcon from '@mui/icons-material/Remove';
-import { Box, IconButton, Input, InputAdornment } from "@mui/material";
+import { Box, Divider, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useUser } from '../../App';
 import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
@@ -17,10 +18,16 @@ import "./RegisterContent.css";
 
 interface RegisterContentProps {
   user: UserI;
-  alertConfig:AlertConfig,
+  alertConfig: AlertConfig,
   setTitle: (title: string) => void;
   isVertical: boolean;
 
+}
+
+
+export interface PointRegister {
+  password: string;
+  email: string;
 }
 
 const RegisterContent: React.FC<RegisterContentProps> = ({
@@ -36,21 +43,45 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
   const labelRegister = {
     email: "Email di registazione",
     emailFiglio: "Email Figlio",
-    points: "Points"
+    points: "Punti"
   }
   const [isRemoveIcon, setIsRemoveIcon] = useState(true);
-  const [emailFigli, setEmailFigli] = useState<string[]>(['child@simulated.com']);
+  const [point, setPoint] = useState<number>(100);
+  const [email, setEmail] = useState<string>(user?.emailUserCurrent);
+  const [password, setPassword] = useState<string>('');
+  const [emailFigli, setEmailFigli] = useState<PointRegister[]>([{ email: 'child@simulated.com', password: 'password' }]);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Funzione per gestire il cambio di valore
   const handleChangeEmailRegister = (index: number, value: string) => {
     const updatedEmails = [...emailFigli];
-    updatedEmails[index] = value;
+    updatedEmails[index].email = value;
     setEmailFigli(updatedEmails);
   };
 
+  const handleChangePasswordRegister = (index: number, value: string) => {
+    const updatedEmails = [...emailFigli];
+    updatedEmails[index].password = value;
+    setEmailFigli(updatedEmails);
+  };
+
+  const togglePasswordVisibility = (event: any): void => {
+    setShowPassword((prev) => !prev);
+
+  }
+
+
   // Funzione per aggiungere un nuovo campo
   const handleAddEmailField = () => {
-    setEmailFigli([...emailFigli, ""]); // Aggiungi un nuovo elemento vuoto
+    setEmailFigli([...emailFigli, { email: '', password: '' }]); // Aggiungi un nuovo elemento vuoto
+  };
+
+  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value)
+  };
+
+  const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value)
   };
 
   const addField = () => {
@@ -86,50 +117,118 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     configDialogPulsante: { message: 'Vuoi registrarti?', showDialog: true }
   };
 
-  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-  };
 
   const salvaRecord = (userData: any): Promise<any> => {
     //  const utente = { email: userData.email, type: userData.type }
-    const arrayDiOggetti = emailFigli.map(email => ({ email }));
+    const arrayDiOggetti = emailFigli.map(pointRegister => (pointRegister.email));
+    if (userData === undefined || userData === null) {
+      userData = { email: email, emailFamily: email, emailUserCurrent: email, password: password }
+    }
     setUser(null);
-    return saveUser({ ...userData, emailFigli: emailFigli, pointFigli: arrayDiOggetti }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((x: ResponseI) => {
+    return saveUser({ ...userData, emailFigli: arrayDiOggetti, pointFigli: emailFigli }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((x: ResponseI) => {
       navigateRouting(navigate, SectionName.ROOT, { newLogin: true })
     })
   }
+  const handleChangePoints = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+    setPoint(parseInt(event.target.value));
+  }
+
   return (
     <>
-      <Box>
-        {emailFigli.map((email, index) => (
-          <Box className= 'box-child'> 
+      {/* Campi di registrazione principali */}
+      <Box mb={3} className='box-register'>
+        <TextField
+          label="Email"
+          variant="outlined"
+          fullWidth
+          value={email}
+          onChange={handleChangeEmail}
+          disabled={user?.email !== undefined}
+        />
+      </Box>
 
-            <><Input
-              id="filled-adornment-new-points"
-              fullWidth
-              value={email} // Collega il valore allo stato
-              onChange={(e) => handleChangeEmailRegister(index, e.target.value)} // Aggiorna lo stato quando cambia
-              type={'string'}
-              startAdornment={<InputAdornment position="start">
-                <IconButton
-                  aria-label={'Add points'}
-                  onClick={(e) => toggleIcon(index)}
-                  onMouseDown={handleMouseDownPassword}
-                  onMouseUp={handleMouseUpPassword}
-                  edge="end"
-                >
-                  {<RemoveIcon />}
-                </IconButton>
-              </InputAdornment>} />
-            </>
+      <Box mb={2} >
+        <TextField
+          id="password"
+          label="Password"
+          variant="outlined"
+          type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={handleChangePassword}
+          fullWidth
+          InputProps={{
+            endAdornment: (
+              <IconButton onClick={togglePasswordVisibility}>
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            ),
+          }}
+        />
+      </Box>
+
+
+
+
+      {/* Divider */}
+      <Box display="flex" alignItems="center" mb={2}>
+        <Divider sx={{ flexGrow: 1 }} />
+        <Typography sx={{ mx: 2 }} variant="body2" color="textSecondary">
+          Email Figli
+        </Typography>
+        <Divider sx={{ flexGrow: 1 }} />
+      </Box>
+
+      {/* Email dei figli */}
+      <Box>
+        {emailFigli.map((emailFiglio, index) => (
+          <Box className="box-child" key={index} mb={2}>
+            <Grid container spacing={2} alignItems="center">
+              {/* Email del figlio */}
+              <Grid size={{ xs: 4 }}>
+                <TextField
+                  label={`Email Figlio ${index + 1}`}
+                  variant="outlined"
+                  fullWidth
+                  value={emailFiglio.email}
+                  onChange={(e) => handleChangeEmailRegister(index, e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton
+                          aria-label="Remove"
+                          onClick={() => toggleIcon(index)}
+                          onMouseDown={handleMouseDownPassword}
+                          onMouseUp={handleMouseUpPassword}
+                          edge="end"
+                        >
+                          <RemoveIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              {/* Points del figlio (fisso 100) */}
+              <Grid size={{ xs: 2 }}>
+                <TextField
+                  label={labelRegister.points}
+                  value={100}
+                  disabled
+                  type="number"
+                  variant="outlined" // uguale agli altri
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
           </Box>
         ))}
+      </Box >
 
-      </Box>
-      <Grid container justifyContent="flex-end" spacing={2} className='button-right'>
-
+      {/* Pulsanti */}
+      < Grid container justifyContent="flex-end" spacing={2} className="button-right" >
         <Button pulsanti={[pulsanteNew]} />
         <Button pulsanti={[pulsanteBlue]} />
-      </Grid>
+      </Grid >
     </>
   );
 }
