@@ -233,7 +233,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
           multiline
           rows={10} // Numero di righe visibili per il campo
          />
-        <Grid container justifyContent="space-between" spacing={2}>
+        <Grid container justifyContent="space-between" spacing={2} className='grid-button-about'>
           <Button pulsanti={[pulsanteReturn]} />
 
           <Button pulsanti={[pulsanteRed, pulsanteBlue]} />

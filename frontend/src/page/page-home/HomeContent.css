@@ -11,3 +11,44 @@
 .welcome-container1 > * {
   width: 100%; /* Fai in modo che gli elementi figli occupino tutta la larghezza */
 }
+
+.login-paper {
+  padding: 32px;
+  max-width: 400px;
+  width: 100%;
+  border-radius: 16px;
+}
+
+.login-button {
+  background-color: #0070f3;
+  text-transform: none;
+  font-weight: bold;
+  font-size: 16px;
+  height: 48px;
+
+}
+
+.social-button {
+  width: 56px;
+  height: 56px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-button svg {
+  font-size: 32px;
+}
+
+.google-button {
+  border: none;
+  padding: 0;
+}
+.box-login{
+  padding-top: 10px!important;
+}
+.box-accedi{
+  padding-top: 10px;
+}

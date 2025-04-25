@@ -14,5 +14,6 @@ public class PointDTO implements InterfaceDTO {
 
 	Long points;
 	String email;
+	String password;
 	List<String> nameImage;
 }
