@@ -276,8 +276,7 @@ const GoogleAuthComponent = () => {
     })
 
   };
-  const userLabel = user ? user.name : "Non autenticato"
-  const label = 'Login ' + userLabel;
+  const label = 'I login simulati servono per testare le funzionalità senza condividere dati';
 
   return (
     <>
@@ -296,12 +295,12 @@ const GoogleAuthComponent = () => {
       {/* Google OAuth & Main Login Box */}
       <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
         <Box display="flex" justifyContent="center" mt={6} px={2}>
-          <Paper elevation={3} sx={{ padding: 4, maxWidth: 500, width: '100%' }}>
+          <Paper elevation={3} sx={{ padding: 4, maxWidth: 600, width: '100%' }}>
             {/* Email TextField */}
             <Box mb={3}>
               <TextField
                 id="emailFamily"
-                label="Email famiglia"
+                label={'INFO'}
                 variant="standard"
                 value={label}
                 onChange={handleChangeEmailFamily}
