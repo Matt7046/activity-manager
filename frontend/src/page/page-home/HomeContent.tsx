@@ -1,17 +1,18 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Apple as AppleIcon, Facebook as FacebookIcon } from '@mui/icons-material';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // Points
+import GoogleIcon from '@mui/icons-material/Google';
 import GroupIcon from '@mui/icons-material/Group'; // 
 import InfoIcon from '@mui/icons-material/Info'; // About
 import ListAltIcon from '@mui/icons-material/ListAlt'; // Activity
 import SettingsIcon from '@mui/icons-material/Settings'; // Operative
-import { Box, Button as ButtonMui, CircularProgress, Paper, SelectChangeEvent, TextField } from '@mui/material';
+import { Box, Button as ButtonMui, CircularProgress, Divider, IconButton, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
 import Alert from '../../components/ms-alert/Alert';
-import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
 import { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import { getToken } from '../../general/service/AuthService';
 import { baseStore } from '../../general/structure/BaseStore';
@@ -20,6 +21,8 @@ import { ResponseI, UserI } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
 import PrivacyPolicy from '../page-privacy-policy/PrivacyPolicy';
 import { getEmailChild, getTypeUser } from '../page-user-point/service/UserPointService';
+
+import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
 import "./HomeContent.css";
 
 
@@ -50,12 +53,18 @@ const GoogleAuthComponent = () => {
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [emailOptions, setEmailOptions] = React.useState<string[]>([]); // Lo stato è un array di stringhe
   const [emailLogin, setEmailLogin] = useState(''); // Stato per l'email
+  const [passwordLogin, setPasswordLogin] = useState(''); // Stato per l'email
   const location = useLocation();
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [hiddenLogin, setHiddenLogin] = useState<any>(false); // Stato utente
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => { };
   const [loginBase, setLoginBase] = useState('Simula login utente base'); // Stato per l'email
-  const [loginParentale, setLoginParentale] = useState('Simula login parentale'); // Stato per l'email
+  const [loginParentale, setLoginParentale] = useState('Simula login parentale'); // Stato per l'emailà
+  const [keepLoggedIn, setKeepLoggedIn] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+
+
 
   let check = false;
 
@@ -166,7 +175,7 @@ const GoogleAuthComponent = () => {
       const accessToken = codeResponse?.access_token;
       // Puoi usare l'access token per fare richieste all'API di Google
       baseStore.clearToken();
-      getToken({ email: LoginUser.USER, password: LoginUser.PASS }, (message: any) => showMessage(setOpen, setMessage, message)).then(tokenData => {
+      getToken({ email: LoginUser.USER, password: LoginUser.PASS }).then(tokenData => {
         fetchUserData(accessToken, tokenData);
       })
     },
@@ -174,6 +183,8 @@ const GoogleAuthComponent = () => {
       console.error('Login Failed:', error);
     },
   });
+
+
 
   const handleLoginSuccessFake = (fakeResponse: any, type: number) => {
     const currentUser = type === 0 ? { ...userDataChildFake } : { ...userDataFake }
@@ -280,8 +291,41 @@ const GoogleAuthComponent = () => {
   };
   const label = 'I login simulati servono per testare le funzionalità senza condividere dati';
 
+  const handleChangeUsername = (event: any): void => {
+    setEmailLogin(event.target.value);
+  }
+
+  const handleChangePassword = (event: any): void => {
+    setPasswordLogin(event.target.value);
+  }
+
+  const togglePasswordVisibility = (event: any): void => {
+    setShowPassword((prev) => !prev);
+
+  }
+
+  const handleLogin = (event: any): void => {
+    throw new Error('Function not implemented.');
+  }
+
+  const handleKeepLoggedIn = (event: any): void => {
+    throw new Error('Function not implemented.');
+  }
+
+  const handleAppleLogin = (event: any): void => {
+    throw new Error('Function not implemented.');
+  }
+
+  const handleFacebookLogin = (event: any): void => {
+    throw new Error('Function not implemented.');
+  }
+
+
+
+
   return (
     <>
+
       {/* Alert */}
       <Grid container justifyContent="flex-end" className="layout-alert" sx={{ mt: 2 }}>
         {open && (
@@ -293,80 +337,179 @@ const GoogleAuthComponent = () => {
       <Routes>
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       </Routes>
+      <>
+        {/* Alert */}
+        <Grid container justifyContent="flex-end" className="layout-alert" sx={{ mt: 2 }}>
+          {open && (
+            <Alert onClose={handleClose} message={message} />
+          )}
+        </Grid>
 
-      {/* Google OAuth & Main Login Box */}
-      <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
-        <Box display="flex" justifyContent="center" mt={6} px={2}  className="welcome-container1"
-       
-      >
-          <Paper elevation={3} sx={{ padding: 4, maxWidth: 600, width: '100%' }}>
-            {/* Email TextField */}
-            <Box mb={3}>
-              <TextField
-                id="emailFamily"
-                label={'INFO'}
-                variant="standard"
-                value={label}
-                onChange={handleChangeEmailFamily}
+        {/* Route Privacy Policy */}
+        <Routes>
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        </Routes>
+
+        {/* Main Login Box */}
+        <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
+          <Box display="flex" justifyContent="center" mt={6} px={2} className="welcome-container1">
+            <Paper elevation={3} className="login-paper">
+              <Box mb={3}>
+                <Typography variant="h5" align="center" gutterBottom>Accedi</Typography>
+              </Box>
+              <Box mt={2} textAlign="center">
+                <Typography variant="body2">
+                  Non hai un account?{' '}
+                  <Link to="/register" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 500 }}>
+                    Registrati
+                  </Link>
+                </Typography>
+              </Box>
+              <Box mb={3}>
+                <TextField
+                  id="emailFamily"
+                  label={'INFO'}
+                  variant="standard"
+                  value={label}
+                  onChange={handleChangeEmailFamily}
+                  fullWidth
+                  disabled
+                />
+              </Box>
+
+              {/* Buttons: Login Simulation and Google Login */}
+              {!hiddenLogin && (
+                <Grid container spacing={2}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <ButtonMui
+                      variant="contained"
+                      color="primary"
+                      onClick={() => simulateLogin(TypeUser.STANDARD)}
+                      fullWidth
+                    >
+                      {loginBase}
+                    </ButtonMui>
+                  </Grid>
+
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <ButtonMui
+                      variant="contained"
+                      color="primary"
+                      onClick={() => simulateLogin(TypeUser.FAMILY)}
+                      fullWidth
+                    >
+                      {loginParentale}
+                    </ButtonMui>
+                  </Grid>
+                </Grid>
+              )}
+              {/*
+              {/* Username / Email 
+              <Box mb={2} className='box-login'>
+                <TextField
+                  id="username"
+                  label="Indirizzo email"
+                  variant="outlined"
+                  value={emailLogin}
+                  onChange={handleChangeUsername}
+                  fullWidth
+                />
+              </Box>
+
+              {/* Password 
+              <Box mb={2} >
+                <TextField
+                  id="password"
+                  label="Password"
+                  variant="outlined"
+                  type={showPassword ? 'text' : 'password'}
+                  value={passwordLogin}
+                  onChange={handleChangePassword}
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton onClick={togglePasswordVisibility}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    ),
+                  }}
+                />
+              </Box>
+
+              {/* Mantieni connessione 
+              <Box mb={2} display="flex" alignItems="center">
+                <Checkbox
+                  checked={keepLoggedIn}
+                  onChange={handleKeepLoggedIn}
+                />
+                <Typography variant="body2">Mantieni la connessione su questo dispositivo</Typography>
+              </Box>
+            */}
+              {/* Pulsante Accedi 
+              <ButtonMui
+                variant="contained"
                 fullWidth
-                disabled
-              />
-            </Box>
+                onClick={handleLogin}
+                className="login-button"
+              >
+                Accedi
+              </ButtonMui>
 
-            {/* Buttons: Login Simulation and Google Login */}
-            {!hiddenLogin && (
-              <Grid container spacing={2}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <ButtonMui
-                    variant="contained"
-                    color="primary"
-                    onClick={() => simulateLogin(TypeUser.STANDARD)}
-                    fullWidth
-                  >
-                    {loginBase}
-                  </ButtonMui>
+              {/* Divider */}
+              <Box display="flex" alignItems="center" mb={2} className='box-accedi'>
+                <Divider sx={{ flexGrow: 1}} />
+                <Typography sx={{ mx: 2 }} variant="body2" color="textSecondary">
+                  oppure accedi con
+                </Typography>
+                <Divider sx={{ flexGrow: 1 }} />
+              </Box>
+
+              {/* Login Social */}
+              <Grid container spacing={2} justifyContent="center">
+                <Grid>
+                  <IconButton onClick={handleAppleLogin} className="social-button" disabled>
+                    <AppleIcon />
+                  </IconButton>
                 </Grid>
-
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <ButtonMui
-                    variant="contained"
-                    color="primary"
-                    onClick={() => simulateLogin(TypeUser.FAMILY)}
-                    fullWidth
-                  >
-                    {loginParentale}
-                  </ButtonMui>
+                <Grid>
+                  <IconButton onClick={handleFacebookLogin} className="social-button" disabled>
+                    <FacebookIcon />
+                  </IconButton>
                 </Grid>
-
-                <Grid size={{ xs: 12 }}>
-                  <Box display="flex" justifyContent="center">
-                    <GoogleLogin onSuccess={() => login()} onError={logOut} />
-                  </Box>
+                <Grid>
+                  <IconButton
+                    className="social-button google-button"
+                    onClick={() => login()}                  >
+                    <GoogleIcon />
+                  </IconButton>
                 </Grid>
               </Grid>
-            )}
 
-            {/* Dialog */}
-            <DialogEmail
-              openD={openD}
-              handleCloseD={handleCloseD}
-              emailOptions={emailOptions}
-              handleEmailChange={handleEmailChange}
-              handleConfirm={handleConfirm}
-              email={emailConfirmDialog}
-              simulated={simulated}
-              emailUserCurrent={emailLogin}
-            />
-          </Paper>
-        </Box>
-      </GoogleOAuthProvider>
+              {/* Dialog */}
+              <DialogEmail
+                openD={openD}
+                handleCloseD={handleCloseD}
+                emailOptions={emailOptions}
+                handleEmailChange={handleEmailChange}
+                handleConfirm={handleConfirm}
+                email={emailConfirmDialog}
+                simulated={simulated}
+                emailUserCurrent={emailLogin}
+              />
 
-      {/* Loader */}
-      {loading && (
-        <Box display="flex" justifyContent="center" mt={4}>
-          <CircularProgress />
-        </Box>
-      )}
+            </Paper>
+          </Box>
+        </GoogleOAuthProvider>
+
+        {/* Loader */}
+        {loading && (
+          <Box display="flex" justifyContent="center" mt={4}>
+            <CircularProgress />
+          </Box>
+        )}
+      </>
+
+
     </>
   );
 

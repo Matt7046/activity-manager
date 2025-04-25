@@ -42,9 +42,6 @@ const Points: React.FC<{}> = ({ }) => {
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
 
 
-
-
-
   useEffect(() => {
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
