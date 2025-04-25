@@ -37,3 +37,10 @@
   background-color: #0056b3;
   transform: scale(1.05);
 }
+
+.enter-button {
+  margin-top: 1.5rem!important; /* equivalente a mt: 3 */
+  border-radius: 20px!important;
+  padding-left: 1rem!important;  /* px: 4 equivale a 1rem a sinistra e destra */
+  padding-right: 1rem!important;
+}
