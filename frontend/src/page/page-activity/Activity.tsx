@@ -68,7 +68,7 @@ const Activity: React.FC<{  }> = ({ }) => {
       // Effettua la chiamata GET quando il componente è montato 
       // axios.
       //  .get('https://api.example.com/data') // URL dell'API]
-      const emailFind = user.emailFamily ? user.emailFamily : user.email;
+      const emailFind = user.emailChild;
       fetchDataActivities({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message))
         .then((response) => {
           if (response) {

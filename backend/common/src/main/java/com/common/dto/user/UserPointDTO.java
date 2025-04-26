@@ -17,7 +17,6 @@ public class UserPointDTO implements InterfaceDTO {
     private String _id; // Identificatore unico
     private String email;
     private String password;
-    private String emailFamily;
     private Integer type;
     private List<PointDTO> pointFigli;
     private String numeroPunti;

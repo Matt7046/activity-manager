@@ -9,6 +9,7 @@ import PointsContent from './UserPointContent';
 export interface UserPointsI {
   _id: string | undefined;
   email?: string;
+  password?:string;
   numeroPunti?: number;
   usePoints?: number;
   nameImage?: string;

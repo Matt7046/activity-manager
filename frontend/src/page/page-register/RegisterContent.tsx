@@ -122,7 +122,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     //  const utente = { email: userData.email, type: userData.type }
     const arrayDiOggetti = emailFigli.map(pointRegister => (pointRegister.email));
     if (userData === undefined || userData === null) {
-      userData = { email: email, emailFamily: email, emailUserCurrent: email, password: password }
+      userData = { email: email, emailFigli: email, emailUserCurrent: email, password: password }
     }
     setUser(null);
     return saveUser({ ...userData, emailFigli: arrayDiOggetti, pointFigli: emailFigli }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((x: ResponseI) => {

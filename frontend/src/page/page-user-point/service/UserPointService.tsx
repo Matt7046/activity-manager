@@ -45,6 +45,15 @@ export const saveUser = async (userDTO: UserPointsI, funzioneMessage?: (message?
   }
 };
 
+export const oldLogin = async (userDTO: UserPointsI, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) => {
+  try {
+    const path = PATH_USER_POINT + `/dati/login`;
+    const data = await postData(path, userDTO, setLoading, funzioneMessage,); // Usa l'URL dinamico
+    return data;
+  } catch (error) {
+  }
+};
+
 export const saveUserImage = async (userDTO: UserPointsI, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const path = PATH_USER_POINT + `/dati/user/image`;
