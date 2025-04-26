@@ -168,7 +168,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   }
 
   const salvaRecord = (_id: string): void => {
-    const emailFind = user.emailFamily ? user.emailFamily : user.email;
+    const emailFind = user.emailChild ? user.emailChild : user.email;
     const testo = {
       ...user,
       _id: _id,

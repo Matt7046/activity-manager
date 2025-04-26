@@ -49,6 +49,10 @@ public class UserPointController {
         return processor.saveUser(userPointDTO);
     }
 
+    @PostMapping("/dati/login")
+    public Mono<ResponseDTO> login(@RequestBody UserPointDTO userPointDTO) {
+        return processor.login(userPointDTO);
+    }
 
     @PostMapping("/dati/user/operation")
     public Mono<ResponseDTO> savePoints(@RequestBody UserPointDTO userPointDTO) {

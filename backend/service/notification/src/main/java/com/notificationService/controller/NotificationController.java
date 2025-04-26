@@ -1,8 +1,9 @@
 package com.notificationService.controller;
 
 import com.common.dto.notification.NotificationDTO;
-import com.notificationService.processor.NotificationProcessor;
+import com.notificationService.processor.EmailProcessor;
 import com.common.dto.structure.ResponseDTO;
+import com.notificationService.processor.NotificationProcessor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import org.springframework.beans.factory.annotation.Autowired;

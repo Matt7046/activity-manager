@@ -7,7 +7,8 @@ spring:
     port: 5672
     username: username
     password: password
-
+  mail:
+    from: matteo.santangelo@colorsdev.tech
 mongo:
   uri: mongodb+srv://cluster0.vmbf6.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&tls=true
   tls:
@@ -47,11 +48,19 @@ app:
       logactivity: /api/logactivity
       userpoint: /api/userpoint
       family: /api/family
-rabbit:
+  rabbitmq:
+    notification:
+      exchange:
+        exchangeName: notification-exchange
+rabbitmq:
   exchange:
     name:
       notification: notification-exchange
       point: point-exchange
+    routingKey:
+        notification: notification.family.notifier
+        email: userpoint.notification.email
+        point: point.log.activity
 message:
   error:
     generic: Errore generico
@@ -59,3 +68,7 @@ cloudinary:
   cloud_name: dzxtjigpc
   api_key: 793323621769757
   api_secret: Prx1G26HHyxr-WSKzyvkmjfNzqA
+email:
+  username: activity.manager.example@gmail.com
+  password: jurh wogf tgef nlas
+

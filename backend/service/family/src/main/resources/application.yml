@@ -4,16 +4,6 @@ spring:
     import: optional:classpath:application-common.yml
   application:
     name: activityManager
-app:
-  rabbitmq:
-    notification:
-      exchange:
-        exchangeName: notification-exchange
-        routingKey: notification.family
-    point:
-      exchange:
-        exchangeName: point-exchange
-        routingKey: point.log.activity
 message:
   document:
     points: "I Point a disposizione sono: "

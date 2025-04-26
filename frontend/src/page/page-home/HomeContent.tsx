@@ -1,5 +1,5 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Apple as AppleIcon, Facebook as FacebookIcon } from '@mui/icons-material';
+import { Apple as AppleIcon, Facebook as FacebookIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // Points
 import GoogleIcon from '@mui/icons-material/Google';
 import GroupIcon from '@mui/icons-material/Group'; // 
@@ -16,11 +16,11 @@ import Alert from '../../components/ms-alert/Alert';
 import { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import { getToken } from '../../general/service/AuthService';
 import { baseStore } from '../../general/structure/BaseStore';
-import { LoginUser, SectionName, SectionNameDesc, ServerMessage, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
+import { SectionName, SectionNameDesc, ServerMessage, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import { ResponseI, UserI } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
 import PrivacyPolicy from '../page-privacy-policy/PrivacyPolicy';
-import { getEmailChild, getTypeUser } from '../page-user-point/service/UserPointService';
+import { getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
 
 import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
 import "./HomeContent.css";
@@ -70,7 +70,7 @@ const GoogleAuthComponent = () => {
 
   const [currentUser, setCurrentUser] = useState({
     name: "",
-    emailFamily: "",
+    emailChild: "",
     email: "",
     type: -1,
     emailUserCurrent: ""
@@ -79,7 +79,7 @@ const GoogleAuthComponent = () => {
   //FAKE LOGIN
   const [userDataFake, setUserDataFake] = useState({
     name: "Simulated User",
-    emailFamily: "user@simulated.com",
+    emailChild: "user@simulated.com",
     email: "user@simulated.com",
     type: TypeUser.STANDARD,
     emailUserCurrent: "user@simulated.com"
@@ -87,7 +87,7 @@ const GoogleAuthComponent = () => {
   //FAKE LOGIN
   const [userDataChildFake, setUserDataChildFake] = useState({
     name: "Simulated child User",
-    emailFamily: "child@simulated.com",
+    emailChild: "child@simulated.com",
     email: "user@simulated.com",
     type: TypeUser.FAMILY,
     emailUserCurrent: "child@simulated.com"
@@ -96,10 +96,14 @@ const GoogleAuthComponent = () => {
   useEffect(() => {
 
     if (location.pathname === '/home') {
+      getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
+        baseStore.setToken(tokenData?.jsonText?.token);
+
+      })
       // Stato per userData
       setCurrentUser({
         name: "",
-        emailFamily: "",
+        emailChild: "",
         email: "",
         type: -1,
         emailUserCurrent: ""
@@ -145,7 +149,7 @@ const GoogleAuthComponent = () => {
 
   const handleConfirm = ((typeSimulated: number, emailUserCurrent: string) => {
     currentUser.email = emailLogin;
-    currentUser.emailFamily = emailConfirmDialog;
+    currentUser.emailChild = emailConfirmDialog;
     currentUser.type = typeSimulated;
     currentUser.emailUserCurrent = emailUserCurrent;
     setUser(currentUser);
@@ -174,10 +178,8 @@ const GoogleAuthComponent = () => {
 
       const accessToken = codeResponse?.access_token;
       // Puoi usare l'access token per fare richieste all'API di Google
-      baseStore.clearToken();
-      getToken({ email: LoginUser.USER, password: LoginUser.PASS }).then(tokenData => {
-        fetchUserData(accessToken, tokenData);
-      })
+      fetchUserData(accessToken);
+
     },
     onError: (error) => {
       console.error('Login Failed:', error);
@@ -186,14 +188,13 @@ const GoogleAuthComponent = () => {
 
 
 
-  const handleLoginSuccessFake = (fakeResponse: any, type: number) => {
+  const handleLoginSuccessFake = (type: number) => {
     const currentUser = type === 0 ? { ...userDataChildFake } : { ...userDataFake }
     const user = {
       ...currentUser,
       //   token: fakeResponse.credential,
       type: type
     };
-    baseStore.setToken(fakeResponse.credential);
     setCurrentUser(user);
     const message = { message: [ServerMessage.SERVER_DOWN], typeMessage: TypeAlertColor.ERROR };
     getEmailChild(user, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x: ResponseI | undefined) => {
@@ -205,44 +206,48 @@ const GoogleAuthComponent = () => {
   };
 
   const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
-    const currentUser = googleAuth ? { ...userDataGoogle, emailFamily: userDataGoogle.email } : type === 0 ? { ...userDataChildFake } : { ...userDataFake }
+    const currentUser = googleAuth ? { ...userDataGoogle, emailChild: userDataGoogle.email } : type === 0 ? { ...userDataChildFake } : { ...userDataFake }
     openHome({ ...currentUser, type: type }, googleAuth, setLoading)
   }
 
   const openHome = (currentUser: any, googleAuth: boolean, setLoading: any): Promise<any> => {
-    return getTypeUser(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
-      setEmailLogin(x?.jsonText.emailUserCurrent);
-      switch (x?.jsonText?.typeUser) {
-        case TypeUser.STANDARD: {
-          setEmailLogin(currentUser.email);
-          setSimulated(TypeUser.STANDARD);
-          setUser({ ...currentUser, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
-          break;
-        }
-        case TypeUser.FAMILY: {
-          setEmailLogin(currentUser.email);
-          setSimulated(TypeUser.FAMILY);
-          handleOpenD();
-          break;
-        }
-        case TypeUser.NEW_USER: {
-          if (googleAuth === true) {
-            setUser({ ...currentUser, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
+    return getEmailChild({...currentUser, email: currentUser.emailChild}).then((x: ResponseI | undefined) => {
+      const emailChild = x?.jsonText?.emailFigli ?? [];
+      setEmailOptions(emailChild);
+    }).then(x => {
+      getTypeUser(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
+        setEmailLogin(x?.jsonText.emailUserCurrent);
+        switch (x?.jsonText?.typeUser) {
+          case TypeUser.STANDARD: {
+            setEmailLogin(currentUser.email);
+            setSimulated(TypeUser.STANDARD);
+            setUser({ ...currentUser, type: x.jsonText.typeUser, emailChild: currentUser.emailUserCurrent ,emailUserCurrent: x.jsonText.emailUserCurrent });
+            break;
+          }
+          case TypeUser.FAMILY: {
+            setEmailLogin(currentUser.email);
+            setSimulated(TypeUser.FAMILY);
+            handleOpenD();
+            break;
+          }
+          case TypeUser.NEW_USER: {
+            if (googleAuth === true) {
+              setUser({ ...currentUser, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
 
+            }
+            else {
+              setUser({ ...currentUser, type: 2 });
+            }
           }
-          else {
-            setUser({ ...currentUser, type: 2 });
-          }
+            break;
         }
-          break;
-      }
+      })
     })
   }
 
   // Funzione per ottenere i dati utente
-  const fetchUserData = async (accessToken: string, tokenData: any) => {
+  const fetchUserData = async (accessToken: string) => {
     try {
-      baseStore.setToken(tokenData?.jsonText?.token);
       // Verifica che il token sia valido
       const tokenInfoResponse = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`);
       const tokenInfo = await tokenInfoResponse.json();
@@ -259,11 +264,10 @@ const GoogleAuthComponent = () => {
       });
       if (userDataResponse.ok) {
         const userDataGoogle = await userDataResponse.json();
+        userDataGoogle.emailUserCurrent = userDataGoogle.email;
+        userDataGoogle.emailChild = userDataGoogle.email;
         setEmailLogin(userDataGoogle.email);
-        getEmailChild(userDataGoogle).then((x: ResponseI | undefined) => {
-          const emailChild = x?.jsonText?.emailFigli ?? [];
-          setEmailOptions(emailChild);
-        })
+
         //setUser({ ...userData, type: 1 });
         setCurrentUser(userDataGoogle);
         showDialog(1, true, userDataGoogle);
@@ -277,16 +281,15 @@ const GoogleAuthComponent = () => {
 
   // Simulazione del login con Google
   const simulateLogin = (type: number) => {
-    baseStore.clearToken();
-    getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
-      setSimulated(type);
-      const fakeResponse = {
-        credential: tokenData?.jsonText?.token,
-        clientId: "549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com",
-        select_by: "google",
-      };
-      handleLoginSuccessFake(fakeResponse, type);
-    })
+    const tokenData = baseStore.getToken();
+    setSimulated(type);
+    const fakeResponse = {
+      credential: tokenData,
+      clientId: "549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com",
+      select_by: "google",
+    };
+    handleLoginSuccessFake(type);
+
 
   };
   const label = 'I login simulati servono per testare le funzionalità senza condividere dati';
@@ -305,7 +308,13 @@ const GoogleAuthComponent = () => {
   }
 
   const handleLogin = (event: any): void => {
-    throw new Error('Function not implemented.');
+    const user = { _id: undefined, email: emailLogin, password: passwordLogin }
+    oldLogin(user).then(x => {
+      if (x) {
+        const currentUser = x.jsonText;
+        openHome(currentUser, false, setLoading)
+      }
+    })
   }
 
   const handleKeepLoggedIn = (event: any): void => {
@@ -403,8 +412,7 @@ const GoogleAuthComponent = () => {
                   </Grid>
                 </Grid>
               )}
-              {/*
-              {/* Username / Email 
+
               <Box mb={2} className='box-login'>
                 <TextField
                   id="username"
@@ -416,7 +424,6 @@ const GoogleAuthComponent = () => {
                 />
               </Box>
 
-              {/* Password 
               <Box mb={2} >
                 <TextField
                   id="password"
@@ -445,7 +452,6 @@ const GoogleAuthComponent = () => {
                 <Typography variant="body2">Mantieni la connessione su questo dispositivo</Typography>
               </Box>
             */}
-              {/* Pulsante Accedi 
               <ButtonMui
                 variant="contained"
                 fullWidth
@@ -457,7 +463,7 @@ const GoogleAuthComponent = () => {
 
               {/* Divider */}
               <Box display="flex" alignItems="center" mb={2} className='box-accedi'>
-                <Divider sx={{ flexGrow: 1}} />
+                <Divider sx={{ flexGrow: 1 }} />
                 <Typography sx={{ mx: 2 }} variant="body2" color="textSecondary">
                   oppure accedi con
                 </Typography>

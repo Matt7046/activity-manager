@@ -196,11 +196,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                 {user?.emailUserCurrent && hiddenEmail!==true ? (
                   <TextField
                     id="emailFamily"
-                    label={user?.emailUserCurrent === user?.emailFamily
+                    label={user?.emailUserCurrent === user?.emailChild
                       ? 'email di registrazione'
                       : 'Email tutelato'}
                     variant="standard"
-                    value={user?.emailFamily}
+                    value={user?.emailChild}
                     fullWidth
                     disabled
                   />
@@ -220,11 +220,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                 {user?.emailUserCurrent && hiddenEmail!==true ? (
                   <TextField
                     id="emailFamily"
-                    label={user?.emailUserCurrent === user?.emailFamily
+                    label={user?.emailUserCurrent === user?.emailChild
                       ? 'email di registrazione'
                       : 'Email tutelato'}
                     variant="standard"
-                    value={user?.emailFamily}
+                    value={user?.emailChild}
                     fullWidth
                     disabled
                   />

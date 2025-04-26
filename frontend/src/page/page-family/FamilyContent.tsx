@@ -2,7 +2,6 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, FormControl, IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from "react";
 import { useUser } from '../../App';
 import { AlertConfig } from '../../components/ms-alert/Alert';
@@ -63,7 +62,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   };
 
   useEffect(() => {
-    const emailFind = user.emailFamily ? user.emailFamily : user.email;
+    const emailFind = user.emailChild;
 
     findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((response: ResponseI | undefined) => {
       if (response) {
@@ -116,6 +115,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
 
   const salvaRecord = (userData: any): Promise<any> => {
     const pointsWithPlus = isPlusIcon ? formValues.newPoints : - formValues.newPoints!;
+    userData.email = user.emailChild;
     return savePointsByFamily({ ...userData, usePoints: pointsWithPlus }, (message: any) => showMessage(alertConfig.setOpen,alertConfig.setMessage, message)).then((x) => {
       familyStore.setPoints(parseInt(x?.jsonText.points)); // Update the state with the new value
     })
@@ -125,17 +125,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
       <Box className='box-family'>
         <Grid container spacing={2}>
           {/* Campo emailFamily */}
-          <Grid size={{ xs: 12 }}>
-            <TextField
-              id="emailFamily"
-              label={labelFamily.email}
-              variant="standard"
-              value={user.email} // Collega il valore allo stato
-              onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
-              fullWidth
-              disabled={true}
-            />
-          </Grid>
+       
           {/* Campo Points */}
           <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl fullWidth variant="standard">

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQPointExchange {
 
-    @Value("${rabbit.exchange.name.point}")
+    @Value("${rabbitmq.exchange.name.point}")
     private String exchangeName; 
 
     @Bean
