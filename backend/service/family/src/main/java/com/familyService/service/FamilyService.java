@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,10 +24,11 @@ public class FamilyService {
     @Autowired
     private LogFamilyMapper logFamilyMapper;
 
+    @Transactional
     public LogFamily saveLogFamily(LogFamily family) {        ;
         return  repository.save(family);
     }
-
+    @Transactional
     public List<LogFamily> getLogFamily(UserPoint user, Pageable pageable) {
         return repository.findLogByEmail(user.getEmail(), pageable);
     }

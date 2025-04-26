@@ -17,6 +17,16 @@ const apiClient = () => {
   });
 
 }
+
+
+
+const apiClientToken = () => {
+  return axios.create({
+    baseURL: apiConfig.baseURL,
+    timeout: 20000,
+  });
+
+}
   // Funzione per ottenere dati dall'API
 export const getData = async (endpoint: string, setLoading?: (loading: boolean) => void) => {
   setLoading = setLoading ?? (() => { });
@@ -42,6 +52,31 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
     const response = await apiClient().post(endpoint, data);
+    response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
+    const message: TypeMessage = {
+      typeMessage:  response.data.status === HttpStatus.OK ? TypeAlertColor.SUCCESS : TypeAlertColor.ERROR ,
+      message : response.data.status === HttpStatus.OK ? null : response.data.errors,
+    }
+    eseguiAlert(funzioneMessage!, message, showSuccess, response);
+    return response.data; // Restituisce i dati della risposta
+  } catch (error: any) {
+    eseguiAlert(funzioneMessage!, { typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    throw error;
+  } finally {
+    setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
+  }
+};
+
+export const postDataToken = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
+  funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
+) => {
+
+
+  showSuccess = showSuccess ?? false;
+  setLoading = setLoading ?? (() => { });
+  setLoading(true);  // Mostra lo spinner prima della richiesta
+  try {
+    const response = await apiClientToken().post(endpoint, data);
     response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
     const message: TypeMessage = {
       typeMessage:  response.data.status === HttpStatus.OK ? TypeAlertColor.SUCCESS : TypeAlertColor.ERROR ,

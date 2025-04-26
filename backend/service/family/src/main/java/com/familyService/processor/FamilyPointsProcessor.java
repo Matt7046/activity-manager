@@ -43,17 +43,20 @@ public class FamilyPointsProcessor {
     private UserPointMapper userPointMapper;
     @Autowired
     private NotificationComponent notificationComponent;
-    @Value("${app.rabbitmq.notification.exchange.exchangeName}")
+
+    private String exchangeName;
+
+    @Value("${rabbitmq.exchange.name.notification}")
     private String notificationExchange;
 
-    @Value("${app.rabbitmq.notification.exchange.routingKey}")
-    private String notificationRoutingKey;
+    @Value("${rabbitmq.exchange.routingKey.notification}")
+    private String routingKeyNotification;
 
-    @Value("${app.rabbitmq.point.exchange.exchangeName}")
+    @Value("${rabbitmq.exchange.name.point}")
     private String pointExchange;
 
-    @Value("${app.rabbitmq.point.exchange.routingKey}")
-    private String pointRoutingKey;
+    @Value("${rabbitmq.exchange.routingKey.point}")
+    private String routingKeyPoint;
 
     @Value("${message.document.add}")
     private String messageAdd;
@@ -88,7 +91,7 @@ public class FamilyPointsProcessor {
                     new ArrayList<>());
             return Mono.just(response);
         } catch (Exception e) {
-            notificationComponent.inviaNotifica(logFamilyDTO.getPoint(), pointExchange, pointRoutingKey);
+            notificationComponent.inviaNotifica(logFamilyDTO.getPoint(), pointExchange, routingKeyPoint);
             throw new NotFoundException(e.getMessage());
         }
     }
@@ -112,7 +115,7 @@ public class FamilyPointsProcessor {
         OperationTypeLogFamily operations = userPointDTO.getUsePoints() < 0L ? OperationTypeLogFamily.FAMILY_REMOVE : OperationTypeLogFamily.FAMILY_ADD;
         dto.setOperations(operations);
         dto.setPerformedByEmail(userPointDTO.getEmailUserCurrent());
-        dto.setReceivedByEmail(userPointDTO.getEmailFamily());
+        dto.setReceivedByEmail(userPointDTO.getEmail());
         dto.setPoint(userPointDTO);
         return dto;
     }
@@ -122,7 +125,7 @@ public class FamilyPointsProcessor {
         builder.append(message).append(userPointDTO.getEmail());
         FamilyNotificationDTO dto = new FamilyNotificationDTO(builder.toString());
         dto.setServiceName(serviceName);
-        dto.setUserReceiver(userPointDTO.getEmailFamily());
+        dto.setUserReceiver(userPointDTO.getEmail());
         dto.setUserSender(userPointDTO.getEmailUserCurrent());
         dto.setMessage(dto.getPointsNew());
         dto.setDateSender(new Date());
@@ -131,7 +134,7 @@ public class FamilyPointsProcessor {
 
     private void inviaNotifica(UserPointDTO userPointDTO) {
         FamilyNotificationDTO dto = getFamilyNotificationDTO(userPointDTO);
-        notificationComponent.inviaNotifica(dto, notificationExchange, notificationRoutingKey);
+        notificationComponent.inviaNotifica(dto, notificationExchange, routingKeyNotification);
     }
 
 

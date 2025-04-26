@@ -7,6 +7,10 @@ class BaseStore {
             // Proprietà e metodi comuni
         });
     }
+
+    getToken(): string|null {
+        return localStorage.getItem('token'); // Salva il token nel localStorage
+    }
     setToken(token: string) {
         BaseStore._token = token;
         localStorage.setItem('token', token); // Salva il token nel localStorage

@@ -13,8 +13,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQNotificationExchange {
 
-    @Value("${rabbit.exchange.name.notification}")
-    private String exchangeName; 
+    @Value("${rabbitmq.exchange.name.notification}")
+    private String exchangeName;
+
+    @Value("${rabbitmq.exchange.routingKey.notification}")
+    private String routingKeyNotification;
+
+    @Value("${rabbitmq.exchange.routingKey.email}")
+    private String routingKeyEmail;
 
     @Bean
     public DirectExchange directExchangeNotification() {
@@ -27,8 +33,18 @@ public class RabbitMQNotificationExchange {
     }
 
     @Bean
-    public Binding binding(Queue notificationQueue, @Qualifier("directExchangeNotification") DirectExchange exchange) {
-        return BindingBuilder.bind(notificationQueue).to(exchange).with("notification.family");
+    public Queue emailQueue() {
+        return QueueBuilder.durable("email.queue").build();
+    }
+
+    @Bean
+    public Binding bindingNotification(Queue notificationQueue, @Qualifier("directExchangeNotification") DirectExchange exchange) {
+        return BindingBuilder.bind(notificationQueue).to(exchange).with(routingKeyNotification);
+    }
+
+    @Bean
+    public Binding bindingEmail(Queue emailQueue, @Qualifier("directExchangeNotification") DirectExchange exchange) {
+        return BindingBuilder.bind(emailQueue).to(exchange).with(routingKeyEmail);
     }
 
 }

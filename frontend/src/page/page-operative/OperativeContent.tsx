@@ -59,7 +59,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
       operativeStore.setEmailField(user.email);
     }
     else {
-      operativeStore.setEmailField(user.emailFamily);
+      operativeStore.setEmailField(user.emailChild);
     }
   }, [formValues]);
 
@@ -88,7 +88,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
   const fetchOptions = () => {
     try {
-      const emailFind = user.emailFamily ? user.emailFamily : user.email;
+      const emailFind = user.emailChild ? user.emailChild : user.email;
 
       return fetchDataActivities({ ...user, email: emailFind }).then((response: ResponseI | undefined) => {
         setIsLoadingO(false);
@@ -101,7 +101,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
   const fetchPoints = () => {
     try {
-      const emailFind = user.emailFamily ? user.emailFamily : user.email;
+      const emailFind = user.emailChild ? user.emailChild : user.email;
 
       findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((response: ResponseI | undefined) => {
         if (response) {
@@ -153,7 +153,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
       console.error('Activity not found');
       return; // Esci dalla funzione se non trovi l'attività
     }
-    const emailFind = user.emailFamily ? user.emailFamily : user.email;
+    const emailFind = user.emailChild ? user.emailChild : user.email;
 
     // Crea il log dell'attività
     const activityLog: ActivityLogI = {

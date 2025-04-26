@@ -9,3 +9,4 @@ session:
     identification: "id"
 websocket:
   path: "ws/notifications"
+
