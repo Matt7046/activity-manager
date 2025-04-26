@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.common.dto.structure.ResponseDTO;
@@ -27,6 +28,7 @@ public class FamilyWebService {
     @Value("${app.page.path.userpoint}")
     private String userPointPath;
 
+    @Transactional
     public Mono<Optional<PointDTO>> savePointsByFamily(UserPointDTO userPointDTO) {
          return webClientPoint.post()
                 .uri(userPointPath+"/dati/user/operation")
@@ -36,7 +38,7 @@ public class FamilyWebService {
                 .flatMap(responseDTO -> Mono.fromCallable(() -> {
                     UserPointDTO subDTO = new ObjectMapper().convertValue(responseDTO.getJsonText(), UserPointDTO.class);
                     return subDTO.getPointFigli().stream()
-                            .filter(point -> userPointDTO.getEmailFamily().equals(point.getEmail()))
+                            .filter(point -> userPointDTO.getEmail().equals(point.getEmail()))
                             .findFirst();
                 }).subscribeOn(Schedulers.boundedElastic()));
     }

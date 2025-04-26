@@ -26,12 +26,15 @@ public abstract class UserPointMapper {
 
 
     @AfterMapping
-    protected void decryptEmail(UserPoint point, @MappingTarget UserPointDTO dto) {
+    protected void decryptField(UserPoint point, @MappingTarget UserPointDTO dto) {
         if (dto.getEmail() != null) {
             dto.setEmail(encryptDecryptConverter.decrypt(point.getEmail()));
         }
-        if (dto.getEmailFamily() != null) {
-            dto.setEmailFamily(encryptDecryptConverter.decrypt(point.getEmailFamily()));
+        if (dto.getEmailUserCurrent() != null) {
+            dto.setEmailUserCurrent(encryptDecryptConverter.decrypt(point.getEmailUserCurrent()));
+        }
+        if (dto.getPassword() != null) {
+            dto.setPassword(encryptDecryptConverter.decrypt(point.getPassword()));
         }
         if (dto.getEmailFigli() != null) {
             dto.setEmailFigli(
@@ -43,20 +46,24 @@ public abstract class UserPointMapper {
     }
 
     @AfterMapping
-    protected void encryptEmail(UserPointDTO dto, @MappingTarget UserPoint point) {
-        if (point.getEmail() != null) {
-            point.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
-        }
-        if (point.getEmailFamily() != null) {
-            point.setEmailFamily(encryptDecryptConverter.convert(dto.getEmailFamily()));
-        }
-        if (point.getEmailFigli() != null) {
-            point.setEmailFigli(
-                    point.getEmailFigli().stream()
-                            .map(encryptDecryptConverter::convert)
-                            .collect(Collectors.toList())
-            );
-        }
+    protected void encryptField(UserPointDTO dto, @MappingTarget UserPoint point) {
+            if (point.getEmail() != null) {
+                point.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
+            }
+            if (point.getEmailUserCurrent() != null) {
+                point.setEmailUserCurrent(encryptDecryptConverter.convert(dto.getEmailUserCurrent()));
+            }
+            if (point.getPassword() != null) {
+                point.setPassword(encryptDecryptConverter.convert(dto.getPassword()));
+            }
+            if (point.getEmailFigli() != null) {
+                point.setEmailFigli(
+                        point.getEmailFigli().stream()
+                                .map(encryptDecryptConverter::convert)
+                                .collect(Collectors.toList())
+                );
+            }
+
     }
 }
 
