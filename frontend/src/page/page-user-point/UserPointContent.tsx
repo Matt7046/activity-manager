@@ -337,6 +337,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
       const url: string = response?.jsonText.url;
       const fileName = url.substring(url.lastIndexOf('upload/'));
       userPoint.nameImage = fileName;
+      userPoint.email = user.emailChild;
       return saveUserImage(userPoint, () => showMessage(alertConfig.setOpen, alertConfig.setMessage)).then((response: ResponseI | undefined) => {
         if (response) {
           setChangePoint(!changePoint);
@@ -352,7 +353,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
   // Crea l'array dei pulsanti in base all'orientamento
 
   const getPoints = (): Promise<CardProps[] | undefined> => {
-    const emailFind = user.emailFamily ? user.emailFamily : user.email;
+    const emailFind = user.emailChild;
     return findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
@@ -442,7 +443,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
     })
   }
   const getLogAttivita = (userI: UserI, openDialog: boolean): Promise<void> => {
-    const emailFind = user.emailFamily ? user.emailFamily : user.email;
+    const emailFind = user.emailChild;
 
     const page = 0;
     const size = 10;
@@ -466,7 +467,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
 
   const getLogFamily = (userI: UserI, openDialog: boolean): Promise<void> => {
-    const emailFind = user.emailFamily ? user.emailFamily : user.email;
+    const emailFind = user.emailChild;
     const page = 0;
     const size = 10;
     const field = 'date';

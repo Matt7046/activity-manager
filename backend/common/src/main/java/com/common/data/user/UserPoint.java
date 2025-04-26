@@ -21,11 +21,11 @@ public class UserPoint {
     private String _id;
     @Field("email")
     private String email;
+    @Transient
+    private String emailUserCurrent;
     private String password;
     private List<Point> pointFigli;
     private Long type;
-    @Field("emailfamily")
-    private String emailFamily;
     private List<String> emailFigli;
     @Transient
     private String nameImage;

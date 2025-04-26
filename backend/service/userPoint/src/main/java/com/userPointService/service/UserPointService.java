@@ -1,7 +1,10 @@
 package com.userPointService.service;
 
+import com.common.configurations.structure.NotificationComponent;
 import com.common.data.user.UserPoint;
 import com.common.dto.auth.Point;
+import com.common.dto.family.FamilyNotificationDTO;
+import com.common.dto.user.UserPointDTO;
 import com.common.structure.exception.ArithmeticCustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,10 +32,10 @@ public class UserPointService {
     }
 
     public UserPoint getPointByEmail(UserPoint userPoint) {
-        UserPoint existingUserPoint = userPointRepository.findByEmailOnEmail(userPoint.getEmail());
+        UserPoint existingUserPoint = userPointRepository.findByEmailOnEmail(userPoint.getEmailUserCurrent());
         if (existingUserPoint == null) {
-            List<UserPoint> userPointList = userPointRepository.findByOnFigli(userPoint.getEmail());
-            existingUserPoint = !userPointList.isEmpty() ? userPointList.get(0) : null;
+            UserPoint userPointList = userPointRepository.findByOnFigli(userPoint.getEmailUserCurrent());
+            existingUserPoint = userPointList!=null ? userPointList : null;
         }
         if (existingUserPoint == null) {
             return new UserPoint();
@@ -42,15 +45,15 @@ public class UserPointService {
 
     public UserPoint savePoint(UserPoint userPoint){
 
-        UserPoint existingUserPoint = userPointRepository.findByEmailOnEmail(userPoint.getEmailFamily());
+        UserPoint existingUserPoint = userPointRepository.findByEmailOnEmail(userPoint.getEmail());
         if (existingUserPoint == null) {
-            List<UserPoint> userPointList = userPointRepository.findByOnFigli(userPoint.getEmailFamily());
-            existingUserPoint = !userPointList.isEmpty() ? userPointList.get(0) : null;
+            UserPoint userPointList = userPointRepository.findByOnFigli(userPoint.getEmail());
+            existingUserPoint = userPointList!=null ? userPointList : null;
         }
 
         assert existingUserPoint != null;
         existingUserPoint.getPointFigli().stream()
-                .filter(point -> userPoint.getEmailFamily() != null && userPoint.getEmailFamily().equals(point.getEmail()))
+                .filter(point -> userPoint.getEmail() != null && userPoint.getEmail().equals(point.getEmail()))
                 .findFirst()
                 .ifPresent(point -> {
                     long delta = userPoint.getOperation() ? userPoint.getUsePoints() : -userPoint.getUsePoints();
@@ -70,23 +73,22 @@ public class UserPointService {
     }
 
     public UserPoint saveUser(UserPoint userPoint) {
-           return userPointRepository.save(userPoint);
+            return userPointRepository.save(userPoint);
     }
 
-
     public Long getTypeUser(UserPoint point)  {
-        List<UserPoint> existUserPointOnFigli = userPointRepository.findByOnFigli(point.getEmailFamily());
-        UserPoint existUserPoint = userPointRepository.findByEmailOnEmail(point.getEmailFamily());
+        UserPoint existUserPointOnFigli = userPointRepository.findByOnFigli(point.getEmailUserCurrent());
+        UserPoint existUserPoint = userPointRepository.findByEmailOnEmail(point.getEmailUserCurrent());
         return Optional.ofNullable(existUserPoint)
                 .map(p -> 1L)
                 .orElseGet(() ->
-                        (existUserPointOnFigli != null && !existUserPointOnFigli.isEmpty()) ? 0L : 2L
+                        (existUserPointOnFigli != null) ? 0L : 2L
                 );
     }
 
     public UserPoint saveUserImage(UserPoint userPoint) throws Exception {
 
-        UserPoint existingUserPoint = userPointRepository.findFirstMatchByEmailOrFigli(userPoint.getEmailFamily());
+        UserPoint existingUserPoint = userPointRepository.findFirstMatchByEmailOrFigli(userPoint.getEmail());
         assert existingUserPoint != null;
         List<Point> updatedPoints = existingUserPoint.getPointFigli().stream()
                 .map(point -> ovverideNameImage(userPoint, point))
@@ -99,7 +101,7 @@ public class UserPointService {
 
 
     private Point ovverideNameImage(UserPoint userPointSave, Point point) {
-        if (!userPointSave.getEmailFamily().equals(point.getEmail())) {
+        if (!userPointSave.getEmail().equals(point.getEmail())) {
             return point;
         }
         List<String> existingNames = Optional.ofNullable(point.getNameImage()).orElse(new ArrayList<>());
@@ -132,5 +134,18 @@ public class UserPointService {
         // Confronta con il nome immagine atteso
         return fileNamexWithoutExtension.equals(fileNameWithoutExtension);
     }
+
+    public UserPoint login(UserPoint userPointLogin) {
+
+        UserPoint existingUserPoint  = userPointRepository.findByPointEmailAndPassword(userPointLogin.getEmail(), userPointLogin.getPassword());
+        if (existingUserPoint == null) {
+            UserPoint userPointList = userPointRepository.findByPointFigliEmailAndPassword(userPointLogin.getEmail(), userPointLogin.getPassword());
+            existingUserPoint = userPointList!=null ? userPointList : null;
+        }
+        if (existingUserPoint == null) {
+            return new UserPoint();
+        }
+        return existingUserPoint;
+        }
 }
 

@@ -8,9 +8,9 @@ import com.common.mapper.UserPointMapper;
 import com.common.structure.status.ActivityHttpStatus;
 import com.notificationService.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

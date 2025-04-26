@@ -34,7 +34,7 @@ export interface FamilyNotificationI extends NotificationI {
 export interface UserI {
   _id: string | undefined;
   email: string;
-  emailFamily: string;
+  emailChild:string;
   type: TypeUser
   emailUserCurrent: string;
   page?: number;
