@@ -12,17 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = { PointMapper.class })
+@Mapper(componentModel = "spring", uses = {PointMapper.class})
 public abstract class UserPointMapper {
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
     // Da Entity a DTO
-    public abstract UserPointDTO toDTO(UserPoint points) throws Exception;
+    public abstract UserPointDTO toDTO(UserPoint points);
 
 
     // Da DTO a Entity
-    public abstract UserPoint fromDTO(UserPointDTO userPointDto) throws Exception;
+    public abstract UserPoint fromDTO(UserPointDTO userPointDto);
 
 
     @AfterMapping
@@ -33,36 +33,34 @@ public abstract class UserPointMapper {
         if (dto.getEmailUserCurrent() != null) {
             dto.setEmailUserCurrent(encryptDecryptConverter.decrypt(point.getEmailUserCurrent()));
         }
+        if (dto.getEmailChild() != null) {
+            dto.setEmailChild(encryptDecryptConverter.decrypt(point.getEmailChild()));
+        }
         if (dto.getPassword() != null) {
             dto.setPassword(encryptDecryptConverter.decrypt(point.getPassword()));
         }
         if (dto.getEmailFigli() != null) {
-            dto.setEmailFigli(
-                    point.getEmailFigli().stream()
-                            .map(encryptDecryptConverter::decrypt)
-                            .collect(Collectors.toList())
-            );
+            dto.setEmailFigli(point.getEmailFigli().stream().map(encryptDecryptConverter::decrypt).collect(Collectors.toList()));
         }
     }
 
     @AfterMapping
     protected void encryptField(UserPointDTO dto, @MappingTarget UserPoint point) {
-            if (point.getEmail() != null) {
-                point.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
-            }
-            if (point.getEmailUserCurrent() != null) {
-                point.setEmailUserCurrent(encryptDecryptConverter.convert(dto.getEmailUserCurrent()));
-            }
-            if (point.getPassword() != null) {
-                point.setPassword(encryptDecryptConverter.convert(dto.getPassword()));
-            }
-            if (point.getEmailFigli() != null) {
-                point.setEmailFigli(
-                        point.getEmailFigli().stream()
-                                .map(encryptDecryptConverter::convert)
-                                .collect(Collectors.toList())
-                );
-            }
+        if (point.getEmail() != null) {
+            point.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
+        }
+        if (point.getEmailChild() != null) {
+            point.setEmailChild(encryptDecryptConverter.convert(dto.getEmailChild()));
+        }
+        if (point.getEmailUserCurrent() != null) {
+            point.setEmailUserCurrent(encryptDecryptConverter.convert(dto.getEmailUserCurrent()));
+        }
+        if (point.getPassword() != null) {
+            point.setPassword(encryptDecryptConverter.convert(dto.getPassword()));
+        }
+        if (point.getEmailFigli() != null) {
+            point.setEmailFigli(point.getEmailFigli().stream().map(encryptDecryptConverter::convert).collect(Collectors.toList()));
+        }
 
     }
 }
