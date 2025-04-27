@@ -196,13 +196,8 @@ const GoogleAuthComponent = () => {
       type: type
     };
     setCurrentUser(user);
-    const message = { message: [ServerMessage.SERVER_DOWN], typeMessage: TypeAlertColor.ERROR };
-    getEmailChild(user, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x: ResponseI | undefined) => {
-      const emailChild = x?.jsonText?.emailFigli ?? [];
-      setEmailOptions(emailChild);
-      const typeNew = emailChild?.length > 0 ? type : 2;
-      showDialog(typeNew, false);
-    })
+    const message = { message: [ServerMessage.SERVER_DOWN], typeMessage: TypeAlertColor.ERROR };   
+      showDialog(type, false);    
   };
 
   const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
@@ -214,6 +209,7 @@ const GoogleAuthComponent = () => {
     return getEmailChild({...currentUser, email: currentUser.emailChild}).then((x: ResponseI | undefined) => {
       const emailChild = x?.jsonText?.emailFigli ?? [];
       setEmailOptions(emailChild);
+      currentUser.type = emailChild?.length > 0 ? currentUser.type  : 2;      
     }).then(x => {
       getTypeUser(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
         setEmailLogin(x?.jsonText.emailUserCurrent);

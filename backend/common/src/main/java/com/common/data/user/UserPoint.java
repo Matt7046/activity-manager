@@ -19,14 +19,17 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class UserPoint {
     @Id
     private String _id;
-    @Field("email")
     private String email;
-    @Transient
-    private String emailUserCurrent;
     private String password;
     private List<Point> pointFigli;
-    private Long type;
+    private Integer type;
     private List<String> emailFigli;
+    private Integer points;
+    private List<String> nameImages;
+    @Transient
+    private String emailChild;
+    @Transient
+    private String emailUserCurrent;
     @Transient
     private String nameImage;
     @Transient

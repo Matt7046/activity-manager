@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class LogActivityToUserPointMapper {
-    @Autowired
-    EncryptDecryptConverter encryptDecryptConverter;
 
     // Da Entity a DTO
    public abstract UserPointDTO toChange(LogActivityDTO logActivity);

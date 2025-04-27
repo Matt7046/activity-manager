@@ -3,9 +3,6 @@ package com.notificationService.service;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.notification.Notification;
 import com.common.data.notification.StatusNotification;
-import com.common.dto.notification.NotificationDTO;
-import com.common.dto.structure.ResponseDTO;
-import com.common.mapper.NotificationMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +12,6 @@ import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.net.URI;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -27,6 +23,7 @@ public class WebSocketService implements WebSocketHandler {
 
 
     private final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+
     @Value("${session.attribute.identification}")
     private String identification;
 
