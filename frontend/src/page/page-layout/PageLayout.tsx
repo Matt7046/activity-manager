@@ -58,7 +58,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const [popoverNotifications, setPopoverNotifications] = useState<PopoverNotification[]>([]);
   const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio  
-  const socketFamilyPoint = SocketFamilyPoint.getInstance(user, SocketURL.NOTIFICATION + user?.emailUserCurrent);
 
 
   const handleClickAnchor = () => {
@@ -88,34 +87,39 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    socketRef.current = socketFamilyPoint.getSocket();
-    // Ping ogni 30 secondi
-    pingIntervalRef.current = setInterval(() => {
-      if (socketFamilyPoint.getSocket().readyState === WebSocket.OPEN) {
-        socketFamilyPoint.getSocket().send("ping");
-      }
-    }, 30000);
-    socketFamilyPoint.getSocket().onmessage = (event) => {
-      console.log("Messaggio ricevuto:", event.data);
-      const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-      const typeMessage: TypeMessage = {
-        message: [familyNotification.message],
-        typeMessage: TypeAlertColor.INFO
-      }
-      showMessage(alertConfig.setOpen, alertConfig.setMessage, typeMessage);
-    };
-    socketFamilyPoint.getSocket().onclose = () => {
-      console.warn("WebSocket chiuso");
-    };
+    if (user) {
+      const socketFamilyPoint = SocketFamilyPoint.getInstance(user, SocketURL.NOTIFICATION + user?.emailUserCurrent);
+      socketRef.current = socketFamilyPoint.getSocket();
+      // Ping ogni 30 secondi
+      pingIntervalRef.current = setInterval(() => {
+        if (socketFamilyPoint.getSocket().readyState === WebSocket.OPEN) {
+          socketFamilyPoint.getSocket().send("ping");
+        }
+        else {
+          SocketFamilyPoint.reconnect(user,SocketURL.NOTIFICATION + user?.emailUserCurrent); 
+         }
+      }, 30000);
+      socketFamilyPoint.getSocket().onmessage = (event) => {
+        console.log("Messaggio ricevuto:", event.data);
+        const familyNotification: FamilyNotificationI = JSON.parse(event.data);
+        const typeMessage: TypeMessage = {
+          message: [familyNotification.message],
+          typeMessage: TypeAlertColor.INFO
+        }
+        showMessage(alertConfig.setOpen, alertConfig.setMessage, typeMessage);
+      };
+      socketFamilyPoint.getSocket().onclose = () => {
+        console.warn("WebSocket chiuso");
+      };
 
 
-    return () => {
-      socketFamilyPoint.getSocket()?.close();
-      if (pingIntervalRef.current) {
-        clearInterval(pingIntervalRef.current);
-      }
-    };
-  }, []);
+      return () => {
+        if (pingIntervalRef.current) {
+          clearInterval(pingIntervalRef.current);
+        }
+      };
+    }
+  }, [user]);
 
 
 
@@ -192,8 +196,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             {/* Riga 2: Email */}
             <Grid container>
               <Box className="box-layout-text-vertical">
-             
-                {user?.emailUserCurrent && hiddenEmail!==true ? (
+
+                {user?.emailUserCurrent && hiddenEmail !== true ? (
                   <TextField
                     id="emailFamily"
                     label={user?.emailUserCurrent === user?.emailChild
@@ -217,7 +221,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                 <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
               )}
               <Box className="box-layout-text">
-                {user?.emailUserCurrent && hiddenEmail!==true ? (
+                {user?.emailUserCurrent && hiddenEmail !== true ? (
                   <TextField
                     id="emailFamily"
                     label={user?.emailUserCurrent === user?.emailChild

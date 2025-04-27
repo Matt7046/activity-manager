@@ -1,15 +1,12 @@
 package com.userPointService.service;
 
-import com.common.configurations.structure.NotificationComponent;
 import com.common.data.user.UserPoint;
-import com.common.dto.auth.Point;
-import com.common.dto.family.FamilyNotificationDTO;
-import com.common.dto.user.UserPointDTO;
 import com.common.structure.exception.ArithmeticCustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.userPointService.repository.UserPointRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,125 +24,105 @@ public class UserPointService {
         return userPointRepository.findAll();
     }
 
-    public UserPoint findByEmail(String identificativo, Long type) {
-        return userPointRepository.findByEmail(identificativo, type);
+    public UserPoint findByEmailAndType(String identificativo, Long type) {
+        return userPointRepository.findByEmailAndType(identificativo, type);
     }
 
-    public UserPoint getPointByEmail(UserPoint userPoint) {
-        UserPoint existingUserPoint = userPointRepository.findByEmailOnEmail(userPoint.getEmailUserCurrent());
-        if (existingUserPoint == null) {
-            UserPoint userPointList = userPointRepository.findByOnFigli(userPoint.getEmailUserCurrent());
-            existingUserPoint = userPointList!=null ? userPointList : null;
-        }
+    public UserPoint getEmailChild(UserPoint userPoint) {
+        UserPoint existingUserPoint = userPointRepository.findUserByEmail(userPoint.getEmailUserCurrent());
+
         if (existingUserPoint == null) {
             return new UserPoint();
         }
         return existingUserPoint;
     }
 
-    public UserPoint savePoint(UserPoint userPoint){
-
-        UserPoint existingUserPoint = userPointRepository.findByEmailOnEmail(userPoint.getEmail());
+    public UserPoint getUserByEmail(UserPoint userPoint) {
+        UserPoint existingUserPoint = userPointRepository.findUserByEmail(userPoint.getEmailUserCurrent());
         if (existingUserPoint == null) {
-            UserPoint userPointList = userPointRepository.findByOnFigli(userPoint.getEmail());
-            existingUserPoint = userPointList!=null ? userPointList : null;
+            UserPoint userPointList = userPointRepository.findByOnFigli(userPoint.getEmailUserCurrent());
+            existingUserPoint = userPointList != null ? userPointList : null;
         }
+        if (existingUserPoint == null) {
+            return new UserPoint();
+        }
+        return existingUserPoint;
 
-        assert existingUserPoint != null;
-        existingUserPoint.getPointFigli().stream()
-                .filter(point -> userPoint.getEmail() != null && userPoint.getEmail().equals(point.getEmail()))
-                .findFirst()
-                .ifPresent(point -> {
-                    long delta = userPoint.getOperation() ? userPoint.getUsePoints() : -userPoint.getUsePoints();
-                    long updatedPoint = point.getPoints() + delta;
-                    if (updatedPoint < 0) {
-                        throw new ArithmeticCustomException(arithmeticProperties);
-                    }
-                    point.setPoints(updatedPoint);
-                });
+    }
+
+    public UserPoint findByOnFigli(UserPoint userPoint) {
+        return userPointRepository.findByOnFigli(userPoint.getEmail());
+    }
+
+    public UserPoint savePoint(UserPoint userPoint) {
+
+        UserPoint existingUserPoint = userPointRepository.findUserByEmail(userPoint.getEmail());
+        Integer delta = userPoint.getOperation() ? userPoint.getUsePoints() : -userPoint.getUsePoints();
+        Integer updatedPoint = existingUserPoint.getPoints() + delta;
+        if (updatedPoint < 0) {
+            throw new ArithmeticCustomException(arithmeticProperties);
+        }
+        existingUserPoint.setPoints(updatedPoint);
         userPointRepository.save(existingUserPoint);
         return existingUserPoint;
     }
 
-    public UserPoint rollbackSavePoint(UserPoint userPoint)  {
+    public UserPoint rollbackSavePoint(UserPoint userPoint) {
         userPoint.setOperation(!userPoint.getOperation());
         return savePoint(userPoint);
     }
 
-    public UserPoint saveUser(UserPoint userPoint) {
-            return userPointRepository.save(userPoint);
+    public UserPoint saveUser(UserPoint userPoint, List<UserPoint> userChild) {
+        userPoint = userPointRepository.save(userPoint);
+        userPointRepository.saveAll(userChild);
+        return userPoint;
     }
 
-    public Long getTypeUser(UserPoint point)  {
-        UserPoint existUserPointOnFigli = userPointRepository.findByOnFigli(point.getEmailUserCurrent());
-        UserPoint existUserPoint = userPointRepository.findByEmailOnEmail(point.getEmailUserCurrent());
-        return Optional.ofNullable(existUserPoint)
-                .map(p -> 1L)
-                .orElseGet(() ->
-                        (existUserPointOnFigli != null) ? 0L : 2L
-                );
+    public Long getTypeUser(UserPoint point) {
+        UserPoint existUserPointOnFigli = userPointRepository.findUserByEmail(point.getEmailUserCurrent());
+        return existUserPointOnFigli != null ? existUserPointOnFigli.getType() : 2L;
     }
 
     public UserPoint saveUserImage(UserPoint userPoint) throws Exception {
 
-        UserPoint existingUserPoint = userPointRepository.findFirstMatchByEmailOrFigli(userPoint.getEmail());
-        assert existingUserPoint != null;
-        List<Point> updatedPoints = existingUserPoint.getPointFigli().stream()
-                .map(point -> ovverideNameImage(userPoint, point))
-                .collect(Collectors.toList());
-        existingUserPoint.setPointFigli(updatedPoints);
-        return userPointRepository.save(existingUserPoint);
+        UserPoint existingUserPoint = userPointRepository.findUserByEmail(userPoint.getEmailChild());
+        UserPoint updatedPoints = ovverideNameImage(userPoint, existingUserPoint);
+        return userPointRepository.save(updatedPoints);
     }
 
 
-
-
-    private Point ovverideNameImage(UserPoint userPointSave, Point point) {
+    private UserPoint ovverideNameImage(UserPoint userPointSave, UserPoint point) {
         if (!userPointSave.getEmail().equals(point.getEmail())) {
             return point;
         }
-        List<String> existingNames = Optional.ofNullable(point.getNameImage()).orElse(new ArrayList<>());
-        boolean nameExists = existingNames.stream()
-                .anyMatch(name -> verifyNameImage(name, userPointSave));
+        List<String> existingNames = Optional.ofNullable(point.getNameImages()).orElse(new ArrayList<>());
+        boolean nameExists = existingNames.stream().anyMatch(name -> verifyNameImage(name, userPointSave));
 
-        List<String> updatedNames = existingNames.stream()
-                .map(name -> verifyNameImage(name, userPointSave)
-                        ? userPointSave.getNameImage()
-                        : name)
-                .collect(Collectors.toList());
+        List<String> updatedNames = existingNames.stream().map(name -> verifyNameImage(name, userPointSave) ? userPointSave.getNameImage() : name).collect(Collectors.toList());
         if (!nameExists) {
             updatedNames.add(userPointSave.getNameImage());
         }
-        point.setNameImage(updatedNames);
+        point.setNameImages(updatedNames);
         return point;
     }
 
     private boolean verifyNameImage(String x, UserPoint userPointSave) {
         // Estrai la parte finale dell'URL dopo l'ultimo "/"
         String fileNamex = x.substring(x.lastIndexOf('/') + 1);
-        String fileNamexWithoutExtension = fileNamex.contains(".")
-                ? fileNamex.substring(0, fileNamex.lastIndexOf('.'))
-                : fileNamex;
+        String fileNamexWithoutExtension = fileNamex.contains(".") ? fileNamex.substring(0, fileNamex.lastIndexOf('.')) : fileNamex;
 
         String fileNameUserPoint = userPointSave.getNameImage().substring(userPointSave.getNameImage().lastIndexOf('/') + 1);
-        String fileNameWithoutExtension = fileNameUserPoint.contains(".")
-                ? fileNameUserPoint.substring(0, fileNameUserPoint.lastIndexOf('.'))
-                : fileNameUserPoint;
+        String fileNameWithoutExtension = fileNameUserPoint.contains(".") ? fileNameUserPoint.substring(0, fileNameUserPoint.lastIndexOf('.')) : fileNameUserPoint;
         // Confronta con il nome immagine atteso
         return fileNamexWithoutExtension.equals(fileNameWithoutExtension);
     }
 
     public UserPoint login(UserPoint userPointLogin) {
-
-        UserPoint existingUserPoint  = userPointRepository.findByPointEmailAndPassword(userPointLogin.getEmail(), userPointLogin.getPassword());
-        if (existingUserPoint == null) {
-            UserPoint userPointList = userPointRepository.findByPointFigliEmailAndPassword(userPointLogin.getEmail(), userPointLogin.getPassword());
-            existingUserPoint = userPointList!=null ? userPointList : null;
-        }
+        UserPoint existingUserPoint = userPointRepository.findByPointEmailAndPassword(userPointLogin.getEmail(), userPointLogin.getPassword());
         if (existingUserPoint == null) {
             return new UserPoint();
         }
         return existingUserPoint;
-        }
+    }
 }
 

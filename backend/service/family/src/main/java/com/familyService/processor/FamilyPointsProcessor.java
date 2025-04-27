@@ -74,11 +74,10 @@ public class FamilyPointsProcessor {
     private Mono<ResponseDTO> processPoints(UserPointDTO userPointDTO) {
         userPointDTO.setOperation(true);
         return familyWebService.savePointsByFamily(userPointDTO)
-                .flatMap(pointsUserOptional -> {
+                .flatMap(userPoint -> {
                     saveLogFamily(createLogFamily(userPointDTO));
                     inviaNotifica(userPointDTO);
-                    PointDTO point = pointsUserOptional.orElse(null);
-                    return Mono.just((new ResponseDTO(point, ActivityHttpStatus.OK.value(), new ArrayList<>())));
+                    return Mono.just((new ResponseDTO(userPoint, ActivityHttpStatus.OK.value(), new ArrayList<>())));
                 });
     }
 

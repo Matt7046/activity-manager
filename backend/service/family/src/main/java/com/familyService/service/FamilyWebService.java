@@ -29,7 +29,7 @@ public class FamilyWebService {
     private String userPointPath;
 
     @Transactional
-    public Mono<Optional<PointDTO>> savePointsByFamily(UserPointDTO userPointDTO) {
+    public Mono<UserPointDTO> savePointsByFamily(UserPointDTO userPointDTO) {
          return webClientPoint.post()
                 .uri(userPointPath+"/dati/user/operation")
                 .bodyValue(userPointDTO)
@@ -37,9 +37,7 @@ public class FamilyWebService {
                 .bodyToMono(ResponseDTO.class)
                 .flatMap(responseDTO -> Mono.fromCallable(() -> {
                     UserPointDTO subDTO = new ObjectMapper().convertValue(responseDTO.getJsonText(), UserPointDTO.class);
-                    return subDTO.getPointFigli().stream()
-                            .filter(point -> userPointDTO.getEmail().equals(point.getEmail()))
-                            .findFirst();
+                    return subDTO;
                 }).subscribeOn(Schedulers.boundedElastic()));
     }
 

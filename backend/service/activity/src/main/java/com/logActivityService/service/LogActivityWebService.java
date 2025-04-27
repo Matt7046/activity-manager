@@ -28,13 +28,25 @@ public class LogActivityWebService {
 
     @Value("${app.page.path.family}")
     private String familyPath;
-
     public Mono<ResponseDTO> savePoints(UserPointDTO userPointDTO) {
         return webClientPoint.post()
-                .uri(userPointPath+"/dati/user/operation")
+                .uri(userPointPath + "/dati/user/operation")
                 .bodyValue(userPointDTO)
                 .retrieve()
-                .bodyToMono(ResponseDTO.class);
+                .bodyToMono(ResponseDTO.class)
+                .doOnError(error -> {
+                    // Log dell'errore
+                    System.out.println("Errore durante il salvataggio dei punti: " + error.getMessage());
+                    // Qui potresti anche inviare un evento di errore se vuoi
+                })
+                .doOnSuccess(response -> {
+                    // Log del successo
+                    System.out.println("Salvataggio punti riuscito: " );
+                    // Esegui un'azione asincrona se necessario
+                    Mono.fromRunnable(() -> {
+                        // Codice per l'evento asincrono
+                    }).subscribe();
+                });
     }
 
     public Mono<ResponseDTO> saveLogFamily(LogFamilyDTO logFamilyDTO) {

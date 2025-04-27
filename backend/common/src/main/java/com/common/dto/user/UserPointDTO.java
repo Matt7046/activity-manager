@@ -16,19 +16,19 @@ public class UserPointDTO implements InterfaceDTO {
 
     private String _id; // Identificatore unico
     private String email;
+    private String emailChild;
     private String password;
-    private Integer type;
+    private Integer points;
     private List<PointDTO> pointFigli;
+    private List<String> emailFigli;
+    private Integer type;
     private String numeroPunti;
     private Integer usePoints;
-    private List<String> emailFigli;
+    private String nameImage;
     private Boolean operation;
     private String emailUserCurrent;
     private Integer page;
     private Integer size;
     private String field;
     private Boolean unpaged;
-    private String nameImage;
-
-
 }
