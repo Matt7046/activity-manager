@@ -2,7 +2,6 @@ package com.userPointService.repository;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import com.common.data.user.UserPoint;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -15,13 +14,16 @@ public interface UserPointRepository extends MongoRepository<UserPoint, String> 
      List<UserPoint>  findAll();
 
      @Query("{'email': ?0, 'type': ?1}")
-     UserPoint findByEmail(String email, Long type);
+     UserPoint findByEmailAndType(String email, Long type);
 
     @Query("{'emailFigli': {$in: [?0]}}")
     UserPoint findByOnFigli(String email);
     
+    @Query(value = "{ 'emailFigli': { '$in': ?0 } }")
+    List<UserPoint> findByEmailIn(List<String> emailFigli);
+
     @Query("{'email': ?0}")
-    UserPoint findByEmailOnEmail(String email);
+    UserPoint findUserByEmail(String email);
 
     @Query(value = "{ '$or': [ { 'email': ?0 }, {'emailFigli': {$in: [?0]}} ] }")
     UserPoint findFirstMatchByEmailOrFigli(String email);
@@ -29,6 +31,6 @@ public interface UserPointRepository extends MongoRepository<UserPoint, String> 
     @Query(value = "{ '$and': [ { 'email': ?0 },{ 'password': ?1 }] }")
     UserPoint findByPointEmailAndPassword(String email, String password);;
 
-@Query("{ 'pointFigli': { $elemMatch: { 'email': ?0, 'password': ?1 } } }")
+    @Query("{ 'pointFigli': { $elemMatch: { 'email': ?0, 'password': ?1 } } }")
     UserPoint findByPointFigliEmailAndPassword(String email, String password);;
 }

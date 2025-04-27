@@ -11,10 +11,7 @@ class Socket {
   }
 
   static getInstance(user: UserI, url: string): Socket {
-    if (user === undefined || user === null) {
-      Socket.instance?.webSocket?.close();
-    }
-    if (!Socket.instance) {
+     if (!Socket.instance) {
       Socket.instance = new Socket(user, url);
     }
     return Socket.instance;
@@ -26,13 +23,28 @@ class Socket {
     return this.webSocket;
   }
 
-  static resetInstance(): void {
-    // utile se vuoi forzare la chiusura e ricreazione (es: logout)
-    if (Socket.instance?.webSocket.readyState === WebSocket.OPEN) {
-      Socket.instance.webSocket.close();
+  static async resetInstance(): Promise<void> {
+    if (Socket.instance) {
+      const socket = Socket.instance.webSocket;
+
+      if (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING) {
+        await new Promise<void>((resolve) => {
+          socket.onclose = () => {
+            console.log("WebSocket chiuso");
+            resolve();
+          };
+          socket.close();
+        });
+      }
+      Socket.instance = null;
     }
-    Socket.instance = null;
+  }
+
+  // 💥 Metodo per fare il reconnect pulito
+  static async reconnect(user: UserI, url: string): Promise<Socket> {
+    console.log("Riconnessione WebSocket...");
+    await Socket.resetInstance();
+    return Socket.getInstance(user, url);
   }
 }
-
 export default Socket;

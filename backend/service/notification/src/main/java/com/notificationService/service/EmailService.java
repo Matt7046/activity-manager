@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class EmailService {
 
@@ -17,8 +19,8 @@ public class EmailService {
     private EncryptDecryptConverter encryptDecryptConverter;
 
     @Transactional
-    public UserPoint sendPasswordEmailChild(UserPoint userPoint)  {
-        userPoint.getPointFigli().stream().forEach(x -> {
+    public UserPoint sendPasswordEmailChild(UserPoint userPoint, List<UserPoint> userChild)  {
+        userChild.stream().forEach(x -> {
             try {
                 mailSenderService.sendEmail(encryptDecryptConverter.decrypt(x.getEmail()), "Nuovo utente",encryptDecryptConverter.decrypt(x.getPassword()));
             } catch (Exception e) {
