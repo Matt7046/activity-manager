@@ -1,6 +1,7 @@
 package com.notificationService.rabbitmq;
 
 import com.common.dto.user.UserPointDTO;
+import com.common.dto.user.UserPointWithChildDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.notificationService.processor.EmailProcessor;
@@ -43,7 +44,7 @@ public class RabbitMQEmailConsumer {
         doWork(in);
         watch.stop();
         ObjectMapper objectMapper = new ObjectMapper();
-        UserPointDTO userPointDTO = objectMapper.readValue(in, UserPointDTO.class);
+        UserPointWithChildDTO userPointDTO = objectMapper.readValue(in, UserPointWithChildDTO.class);
         emailProcessor.sendPasswordEmailChild(userPointDTO);
     }
 

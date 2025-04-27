@@ -1,7 +1,7 @@
 package com.notificationService.controller;
 
 import com.common.dto.structure.ResponseDTO;
-import com.common.dto.user.UserPointDTO;
+import com.common.dto.user.UserPointWithChildDTO;
 import com.notificationService.processor.EmailProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +15,8 @@ public class EmailController {
     @Autowired
     private EmailProcessor notificationProcessor;
 
-
     @PostMapping("/entity")
-    public Mono<ResponseDTO> sendPasswordEmailChild(@RequestBody UserPointDTO userPoint) throws Exception {
+    public Mono<ResponseDTO> sendPasswordEmailChild(@RequestBody UserPointWithChildDTO userPoint) throws Exception {
         return notificationProcessor.sendPasswordEmailChild(userPoint);
     }
 }
