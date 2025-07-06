@@ -1,24 +1,37 @@
+version: '3.8'
+
 services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    image: react-frontend:1.0.0
+    container_name: frontend
+    networks:
+      - app-network
 
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
-      - "5672:5672"  # Porta per la comunicazione con l'app
-      - "15672:15672" # Interfaccia di gestione web
+      - "5672:5672"
+      - "15672:15672"
     environment:
       - 'RABBITMQ_DEFAULT_PASS=password'
       - 'RABBITMQ_DEFAULT_USER=username'
     networks:
       - app-network
+
   nginx:
     image: nginx:latest
     container_name: nginx
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+      - /root/app/frontend-build:/usr/share/nginx/html:ro
     ports:
       - "80:80"
     depends_on:
+      - frontend
       - image-service
       - user-point-service
       - activity-service
@@ -27,13 +40,13 @@ services:
       - notification-service
     networks:
       - app-network
-      
+
   user-point-service:
     depends_on:
-      - rabbitmq  
+      - rabbitmq
     image: user-point-service:1.0.0
     build:
-      context: ./
+      context: ./ 
       dockerfile: service/userPoint/Dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
@@ -41,13 +54,13 @@ services:
       - SPRING_RABBITMQ_USERNAME=username
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
-      - ./service/userPoint/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+      - ./service/userPoint/src/main/resources/certificate:/app/certificate
     networks:
       - app-network
 
   activity-service:
     depends_on:
-      - rabbitmq 
+      - rabbitmq
     image: activity-service:1.0.0
     build:
       context: ./
@@ -62,9 +75,9 @@ services:
     networks:
       - app-network
 
-  auth-service:   
+  auth-service:
     depends_on:
-      - rabbitmq  
+      - rabbitmq
     image: auth-service:1.0.0
     build:
       context: ./
@@ -75,7 +88,7 @@ services:
       - SPRING_RABBITMQ_USERNAME=username
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
-      - ./service/auth/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+      - ./service/auth/src/main/resources/certificate:/app/certificate
     networks:
       - app-network
 
@@ -92,24 +105,24 @@ services:
       - SPRING_RABBITMQ_USERNAME=username
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
-      - ./service/family/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+      - ./service/family/src/main/resources/certificate:/app/certificate
     networks:
       - app-network
 
   notification-service:
     depends_on:
-      - rabbitmq 
+      - rabbitmq
     image: notification-service:1.0.0
     build:
       context: ./
-      dockerfile: service/notification/Dockerfile   
+      dockerfile: service/notification/Dockerfile
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=username
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
-      - ./service/notification/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+      - ./service/notification/src/main/resources/certificate:/app/certificate
     networks:
       - app-network
 
@@ -126,7 +139,7 @@ services:
       - SPRING_RABBITMQ_USERNAME=username
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
-      - ./service/image/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+      - ./service/image/src/main/resources/certificate:/app/certificate
     networks:
       - app-network
 
@@ -134,3 +147,4 @@ networks:
   app-network:
     driver: bridge
     external: true
+
