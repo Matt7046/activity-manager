@@ -1,5 +1,5 @@
 import { Box, FormControl, Input, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { AlertConfig } from "../../components/ms-alert/Alert";
@@ -182,7 +182,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
         <Box className ='box-operative-content'>
           <Grid container spacing={2}>
             {/* Prima riga */}
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid xs={12} sm={6} >
               {/* Campo stringa 1 */}
               <FormControl fullWidth >
                 <TextField
@@ -195,7 +195,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
                 />
               </FormControl>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid xs={12} sm={6} >
               <FormControl className="form-control-operative" variant="standard">
                 <InputLabel htmlFor="filled-points">{puntiDes}</InputLabel>
                 <Input
@@ -208,7 +208,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
             </Grid>
 
             {/* Seconda riga */}
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid xs={12} sm={6}>
               {/* Campo combobox */}
               <FormControl fullWidth margin="normal">
                 <InputLabel id="select-label">{activityDes}
@@ -230,7 +230,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
             </Grid>
             {/* Campo con punti */}
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid xs={12} sm={6}>
               {/* Campo numerico */}
               <FormControl fullWidth >
                 <TextField

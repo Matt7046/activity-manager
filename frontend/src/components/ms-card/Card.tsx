@@ -7,7 +7,7 @@ import {
   Card as MuiCard,
   Typography
 } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Unstable_Grid2';
 import { observer } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { IMAGE } from '../../general/structure/Constant';
@@ -138,13 +138,13 @@ const CardComponent = observer((props: CardProps) => {
         </Typography>
         <List className='list-body'>
           <Grid container className="card-header-row" justifyContent="space-between" alignItems="center">
-            <Grid size={{ xs: 6, sm: 6 }}>
+           <Grid xs={6} sm={6} >
               <Typography className="card-header-text">
                 {propsCard.text.text.length > 0 ? propsCard.text.textLeftTitle : ''}
               </Typography>
             </Grid>
             {propsCard.text.text.length > 0 && propsCard.text.text[0].textRight && (
-              <Grid size={{ xs: 6, sm: 6 }}>
+               <Grid xs={6} sm={6} >
                 <Typography className="card-header-text">
                   {propsCard.text.textRightTitle}
                 </Typography>
@@ -157,11 +157,11 @@ const CardComponent = observer((props: CardProps) => {
             : [{ textLeft: "", textRight: "" }]
           ).map((item: CardTextAlign, index: number) => (
             <Grid container key={index} justifyContent="space-between" alignItems="center">
-              <Grid size={{ xs: item.textRight ? 6 : 12, sm: item.textRight ? 6 : 12 }}>
+              <Grid xs={ item.textRight ? 6 : 12} sm={ item.textRight ? 6 : 12 }>
                 <Typography className="card-list-item">{item.textLeft}</Typography>
               </Grid>
               {item.textRight && (
-                <Grid size={{ xs: 6, sm: 6 }}>
+                 <Grid xs={6} sm={6} >
                   <Typography className="card-list-item">{item.textRight}</Typography>
                 </Grid>
               )}
@@ -186,7 +186,7 @@ const CardGrid = ({ cardsData }: { cardsData: CardProps[] }) => {
   return (
     <Grid container spacing={2} alignItems="stretch" className= 'grid-card-data'>
       {cardsData.map((cardData) => (
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={cardData._id}>
+        <Grid xs= {12} sm= {6} md= {4} lg= {3} key={cardData._id}>
           <CardComponent {...cardData} />
         </Grid>
       ))}

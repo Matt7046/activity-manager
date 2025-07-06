@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
-import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button, { Pulsante } from "../../components/ms-button/Button";
@@ -198,7 +198,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
           disabled={true}
         />
         <Grid container spacing={2}>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid xs={12} sm={6}>
             <TextField
               id="activity"
               label={testoOld.nome}
@@ -209,7 +209,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
               required={true}
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid xs={12} sm={6}>
             <TextField
               id="points"
               label={'Punti'}

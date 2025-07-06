@@ -1,6 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Pagination, Typography } from "@mui/material";
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertConfig } from '../../components/ms-alert/Alert';
@@ -127,12 +127,12 @@ const PointsContent: React.FC<PointsContentProps> = ({
           <DialogTitle id="customized-dialog-title">
             <Grid container spacing={2}>
               {/* Prima riga: Pulsanti per simulare il login */}
-              <Grid size={{ xs: 10, sm: 11 }}>
+              <Grid  xs= {10} sm= {11 }>
                 <div className="col-display">
                   <Label text={"LOG ATTIVITA'"} _id={"logActivity"} className='col-display' />
                 </div>
               </Grid>
-              <Grid size={{ xs: 1, sm: 1 }}>
+              <Grid xs= {1} sm= {1}>
                 <IconButton
                   aria-label="close"
                   onClick={handleCloseDialogLogActivity}
@@ -148,7 +148,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
               <>
                 <Grid container spacing={2}>
                   {testoLogUnpaged.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
-                    <Grid size={{ xs: 12, sm: 6 }} key={index} >
+                    <Grid xs={12} sm={6} key={index} >
                       <Card >
 
                         <CardContent className='text-card-point'>
@@ -209,12 +209,12 @@ const PointsContent: React.FC<PointsContentProps> = ({
           <DialogTitle id="customized-dialog-title-family">
             <Grid container spacing={2}>
               {/* Prima riga: Pulsanti per simulare il login */}
-              <Grid size={{ xs: 10, sm: 11 }}>
+              <Grid xs={10} sm={11}>
                 <div className="col-display">
                   <Label text={"LOG FAMIGLIA"} _id={"logFamily"} className='col-display' />
                 </div>
               </Grid>
-              <Grid size={{ xs: 1, sm: 1 }}>
+              <Grid xs= {1} sm={1}>
                 <IconButton
                   aria-label="close"
                   onClick={handleCloseDialogLogFamily}
@@ -230,7 +230,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
               <>
                 <Grid container spacing={2}>
                   {testoLogFamilyUnpaged.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
-                    <Grid size={{ xs: 12, sm: 6 }} key={index} >
+                    <Grid xs={12} sm={6} key={index}>
                       <Card >
 
                         <CardContent className='text-card-point'>
