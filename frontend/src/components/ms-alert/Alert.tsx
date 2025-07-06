@@ -4,7 +4,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
 import { Box, Card, CardContent, IconButton, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Unstable_Grid2';
 import { useEffect } from 'react';
 import { TypeAlertColor } from '../../general/structure/Constant';
 import { TypeMessage } from '../../page/page-layout/PageLayout';

@@ -1,6 +1,6 @@
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, Divider, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Unstable_Grid2';
 import React, { ChangeEvent, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -184,7 +184,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
           <Box className="box-child" key={index} mb={2}>
             <Grid container spacing={2} alignItems="center">
               {/* Email del figlio */}
-              <Grid size={{ xs: 4 }}>
+              <Grid xs={4}>
                 <TextField
                   label={`Email Figlio ${index + 1}`}
                   variant="outlined"
@@ -209,7 +209,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
                 />
               </Grid>
               {/* Points del figlio (fisso 100) */}
-              <Grid size={{ xs: 2 }}>
+              <Grid xs= {2 }>
                 <TextField
                   label={labelRegister.points}
                   value={100}

@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, FormControl, IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
 import { useUser } from '../../App';
 import { AlertConfig } from '../../components/ms-alert/Alert';
@@ -127,7 +127,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
           {/* Campo emailFamily */}
        
           {/* Campo Points */}
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid xs={12} sm={6}>
             <FormControl fullWidth variant="standard">
               <InputLabel htmlFor="filled-points">{labelFamily.points}</InputLabel>
               <Input
@@ -140,7 +140,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
           </Grid>
 
           {/* Campo New Points */}
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid xs={12} sm={6}>
             <FormControl fullWidth variant="standard">
               <InputLabel htmlFor="filled-adornment-new-points">{labelFamily.newPoints}</InputLabel>
               <Input
