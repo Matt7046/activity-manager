@@ -25,8 +25,8 @@ app:
         key: qwertyuiop
   algorithm1: AES
   algorithm2: HmacSHA256
-  address1: http://localhost:3000
-  address2: http://localhost:3001
+  address1: 'http://173.212.220.20:80'
+  address2: 'http://173.212.220.20:80'
   security:
     roles: USER
     username: user
