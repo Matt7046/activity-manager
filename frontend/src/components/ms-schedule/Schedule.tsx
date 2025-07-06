@@ -1,4 +1,4 @@
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Unstable_Grid2';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import Button, { Pulsante } from '../ms-button/Button';
