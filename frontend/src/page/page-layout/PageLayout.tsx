@@ -1,5 +1,5 @@
 import { Box, TextField } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Unstable_Grid2';
 import { googleLogout } from '@react-oauth/google';
 import React, { useEffect, useRef, useState } from 'react';
 import { NavigateFunction } from 'react-router-dom';

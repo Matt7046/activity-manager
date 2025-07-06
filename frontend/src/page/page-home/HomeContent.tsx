@@ -7,7 +7,7 @@ import InfoIcon from '@mui/icons-material/Info'; // About
 import ListAltIcon from '@mui/icons-material/ListAlt'; // Activity
 import SettingsIcon from '@mui/icons-material/Settings'; // Operative
 import { Box, Button as ButtonMui, CircularProgress, Divider, IconButton, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Unstable_Grid2';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Link, NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
@@ -385,7 +385,7 @@ const GoogleAuthComponent = () => {
               {/* Buttons: Login Simulation and Google Login */}
               {!hiddenLogin && (
                 <Grid container spacing={2}>
-                  <Grid size={{ xs: 12, sm: 6 }}>
+                 <Grid xs={12} sm={6}>
                     <ButtonMui
                       variant="contained"
                       color="primary"
@@ -396,7 +396,7 @@ const GoogleAuthComponent = () => {
                     </ButtonMui>
                   </Grid>
 
-                  <Grid size={{ xs: 12, sm: 6 }}>
+                  <Grid xs={12} sm={6} >
                     <ButtonMui
                       variant="contained"
                       color="primary"
