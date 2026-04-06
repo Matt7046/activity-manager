@@ -38,13 +38,47 @@ public class RabbitMQNotificationExchange {
     }
 
     @Bean
-    public Binding bindingNotification(Queue notificationQueue, @Qualifier("directExchangeNotification") DirectExchange exchange) {
+    public Queue activityCreateQueue() {
+        return QueueBuilder.durable("activity.create.queue").build();
+    }
+
+    @Bean
+    public Queue activityModifyQueue() {
+        return QueueBuilder.durable("activity.modify.queue").build();
+    }
+
+    @Bean
+    public Queue activityDeleteQueue() {
+        return QueueBuilder.durable("activity.delete.queue").build();
+    }
+
+    @Bean
+    public Binding bindingNotification(Queue notificationQueue,
+            @Qualifier("directExchangeNotification") DirectExchange exchange) {
         return BindingBuilder.bind(notificationQueue).to(exchange).with(routingKeyNotification);
     }
 
     @Bean
     public Binding bindingEmail(Queue emailQueue, @Qualifier("directExchangeNotification") DirectExchange exchange) {
         return BindingBuilder.bind(emailQueue).to(exchange).with(routingKeyEmail);
+    }
+
+    @Bean
+    public Binding bindingCreateActivity(Queue notificationQueue,
+            @Qualifier("directExchangeNotification") DirectExchange exchange) {
+        return BindingBuilder.bind(notificationQueue).to(exchange).with(routingKeyNotification);
+    }
+
+    @Bean
+    public Binding bindingModifyActivity(Queue notificationQueue,
+            @Qualifier("directExchangeNotification") DirectExchange exchange) {
+        return BindingBuilder.bind(notificationQueue).to(exchange).with(routingKeyNotification);
+    }
+
+    @Bean
+    public Binding bindingDeleteActivity(Queue notificationQueue,
+            @Qualifier("directExchangeNotification") DirectExchange exchange) {
+        return BindingBuilder.bind(notificationQueue).to(exchange).with(routingKeyNotification);
     }
 
 }

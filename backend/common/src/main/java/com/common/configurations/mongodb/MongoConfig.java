@@ -1,4 +1,4 @@
-package com.common.configurations.config;
+package com.common.configurations.mongodb;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -30,16 +30,16 @@ import javax.net.ssl.TrustManagerFactory;
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
-    @Value("${mongo.uri}")
+    @Value("${spring.data.mongo.uri}")
     private String mongoUri;
 
-    @Value("${mongo.tls.cert}")
+    @Value("${spring.data.mongo.tls.cert}")
     private String certFilePath; // Il percorso al file PEM CLIENT
 
-    @Value("${mongo.tls.key}")
+    @Value("${spring.data.mongo.tls.key}")
     private String certKeyFilePath; // Il percorso al file PEM KEY
 
-    @Value("${mongo.database}")
+    @Value("${spring.data.mongo.database}")
     private String database;
 
     @Bean
@@ -92,7 +92,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
         trustManagerFactory.init((KeyStore) null); // Usando il TrustStore di default
 
         // Creazione dell'SSLContext
-        SSLContext sslContext = SSLContext.getInstance("TLS");
+        SSLContext sslContext = SSLContext.getInstance("TLSv1.2");        
         sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), new SecureRandom());
         return sslContext;
     }

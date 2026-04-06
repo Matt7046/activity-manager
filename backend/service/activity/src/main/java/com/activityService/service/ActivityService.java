@@ -2,13 +2,15 @@ package com.activityService.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.common.dto.activity.ActivityDTO;
 import com.common.mapper.ActivityMapper;
-import com.activityService.repository.ActivityRepository;
+import com.activityService.repository.mongodb.ActivityRepository;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.configurations.rabbitmq.RabbitMQProducer;
 import com.common.data.activity.Activity;
 
 
@@ -26,6 +28,8 @@ public class ActivityService {
     @Qualifier("webClientActivity")
     private WebClient webClientActivity;
 
+
+
     @Transactional
     public List<Activity> findAll() {
         return activityRepository.findAll();
@@ -40,10 +44,10 @@ public class ActivityService {
         return activityRepository.deleteByIdentificativo(identificativo);
     }
     @Transactional
-    public String saveActivity(ActivityDTO activityDTO) {
+    public Activity saveActivity(ActivityDTO activityDTO) {
         Activity activityToSave = activityMapper.fromDTO(activityDTO);
         Activity result = activityRepository.save(activityToSave); // Supponiamo che restituisca una String
-        return result.get_id();
+        return result;
     }
     @Transactional
     public Activity save(ActivityDTO ActivityDTO) {
