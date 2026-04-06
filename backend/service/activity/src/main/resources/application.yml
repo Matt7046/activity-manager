@@ -1,13 +1,19 @@
-# common/src/main/resources/application-common.yml
 spring:
   config:
     import: optional:classpath:application-common.yml
   application:
     name: activityManager
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: username
+    password: password
+
 error:
   http: "Errore HTTP: "
   document:
     notFound: 'Documento non trovato con identificativo: '
+
 app:
   rabbitmq:
     exchange:
@@ -16,3 +22,7 @@ app:
         routingKey:
           logActivity: point.log.activity
           logFamily: point.log.family
+          commandSaveActivity: activity.save
+          commandDeleteActivity: activity.delete
+  elasticsearch:
+    enabled: "true"
