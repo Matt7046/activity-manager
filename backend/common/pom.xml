@@ -38,6 +38,8 @@
             <artifactId>spring-boot-starter-amqp</artifactId>
             <version>3.1.0</version>
         </dependency>
+
+
         <!-- JavaMail API -->
         <dependency>
             <groupId>com.sun.mail</groupId>

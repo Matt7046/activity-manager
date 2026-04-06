@@ -8,7 +8,7 @@ services:
     image: react-frontend:1.0.0
     container_name: frontend
     networks:
-      - app-network
+      - app-network    
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -22,6 +22,32 @@ services:
     networks:
       - app-network
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.9.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ELASTIC_PASSWORD=password
+      - xpack.security.enabled=true
+
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.keystore.path=certs/elastic-certificates.p12
+      - xpack.security.http.ssl.keystore.password=password
+      - xpack.security.transport.ssl.enabled=false
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -k -u elastic:password https://localhost:9200 >/dev/null 2>&1 || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./elasticsearch/certs:/usr/share/elasticsearch/config/certs:ro
+    networks:
+      - app-network
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -59,21 +85,47 @@ services:
       - app-network
 
   activity-service:
-    depends_on:
-      - rabbitmq
     image: activity-service:1.0.0
     build:
       context: ./
       dockerfile: service/activity/Dockerfile
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    
+    environment:     
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: username
+      SPRING_RABBITMQ_PASSWORD: password
+
+      # Configurazione Client Elasticsearch
+      #SPRING_ELASTICSEARCH_URIS: https://elasticsearch:9200
+      #SPRING_ELASTICSEARCH_USERNAME: elastic
+      #SPRING_ELASTICSEARCH_PASSWORD: password # La password dell'utente 'elastic'
+
+      # Mapping SSL Bundle per Spring Boot 3.1+
+      # Nota: Deve chiamarsi ELASTICSEARCH_BUNDLE come nel tuo codice Java
+      #SPRING_BOOT_SSL_BUNDLE_JKS_ELASTIC_BUNDLE_TRUSTSTORE_LOCATION: "file:/app/certs/elastic-truststore.p12"
+      #SPRING_BOOT_SSL_BUNDLE_JKS_ELASTIC_BUNDLE_TRUSTSTORE_PASSWORD: "mypassword" # La password del file .p12
+      #SPRING_BOOT_SSL_BUNDLE_JKS_ELASTIC_BUNDLE_TRUSTSTORE_TYPE: PKCS12
+
+      # Timeout consigliati per la produzione
+      #SPRING_ELASTICSEARCH_CONNECTION_TIMEOUT: 5s
+      #SPRING_ELASTICSEARCH_SOCKET_TIMEOUT: 60s
+
     volumes:
+      # Mappiamo la cartella dove hai salvato il file .p12
+      # Assicurati che il file si chiami elastic-truststore.p12 dentro quella cartella
       - ./service/activity/src/main/resources/certificate:/app/certificate
+
     networks:
       - app-network
+
+  # RIMOSSO: "sleep infinity" (altrimenti l'app Java non parte mai)
+  # Il container userà l'ENTRYPOINT definito nel tuo Dockerfile
 
   auth-service:
     depends_on:
@@ -88,7 +140,7 @@ services:
       - SPRING_RABBITMQ_USERNAME=username
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
-      - ./service/auth/src/main/resources/certificate:/app/certificate
+      - ./service/auth/src/main/resources/certificate:/app/certificate      
     networks:
       - app-network
 
@@ -147,4 +199,5 @@ networks:
   app-network:
     driver: bridge
     external: true
+
 

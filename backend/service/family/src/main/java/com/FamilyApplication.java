@@ -9,7 +9,15 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 })
 @SpringBootApplication(scanBasePackages = {
         "com.familyService",
-        "com.common"
+        "com.common.configurations.mongodb",
+        "com.common.configurations.config",
+        "com.common.configurations.encrypt",   
+        "com.common.configurations.rabbitmq",
+        "com.common.configurations.structure",
+        "com.common.mapper",  
+        "com.common.data",
+        "com.common.dto",
+        "com.common.structure"
 })
 public class FamilyApplication {
 
