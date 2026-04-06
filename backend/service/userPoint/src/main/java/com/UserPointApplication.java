@@ -6,7 +6,15 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = "com.userPointService.repository")
 @SpringBootApplication(scanBasePackages = {
     "com.userPointService",
-    "com.common"
+    "com.common.configurations.mongodb",
+    "com.common.configurations.config",
+    "com.common.configurations.encrypt",   
+    "com.common.configurations.rabbitmq",
+    "com.common.configurations.structure",
+    "com.common.mapper",  
+    "com.common.data",
+    "com.common.dto",
+    "com.common.structure"
 })
 public class UserPointApplication {
 

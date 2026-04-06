@@ -32,9 +32,7 @@ import java.util.stream.Collectors;
 public class FamilyPointsProcessor {
 
     @Autowired
-    private FamilyWebService familyWebService;
-    @Autowired
-    private RabbitMQProducer notificationPublisher;
+    private FamilyWebService familyWebService;   
     @Autowired
     private FamilyService familyService;
     @Autowired
@@ -42,9 +40,7 @@ public class FamilyPointsProcessor {
     @Autowired
     private UserPointMapper userPointMapper;
     @Autowired
-    private NotificationComponent notificationComponent;
-
-    private String exchangeName;
+    private NotificationComponent notificationComponent; 
 
     @Value("${rabbitmq.exchange.name.notification}")
     private String notificationExchange;
