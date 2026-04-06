@@ -1,4 +1,8 @@
 # common/src/main/resources/application-common.yml
+jdk:
+  tls:
+    client:
+      protocol: TLSv1.2 
 spring:
   application:
     name: common-config
@@ -9,12 +13,27 @@ spring:
     password: password
   mail:
     from: matteo.santangelo@colorsdev.tech
-mongo:
-  uri: mongodb+srv://cluster0.vmbf6.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&tls=true
-  tls:
-    cert: certificate/client.pem
-    key: certificate/client-key.pem
-  database: demo
+  data:
+    mongo:
+      uri: mongodb+srv://cluster0.vmbf6.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&tls=true
+      tls:
+        cert: /app/certificate/client.pem
+        key: /app/certificate/client-key.pem
+      database: demo
+  elasticsearch:
+    uris: https://elasticsearch:9200
+    username: elastic
+    password: password
+    connection-timeout: 5s
+    socket-timeout: 30s
+  ssl:
+    bundle:
+      jks:
+        elastic-bundle: # Nome del bundle che useremo nel codice Java
+          truststore:
+            location: "certificate/elastic-client.p12"
+            password: "mypassword" # La password che hai usato nel comando keytool
+            type: PKCS12
 
 app:
   secret:
@@ -27,6 +46,7 @@ app:
   algorithm2: HmacSHA256
   address1: http://localhost:3000
   address2: http://localhost:3001
+  address3: http://localhost:8080
   security:
     roles: USER
     username: user

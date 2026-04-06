@@ -1,4 +1,4 @@
-package com.activityService.repository;
+package com.activityService.repository.mongodb;
 
 
 
