@@ -7,10 +7,13 @@ import com.common.configurations.rabbitmq.RabbitMQSearchPublisher;
 import com.common.data.activity.Activity;
 import com.common.data.activity.event.ActivityCreateEvent;
 import com.common.data.activity.event.ActivityDeleteEvent;
+import com.common.data.activity.event.ActivityEnrichedEvent;
 import com.common.dto.activity.ActivityDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.structure.status.ActivityHttpStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -61,7 +64,7 @@ public class ActivityCommandProcessor {
         }).doOnSuccess(response1 -> {
             // Invia l'evento dopo il salvataggio del log in modo asincrono
             Mono.fromRunnable(() -> {
-
+                commandSearchPublisher.publishDeleteEnriched(_id); // u
             }).subscribe(); // Avvia il runnable senza bloccare il flusso
         });
 

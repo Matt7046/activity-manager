@@ -1,6 +1,8 @@
 package com.common.data.activity.event;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public record ActivityEnrichedEvent(
         String _id,
@@ -12,6 +14,11 @@ public record ActivityEnrichedEvent(
 ) {
 
     // Costruttore da JsonNode
+
+    public ActivityEnrichedEvent(String _id) {
+        this(_id, null, null, null, null, null);
+    }
+
     public ActivityEnrichedEvent(JsonNode activity) {
         this(
                 activity.path("_id").asText(null),
@@ -25,7 +32,7 @@ public record ActivityEnrichedEvent(
         );
     }
 
-    // Costruttore da ActivityCreateEvent + categoria
+   // Costruttore da ActivityCreateEvent + categoria
     public ActivityEnrichedEvent(ActivityCreateEvent activity, String categoryNew) {
         this(
                 activity._id(),
@@ -35,5 +42,13 @@ public record ActivityEnrichedEvent(
                 activity.email(),
                 categoryNew
         );
+    }
+
+    public ObjectNode addId(String identificativo)
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode node = mapper.createObjectNode();
+        node.put("_id", identificativo);
+        return node;
     }
 }
