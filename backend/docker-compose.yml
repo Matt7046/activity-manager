@@ -48,6 +48,7 @@ services:
       - ./elasticsearch/certs:/usr/share/elasticsearch/config/certs:ro
     networks:
       - app-network
+      
   nginx:
     image: nginx:latest
     container_name: nginx

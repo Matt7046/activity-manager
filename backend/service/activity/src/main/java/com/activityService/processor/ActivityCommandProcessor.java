@@ -10,10 +10,12 @@ import com.common.data.activity.event.ActivityDeleteEvent;
 import com.common.dto.activity.ActivityDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.structure.status.ActivityHttpStatus;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
 import java.util.ArrayList;
 
 @Service
@@ -22,8 +24,6 @@ public class ActivityCommandProcessor {
     private ActivityService activityService;
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
-    @Autowired
-    private RabbitMQProducer commandPublisher;
     @Autowired
     private RabbitMQSearchPublisher commandSearchPublisher;
     @Value("${app.rabbitmq.exchange.point.exchangeName}")
@@ -46,8 +46,6 @@ public class ActivityCommandProcessor {
         }).doOnSuccess(response1 -> {
             // Invia l'evento dopo il salvataggio del log in modo asincrono
             Mono.fromRunnable(() -> {
-                commandPublisher.sendMessage(exchangePoint, routingKeySaveActivity,
-                        new ActivityCreateEvent(response1.getJsonText()));
                 ActivityCreateEvent event = new ActivityCreateEvent(response1.getJsonText());
                 commandSearchPublisher.publishCreate(event); // usa il tuo RabbitMQSearchPublisher
 
@@ -63,8 +61,7 @@ public class ActivityCommandProcessor {
         }).doOnSuccess(response1 -> {
             // Invia l'evento dopo il salvataggio del log in modo asincrono
             Mono.fromRunnable(() -> {
-                commandPublisher.sendMessage(exchangePoint, routingKeyDeleteActivity,
-                        new ActivityDeleteEvent(response1.getJsonText()));
+
             }).subscribe(); // Avvia il runnable senza bloccare il flusso
         });
 
