@@ -89,6 +89,8 @@ rabbitmq:
     point: point.log.activity
 
     activity:
+      delete:
+        enriched: activity.delete.enriched
       search:
         create: activity.search.create
         enriched: activity.search.enriched

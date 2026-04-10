@@ -21,6 +21,9 @@ public class RabbitMQNActivitySearchExchange {
     @Value("${rabbitmq.routingKey.activity.search.enriched}")
     private String routingKeySearchEnriched;
 
+    @Value("${rabbitmq.routingKey.activity.delete.enriched}")
+    private String routingKeyDeleteEnriched;
+
     @Bean
     public DirectExchange directExchangeActivitySearch() {
         return new DirectExchange(exchangeName);
@@ -41,6 +44,11 @@ public class RabbitMQNActivitySearchExchange {
     @Bean
     public Queue searchElasticQueue() {
         return QueueBuilder.durable("search.elastic.queue").build();
+    }
+
+    @Bean
+    public Queue deleteElasticQueue() {
+        return QueueBuilder.durable("delete.elastic.queue").build();
     }
 
     @Bean
@@ -74,5 +82,16 @@ public class RabbitMQNActivitySearchExchange {
                 .bind(searchElasticQueue)
                 .to(exchange)
                 .with(routingKeySearchEnriched);
+    }
+
+    @Bean
+    public Binding bindingDeleteEnriched(
+            Queue deleteElasticQueue,
+            @Qualifier("directExchangeActivitySearch") DirectExchange exchange) {
+
+        return BindingBuilder
+                .bind(deleteElasticQueue)
+                .to(exchange)
+                .with(routingKeyDeleteEnriched);
     }
 }

@@ -4,6 +4,7 @@ import com.common.data.activity.event.ActivityCreateEvent;
 import com.common.data.activity.event.ActivityEnrichedEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,9 @@ public class RabbitMQSearchPublisher implements SearchPublisher {
 
     @Value("${rabbitmq.routingKey.activity.search.enriched}")
     private String routingKeySearchEnriched;
+
+    @Value("${rabbitmq.routingKey.activity.delete.enriched}")
+    private String routingKeyDeleteEnriched;
 
     public RabbitMQSearchPublisher(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
@@ -54,6 +58,23 @@ public class RabbitMQSearchPublisher implements SearchPublisher {
             rabbitTemplate.convertAndSend(
                     exchangeActivitySearch,
                     routingKeySearchEnriched,
+                    jsonMessage
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void publishDeleteEnriched(String identificativo) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            ObjectNode node = mapper.createObjectNode();
+            node.put("_id", identificativo);
+            String jsonMessage = mapper.writeValueAsString(node);
+            rabbitTemplate.convertAndSend(
+                    exchangeActivitySearch,
+                    routingKeyDeleteEnriched,
                     jsonMessage
             );
         } catch (JsonProcessingException e) {
