@@ -13,9 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // Genera un costruttore con tutti i campi
 public class ActivityDocument {
     @Id
+    private String identificativo;
     private String _id;
     private String subTesto;
     private String nome;
     private Long points;
     private String email;
+    private String category;
+
+
 }
