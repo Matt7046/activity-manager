@@ -7,4 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public interface SearchPublisher {
     void publishCreate(ActivityCreateEvent event);
     void publishEnriched(ActivityEnrichedEvent event);
+    void publishDeleteEnriched(String event);
+
 }
