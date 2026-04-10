@@ -35,9 +35,9 @@ services:
       - "9300:9300"
     volumes:
       - ./elasticsearch/certs:/usr/share/elasticsearch/config/certs:ro
-    networks:
+      - esdata:/usr/share/elasticsearch/data
+    networks:      
       - app-network
-  
 
   nginx:
     image: nginx:latest
@@ -182,6 +182,8 @@ services:
       - ./service/image/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
     networks:
       - app-network
+volumes:
+  esdata:      
 
 networks:
   app-network:
