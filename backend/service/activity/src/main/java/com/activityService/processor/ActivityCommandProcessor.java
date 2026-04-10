@@ -3,6 +3,7 @@ package com.activityService.processor;
 import com.activityService.service.ActivityService;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.configurations.rabbitmq.RabbitMQProducer;
+import com.common.configurations.rabbitmq.RabbitMQSearchPublisher;
 import com.common.data.activity.Activity;
 import com.common.data.activity.event.ActivityCreateEvent;
 import com.common.data.activity.event.ActivityDeleteEvent;
@@ -23,12 +24,16 @@ public class ActivityCommandProcessor {
     EncryptDecryptConverter encryptDecryptConverter;
     @Autowired
     private RabbitMQProducer commandPublisher;
+    @Autowired
+    private RabbitMQSearchPublisher commandSearchPublisher;
     @Value("${app.rabbitmq.exchange.point.exchangeName}")
     private String exchangePoint;
     @Value("${app.rabbitmq.exchange.point.routingKey.commandSaveActivity}")
     private String routingKeySaveActivity;
     @Value("${app.rabbitmq.exchange.point.routingKey.commandDeleteActivity}")
     private String routingKeyDeleteActivity;
+    @Value("${rabbitmq.exchange.name.activity.search.exchangeName}")
+    private String exchangeActivitySearch;
     @Value("${error.document.notFound}")
     private String errorDocument;
 
@@ -40,10 +45,12 @@ public class ActivityCommandProcessor {
             return new ResponseDTO(activity, ActivityHttpStatus.OK.value(), new ArrayList<>());
         }).doOnSuccess(response1 -> {
             // Invia l'evento dopo il salvataggio del log in modo asincrono
-            Mono.fromRunnable(() -> {             
+            Mono.fromRunnable(() -> {
                 commandPublisher.sendMessage(exchangePoint, routingKeySaveActivity,
                         new ActivityCreateEvent(response1.getJsonText()));
-                             
+                ActivityCreateEvent event = new ActivityCreateEvent(response1.getJsonText());
+                commandSearchPublisher.publishCreate(event); // usa il tuo RabbitMQSearchPublisher
+
             }).subscribe(); // Avvia il runnable senza bloccare il flusso
         });
     }

@@ -16,10 +16,10 @@ public class RabbitMQNotificationExchange {
     @Value("${rabbitmq.exchange.name.notification}")
     private String exchangeName;
 
-    @Value("${rabbitmq.exchange.routingKey.notification}")
+    @Value("${rabbitmq.routingKey.notification}")
     private String routingKeyNotification;
 
-    @Value("${rabbitmq.exchange.routingKey.email}")
+    @Value("${rabbitmq.routingKey.email}")
     private String routingKeyEmail;
 
     @Bean
@@ -80,5 +80,6 @@ public class RabbitMQNotificationExchange {
             @Qualifier("directExchangeNotification") DirectExchange exchange) {
         return BindingBuilder.bind(notificationQueue).to(exchange).with(routingKeyNotification);
     }
+
 
 }

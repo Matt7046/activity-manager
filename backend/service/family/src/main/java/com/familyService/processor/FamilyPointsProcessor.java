@@ -45,13 +45,13 @@ public class FamilyPointsProcessor {
     @Value("${rabbitmq.exchange.name.notification}")
     private String notificationExchange;
 
-    @Value("${rabbitmq.exchange.routingKey.notification}")
+    @Value("${rabbitmq.routingKey.notification}")
     private String routingKeyNotification;
 
     @Value("${rabbitmq.exchange.name.point}")
     private String pointExchange;
 
-    @Value("${rabbitmq.exchange.routingKey.point}")
+    @Value("${rabbitmq.routingKey.point}")
     private String routingKeyPoint;
 
     @Value("${message.document.add}")

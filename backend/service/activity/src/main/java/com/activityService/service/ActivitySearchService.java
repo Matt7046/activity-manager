@@ -1,5 +1,6 @@
 package com.activityService.service;
 
+import com.common.data.activity.event.ActivityEnrichedEvent;
 import org.springframework.stereotype.Service;
 
 import com.activityService.repository.elastic.ActivityDocumentRepository;
@@ -19,13 +20,15 @@ public class ActivitySearchService {
      * Inserisce o aggiorna un documento Elastic.
      * Serve sia per la creazione sia per l'update.
      */
-    public void index(ActivityCreateEvent event) {
+    public void index(ActivityEnrichedEvent event) {
         ActivityDocument doc = new ActivityDocument(
+                event._id(),
                 event._id(),
                 event.subTesto(),
                 event.nome(),
                 event.points(),
-                event.email()
+                event.email(),
+                event.category()
         );
         repository.save(doc); // save = upsert in Elasticsearch
     }

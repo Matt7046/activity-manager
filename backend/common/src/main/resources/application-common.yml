@@ -72,15 +72,26 @@ app:
     notification:
       exchange:
         exchangeName: notification-exchange
+
+
 rabbitmq:
   exchange:
     name:
       notification: notification-exchange
       point: point-exchange
-    routingKey:
-        notification: notification.family.notifier
-        email: userpoint.notification.email
-        point: point.log.activity
+      activity:
+        search:
+          exchangeName: activity.search.exchange
+
+  routingKey:
+    notification: notification.family.notifier
+    email: userpoint.notification.email
+    point: point.log.activity
+
+    activity:
+      search:
+        create: activity.search.create
+        enriched: activity.search.enriched
 message:
   error:
     generic: Errore generico

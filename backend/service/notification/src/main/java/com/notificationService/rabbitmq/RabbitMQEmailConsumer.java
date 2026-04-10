@@ -1,12 +1,9 @@
 package com.notificationService.rabbitmq;
 
-import com.common.dto.user.UserPointDTO;
 import com.common.dto.user.UserPointWithChildDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.notificationService.processor.EmailProcessor;
-import com.notificationService.service.EmailService;
-import com.notificationService.service.WebSocketService;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
