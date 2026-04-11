@@ -24,11 +24,6 @@ public class ActivityService {
     EncryptDecryptConverter encryptDecryptConverter;
     @Autowired
     ActivityMapper activityMapper;
-    @Autowired
-    @Qualifier("webClientActivity")
-    private WebClient webClientActivity;
-
-
 
     @Transactional
     public List<Activity> findAll() {

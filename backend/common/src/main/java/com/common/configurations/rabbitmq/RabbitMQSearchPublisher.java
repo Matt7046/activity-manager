@@ -70,7 +70,7 @@ public class RabbitMQSearchPublisher implements SearchPublisher {
             ObjectMapper mapper = new ObjectMapper();
 
             ObjectNode node = mapper.createObjectNode();
-            node.put("_id", identificativo);
+            node.put("identificativo", identificativo);
             String jsonMessage = mapper.writeValueAsString(node);
             rabbitTemplate.convertAndSend(
                     exchangeActivitySearch,
