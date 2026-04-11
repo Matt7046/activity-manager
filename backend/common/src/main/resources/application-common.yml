@@ -36,6 +36,8 @@ spring:
             type: PKCS12
 
 app:
+  gpt:
+    token: insert-gpt-key-for-use-categorize-ai
   secret:
     key: this_is_a_very_long_secret_key_256bit
     crypt:
@@ -61,6 +63,7 @@ app:
       activity: http://activity-service:8080
       userpoint: http://user-point-service:8080
       family: http://family-service:8080
+      gpt: https://api.openai.com/v1
     path:
       image: /api/image
       auth: /api/auth
