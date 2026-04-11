@@ -1,17 +1,21 @@
-package com.notificationService.rabbitmq;
+package com.activityService.rabbitmq;
 
+import com.activityService.service.ActivityWebAIService;
 import com.common.configurations.rabbitmq.SearchPublisher;
 import com.common.data.activity.event.ActivityCreateEvent;
 import com.common.data.activity.event.ActivityEnrichedEvent;
+import com.common.dto.activity.LogActivityDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 
@@ -19,6 +23,8 @@ import java.io.IOException;
 public class RabbitMQActivityAIConsumer {
 
     private final SearchPublisher searchPublisher;
+    @Autowired
+    private ActivityWebAIService activityWebAIService;
 
     public RabbitMQActivityAIConsumer(SearchPublisher searchPublisher) {
         this.searchPublisher = searchPublisher;
@@ -47,17 +53,36 @@ public class RabbitMQActivityAIConsumer {
         watch.start();
         doWork(in);
         watch.stop();
-        ActivityEnrichedEvent enriched = new ActivityEnrichedEvent(
-                event._id(),
-                event.subTesto(),
-                event.nome(),
-                event.points(),
-                event.email(),
-                categorize(event)
-        );
 
-        // 👉 Pubblica verso Elastic step
-        searchPublisher.publishEnriched(enriched);
+        categorize(event).doOnSuccess(response1 -> {
+                    // Invia l'evento dopo il salvataggio del log in modo asincrono
+                    Mono.fromRunnable(() -> {
+                        ActivityEnrichedEvent eventEnriched = new ActivityEnrichedEvent(
+                                event._id(),
+                                event.subTesto(),
+                                event.nome(),
+                                event.points(),
+                                event.email(),
+                                response1);
+                        searchPublisher.publishEnriched(eventEnriched); // u
+                    }).subscribe(); // Avvia il runnable senza bloccare il flusso
+
+            }).doOnError(error -> {
+            // Invia l'evento dopo il salvataggio del log in modo asincrono
+            Mono.fromRunnable(() -> {
+                System.out.println("Errore durante il salvataggio dei punti: " + error.getMessage());
+                ActivityEnrichedEvent eventEnriched = new ActivityEnrichedEvent(
+                        event._id(),
+                        event.subTesto(),
+                        event.nome(),
+                        event.points(),
+                        event.email(),
+                        "GENERIC");
+                searchPublisher.publishEnriched(eventEnriched); // u
+
+
+            }).subscribe();
+            }).subscribe();
     }
 
     private void doWork(String in) throws InterruptedException {
@@ -69,10 +94,7 @@ public class RabbitMQActivityAIConsumer {
     }
 
 
-    private String categorize(ActivityCreateEvent event) {
-        // MOCK iniziale
-        if (event.nome().toLowerCase().contains("sport")) return "SPORT";
-        if (event.nome().toLowerCase().contains("studio")) return "STUDY";
-        return "GENERIC";
+    private Mono<String> categorize(ActivityCreateEvent event) {
+        return activityWebAIService.categorize(event);
     }
 }

@@ -46,7 +46,13 @@ public class RabbitMQActivityElasticConsumer {
         watch.start();
         doWork(in);
         watch.stop();
-        ActivityDocument doc = new ActivityDocument();
+        ActivityDocument doc = null;
+        if(event._id() != null) {
+          doc = repository.findByIdentificativo(event._id());
+        }
+        if(doc == null) {
+            doc = new ActivityDocument();
+        };
         doc.setIdentificativo(event._id());
         doc.setNome(event.nome());
         doc.setSubTesto(event.subTesto());
@@ -67,17 +73,5 @@ public class RabbitMQActivityElasticConsumer {
     }
 
 
-    public void handleEnriched(ActivityEnrichedEvent event) {
-
-        ActivityDocument doc = new ActivityDocument();
-        doc.set_id(event._id());
-        doc.setNome(event.nome());
-        doc.setSubTesto(event.subTesto());
-        doc.setPoints(event.points());
-        doc.setEmail(event.email());
-        doc.setCategory(event.category());
-
-        repository.save(doc);
-    }
 
 }
