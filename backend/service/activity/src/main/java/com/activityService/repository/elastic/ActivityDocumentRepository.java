@@ -15,4 +15,6 @@ public interface ActivityDocumentRepository extends ElasticsearchRepository<Acti
     List<ActivityDocument> findByCategoryContaining(String text);
 
     void deleteByIdentificativo(String identificativo);
+    ActivityDocument findByIdentificativo(String identificativo);
+
 }

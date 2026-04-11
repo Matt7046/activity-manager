@@ -42,12 +42,15 @@ public class RabbitMQActivityDeleteElasticConsumer {
     public void receive(String in, int receiver) throws InterruptedException, JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode node = objectMapper.readTree(in);
-        String identificativo = node.path("_id").asText();
+        String identificativo = node.path("identificativo").asText();
         StopWatch watch = new StopWatch();
         watch.start();
         doWork(in);
         watch.stop();
-        repository.deleteByIdentificativo(identificativo);
+        ActivityDocument document = repository.findByIdentificativo(identificativo);
+        if(document !=null){
+            repository.delete(document);
+        }
 
     }
 
