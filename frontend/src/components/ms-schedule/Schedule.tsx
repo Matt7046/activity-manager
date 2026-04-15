@@ -109,15 +109,21 @@ const Schedule = observer((props: {
                 <Label text={item.nome} _id={item._id} />
               </div>
 
-              <Grid container justifyContent={props.schedule.justifyContent} spacing={2} style={{ height: '10px' }}>
+              <Grid
+                container
+                justifyContent={props.schedule.justifyContent}
+                alignItems="center"
+                spacing={2}
+                style={{ minHeight: '40px', marginTop: '-20px' }} // minHeight garantisce spazio per il cerchio, marginTop compensa il div del nome se necessario
+              >
                 <Button pulsanti={pulsanti} />
               </Grid>
+
               <div id={`rowHidden-${item._id}`}>
                 <Label _id={item._id} text={subTesti[item._id] ? subTesti[item._id] : isVertical ? '' : "-"} visibility={isVertical && visibilitySubTesto ? 'hidden' : undefined} />
               </div>
-
               {/* Separatore */}
-              <hr className= {isVertical ? 'custom-separator-vertical' : 'custom-separator-horizontal'} />
+              <hr className={isVertical ? 'custom-separator-vertical' : 'custom-separator-horizontal'} />
             </React.Fragment>
           );
         })}

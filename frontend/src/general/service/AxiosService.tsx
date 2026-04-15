@@ -54,14 +54,14 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
     const response = await apiClient().post(endpoint, data);
     response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
     const message: TypeMessage = {
-      titleMessage:response.data.status === HttpStatus.OK ? "Successo nella richiesta":"Errore nellla richiesta" ,
+      titleMessage:response.data.status === HttpStatus.OK ? "Successo nella richiesta":"Errore nella richiesta" ,
       typeMessage:  response.data.status === HttpStatus.OK ? TypeAlertColor.SUCCESS : TypeAlertColor.ERROR ,
       message : response.data.status === HttpStatus.OK ? null : response.data.errors,
     }
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { titleMessage:"Errore nellla richiesta", typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { titleMessage:"Errore nella richiesta", typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -80,14 +80,14 @@ export const postDataToken = async (endpoint: string, data: any, setLoading?: (l
     const response = await apiClientToken().post(endpoint, data);
     response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
     const message: TypeMessage = {
-      titleMessage:response.data.status === HttpStatus.OK ? "Successo nella richiesta":"Errore nellla richiesta" ,
+      titleMessage:response.data.status === HttpStatus.OK ? "Successo nella richiesta":"Errore nella richiesta" ,
       typeMessage:  response.data.status === HttpStatus.OK ? TypeAlertColor.SUCCESS : TypeAlertColor.ERROR ,
       message : response.data.status === HttpStatus.OK ? null : response.data.errors,
     }
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, {  titleMessage:"Errore nellla richiesta",typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, {  titleMessage:"Errore nella richiesta",typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -110,14 +110,14 @@ export const postDataFormData = async (endpoint: string, data: any, setLoading?:
     const response = await apiClient().post(endpoint, data,config);
     response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
     const message: TypeMessage = {
-      titleMessage:response.data.status === HttpStatus.OK ? "Successo nella richiesta":"Errore nellla richiesta" ,
+      titleMessage:response.data.status === HttpStatus.OK ? "Successo nella richiesta":"Errore nella richiesta" ,
       typeMessage:  response.data.status === HttpStatus.OK ? TypeAlertColor.SUCCESS : TypeAlertColor.ERROR ,
       message : response.data.status === HttpStatus.OK ? null : response.data.errors,
     }
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, {  titleMessage:"Errore nellla richiesta",typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, {  titleMessage:"Errore nella richiesta",typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -138,14 +138,14 @@ export const putData = async (endpoint: string, data: any, setLoading?: (loading
     const response = await apiClient().put(endpoint, data);
     response.data.status = response.data.status === undefined ? 200 : response.data.status;
     const message: TypeMessage = {
-      titleMessage:response.data.status === HttpStatus.OK ? "Successo nella richiesta":"Errore nellla richiesta" ,
+      titleMessage:response.data.status === HttpStatus.OK ? "Successo nella richiesta":"Errore nella richiesta" ,
       typeMessage:  response.data.status === HttpStatus.OK ? TypeAlertColor.SUCCESS : TypeAlertColor.ERROR ,
       message : response.data.status === HttpStatus.OK ? null : response.data.errors, 
     }
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, {  titleMessage:"Errore nellla richiesta",typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, {  titleMessage:"Errore nella richiesta",typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -168,7 +168,7 @@ export const deleteData = async (endpoint: string, setLoading?: (loading: boolea
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, {  titleMessage:"Errore nellla richiesta",typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, {  titleMessage:"Errore nella richiesta",typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -184,7 +184,7 @@ export const showMessageForm = async (setLoading?: (loading: boolean) => void,
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
-    eseguiAlert(funzioneMessage!, { titleMessage:"Errore nellla richiesta", typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { titleMessage:"Errore nella richiesta", typeMessage: TypeAlertColor.ERROR , message: [ServerMessage.SERVER_DOWN] }, showSuccess);
     return 'ok'; // Restituisce i dati della risposta
   } catch (error: any) {
     throw error;
@@ -201,7 +201,7 @@ export const eseguiAlert = (funzioneMessage: (message?: TypeMessage) => void, me
   if (funzioneMessage) {
     message.message = response.data.errors;
     if (response.data.status !== HttpStatus.OK) {
-      message.titleMessage ="Errore nellla richiesta"
+      message.titleMessage ="Errore nella richiesta"
       message.typeMessage = TypeAlertColor.ERROR 
     } else {
       message.titleMessage ="Successo nella richiesta"
