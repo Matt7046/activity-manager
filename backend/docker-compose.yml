@@ -5,7 +5,7 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
-    image: docker.io/matt7046/frontend:1.0.0
+    image: docker.io/matt7046/frontend:1.0.1
     container_name: frontend
     networks:
       - app-network    
