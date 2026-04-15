@@ -1,4 +1,5 @@
 import {
+  Box,
   CardActionArea,
   CardActions,
   CardContent,
@@ -56,7 +57,7 @@ const CardComponent = observer((props: CardProps) => {
 
   const propsCard = { ...props };
   useEffect(() => {
-  if (propsCard.img) {
+    if (propsCard.img) {
       setImage(IMAGE.SERVER + propsCard.img);
     }
   }, [propsCard.img]);
@@ -82,7 +83,7 @@ const CardComponent = observer((props: CardProps) => {
 
   // Gestisce la selezione del file
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];   
+    const file = event.target.files?.[0];
     selectedFile = file;
     handleClickOpen(props);
   };
@@ -113,7 +114,7 @@ const CardComponent = observer((props: CardProps) => {
     return img + extension;
   }
 
- return (
+  return (
     <MuiCard className="card" elevation={0}>
       <CardActionArea onClick={() => fileInputRef.current?.click()}>
         <CardMedia
@@ -122,7 +123,7 @@ const CardComponent = observer((props: CardProps) => {
           title={props.title}
         />
       </CardActionArea>
-      
+
       <input
         id="file-upload"
         type="file"
@@ -174,10 +175,15 @@ const CardComponent = observer((props: CardProps) => {
         </List>
       </CardContent>
 
+    {/* MODIFICA QUI: Rendiamo la sezione azioni sempre presente */}
       <CardActions className="card-actions-bottom">
         <Grid container justifyContent="flex-end" sx={{ width: '100%' }}>
-          {/* Qui compariranno i tuoi pulsanti (che avranno lo stile blu/rosso delle Dialog) */}
-          <div>{props.children}</div>
+          {/* Usiamo un Box con altezza minima. 
+             Se props.children esiste lo mostra, altrimenti lascia lo spazio vuoto
+          */}
+          <Box sx={{ minHeight: '15px', display: 'flex', alignItems: 'center' }}>
+            {props.children}
+          </Box>
         </Grid>
       </CardActions>
     </MuiCard>
@@ -187,9 +193,9 @@ const CardComponent = observer((props: CardProps) => {
 
 const CardGrid = ({ cardsData }: { cardsData: CardProps[] }) => {
   return (
-    <Grid container spacing={2} alignItems="stretch" className= 'grid-card-data'>
+    <Grid container spacing={2} alignItems="stretch" className='grid-card-data'>
       {cardsData.map((cardData) => (
-        <Grid xs= {12} sm= {6} md= {4} lg= {3} key={cardData._id}>
+        <Grid xs={12} sm={6} md={4} lg={3} key={cardData._id}>
           <CardComponent {...cardData} />
         </Grid>
       ))}
