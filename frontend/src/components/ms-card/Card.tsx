@@ -1,4 +1,5 @@
 import {
+  Box,
   CardActionArea,
   CardActions,
   CardContent,
@@ -56,7 +57,7 @@ const CardComponent = observer((props: CardProps) => {
 
   const propsCard = { ...props };
   useEffect(() => {
-  if (propsCard.img) {
+    if (propsCard.img) {
       setImage(IMAGE.SERVER + propsCard.img);
     }
   }, [propsCard.img]);
@@ -82,7 +83,7 @@ const CardComponent = observer((props: CardProps) => {
 
   // Gestisce la selezione del file
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];   
+    const file = event.target.files?.[0];
     selectedFile = file;
     handleClickOpen(props);
   };
@@ -114,17 +115,15 @@ const CardComponent = observer((props: CardProps) => {
   }
 
   return (
-    <MuiCard className="card">
-      <CardActionArea onClick={() => {
-        fileInputRef.current?.click();
-      }
-      }>
+    <MuiCard className="card" elevation={0}>
+      <CardActionArea onClick={() => fileInputRef.current?.click()}>
         <CardMedia
           className={props.className ?? 'card-media'}
           image={image}
           title={props.title}
         />
       </CardActionArea>
+
       <input
         id="file-upload"
         type="file"
@@ -132,51 +131,61 @@ const CardComponent = observer((props: CardProps) => {
         ref={fileInputRef}
         onChange={(e) => handleFileChange(e)}
       />
+
       <CardContent className='card-content'>
-        <Typography gutterBottom variant="h5" component="div" className="card-title">
+        <Typography variant="h6" className="card-title">
           {props.title}
         </Typography>
+
         <List className='list-body'>
-          <Grid container className="card-header-row" justifyContent="space-between" alignItems="center">
-           <Grid xs={6} sm={6} >
+          {/* Header stilizzato come una "tabellina" pulita */}
+          <Grid container className="card-header-row">
+            <Grid xs={6}>
               <Typography className="card-header-text">
                 {propsCard.text.text.length > 0 ? propsCard.text.textLeftTitle : ''}
               </Typography>
             </Grid>
             {propsCard.text.text.length > 0 && propsCard.text.text[0].textRight && (
-               <Grid xs={6} sm={6} >
-                <Typography className="card-header-text">
+              <Grid xs={6}>
+                <Typography className="card-header-text" sx={{ textAlign: 'right' }}>
                   {propsCard.text.textRightTitle}
                 </Typography>
               </Grid>
             )}
           </Grid>
 
+          {/* Mappa dei dati con classe per righe alternate */}
           {(propsCard.text.text.length > 0
             ? propsCard.text.text
             : [{ textLeft: "", textRight: "" }]
           ).map((item: CardTextAlign, index: number) => (
-            <Grid container key={index} justifyContent="space-between" alignItems="center">
-              <Grid xs={ item.textRight ? 6 : 12} sm={ item.textRight ? 6 : 12 }>
+            <Grid container key={index} className="grid-row-item" alignItems="center">
+              <Grid xs={item.textRight ? 6 : 12}>
                 <Typography className="card-list-item">{item.textLeft}</Typography>
               </Grid>
               {item.textRight && (
-                 <Grid xs={6} sm={6} >
-                  <Typography className="card-list-item">{item.textRight}</Typography>
+                <Grid xs={6}>
+                  <Typography className="card-list-item" sx={{ textAlign: 'right', fontWeight: 600 }}>
+                    {item.textRight}
+                  </Typography>
                 </Grid>
               )}
             </Grid>
           ))}
         </List>
-
-
-        <CardActions className="card-actions-bottom">
-          <Grid container justifyContent="flex-end" spacing={2}>
-             <div>{props.children}</div>
-          </Grid>
-        </CardActions>
       </CardContent>
 
+    {/* MODIFICA QUI: Rendiamo la sezione azioni sempre presente */}
+      <CardActions className="card-actions-bottom">
+        <Grid container justifyContent="flex-end" sx={{ width: '100%' }}>
+          {/* Usiamo un Box con altezza minima. 
+             Se props.children esiste lo mostra, altrimenti lascia lo spazio vuoto
+          */}
+          <Box sx={{ minHeight: '15px', display: 'flex', alignItems: 'center' }}>
+            {props.children}
+          </Box>
+        </Grid>
+      </CardActions>
     </MuiCard>
   );
 });
@@ -184,9 +193,9 @@ const CardComponent = observer((props: CardProps) => {
 
 const CardGrid = ({ cardsData }: { cardsData: CardProps[] }) => {
   return (
-    <Grid container spacing={2} alignItems="stretch" className= 'grid-card-data'>
+    <Grid container spacing={2} alignItems="stretch" className='grid-card-data'>
       {cardsData.map((cardData) => (
-        <Grid xs= {12} sm= {6} md= {4} lg= {3} key={cardData._id}>
+        <Grid xs={12} sm={6} md={4} lg={3} key={cardData._id}>
           <CardComponent {...cardData} />
         </Grid>
       ))}

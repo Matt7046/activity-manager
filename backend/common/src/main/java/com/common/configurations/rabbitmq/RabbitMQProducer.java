@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 public class RabbitMQProducer {
 
     @Autowired
-    private RabbitTemplate template;
+    private RabbitTemplate template; 
 
     @Scheduled(fixedDelay = 1000, initialDelay = 500)
-    public void sendMessage(String exchange, String routingKey, String message) {
+    public void sendMessage(String exchange, String routingKey, Object message) {
         template.convertAndSend(exchange, routingKey, message);
     }
 
