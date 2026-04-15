@@ -59,9 +59,6 @@ services:
     depends_on:
       - rabbitmq
     image: docker.io/matt7046/user-point-service:1.0.0
-    build:
-      context: ./ 
-      dockerfile: service/userPoint/Dockerfile
     ports:
       - "8083:8080"
       - "5006:5006"
@@ -83,9 +80,6 @@ services:
       rabbitmq:
         condition: service_started
     image: docker.io/matt7046/activity-service:1.0.0
-    build:
-      context: ./ 
-      dockerfile: service/activity/Dockerfile
     ports:
       - "8084:8080"
       - "5008:5008"
@@ -104,9 +98,6 @@ services:
     depends_on:
       - rabbitmq
     image: docker.io/matt7046/auth-service:1.0.0
-    build:
-      context: ./ 
-      dockerfile: service/auth/Dockerfile
     ports:
       - "8086:8080"
       - "5010:5010"
@@ -124,10 +115,7 @@ services:
   family-service:
     depends_on:
       - rabbitmq
-    image: docker.io/matt7046/family-service:1.0.0
-    build:
-      context: ./ 
-      dockerfile: service/family/Dockerfile
+    image: docker.io/matt7046/family-service:1.0.0  
     ports:
       - "8087:8080"
       - "5011:5011"
@@ -146,9 +134,6 @@ services:
     depends_on:
       - rabbitmq
     image: docker.io/matt7046/notification-service:1.0.0
-    build:
-      context: ./ 
-      dockerfile: service/notification/Dockerfile
     ports:
       - "8088:8080"
       - "5012:5012"
@@ -166,10 +151,7 @@ services:
   image-service:
     depends_on:
       - rabbitmq
-    image: docker.io/matt7046/image-service:1.0.0
-    build:
-      context: ./
-      dockerfile: service/image/Dockerfile
+    image: docker.io/matt7046/image-service:1.0.0  
     ports:
       - "8089:8080"
       - "5013:5013"
