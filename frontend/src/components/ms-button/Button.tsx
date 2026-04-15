@@ -33,7 +33,7 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
     setMessageTitle(configDialogPulsante.message);
     if (configDialogPulsante.showDialog) {
       setOpen(true);
-    }else{
+    } else {
       funzione();
     }
   };
@@ -64,37 +64,51 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
     <div className="col-button-container">
       {props.pulsanti.map((button, index) => (
         <div key={index} className="col-button">
-          <ButtonMui 
+          <ButtonMui
             id={`button-${index}`}
             className={button.nome === 'red' ? 'button-red' : 'button-blue'}
             title={button.title}
             onClick={() => handleClickOpen(button.funzione, button.configDialogPulsante)} // Apri il dialog con la funzione specifica
             disabled={button.disableButton}
-            
+
           >
             <i className={button.icona}></i>
           </ButtonMui>
         </div>
       ))}
       <Dialog
-      className='dialog-button'
         open={open}
-        onClose={handleClose}      
- 
+        onClose={handleClose}
+        PaperProps={{ className: 'dialog-custom' }}
       >
-        <DialogTitle className='dialog-title' >{title}
+        {/* Header dedicato */}
+        <div className="dialog-header">
+          <DialogTitle className='dialog-title-custom'>
+            {title}
           </DialogTitle>
-        <DialogContent> 
-          <DialogContentText>
-            {messageTitle}
-          </DialogContentText>
+        </div>
+
+        <DialogContent sx={{ px: 3, py: 1, minWidth: 380 }}>
+          {/* Testo avvolto da un contenitore stilizzato */}
+          <div className="dialog-message-container">
+            <DialogContentText className='dialog-text-custom'>
+              {messageTitle || "Sei sicuro di voler procedere con questa operazione?"}
+            </DialogContentText>
+          </div>
         </DialogContent>
-        <DialogActions>
-          <ButtonMui onClick={handleClose} color="error">
+
+        <DialogActions className="dialog-actions-custom">
+          <ButtonMui
+            onClick={handleClose}
+            className="dialog-button-cancel"
+          >
             Annulla
           </ButtonMui>
-          <ButtonMui onClick={handleConfirm} >
-            Conferma
+          <ButtonMui
+            onClick={handleConfirm}
+            className="dialog-button-confirm"
+            variant="contained"    >
+            Sì, Conferma
           </ButtonMui>
         </DialogActions>
       </Dialog>

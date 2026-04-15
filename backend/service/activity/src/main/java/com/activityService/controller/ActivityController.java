@@ -1,6 +1,7 @@
 package com.activityService.controller;
 
-import com.activityService.processor.ActivityProcessor;
+import com.activityService.processor.ActivityCommandProcessor;
+import com.activityService.processor.ActivityQueryProcessor;
 import com.activityService.service.ActivityService;
 import com.common.dto.user.UserPointDTO;
 import com.common.structure.status.ActivityHttpStatus;
@@ -32,26 +33,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ActivityController {
 
     @Autowired
-    private ActivityProcessor processor;
+    private ActivityQueryProcessor processorQuery;
+
+        @Autowired
+    private ActivityCommandProcessor processorCommand;
 
     @PostMapping("/activities")
     public Mono<ResponseDTO> getActivities(@RequestBody UserPointDTO userPointDTO) {
-       return processor.getActivities(userPointDTO);
+       return processorQuery.getActivities(userPointDTO);
     }
 
     @PostMapping("/find")
     public Mono<ResponseDTO> findByIdentificativo(@RequestBody UserPointDTO userPointDTO) {
-        return processor.findByIdentificativo(userPointDTO);
+        return processorQuery.findByIdentificativo(userPointDTO);
     }
 
     @PostMapping("/dati")
     public Mono<ResponseDTO> saveActivity(@RequestBody ActivityDTO activityDTO) {
-        return processor.saveActivity(activityDTO); // Mappa il risultato in un ResponseDTO
+        return processorCommand.saveActivity(activityDTO); // Mappa il risultato in un ResponseDTO
     }
 
      @DeleteMapping("toggle/{identificativo}")
     public Mono<ResponseDTO> deleteByIdentificativo(@PathVariable String identificativo) throws Exception {
-         return processor.deleteByIdentificativo(identificativo);// Mappa il risultato in un ResponseDTO
+         return processorCommand.deleteByIdentificativo(identificativo);// Mappa il risultato in un ResponseDTO
        
     }
 }

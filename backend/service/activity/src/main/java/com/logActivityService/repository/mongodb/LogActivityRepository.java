@@ -1,4 +1,4 @@
-package com.logActivityService.repository;
+package com.logActivityService.repository.mongodb;
 
 
 
