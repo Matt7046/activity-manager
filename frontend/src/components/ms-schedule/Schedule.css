@@ -1,54 +1,19 @@
-.row {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  box-sizing: border-box;
-  padding-left: 8px;
-}
+/* Schedule.css */
 
 .col-display {
-  /* Assicurati che il contenitore sia corretto */
   display: flex;
   align-items: center;
-  margin: 10px 0;
-  font-size: 18px; /* Aumenta la dimensione del testo */
-  font-weight: bold; /* Facoltativo: rende il testo più spesso */
-  color: #333; /* Puoi cambiare il colore del testo */
+  margin: 10px 0 0 0; /* Ridotto il margine inferiore */
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  line-height: 1; /* Forza il testo a non occupare spazio extra */
 }
 
-
-.label-container {
-  max-width: 100%;
-  overflow: hidden;
-  padding: 0 10px;
-}
-
-.label-text {
-  display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: middle;
-  font-size: 14px;
-}
-
-.custom-separator-vertical {
-  border: none;
-  height: 1px;
-  background-color: #ccc;
-  margin: 20px 0;
- 
-}
-
-.custom-separator-horizontal {
-  border: none;
-  height: 1px;
-  background-color: #ccc;
-  margin: 8px 0;
- 
-}
+/* Assicuriamoci che la riga che contiene i bottoni sia flessibile */
 .new-button-container {
   padding-top: 20px;
-  padding-bottom: 16px; /* o qualsiasi valore ti serva, es. 1rem, 20px, etc */
+  padding-bottom: 16px;
+  display: flex;
+  align-items: center;
 }
