@@ -578,7 +578,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
 }
 
 export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage, onlyError?: boolean) => {
-  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage } : { message: [ServerMessage.SERVER_DOWN], typeMessage: 'error' };
+  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage, titleMessage:message?.titleMessage } : {titleMessage:"Errore nella richiesta", message: [ServerMessage.SERVER_DOWN], typeMessage: 'error' };
   if (!onlyError || onlyError && message?.typeMessage === TypeAlertColor.ERROR) {
     setOpen(true);
   }
