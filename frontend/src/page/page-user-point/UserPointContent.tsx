@@ -1,5 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Card, CardContent, Dialog, DialogContent, IconButton, Pagination, Typography } from "@mui/material";
+import { Box, Card, CardContent, Dialog, DialogContent, IconButton, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -118,153 +118,123 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
   // ... (tutti gli import rimangono invariati)
 
-  const renderChildren2 = (open: boolean) => (
-    <React.Fragment>
-      <Grid container justifyContent="flex-end" spacing={2} >
-        <Button pulsanti={[pulsanteLog]} />
-        <Dialog
-          onClose={handleCloseDialogLogActivity}
-          open={open}
-          maxWidth="md"
-          fullWidth
-          PaperProps={{ className: 'dialog-log-custom' }}
-        >
-          {/* Header Pulito */}
-          <div className="log-header-container">
-            <Typography className="log-title-text">LOG ATTIVITÀ</Typography>
-            <IconButton onClick={handleCloseDialogLogActivity} size="small" sx={{ color: '#94a3b8' }}>
-              <CloseIcon />
-            </IconButton>
-          </div>
+ const renderChildren2 = (open: boolean) => (
+  <React.Fragment>
+    <Grid container justifyContent="flex-end" spacing={2} >
+      <Button pulsanti={[pulsanteLog]} />
+      <Dialog
+        onClose={handleCloseDialogLogActivity}
+        open={open}
+        maxWidth="lg"
+        fullWidth
+        PaperProps={{ className: 'dialog-log-custom' }}
+      >
+        <div className="log-header-container">
+          <Typography className="log-title-text">LOG ATTIVITÀ</Typography>
+          <IconButton onClick={handleCloseDialogLogActivity} size="small">
+            <CloseIcon />
+          </IconButton>
+        </div>
 
-          <DialogContent className="log-content-area">
-            {testoLogUnpaged.length > 0 ? (
-              <>
-                <Grid container spacing={3}> {/* Spaziatura generosa */}
-                  {testoLogUnpaged.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
-                    <Grid xs={12} sm={6} key={index}>
-                      <Card className="log-card-item" elevation={0}>
-                        <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
-
-                          <Typography className="log-label">Data Operazione</Typography>
-                          <Typography className="log-value">{getDateStringExtendsFormat(item.date)}</Typography>
-
-                          <Grid container>
-                            <Grid xs={6}>
-                              <Typography className="log-label">Punti</Typography>
-                              <Typography className="log-value">
-                                <span className="points-badge">{item.usePoints}</span>
-                              </Typography>
-                            </Grid>
-                          </Grid>
-
-                          {/* Descrizione in Box separata */}
-                          <div className="log-card-footer" >
-                            <Typography className="log-label">Descrizione Log</Typography>
-                            <Typography className="log-footer-text" sx={{ fontStyle: 'italic' }}>
-                              {item.log}
-                            </Typography>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-                <div className="pagination-container">
-                  <Pagination
-                    count={Math.ceil(testoLogUnpaged.length / logsPerPage)}
-                    page={page}
-                    onChange={handlePageChange}
-                    color="primary"
-                    size="large"
-                  />
-                </div>
-              </>
-            ) : (
-              <Typography sx={{ textAlign: 'center', py: 8, color: '#94a3b8' }}>
-                Nessuna attività registrata.
-              </Typography>
-            )}
-          </DialogContent>
-        </Dialog>
-      </Grid>
-    </React.Fragment>
-  );
-
-  const renderChildren3 = (open: boolean) => (
-    <React.Fragment>
-      <Grid container justifyContent="flex-end" >
-        <Button pulsanti={[pulsanteLogFamily]} />
-        <Dialog
-          onClose={handleCloseDialogLogFamily}
-          open={open}
-          maxWidth="md"
-          fullWidth
-          PaperProps={{ className: 'dialog-log-custom' }}
-        >
-          {/* Header Pulito */}
-          <div className="log-header-container">
-            <Typography className="log-title-text">LOG FAMIGLIA</Typography>
-            <IconButton onClick={handleCloseDialogLogFamily} size="small" sx={{ color: '#94a3b8' }}>
-              <CloseIcon />
-            </IconButton>
-          </div>
-
-          <DialogContent className="log-content-area">
-            {testoLogFamilyUnpaged.length > 0 ? (
-              <>
-                <Grid container spacing={3}> {/* Spaziatura generosa */}
-                  {testoLogFamilyUnpaged.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
-                    <Grid xs={12} sm={6} key={index}>
-                      <Card className="log-card-item" elevation={0}>
-                        <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
-
-                          <Typography className="log-label">Data</Typography>
-                          <Typography className="log-value">{getDateStringExtendsFormat(item.date)}</Typography>
-
-                          <Typography className="log-label">Operazione</Typography>
-                          <Typography component="div" className="log-value">
-                            {item.operations === 'FAMILY_REMOVE' ? (
-                              <span className="log-value-highlight-red">{item.operations}</span>
-                            ) : (
-                              <span className="log-value-highlight">{item.operations}</span>
-                            )}
+        <DialogContent className="log-content-area">
+          {testoLogUnpaged.length > 0 ? (
+            <div className="log-scroll-container">
+              {testoLogUnpaged.map((item, index) => (
+                <div className="log-card-scroll-item" key={index}>
+                  <Card className="log-card-item" elevation={0}>
+                    <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
+                      <Typography className="log-label">Data Operazione</Typography>
+                      <Typography className="log-value">{getDateStringExtendsFormat(item.date)}</Typography>
+                      
+                      <Typography className="log-label">Punti</Typography>
+                      <Typography className="log-value">
+                        <span className="points-badge">{item.usePoints}</span>
+                      </Typography>
+                      
+                      <div className="log-card-footer">
+                          <Typography className="log-label">Descrizione</Typography>
+                          <Typography className="log-footer-text" sx={{ fontStyle: 'italic' }}>
+                            {item.log}
                           </Typography>
-                          {/* Footer con Da/A stilizzato */}
-                          <div className="log-card-footer">
-                            <Typography className="log-footer-text">
-                              <strong>Da:</strong> {item.performedByEmail}
-                            </Typography>
-                            <Typography className="log-footer-text">
-                              <strong>A:</strong> {item.receivedByEmail}
-                            </Typography>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-                <div className="pagination-container">
-                  <Pagination
-                    count={Math.ceil(testoLogFamilyUnpaged.length / logsPerPage)}
-                    page={page}
-                    onChange={handlePageChange}
-                    color="primary"
-                    size="large"
-                  />
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </>
-            ) : (
-              <Typography sx={{ textAlign: 'center', py: 8, color: '#94a3b8' }}>
-                Nessun log familiare trovato.
-              </Typography>
-            )}
-          </DialogContent>
-        </Dialog>
-      </Grid>
-    </React.Fragment>
-  );
+              ))}
+            </div>
+          ) : (
+            <Typography sx={{ textAlign: 'center', py: 8, color: '#94a3b8' }}>
+              Nessuna attività registrata.
+            </Typography>
+          )}
+        </DialogContent>
+      </Dialog>
+    </Grid>
+  </React.Fragment>
+);
 
+const renderChildren3 = (open: boolean) => (
+  <React.Fragment>
+    <Grid container justifyContent="flex-end" spacing={2}>
+      <Button pulsanti={[pulsanteLogFamily]} />
+      <Dialog
+        onClose={handleCloseDialogLogFamily}
+        open={open}
+        maxWidth="lg"
+        fullWidth
+        PaperProps={{ className: 'dialog-log-custom' }}
+      >
+        <div className="log-header-container">
+          <Typography className="log-title-text">LOG FAMIGLIA</Typography>
+          <IconButton onClick={handleCloseDialogLogFamily} size="small">
+            <CloseIcon />
+          </IconButton>
+        </div>
+
+        <DialogContent className="log-content-area">
+          {testoLogFamilyUnpaged.length > 0 ? (
+            <div className="log-scroll-container">
+              {testoLogFamilyUnpaged.map((item, index) => (
+                <div className="log-card-scroll-item" key={index}>
+                  <Card className="log-card-item" elevation={0}>
+                    <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
+                      
+                      <Typography className="log-label">Data</Typography>
+                      <Typography className="log-value">{getDateStringExtendsFormat(item.date)}</Typography>
+                      
+                      <Typography className="log-label">Operazione</Typography>
+                      <Typography component="div" className="log-value">
+                        {item.operations === 'FAMILY_ADD' ? (
+                          <span className="log-value-highlight">{item.operations}</span>
+                        ) : (
+                          <span className="log-value-highlight2">{item.operations}</span>
+                        )}
+                      </Typography>
+
+                      <div className="log-card-footer">
+                        <Typography className="log-label">Eseguito Da / A</Typography>
+                        <Typography className="log-footer-text">
+                          <strong>Da:</strong> {item.performedByEmail}
+                        </Typography>
+                        <Typography className="log-footer-text">
+                          <strong>A:</strong> {item.receivedByEmail}
+                        </Typography>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Typography sx={{ textAlign: 'center', py: 8, color: '#94a3b8' }}>
+              Nessun log familiare trovato.
+            </Typography>
+          )}
+        </DialogContent>
+      </Dialog>
+    </Grid>
+  </React.Fragment>
+);
 
   const handleCloseDialogLogFamily = () => {
     setOpenDialogLogFamily(false);
