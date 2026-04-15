@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.common.dto.activity.LogActivityDTO;
 import com.common.dto.user.UserPointDTO;
 import com.common.mapper.LogActivityMapper;
-import com.logActivityService.repository.LogActivityRepository;
+import com.logActivityService.repository.mongodb.LogActivityRepository;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.activity.LogActivity;
 import java.util.List;

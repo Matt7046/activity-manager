@@ -1,7 +1,6 @@
 package com.logActivityService.processor;
 
 import com.common.configurations.structure.NotificationComponent;
-import com.common.configurations.rabbitmq.RabbitMQProducer;
 import com.common.data.family.OperationTypeLogFamily;
 import com.common.dto.activity.LogActivityDTO;
 import com.common.dto.structure.ResponseDTO;
@@ -34,8 +33,6 @@ public class LogActivityProcessor {
     private LogActivityWebService logActivityWebService;
     @Autowired
     private LogActivityService logActivityService;
-    @Autowired
-    private RabbitMQProducer notificationPublisher;
     @Autowired
     private NotificationComponent notificationComponent;
     @Autowired
@@ -101,7 +98,6 @@ public class LogActivityProcessor {
         if (logFamilyDTO.getReceivedByEmail().equals(logFamilyDTO.getPerformedByEmail())) {
             return Mono.just(new ResponseDTO(logFamilyDTO, ActivityHttpStatus.OK.value(), new ArrayList<>()));
         }
-        StringBuilder builder = new StringBuilder();
         return logActivityWebService.saveLogFamily(logFamilyDTO)
                 .doOnSuccess(response1 -> {
                     // Azioni con la response

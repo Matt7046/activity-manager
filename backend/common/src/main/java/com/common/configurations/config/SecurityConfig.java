@@ -42,6 +42,9 @@ public class SecurityConfig implements WebFluxConfigurer {
 
     @Value("${app.address2}")
     private String address2;
+
+    @Value("${app.address3}")
+    private String address3;
     
     @Value("${app.security.roles}")
     private String roles;
@@ -62,7 +65,7 @@ public class SecurityConfig implements WebFluxConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         
         registry.addMapping("/**")
-                .allowedOrigins(address1, address2)
+                .allowedOrigins(address1, address2, address3)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true); // Aggiungi questo se invii cookie o header di autenticazione
