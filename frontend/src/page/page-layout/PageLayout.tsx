@@ -29,6 +29,7 @@ interface PageLayoutProps {
   children: React.ReactNode; // Contenuto specifico della maschera
 }
 export interface TypeMessage {
+  titleMessage?: string;
   message?: string[];
   typeMessage?: TypeAlertColor;
 }
