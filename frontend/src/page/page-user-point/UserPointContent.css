@@ -123,3 +123,39 @@
   font-weight: 800;
   font-size: 0.9rem;
 }
+
+/* Contenitore esterno che abilita lo scroll */
+.log-scroll-container {
+    display: flex;
+    overflow-x: auto; /* Abilita lo scroll orizzontale */
+    gap: 20px;       /* Spazio tra le card */
+    padding: 20px 10px 30px 10px; /* Spazio per l'ombra delle card */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Scroll fluido su mobile */
+}
+
+/* Nascondi la barra di scorrimento brutta (opzionale, per un look pulito) */
+.log-scroll-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.log-scroll-container::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.log-scroll-container::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.log-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Forza ogni card ad avere una larghezza fissa nello scroll */
+.log-card-scroll-item {
+    min-width: 320px; /* Larghezza di ogni card */
+    max-width: 320px;
+    flex-shrink: 0;   /* Impedisce alle card di rimpicciolirsi */
+}
