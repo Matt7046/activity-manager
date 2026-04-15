@@ -87,3 +87,20 @@
 .grid-card-data {
   padding: 24px;
 }
+
+.card-actions-bottom {
+    /* Padding interno per distanziare i pulsanti dai bordi della card */
+    padding: 16px 24px !important; 
+    
+    /* Margine superiore per distanziarli dalla descrizione/testo sopra */
+    margin-top: auto !important; 
+    
+    /* Assicuriamoci che non ci siano padding di default di MUI che disturbano */
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Se vuoi distanziare specificamente il contenitore dei bottoni */
+.card-actions-bottom .MuiGrid2-root {
+    gap: 12px; /* Spazio tra un bottone e l'altro se ce n'è più di uno */
+}
