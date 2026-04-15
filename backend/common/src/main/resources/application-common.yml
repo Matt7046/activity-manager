@@ -47,7 +47,7 @@ app:
   algorithm1: AES
   algorithm2: HmacSHA256
   address1: 'http://173.212.220.20:80'
-  address2: 'http://173.212.220.20:80'
+  address2: 'http://activity-manager.colorsdev.tech:80'
   address3: 'http://173.212.220.20:80'
   security:
     roles: USER
