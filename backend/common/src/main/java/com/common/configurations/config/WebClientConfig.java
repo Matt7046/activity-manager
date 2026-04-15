@@ -24,6 +24,12 @@ public class WebClientConfig {
     @Value("${app.page.service.family}")
     private String family;
 
+    @Value("${app.page.service.gpt}")
+    private String gpt;
+
+    @Value("${app.gpt.token}")
+    private String tokenValue;
+
 
     @Bean
     public WebClient webClientPoint(WebClient.Builder builder) {
@@ -93,5 +99,17 @@ public class WebClientConfig {
                 .build();
     }
 
+    @Bean
+    public WebClient webClientGPT(WebClient.Builder builder) {
+        return builder
+                .baseUrl(gpt)
+                .filter((request, next) -> {
+                    ClientRequest newRequest = ClientRequest.from(request)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenValue)
+                            .build();
 
+                    return next.exchange(newRequest);
+                })
+                .build();
+    }
 }

@@ -39,7 +39,7 @@ public class UserPointProcessor {
     private EncryptDecryptConverter encryptDecryptConverter;
     @Value("${rabbitmq.exchange.name.notification}")
     private String notificationExchange;
-    @Value("${rabbitmq.exchange.routingKey.email}")
+    @Value("${rabbitmq.routingKey.email}")
     private String routingKeyEmail;
     @Value("${error.document.notFound}")
     private String errorDocument;

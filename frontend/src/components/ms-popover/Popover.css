@@ -1,66 +1,61 @@
-.text-box {
-  border: 1px solid #ccc;
-  /* Bordo del riquadro */
-  border-radius: 8px;
-  /* Angoli arrotondati */
-  background-color: #f9f9f9;
-  /* Sfondo tenue */
-  font-size: 16px;
-  /* Dimensione del testo */
-  color: #333;
-  /* Colore del testo */
-  max-width: 100%;
-  /* Impedisce di superare il contenitore */
-  word-wrap: break-word;
-  /* Gestisce la divisione delle parole lunghe */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  /* Ombreggiatura */
-  padding-left: 50px;
-}
-
-.popover-prop {
-  opacity: 1;
-  pointer-events: auto;
-  cursor: pointer;
-  border: initial;
-  color: #fff;
-  border-radius: 50px,
-}
-
-.popover-paper {
-  opacity: 1;
-  pointer-events: auto;
-  cursor: pointer;
-  border: initial;
-  color: #e52d2d;
-  background-color: #e52d2d;
-  border-radius: 50px;
-}
-
-
-
-.popover-box {
-  padding: 16px;
-  border-radius: 50px;
-}
-
-.notification-box {
-  margin-bottom: 16px;
-}
-
-.notification-message {
-  color: #bb0707; /* oppure usa var(--mui-palette-text-primary) se hai CSS variables */
-}
-
-.notification-subtext {
-  color: gray; /* oppure text.secondary se lo vuoi con più contrasto */
-}
-
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-}
-
+/* Container principale del Popover */
 .custom-popover .MuiPaper-root {
-  border-radius: 45px;
+  border-radius: 20px !important;
+  margin-top: 12px;
+  min-width: 350px;
+  max-width: 450px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid #f1f5f9;
+  overflow: hidden;
+}
+
+/* Box interno che contiene le notifiche */
+.popover-box {
+  background-color: #ffffff;
+}
+
+/* Header opzionale o spaziatura superiore */
+.notification-box {
+  padding: 0 !important;
+}
+
+/* Singola riga di notifica */
+.notification-message {
+  padding: 16px 20px !important;
+  background-color: #f8fafc; /* Sfondo leggermente diverso per il titolo */
+  color: #4338ca !important; /* Indigo */
+  font-weight: 800 !important;
+  font-size: 0.9rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Sottotesto (le liste di notifiche vere e proprie) */
+.notification-subtext {
+  padding: 12px 20px !important;
+  color: #475569 !important; /* Slate grey */
+  font-size: 0.85rem !important;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  display: block;
+}
+
+.notification-subtext:hover {
+  background-color: #f5f3ff !important; /* Hover lilla coerente */
+  color: #4338ca !important;
+}
+
+/* Divider più discreto */
+.MuiDivider-root {
+  border-color: #f1f5f9 !important;
+}
+
+/* Container del bottone in fondo */
+.button-container {
+  padding: 12px 20px;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: flex-end; /* Sposta il bottone a destra */
+  border-top: 1px solid #f1f5f9;
 }
