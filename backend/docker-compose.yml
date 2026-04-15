@@ -5,7 +5,7 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
-    image: react-frontend:1.0.0
+    image: docker.io/matt7046/frontend:1.0.1
     container_name: frontend
     networks:
       - app-network    
@@ -72,7 +72,7 @@ services:
   user-point-service:
     depends_on:
       - rabbitmq
-    image: user-point-service:1.0.0
+    image: docker.io/matt7046/user-point-service:1.0.0
     build:
       context: ./ 
       dockerfile: service/userPoint/Dockerfile
@@ -87,7 +87,7 @@ services:
       - app-network
 
   activity-service:
-    image: activity-service:1.0.0
+    image: docker.io/matt7046/activity-service:1.0.0
     build:
       context: ./
       dockerfile: service/activity/Dockerfile
@@ -132,7 +132,7 @@ services:
   auth-service:
     depends_on:
       - rabbitmq
-    image: auth-service:1.0.0
+    image: docker.io/matt7046/auth-service:1.0.0
     build:
       context: ./
       dockerfile: service/auth/Dockerfile
@@ -149,7 +149,7 @@ services:
   family-service:
     depends_on:
       - rabbitmq
-    image: family-service:1.0.0
+    image: docker.io/matt7046/family-service:1.0.0
     build:
       context: ./
       dockerfile: service/family/Dockerfile
@@ -166,7 +166,7 @@ services:
   notification-service:
     depends_on:
       - rabbitmq
-    image: notification-service:1.0.0
+    image: docker.io/matt7046/notification-service:1.0.0
     build:
       context: ./
       dockerfile: service/notification/Dockerfile
@@ -183,7 +183,7 @@ services:
   image-service:
     depends_on:
       - rabbitmq
-    image: image-service:1.0.0
+    image: docker.io/matt7046/image-service:1.0.0
     build:
       context: ./
       dockerfile: service/image/Dockerfile
