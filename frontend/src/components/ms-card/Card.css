@@ -1,69 +1,89 @@
+/* Container principale della Card */
 .card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 600px;
-  max-height: 600px;
-  /* 4 * 4px */
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  min-height: 580px;
+  max-height: 620px;
+  background: #ffffff;
+  border-radius: 24px !important; /* Coerente con le Dialog */
+  border: none !important; /* Rimosso il bordo blu */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
   overflow: hidden;
-  border: 2px solid  #0600bc;
-  /* rosso acceso */
-  border-radius: 2px;
 }
 
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Immagine della Card */
 .card-media {
-  height: 200px;
-  border-radius: 106px;
-  /* 4 * 4px */
-
+  height: 220px;
+  margin: 12px;
+  border-radius: 18px !important; /* Arrotondata ma non circolare */
+  object-fit: cover;
 }
 
+/* Contenuto della Card */
 .card-content {
-  border-radius: 106px;
-
-  /* 4 * 4px */
-
+  padding: 20px !important;
+  flex-grow: 1;
 }
 
+/* Titolo principale */
 .card-title {
-  color: #0600bc;
-  text-align: center;
+  font-weight: 800 !important;
+  color: #1e1b4b !important; /* Indigo scuro */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 15px !important;
 }
 
-.card-list-item {
-  margin-bottom: 1px;
-  /* Riduci il margine inferiore */
-}
-
-.card-text-secondary {
-  color: #6e6e6e;
-}
-
-.card-actions-bottom {
-  justify-content: flex-end;
-}
-
+/* Header delle colonne (ex rosso) */
 .card-header-row {
-  background-color: rgba(255, 0, 0, 0.1);
-  /* rosso trasparente */
-  border-radius: 4px;
-  margin-bottom: 8px;
-  
+  background-color: #f8fafc !important; /* Grigio chiarissimo Blue-grey */
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 12px !important;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .card-header-text {
-  font-weight: bold;
-  color: #b30000;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  color: #64748b !important; /* Slate grey */
+  text-transform: uppercase;
 }
 
+/* Lista degli elementi */
 .card-list-item {
-  background-color: rgba(210, 209, 209, 0.25);
-  /* grigio neutro trasparente */
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem !important;
+  background-color: transparent !important;
+  color: #475569 !important;
+  transition: background-color 0.2s;
 }
-.list-body{
-  min-height: 250px;
+
+/* Effetto zebra leggerissimo sulle righe */
+.grid-row-item:nth-child(odd) .card-list-item {
+  background-color: #f1f5f9 !important;
 }
-.grid-card-data{
-  padding-left: 20px;
+
+.list-body {
+  min-height: 220px;
+  margin-top: 10px;
+}
+
+/* Azioni in basso */
+.card-actions-bottom {
+  padding: 16px 20px !important;
+  background-color: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+}
+
+.grid-card-data {
+  padding: 24px;
 }
