@@ -1,92 +1,76 @@
-.card-alert-success {
-    display: flex;
-    align-items: 'center';
-    border-radius: 100px!important;
-    width: 400px!important;;
-    padding: 12px 32px!important;;
-    font-weight: 600!important;;
-    opacity: 1!important;;
-    cursor: pointer!important;;
-    border: none!important;;
-    color: black!important;;
-    border-radius: 35px!important;;
-    background: linear-gradient(135deg, #bccbbc, #5f665f)!important;; /* verde sfumato */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)!important;;
-  }
-.card-alert-error {
-    display: flex;
-    background-color: #f9f9f9;
-    align-items: 'center';
-    border-radius: 100px!important;
-  }
-.card-content {
-    flex-grow: 1
-}
-.text-message {
-  text-align : center;
+/* Container principale posizionato (per farlo sembrare un Toast) */
+.alert-toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  min-width: 320px;
+  max-width: 450px;
+  animation: slideInRight 0.4s ease-out;
 }
 
-.text-up-message-success {
-    text-align : center;
-    color: green;
+/* Stile base della Card Alert */
+.card-alert-base {
+  display: flex !important;
+  flex-direction: column;
+  border-radius: 16px !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  border: none !important;
+  overflow: hidden;
+  position: relative;
 }
 
-.text-up-message-error {
-    text-align : center;
-    color: red;
+/* Barra laterale colorata per indicare il tipo */
+.card-alert-base::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
 }
 
-.text-up-message-warning {
-    text-align : center;
-    color: yellow;
+/* Varianti di colore con barra laterale e icone */
+.alert-success::before { background-color: #10b981; }
+.alert-error::before { background-color: #ef4444; }
+.alert-warning::before { background-color: #f59e0b; }
+.alert-info::before { background-color: #3b82f6; }
+
+/* Header dell'Alert */
+.alert-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 12px;
 }
 
-.text-up-message-info {
-    text-align : center;
-    color:blue;
+.alert-title {
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  text-transform: uppercase;
+  flex-grow: 1;
 }
-  
-  .message-wrapper {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-  }
-  
-  .icon-container {
-    margin-right: 16px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .message-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .message-title {
-    text-transform: capitalize;
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
-  
-  .message-text {
-    margin-bottom: 4px;
-  }
-  
-  .close-button {
-    padding: 8px;
-  }
 
-  /* Bottoni dentro il dialog */
-.card-alert-success {
-  padding: 12px 32px;
-  font-weight: 600;
-  opacity: 1;
-  cursor: pointer;
-  border: none;
-  color: #ffffff;
-  border-radius: 35px;
-  background: linear-gradient(135deg, #bccbbc, #5f665f); /* verde sfumato */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+/* Colori dei titoli */
+.text-success { color: #065f46; }
+.text-error { color: #991b1b; }
+.text-warning { color: #92400e; }
+.text-info { color: #1e40af; }
+
+/* Contenuto del messaggio */
+.alert-body {
+  padding: 0 16px 12px 48px !important; /* Allineato sotto il titolo, saltando l'icona */
 }
-  
+
+.text-message-detail {
+  color: #4b5563 !important;
+  font-size: 0.85rem !important;
+  line-height: 1.4;
+}
+
+/* Animazione di entrata */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

@@ -113,18 +113,16 @@ const CardComponent = observer((props: CardProps) => {
     return img + extension;
   }
 
-  return (
-    <MuiCard className="card">
-      <CardActionArea onClick={() => {
-        fileInputRef.current?.click();
-      }
-      }>
+ return (
+    <MuiCard className="card" elevation={0}>
+      <CardActionArea onClick={() => fileInputRef.current?.click()}>
         <CardMedia
           className={props.className ?? 'card-media'}
           image={image}
           title={props.title}
         />
       </CardActionArea>
+      
       <input
         id="file-upload"
         type="file"
@@ -132,51 +130,56 @@ const CardComponent = observer((props: CardProps) => {
         ref={fileInputRef}
         onChange={(e) => handleFileChange(e)}
       />
+
       <CardContent className='card-content'>
-        <Typography gutterBottom variant="h5" component="div" className="card-title">
+        <Typography variant="h6" className="card-title">
           {props.title}
         </Typography>
+
         <List className='list-body'>
-          <Grid container className="card-header-row" justifyContent="space-between" alignItems="center">
-           <Grid xs={6} sm={6} >
+          {/* Header stilizzato come una "tabellina" pulita */}
+          <Grid container className="card-header-row">
+            <Grid xs={6}>
               <Typography className="card-header-text">
                 {propsCard.text.text.length > 0 ? propsCard.text.textLeftTitle : ''}
               </Typography>
             </Grid>
             {propsCard.text.text.length > 0 && propsCard.text.text[0].textRight && (
-               <Grid xs={6} sm={6} >
-                <Typography className="card-header-text">
+              <Grid xs={6}>
+                <Typography className="card-header-text" sx={{ textAlign: 'right' }}>
                   {propsCard.text.textRightTitle}
                 </Typography>
               </Grid>
             )}
           </Grid>
 
+          {/* Mappa dei dati con classe per righe alternate */}
           {(propsCard.text.text.length > 0
             ? propsCard.text.text
             : [{ textLeft: "", textRight: "" }]
           ).map((item: CardTextAlign, index: number) => (
-            <Grid container key={index} justifyContent="space-between" alignItems="center">
-              <Grid xs={ item.textRight ? 6 : 12} sm={ item.textRight ? 6 : 12 }>
+            <Grid container key={index} className="grid-row-item" alignItems="center">
+              <Grid xs={item.textRight ? 6 : 12}>
                 <Typography className="card-list-item">{item.textLeft}</Typography>
               </Grid>
               {item.textRight && (
-                 <Grid xs={6} sm={6} >
-                  <Typography className="card-list-item">{item.textRight}</Typography>
+                <Grid xs={6}>
+                  <Typography className="card-list-item" sx={{ textAlign: 'right', fontWeight: 600 }}>
+                    {item.textRight}
+                  </Typography>
                 </Grid>
               )}
             </Grid>
           ))}
         </List>
-
-
-        <CardActions className="card-actions-bottom">
-          <Grid container justifyContent="flex-end" spacing={2}>
-             <div>{props.children}</div>
-          </Grid>
-        </CardActions>
       </CardContent>
 
+      <CardActions className="card-actions-bottom">
+        <Grid container justifyContent="flex-end" sx={{ width: '100%' }}>
+          {/* Qui compariranno i tuoi pulsanti (che avranno lo stile blu/rosso delle Dialog) */}
+          <div>{props.children}</div>
+        </Grid>
+      </CardActions>
     </MuiCard>
   );
 });

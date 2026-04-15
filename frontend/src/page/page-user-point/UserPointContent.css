@@ -1,31 +1,125 @@
-.text-message-point-title {
-    font-weight: 'bold';
+/* --- Dialog Generale dei Log --- */
+.dialog-log-custom .MuiPaper-root {
+  border-radius: 28px !important; /* Molto stondato e moderno */
+  padding: 10px;
+  background-color: #fcfcfd; /* Sfondo appena percepibile */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.text-message-point-body {
-    color: 'text.secondary';
+/* --- Header Stilizzato --- */
+.log-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 28px !important;
+  background-color: #ffffff;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.text-card-point {
-
-    border: 2px solid #0600bc;
-    /* rosso acceso */
-
-    border-radius: 12px;
-    /* Bordi arrotondati */
-    cursor: pointer;
-    /* Cambia il cursore al passaggio */
-    transition: background-color 0.3s ease;
-    /* Effetto al passaggio */
-    box-shadow: rgba(44, 53, 187, 0.35) 0 -25px 18px -14px inset, rgba(44, 187, 99, .25) 0 1px 2px, rgba(44, 187, 99, .25) 0 2px 4px, rgba(44, 187, 99, .25) 0 4px 8px, rgba(44, 187, 99, .25) 0 8px 16px, rgba(44, 187, 99, .25) 0 16px 32px;
+/* Titolo Header (es. LOG FAMIGLIA) */
+.log-title-text {
+  font-weight: 800 !important;
+  color: #4338ca !important; /* Indigo */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.1rem !important;
 }
 
-.text-message-point-title {
-    color: #0600bc;
+/* --- Area Contenuto (Grid) --- */
+.log-content-area {
+  padding: 32px !important; /* Più spazio interno */
 }
 
-.pagination-activity {
-    margin-top: 2;
-    display: 'flex';
-    justify-content: 'center'
+/* --- Mini-Card del Singolo Log --- */
+.log-card-item {
+  background: #ffffff !important;
+  border-radius: 20px !important; /* Coerente con l'header */
+  border: 1px solid #f1f5f9 !important;
+  transition: all 0.3s ease !important;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hover pulito e non aggressivo */
+.log-card-item:hover {
+  transform: translateY(-4px);
+  border-color: #e0e7ff !important;
+  box-shadow: 0 12px 20px -5px rgba(67, 56, 202, 0.08) !important;
+}
+
+/* --- Tipografia Interna --- */
+
+/* Etichetta piccola (DATA, OPERAZIONE) */
+.log-label {
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  color: #94a3b8 !important; /* Slate grey chiaro */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px !important;
+}
+
+/* Valore (La data vera e propria, l'operazione) */
+.log-value {
+  font-size: 0.95rem !important;
+  color: #1e293b !important; /* Quasi nero */
+  font-weight: 600 !important;
+  margin-bottom: 20px !important; /* Spazio sotto il valore */
+}
+
+/* Valore evidenziato (es. FAMILY_ADD) */
+.log-value-highlight {
+  color: #4338ca !important;
+  background-color: #eef2ff;
+  padding: 4px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  font-family: 'Roboto Mono', monospace; /* Font monospace per codici */
+  font-size: 0.85rem !important;
+}
+
+.log-value-highlight-red {
+  color: #ca385a !important;
+  background-color: #eef2ff;
+  padding: 4px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  font-family: 'Roboto Mono', monospace; /* Font monospace per codici */
+  font-size: 0.85rem !important;
+}
+
+/* --- Footer della Mini-Card (Da/A) --- */
+.log-card-footer {
+  margin-top: auto; /* Spinge il footer in basso */
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.log-footer-text {
+  font-size: 0.8rem !important;
+  color: #64748b !important;
+  line-height: 1.6 !important;
+}
+
+/* Grassetto per le email */
+.log-footer-text strong {
+  color: #475569;
+}
+
+/* --- Paginazione --- */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0 10px;
+}
+
+/* Badge Punti (per Log Attività) */
+.points-badge {
+  background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.9rem;
 }
