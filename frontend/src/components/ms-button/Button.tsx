@@ -1,7 +1,7 @@
-import { Button as ButtonMui, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button as ButtonMui, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab } from '@mui/material'; // Importato Fab
 import { observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
-import './Button.css'; // Importa il file CSS
+import './Button.css'; // Assicurati che il nome del file CSS sia corretto
 
 
 export interface Pulsante {
@@ -64,16 +64,23 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
     <div className="col-button-container">
       {props.pulsanti.map((button, index) => (
         <div key={index} className="col-button">
-          <ButtonMui
+          {/* Componente Fab di MUI stilizzato col nostro CSS */}
+          <Fab
             id={`button-${index}`}
+            // Le classi CSS gestiranno i colori accesi e la forma
             className={button.nome === 'red' ? 'button-red' : 'button-blue'}
             title={button.title}
-            onClick={() => handleClickOpen(button.funzione, button.configDialogPulsante)} // Apri il dialog con la funzione specifica
+            onClick={() => handleClickOpen(button.funzione, button.configDialogPulsante)}
             disabled={button.disableButton}
-
+            
+            // MODIFICATO: size="small" per il FAB mini (40px)
+            size="small" 
+            
+            aria-label={button.title}
           >
+            {/* L'icona sarà rimpicciolita via CSS */}
             <i className={button.icona}></i>
-          </ButtonMui>
+          </Fab>
         </div>
       ))}
       <Dialog
@@ -98,6 +105,7 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
         </DialogContent>
 
         <DialogActions className="dialog-actions-custom">
+          {/* Pulsanti standard per il Dialog */}
           <ButtonMui
             onClick={handleClose}
             className="dialog-button-cancel"
@@ -117,3 +125,5 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
 });
 
 export default Button;
+
+
