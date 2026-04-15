@@ -11,15 +11,14 @@ import com.common.structure.exception.NotFoundException;
 import com.common.structure.status.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
-public class ActivityProcessor {
+@Service
+public class ActivityQueryProcessor {
     @Autowired
     private ActivityService activityService;
 
@@ -56,18 +55,5 @@ public class ActivityProcessor {
         }
         return Mono.just(responseDTO);
     }
-
-    public Mono<ResponseDTO> saveActivity(ActivityDTO activityDTO) {
-        String emailCriypt = encryptDecryptConverter.convert(activityDTO.getEmail());
-        activityDTO.setEmail(emailCriypt);
-        String _id = activityService.saveActivity(activityDTO);  // Ottieni il Mono<String>
-        return Mono.just(new ResponseDTO(_id, ActivityHttpStatus.OK.value(), new ArrayList<>()));
-    }
-
-    public Mono<ResponseDTO> deleteByIdentificativo(String identificativo) {
-        identificativo = encryptDecryptConverter.decrypt(identificativo);
-        return Mono.just(activityService.deleteByIdentificativo(identificativo))
-                .map(result -> new ResponseDTO(result, ActivityHttpStatus.OK.value(), new ArrayList<>()));  // Mappa il risultato in un ResponseDTO
-
-    }
+  
 }
