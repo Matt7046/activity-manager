@@ -1,10 +1,8 @@
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CloseIcon from '@mui/icons-material/Close';
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
-import { Box, Card, CardContent, IconButton, Typography } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
+import { Box, Alert as MuiAlert, Snackbar, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { TypeAlertColor } from '../../general/structure/Constant';
 import { TypeMessage } from '../../page/page-layout/PageLayout';
@@ -26,14 +24,11 @@ export interface AlertConfig {
 }
 
 interface CustomAlertProps {
-  message: {
-    typeMessage?: TypeAlertColor;
-    message?: string[];
-  };
+  message: TypeMessage;
   onClose: () => void;
 }
-const classNameByTypeMessage = (typeMessage: TypeAlertColor|undefined) => {
-  switch(typeMessage) {
+const classNameByTypeMessage = (typeMessage: TypeAlertColor | undefined) => {
+  switch (typeMessage) {
     case TypeAlertColor.SUCCESS:
       return 'text-up-message-success';
     case TypeAlertColor.ERROR:
@@ -48,6 +43,12 @@ const classNameByTypeMessage = (typeMessage: TypeAlertColor|undefined) => {
 };
 
 
+
+
+
+
+
+
 const Alert: React.FC<CustomAlertProps> = ({ message, onClose }) => {
 
   useEffect(() => {
@@ -60,43 +61,40 @@ const Alert: React.FC<CustomAlertProps> = ({ message, onClose }) => {
     return () => clearTimeout(timer);
   }, [onClose]);
 
-
-
-
+  // message.typeMessage conterrà SUCCESS, ERROR, etc.
+  // Lo convertiamo in minuscolo per la prop 'severity' di MUI
+  const severity = (message.typeMessage?.toLowerCase() || 'info') as any;
 
   return (
-    <Card className={message.typeMessage ? "card-alert-success" : "card-alert-error"}   >
-
-      <CardContent className='card-content'>
-        <Grid container justifyContent="space-between" spacing={2}>
-          <Box className ='box-alert'>
-            {message.typeMessage && icons[message.typeMessage]}
-          </Box>
-          <Typography
-            variant="h6"
-            className={classNameByTypeMessage(message.typeMessage)}        >
-            {message.typeMessage}
-          </Typography>
-          <Grid>
-            <IconButton onClick={onClose} aria-label="close">
-              <CloseIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-
-        {message?.message?.map((msg, index) => (
-          <Typography
-          className='text-message'
-            key={index}
-            variant="body2"         
-          >
-            {msg}
-          </Typography>
-        ))}
-      </CardContent>
-
-
-    </Card>
+    <Snackbar
+      open={true} // L'apertura è gestita dal padre
+      autoHideDuration={4000} // Sparisce dopo 4 secondi
+      onClose={onClose}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Posizione in alto a destra
+      className="alert-snackbar-custom"
+    >
+      <MuiAlert
+        onClose={onClose}
+        severity={severity}
+        variant="filled"
+        className={`alert-mui-custom alert-shadow-${severity}`}
+        iconMapping={{
+          // Puoi personalizzare le icone qui se vuoi
+        }}
+        sx={{ width: '100%', borderRadius: '16px' }}
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Typography sx={{ fontWeight: 800, fontSize: '0.85rem', textTransform: 'uppercase', mb: 0.5 }}>
+            {message.titleMessage}
+              </Typography>
+          {message?.message?.map((msg, index) => (
+            <Typography key={index} sx={{ fontSize: '0.85rem', opacity: 0.9 }}>
+              {msg}
+            </Typography>
+          ))}
+        </Box>
+      </MuiAlert>
+    </Snackbar>
   );
 };
 

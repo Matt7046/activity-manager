@@ -1,12 +1,11 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Pagination, Typography } from "@mui/material";
+import { Box, Card, CardContent, Dialog, DialogContent, IconButton, Pagination, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps, CardText, CardTextAlign } from "../../components/ms-card/Card";
-import Label from '../../components/ms-label/Label';
 import { upload } from '../../general/service/ImageService';
 import { ButtonName, HttpStatus } from "../../general/structure/Constant";
 import { getDateStringExtendsFormat, getDateStringRegularFormat, ResponseI, UserI } from "../../general/structure/Utils";
@@ -115,82 +114,78 @@ const PointsContent: React.FC<PointsContentProps> = ({
     </React.Fragment>
   )
 
+  // Modifica dei renderChildren all'interno di PointsContent
+
+  // ... (tutti gli import rimangono invariati)
+
   const renderChildren2 = (open: boolean) => (
     <React.Fragment>
       <Grid container justifyContent="flex-end" spacing={2} >
         <Button pulsanti={[pulsanteLog]} />
         <Dialog
           onClose={handleCloseDialogLogActivity}
-          aria-labelledby="customized-dialog-title"
           open={open}
+          maxWidth="md"
+          fullWidth
+          PaperProps={{ className: 'dialog-log-custom' }}
         >
-          <DialogTitle id="customized-dialog-title">
-            <Grid container spacing={2}>
-              {/* Prima riga: Pulsanti per simulare il login */}
-              <Grid  xs= {10} sm= {11 }>
-                <div className="col-display">
-                  <Label text={"LOG ATTIVITA'"} _id={"logActivity"} className='col-display' />
-                </div>
-              </Grid>
-              <Grid xs= {1} sm= {1}>
-                <IconButton
-                  aria-label="close"
-                  onClick={handleCloseDialogLogActivity}
-                  className="icon-button" >
-                  <CloseIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-          </DialogTitle>
-          <DialogContent dividers>
-            {/* Aggiungi la paginazione per i log */}
+          {/* Header Pulito */}
+          <div className="log-header-container">
+            <Typography className="log-title-text">LOG ATTIVITÀ</Typography>
+            <IconButton onClick={handleCloseDialogLogActivity} size="small" sx={{ color: '#94a3b8' }}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+
+          <DialogContent className="log-content-area">
             {testoLogUnpaged.length > 0 ? (
               <>
-                <Grid container spacing={2}>
+                <Grid container spacing={3}> {/* Spaziatura generosa */}
                   {testoLogUnpaged.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
-                    <Grid xs={12} sm={6} key={index} >
-                      <Card >
+                    <Grid xs={12} sm={6} key={index}>
+                      <Card className="log-card-item" elevation={0}>
+                        <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
 
-                        <CardContent className='text-card-point'>
-                          <Typography variant="subtitle1" className='text-message-point-title'>
-                            {'Data: '}
-                          </Typography>
-                          <Typography variant="subtitle1" className='text-message-point-body'>
-                            {getDateStringExtendsFormat(item.date)}
-                          </Typography>
-                          <Typography variant="body2" className='text-message-point-title'>
-                            {'Punti usati: '}
-                          </Typography>
-                          <Typography variant="body2" className='text-message-point-body'>
-                            {item.usePoints}
-                          </Typography>
-                          <Typography variant="body2" className='text-message-point-title'>
-                            {'Descrizione: '}
-                          </Typography>
-                          <Typography variant="body2" className='text-message-point-body'>
-                            {item.log}
-                          </Typography>
+                          <Typography className="log-label">Data Operazione</Typography>
+                          <Typography className="log-value">{getDateStringExtendsFormat(item.date)}</Typography>
+
+                          <Grid container>
+                            <Grid xs={6}>
+                              <Typography className="log-label">Punti</Typography>
+                              <Typography className="log-value">
+                                <span className="points-badge">{item.usePoints}</span>
+                              </Typography>
+                            </Grid>
+                          </Grid>
+
+                          {/* Descrizione in Box separata */}
+                          <div className="log-card-footer" >
+                            <Typography className="log-label">Descrizione Log</Typography>
+                            <Typography className="log-footer-text" sx={{ fontStyle: 'italic' }}>
+                              {item.log}
+                            </Typography>
+                          </div>
                         </CardContent>
                       </Card>
                     </Grid>
                   ))}
                 </Grid>
-                {/* Paginazione per i log */}
-                <Pagination
-                  count={Math.ceil(testoLogUnpaged.length / logsPerPage)}
-                  page={page}
-                  onChange={handlePageChange}
-                  color="primary"
-                  className='pagination-activity'
-                />
+                <div className="pagination-container">
+                  <Pagination
+                    count={Math.ceil(testoLogUnpaged.length / logsPerPage)}
+                    page={page}
+                    onChange={handlePageChange}
+                    color="primary"
+                    size="large"
+                  />
+                </div>
               </>
             ) : (
-              <Typography variant="body2">
-                {'Nessun dato disponibile.'}
+              <Typography sx={{ textAlign: 'center', py: 8, color: '#94a3b8' }}>
+                Nessuna attività registrata.
               </Typography>
             )}
           </DialogContent>
-          <DialogActions />
         </Dialog>
       </Grid>
     </React.Fragment>
@@ -200,90 +195,75 @@ const PointsContent: React.FC<PointsContentProps> = ({
     <React.Fragment>
       <Grid container justifyContent="flex-end" >
         <Button pulsanti={[pulsanteLogFamily]} />
-
         <Dialog
           onClose={handleCloseDialogLogFamily}
-          aria-labelledby="customized-dialog-title"
           open={open}
+          maxWidth="md"
+          fullWidth
+          PaperProps={{ className: 'dialog-log-custom' }}
         >
-          <DialogTitle id="customized-dialog-title-family">
-            <Grid container spacing={2}>
-              {/* Prima riga: Pulsanti per simulare il login */}
-              <Grid xs={10} sm={11}>
-                <div className="col-display">
-                  <Label text={"LOG FAMIGLIA"} _id={"logFamily"} className='col-display' />
-                </div>
-              </Grid>
-              <Grid xs= {1} sm={1}>
-                <IconButton
-                  aria-label="close"
-                  onClick={handleCloseDialogLogFamily}
-                  className="icon-button" >
-                  <CloseIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-          </DialogTitle>
-          <DialogContent dividers>
-            {/* Aggiungi la paginazione per i log */}
+          {/* Header Pulito */}
+          <div className="log-header-container">
+            <Typography className="log-title-text">LOG FAMIGLIA</Typography>
+            <IconButton onClick={handleCloseDialogLogFamily} size="small" sx={{ color: '#94a3b8' }}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+
+          <DialogContent className="log-content-area">
             {testoLogFamilyUnpaged.length > 0 ? (
               <>
-                <Grid container spacing={2}>
+                <Grid container spacing={3}> {/* Spaziatura generosa */}
                   {testoLogFamilyUnpaged.slice((page - 1) * logsPerPage, page * logsPerPage).map((item, index) => (
                     <Grid xs={12} sm={6} key={index}>
-                      <Card >
+                      <Card className="log-card-item" elevation={0}>
+                        <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
 
-                        <CardContent className='text-card-point'>
-                          <Typography variant="subtitle1" className='text-message-point-title'>
-                            {'Data: '}
+                          <Typography className="log-label">Data</Typography>
+                          <Typography className="log-value">{getDateStringExtendsFormat(item.date)}</Typography>
+
+                          <Typography className="log-label">Operazione</Typography>
+                          <Typography component="div" className="log-value">
+                            {item.operations === 'FAMILY_REMOVE' ? (
+                              <span className="log-value-highlight-red">{item.operations}</span>
+                            ) : (
+                              <span className="log-value-highlight">{item.operations}</span>
+                            )}
                           </Typography>
-                          <Typography variant="subtitle1">
-                            {getDateStringExtendsFormat(item.date)}
-                          </Typography>
-                          <Typography variant="body2" className='text-message-point-title'>
-                            {'Email inviante: '}
-                          </Typography>
-                          <Typography variant="body2" className='text-message-point-body'>
-                            {item.performedByEmail}
-                          </Typography>
-                          <Typography variant="body2" className='text-message-point-title'>
-                            {'Email ricevente: '}
-                          </Typography>
-                          <Typography variant="body2" className='text-message-point-body'>
-                            {item.receivedByEmail}
-                          </Typography>
-                          <Typography variant="body2" className='text-message-point-title'>
-                            {'Tipo operazione: '}
-                          </Typography>
-                          <Typography variant="body2" className='text-message-point-body'>
-                            {item.operations}
-                          </Typography>
+                          {/* Footer con Da/A stilizzato */}
+                          <div className="log-card-footer">
+                            <Typography className="log-footer-text">
+                              <strong>Da:</strong> {item.performedByEmail}
+                            </Typography>
+                            <Typography className="log-footer-text">
+                              <strong>A:</strong> {item.receivedByEmail}
+                            </Typography>
+                          </div>
                         </CardContent>
                       </Card>
                     </Grid>
                   ))}
                 </Grid>
-                {/* Paginazione per i log */}
-                <Pagination
-                  count={Math.ceil(testoLogFamilyUnpaged.length / logsPerPage)}
-                  page={page}
-                  onChange={handlePageChange}
-                  color="primary"
-                  className='pagination-card'
-                />
+                <div className="pagination-container">
+                  <Pagination
+                    count={Math.ceil(testoLogFamilyUnpaged.length / logsPerPage)}
+                    page={page}
+                    onChange={handlePageChange}
+                    color="primary"
+                    size="large"
+                  />
+                </div>
               </>
             ) : (
-              <Typography variant="body2">
-                {'Nessun dato disponibile.'}
+              <Typography sx={{ textAlign: 'center', py: 8, color: '#94a3b8' }}>
+                Nessun log familiare trovato.
               </Typography>
             )}
           </DialogContent>
-          <DialogActions />
         </Dialog>
       </Grid>
     </React.Fragment>
   );
-
 
 
   const handleCloseDialogLogFamily = () => {
@@ -446,7 +426,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
     const emailFind = user.emailChild;
 
     const page = 0;
-    const size = 10;
+    const size = 5;
     const field = 'date';
     const unpaged = openDialog;
     return getLogActivityByEmail({ ...userI, email: emailFind, page, size, field, unpaged }, () => showMessage(alertConfig.setOpen, alertConfig.setMessage)).then((response: ResponseI | undefined) => {
@@ -469,7 +449,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const getLogFamily = (userI: UserI, openDialog: boolean): Promise<void> => {
     const emailFind = user.emailChild;
     const page = 0;
-    const size = 10;
+    const size = 5;
     const field = 'date';
     const unpaged = openDialog;
     return getLogFamilyByEmail({ ...userI, email: emailFind, page, size, field, unpaged }, () => showMessage(alertConfig.setOpen, alertConfig.setMessage)).then((response: ResponseI | undefined) => {
