@@ -46,7 +46,7 @@ const Schedule = observer((props: {
         {props.schedule.pulsanti.filter(
           (pulsante) => pulsante.nome.toUpperCase() === 'NEW'
         ).map((pulsante) => (
-          <Grid container justifyContent="space-between" alignItems="center" spacing={2} key="newButton"
+          <Grid container justifyContent="space-between" alignItems="center" key="newButton"
             className="new-button-container">
 
             <Button
@@ -104,28 +104,38 @@ const Schedule = observer((props: {
           const visibilitySubTesto = pulsantiDom.some((element) => element.style.visibility === '');
           return (
             <React.Fragment key={item._id}>
+              {/* Contenitore principale della riga */}
+              <div className="schedule-row">
 
-              <div className="col-display">
-                <Label text={item.nome} _id={item._id} />
+                <div className="col-display">
+                  <Label text={item.nome} _id={item._id} />
+                </div>
+
+                <Grid
+                  container
+                  justifyContent={props.schedule.justifyContent}
+                  alignItems="center"
+                  spacing={2}
+                  className="buttons-grid"
+                >
+                  <Button pulsanti={pulsanti} />
+                </Grid>
+
               </div>
 
-              <Grid
-                container
-                justifyContent={props.schedule.justifyContent}
-                alignItems="center"
-                spacing={2}
-                style={{ minHeight: '40px', marginTop: '-20px' }} // minHeight garantisce spazio per il cerchio, marginTop compensa il div del nome se necessario
-              >
-                <Button pulsanti={pulsanti} />
-              </Grid>
-
+              {/* Sotto-testo e separatore rimangono fuori dal flex-row per stare sotto */}
               <div id={`rowHidden-${item._id}`}>
-                <Label _id={item._id} text={subTesti[item._id] ? subTesti[item._id] : isVertical ? '' : "-"} visibility={isVertical && visibilitySubTesto ? 'hidden' : undefined} />
+                <Label
+                  _id={item._id}
+                  text={subTesti[item._id] ? subTesti[item._id] : isVertical ? '' : "-"}
+                  visibility={isVertical && visibilitySubTesto ? 'hidden' : undefined}
+                />
               </div>
-              {/* Separatore */}
+
               <hr className={isVertical ? 'custom-separator-vertical' : 'custom-separator-horizontal'} />
             </React.Fragment>
           );
+
         })}
       </div>
     </>
