@@ -204,10 +204,10 @@ const renderChildren3 = (open: boolean) => (
                       
                       <Typography className="log-label">Operazione</Typography>
                       <Typography component="div" className="log-value">
-                        {item.operations === 'FAMILY_ADD' ? (
-                          <span className="log-value-highlight">{item.operations}</span>
+                        {item.operations === 'FAMILY_REMOVE' ? (
+                          <span className="log-value-highlight-red">{item.operations}</span>
                         ) : (
-                          <span className="log-value-highlight2">{item.operations}</span>
+                          <span className="log-value-highlight">{item.operations}</span>
                         )}
                       </Typography>
 
