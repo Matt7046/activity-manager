@@ -19,9 +19,8 @@
   }
 
 .box-layout-right-button {
-    padding-right: 15px;
+    padding-right: 10px;
     display: flex;
-    gap: 12px
 }
 .grid-menu{
     padding-top: 10px;
