@@ -151,7 +151,8 @@ export const funzionalitaPulsanteRed = (item: any, pulsante: Pulsante, handleSub
   if (check) {
     element.style.visibility = ""; // Rimuove il valore inline
     pulsante.funzione(_id).then((response: { jsonText: { subTesto: string; }; }) => {
-      handleSubTestoUpdate(item._id, response.jsonText.subTesto);
+      const descrizione = response.jsonText.subTesto ? response.jsonText.subTesto : '';
+      handleSubTestoUpdate(item._id, descrizione);
     })
   } else {
     element.style.visibility = "hidden"; // mette il valore inline
