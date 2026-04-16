@@ -1,5 +1,13 @@
 /* Schedule.css */
 
+.schedule-row {
+  display: flex;
+  justify-content: space-between; /* Spinge il testo a sinistra e i bottoni a destra */
+  align-items: center;           /* Allinea verticalmente al centro */
+  width: 100%;
+  min-height: 48px;              /* Altezza minima coerente */
+}
+
 .col-display {
   display: flex;
   align-items: center;

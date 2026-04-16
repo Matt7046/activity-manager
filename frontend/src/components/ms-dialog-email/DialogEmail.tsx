@@ -38,7 +38,7 @@ return (
         </DialogTitle>
       </div>
 
-      <DialogContent className="dialog-body" sx={{ minWidth: 400 }}>
+      <DialogContent className="dialog-body" >
         {/* Box Istruzioni */}
         <div className="instruction-box">
           <Typography className="instruction-text">
