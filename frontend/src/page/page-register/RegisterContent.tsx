@@ -184,7 +184,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
           <Box className="box-child" key={index} mb={2}>
             <Grid container spacing={2} alignItems="center">
               {/* Email del figlio */}
-              <Grid xs={4}>
+              <Grid xs={10}>
                 <TextField
                   label={`Email Figlio ${index + 1}`}
                   variant="outlined"
