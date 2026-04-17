@@ -99,7 +99,7 @@
 .dialog-header { background-color: #f9fafb; padding: 24px !important; border-bottom: 1px solid #f3f4f6; }
 .dialog-title-custom { font-weight: 800 !important; color: #111827 !important; text-align: center; margin: 0 !important; font-size: 1.25rem !important; }
 .dialog-message-container { background-color: #fff1f2; border: 1px solid #fecaca; border-radius: 16px; padding: 20px; margin: 16px 0; }
-.dialog-text-custom { text-align: center; color: #991b1b !important; font-weight: 500 !important; line-height: 1.5 !important; }
+.dialog-text-custom { text-align: left; color: #991b1b !important; font-weight: 500 !important; line-height: 1.5 !important; }
 .dialog-actions-custom { padding: 16px 24px 24px !important; justify-content: center !important; gap: 16px !important; }
 .dialog-button-confirm { background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%) !important; color: white !important; text-transform: none !important; font-weight: 600 !important; padding: 10px 32px !important; border-radius: 12px !important; box-shadow: 0 4px 6px -1px rgba(67, 56, 202, 0.4) !important; transition: all 0.2s ease-in-out !important; }
 .dialog-button-confirm:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(67, 56, 202, 0.4) !important; }
