@@ -20,7 +20,25 @@ const Schedule = observer((props: {
 }) => {
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [subTesti, setSubTesti] = useState<{ [key: string]: string }>({});
+  // NUOVO: Stato per gestire la visibilità delle righe
+  // Dentro il componente Schedule:
+  const [visibili, setVisibili] = useState<{ [key: string]: boolean }>({});
 
+  const toggleRow = (item: any, pulsante: Pulsante) => {
+    const _id = item._id;
+    const isOpening = !visibili[_id]; // Se era falso/undefined, stiamo aprendo
+
+    // Aggiorna lo stato di visibilità
+    setVisibili(prev => ({ ...prev, [_id]: isOpening }));
+
+    // Se stiamo aprendo e non c'è il testo, lo scarichiamo (logica originale)
+    if (isOpening && !subTesti[_id]) {
+      pulsante.funzione(_id).then((response: any) => {
+        const descrizione = response.jsonText.subTesto || '';
+        handleSubTestoUpdate(_id, descrizione);
+      });
+    }
+  };
 
   const handleSubTestoUpdate = (itemId: string, subTesto: string) => {
     setSubTesti((prev) => ({
@@ -127,7 +145,7 @@ const Schedule = observer((props: {
               <div id={`rowHidden-${item._id}`}>
                 <Label
                   _id={item._id}
-                  text={subTesti[item._id] ? subTesti[item._id] : isVertical ? '' : "-"}
+                  text={subTesti[item._id] ? subTesti[item._id] : isVertical ? '' : ""}
                   visibility={isVertical && visibilitySubTesto ? 'hidden' : undefined}
                 />
               </div>
@@ -146,18 +164,17 @@ export const funzionalitaPulsanteRed = (item: any, pulsante: Pulsante, handleSub
   const _id = item._id;
 
   const element = document.querySelector(`#rowHidden-${_id}`) as HTMLElement;
-  const check = (element.style.visibility === "" && subTesti[item._id] === undefined) || element.style.visibility === "hidden";
-  // Rimuove il valore inline
-  if (check) {
-    element.style.visibility = ""; // Rimuove il valore inline
+  const isHidden = element.style.display === "none" || (element.style.display === "" && !subTesti[item._id]);  // Rimuove il valore inline
+  if (isHidden) {
+    element.style.display = "block"; // Rimuove il valore inline
     pulsante.funzione(_id).then((response: { jsonText: { subTesto: string; }; }) => {
       const descrizione = response.jsonText.subTesto ? response.jsonText.subTesto : '';
       handleSubTestoUpdate(item._id, descrizione);
     })
   } else {
-    element.style.visibility = "hidden"; // mette il valore inline
+    element.style.display = "none"; // mette il valore inline
   }
-  return check; // Aggiorna lo stato
+  return isHidden; // Aggiorna lo stato
 };
 
 
