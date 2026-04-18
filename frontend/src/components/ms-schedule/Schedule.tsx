@@ -83,10 +83,7 @@ const Schedule = observer((props: {
             .filter((pulsante) => pulsante.nome.toUpperCase() === 'RED')
             .map((pulsante) => ({
               ...pulsante, // Copia tutte le altre proprietà del pulsante
-              funzione: (_id: string) => {
-                funzionalitaPulsanteRed(item, pulsante, handleSubTestoUpdate, subTesti);
-              }
-              //visibility: !isVertical
+              funzione: () => toggleRow(item, pulsante) // Usa la nuova funzione interna
             }));
 
           // Creazione degli altri pulsanti
@@ -142,11 +139,13 @@ const Schedule = observer((props: {
               </div>
 
               {/* Sotto-testo e separatore rimangono fuori dal flex-row per stare sotto */}
-              <div id={`rowHidden-${item._id}`}>
+              <div
+                id={`rowHidden-${item._id}`}
+                style={{ display: visibili[item._id] ? 'block' : 'none' }} // Cambiato visibility in display
+              >
                 <Label
                   _id={item._id}
-                  text={subTesti[item._id] ? subTesti[item._id] : isVertical ? '' : ""}
-                  visibility={isVertical && visibilitySubTesto ? 'hidden' : undefined}
+                  text={subTesti[item._id] ? subTesti[item._id] : isVertical ? '' : ''}
                 />
               </div>
 
@@ -159,23 +158,6 @@ const Schedule = observer((props: {
     </>
   );
 })
-
-export const funzionalitaPulsanteRed = (item: any, pulsante: Pulsante, handleSubTestoUpdate: any, subTesti: any) => {
-  const _id = item._id;
-
-  const element = document.querySelector(`#rowHidden-${_id}`) as HTMLElement;
-  const isHidden = element.style.display === "none" || (element.style.display === "" && !subTesti[item._id]);  // Rimuove il valore inline
-  if (isHidden) {
-    element.style.display = "block"; // Rimuove il valore inline
-    pulsante.funzione(_id).then((response: { jsonText: { subTesto: string; }; }) => {
-      const descrizione = response.jsonText.subTesto ? response.jsonText.subTesto : '';
-      handleSubTestoUpdate(item._id, descrizione);
-    })
-  } else {
-    element.style.display = "none"; // mette il valore inline
-  }
-  return isHidden; // Aggiorna lo stato
-};
 
 
 
