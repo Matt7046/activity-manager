@@ -110,13 +110,6 @@ const Schedule = observer((props: {
             x.disableButton = x.nome.toUpperCase() === "RED" && isVertical;
             return x;
           });
-          const pulsantiDom: HTMLElement[] = [];
-          Object.keys(subTesti).forEach((_id) => {
-            const element = document.querySelector(`#rowHidden-${_id}`) as HTMLElement;
-            pulsantiDom.push(element);
-          });
-
-          const visibilitySubTesto = pulsantiDom.some((element) => element.style.visibility === '');
           return (
             <React.Fragment key={item._id}>
               {/* Contenitore principale della riga */}
