@@ -1,0 +1,115 @@
+# common/src/main/resources/application-common.yml
+jdk:
+  tls:
+    client:
+      protocol: TLSv1.2 
+
+spring:
+  application:
+    name: common-config
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+  mail:
+    from: ${EMAIL_FROM}
+  data:
+    mongo:
+      uri: ${MONGO_URI}
+      tls:
+        cert: ${MONGO_CERT_PATH:/app/certificate/client.pem}
+        key: ${MONGO_KEY_PATH:/app/certificate/client-key.pem}
+      database: ${MONGO_DB}
+  elasticsearch:
+    uris: ${ELASTIC_URIS}
+    username: ${ELASTIC_USER}
+    password: ${ELASTIC_PASSWORD}
+    connection-timeout: 5s
+    socket-timeout: 30s
+  ssl:
+    bundle:
+      jks:
+        elastic-bundle: 
+          truststore:
+            location: ${ELASTIC_TRUSTSTORE_PATH:certificate/elastic-client.p12}
+            password: ${ELASTIC_BUNDLE_PASSWORD}
+            type: PKCS12
+
+app:
+  gpt:
+    token: ${GPT_TOKEN}
+  secret:
+    key: ${APP_SECRET_KEY}
+    crypt:
+      key: ${APP_CRYPT_KEY}
+      user:
+        key: ${APP_USER_KEY}
+  algorithm1: AES
+  algorithm2: HmacSHA256
+  address1: ${ADDRESS_1}
+  address2: ${ADDRESS_2}
+  address3: ${ADDRESS_3}
+  security:
+    roles: USER
+    username: user
+    crypt: bcrypt
+  page:
+    address:
+      policy: /privacy-policy
+      home: /home
+      service:
+        image: http://image-service:8080
+        auth: http://auth-service:8080
+        activity: http://activity-service:8080
+        userpoint: http://user-point-service:8080
+        family: http://family-service:8080
+        gpt: https://api.openai.com/v1
+    path:
+      image: /api/image
+      auth: /api/auth
+      activity: /api/activity
+      logactivity: /api/logactivity
+      userpoint: /api/userpoint
+      family: /api/family
+  rabbitmq:
+    notification:
+      exchange:
+        exchangeName: notification-exchange
+
+youtube:
+  api-key: ${YOUTUBE_API_KEY}
+  base-url: https://www.googleapis.com/youtube/v3
+
+rabbitmq:
+  exchange:
+    name:
+      notification: notification-exchange
+      point: point-exchange
+      activity:
+        search:
+          exchangeName: activity.search.exchange
+
+  routingKey:
+    notification: notification.family.notifier
+    email: userpoint.notification.email
+    point: point.log.activity
+
+    activity:
+      delete:
+        enriched: activity.delete.enriched
+      search:
+        create: activity.search.create
+        enriched: activity.search.enriched
+message:
+  error:
+    generic: Errore generico
+
+cloudinary:
+  cloud_name: ${CLOUDINARY_NAME}
+  api_key: ${CLOUDINARY_API_KEY}
+  api_secret: ${CLOUDINARY_API_SECRET}
+
+email:
+  username: ${EMAIL_USER}
+  password: ${EMAIL_PASSWORD}
