@@ -29,7 +29,7 @@ const fetchOptions = async (testo: string) => {
   try {
     return fetchDataVideo(testo).then((response: ResponseI | undefined) => {
       gamificationStore.setVideo(response?.jsonText ?? []);
-      return response?.jsonText;
+      return response;
     }).catch((error) => {
       console.error('Error fetching options:', error);
     });
@@ -40,6 +40,8 @@ const fetchOptions = async (testo: string) => {
 
 const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [videos, setVideos] = useState<VideoI[]>([]);
+
 
   const savePoints = () => {
     const emailFind = user.emailChild ? user.emailChild : user.email;
@@ -72,8 +74,9 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
       title: "Ricerca video",
       funzione: () => {
         console.log("Ricerca video:", testo)
-        fetchOptions(testo).then((response: ResponseI) => {
+        fetchOptions(testo).then((response: ResponseI|void) => {
           if (response) {
+            setVideos(response.jsonText);
           }
         })
         onPlayClick(null);
@@ -178,7 +181,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
       ) : (
         /* 🎥 GRID SE NESSUN VIDEO SELEZIONATO */
         <div className="video-grid">
-          {gamificationStore.video.map((video: VideoI) => (
+          {videos.map((video: VideoI) => (
             <div key={video.videoId} className="video-card">
               <div className="video-thumbnail-container">
                 <img
