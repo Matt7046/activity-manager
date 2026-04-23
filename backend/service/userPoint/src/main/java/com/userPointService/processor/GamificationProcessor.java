@@ -34,9 +34,14 @@ public class GamificationProcessor {
 
     @Autowired
     private GamificationService gamificationService;
+    @Autowired
+    EncryptDecryptConverter encryptDecryptConverter;
+
+
 
     @Transactional
-    public Mono<ResponseDTO> fetchVideos(String topic) {
+    public Mono<ResponseDTO> fetchVideos(String topicCrypt) {
+        String topic = encryptDecryptConverter.decrypt(topicCrypt);
         return gamificationService.fetchVideos(topic)
                 .map(json -> json.get("items"))
                 .flatMapMany(Flux::fromIterable)
