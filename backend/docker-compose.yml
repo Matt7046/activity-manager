@@ -4,6 +4,8 @@ services:
   frontend:   
     image: docker.io/matt7046/frontend:1.0.1
     container_name: frontend
+    env_file:
+      - .env
     networks:
       - app-network    
 
@@ -17,7 +19,7 @@ services:
       - .env
     environment:
       - 'RABBITMQ_DEFAULT_PASS=password'
-      - 'RABBITMQ_DEFAULT_USER=username'
+      - 'RABBITMQ_DEFAULT_USER=username'  
     networks:
       - app-network
 
@@ -138,9 +140,9 @@ services:
       - SPRING_RABBITMQ_USERNAME=username
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
-      - ./service/auth/src/main/resources/certificate:/app/certificate      
+      - ./service/auth/src/main/resources/certificate:/app/certificate 
     env_file:
-      - .env
+      - .env     
     networks:
       - app-network
 
