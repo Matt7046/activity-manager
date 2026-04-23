@@ -38,4 +38,15 @@ backend/.vscode/
 .env
 *.env
 
+### Esclude qualsiasi cartella chiamata 'certificate' in tutto il progetto ###
+**/src/main/resources/certificate/
+
+### Esclude tutti i file con queste estensioni, ovunque siano ###
+**/*.p12
+**/*.jks
+**/*.pem
+**/*.crt
+**/*.key
+**/*.pub
+
 
