@@ -64,7 +64,7 @@ app:
         activity: http://activity-service:8080
         userpoint: http://user-point-service:8080
         family: http://family-service:8080
-        gpt: https://api.openai.com/v1
+        gpt: http://api.openai.com/v1
     path:
       image: /api/image
       auth: /api/auth
