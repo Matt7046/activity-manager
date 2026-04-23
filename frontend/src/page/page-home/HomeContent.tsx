@@ -6,6 +6,7 @@ import GroupIcon from '@mui/icons-material/Group'; //
 import InfoIcon from '@mui/icons-material/Info'; // About
 import ListAltIcon from '@mui/icons-material/ListAlt'; // Activity
 import SettingsIcon from '@mui/icons-material/Settings'; // Operative
+import StarIcon from '@mui/icons-material/Star';
 import { Box, Button as ButtonMui, CircularProgress, Divider, IconButton, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
@@ -196,8 +197,8 @@ const GoogleAuthComponent = () => {
       type: type
     };
     setCurrentUser(user);
-    const message = { message: [ServerMessage.SERVER_DOWN], typeMessage: TypeAlertColor.ERROR };   
-      showDialog(type, false);    
+    const message = { message: [ServerMessage.SERVER_DOWN], typeMessage: TypeAlertColor.ERROR };
+    showDialog(type, false);
   };
 
   const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
@@ -206,10 +207,10 @@ const GoogleAuthComponent = () => {
   }
 
   const openHome = (currentUser: any, googleAuth: boolean, setLoading: any): Promise<any> => {
-    return getEmailChild({...currentUser, email: currentUser.emailChild}).then((x: ResponseI | undefined) => {
+    return getEmailChild({ ...currentUser, email: currentUser.emailChild }).then((x: ResponseI | undefined) => {
       const emailChild = x?.jsonText?.emailFigli ?? [];
       setEmailOptions(emailChild);
-      currentUser.type = emailChild?.length > 0 ? currentUser.type  : 2;      
+      currentUser.type = emailChild?.length > 0 ? currentUser.type : 2;
     }).then(x => {
       getTypeUser(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
         setEmailLogin(x?.jsonText.emailUserCurrent);
@@ -217,7 +218,7 @@ const GoogleAuthComponent = () => {
           case TypeUser.STANDARD: {
             setEmailLogin(currentUser.email);
             setSimulated(TypeUser.STANDARD);
-            setUser({ ...currentUser, type: x.jsonText.typeUser, emailChild: currentUser.emailUserCurrent ,emailUserCurrent: x.jsonText.emailUserCurrent });
+            setUser({ ...currentUser, type: x.jsonText.typeUser, emailChild: currentUser.emailUserCurrent, emailUserCurrent: x.jsonText.emailUserCurrent });
             break;
           }
           case TypeUser.FAMILY: {
@@ -385,7 +386,7 @@ const GoogleAuthComponent = () => {
               {/* Buttons: Login Simulation and Google Login */}
               {!hiddenLogin && (
                 <Grid container spacing={2}>
-                 <Grid xs={12} sm={6}>
+                  <Grid xs={12} sm={6}>
                     <ButtonMui
                       variant="contained"
                       color="primary"
@@ -532,7 +533,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
           funzione: null,
           testo: SectionNameDesc.ACTIVITY,
           icon: ListAltIcon
-        },
+        },     
         {
           funzione: null,
           testo: SectionNameDesc.ABOUT,
@@ -565,6 +566,11 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
           icon: ListAltIcon
         },
         {
+          funzione: null,
+          testo: SectionNameDesc.GAMIFICATION,
+          icon: StarIcon
+        },
+        {
           funzione: null, testo: SectionNameDesc.POINTS,
           icon: EmojiEventsIcon
         },
@@ -578,7 +584,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
 }
 
 export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage, onlyError?: boolean) => {
-  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage, titleMessage:message?.titleMessage } : {titleMessage:"Errore nella richiesta", message: [ServerMessage.SERVER_DOWN], typeMessage: 'error' };
+  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage, titleMessage: message?.titleMessage } : { titleMessage: "Errore nella richiesta", message: [ServerMessage.SERVER_DOWN], typeMessage: 'error' };
   if (!onlyError || onlyError && message?.typeMessage === TypeAlertColor.ERROR) {
     setOpen(true);
   }
