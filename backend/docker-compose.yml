@@ -13,8 +13,11 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+<<<<<<< HEAD
     env_file:
       - .env
+=======
+>>>>>>> d76af0e0a8c1fae4800ebd0e733bb5310558782a
     environment:
       - 'RABBITMQ_DEFAULT_PASS=password'
       - 'RABBITMQ_DEFAULT_USER=username'
@@ -46,8 +49,11 @@ services:
     volumes:
       - ./elasticsearch/certs:/usr/share/elasticsearch/config/certs:ro
       - esdata:/usr/share/elasticsearch/data
+<<<<<<< HEAD
     env_file:
       - .env
+=======
+>>>>>>> d76af0e0a8c1fae4800ebd0e733bb5310558782a
     networks:      
       - app-network
       
@@ -66,8 +72,11 @@ services:
       - auth-service
       - family-service
       - notification-service
+<<<<<<< HEAD
     env_file:
       - .env
+=======
+>>>>>>> d76af0e0a8c1fae4800ebd0e733bb5310558782a
     networks:
       - app-network
 
@@ -82,8 +91,11 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/userPoint/src/main/resources/certificate:/app/certificate
+<<<<<<< HEAD
     env_file:
       - .env
+=======
+>>>>>>> d76af0e0a8c1fae4800ebd0e733bb5310558782a
     networks:
       - app-network
 
@@ -120,8 +132,12 @@ services:
       # Mappiamo la cartella dove hai salvato il file .p12
       # Assicurati che il file si chiami elastic-truststore.p12 dentro quella cartella
       - ./service/activity/src/main/resources/certificate:/app/certificate
+<<<<<<< HEAD
     env_file:
       - .env
+=======
+
+>>>>>>> d76af0e0a8c1fae4800ebd0e733bb5310558782a
     networks:
       - app-network
 
@@ -139,8 +155,11 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/auth/src/main/resources/certificate:/app/certificate      
+<<<<<<< HEAD
     env_file:
       - .env
+=======
+>>>>>>> d76af0e0a8c1fae4800ebd0e733bb5310558782a
     networks:
       - app-network
 
@@ -155,8 +174,11 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/family/src/main/resources/certificate:/app/certificate
+<<<<<<< HEAD
     env_file:
       - .env
+=======
+>>>>>>> d76af0e0a8c1fae4800ebd0e733bb5310558782a
     networks:
       - app-network
 
@@ -171,8 +193,11 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/notification/src/main/resources/certificate:/app/certificate
+<<<<<<< HEAD
     env_file:
       - .env
+=======
+>>>>>>> d76af0e0a8c1fae4800ebd0e733bb5310558782a
     networks:
       - app-network
 
@@ -187,8 +212,11 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/image/src/main/resources/certificate:/app/certificate
+<<<<<<< HEAD
     env_file:
       - .env
+=======
+>>>>>>> d76af0e0a8c1fae4800ebd0e733bb5310558782a
     networks:
       - app-network
 volumes:
