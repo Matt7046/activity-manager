@@ -77,7 +77,7 @@ public class RabbitMQActivityAIConsumer {
                         event.nome(),
                         event.points(),
                         event.email(),
-                        "GENERIC");
+                        "GENERICO");
                 searchPublisher.publishEnriched(eventEnriched); // u
 
 
