@@ -34,4 +34,8 @@ frontend/.vscode/
 node_modules
 backend/.vscode/
 
+###  Escludi i file delle variabili d'ambiente ###
+.env
+*.env
+
 
