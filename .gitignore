@@ -34,8 +34,11 @@ frontend/.vscode/
 node_modules
 backend/.vscode/
 
+<<<<<<< HEAD
 ### ENV ###
 .env
 *.env
 
+=======
+>>>>>>> d76af0e0a8c1fae4800ebd0e733bb5310558782a
 
