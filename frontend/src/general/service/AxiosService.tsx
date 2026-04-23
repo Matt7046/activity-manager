@@ -215,6 +215,7 @@ export const eseguiAlert = (funzioneMessage: (message?: TypeMessage) => void, me
 export const PATH_IMAGE = 'image'
 export const PATH_AUTH = 'auth'
 export const PATH_ACTIVITY = 'activity';
+export const PATH_GAMIFICATION = 'gamification';
 export const PATH_USER_POINT = 'userpoint';
 export const PATH_OPERATIVE = 'operative';
 export const PATH_FAMILY = 'family';

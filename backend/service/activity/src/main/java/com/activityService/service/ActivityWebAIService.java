@@ -32,7 +32,7 @@ public class ActivityWebAIService {
                 AGRICOLTURA
                 TECNOLOGIA
                 GIOCHI DA TAVOLO
-                GENERIC
+                GENERICO
                 
                 Regole:
                 - Rispondi SOLO con una parola

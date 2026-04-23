@@ -13,7 +13,6 @@ export const fetchDataActivities = async (pointsDTO: UserPointsI, funzioneMessag
   }
 };
 
-
 export const findByIdentificativo = async (pointsDTO: UserPointsI,  funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
   try {
     const path = PATH_ACTIVITY + `/find`;
