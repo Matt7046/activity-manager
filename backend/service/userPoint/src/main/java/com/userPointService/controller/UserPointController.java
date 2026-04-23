@@ -18,20 +18,15 @@ public class UserPointController {
     @Autowired
     private UserPointProcessor processor;
 
-    @Autowired
-    private EncryptDecryptConverter encryptDecryptConverter;
-
     @Value("${error.document.notFound}")
     private String errorDocument;
 
     @Value("${error.document.points}")
     private String message;
 
-
     @PostMapping("find")
     public Mono<ResponseDTO> findByEmail(@RequestBody UserPointDTO userPointDTO)  {
         return processor.findByEmail(userPointDTO);
-
     }
 
     @PostMapping("child")

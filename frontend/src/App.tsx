@@ -6,6 +6,7 @@ import Presentation from './components/ms-presentation/Presentation';
 import About from './page/page-about/About';
 import Activity from './page/page-activity/Activity';
 import Family from './page/page-family/Family';
+import Gamification from './page/page-gamification/Gamification';
 import Home from './page/page-home/Home';
 import Operative from './page/page-operative/Operative';
 import PrivacyPolicy from './page/page-privacy-policy/PrivacyPolicy';
@@ -50,6 +51,7 @@ const AppComponent = () => {
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/register" element={<Register />} />
       <Route path="/activity" element={<Activity />} />
+      <Route path="/gamification" element={<Gamification />} />
       <Route path="/about" element={<About />} />
       <Route path="/points" element={<Points />} />
       <Route path="/operative" element={<Operative />} />
