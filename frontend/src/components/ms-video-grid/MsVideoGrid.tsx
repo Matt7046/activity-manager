@@ -100,11 +100,12 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
         console.log("Punti assegnati:", points);
         gamificationStore.addPoints(points);
         savePoints();
+        gamificationStore.ResetPointsMinutes();     
         console.log("Punti assegnati")
       },
       configDialogPulsante: {
         showDialog: true,
-        message: "Aggiungi i punti premio del video?"
+        message: "Vuoi aggiungere i punti premio del video?"
       }
     }];
 
