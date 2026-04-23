@@ -88,7 +88,6 @@ public class UserPointProcessor {
             UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);
             List<UserPoint> userChild = userPointSave.getPointFigli().stream().map(userPointToPointMapper::toChange).toList();
             userPointSave.setType(1);
-            UserPoint finalUserPointSave = userPointSave;
             userChild = userChild.stream().map(x -> {
                 String tempPassword = UUID.randomUUID().toString().substring(0, 8);
                 x.setPassword(encryptDecryptConverter.convert(tempPassword));

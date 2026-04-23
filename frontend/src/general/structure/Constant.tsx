@@ -1,6 +1,7 @@
 export enum SectionName {
   POLICY = `privacy-policy`,
   ACTIVITY = `activity`,
+  GAMIFICATION = `gamification`,
   ABOUT = `about`,
   POINTS = `points`,
   OPERATIVE = `operative`,
@@ -14,7 +15,8 @@ export enum SectionName {
 export enum SectionNameDesc {
   POLICY = `privacy-policy`,
   ACTIVITY = `Attività`,
-  ABOUT = `Informazioni attività`,
+  GAMIFICATION =  `Sfide e premi`,
+  ABOUT = `Nuova attività`,
   POINTS = `Informazioni utente`,
   OPERATIVE = `Operatività`,
   FAMILY = `Famiglia`,
