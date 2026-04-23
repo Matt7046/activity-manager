@@ -40,3 +40,12 @@ backend/.vscode/
 
 
 
+### Esclude tutti i file con queste estensioni, ovunque siano ###
+**/*.p12
+**/*.jks
+**/*.pem
+**/*.crt
+**/*.key
+**/*.pub
+
+
