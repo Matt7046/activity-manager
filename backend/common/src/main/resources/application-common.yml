@@ -58,7 +58,7 @@ app:
     address:
       policy: /privacy-policy
       home: /home
-      service:
+    service:
         image: http://image-service:8080
         auth: http://auth-service:8080
         activity: http://activity-service:8080
