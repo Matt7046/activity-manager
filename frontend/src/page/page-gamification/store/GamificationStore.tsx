@@ -22,6 +22,10 @@ export class GamificationStore extends BaseStore {
     this.points += value;
     this.minutes = 0;
   }
+  ResetPointsMinutes() {
+    this.points = 0;
+    this.minutes = 0;
+  }
 
   getPoints() {
     return this.points;
@@ -30,7 +34,7 @@ export class GamificationStore extends BaseStore {
   getMinutes() {
     return this.minutes;
   }
-  
+
   setVideo(video: VideoI[]) {
     this.video = video;
   }
