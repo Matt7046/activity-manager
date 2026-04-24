@@ -56,8 +56,11 @@ app:
     crypt: bcrypt
   page:
     address:
-      policy: /privacy-policy
+      all: /**
+      webSocket: /ws/**
       home: /home
+      token: /api/auth/token
+      policy: /api/privacy-policy
     service:
         image: http://image-service:8080
         auth: http://auth-service:8080
