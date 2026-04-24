@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react";
 import { Button as ButtonMui, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import './DialogEmail.css'; // Importa il file CSS
@@ -34,7 +35,7 @@ return (
       {/* Sezione Header */}
       <div className="dialog-header">
         <DialogTitle className="dialog-title-custom">
-          Configurazione Tutorato
+          <Trans id="configurazione_tutorato" />
         </DialogTitle>
       </div>
 
@@ -42,13 +43,13 @@ return (
         {/* Box Istruzioni */}
         <div className="instruction-box">
           <Typography className="instruction-text">
-            Seleziona l'indirizzo email del tutor per procedere con l'assegnazione.
+            <Trans id="seleziona_lindirizzo_email_del_tutor_per_procedere_con_lassegnazione" />
           </Typography>
         </div>
 
         {/* Form Field */}
         <InputLabel sx={{ ml: 1, fontSize: '0.85rem', fontWeight: 600, color: '#4b5563' }}>
-          Indirizzo Email
+          <Trans id="indirizzo_email" />
         </InputLabel>
         <Select
           value={email}
@@ -70,7 +71,7 @@ return (
           onClick={handleCloseD} 
           className="button-cancel-custom"
         >
-          Annulla
+          <Trans id="annulla" />
         </ButtonMui>
         <ButtonMui
           onClick={() => handleConfirm(simulated, emailUserCurrent)}
@@ -78,7 +79,7 @@ return (
           variant="contained"
           disabled={!email}
         >
-          Conferma Scelta
+          <Trans id="conferma_scelta" />
         </ButtonMui>
       </DialogActions>
     </Dialog>

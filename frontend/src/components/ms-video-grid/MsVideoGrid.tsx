@@ -1,3 +1,4 @@
+import { i18n } from "@lingui/core";
 import { useState } from 'react';
 import { ResponseI, UserI } from '../../general/structure/Utils';
 import { ActivityLogI } from '../../page/page-activity/Activity';
@@ -154,7 +155,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
       <div className="search-container">
         <input
           type="text"
-          placeholder="Cerca video..."
+          placeholder={i18n._("cerca_video")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-input"
@@ -170,7 +171,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
             width="100%"
             height="500"
             src={`https://www.youtube.com/embed/${selectedVideo}`}
-            title="YouTube video player"
+            title={i18n._("youtube_video_player")}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

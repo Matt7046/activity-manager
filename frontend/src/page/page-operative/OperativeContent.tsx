@@ -1,3 +1,5 @@
+import { Trans } from "@lingui/react";
+import { i18n } from "@lingui/core";
 import { Box, FormControl, Input, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
@@ -171,7 +173,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
       })
   };
   if (isLoading || isLoadingO) {
-    return <p>Caricamento...</p>; // Mostra un loader mentre i dati vengono caricati
+    return <p><Trans id="caricamento" /></p>; // Mostra un loader mentre i dati vengono caricati
   }
 
   const activityDes = 'Attività *';
@@ -186,7 +188,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
               {/* Campo stringa 1 */}
               <FormControl fullWidth >
                 <TextField
-                  label="Email"
+                  label={i18n._("email")}
                   value={operativeStore.emailField}
                   onChange={(e) => operativeStore.setEmailField(e.target.value)}
                   fullWidth
@@ -217,7 +219,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
                   labelId="select-label"
                   value={formValues.activity}
                   onChange={(e) => clickCombobox(e.target.value)}
-                  label="Attività"
+                  label={i18n._("attivita")}
                   required={true}
                 >
                   {operativeStore.activity.map((option) => (
@@ -234,7 +236,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
               {/* Campo numerico */}
               <FormControl fullWidth >
                 <TextField
-                  label="Punti attività"
+                  label={i18n._("punti_attivita")}
                   type="number"
                   value={operativeStore.pointsField}
                   onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
