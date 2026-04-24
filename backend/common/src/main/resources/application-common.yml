@@ -45,6 +45,7 @@ app:
       key: ${APP_CRYPT_KEY}
       user:
         key: ${APP_USER_KEY}
+        name: ${APP_USER_NAME}
   algorithm1: AES
   algorithm2: HmacSHA256
   address1: ${ADDRESS_1}
@@ -56,15 +57,19 @@ app:
     crypt: bcrypt
   page:
     address:
-      policy: /privacy-policy
+      all: /**
+      webSocket: /ws/**
       home: /home
+      token: /api/auth/token
+      policy: /api/privacy-policy
+      login: /api/userpoint/dati/login
     service:
         image: http://image-service:8080
         auth: http://auth-service:8080
         activity: http://activity-service:8080
         userpoint: http://user-point-service:8080
         family: http://family-service:8080
-        gpt: https://api.openai.com/v1
+        gpt: http://api.openai.com/v1
     path:
       image: /api/image
       auth: /api/auth

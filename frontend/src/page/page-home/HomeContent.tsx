@@ -15,8 +15,6 @@ import { Link, NavigateFunction, Route, Routes, useLocation, useNavigate } from 
 import { useUser } from '../../App';
 import Alert from '../../components/ms-alert/Alert';
 import { MenuLaterale } from '../../components/ms-drawer/Drawer';
-import { getToken } from '../../general/service/AuthService';
-import { baseStore } from '../../general/structure/BaseStore';
 import { SectionName, SectionNameDesc, ServerMessage, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import { ResponseI, UserI } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
@@ -24,6 +22,8 @@ import PrivacyPolicy from '../page-privacy-policy/PrivacyPolicy';
 import { getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
 
 import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
+import { getToken } from '../../general/service/AuthService';
+import { baseStore } from '../../general/structure/BaseStore';
 import "./HomeContent.css";
 
 
@@ -97,10 +97,7 @@ const GoogleAuthComponent = () => {
   useEffect(() => {
 
     if (location.pathname === '/home') {
-      getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
-        baseStore.setToken(tokenData?.jsonText?.token);
 
-      })
       // Stato per userData
       setCurrentUser({
         name: "",
@@ -196,9 +193,13 @@ const GoogleAuthComponent = () => {
       //   token: fakeResponse.credential,
       type: type
     };
-    setCurrentUser(user);
-    const message = { message: [ServerMessage.SERVER_DOWN], typeMessage: TypeAlertColor.ERROR };
-    showDialog(type, false);
+    getToken({ email: currentUser.email, password: 'password' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
+      baseStore.setToken(tokenData?.jsonText?.token);
+
+      setCurrentUser(user);
+      const message = { message: [ServerMessage.SERVER_DOWN], typeMessage: TypeAlertColor.ERROR };
+      showDialog(type, false);
+    })
   };
 
   const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
@@ -278,18 +279,12 @@ const GoogleAuthComponent = () => {
 
   // Simulazione del login con Google
   const simulateLogin = (type: number) => {
-    const tokenData = baseStore.getToken();
     setSimulated(type);
-    const fakeResponse = {
-      credential: tokenData,
-      clientId: "549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com",
-      select_by: "google",
-    };
     handleLoginSuccessFake(type);
 
 
   };
-  const label = 'I login simulati servono per testare le funzionalità senza condividere dati';
+  const label = 'I login simulati non recuperano informazioni';
 
   const handleChangeUsername = (event: any): void => {
     setEmailLogin(event.target.value);
@@ -306,11 +301,14 @@ const GoogleAuthComponent = () => {
 
   const handleLogin = (event: any): void => {
     const user = { _id: undefined, email: emailLogin, password: passwordLogin }
-    oldLogin(user).then(x => {
-      if (x) {
-        const currentUser = x.jsonText;
-        openHome(currentUser, false, setLoading)
-      }
+    getToken({ email: user.email, password: user.password }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
+      baseStore.setToken(tokenData?.jsonText?.token);
+      oldLogin(user).then(x => {
+        if (x.jsonText.type) {
+          const currentUser = x.jsonText;
+          openHome(currentUser, false, setLoading)
+        }
+      })
     })
   }
 
@@ -533,7 +531,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
           funzione: null,
           testo: SectionNameDesc.ACTIVITY,
           icon: ListAltIcon
-        },     
+        },
         {
           funzione: null,
           testo: SectionNameDesc.ABOUT,
