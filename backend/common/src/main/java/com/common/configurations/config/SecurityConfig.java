@@ -64,6 +64,9 @@ public class SecurityConfig implements WebFluxConfigurer {
     @Value("${app.page.address.policy}")
     private String policyAddress;
 
+    @Value("${app.page.address.login}")
+    private String loginAddress;
+
     @Value("${app.page.address.all}")
     private String allAddress;
 
@@ -101,6 +104,7 @@ public class SecurityConfig implements WebFluxConfigurer {
                         .pathMatchers(homeAddress).permitAll()
                         .pathMatchers(tokenAddress).permitAll()
                         .pathMatchers(webSocketAddress).permitAll()
+                        .pathMatchers(loginAddress).permitAll()
                         .pathMatchers(HttpMethod.OPTIONS, allAddress).permitAll() // Permetti l'accesso pubblico a
                         // "/api/auth/token"
                         .anyExchange().authenticated() // Richiedi autenticazione per tutte le altre richieste
