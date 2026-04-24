@@ -45,6 +45,7 @@ app:
       key: ${APP_CRYPT_KEY}
       user:
         key: ${APP_USER_KEY}
+        name: ${APP_USER_NAME}
   algorithm1: AES
   algorithm2: HmacSHA256
   address1: ${ADDRESS_1}
