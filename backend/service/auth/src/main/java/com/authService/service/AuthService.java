@@ -1,36 +1,48 @@
 package com.authService.service;
 
-import com.common.configurations.structure.JwtUtil;
-import com.common.dto.auth.LoginResponse;
-import com.common.dto.user.UserPointDTO;
+import com.common.dto.auth.LoginRequest;
 import com.common.dto.structure.ResponseDTO;
-import com.common.structure.status.ActivityHttpStatus;
+import com.common.dto.user.UserPointDTO;
+import reactor.core.publisher.Mono;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-
-import java.util.ArrayList;
 
 @Service
 public class AuthService {
 
     @Autowired
-    JwtUtil jwtUtil;
+    @Qualifier("webClientPublic")
+    private WebClient webClientPublic;
+
+    @Value("${app.page.path.userpoint}")
+    private String userPointPath;
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private WebClient webClientPoint;
 
-    @Transactional
-    public LoginResponse getToken( Authentication authentication) {
-        String token = jwtUtil.generateToken(authentication.getName());
-        return new LoginResponse(token);// Genera il token JWT
+    @Transactional // Nota: Transactional ha senso solo se interagisci con un DB locale qui
+    public Mono<Boolean> checkUserExists(LoginRequest loginRequest) {
+        UserPointDTO userPointDTO = new UserPointDTO();
+        userPointDTO.setEmail(loginRequest.getEmail());
+        userPointDTO.setPassword(loginRequest.getPassword());
 
+        return webClientPublic.post()
+                .uri(userPointPath + "/dati/login")
+                .bodyValue(userPointDTO)
+                .retrieve()
+                .bodyToMono(ResponseDTO.class)
+                .map(responseDTO -> responseDTO != null && responseDTO.getJsonText() != null)
+                .defaultIfEmpty(false)
+                .doOnError(error -> {
+                    // Usa un logger reale invece di System.out se possibile
+                    System.out.println("Errore durante la chiamata di verifica utente: {}"+ error);
+                })
+                .doOnNext(exists -> {
+                    // doOnNext è più appropriato di doOnSuccess per loggare il valore emesso
+                    System.out.println("Esito verifica utente: {}"+exists);
+                });
     }
 }
