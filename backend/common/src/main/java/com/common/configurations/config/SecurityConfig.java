@@ -45,32 +45,40 @@ public class SecurityConfig implements WebFluxConfigurer {
 
     @Value("${app.address3}")
     private String address3;
-    
+
     @Value("${app.security.roles}")
     private String roles;
 
     @Value("${app.security.username}")
     private String username;
-    
-    @Value("${app.security.crypt}")
-    private String crypt;
 
-    @Value("${app.page.address.policy}")
-    private String policyAddress;
+    @Value("${app.security.crypt}")
+    private String crypt;   
 
     @Value("${app.page.address.home}")
     private String homeAddress;
 
+    @Value("${app.page.address.token}")
+    private String tokenAddress;
+
+    @Value("${app.page.address.policy}")
+    private String policyAddress;
+
+    @Value("${app.page.address.all}")
+    private String allAddress;
+
+    @Value("${app.page.address.webSocket}")
+    private String webSocketAddress;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        
+
         registry.addMapping("/**")
                 .allowedOrigins(address1, address2, address3)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true); // Aggiungi questo se invii cookie o header di autenticazione
     }
-
 
     @Bean
     public MapReactiveUserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
@@ -89,20 +97,19 @@ public class SecurityConfig implements WebFluxConfigurer {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange(exchanges -> exchanges
-                .pathMatchers(policyAddress).permitAll() // Consenti accesso pubblico alla Privacy Policy
-                                .pathMatchers(homeAddress).permitAll()
-                                .pathMatchers("/api/auth/token").permitAll()
-                                .pathMatchers("/ws/**").permitAll()
-                                .pathMatchers(HttpMethod.POST,"/api/privacy").permitAll()
-                        .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permetti l'accesso pubblico a
-                                                                             // "/api/auth/token"
+                        .pathMatchers(policyAddress).permitAll() // Consenti accesso pubblico alla Privacy Policy
+                        .pathMatchers(homeAddress).permitAll()
+                        .pathMatchers(tokenAddress).permitAll()
+                        .pathMatchers(webSocketAddress).permitAll()
+                        .pathMatchers(HttpMethod.OPTIONS, allAddress).permitAll() // Permetti l'accesso pubblico a
+                        // "/api/auth/token"
                         .anyExchange().authenticated() // Richiedi autenticazione per tutte le altre richieste
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(Customizer.withDefaults()) // Configura il decoder JWT automaticamente
+                        .jwt(Customizer.withDefaults()) // Configura il decoder JWT automaticamente
                 )
-                .cors(Customizer.withDefaults())  // Abilita CORS
-                .csrf(ServerHttpSecurity.CsrfSpec::disable);  // Disabilita CSRF per le API
+                .cors(Customizer.withDefaults()) // Abilita CORS
+                .csrf(ServerHttpSecurity.CsrfSpec::disable); // Disabilita CSRF per le API
 
         return http.build();
     }
