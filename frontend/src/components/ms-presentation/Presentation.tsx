@@ -1,6 +1,8 @@
 import { Trans } from "@lingui/react";
 import ReactIcon from '@mui/icons-material/Code'; // Potrebbe non esserci un'icona specifica, usa un generico
 import JavaIcon from '@mui/icons-material/Coffee'; // Esempio
+import HubIcon from '@mui/icons-material/Hub';
+import Inventory2Icon from '@mui/icons-material/Inventory2';
 import SpringBootIcon from '@mui/icons-material/PlayCircleFilled'; // Esempio
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import SearchIcon from '@mui/icons-material/Search';
@@ -32,11 +34,14 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
     { name: 'Java', icon: <JavaIcon fontSize="large" className="tech-icon" /> },
     { name: 'Spring Boot', icon: <SpringBootIcon fontSize="large" className="tech-icon" /> },
     { name: 'ElasticSearch', icon: <SearchIcon fontSize="large" className="tech-icon" /> },
+    { name: 'RabbitMQ', icon: <HubIcon fontSize="large" className="tech-icon" /> },
+    { name: 'Docker', icon: <Inventory2Icon fontSize="large" className="tech-icon" /> },
     { name: 'GPT (AI)', icon: <PsychologyIcon fontSize="large" className="tech-icon" /> },
   ];
 
   return (
     <>
+    <Box className="page-wrapper">
       <BannerOpenSource />
       <Box className="welcome-container">
         <Typography
@@ -48,7 +53,7 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
         >
           {testoEntry}
         </Typography>
-        
+
         <Typography
           variant="body1"
           gutterBottom
@@ -73,18 +78,19 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
         <Typography variant="h6" gutterBottom>
           <Trans id="tecnologie_che_utilizzo" />
         </Typography>
-        <Grid container justifyContent="center" spacing={4}>
+        <Grid container justifyContent="center" spacing={2}> {/* Ridotto leggermente lo spacing per mobile */}
           {technologies.map((tech) => (
-            <Grid item key={tech.name} xs={6} sm={4} md={2} lg={1}>
-              <IconButton color="inherit" disabled>
+            <Grid item key={tech.name} xs={4} sm={3} md={2}> {/* xs={4} permette di averne 3 per riga invece di 2 */}
+              <IconButton color="inherit" disabled style={{ padding: '8px' }}>
                 {tech.icon}
               </IconButton>
-              <Typography variant="caption" display="block">
+              <Typography variant="caption" display="block" sx={{ fontSize: '0.7rem' }}>
                 {tech.name}
               </Typography>
             </Grid>
           ))}
         </Grid>
+      </Box>
       </Box>
     </>
   );
