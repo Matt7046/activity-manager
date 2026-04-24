@@ -1,3 +1,5 @@
+import { Trans } from "@lingui/react";
+import { i18n } from "@lingui/core";
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, Divider, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
@@ -138,7 +140,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
       {/* Campi di registrazione principali */}
       <Box mb={3} className='box-register'>
         <TextField
-          label="Email"
+          label={i18n._("email")}
           variant="outlined"
           fullWidth
           value={email}
@@ -150,7 +152,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
       <Box mb={2} >
         <TextField
           id="password"
-          label="Password"
+          label={i18n._("password")}
           variant="outlined"
           type={showPassword ? 'text' : 'password'}
           value={password}
@@ -173,7 +175,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
       <Box display="flex" alignItems="center" mb={2}>
         <Divider sx={{ flexGrow: 1 }} />
         <Typography sx={{ mx: 2 }} variant="body2" color="textSecondary">
-          Email Figli
+          <Trans id="email_figli" />
         </Typography>
         <Divider sx={{ flexGrow: 1 }} />
       </Box>
@@ -195,7 +197,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
                     startAdornment: (
                       <InputAdornment position="start">
                         <IconButton
-                          aria-label="Remove"
+                          aria-label={i18n._("remove")}
                           onClick={() => toggleIcon(index)}
                           onMouseDown={handleMouseDownPassword}
                           onMouseUp={handleMouseUpPassword}
