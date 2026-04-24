@@ -187,148 +187,161 @@ const GoogleAuthComponent = () => {
 
 
   const handleLoginSuccessFake = (type: number) => {
-    getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
+    const currentUser = type === 0 ? { ...userDataChildFake } : { ...userDataFake }
+    const user = {
+      ...currentUser,
+      //   token: fakeResponse.credential,
+      type: type
+    };
+    getToken({ email: currentUser.email, password: 'password' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
       baseStore.setToken(tokenData?.jsonText?.token);
-      const currentUser = type === 0 ? { ...userDataChildFake } : { ...userDataFake }
-      const user = {
-        ...currentUser,
-        //   token: fakeResponse.credential,
-        type: type
-      };
+
       setCurrentUser(user);
       const message = { message: [ServerMessage.SERVER_DOWN], typeMessage: TypeAlertColor.ERROR };
       showDialog(type, false);
     })
-    };
+  };
 
-    const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
-      const currentUser = googleAuth ? { ...userDataGoogle, emailChild: userDataGoogle.email } : type === 0 ? { ...userDataChildFake } : { ...userDataFake }
-      openHome({ ...currentUser, type: type }, googleAuth, setLoading)
-    }
+  const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
+    const currentUser = googleAuth ? { ...userDataGoogle, emailChild: userDataGoogle.email } : type === 0 ? { ...userDataChildFake } : { ...userDataFake }
+    openHome({ ...currentUser, type: type }, googleAuth, setLoading)
+  }
 
-    const openHome = (currentUser: any, googleAuth: boolean, setLoading: any): Promise<any> => {
-      return getEmailChild({ ...currentUser, email: currentUser.emailChild }).then((x: ResponseI | undefined) => {
-        const emailChild = x?.jsonText?.emailFigli ?? [];
-        setEmailOptions(emailChild);
-        currentUser.type = emailChild?.length > 0 ? currentUser.type : 2;
-      }).then(x => {
-        getTypeUser(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
-          setEmailLogin(x?.jsonText.emailUserCurrent);
-          switch (x?.jsonText?.typeUser) {
-            case TypeUser.STANDARD: {
-              setEmailLogin(currentUser.email);
-              setSimulated(TypeUser.STANDARD);
-              setUser({ ...currentUser, type: x.jsonText.typeUser, emailChild: currentUser.emailUserCurrent, emailUserCurrent: x.jsonText.emailUserCurrent });
-              break;
-            }
-            case TypeUser.FAMILY: {
-              setEmailLogin(currentUser.email);
-              setSimulated(TypeUser.FAMILY);
-              handleOpenD();
-              break;
-            }
-            case TypeUser.NEW_USER: {
-              if (googleAuth === true) {
-                setUser({ ...currentUser, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
-
-              }
-              else {
-                setUser({ ...currentUser, type: 2 });
-              }
-            }
-              break;
+  const openHome = (currentUser: any, googleAuth: boolean, setLoading: any): Promise<any> => {
+    return getEmailChild({ ...currentUser, email: currentUser.emailChild }).then((x: ResponseI | undefined) => {
+      const emailChild = x?.jsonText?.emailFigli ?? [];
+      setEmailOptions(emailChild);
+      currentUser.type = emailChild?.length > 0 ? currentUser.type : 2;
+    }).then(x => {
+      getTypeUser(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
+        setEmailLogin(x?.jsonText.emailUserCurrent);
+        switch (x?.jsonText?.typeUser) {
+          case TypeUser.STANDARD: {
+            setEmailLogin(currentUser.email);
+            setSimulated(TypeUser.STANDARD);
+            setUser({ ...currentUser, type: x.jsonText.typeUser, emailChild: currentUser.emailUserCurrent, emailUserCurrent: x.jsonText.emailUserCurrent });
+            break;
           }
-        })
+          case TypeUser.FAMILY: {
+            setEmailLogin(currentUser.email);
+            setSimulated(TypeUser.FAMILY);
+            handleOpenD();
+            break;
+          }
+          case TypeUser.NEW_USER: {
+            if (googleAuth === true) {
+              setUser({ ...currentUser, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
+
+            }
+            else {
+              setUser({ ...currentUser, type: 2 });
+            }
+          }
+            break;
+        }
       })
-    }
+    })
+  }
 
-    // Funzione per ottenere i dati utente
-    const fetchUserData = async (accessToken: string) => {
-      try {
-        // Verifica che il token sia valido
-        const tokenInfoResponse = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`);
-        const tokenInfo = await tokenInfoResponse.json();
-        if (tokenInfo.error) {
-          console.error('Token invalido:', tokenInfo.error);
-          return;
-        }
-        // Se il token è valido, recupera i dati dell'utente
-        const userDataResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        if (userDataResponse.ok) {
-          const userDataGoogle = await userDataResponse.json();
-          userDataGoogle.emailUserCurrent = userDataGoogle.email;
-          userDataGoogle.emailChild = userDataGoogle.email;
-          setEmailLogin(userDataGoogle.email);
-
-          //setUser({ ...userData, type: 1 });
-          setCurrentUser(userDataGoogle);
-          showDialog(1, true, userDataGoogle);
-        } else {
-          console.error('Failed to fetch user data:', userDataResponse.status);
-        }
-      } catch (error) {
-        console.error('Error fetching user data', error);
+  // Funzione per ottenere i dati utente
+  const fetchUserData = async (accessToken: string) => {
+    try {
+      // Verifica che il token sia valido
+      const tokenInfoResponse = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`);
+      const tokenInfo = await tokenInfoResponse.json();
+      if (tokenInfo.error) {
+        console.error('Token invalido:', tokenInfo.error);
+        return;
       }
+      // Se il token è valido, recupera i dati dell'utente
+      const userDataResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (userDataResponse.ok) {
+        const userDataGoogle = await userDataResponse.json();
+        userDataGoogle.emailUserCurrent = userDataGoogle.email;
+        userDataGoogle.emailChild = userDataGoogle.email;
+        setEmailLogin(userDataGoogle.email);
+
+        //setUser({ ...userData, type: 1 });
+        setCurrentUser(userDataGoogle);
+        showDialog(1, true, userDataGoogle);
+      } else {
+        console.error('Failed to fetch user data:', userDataResponse.status);
+      }
+    } catch (error) {
+      console.error('Error fetching user data', error);
     }
+  }
 
-    // Simulazione del login con Google
-    const simulateLogin = (type: number) => {
-      setSimulated(type);
-      handleLoginSuccessFake(type);
+  // Simulazione del login con Google
+  const simulateLogin = (type: number) => {
+    setSimulated(type);
+    handleLoginSuccessFake(type);
 
 
-    };
-    const label = 'I login simulati non recuperano informazioni';
+  };
+  const label = 'I login simulati non recuperano informazioni';
 
-    const handleChangeUsername = (event: any): void => {
-      setEmailLogin(event.target.value);
-    }
+  const handleChangeUsername = (event: any): void => {
+    setEmailLogin(event.target.value);
+  }
 
-    const handleChangePassword = (event: any): void => {
-      setPasswordLogin(event.target.value);
-    }
+  const handleChangePassword = (event: any): void => {
+    setPasswordLogin(event.target.value);
+  }
 
-    const togglePasswordVisibility = (event: any): void => {
-      setShowPassword((prev) => !prev);
+  const togglePasswordVisibility = (event: any): void => {
+    setShowPassword((prev) => !prev);
 
-    }
+  }
 
-    const handleLogin = (event: any): void => {
-      const user = { _id: undefined, email: emailLogin, password: passwordLogin }
-      getToken({ email: 'user', password: 'qwertyuiop' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
-        baseStore.setToken(tokenData?.jsonText?.token);
-        oldLogin(user).then(x => {
-          if (x) {
-            const currentUser = x.jsonText;
-            openHome(currentUser, false, setLoading)
-          }
-        })
+  const handleLogin = (event: any): void => {
+    const user = { _id: undefined, email: emailLogin, password: passwordLogin }
+    getToken({ email: user.email, password: user.password }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
+      baseStore.setToken(tokenData?.jsonText?.token);
+      oldLogin(user).then(x => {
+        if (x.jsonText.type) {
+          const currentUser = x.jsonText;
+          openHome(currentUser, false, setLoading)
+        }
       })
-    }
+    })
+  }
 
-    const handleKeepLoggedIn = (event: any): void => {
-      throw new Error('Function not implemented.');
-    }
+  const handleKeepLoggedIn = (event: any): void => {
+    throw new Error('Function not implemented.');
+  }
 
-    const handleAppleLogin = (event: any): void => {
-      throw new Error('Function not implemented.');
-    }
+  const handleAppleLogin = (event: any): void => {
+    throw new Error('Function not implemented.');
+  }
 
-    const handleFacebookLogin = (event: any): void => {
-      throw new Error('Function not implemented.');
-    }
-
-
+  const handleFacebookLogin = (event: any): void => {
+    throw new Error('Function not implemented.');
+  }
 
 
-    return (
+
+
+  return (
+    <>
+
+      {/* Alert */}
+      <Grid container justifyContent="flex-end" className="layout-alert" sx={{ mt: 2 }}>
+        {open && (
+          <Alert onClose={handleClose} message={message} />
+        )}
+      </Grid>
+
+      {/* Route Privacy Policy */}
+      <Routes>
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+      </Routes>
       <>
-
         {/* Alert */}
         <Grid container justifyContent="flex-end" className="layout-alert" sx={{ mt: 2 }}>
           {open && (
@@ -340,104 +353,92 @@ const GoogleAuthComponent = () => {
         <Routes>
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         </Routes>
-        <>
-          {/* Alert */}
-          <Grid container justifyContent="flex-end" className="layout-alert" sx={{ mt: 2 }}>
-            {open && (
-              <Alert onClose={handleClose} message={message} />
-            )}
-          </Grid>
 
-          {/* Route Privacy Policy */}
-          <Routes>
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          </Routes>
+        {/* Main Login Box */}
+        <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
+          <Box display="flex" justifyContent="center" mt={6} px={2} className="welcome-container1">
+            <Paper elevation={3} className="login-paper">
+              <Box mb={3}>
+                <Typography variant="h5" align="center" gutterBottom>Accedi</Typography>
+              </Box>
+              <Box mt={2} textAlign="center">
+                <Typography variant="body2">
+                  Non hai un account?{' '}
+                  <Link to="/register" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 500 }}>
+                    Registrati
+                  </Link>
+                </Typography>
+              </Box>
+              <Box mb={3}>
+                <TextField
+                  id="emailFamily"
+                  label={'INFO'}
+                  variant="standard"
+                  value={label}
+                  onChange={handleChangeEmailFamily}
+                  fullWidth
+                  disabled
+                />
+              </Box>
 
-          {/* Main Login Box */}
-          <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
-            <Box display="flex" justifyContent="center" mt={6} px={2} className="welcome-container1">
-              <Paper elevation={3} className="login-paper">
-                <Box mb={3}>
-                  <Typography variant="h5" align="center" gutterBottom>Accedi</Typography>
-                </Box>
-                <Box mt={2} textAlign="center">
-                  <Typography variant="body2">
-                    Non hai un account?{' '}
-                    <Link to="/register" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 500 }}>
-                      Registrati
-                    </Link>
-                  </Typography>
-                </Box>
-                <Box mb={3}>
-                  <TextField
-                    id="emailFamily"
-                    label={'INFO'}
-                    variant="standard"
-                    value={label}
-                    onChange={handleChangeEmailFamily}
-                    fullWidth
-                    disabled
-                  />
-                </Box>
-
-                {/* Buttons: Login Simulation and Google Login */}
-                {!hiddenLogin && (
-                  <Grid container spacing={2}>
-                    <Grid xs={12} sm={6}>
-                      <ButtonMui
-                        variant="contained"
-                        color="primary"
-                        onClick={() => simulateLogin(TypeUser.STANDARD)}
-                        fullWidth
-                      >
-                        {loginBase}
-                      </ButtonMui>
-                    </Grid>
-
-                    <Grid xs={12} sm={6} >
-                      <ButtonMui
-                        variant="contained"
-                        color="primary"
-                        onClick={() => simulateLogin(TypeUser.FAMILY)}
-                        fullWidth
-                      >
-                        {loginParentale}
-                      </ButtonMui>
-                    </Grid>
+              {/* Buttons: Login Simulation and Google Login */}
+              {!hiddenLogin && (
+                <Grid container spacing={2}>
+                  <Grid xs={12} sm={6}>
+                    <ButtonMui
+                      variant="contained"
+                      color="primary"
+                      onClick={() => simulateLogin(TypeUser.STANDARD)}
+                      fullWidth
+                    >
+                      {loginBase}
+                    </ButtonMui>
                   </Grid>
-                )}
 
-                <Box mb={2} className='box-login'>
-                  <TextField
-                    id="username"
-                    label="Indirizzo email"
-                    variant="outlined"
-                    value={emailLogin}
-                    onChange={handleChangeUsername}
-                    fullWidth
-                  />
-                </Box>
+                  <Grid xs={12} sm={6} >
+                    <ButtonMui
+                      variant="contained"
+                      color="primary"
+                      onClick={() => simulateLogin(TypeUser.FAMILY)}
+                      fullWidth
+                    >
+                      {loginParentale}
+                    </ButtonMui>
+                  </Grid>
+                </Grid>
+              )}
 
-                <Box mb={2} >
-                  <TextField
-                    id="password"
-                    label="Password"
-                    variant="outlined"
-                    type={showPassword ? 'text' : 'password'}
-                    value={passwordLogin}
-                    onChange={handleChangePassword}
-                    fullWidth
-                    InputProps={{
-                      endAdornment: (
-                        <IconButton onClick={togglePasswordVisibility}>
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                </Box>
+              <Box mb={2} className='box-login'>
+                <TextField
+                  id="username"
+                  label="Indirizzo email"
+                  variant="outlined"
+                  value={emailLogin}
+                  onChange={handleChangeUsername}
+                  fullWidth
+                />
+              </Box>
 
-                {/* Mantieni connessione 
+              <Box mb={2} >
+                <TextField
+                  id="password"
+                  label="Password"
+                  variant="outlined"
+                  type={showPassword ? 'text' : 'password'}
+                  value={passwordLogin}
+                  onChange={handleChangePassword}
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton onClick={togglePasswordVisibility}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    ),
+                  }}
+                />
+              </Box>
+
+              {/* Mantieni connessione 
               <Box mb={2} display="flex" alignItems="center">
                 <Checkbox
                   checked={keepLoggedIn}
@@ -446,170 +447,170 @@ const GoogleAuthComponent = () => {
                 <Typography variant="body2">Mantieni la connessione su questo dispositivo</Typography>
               </Box>
             */}
-                <ButtonMui
-                  variant="contained"
-                  fullWidth
-                  onClick={handleLogin}
-                  className="login-button"
-                >
-                  Accedi
-                </ButtonMui>
+              <ButtonMui
+                variant="contained"
+                fullWidth
+                onClick={handleLogin}
+                className="login-button"
+              >
+                Accedi
+              </ButtonMui>
 
-                {/* Divider */}
-                <Box display="flex" alignItems="center" mb={2} className='box-accedi'>
-                  <Divider sx={{ flexGrow: 1 }} />
-                  <Typography sx={{ mx: 2 }} variant="body2" color="textSecondary">
-                    oppure accedi con
-                  </Typography>
-                  <Divider sx={{ flexGrow: 1 }} />
-                </Box>
+              {/* Divider */}
+              <Box display="flex" alignItems="center" mb={2} className='box-accedi'>
+                <Divider sx={{ flexGrow: 1 }} />
+                <Typography sx={{ mx: 2 }} variant="body2" color="textSecondary">
+                  oppure accedi con
+                </Typography>
+                <Divider sx={{ flexGrow: 1 }} />
+              </Box>
 
-                {/* Login Social */}
-                <Grid container spacing={2} justifyContent="center">
-                  <Grid>
-                    <IconButton onClick={handleAppleLogin} className="social-button" disabled>
-                      <AppleIcon />
-                    </IconButton>
-                  </Grid>
-                  <Grid>
-                    <IconButton onClick={handleFacebookLogin} className="social-button" disabled>
-                      <FacebookIcon />
-                    </IconButton>
-                  </Grid>
-                  <Grid>
-                    <IconButton
-                      className="social-button google-button"
-                      onClick={() => login()}                  >
-                      <GoogleIcon />
-                    </IconButton>
-                  </Grid>
+              {/* Login Social */}
+              <Grid container spacing={2} justifyContent="center">
+                <Grid>
+                  <IconButton onClick={handleAppleLogin} className="social-button" disabled>
+                    <AppleIcon />
+                  </IconButton>
                 </Grid>
+                <Grid>
+                  <IconButton onClick={handleFacebookLogin} className="social-button" disabled>
+                    <FacebookIcon />
+                  </IconButton>
+                </Grid>
+                <Grid>
+                  <IconButton
+                    className="social-button google-button"
+                    onClick={() => login()}                  >
+                    <GoogleIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
 
-                {/* Dialog */}
-                <DialogEmail
-                  openD={openD}
-                  handleCloseD={handleCloseD}
-                  emailOptions={emailOptions}
-                  handleEmailChange={handleEmailChange}
-                  handleConfirm={handleConfirm}
-                  email={emailConfirmDialog}
-                  simulated={simulated}
-                  emailUserCurrent={emailLogin}
-                />
+              {/* Dialog */}
+              <DialogEmail
+                openD={openD}
+                handleCloseD={handleCloseD}
+                emailOptions={emailOptions}
+                handleEmailChange={handleEmailChange}
+                handleConfirm={handleConfirm}
+                email={emailConfirmDialog}
+                simulated={simulated}
+                emailUserCurrent={emailLogin}
+              />
 
-              </Paper>
-            </Box>
-          </GoogleOAuthProvider>
+            </Paper>
+          </Box>
+        </GoogleOAuthProvider>
 
-          {/* Loader */}
-          {loading && (
-            <Box display="flex" justifyContent="center" mt={4}>
-              <CircularProgress />
-            </Box>
-          )}
-        </>
-
-
+        {/* Loader */}
+        {loading && (
+          <Box display="flex" justifyContent="center" mt={4}>
+            <CircularProgress />
+          </Box>
+        )}
       </>
-    );
 
-  };
 
-  export const navigateRouting = (navigate: NavigateFunction, path: SectionName, params: any) => {
-    navigate(`/${path}`, { state: params }); // Passa i parametri come stato
-  };
+    </>
+  );
 
-  export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
-    if (user === undefined || user === null) {
-      return [[]];
-    }
-    if (user?.type === TypeUser.FAMILY || user.type === TypeUser.NEW_USER) {
-      return [
-        [
-          {
-            funzione: null,
-            testo: SectionNameDesc.ACTIVITY,
-            icon: ListAltIcon
-          },
-          {
-            funzione: null,
-            testo: SectionNameDesc.ABOUT,
-            icon: InfoIcon
-          },
-          {
-            funzione: null,
-            testo: SectionNameDesc.POINTS,
-            icon: EmojiEventsIcon
-          },
-          {
-            funzione: null,
-            testo: SectionNameDesc.OPERATIVE,
-            icon: SettingsIcon
-          },
-        ],
-        [
-          {
-            funzione: null,
-            testo: SectionNameDesc.FAMILY,
-            icon: GroupIcon
-          }
-        ]
-      ];
-    } else {
-      return [
-        [
-          {
-            funzione: null, testo: SectionNameDesc.ACTIVITY,
-            icon: ListAltIcon
-          },
-          {
-            funzione: null,
-            testo: SectionNameDesc.GAMIFICATION,
-            icon: StarIcon
-          },
-          {
-            funzione: null, testo: SectionNameDesc.POINTS,
-            icon: EmojiEventsIcon
-          },
-          {
-            funzione: null, testo: SectionNameDesc.OPERATIVE,
-            icon: SettingsIcon
-          },
-        ]
-      ];
-    }
+};
+
+export const navigateRouting = (navigate: NavigateFunction, path: SectionName, params: any) => {
+  navigate(`/${path}`, { state: params }); // Passa i parametri come stato
+};
+
+export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
+  if (user === undefined || user === null) {
+    return [[]];
   }
-
-  export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage, onlyError?: boolean) => {
-    const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage, titleMessage: message?.titleMessage } : { titleMessage: "Errore nella richiesta", message: [ServerMessage.SERVER_DOWN], typeMessage: 'error' };
-    if (!onlyError || onlyError && message?.typeMessage === TypeAlertColor.ERROR) {
-      setOpen(true);
-    }
-    setMessage(messageBE);
+  if (user?.type === TypeUser.FAMILY || user.type === TypeUser.NEW_USER) {
+    return [
+      [
+        {
+          funzione: null,
+          testo: SectionNameDesc.ACTIVITY,
+          icon: ListAltIcon
+        },
+        {
+          funzione: null,
+          testo: SectionNameDesc.ABOUT,
+          icon: InfoIcon
+        },
+        {
+          funzione: null,
+          testo: SectionNameDesc.POINTS,
+          icon: EmojiEventsIcon
+        },
+        {
+          funzione: null,
+          testo: SectionNameDesc.OPERATIVE,
+          icon: SettingsIcon
+        },
+      ],
+      [
+        {
+          funzione: null,
+          testo: SectionNameDesc.FAMILY,
+          icon: GroupIcon
+        }
+      ]
+    ];
+  } else {
+    return [
+      [
+        {
+          funzione: null, testo: SectionNameDesc.ACTIVITY,
+          icon: ListAltIcon
+        },
+        {
+          funzione: null,
+          testo: SectionNameDesc.GAMIFICATION,
+          icon: StarIcon
+        },
+        {
+          funzione: null, testo: SectionNameDesc.POINTS,
+          icon: EmojiEventsIcon
+        },
+        {
+          funzione: null, testo: SectionNameDesc.OPERATIVE,
+          icon: SettingsIcon
+        },
+      ]
+    ];
   }
+}
+
+export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage, onlyError?: boolean) => {
+  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage, titleMessage: message?.titleMessage } : { titleMessage: "Errore nella richiesta", message: [ServerMessage.SERVER_DOWN], typeMessage: 'error' };
+  if (!onlyError || onlyError && message?.typeMessage === TypeAlertColor.ERROR) {
+    setOpen(true);
+  }
+  setMessage(messageBE);
+}
 
 
 
-  export const sezioniMenu = (
-    sezioni: MenuLaterale[][],
-    navigate: NavigateFunction,
-    path: SectionName,
-    params: any,
-    indice: number
-  ): MenuLaterale[][] => {
+export const sezioniMenu = (
+  sezioni: MenuLaterale[][],
+  navigate: NavigateFunction,
+  path: SectionName,
+  params: any,
+  indice: number
+): MenuLaterale[][] => {
 
-    // Calcola la posizione (riga e colonna) per assegnare la funzione
-    const numeroRighe = sezioni.length;
-    const lunghezzaRiga = sezioni[0].length;
+  // Calcola la posizione (riga e colonna) per assegnare la funzione
+  const numeroRighe = sezioni.length;
+  const lunghezzaRiga = sezioni[0].length;
 
-    const riga = Math.floor(indice / lunghezzaRiga);
-    const colonna = indice % lunghezzaRiga;
+  const riga = Math.floor(indice / lunghezzaRiga);
+  const colonna = indice % lunghezzaRiga;
 
-    // Verifica che riga e colonna siano validi e assegna la funzione dinamica
-    if (riga < numeroRighe && colonna < sezioni[riga].length) {
-      sezioni[riga][colonna].funzione = () => navigateRouting(navigate, path, params);
-    }
-    return sezioni;
-  };
+  // Verifica che riga e colonna siano validi e assegna la funzione dinamica
+  if (riga < numeroRighe && colonna < sezioni[riga].length) {
+    sezioni[riga][colonna].funzione = () => navigateRouting(navigate, path, params);
+  }
+  return sezioni;
+};
 
-  export default HomeContent;
+export default HomeContent;
