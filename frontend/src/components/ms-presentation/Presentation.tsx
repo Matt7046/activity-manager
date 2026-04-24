@@ -21,47 +21,38 @@ interface PresentationProps {
 
 
 const Presentation: React.FC<PresentationProps> = ({ }) => {
-  const [testoButton, setTestoButton] = useState<string>('Entra');
-  const [testoEntry, setTestoEntry] = useState<string>('Benvenuto in Activity Manager');
-  const [testoDesc, setTestoDesc] = useState<string>('Gestisci attività, punti e molto altro in famiglia!');
+  const [testoButton] = useState<string>('Entra');
+  const [testoEntry] = useState<string>('Benvenuto in Activity Manager');
+  const [testoDesc] = useState<string>('Gestisci attività, punti e molto altro in famiglia!');
   const navigate = useNavigate();
 
   const technologies = [
-    { name: 'MongoDB Cloud', icon: <MongoDBIcon fontSize="large" sx={{ color: 'red' }} /> },
-    { name: 'React', icon: <ReactIcon fontSize="large" sx={{ color: 'red' }} /> },
-    { name: 'Java', icon: <JavaIcon fontSize="large" sx={{ color: 'red' }} /> },
-    { name: 'Spring Boot', icon: <SpringBootIcon fontSize="large" sx={{ color: 'red' }} /> },
-    { name: 'ElasticSearch', icon: <SearchIcon fontSize="large" sx={{ color: 'red' }} /> },
-    { name: 'GPT (AI)', icon: <PsychologyIcon fontSize="large" sx={{ color: 'red' }} /> },
-    // Aggiungi altre tecnologie con le relative icone
+    { name: 'MongoDB Cloud', icon: <MongoDBIcon fontSize="large" className="tech-icon" /> },
+    { name: 'React', icon: <ReactIcon fontSize="large" className="tech-icon" /> },
+    { name: 'Java', icon: <JavaIcon fontSize="large" className="tech-icon" /> },
+    { name: 'Spring Boot', icon: <SpringBootIcon fontSize="large" className="tech-icon" /> },
+    { name: 'ElasticSearch', icon: <SearchIcon fontSize="large" className="tech-icon" /> },
+    { name: 'GPT (AI)', icon: <PsychologyIcon fontSize="large" className="tech-icon" /> },
   ];
-
 
   return (
     <>
       <BannerOpenSource />
-      <Box
-        className="welcome-container"
-      >
+      <Box className="welcome-container">
         <Typography
           variant="h4"
           component="label"
           htmlFor="enter-button"
           gutterBottom
           fontWeight="bold"
-
         >
           {testoEntry}
         </Typography>
+        
         <Typography
           variant="body1"
-          color="text.secondary"
           gutterBottom
-          sx={{
-            lineHeight: 1.6,
-            marginBottom: (theme) => theme.spacing(3),
-            color: '#94a3b8', // Testo descrizione grigio
-          }}
+          className="welcome-description"
         >
           {testoDesc}
         </Typography>
@@ -77,18 +68,8 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
           {testoButton}
         </Button>
       </Box>
-      <Box
-        sx={{
-          backgroundColor: '#2d3748', // Un altro sfondo scuro per la sezione
-          color: '#f7fafc',        
-          textAlign: 'center',
-          position: 'absolute', // Imposta la posizione come assoluta
-          bottom: 0,           // Ancora al bordo inferiore del contenitore posizionato
-          left: 0,             // Si estende dal bordo sinistro
-          right: 0,            // Si estende fino al bordo destro
-          zIndex: 1,           // Assicura che sia sopra altri elementi se necessario
-        }}
-      >
+
+      <Box className="tech-footer-container">
         <Typography variant="h6" gutterBottom>
           <Trans id="tecnologie_che_utilizzo" />
         </Typography>
@@ -110,4 +91,3 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
 }
 
 export default Presentation;
-
