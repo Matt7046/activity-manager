@@ -1,3 +1,5 @@
+import { Trans } from "@lingui/react";
+import { i18n } from "@lingui/core";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Apple as AppleIcon, Facebook as FacebookIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // Points
@@ -359,13 +361,13 @@ const GoogleAuthComponent = () => {
           <Box display="flex" justifyContent="center" mt={6} px={2} className="welcome-container1">
             <Paper elevation={3} className="login-paper">
               <Box mb={3}>
-                <Typography variant="h5" align="center" gutterBottom>Accedi</Typography>
+                <Typography variant="h5" align="center" gutterBottom><Trans id="accedi" /></Typography>
               </Box>
               <Box mt={2} textAlign="center">
                 <Typography variant="body2">
                   Non hai un account?{' '}
                   <Link to="/register" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 500 }}>
-                    Registrati
+                    <Trans id="registrati" />
                   </Link>
                 </Typography>
               </Box>
@@ -411,7 +413,7 @@ const GoogleAuthComponent = () => {
               <Box mb={2} className='box-login'>
                 <TextField
                   id="username"
-                  label="Indirizzo email"
+                  label={i18n._("indirizzo_email")}
                   variant="outlined"
                   value={emailLogin}
                   onChange={handleChangeUsername}
@@ -422,7 +424,7 @@ const GoogleAuthComponent = () => {
               <Box mb={2} >
                 <TextField
                   id="password"
-                  label="Password"
+                  label={i18n._("password")}
                   variant="outlined"
                   type={showPassword ? 'text' : 'password'}
                   value={passwordLogin}
@@ -444,7 +446,7 @@ const GoogleAuthComponent = () => {
                   checked={keepLoggedIn}
                   onChange={handleKeepLoggedIn}
                 />
-                <Typography variant="body2">Mantieni la connessione su questo dispositivo</Typography>
+                <Typography variant="body2"><Trans id="mantieni_la_connessione_su_questo_dispositivo" /></Typography>
               </Box>
             */}
               <ButtonMui
@@ -453,14 +455,14 @@ const GoogleAuthComponent = () => {
                 onClick={handleLogin}
                 className="login-button"
               >
-                Accedi
+                <Trans id="accedi" />
               </ButtonMui>
 
               {/* Divider */}
               <Box display="flex" alignItems="center" mb={2} className='box-accedi'>
                 <Divider sx={{ flexGrow: 1 }} />
                 <Typography sx={{ mx: 2 }} variant="body2" color="textSecondary">
-                  oppure accedi con
+                  <Trans id="oppure_accedi_con" />
                 </Typography>
                 <Divider sx={{ flexGrow: 1 }} />
               </Box>

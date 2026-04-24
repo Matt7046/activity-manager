@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { SectionName } from "../../general/structure/Constant";
@@ -25,7 +26,7 @@ const BannerOpenSource: React.FC = () => {
             Tratteremo i tuoi dati personali esclusivamente per inviarti comunicazioni relative al progetto. 
             Per maggiori dettagli, consulta la nostra{" "}
             <label onClick={handleClick} className="link">
-              Privacy Policy
+              <Trans id="privacy_policy" />
             </label>
           </label>      
         </form>      

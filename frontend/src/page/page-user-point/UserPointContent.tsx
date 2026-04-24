@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react";
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Card, CardContent, Dialog, DialogContent, IconButton, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
@@ -130,7 +131,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
         PaperProps={{ className: 'dialog-log-custom' }}
       >
         <div className="log-header-container">
-          <Typography className="log-title-text">LOG ATTIVITÀ</Typography>
+          <Typography className="log-title-text"><Trans id="log_attivita" /></Typography>
           <IconButton onClick={handleCloseDialogLogActivity} size="small">
             <CloseIcon />
           </IconButton>
@@ -143,16 +144,16 @@ const PointsContent: React.FC<PointsContentProps> = ({
                 <div className="log-card-scroll-item" key={index}>
                   <Card className="log-card-item" elevation={0}>
                     <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
-                      <Typography className="log-label">Data Operazione</Typography>
+                      <Typography className="log-label"><Trans id="data_operazione" /></Typography>
                       <Typography className="log-value">{getDateStringExtendsFormat(item.date)}</Typography>
                       
-                      <Typography className="log-label">Punti</Typography>
+                      <Typography className="log-label"><Trans id="punti" /></Typography>
                       <Typography className="log-value">
                         <span className="points-badge">{item.usePoints}</span>
                       </Typography>
                       
                       <div className="log-card-footer">
-                          <Typography className="log-label">Descrizione</Typography>
+                          <Typography className="log-label"><Trans id="descrizione" /></Typography>
                           <Typography className="log-footer-text" sx={{ fontStyle: 'italic' }}>
                             {item.log}
                           </Typography>
@@ -164,7 +165,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
             </div>
           ) : (
             <Typography sx={{ textAlign: 'center', py: 8, color: '#94a3b8' }}>
-              Nessuna attività registrata.
+              <Trans id="nessuna_attivita_registrata" />
             </Typography>
           )}
         </DialogContent>
@@ -185,7 +186,7 @@ const renderChildren3 = (open: boolean) => (
         PaperProps={{ className: 'dialog-log-custom' }}
       >
         <div className="log-header-container">
-          <Typography className="log-title-text">LOG FAMIGLIA</Typography>
+          <Typography className="log-title-text"><Trans id="log_famiglia" /></Typography>
           <IconButton onClick={handleCloseDialogLogFamily} size="small">
             <CloseIcon />
           </IconButton>
@@ -199,10 +200,10 @@ const renderChildren3 = (open: boolean) => (
                   <Card className="log-card-item" elevation={0}>
                     <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
                       
-                      <Typography className="log-label">Data</Typography>
+                      <Typography className="log-label"><Trans id="data" /></Typography>
                       <Typography className="log-value">{getDateStringExtendsFormat(item.date)}</Typography>
                       
-                      <Typography className="log-label">Operazione</Typography>
+                      <Typography className="log-label"><Trans id="operazione" /></Typography>
                       <Typography component="div" className="log-value">
                         {item.operations === 'FAMILY_REMOVE' ? (
                           <span className="log-value-highlight-red">{item.operations}</span>
@@ -212,7 +213,7 @@ const renderChildren3 = (open: boolean) => (
                       </Typography>
 
                       <div className="log-card-footer">
-                        <Typography className="log-label">Eseguito Da / A</Typography>
+                        <Typography className="log-label"><Trans id="eseguito_da_a" /></Typography>
                         <Typography className="log-footer-text">
                           <strong>Da:</strong> {item.performedByEmail}
                         </Typography>
@@ -227,7 +228,7 @@ const renderChildren3 = (open: boolean) => (
             </div>
           ) : (
             <Typography sx={{ textAlign: 'center', py: 8, color: '#94a3b8' }}>
-              Nessun log familiare trovato.
+              <Trans id="nessun_log_familiare_trovato" />
             </Typography>
           )}
         </DialogContent>
