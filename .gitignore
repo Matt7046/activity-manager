@@ -47,5 +47,6 @@ backend/.vscode/
 **/*.crt
 **/*.key
 **/*.pub
+**/*.cer
 
 
