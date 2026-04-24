@@ -30,6 +30,14 @@ public class WebClientConfig {
         @Value("${app.gpt.token}")
         private String tokenValue;
 
+
+    @Bean
+    public WebClient webClientPublic(WebClient.Builder builder) {
+        return builder
+                .baseUrl(userpoint)
+                .build(); // Nessun filtro che cerca il token
+    }
+
         @Bean
         public WebClient webClientPoint(WebClient.Builder builder) {
                 return builder

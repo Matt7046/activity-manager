@@ -125,7 +125,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
       userData = { email: email, emailFigli: email, emailUserCurrent: email, password: password }
     }
     setUser(null);
-    return saveUser({ ...userData, emailFigli: arrayDiOggetti, pointFigli: emailFigli }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((x: ResponseI) => {
+    return saveUser({ ...userData, password: password, emailFigli: arrayDiOggetti, pointFigli: emailFigli }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((x: ResponseI) => {
       navigateRouting(navigate, SectionName.ROOT, { newLogin: true })
     })
   }
@@ -209,7 +209,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
                 />
               </Grid>
               {/* Points del figlio (fisso 100) */}
-              <Grid xs= {2 }>
+              <Grid xs={2}>
                 <TextField
                   label={labelRegister.points}
                   value={100}
