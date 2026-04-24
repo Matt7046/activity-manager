@@ -91,8 +91,9 @@ public class SecurityConfig implements WebFluxConfigurer {
                 .authorizeExchange(exchanges -> exchanges
                 .pathMatchers(policyAddress).permitAll() // Consenti accesso pubblico alla Privacy Policy
                                 .pathMatchers(homeAddress).permitAll()
+                                .pathMatchers("/api/auth/token").permitAll()
                                 .pathMatchers("/ws/**").permitAll()
-                                .pathMatchers(HttpMethod.POST,"/**").permitAll()
+                                .pathMatchers(HttpMethod.POST,"/api/privacy").permitAll()
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Permetti l'accesso pubblico a
                                                                              // "/api/auth/token"
                         .anyExchange().authenticated() // Richiedi autenticazione per tutte le altre richieste
