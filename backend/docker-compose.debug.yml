@@ -9,6 +9,8 @@ services:
     environment:
       - RABBITMQ_DEFAULT_PASS=password
       - RABBITMQ_DEFAULT_USER=username
+    env_file:
+      - .env  
     networks:
       - app-network
   elasticsearch:
@@ -36,6 +38,8 @@ services:
     volumes:
       - ./elasticsearch/certs:/usr/share/elasticsearch/config/certs:ro
       - esdata:/usr/share/elasticsearch/data
+    env_file:
+      - .env
     networks:      
       - app-network
 
@@ -52,6 +56,8 @@ services:
       - auth-service
       - family-service
       - notification-service
+    env_file:
+      - .env
     networks:
       - app-network
 
@@ -70,6 +76,8 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/userPoint/src/main/resources/certificate:/app/certificate
+    env_file:
+      - .env
     networks:
       - app-network
 
@@ -91,6 +99,8 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/activity/src/main/resources/certificate:/app/certificate
+    env_file:
+      - .env
     networks:
       - app-network
 
@@ -109,6 +119,8 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/auth/src/main/resources/certificate:/app/certificate
+    env_file:
+      - .env  
     networks:
       - app-network
 
@@ -127,6 +139,8 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/family/src/main/resources/certificate:/app/certificate
+    env_file:
+      - .env
     networks:
       - app-network
 
@@ -145,6 +159,8 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/notification/src/main/resources/certificate:/app/certificate
+    env_file:
+      - .env
     networks:
       - app-network
       
@@ -162,6 +178,8 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/image/src/main/resources/certificate:/app/certificate  # Monta i certificati nel path giusto
+    env_file:
+      - .env
     networks:
       - app-network
 volumes:

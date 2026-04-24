@@ -41,11 +41,7 @@ public class LogActivityWebService {
                 })
                 .doOnSuccess(response -> {
                     // Log del successo
-                    System.out.println("Salvataggio punti riuscito: " );
-                    // Esegui un'azione asincrona se necessario
-                    Mono.fromRunnable(() -> {
-                        // Codice per l'evento asincrono
-                    }).subscribe();
+                    System.out.println("Salvataggio punti riuscito: " );                 
                 });
     }
 
