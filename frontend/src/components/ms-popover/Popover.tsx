@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react";
 import { Box, Divider, Popover, Typography } from '@mui/material';
 import React from 'react';
 import Button, { Pulsante } from '../ms-button/Button';
@@ -65,7 +66,7 @@ const PopoverComponent: React.FC<PopoverComponentProps> = ({
         ) : (
           <Box sx={{ p: 3, textAlign: 'center' }}>
             <Typography sx={{ color: '#94a3b8', fontSize: '0.85rem' }}>
-              Nessuna nuova notifica
+              <Trans id="nessuna_nuova_notifica" />
             </Typography>
           </Box>
         )}
