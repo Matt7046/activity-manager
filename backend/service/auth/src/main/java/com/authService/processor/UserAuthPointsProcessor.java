@@ -8,6 +8,7 @@ import com.common.dto.structure.ResponseDTO;
 import com.common.dto.user.UserPointDTO;
 import com.common.structure.status.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,9 +29,15 @@ public class UserAuthPointsProcessor {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Value("${app.secret.crypt.user.name}")
+    private String secretName;
+
+    @Value("${app.secret.crypt.user.key}")
+    private String secretKey;
+
     public Mono<ResponseDTO> getToken(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken("user", "qwertyuiop"));
+                new UsernamePasswordAuthenticationToken(secretName, secretKey));
         String token = jwtUtil.generateToken(authentication.getName());
         return authService.checkUserExists(loginRequest)
                 .flatMap(exists -> {

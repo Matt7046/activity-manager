@@ -46,11 +46,6 @@ export enum TypeUser {
   NEW_USER = 2
 }
 
-export enum LoginUser {
-  USER = 'user',
-  PASS = 'qwertyuiop',
-}
-
 export enum ServerMessage {
   SERVER_DOWN = "Il server non risponde"
 }
