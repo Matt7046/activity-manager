@@ -1,9 +1,10 @@
+import { Trans } from "@lingui/react";
 import React from "react";
 
 const PrivacyPolicy: React.FC = () => {
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Privacy Policy</h1>
+      <h1 style={styles.title}><Trans id="privacy_policy" /></h1>
       <p style={styles.text}>
         La presente Privacy Policy descrive come raccogliamo, utilizziamo e
         proteggiamo i tuoi dati personali quando utilizzi il nostro progetto
@@ -18,7 +19,7 @@ const PrivacyPolicy: React.FC = () => {
         newsletter o utilizzi i nostri servizi:
       </p>
       <ul style={styles.list}>
-        <li>Email</li>
+        <li><Trans id="email" /></li>
         <li>Eventuali altri dati forniti volontariamente tramite i moduli del
             nostro sito</li>
       </ul>
@@ -28,9 +29,9 @@ const PrivacyPolicy: React.FC = () => {
         Utilizziamo i tuoi dati personali per i seguenti scopi:
       </p>
       <ul style={styles.list}>
-        <li>Inviarti aggiornamenti sul progetto open source</li>
-        <li>Comunicarti nuove funzionalità, eventi o opportunità di contribuire</li>
-        <li>Accedere alla applicazione </li>
+        <li><Trans id="inviarti_aggiornamenti_sul_progetto_open_source" /></li>
+        <li><Trans id="comunicarti_nuove_funzionalita_eventi_o_opportunita_di_contribuire" /></li>
+        <li><Trans id="accedere_alla_applicazione" /> </li>
       </ul>
 
       <h2 style={styles.subtitle}>3. Conservazione dei dati</h2>
@@ -45,16 +46,16 @@ const PrivacyPolicy: React.FC = () => {
         Ai sensi del GDPR, hai il diritto di:
       </p>
       <ul style={styles.list}>
-        <li>Accedere ai tuoi dati personali</li>
-        <li>Richiedere la correzione o la cancellazione dei tuoi dati</li>
-        <li>Revocare il consenso al trattamento</li>
-        <li>Portabilità dei dati</li>
-        <li>Opporsi al trattamento dei dati</li>
+        <li><Trans id="accedere_ai_tuoi_dati_personali" /></li>
+        <li><Trans id="richiedere_la_correzione_o_la_cancellazione_dei_tuoi_dati" /></li>
+        <li><Trans id="revocare_il_consenso_al_trattamento" /></li>
+        <li><Trans id="portabilita_dei_dati" /></li>
+        <li><Trans id="opporsi_al_trattamento_dei_dati" /></li>
       </ul>
       <p style={styles.text}>
         Per esercitare questi diritti, puoi contattarci all'indirizzo email:{" "}
         <a href="mailto:matteo.santangelo@colorsdev.tech" style={styles.link}>
-        matteo.santangelo@colorsdev.tech
+        <Trans id="matteosantangelocolorsdevtech" />
         </a>.
       </p>
 

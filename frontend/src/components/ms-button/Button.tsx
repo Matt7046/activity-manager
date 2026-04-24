@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react";
 import { Button as ButtonMui, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab } from '@mui/material'; // Importato Fab
 import { observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
@@ -110,13 +111,13 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
             onClick={handleClose}
             className="dialog-button-cancel"
           >
-            Annulla
+            <Trans id="annulla" />
           </ButtonMui>
           <ButtonMui
             onClick={handleConfirm}
             className="dialog-button-confirm"
             variant="contained"    >
-            Sì, Conferma
+            <Trans id="si_conferma" />
           </ButtonMui>
         </DialogActions>
       </Dialog>
