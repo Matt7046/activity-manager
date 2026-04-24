@@ -61,6 +61,7 @@ app:
       home: /home
       token: /api/auth/token
       policy: /api/privacy-policy
+      login: /api/userpoint/dati/login
     service:
         image: http://image-service:8080
         auth: http://auth-service:8080
