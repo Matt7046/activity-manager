@@ -1,20 +1,8 @@
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
-import InfoIcon from '@mui/icons-material/Info';
-import WarningIcon from '@mui/icons-material/Warning';
 import { Box, Alert as MuiAlert, Snackbar, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { TypeAlertColor } from '../../general/structure/Constant';
 import { TypeMessage } from '../../page/page-layout/PageLayout';
 import "./Alert.css";
-
-const icons = {
-
-  SUCCESS: <CheckCircleIcon color="success" />,
-  WARNING: <WarningIcon color="warning" />,
-  ERROR: <ErrorIcon color="error" />,
-  INFO: <InfoIcon color="info" />,
-};
 
 export interface AlertConfig {
   open: boolean;
