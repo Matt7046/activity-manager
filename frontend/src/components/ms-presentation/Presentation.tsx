@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react";
 import ReactIcon from '@mui/icons-material/Code'; // Potrebbe non esserci un'icona specifica, usa un generico
 import JavaIcon from '@mui/icons-material/Coffee'; // Esempio
 import SpringBootIcon from '@mui/icons-material/PlayCircleFilled'; // Esempio
@@ -97,7 +98,7 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
   }}
 >
   <Typography variant="h6" gutterBottom>
-    Tecnologie che utilizzo
+    <Trans id="tecnologie_che_utilizzo" />
   </Typography>
   <Grid container justifyContent="center" spacing={4}>
     {technologies.map((tech) => (
