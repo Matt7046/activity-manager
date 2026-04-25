@@ -41,7 +41,7 @@ public class UserPointService {
         UserPoint existingUserPoint = userPointRepository.findUserByEmail(userPoint.getEmailUserCurrent());
         if (existingUserPoint == null) {
             UserPoint userPointList = userPointRepository.findByOnFigli(userPoint.getEmailUserCurrent());
-            existingUserPoint = userPointList != null ? userPointList : null;
+            existingUserPoint = userPointList;
         }
         if (existingUserPoint == null) {
             return new UserPoint();
@@ -58,7 +58,7 @@ public class UserPointService {
 
         UserPoint existingUserPoint = userPointRepository.findUserByEmail(userPoint.getEmail());
         Integer delta = userPoint.getOperation() ? userPoint.getUsePoints() : -userPoint.getUsePoints();
-        Integer updatedPoint = existingUserPoint.getPoints() + delta;
+        int updatedPoint = existingUserPoint.getPoints() + delta;
         if (updatedPoint < 0) {
             throw new ArithmeticCustomException(arithmeticProperties);
         }
@@ -83,7 +83,7 @@ public class UserPointService {
         return existUserPointOnFigli != null ? existUserPointOnFigli.getType() : 2L;
     }
 
-    public UserPoint saveUserImage(UserPoint userPoint) throws Exception {
+    public UserPoint saveUserImage(UserPoint userPoint) {
 
         UserPoint existingUserPoint = userPointRepository.findUserByEmail(userPoint.getEmailChild());
         UserPoint updatedPoints = ovverideNameImage(userPoint, existingUserPoint);

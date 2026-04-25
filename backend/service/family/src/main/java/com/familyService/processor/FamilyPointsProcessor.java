@@ -6,7 +6,6 @@ import com.common.data.family.OperationTypeLogFamily;
 import com.common.data.user.UserPoint;
 import com.common.dto.family.LogFamilyDTO;
 import com.common.dto.structure.ResponseDTO;
-import com.common.dto.user.PointDTO;
 import com.common.dto.user.UserPointDTO;
 import com.common.dto.family.FamilyNotificationDTO;
 import com.common.mapper.LogFamilyMapper;
@@ -14,7 +13,6 @@ import com.common.mapper.UserPointMapper;
 import com.common.structure.status.ActivityHttpStatus;
 import com.common.structure.exception.NotFoundException;
 import com.familyService.service.FamilyService;
-import com.common.configurations.rabbitmq.RabbitMQProducer;
 import com.familyService.service.FamilyWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -91,9 +89,9 @@ public class FamilyPointsProcessor {
         }
     }
 
-    public Mono<ResponseDTO> logFamilyByEmail(UserPointDTO userPointDTO) throws Exception {
-        Integer page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
-        Integer size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
+    public Mono<ResponseDTO> logFamilyByEmail(UserPointDTO userPointDTO)  {
+        int page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
+        int size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
         UserPoint userPoint = userPointMapper.fromDTO(userPointDTO);
         List<LogFamily> familyList = familyService.getLogFamily(userPoint, pageable);

@@ -29,8 +29,8 @@ public interface UserPointRepository extends MongoRepository<UserPoint, String> 
     UserPoint findFirstMatchByEmailOrFigli(String email);
 
     @Query(value = "{ '$and': [ { 'email': ?0 },{ 'password': ?1 }] }")
-    UserPoint findByPointEmailAndPassword(String email, String password);;
+    UserPoint findByPointEmailAndPassword(String email, String password);
 
     @Query("{ 'pointFigli': { $elemMatch: { 'email': ?0, 'password': ?1 } } }")
-    UserPoint findByPointFigliEmailAndPassword(String email, String password);;
+    UserPoint findByPointFigliEmailAndPassword(String email, String password);
 }
