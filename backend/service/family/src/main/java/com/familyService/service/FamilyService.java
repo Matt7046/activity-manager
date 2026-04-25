@@ -25,7 +25,7 @@ public class FamilyService {
     private LogFamilyMapper logFamilyMapper;
 
     @Transactional
-    public LogFamily saveLogFamily(LogFamily family) {        ;
+    public LogFamily saveLogFamily(LogFamily family) {
         return  repository.save(family);
     }
     @Transactional

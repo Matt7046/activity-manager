@@ -16,7 +16,7 @@ public class GamificationController {
     private GamificationProcessor processor;
 
     @GetMapping("videos/{topic}")
-    public Mono<ResponseDTO> fetchVideos(@PathVariable String topic) throws Exception {
+    public Mono<ResponseDTO> fetchVideos(@PathVariable String topic) {
         return processor.fetchVideos(topic);
     }
    

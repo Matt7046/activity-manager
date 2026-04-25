@@ -14,6 +14,8 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
+import java.io.IOException;
+
 @Component
 public class RabbitMQRollbackLogActivityConsumer {
 
@@ -24,7 +26,7 @@ public class RabbitMQRollbackLogActivityConsumer {
     private UserPointMapper userPointMapper;
 
     @RabbitListener(queues = "notifications.log.point.queue", ackMode = "MANUAL")
-    public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
+    public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
 
              // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
         try {
@@ -32,8 +34,6 @@ public class RabbitMQRollbackLogActivityConsumer {
             receive(jsonMessage, 0);
 
             channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,7 +1,6 @@
 package com.notificationService.controller;
 
 import com.common.dto.notification.NotificationDTO;
-import com.notificationService.processor.EmailProcessor;
 import com.common.dto.structure.ResponseDTO;
 import com.notificationService.processor.NotificationProcessor;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ public class NotificationController {
     private NotificationProcessor notificationProcessor;
 
     @GetMapping("all/{identificativo}/{page}/{size}")
-    public Mono<ResponseDTO> getNotificationsByIdentificativo(@PathVariable String identificativo, @PathVariable Integer page, @PathVariable Integer size) throws Exception {
+    public Mono<ResponseDTO> getNotificationsByIdentificativo(@PathVariable String identificativo, @PathVariable Integer page, @PathVariable Integer size) {
         return  notificationProcessor.getLatestNotifications(identificativo,page,size );
     }
 
