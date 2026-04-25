@@ -1,6 +1,5 @@
 package com.imageService.processor;
 
-import com.cloudinary.Cloudinary;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.dto.image.UploadResultDTO;
 import com.common.dto.structure.ResponseDTO;
@@ -22,7 +21,7 @@ public class ImageProcessor {
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
-    public Mono<ResponseDTO> uploadImage(ImageDTO image ) throws IOException {
+    public Mono<ResponseDTO> uploadImage(ImageDTO image ) {
         image.setNameImage(encryptDecryptConverter.decrypt(image.getNameImage()));
             return DataBufferUtils.join(image.getFile().content())
                     .flatMap(dataBuffer -> {
