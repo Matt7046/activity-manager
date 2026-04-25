@@ -1,6 +1,5 @@
 package com.userPointService.controller;
 
-import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.dto.user.UserPointDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.userPointService.processor.UserPointProcessor;

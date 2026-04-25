@@ -24,16 +24,14 @@ public class RabbitMQActivityElasticConsumer {
     }
 
     @RabbitListener(queues = "search.elastic.queue")
-    public void handleEnriched(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
+    public void handleEnriched(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
 
         // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
         try {
             // Thread.sleep(20000); // 5 secondi
             receive(jsonMessage, 0);
             channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -52,7 +50,7 @@ public class RabbitMQActivityElasticConsumer {
         }
         if(doc == null) {
             doc = new ActivityDocument();
-        };
+        }
         doc.setIdentificativo(event._id());
         doc.setNome(event.nome());
         doc.setSubTesto(event.subTesto());

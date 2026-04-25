@@ -42,17 +42,15 @@ public class ActivityQueryProcessor {
     }
 
     public Mono<ResponseDTO> findByIdentificativo(UserPointDTO userPointDTO) {
-        Activity item = null;
-        ResponseDTO responseDTO = null;
+        Activity item;
+        ResponseDTO responseDTO;
         item = activityService.findByIdentificativo(userPointDTO.get_id());
         if (item == null) {
             throw new NotFoundException(errorDocument + userPointDTO.get_id());
         }
 
-        if (item != null) {
-            ActivityDTO subDTO = activityMapper.toDTO(item);
-            responseDTO = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
-        }
+        ActivityDTO subDTO = activityMapper.toDTO(item);
+        responseDTO = new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
         return Mono.just(responseDTO);
     }
   

@@ -2,7 +2,6 @@ package com.activityService.processor;
 
 import com.activityService.service.ActivityService;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
-import com.common.configurations.rabbitmq.RabbitMQProducer;
 import com.common.configurations.rabbitmq.RabbitMQSearchPublisher;
 import com.common.data.activity.Activity;
 import com.common.data.activity.event.ActivityCreateEvent;

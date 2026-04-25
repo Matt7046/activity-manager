@@ -12,8 +12,6 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-import java.io.IOException;
-
 @Component
 public class RabbitMQEmailConsumer {
 
@@ -23,7 +21,7 @@ public class RabbitMQEmailConsumer {
 
 
     @RabbitListener(queues = "email.queue", ackMode = "MANUAL")
-    public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
+    public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
 
         // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
         try {
