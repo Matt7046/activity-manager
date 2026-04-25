@@ -2,17 +2,11 @@ package com.common.mapper;
 
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.notification.Notification;
-import com.common.dto.auth.Point;
 import com.common.dto.notification.NotificationDTO;
-import com.common.dto.user.PointDTO;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
 
 @Mapper(componentModel = "spring")
 public abstract class NotificationMapper {

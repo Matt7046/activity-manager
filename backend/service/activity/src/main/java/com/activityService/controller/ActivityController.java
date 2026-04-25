@@ -40,7 +40,7 @@ public class ActivityController {
     }
 
      @DeleteMapping("toggle/{identificativo}")
-    public Mono<ResponseDTO> deleteByIdentificativo(@PathVariable String identificativo) throws Exception {
+    public Mono<ResponseDTO> deleteByIdentificativo(@PathVariable String identificativo) {
          return processorCommand.deleteByIdentificativo(identificativo);// Mappa il risultato in un ResponseDTO
        
     }

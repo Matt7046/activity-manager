@@ -2,7 +2,6 @@ package com.activityService.rabbitmq;
 
 import com.activityService.repository.elastic.ActivityDocumentRepository;
 import com.common.data.activity.ActivityDocument;
-import com.common.data.activity.event.ActivityEnrichedEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +11,6 @@ import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
-
 import java.io.IOException;
 
 @Component
@@ -25,16 +23,14 @@ public class RabbitMQActivityDeleteElasticConsumer {
     }
 
     @RabbitListener(queues = "delete.elastic.queue")
-    public void handleDeleteEnriched(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
+    public void handleDeleteEnriched(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
 
         // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
         try {
             // Thread.sleep(20000); // 5 secondi
             receive(jsonMessage, 0);
             channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }
     }

@@ -5,7 +5,6 @@ import com.common.configurations.structure.JwtUtil;
 import com.common.dto.auth.LoginRequest;
 import com.common.dto.auth.LoginResponse;
 import com.common.dto.structure.ResponseDTO;
-import com.common.dto.user.UserPointDTO;
 import com.common.structure.status.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-
 import java.util.ArrayList;
 
 @Component
