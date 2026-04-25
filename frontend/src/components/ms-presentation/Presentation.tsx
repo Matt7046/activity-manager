@@ -50,6 +50,7 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
           htmlFor="enter-button"
           gutterBottom
           fontWeight="bold"
+          className="welcome-description-title"
         >
           {testoEntry}
         </Typography>
