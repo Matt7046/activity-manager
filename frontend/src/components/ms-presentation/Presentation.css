@@ -33,9 +33,13 @@
   color: #94a3b8;
   text-align: center; /* Assicura che il testo sia centrato */
 }
+
+/* Testo della descrizione */
+.welcome-description-title {
+  text-align: center; /* Assicura che il testo sia centrato */
+}
 /* Il wrapper ora occupa tutta l'altezza dello schermo */
 .page-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Forza l'altezza minima all'altezza dello schermo */
 }
