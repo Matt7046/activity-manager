@@ -48,8 +48,8 @@ public class LogActivityProcessor {
 
 
     public Mono<ResponseDTO> logAttivitaByEmail(UserPointDTO userPointDTO) {
-        Integer page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
-        Integer size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
+        int page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
+        int size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
         List<LogActivityDTO> logAttivitaUnica =  logActivityService.logAttivitaByEmail(userPointDTO, pageable).stream()
                 .map(logActivityMapper::toDTO)
@@ -88,9 +88,7 @@ public class LogActivityProcessor {
             return new ResponseDTO(logActivityMapper.toDTO(sub), ActivityHttpStatus.OK.value(), new ArrayList<>());
         }).doOnError(response1 -> {
             // Invia l'evento dopo il salvataggio del log in modo asincrono
-            Mono.fromRunnable(() -> {
-                notificationComponent.inviaNotifica(logActivityDTO.getPoint(), exchangePoint, routingKeyLogActivity);
-            }).subscribe();  // Avvia il runnable senza bloccare il flusso
+            Mono.fromRunnable(() -> notificationComponent.inviaNotifica(logActivityDTO.getPoint(), exchangePoint, routingKeyLogActivity)).subscribe();  // Avvia il runnable senza bloccare il flusso
         });
     }
 

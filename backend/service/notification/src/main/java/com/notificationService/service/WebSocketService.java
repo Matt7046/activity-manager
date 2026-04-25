@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.socket.WebSocketHandler;
+import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -39,16 +40,12 @@ public class WebSocketService implements WebSocketHandler {
         String emailID = extractEmailFromSession(session);
         session.getAttributes().put(identification, emailID);
         sessions.add(session);
-        session.closeStatus().doOnTerminate(() -> {
-            sessions.remove(session);
-        }).subscribe(); // Im
+        session.closeStatus().doOnTerminate(() -> sessions.remove(session)).subscribe(); // Im
         // Flux per ricevere messaggi dal client (opzionale, solo per logging)
-        Flux<String> receive = session.receive().map(msg -> msg.getPayloadAsText());
+        Flux<String> receive = session.receive().map(WebSocketMessage::getPayloadAsText);
 
         // Quando il client si disconnette, rimuoviamo la sessione
-        return receive.then(Mono.fromRunnable(() -> {
-            sessions.remove(session);
-        }));
+        return receive.then(Mono.fromRunnable(() -> sessions.remove(session)));
     }
 
 

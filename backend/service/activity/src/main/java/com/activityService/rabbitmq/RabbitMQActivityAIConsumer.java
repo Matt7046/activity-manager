@@ -4,7 +4,6 @@ import com.activityService.service.ActivityWebAIService;
 import com.common.configurations.rabbitmq.SearchPublisher;
 import com.common.data.activity.event.ActivityCreateEvent;
 import com.common.data.activity.event.ActivityEnrichedEvent;
-import com.common.dto.activity.LogActivityDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
@@ -15,8 +14,6 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-
 import java.io.IOException;
 
 @Component
@@ -31,16 +28,14 @@ public class RabbitMQActivityAIConsumer {
     }
 
     @RabbitListener(queues = "search.ai.queue")
-    public void handleCreate(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
+    public void handleCreate(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag)  {
 
         // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
         try {
             // Thread.sleep(20000); // 5 secondi
             receive(jsonMessage, 0);
             channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }
     }

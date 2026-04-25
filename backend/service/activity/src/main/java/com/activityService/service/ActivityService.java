@@ -1,19 +1,13 @@
 package com.activityService.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 import com.common.dto.activity.ActivityDTO;
 import com.common.mapper.ActivityMapper;
 import com.activityService.repository.mongodb.ActivityRepository;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
-import com.common.configurations.rabbitmq.RabbitMQProducer;
 import com.common.data.activity.Activity;
-
-
 import java.util.List;
 
 @Service

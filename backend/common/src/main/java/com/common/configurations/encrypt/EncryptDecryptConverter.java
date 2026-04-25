@@ -39,7 +39,7 @@ public class EncryptDecryptConverter implements Converter<String, String> {
             // Decripta il dato
             return decrypts(encryptedData);
         }
-        return encryptedData;
+        return null;
     }
 
     public String encrypts(String data) throws DecryptException {

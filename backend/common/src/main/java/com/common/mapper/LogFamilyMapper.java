@@ -1,16 +1,12 @@
 package com.common.mapper;
 
 import com.common.configurations.encrypt.EncryptDecryptConverter;
-import com.common.data.activity.LogActivity;
 import com.common.data.family.LogFamily;
-import com.common.dto.activity.ActivityDTO;
 import com.common.dto.family.LogFamilyDTO;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-
 
 @Mapper(componentModel = "spring")
 public abstract class LogFamilyMapper {

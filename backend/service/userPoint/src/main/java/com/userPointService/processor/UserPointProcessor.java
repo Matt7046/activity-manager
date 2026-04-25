@@ -73,7 +73,6 @@ public class UserPointProcessor {
     @Transactional
     public Mono<ResponseDTO> getTypeUser(UserPointDTO userPointDTO) {
         return Mono.fromCallable(() -> {
-            ;
             UserPoint sub = userPointMapper.fromDTO(userPointDTO);
             Long itemId = userPointService.getTypeUser(sub);
             String emailUserCurrent = userPointDTO.getEmailUserCurrent();
