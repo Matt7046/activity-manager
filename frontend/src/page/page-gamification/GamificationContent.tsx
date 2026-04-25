@@ -43,7 +43,6 @@ const GamificationContent: React.FC<GamificationContentProps> = ({
 }) => {
 
   const location = useLocation();
-  const [disableButtonSave, setDisableButtonSave] = useState(true);
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
   const [isWatching, setIsWatching] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
