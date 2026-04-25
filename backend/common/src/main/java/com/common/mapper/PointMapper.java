@@ -1,18 +1,12 @@
 package com.common.mapper;
 
 import com.common.configurations.encrypt.EncryptDecryptConverter;
-import com.common.data.user.UserPoint;
 import com.common.dto.auth.Point;
 import com.common.dto.user.PointDTO;
-import com.common.dto.user.UserPointDTO;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.stream.Collectors;
-
 
 @Mapper(componentModel = "spring")
 public abstract class PointMapper {

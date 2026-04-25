@@ -1,12 +1,9 @@
 package com.common.mapper;
 
 import com.common.configurations.encrypt.EncryptDecryptConverter;
-import org.mapstruct.factory.Mappers;
-
 import com.common.data.activity.LogActivity;
 import com.common.dto.activity.ActivityDTO;
 import com.common.dto.activity.LogActivityDTO;
-
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 

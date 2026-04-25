@@ -3,8 +3,6 @@ package com.common.dto.auth;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Field;
-
 import java.util.List;
 
 @Data // Genera getter, setter, toString, equals e hashCode
