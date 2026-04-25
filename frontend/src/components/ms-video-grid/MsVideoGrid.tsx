@@ -75,7 +75,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
       title: "Ricerca video",
       funzione: () => {
         console.log("Ricerca video:", testo)
-        fetchOptions(testo).then((response: ResponseI|void) => {
+        fetchOptions(testo).then((response: ResponseI | void) => {
           if (response) {
             setVideos(response.jsonText);
           }
@@ -95,20 +95,22 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
       nome: "red",
       title: "Completa e guadagna punti",
       funzione: () => {
-        const minutes = gamificationStore.getMinutes();
-        const points = minutes; // 1 punto = 1 minuto
-        console.log("Minuti visti:", minutes);
-        console.log("Punti assegnati:", points);
+        const points = gamificationStore.getMinutes();
         gamificationStore.addPoints(points);
         savePoints();
-        gamificationStore.ResetPointsMinutes();     
-        console.log("Punti assegnati")
+        gamificationStore.ResetPointsMinutes();
       },
       configDialogPulsante: {
         showDialog: true,
-        message: "Vuoi aggiungere i punti premio del video?"
+        // Passiamo una funzione () => ... invece di una stringa
+        // Verrà eseguita solo quando l'utente preme il trofeo
+        message: () => {
+          const currentPoints = gamificationStore.getMinutes();
+          return `Vuoi aggiungere i ${currentPoints} punti premio del video?`;
+        }
       }
-    }];
+    }
+  ];
 
 
   const createButtonPreferiti = (videoId: string): Pulsante[] => [
