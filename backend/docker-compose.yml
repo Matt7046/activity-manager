@@ -15,11 +15,11 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-    env_file:
-      - .env
     environment:
       - 'RABBITMQ_DEFAULT_PASS=password'
-      - 'RABBITMQ_DEFAULT_USER=username'  
+      - 'RABBITMQ_DEFAULT_USER=username'
+    env_file:
+      - .env
     networks:
       - app-network
 
@@ -31,7 +31,6 @@ services:
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
       - ELASTIC_PASSWORD=password
       - xpack.security.enabled=true
-
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.keystore.path=certs/elastic-certificates.p12
       - xpack.security.http.ssl.keystore.password=password
@@ -77,13 +76,14 @@ services:
 
   user-point-service:
     depends_on:
-      - rabbitmq
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     image: docker.io/matt7046/user-point-service:1.0.0
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
+    build:
+      context: ./ 
+      dockerfile: service/userPoint/Dockerfile 
     volumes:
       - ./service/userPoint/src/main/resources/certificate:/app/certificate
     env_file:
@@ -91,19 +91,17 @@ services:
     networks:
       - app-network
 
-  activity-service:
-    image: docker.io/matt7046/activity-service:1.0.0
+  activity-service:  
     depends_on:
       elasticsearch:
         condition: service_healthy
       rabbitmq:
         condition: service_started
-    
-    environment:     
-      SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_PORT: 5672
-      SPRING_RABBITMQ_USERNAME: username
-      SPRING_RABBITMQ_PASSWORD: password
+    image: docker.io/matt7046/activity-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/activity/Dockerfile
+
     volumes:
       # Mappiamo la cartella dove hai salvato il file .p12
       # Assicurati che il file si chiami elastic-truststore.p12 dentro quella cartella
@@ -115,13 +113,14 @@ services:
 
   auth-service:
     depends_on:
-      - rabbitmq
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     image: docker.io/matt7046/auth-service:1.0.0
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
+    build:
+      context: ./
+      dockerfile: service/auth/Dockerfile
     volumes:
       - ./service/auth/src/main/resources/certificate:/app/certificate 
     env_file:
@@ -131,13 +130,14 @@ services:
 
   family-service:
     depends_on:
-      - rabbitmq
-    image: docker.io/matt7046/family-service:1.0.0   
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    image: docker.io/matt7046/family-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/family/Dockerfile
     volumes:
       - ./service/family/src/main/resources/certificate:/app/certificate
     env_file:
@@ -147,13 +147,14 @@ services:
 
   notification-service:
     depends_on:
-      - rabbitmq
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     image: docker.io/matt7046/notification-service:1.0.0
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
+    build:
+      context: ./
+      dockerfile: service/notification/Dockerfile
     volumes:
       - ./service/notification/src/main/resources/certificate:/app/certificate
     env_file:
@@ -163,13 +164,14 @@ services:
 
   image-service:
     depends_on:
-      - rabbitmq
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     image: docker.io/matt7046/image-service:1.0.0
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
+    build:
+      context: ./
+      dockerfile: service/image/Dockerfile
     volumes:
       - ./service/image/src/main/resources/certificate:/app/certificate
     env_file:

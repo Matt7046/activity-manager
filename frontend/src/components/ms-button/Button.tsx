@@ -96,7 +96,7 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
           </DialogTitle>
         </div>
 
-        <DialogContent sx={{ px: 3, py: 1, minWidth: 380 }}>
+        <DialogContent >
           {/* Testo avvolto da un contenitore stilizzato */}
           <div className="dialog-message-container">
             <DialogContentText className='dialog-text-custom'>

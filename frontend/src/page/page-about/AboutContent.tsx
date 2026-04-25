@@ -112,7 +112,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
     disableButton: disableButtonSave,
     nome: ButtonName.BLUE,
     title: 'Salva',
-    configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
+    configDialogPulsante: { message: "Confermi l'operazione?", showDialog: true }
 
   };
 
