@@ -10,10 +10,8 @@ import com.notificationService.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -25,7 +23,7 @@ public class EmailProcessor {
     private UserPointMapper userPointMapper;
 
 
-    public Mono<ResponseDTO> sendPasswordEmailChild(UserPointWithChildDTO userPointDTO) throws Exception {
+    public Mono<ResponseDTO> sendPasswordEmailChild(UserPointWithChildDTO userPointDTO) {
         UserPoint userPoint = userPointMapper.fromDTO(userPointDTO.getUserPoint());
         List<UserPoint> userChild =  userPointDTO.getUserPointChild().stream().map(userPointMapper::fromDTO).collect(Collectors.toList());
         userPoint = emailService.sendPasswordEmailChild(userPoint,userChild);

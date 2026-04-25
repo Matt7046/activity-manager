@@ -2,8 +2,6 @@ package com.authService.controller;
 
 import com.authService.processor.UserAuthPointsProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import com.common.configurations.structure.JwtUtil;
 import com.common.dto.structure.ResponseDTO;
 import com.common.dto.auth.LoginRequest;
 import org.springframework.web.bind.annotation.PostMapping;

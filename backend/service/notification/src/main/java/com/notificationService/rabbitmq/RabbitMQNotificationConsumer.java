@@ -18,16 +18,14 @@ public class RabbitMQNotificationConsumer {
 
 
     @RabbitListener(queues = "notifications.queue", ackMode = "MANUAL")
-    public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws JsonProcessingException {
+    public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
 
              // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
         try {
             // Thread.sleep(20000); // 5 secondi
             receive(jsonMessage, 0);
             channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }
     }
