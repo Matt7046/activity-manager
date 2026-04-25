@@ -17,7 +17,7 @@ export interface Pulsante {
 
 export interface configDialogPulsante {
   showDialog: boolean;
-  message: string;
+  message: string | (() => string);
 }
 
 const Button = observer((props: { pulsanti: Pulsante[] }) => {
@@ -31,7 +31,11 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
 
   const handleClickOpen = (funzione: (...args: any[]) => any, configDialogPulsante: configDialogPulsante) => {
     setCurrentFunction(() => funzione); // Salva la funzione corrente
-    setMessageTitle(configDialogPulsante.message);
+    // Se message è una funzione, eseguila ora per avere il valore aggiornato
+    const finalMessage = typeof configDialogPulsante.message === 'function'
+      ? configDialogPulsante.message()
+      : configDialogPulsante.message;
+    setMessageTitle(finalMessage);
     if (configDialogPulsante.showDialog) {
       setOpen(true);
     } else {
@@ -73,10 +77,10 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
             title={button.title}
             onClick={() => handleClickOpen(button.funzione, button.configDialogPulsante)}
             disabled={button.disableButton}
-            
+
             // MODIFICATO: size="small" per il FAB mini (40px)
-            size="small" 
-            
+            size="small"
+
             aria-label={button.title}
           >
             {/* L'icona sarà rimpicciolita via CSS */}
