@@ -1,5 +1,5 @@
-import { Trans } from "@lingui/react";
 import { i18n } from "@lingui/core";
+import { Trans } from "@lingui/react";
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, Divider, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
@@ -186,7 +186,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
           <Box className="box-child" key={index} mb={2}>
             <Grid container spacing={2} alignItems="center">
               {/* Email del figlio */}
-              <Grid xs={10}>
+              <Grid xs={9}>
                 <TextField
                   label={`Email Figlio ${index + 1}`}
                   variant="outlined"
@@ -211,7 +211,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
                 />
               </Grid>
               {/* Points del figlio (fisso 100) */}
-              <Grid xs={2}>
+              <Grid xs={3}>
                 <TextField
                   label={labelRegister.points}
                   value={100}
