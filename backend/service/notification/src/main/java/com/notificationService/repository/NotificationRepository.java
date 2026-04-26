@@ -12,6 +12,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NotificationRepository extends MongoRepository<Notification, String> {
 
-    @Query(value = "{'userReceiver': ?0}", sort = "{'dateSender': -1}")
-    List<Notification> findLatestNotifications(String userReceiver, Pageable pageable);
+@Query(value = "{ 'userReceiver': ?0, 'status': ?1 }", sort = "{ 'dateSender': -1 }")
+List<Notification> findLatestNotificationsByStatus(String userReceiver, String status, Pageable pageable);
+
+@Query(value = "{ 'userReceiver': ?0 }", sort = "{ 'dateSender': -1 }")
+List<Notification> findLatestNotifications(String userReceiver, Pageable pageable);
 }
