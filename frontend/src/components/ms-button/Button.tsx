@@ -21,6 +21,7 @@ export interface configDialogPulsante {
 }
 
 const Button = observer((props: { pulsanti: Pulsante[] }) => {
+
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('CONFERMA OPERAZIONE');
@@ -67,27 +68,29 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
 
   return (
     <div className="col-button-container">
-      {props.pulsanti.map((button, index) => (
-        <div key={index} className="col-button">
-          {/* Componente Fab di MUI stilizzato col nostro CSS */}
-          <Fab
-            id={`button-${index}`}
-            // Le classi CSS gestiranno i colori accesi e la forma
-            className={button.nome === 'red' ? 'button-red' : 'button-blue'}
-            title={button.title}
-            onClick={() => handleClickOpen(button.funzione, button.configDialogPulsante)}
-            disabled={button.disableButton}
+      {
 
-            // MODIFICATO: size="small" per il FAB mini (40px)
-            size="small"
+        props.pulsanti.map((button, index) => (
+          <div key={index} className="col-button">
+            {/* Componente Fab di MUI stilizzato col nostro CSS */}
+            <Fab
+              id={`button-${index}`}
+              // Le classi CSS gestiranno i colori accesi e la forma
+              className={button.nome === 'red' ? 'button-red' : 'button-blue'}
+              title={button.title}
+              onClick={() => handleClickOpen(button.funzione, button.configDialogPulsante)}
+              disabled={button.disableButton}
 
-            aria-label={button.title}
-          >
-            {/* L'icona sarà rimpicciolita via CSS */}
-            <i className={button.icona}></i>
-          </Fab>
-        </div>
-      ))}
+              // MODIFICATO: size="small" per il FAB mini (40px)
+              size="small"
+
+              aria-label={button.title}
+            >
+              {/* L'icona sarà rimpicciolita via CSS */}
+              <i className={button.icona}></i>
+            </Fab>
+          </div>
+        ))}
       <Dialog
         open={open}
         onClose={handleClose}

@@ -79,35 +79,3 @@
   background-color: inherit; /* Segue il colore della riga (bianco o azzurrino) */
 }
 
-/* Container della griglia per occupare tutto lo spazio */
-.grid-container {
-  height: 600px; /* O 100% se il parent ha altezza definita */
-  width: 100%;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-/* Stile Zebra per le righe della DataGrid */
-.MuiDataGrid-row:nth-child(even) {
-  background-color: #edf3fd !important;
-}
-
-.MuiDataGrid-row:nth-child(odd) {
-  background-color: #ffffff !important;
-}
-
-.MuiDataGrid-row:hover {
-  background-color: #cee0f6 !important;
-}
-
-/* Rimuoviamo i bordi delle celle per farla sembrare una lista pulita */
-.MuiDataGrid-cell {
-  border-bottom: none !important;
-}
-
-.MuiDataGrid-columnHeaders {
-  background-color: #f8f9fa;
-  border-bottom: 2px solid #f1f3f5 !important;
-  font-weight: 700;
-}
