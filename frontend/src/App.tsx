@@ -8,10 +8,12 @@ import Activity from './page/page-activity/Activity';
 import Family from './page/page-family/Family';
 import Gamification from './page/page-gamification/Gamification';
 import Home from './page/page-home/Home';
+import Notification from './page/page-notification/Notification';
 import Operative from './page/page-operative/Operative';
 import PrivacyPolicy from './page/page-privacy-policy/PrivacyPolicy';
 import Register from './page/page-register/Register';
 import Points from './page/page-user-point/UserPoint';
+
 
 
 // Creazione del contesto per User
@@ -56,6 +58,7 @@ const AppComponent = () => {
       <Route path="/points" element={<Points />} />
       <Route path="/operative" element={<Operative />} />
       <Route path="/family" element={<Family />} />
+      <Route path="/notification" element={<Notification />} />
     </Routes>);
 };
 

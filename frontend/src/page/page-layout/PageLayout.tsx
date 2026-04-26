@@ -63,7 +63,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
 
   const handleClickAnchor = () => {
-    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 5).then((response: ResponseI) => {
+    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3).then((response: ResponseI) => {
       setNotifications(response.jsonText);
       const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
         const popoverNotification = {
