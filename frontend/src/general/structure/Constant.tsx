@@ -8,6 +8,7 @@ export enum SectionName {
   FAMILY = `family`,
   REGISTER = `register`,
   HOME = 'home',
+  NOTIFICATION = `Notification`,
   ROOT = ''
 }
 
@@ -21,6 +22,7 @@ export enum SectionNameDesc {
   OPERATIVE = `Operatività`,
   FAMILY = `Famiglia`,
   REGISTER = `Registazione`,
+  NOTIFICATION = `Notifiche`,
   ROOT = ''
 }
 
