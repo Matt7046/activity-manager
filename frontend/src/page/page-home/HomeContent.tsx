@@ -1,12 +1,13 @@
-import { Trans } from "@lingui/react";
-import { i18n } from "@lingui/core";
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { i18n } from "@lingui/core";
+import { Trans } from "@lingui/react";
 import { Apple as AppleIcon, Facebook as FacebookIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // Points
 import GoogleIcon from '@mui/icons-material/Google';
 import GroupIcon from '@mui/icons-material/Group'; // 
 import InfoIcon from '@mui/icons-material/Info'; // About
 import ListAltIcon from '@mui/icons-material/ListAlt'; // Activity
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings'; // Operative
 import StarIcon from '@mui/icons-material/Star';
 import { Box, Button as ButtonMui, CircularProgress, Divider, IconButton, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
@@ -555,7 +556,12 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
           funzione: null,
           testo: SectionNameDesc.FAMILY,
           icon: GroupIcon
-        }
+        },
+        {
+          funzione: null,
+          testo: SectionNameDesc.NOTIFICATION,
+          icon: NotificationsIcon
+        },
       ]
     ];
   } else {
@@ -577,6 +583,14 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
         {
           funzione: null, testo: SectionNameDesc.OPERATIVE,
           icon: SettingsIcon
+        },
+
+      ],
+      [    
+        {
+          funzione: null,
+          testo: SectionNameDesc.NOTIFICATION,
+          icon: NotificationsIcon
         },
       ]
     ];
