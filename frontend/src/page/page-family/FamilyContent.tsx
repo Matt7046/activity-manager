@@ -1,3 +1,4 @@
+import { i18n } from "@lingui/core";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, FormControl, IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
@@ -92,8 +93,8 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     funzione: () => salvaRecord(user), // Passi la funzione direttamente
     nome: ButtonName.BLUE,
     disableButton: disableButtonSave,
-    title: 'Salva',
-    configDialogPulsante: { message: 'Vuoi salvare il record?', showDialog: true }
+    title: i18n._("salva"),
+    configDialogPulsante: { message: i18n._("vuoi_salvare_il_record"), showDialog: true }
   };
 
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {

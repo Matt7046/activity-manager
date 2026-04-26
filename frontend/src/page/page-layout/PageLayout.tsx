@@ -1,3 +1,4 @@
+import { i18n } from "@lingui/core";
 import { Box, TextField } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { googleLogout } from '@react-oauth/google';
@@ -130,8 +131,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     funzione: () => saveReadNotification(), // Passi la funzione direttamente
     //disableButton: disableButtonSave,
     nome: ButtonName.BLUE,
-    title: 'Visualizzate',
-    configDialogPulsante: { message: 'Vuoi impostate le notifiche come lette?', showDialog: true }
+    title: i18n._("visualizzate"),
+    configDialogPulsante: { message: i18n._("vuoi_impostate_le_notifiche_come_lette"), showDialog: true }
 
   };
 
@@ -153,7 +154,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     icona: 'fas fa-clipboard',
     funzione: (event) => handleClickAnchor(), // Passi la funzione direttamente
     nome: ButtonName.BLUE,
-    title: 'Notifiche',
+    title: i18n._("notifiche"),
     visibility: user ? true : false,
     configDialogPulsante: { message: '', showDialog: false }
   };
@@ -162,7 +163,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     icona: 'fas fa-sign-out-alt',
     funzione: () => logout(), // Passi la funzione direttamente
     nome: ButtonName.RED,
-    title: 'Logout',
+    title: i18n._("logout"),
     visibility: user ? true : false,
     configDialogPulsante: { message: '', showDialog: false }
   };
