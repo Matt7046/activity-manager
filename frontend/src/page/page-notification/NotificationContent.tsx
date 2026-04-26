@@ -3,6 +3,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { Box, Collapse, Divider, Typography } from "@mui/material";
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import React, { useEffect, useState } from "react";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import { PopoverNotification } from "../../components/ms-popover/Popover";
@@ -21,69 +22,113 @@ interface NotificationContentProps {
 const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertConfig }) => {
   const [notifications, setNotifications] = useState<NotificationI[]>([]);
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [rowCount, setRowCount] = useState(0);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
   const notify: NotificationI[] = [];
   const [popoverNotifications, setPopoverNotifications] = useState<PopoverNotification[]>([]);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [expandedRowId, setExpandedRowId] = useState<number | string | null>(null);
   const handleToggle = (index: number) => {
     setExpandedIndex(prev => (prev === index ? null : index));
   };
 
   useEffect(() => {
-    getNotifications(user, alertConfig);
+    fetchNotifications();
     return () => { };
   }, [inizialLoad])
 
-  const getNotifications = (
-    userI: UserI,
-    alertConfig: AlertConfig
-  ): void => {
+  // Chiamata REST con paginazione
+  const fetchNotifications = React.useCallback(() => {
+    setLoading(true);
     getNotificationsByIdentificativo(
-      userI.emailUserCurrent,
-      0,
+      user.emailUserCurrent,
+      paginationModel.page,
       100,
       () => showMessage(alertConfig.setOpen, alertConfig.setMessage)
     ).then((response: ResponseI | undefined) => {
       if (response?.status === HttpStatus.OK) {
+        // Assumendo che il server restituisca anche il totale record per la paginazione virtuale
         setNotifications(response.jsonText);
-        const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
-          const popoverNotification = {
-            message: x.message,
-            subText: ['Inviato da: ' + x.userSender, 'data: ' + getDateStringRegularFormat(x.dateSender),
-            ' Stato :' + x.status
-            ]
-
-          }
-          return popoverNotification;
-
-        });
-        setPopoverNotifications(popover);
+        setRowCount(response.jsonText.length);
       }
+      setLoading(false);
     });
-  };
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  }, [user.emailUserCurrent, paginationModel, startDate, endDate]);
 
   // Logica di filtraggio corretta
   const filteredNotifications = notifications.filter(notif => {
-  if (!notif.dateSender) return true;
+    if (!notif.dateSender) return true;
 
-  // Trasformiamo la data della notifica in timestamp
-  const notifDate = new Date(notif.dateSender).getTime();
+    // Trasformiamo la data della notifica in timestamp
+    const notifDate = new Date(notif.dateSender).getTime();
 
-  // Data inizio: impostiamo alle 00:00:00
-  const start = startDate ? new Date(startDate).setHours(0, 0, 0, 0) : -Infinity;
+    // Data inizio: impostiamo alle 00:00:00
+    const start = startDate ? new Date(startDate).setHours(0, 0, 0, 0) : -Infinity;
 
-  // Data fine: impostiamo alle 23:59:59 per includere l'intera giornata
-  let end = Infinity;
-  if (endDate) {
-    const d = new Date(endDate);
-    d.setHours(23, 59, 59, 999);
-    end = d.getTime();
-  }
+    // Data fine: impostiamo alle 23:59:59 per includere l'intera giornata
+    let end = Infinity;
+    if (endDate) {
+      const d = new Date(endDate);
+      d.setHours(23, 59, 59, 999);
+      end = d.getTime();
+    }
 
-  return notifDate >= start && notifDate <= end;
-});
+    return notifDate >= start && notifDate <= end;
+  });
+  // Definizione colonne UNICA (fuori dal render per performance)
+  const columns: GridColDef[] = [
+    {
+      field: 'message',
+      headerName: 'Notifiche',
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => {
+        const isExpanded = expandedRowId === params.id;
+        const x = params.row as NotificationI;
+
+        return (
+          <Box sx={{ width: '100%' }}>
+            <Box
+              sx={{ display: 'flex', alignItems: 'center', py: 1, cursor: 'pointer' }}
+              onClick={() => setExpandedRowId(isExpanded ? null : params.id)}
+            >
+              <InfoOutlinedIcon sx={{ mr: 2, color: isExpanded ? '#1976d2' : '#b2bec3' }} />
+              <Box sx={{ flexGrow: 1 }}>
+                 {x.dateSender && (
+                    <Typography className="notification-date-badge">
+                        {getDateStringRegularFormat(x.dateSender)}
+                    </Typography>
+                 )}
+                <Typography className="notification-title">
+                  {x.message || "Aggiornamento"}
+                </Typography>
+              </Box>
+              <KeyboardArrowDownIcon
+                sx={{
+                  transform: isExpanded ? 'rotate(180deg)' : 'none',
+                  transition: '0.3s',
+                  color: '#666'
+                }}
+              />
+            </Box>
+
+            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+              <Box sx={{ pl: 6, pb: 2, bgcolor: 'inherit' }}>
+                <Typography variant="body2" color="text.secondary"><strong>Inviato da:</strong> {x.userSender}</Typography>
+                <Divider sx={{ my: 1, opacity: 0.3 }} />
+                <Typography variant="body2" color="text.secondary"><strong>Stato:</strong> {x.status}</Typography>
+              </Box>
+            </Collapse>
+          </Box>
+        );
+      }
+    }
+  ];
 
   return (
     <Box className="popover-box">
@@ -115,65 +160,35 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
         </Box>
       </Box>
 
-     {filteredNotifications.length > 0 ? (
-      filteredNotifications.map((x, index) => {
-        const isExpanded = expandedIndex === index;
-        // Costruiamo i subText al volo o li prendiamo dall'oggetto
-        const subTexts = [
-          `Inviato da: ${x.userSender}`,
-          `Data: ${getDateStringRegularFormat(x.dateSender)}`,
-          `Stato: ${x.status}`
-        ];
-
-        return (
-          <Box key={index} className="notification-item">
-            <Box
-              className={`notification-header ${isExpanded ? 'is-expanded' : ''}`}
-              onClick={() => handleToggle(index)}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-                <InfoOutlinedIcon sx={{ mr: 2, color: isExpanded ? '#1976d2' : '#b2bec3' }} />
-                <Box>
-                  <Typography className="notification-title">
-                    {x.message || "Aggiornamento"}
-                  </Typography>
-                </Box>
-              </Box>
-              <Box className="icon-wrapper">
-                <KeyboardArrowDownIcon 
-                  fontSize="small" 
-                  style={{ transform: isExpanded ? 'rotate(180deg)' : 'none', transition: '0.3s' }} 
-                />
-              </Box>
-            </Box>
-
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              <Box className="notification-details">
-                {subTexts.map((text, subIndex) => (
-                  <div key={subIndex} className="subtext-item">
-                    <Typography className="notification-subtext">{text}</Typography>
-                    {subIndex < subTexts.length - 1 && (
-                      <Divider sx={{ mt: 1.5, borderColor: '#edf2f7' }} />
-                    )}
-                  </div>
-                ))}
-              </Box>
-            </Collapse>
+     <Box className="grid-container" sx={{ height: 600, width: '100%' }}>
+        <DataGrid
+          rows={filteredNotifications}
+          columns={columns}
+          getRowId={(row) => row.id || `${row.dateSender}-${row.message}`}
+          rowCount={rowCount}
+          loading={loading}
+          pageSizeOptions={[5, 10, 20]}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          paginationMode="client" // Cambiato a server se la funzione getNotificationsByIdentificativo supporta paginazione
+          getRowHeight={() => 'auto'}
+          disableColumnMenu
+          disableRowSelectionOnClick
+          hideFooterSelectedRowCount
+          sx={{
+            border: 'none',
+            '& .MuiDataGrid-virtualScroller': { overflowX: 'hidden' }
+          }}
+        />
+        {filteredNotifications.length === 0 && !loading && (
+          <Box className="empty-state" sx={{ p: 4, textAlign: 'center' }}>
+            <NotificationsActiveIcon className="empty-icon" />
+            <Typography variant="h6">Nessun risultato</Typography>
           </Box>
-        );
-      })
-      ) : (
-        <Box className="empty-state">
-          <NotificationsActiveIcon className="empty-icon" />
-          <Typography variant="h6" sx={{ color: '#2d3436', fontWeight: 600 }}>
-            Nessun risultato
-          </Typography>
-          <Typography variant="body2" sx={{ color: '#636e72' }}>
-            Prova a cambiare le date del filtro o resetta la ricerca.
-          </Typography>
-        </Box>
-      )}
+        )}
+      </Box>
     </Box>
   );
+
 }
 export default NotificationContent;
