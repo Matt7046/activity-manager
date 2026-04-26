@@ -107,16 +107,16 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     icona: 'fas fa-plus',
     funzione: () => addField(),
     nome: ButtonName.NEW,
-    title: 'Nuovo tutorato',
-    configDialogPulsante: { message: 'Vuoi aggiungere un tutorato?', showDialog: true }
+    title: i18n._("nuovo_tutorato"),
+    configDialogPulsante: { message: i18n._("vuoi_aggiungere_un_tutorato"), showDialog: true }
   };
 
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-solid fa-floppy-disk',
     funzione: () => salvaRecord(user), // Passi la funzione direttamente
     nome: 'blue',
-    title: 'Salva',
-    configDialogPulsante: { message: 'Vuoi registrarti?', showDialog: true }
+    title: i18n._("salva"),
+    configDialogPulsante: { message: i18n._("vuoi_registrarti"), showDialog: true }
   };
 
 
