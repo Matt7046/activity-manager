@@ -73,6 +73,9 @@ public class SecurityConfig implements WebFluxConfigurer {
     @Value("${app.page.address.webSocket}")
     private String webSocketAddress;
 
+    @Value("${app.page.address.sitemap}")
+    private String sitemapAddress;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 
@@ -105,6 +108,7 @@ public class SecurityConfig implements WebFluxConfigurer {
                         .pathMatchers(tokenAddress).permitAll()
                         .pathMatchers(webSocketAddress).permitAll()
                         .pathMatchers(loginAddress).permitAll()
+                        .pathMatchers(sitemapAddress).permitAll()
                         .pathMatchers(HttpMethod.OPTIONS, allAddress).permitAll() // Permetti l'accesso pubblico a
                         // "/api/auth/token"
                         .anyExchange().authenticated() // Richiedi autenticazione per tutte le altre richieste
