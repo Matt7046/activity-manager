@@ -1,3 +1,4 @@
+import { i18n } from "@lingui/core";
 import { Box } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +39,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     icona: 'fas fa-plus',
     funzione: () => navigateRouting(navigate, SectionName.ABOUT, {}),
     nome: ButtonName.NEW,
-    title: 'Nuovo documento',
+    title: i18n._("nuovo_documento"),
     configDialogPulsante: { message: '', showDialog: false },
     disableButton: user?.type === TypeUser.STANDARD
   };;
@@ -49,7 +50,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
       _id: _id
     }, (message) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)),
     nome: ButtonName.RED,
-    title: 'Carica sottotesto',
+    title: i18n._("carica_sottotesto"),
     configDialogPulsante: { message: '', showDialog: false }
   }
 
@@ -57,7 +58,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
     icona: 'fas fa-eye',
     funzione: (_id: string) => openDetail(_id, () => findActivityByIdentificativo(_id)), // Passi la funzione direttamente
     nome: ButtonName.BLUE,
-    title: 'Apri dettaglio',
+    title: i18n._("apri_dettaglio"),
     configDialogPulsante: { message: '', showDialog: false }
   }
 
