@@ -68,7 +68,7 @@ public class FamilyPointsProcessor {
     private Mono<ResponseDTO> processPoints(UserPointDTO userPointDTO) {
         userPointDTO.setOperation(true);
         return familyWebService.savePointsByFamily(userPointDTO)
-                .flatMap(userPoint -> {
+                .flatMap(userPoint -> {                 
                     saveLogFamily(createLogFamily(userPointDTO));
                     inviaNotifica(userPointDTO);
                     return Mono.just((new ResponseDTO(userPoint, ActivityHttpStatus.OK.value(), new ArrayList<>())));
@@ -115,7 +115,7 @@ public class FamilyPointsProcessor {
     private FamilyNotificationDTO getFamilyNotificationDTO(UserPointDTO userPointDTO) {
         StringBuilder builder = new StringBuilder(userPointDTO.getUsePoints().toString());
         String message = userPointDTO.getUsePoints() < 0L ? messageRemove : messageAdd;
-        builder.append(message).append(userPointDTO.getEmail());
+        builder.append(message).append(userPointDTO.getEmailUserCurrent());
         FamilyNotificationDTO dto = new FamilyNotificationDTO(builder.toString());
         dto.setServiceName(serviceName);
         dto.setUserReceiver(userPointDTO.getEmail());
