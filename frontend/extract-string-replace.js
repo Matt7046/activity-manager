@@ -56,8 +56,6 @@ function transformFile(filePath) {
     const transformedLines = [];
 
     for (let line of lines) {
-        // --- PROTEZIONE RIGIDA PER CODICE E INTERFACCE ---
-        // Se la riga contiene tipi tecnici, frecce di funzione o definizioni, la saltiamo
         const isTechLine = TECH_KEYWORDS.some(keyword => line.includes(keyword));
         
         if (isTechLine) {
@@ -68,25 +66,19 @@ function transformFile(filePath) {
         // 1. Proprietà oggetti
         line = line.replace(VAL_REGEX, (match, prop, valD, valS) => {
             const text = valD || valS;
-            if (isRealText(text)) {
-                return `${prop}: i18n._("${generateKey(text)}")`;
-            }
+            if (isRealText(text)) return `${prop}: i18n._("${generateKey(text)}")`;
             return match;
         });
 
         // 2. Attributi
         line = line.replace(ATTR_REGEX, (match, attr, text) => {
-            if (isRealText(text)) {
-                return `${attr}={i18n._("${generateKey(text)}")}`;
-            }
+            if (isRealText(text)) return `${attr}={i18n._("${generateKey(text)}")}`;
             return match;
         });
 
-        // 3. Testo JSX
+        // 3. Testo JSX - Improved to avoid matching logic or empty tags
         line = line.replace(JSX_TEXT_REGEX, (match, text) => {
-            if (isRealText(text)) {
-                return `><Trans id="${generateKey(text)}" /><`;
-            }
+            if (isRealText(text)) return `><Trans id="${generateKey(text)}" /><`;
             return match;
         });
 
@@ -96,7 +88,7 @@ function transformFile(filePath) {
     content = transformedLines.join('\n');
 
     if (content !== originalContent) {
-        content = content.replace(/>+/g, '>').replace(/<+/g, '<');
+        // REMOVED: content = content.replace(/>+/g, '>').replace(/<+/g, '<'); <--- THIS WAS THE BUG
 
         let imports = [];
         if (content.includes('<Trans id=') && !content.includes('from "@lingui/react"')) {

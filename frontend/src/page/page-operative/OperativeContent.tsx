@@ -123,8 +123,8 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     funzione: () => handleButtonClick(),
     nome: ButtonName.RED,
     disableButton: disableButtonSave,
-    title: 'Salva',
-    configDialogPulsante: { message: "Vuoi salvare?", showDialog: true }
+    title: i18n._("salva"),
+    configDialogPulsante: { message: i18n._("vuoi_salvare"), showDialog: true }
 
   }
 

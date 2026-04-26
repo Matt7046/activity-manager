@@ -13,7 +13,7 @@ const PrivacyPolicy: React.FC = () => {
         Protezione dei Dati (GDPR).
       </p>
 
-      <h2 style={styles.subtitle}>1. Dati personali raccolti</h2>
+      <h2 style={styles.subtitle}><Trans id="1_dati_personali_raccolti" /></h2>
       <p style={styles.text}>
         Raccogliamo i seguenti dati personali quando ti iscrivi alla nostra
         newsletter o utilizzi i nostri servizi:
@@ -24,7 +24,7 @@ const PrivacyPolicy: React.FC = () => {
             nostro sito</li>
       </ul>
 
-      <h2 style={styles.subtitle}>2. Finalità del trattamento</h2>
+      <h2 style={styles.subtitle}><Trans id="2_finalita_del_trattamento" /></h2>
       <p style={styles.text}>
         Utilizziamo i tuoi dati personali per i seguenti scopi:
       </p>
@@ -34,14 +34,14 @@ const PrivacyPolicy: React.FC = () => {
         <li><Trans id="accedere_alla_applicazione" /> </li>
       </ul>
 
-      <h2 style={styles.subtitle}>3. Conservazione dei dati</h2>
+      <h2 style={styles.subtitle}><Trans id="3_conservazione_dei_dati" /></h2>
       <p style={styles.text}>
         I tuoi dati personali saranno conservati solo per il tempo necessario
         per le finalità sopra indicate, salvo diversa richiesta legale o
         consenso esplicito.
       </p>
 
-      <h2 style={styles.subtitle}>4. Diritti dell'utente</h2>
+      <h2 style={styles.subtitle}><Trans id="4_diritti_dellutente" /></h2>
       <p style={styles.text}>
         Ai sensi del GDPR, hai il diritto di:
       </p>
@@ -59,13 +59,13 @@ const PrivacyPolicy: React.FC = () => {
         </a>.
       </p>
 
-      <h2 style={styles.subtitle}>5. Sicurezza dei dati</h2>
+      <h2 style={styles.subtitle}><Trans id="5_sicurezza_dei_dati" /></h2>
       <p style={styles.text}>
         Adottiamo misure tecniche e organizzative adeguate per proteggere i tuoi
         dati personali da accessi non autorizzati, perdite o divulgazioni.
       </p>
 
-      <h2 style={styles.subtitle}>6. Modifiche alla Privacy Policy</h2>
+      <h2 style={styles.subtitle}><Trans id="6_modifiche_alla_privacy_policy" /></h2>
       <p style={styles.text}>
         Potremmo aggiornare questa Privacy Policy di tanto in tanto. Ti
         invitiamo a controllare periodicamente questa pagina per eventuali
