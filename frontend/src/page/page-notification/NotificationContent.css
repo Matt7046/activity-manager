@@ -1,0 +1,80 @@
+/* Area Filtri in alto */
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 24px;
+  background-color: #ffffff;
+  border-bottom: 2px solid #f1f3f5;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px; /* Si mette in colonna su dispositivi piccoli */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #b2bec3;
+  letter-spacing: 0.5px;
+}
+
+.date-input {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #dfe6e9;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: #2d3436;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.date-input:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+/* Badge della data sulla notifica */
+.notification-date-badge {
+  font-size: 0.7rem;
+  background: #f1f3f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #636e72;
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+/* Righe alterne: azzurro chiarissimo per le righe pari */
+.notification-item:nth-child(even) {
+  background-color: #edf3fd; /* Azzurro molto tenue */
+}
+
+/* Righe bianche per le dispari */
+.notification-item:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+/* Hover più evidente per distinguere la riga su cui si trova il mouse */
+.notification-item:hover {
+  background-color: #cee0f6 !important; /* Azzurro un po' più marcato */
+}
+
+/* Se la riga è espansa, manteniamo un colore di sfondo che dia continuità */
+.notification-header.is-expanded {
+  background-color: #d8effe; /* Azzurro cielo quando aperto */
+  border-bottom: 1px solid #bbdefb;
+}
+
+/* Stile per i dettagli quando la riga è espansa */
+.notification-details {
+  padding: 0 24px 20px 48px;
+  background-color: inherit; /* Segue il colore della riga (bianco o azzurrino) */
+}
