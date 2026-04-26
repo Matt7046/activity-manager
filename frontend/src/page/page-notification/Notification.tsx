@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
-import { TypeUser } from '../../general/structure/Constant';
 import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import NotificationContent from './NotificationContent';
@@ -9,8 +8,7 @@ import NotificationContent from './NotificationContent';
 
 const Notification: React.FC<{}> = ({ }) => {
   const { user, setUser } = useUser();
-  const subTitle = user.type === TypeUser.FAMILY ? ' (tutorato)' : ''
-  const [title, setTitle] = useState<string>("Sezione operativa" + subTitle);
+  const [title, setTitle] = useState<string>("Sezione Notifiche");
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
