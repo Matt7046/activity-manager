@@ -1,3 +1,4 @@
+import { i18n } from "@lingui/core";
 import { Box } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -100,9 +101,9 @@ const AboutContent: React.FC<AboutContentProps> = ({
     funzione: () => cancellaRecord(_id), // Passi la funzione direttamente
     disableButton: disableButtonDelete,
     nome: ButtonName.RED,
-    title: 'Elimina',
+    title: i18n._("elimina"),
     visibility: _id ? true : false,
-    configDialogPulsante: { message: 'Vuoi eliminare il record?', showDialog: true }
+    configDialogPulsante: { message: i18n._("vuoi_eliminare_il_record"), showDialog: true }
 
   };
 
@@ -111,8 +112,8 @@ const AboutContent: React.FC<AboutContentProps> = ({
     funzione: () => handleButtonClick(), // Passi la funzione direttamente
     disableButton: disableButtonSave,
     nome: ButtonName.BLUE,
-    title: 'Salva',
-    configDialogPulsante: { message: "Confermi l'operazione?", showDialog: true }
+    title: i18n._("salva"),
+    configDialogPulsante: { message: i18n._("confermi_loperazione"), showDialog: true }
 
   };
 
@@ -121,7 +122,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
     funzione: () => returnActivity(), // Passi la funzione direttamente
     //disableButton: disableButtonSave,
     nome: ButtonName.BACK,
-    title: 'Ritorna',
+    title: i18n._("ritorna"),
     configDialogPulsante: { message: '', showDialog: false }
 
   };
