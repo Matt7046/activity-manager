@@ -16,9 +16,10 @@ public class NotificationController {
     @Autowired
     private NotificationProcessor notificationProcessor;
 
-    @GetMapping("all/{identificativo}/{page}/{size}")
-    public Mono<ResponseDTO> getNotificationsByIdentificativo(@PathVariable String identificativo, @PathVariable Integer page, @PathVariable Integer size) {
-        return  notificationProcessor.getLatestNotifications(identificativo,page,size );
+    @GetMapping("all/{identificativo}/{page}/{size}/{status}")
+    public Mono<ResponseDTO> getNotificationsByIdentificativo(@PathVariable String identificativo,
+            @PathVariable Integer page, @PathVariable Integer size, @PathVariable String status) {
+        return notificationProcessor.getLatestNotifications(identificativo, page, size, status);
     }
 
     @PostMapping("/entity")
