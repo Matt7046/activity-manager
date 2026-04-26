@@ -1,3 +1,4 @@
+import { i18n } from "@lingui/core";
 import { Trans } from "@lingui/react";
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Card, CardContent, Dialog, DialogContent, IconButton, Typography } from "@mui/material";
@@ -252,7 +253,7 @@ const renderChildren3 = (open: boolean) => (
 
     },
     nome: ButtonName.BLUE,
-    title: 'Log Attività',
+    title: i18n._("log_attivita"),
     visibility: user ? true : false,
     configDialogPulsante: { message: '', showDialog: false }
   };
@@ -261,7 +262,7 @@ const renderChildren3 = (open: boolean) => (
     icona: 'fas fa-clipboard',
     funzione: () => getLogFamily(user, true), // Passi la funzione direttamente
     nome: ButtonName.BLUE,
-    title: 'Log Family',
+    title: i18n._("log_family"),
     visibility: user ? true : false,
     configDialogPulsante: { message: '', showDialog: false }
   };
@@ -364,7 +365,7 @@ const renderChildren3 = (open: boolean) => (
               _id: cardsDataId[0],
               text: cardText1,
               img: nameImage[0].name,
-              title: "Punti",
+              title: i18n._("punti"),
               loadImage: (image: FormData) => saveImage(cardsDataId[0], image, user),
               children: renderChildren1(),
             },
@@ -373,7 +374,7 @@ const renderChildren3 = (open: boolean) => (
               _id: cardsDataId[1],
               text: cardText2,
               img: nameImage[1].name,
-              title: "Log Attività",
+              title: i18n._("log_attivita"),
               loadImage: (image: FormData) => saveImage(cardsDataId[1], image, user),
               children: renderChildren2(false),
             },
@@ -382,7 +383,7 @@ const renderChildren3 = (open: boolean) => (
               _id: cardsDataId[2],
               text: cardText3,
               img: nameImage[2].name,
-              title: "Log Famiglia",
+              title: i18n._("log_famiglia"),
               loadImage: (image: FormData) => saveImage(cardsDataId[2], image, user),
               children: renderChildren3(false),
             }

@@ -72,7 +72,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
     return {
       icona: "fas fa-search",
       nome: "blue",
-      title: "Ricerca video",
+      title: i18n._("ricerca_video"),
       funzione: () => {
         console.log("Ricerca video:", testo)
         fetchOptions(testo).then((response: ResponseI | void) => {
@@ -84,7 +84,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
       },
       configDialogPulsante: {
         showDialog: false,
-        message: "Confermi di voler ricercare i video?"
+        message: i18n._("confermi_di_voler_ricercare_i_video")
       }
     }
   }
@@ -93,7 +93,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
     {
       icona: "fas fa-trophy",
       nome: "red",
-      title: "Completa e guadagna punti",
+      title: i18n._("completa_e_guadagna_punti"),
       funzione: () => {
         const points = gamificationStore.getMinutes();
         gamificationStore.addPoints(points);
@@ -118,11 +118,11 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
     {
       icona: "fas fa-star",
       nome: "blue",
-      title: "Aggiungi ai preferiti",
+      title: i18n._("aggiungi_ai_preferiti"),
       funzione: () => console.log("Preferito:", videoId),
       configDialogPulsante: {
         showDialog: true,
-        message: "Vuoi aggiungere questo video ai preferiti?"
+        message: i18n._("vuoi_aggiungere_questo_video_ai_preferiti")
       }
     },
   ];
@@ -131,7 +131,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
     {
       icona: "fas fa-play",
       nome: "blue",
-      title: "Guarda video",
+      title: i18n._("guarda_video"),
       // Attiva la visualizzazione del player e nasconde la griglia
       funzione: () => onPlayClick(videoId),
       configDialogPulsante: {
