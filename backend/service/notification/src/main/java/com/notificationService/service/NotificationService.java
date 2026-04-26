@@ -14,9 +14,6 @@ public class NotificationService {
     @Autowired
     private NotificationRepository repository;
 
-    @Autowired
-    private NotificationMapper notificationMapper;
-
     public Notification saveNotification(Notification notification) {
         notification = repository.save(notification);
         return notification;
@@ -28,12 +25,15 @@ public class NotificationService {
         return repository.saveAll(notification);
     }
 
-
     // Metodo per ottenere le ultime notifiche con paginazione
-    public List<Notification> getLatestNotifications(String identificative, Integer page, Integer size) {
+    public List<Notification> getLatestNotifications(String identificative, Integer page, Integer size, String status) {
         // Crea un Pageable con la pagina desiderata e la dimensione della pagina
-        PageRequest pageRequest = PageRequest.of(page, size); // page: indice della pagina (0-based), size: numero di risultati per pagina
+        PageRequest pageRequest = PageRequest.of(page, size); // page: indice della pagina (0-based), size: numero di
+                                                              // risultati per pagina
         // Ottieni la pagina di notifiche
-        return repository.findLatestNotifications(identificative, pageRequest);
+        if ("ALL".equalsIgnoreCase(status)) {
+            return repository.findLatestNotifications(identificative, pageRequest);
+        }
+        return repository.findLatestNotificationsByStatus(identificative, status, pageRequest);
     }
 }
