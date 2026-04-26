@@ -1,5 +1,6 @@
 package com.notificationService.processor;
 
+import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.notification.Notification;
 import com.common.dto.notification.NotificationDTO;
 import com.common.dto.structure.ResponseDTO;
@@ -23,11 +24,13 @@ public class NotificationProcessor {
     @Autowired
     private NotificationMapper notificationMapper;
     @Autowired
-    private UserPointMapper userPointMapper;
+    EncryptDecryptConverter encryptDecryptConverter;
 
-    public Mono<ResponseDTO> getLatestNotifications(String identificativo, Integer page, Integer size) {
+    public Mono<ResponseDTO> getLatestNotifications(String identificativo, Integer page, Integer size, String status) {
         return Mono.fromCallable(() -> {
-            List<Notification> notificationList = notificationService.getLatestNotifications(identificativo, page, size);
+            String statusDecrypt = encryptDecryptConverter.decrypt(status);
+            List<Notification> notificationList = notificationService.getLatestNotifications(identificativo, page, size,
+                    statusDecrypt);
             List<NotificationDTO> notificationDTO = notificationList.stream().map(
                     notificationMapper::toDTO).toList();
             return new ResponseDTO(notificationDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());

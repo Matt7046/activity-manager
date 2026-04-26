@@ -66,3 +66,10 @@ export enum ButtonName {
   BACK = "return",
 }
 
+export enum StatusNotification {
+  READ = 'READ',
+  SEND = 'SEND',
+  NOT_READ = "NOT_READ",
+  ALL = "ALL"
+}
+
