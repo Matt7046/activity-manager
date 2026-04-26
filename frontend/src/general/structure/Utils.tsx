@@ -21,7 +21,7 @@ export interface NotificationI {
 
   serviceName: string;
   message: string;
-  userSender: Date;
+  userSender: string;
   userReceiver: Date;
   dateSender: Date;
   status: string;
