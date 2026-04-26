@@ -10,7 +10,7 @@ import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import Label from '../../components/ms-label/Label';
 import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
-import { ButtonName, HttpStatus, SectionName, TypeAlertColor } from '../../general/structure/Constant';
+import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
 import { SocketURL } from '../../general/structure/SocketUrl';
 import { FamilyNotificationI, getDateStringRegularFormat, NotificationI, ResponseI } from '../../general/structure/Utils';
@@ -63,7 +63,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
 
   const handleClickAnchor = () => {
-    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3).then((response: ResponseI) => {
+    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3, StatusNotification.NOT_READ).then((response: ResponseI) => {
       setNotifications(response.jsonText);
       const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
         const popoverNotification = {

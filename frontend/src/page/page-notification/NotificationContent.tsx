@@ -9,7 +9,7 @@ import { AlertConfig } from "../../components/ms-alert/Alert";
 import { Pulsante } from "../../components/ms-button/Button";
 import DataGridComponent from '../../components/ms-data-grid/DataGrid';
 import { PopoverNotification } from "../../components/ms-popover/Popover";
-import { ButtonName, HttpStatus } from "../../general/structure/Constant";
+import { ButtonName, HttpStatus, StatusNotification } from "../../general/structure/Constant";
 import { getDateStringRegularFormat, NotificationI, ResponseI, UserI } from "../../general/structure/Utils";
 import { showMessage } from "../page-home/HomeContent";
 import { TypeMessage } from "../page-layout/PageLayout";
@@ -39,7 +39,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
   const [expandedRowId, setExpandedRowId] = useState<number | string | null>(null);
   const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio  
   const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
-  
+
   const handleToggle = (index: number) => {
     setExpandedIndex(prev => (prev === index ? null : index));
   };
@@ -56,6 +56,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
       user.emailUserCurrent,
       paginationModel.page,
       100,
+      StatusNotification.ALL,
       () => showMessage(alertConfig.setOpen, alertConfig.setMessage)
     ).then((response: ResponseI | undefined) => {
       if (response?.status === HttpStatus.OK) {
@@ -79,12 +80,14 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
 
   const saveReadNotification = () => {
     const notificationsStatusRead = notifications.map(x => {
-      x.status = "READ";
+      x.status = StatusNotification.READ;
       return x;
     });
     saveNotification(notificationsStatusRead, (messageLayout?: TypeMessage) => showMessage(setOpenLayout, setMessageLayout, messageLayout)).then((response) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
+          // REFRESH DELLA GRIGLIA
+          fetchNotifications();
         }
       }
     })
