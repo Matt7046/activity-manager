@@ -3,63 +3,101 @@ const path = require('path');
 
 const SRC_DIR = './src';
 
-const TEXT_REGEX = />\s*([^<>{}\n\t]+)\s*</g;
+// 1. Regex per attributi (es: placeholder="Cerca")
 const ATTR_REGEX = /(placeholder|title|label|aria-label)="([^"]+)"/g;
-const VAL_REGEX = /(title|message|label|description|placeholder):\s*["']([^"']+)["']/g;
 
-const BLACKLIST = ['promise', 'void', 'string', 'number', 'boolean', 'any', 'object', 'undefined', 'null'];
+// 2. Regex per proprietà oggetti (es: message: "Salva")
+const VAL_REGEX = /(title|message|label|description|placeholder):\s*(?:"([^"]+)"|'([^']+)')/g;
+
+// 3. Regex per testo JSX
+const JSX_TEXT_REGEX = />([^<>{}\n\t;()]+)</g;
+
+// BLACKLIST estesa per includere tipi e termini tecnici comuni
+const BLACKLIST = [
+    'promise', 'Promise', 'void', 'string', 'number', 'boolean', 
+    'any', 'object', 'undefined', 'null', 'dispatch', 'setstateaction', 'SetStateAction'
+];
+
+// Parole chiave che bloccano la trasformazione della riga
+const TECH_KEYWORDS = [
+    'Dispatch', 'SetStateAction', 'useState', 'useContext', 
+    'interface', 'type ', 'Promise', '=>', 'ReactNode'
+];
 
 function generateKey(text) {
+    if (!text) return '';
     return text
         .toLowerCase()
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/['']/g, '_') // Sostituisce gli apostrofi con underscore
-        .replace(/[^a-z0-9 ]/g, '') // Rimuove tutto il resto che non è alfanumerico
+        .replace(/['’]/g, '_')
+        .replace(/[^a-z0-9 ]/g, '')
         .trim()
         .replace(/\s+/g, '_');
 }
 
 function isRealText(text) {
     const t = text.trim();
-    if (/^\d/.test(t)) return false;
-    if (/[&|?=:(){}[\]]/.test(t)) return false;
+    if (!t || t.length < 2 || /^\d+$/.test(t)) return false;
+    
+    // Se la parola è nella blacklist (case insensitive), scarta
+    if (BLACKLIST.some(b => b.toLowerCase() === t.toLowerCase())) return false;
+    
+    // Se contiene simboli di assegnazione o logica, scarta
+    if (/[=:{}\[\]()|]/.test(t)) return false; 
+    
     if (!/[a-zA-ZÀ-ÿ]/.test(t)) return false;
-    if (t.length < 2 || BLACKLIST.includes(t.toLowerCase())) return false;
     return true;
 }
 
 function transformFile(filePath) {
     let content = fs.readFileSync(filePath, 'utf-8');
     const originalContent = content;
+    const lines = content.split('\n');
+    const transformedLines = [];
 
-    content = content.replace(TEXT_REGEX, (match, text) => {
-        if (isRealText(text)) {
-            const key = generateKey(text);
-            const leadingMatch = match.match(/^>\s*/);
-            const trailingMatch = match.match(/\s*</);
-            return `${leadingMatch ? leadingMatch[0] : '>'}<Trans id="${key}" />${trailingMatch ? trailingMatch[0] : '<'}`;
+    for (let line of lines) {
+        // --- PROTEZIONE RIGIDA PER CODICE E INTERFACCE ---
+        // Se la riga contiene tipi tecnici, frecce di funzione o definizioni, la saltiamo
+        const isTechLine = TECH_KEYWORDS.some(keyword => line.includes(keyword));
+        
+        if (isTechLine) {
+            transformedLines.push(line);
+            continue;
         }
-        return match;
-    });
 
-    content = content.replace(ATTR_REGEX, (match, attr, text) => {
-        if (isRealText(text)) {
-            const key = generateKey(text);
-            return `${attr}={i18n._("${key}")}`;
-        }
-        return match;
-    });
+        // 1. Proprietà oggetti
+        line = line.replace(VAL_REGEX, (match, prop, valD, valS) => {
+            const text = valD || valS;
+            if (isRealText(text)) {
+                return `${prop}: i18n._("${generateKey(text)}")`;
+            }
+            return match;
+        });
 
-    content = content.replace(VAL_REGEX, (match, prop, text) => {
-        if (isRealText(text)) {
-            const key = generateKey(text);
-            // Usiamo i doppi apici per la stringa interna per evitare conflitti con l'apostrofo
-            return `${prop}: i18n._("${key}")`;
-        }
-        return match;
-    });
+        // 2. Attributi
+        line = line.replace(ATTR_REGEX, (match, attr, text) => {
+            if (isRealText(text)) {
+                return `${attr}={i18n._("${generateKey(text)}")}`;
+            }
+            return match;
+        });
+
+        // 3. Testo JSX
+        line = line.replace(JSX_TEXT_REGEX, (match, text) => {
+            if (isRealText(text)) {
+                return `><Trans id="${generateKey(text)}" /><`;
+            }
+            return match;
+        });
+
+        transformedLines.push(line);
+    }
+
+    content = transformedLines.join('\n');
 
     if (content !== originalContent) {
+        content = content.replace(/>+/g, '>').replace(/<+/g, '<');
+
         let imports = [];
         if (content.includes('<Trans id=') && !content.includes('from "@lingui/react"')) {
             imports.push('import { Trans } from "@lingui/react";');
@@ -73,7 +111,7 @@ function transformFile(filePath) {
         }
 
         fs.writeFileSync(filePath, content, 'utf-8');
-        console.log(`✅ Trasformato: ${filePath}`);
+        console.log(`✅ Trasformato in sicurezza: ${filePath}`);
     }
 }
 
@@ -83,13 +121,13 @@ function walk(dir) {
         const fullPath = path.join(dir, file);
         if (fs.statSync(fullPath).isDirectory()) {
             walk(fullPath);
-        } else if (fullPath.endsWith('.tsx') || fullPath.endsWith('.ts')) {
-            if (fullPath.includes('service') || fullPath.includes('api') || fullPath.includes('interface') || fullPath.endsWith('.d.ts')) return;
+        } else if (fullPath.endsWith('.tsx')) {
             transformFile(fullPath);
         }
     });
 }
 
-console.log("🚀 Avvio trasformazione (Fix apostrofi)...");
+console.log("🚀 Avvio trasformazione con protezione per Promise e Tipi...");
 walk(SRC_DIR);
+console.log("✨ Operazione completata!");
 console.log("✨ Completato! esegui npm run lang:extract");
