@@ -50,9 +50,10 @@ public class UserPointProcessor {
     public Mono<ResponseDTO> findByEmail(UserPointDTO userPointDTO) {
         return Mono.fromCallable(() -> {
             UserPoint sub = userPointMapper.fromDTO(userPointDTO);
-            UserPoint item = userPointService.findByEmailAndType(sub.getEmailChild(),0L);
+            UserPoint item = userPointService.findByEmailAndType(sub.getEmailChild(), 0L);
             if (item != null) {
-                PointRDTO record = new PointRDTO(item.getPoints(), message.concat(item.getPoints().toString()), item.getNameImages());
+                PointRDTO record = new PointRDTO(item.getPoints(), message.concat(item.getPoints().toString()),
+                        item.getNameImages());
                 return new ResponseDTO(record, ActivityHttpStatus.OK.value(), new ArrayList<>());
             }
             throw new NotFoundException(errorDocument + userPointDTO.getEmail());
@@ -76,7 +77,8 @@ public class UserPointProcessor {
             UserPoint sub = userPointMapper.fromDTO(userPointDTO);
             Long itemId = userPointService.getTypeUser(sub);
             String emailUserCurrent = userPointDTO.getEmailUserCurrent();
-            return new ResponseDTO(new UserDTO(itemId, itemId == 2, emailUserCurrent), ActivityHttpStatus.OK.value(), new ArrayList<>());
+            return new ResponseDTO(new UserDTO(itemId, itemId == 2, emailUserCurrent), ActivityHttpStatus.OK.value(),
+                    new ArrayList<>());
         });
     }
 
@@ -85,13 +87,16 @@ public class UserPointProcessor {
         // Una volta completata la chiamata points, salva il log e crea la response
         return Mono.fromCallable(() -> {
             UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);
-            List<UserPoint> userChild = userPointSave.getPointFigli().stream().map(userPointToPointMapper::toChange).toList();
+            List<UserPoint> userChild = userPointSave.getPointFigli().stream().map(userPointToPointMapper::toChange)
+                    .toList();
             userPointSave.setType(1);
+            userPointSave.setStatus(1);
             userChild = userChild.stream().map(x -> {
                 String tempPassword = UUID.randomUUID().toString().substring(0, 8);
                 x.setPassword(encryptDecryptConverter.convert(tempPassword));
                 x.setPoints(100);
                 x.setType(0);
+                x.setStatus(1);
                 return x;
             }).collect(Collectors.toList());
 
@@ -100,7 +105,8 @@ public class UserPointProcessor {
                 UserPointDTO dto = userPointMapper.toDTO(userPointSave);
                 inviaNotifica(dto, userChild);
             }
-            return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent()), ActivityHttpStatus.OK.value(), new ArrayList<>());
+            return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent()),
+                    ActivityHttpStatus.OK.value(), new ArrayList<>());
         });
     }
 
@@ -140,12 +146,19 @@ public class UserPointProcessor {
         });
     }
 
-
     private void inviaNotifica(UserPointDTO userPointDTO, List<UserPoint> userChild) {
-        List<UserPointDTO> userChildDTO=  userChild.stream().map(userPointMapper::toDTO).collect(Collectors.toList());
-        UserPointWithChildDTO dto = new UserPointWithChildDTO(userPointDTO,userChildDTO);
+        List<UserPointDTO> userChildDTO = userChild.stream().map(userPointMapper::toDTO).collect(Collectors.toList());
+        UserPointWithChildDTO dto = new UserPointWithChildDTO(userPointDTO, userChildDTO);
         notificationComponent.inviaNotifica(dto, notificationExchange, routingKeyEmail);
     }
 
+    public Mono<ResponseDTO> updateStatus(UserPointDTO userPointDTO) {
+        return Mono.fromCallable(() -> {
+            UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);
+            UserPoint points = userPointService.updateStatus(userPointSave);
+            UserPointDTO subDTO = userPointMapper.toDTO(points);
+            return new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
+        });
+    }
 
 }
