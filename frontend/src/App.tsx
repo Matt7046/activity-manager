@@ -12,6 +12,7 @@ import Notification from './page/page-notification/Notification';
 import Operative from './page/page-operative/Operative';
 import PrivacyPolicy from './page/page-privacy-policy/PrivacyPolicy';
 import Register from './page/page-register/Register';
+import Settings from './page/page-settings/Settings';
 import Points from './page/page-user-point/UserPoint';
 
 
@@ -59,6 +60,7 @@ const AppComponent = () => {
       <Route path="/operative" element={<Operative />} />
       <Route path="/family" element={<Family />} />
       <Route path="/notification" element={<Notification />} />
+      <Route path="/settings" element={<Settings />} />
     </Routes>);
 };
 
