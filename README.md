@@ -1,16 +1,16 @@
 #per compilare il front end
     docker network create backend_app-network || true
-    docker build -t frontend:1.0.0 .
+    docker build -t frontend:1.0.1 .
     docker rm -f frontend
 
 #per avviare due istanze
 
-    docker run -d --name frontend --network backend_app-network -p 3000:80 frontend:1.0.0 
-    docker run -d --name frontend --network backend_app-network -p 3001:80 frontend:1.0.0
+    docker run -d --name frontend --network backend_app-network -p 3000:80 frontend:1.0.1 
+    docker run -d --name frontend --network backend_app-network -p 3001:80 frontend:1.0.1
 
 #per containerizzate il backend con 3 istanze di ogni microservizio.
 
-    docker-compose up --scale activity-service=3 --scale register-service=3 --scale about-service=3 --scale points-service=3 --scale log-activity-service=3 --scale auth-service=3 --scale family-service=3 --scale notification-service=3
+    docker-compose up --scale activity-service=3 --scale auth-service=3 --scale family-service=3 --scale image-service=3 --scale user-point-service=3   --scale notification-service=3
 
 #FILE ENV EMPY
 
