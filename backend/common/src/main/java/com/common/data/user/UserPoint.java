@@ -25,6 +25,7 @@ public class UserPoint {
     private List<String> emailFigli;
     private Integer points;
     private List<String> nameImages;
+    private Integer status;
     @Transient
     private String emailChild;
     @Transient

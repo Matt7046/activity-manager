@@ -8,24 +8,29 @@ export enum SectionName {
   FAMILY = `family`,
   REGISTER = `register`,
   HOME = 'home',
-  NOTIFICATION = `Notification`,
+  NOTIFICATION = `notification`,
+  SETTINGS = `settings`,
   ROOT = ''
 }
-
 
 export enum SectionNameDesc {
   POLICY = `privacy-policy`,
   ACTIVITY = `Attività`,
-  GAMIFICATION =  `Sfide e premi`,
+  GAMIFICATION = `Sfide e premi`,
   ABOUT = `Nuova attività`,
   POINTS = `Informazioni utente`,
   OPERATIVE = `Operatività`,
   FAMILY = `Famiglia`,
   REGISTER = `Registazione`,
   NOTIFICATION = `Notifiche`,
+  SETTINGS = `Impostazioni`,
   ROOT = ''
 }
 
+export enum StatusUserPoint {
+  ACTIVE = 1,
+  DISACTIVE = 2
+}
 
 export enum IMAGE {
   SERVER = 'https://res.cloudinary.com/dzxtjigpc/image/'
