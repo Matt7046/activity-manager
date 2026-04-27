@@ -1,0 +1,84 @@
+/* Contenitore principale del popover */
+.popover-box {
+  min-width: 350px; /* Larghezza suggerita per popover */
+}
+
+/* Header della pagina */
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px; /* Esempio di spaziatura standard */
+}
+
+.header-title-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.header-icon {
+  font-size: 22px;
+  margin-right: 8px;
+  color: #1976d2;
+}
+
+.header-title {
+  font-weight: 700 !important;
+}
+
+/* Contenitore del contenuto */
+.settings-content {
+  padding: 24px;
+}
+
+/* Paper/Card per le sezioni */
+.settings-section-card {
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 16px;
+  background-color: #f8f9fa;
+}
+
+.section-title {
+  font-weight: 700 !important;
+  color: #2d3436;
+}
+
+/* Righe delle azioni */
+.action-row {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.action-info {
+  display: flex;
+  align-items: flex-start;
+}
+
+.delete-icon {
+  color: #d32f2f;
+  margin-right: 16px;
+  margin-top: 4px;
+}
+
+.action-title {
+  font-weight: 600 !important;
+}
+
+/* Stato disabilitato/placeholder */
+.action-disabled {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 0.6;
+}
