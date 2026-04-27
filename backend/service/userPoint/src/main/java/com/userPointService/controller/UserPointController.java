@@ -59,4 +59,10 @@ public class UserPointController {
         return processor.saveUserImage(userPointDTO);
     }
 
+      @PostMapping("/dati/user/status")
+    public Mono<ResponseDTO> updateStatus(@RequestBody UserPointDTO userPointDTO) {
+        return processor.updateStatus(userPointDTO);
+
+    }
+
 }
