@@ -3,6 +3,7 @@ import { i18n } from "@lingui/core";
 import { Trans } from "@lingui/react";
 import { Apple as AppleIcon, Facebook as FacebookIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // Points
+import EngineeringIcon from '@mui/icons-material/Engineering';
 import GoogleIcon from '@mui/icons-material/Google';
 import GroupIcon from '@mui/icons-material/Group'; // 
 import InfoIcon from '@mui/icons-material/Info'; // About
@@ -548,7 +549,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
         {
           funzione: null,
           testo: SectionNameDesc.OPERATIVE,
-          icon: SettingsIcon
+          icon: EngineeringIcon
         },
       ],
       [
@@ -561,6 +562,11 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
           funzione: null,
           testo: SectionNameDesc.NOTIFICATION,
           icon: NotificationsIcon
+        },
+        {
+          funzione: null,
+          testo: SectionNameDesc.SETTINGS,
+          icon: SettingsIcon
         },
       ]
     ];
@@ -582,16 +588,21 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
         },
         {
           funzione: null, testo: SectionNameDesc.OPERATIVE,
-          icon: SettingsIcon
+          icon: EngineeringIcon
         },
 
       ],
-      [    
+      [
         {
           funzione: null,
           testo: SectionNameDesc.NOTIFICATION,
           icon: NotificationsIcon
         },
+         {
+          funzione: null,
+          testo: SectionNameDesc.SETTINGS,
+          icon: SettingsIcon
+        }
       ]
     ];
   }

@@ -2,6 +2,7 @@ package com.common.dto.user;
 
 import java.util.List;
 
+import com.common.data.notification.StatusUserPoint;
 import com.common.dto.structure.InterfaceDTO;
 
 import lombok.AllArgsConstructor;
@@ -31,4 +32,5 @@ public class UserPointDTO implements InterfaceDTO {
     private Integer size;
     private String field;
     private Boolean unpaged;
+    private Integer status;
 }

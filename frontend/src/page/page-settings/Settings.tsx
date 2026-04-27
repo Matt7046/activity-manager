@@ -1,41 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
-import { TypeUser } from '../../general/structure/Constant';
 import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
-import PointsContent from './UserPointContent';
-
-export interface UserPointsI {
-  _id: string | undefined;
-  email?: string;
-  password?:string;
-  numeroPunti?: number;
-  usePoints?: number;
-  nameImage?: string;
-  status?: number;
-}
+import SettingsContent from './SettingsContent';
 
 
-export interface ImageI {
-
-  file: FormData;
-  width: number;
-  height: number;
-
-}
-
-
-export interface NameImageI {
-
-  name: string;
-}
-
-const Points: React.FC<{}> = ({ }) => {
-
+const Settings: React.FC<{}> = ({ }) => {
   const { user, setUser } = useUser();
-  const subTitle = user.type === TypeUser.FAMILY ? ' (tutorato)' : ''
-  const [title, setTitle] = useState<string>("Sezione informazioni utente"+subTitle);
+  const [title, setTitle] = useState<string>("Sezione Notifiche");
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
@@ -45,20 +18,17 @@ const Points: React.FC<{}> = ({ }) => {
 
 
   useEffect(() => {
+
     const handleResize = () => {
       setIsVertical(window.innerHeight > window.innerWidth);
       setPaddingType(window.innerHeight > window.innerWidth ? 0 : 5);
-
     };
+
     window.addEventListener("resize", handleResize);
 
-   
-
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    };
+    // Pulisci il listener al dismount
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
-
 
 
   const handleClose = () => {
@@ -68,7 +38,6 @@ const Points: React.FC<{}> = ({ }) => {
   return (
     <>
       <PageLayout
-
         title={title}
         menuLaterale={menuLaterale}
         alertConfig={{open,setOpen,message,setMessage}}
@@ -76,7 +45,7 @@ const Points: React.FC<{}> = ({ }) => {
         handleClose={handleClose}
         navigate={useNavigate()}
       >
-        <PointsContent
+        <SettingsContent
           user={user}
           alertConfig={{open,setOpen,message,setMessage}}
           isVertical={isVertical}
@@ -89,7 +58,7 @@ const Points: React.FC<{}> = ({ }) => {
   );
 };
 
-export default Points;
+export default Settings;
 
 
 
