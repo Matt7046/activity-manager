@@ -8,7 +8,6 @@ import RegisterContent from './RegisterContent';
 const Register: React.FC<{}> = ({ }) => {
 
   const location = useLocation();
-  const [title, setTitle] = useState<string>(i18n._("sezione_registrazione"));
   const { user, setUser } = useUser();
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
@@ -36,7 +35,7 @@ const Register: React.FC<{}> = ({ }) => {
   return (
     <>
       <PageLayout
-        title={title}
+        title={i18n._("sezione_registrazione")}
         alertConfig={{open,setOpen,message,setMessage}}
         isVertical={isVertical}
         handleClose={handleClose}
@@ -46,7 +45,6 @@ const Register: React.FC<{}> = ({ }) => {
         <RegisterContent
           user={user}
           alertConfig={{open,setOpen,message,setMessage}}
-          setTitle={setTitle}
           isVertical={isVertical}
         />
       </PageLayout>

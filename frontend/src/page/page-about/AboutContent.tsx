@@ -1,4 +1,4 @@
-import { i18n } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import { Box } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -7,12 +7,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus, SectionName, TypeUser } from "../../general/structure/Constant";
 import { FormErrorValues, UserI, verifyForm } from "../../general/structure/Utils";
-import { ActivityI } from "../page-activity/Activity";
 import { deleteAboutById, saveActivity, showMessageAboutForm } from "../page-activity/service/ActivityService";
 import activityStore from "../page-activity/store/ActivityStore";
 import { navigateRouting, showMessage } from "../page-home/HomeContent";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./AboutContent.css";
+
+
 
 
 interface AboutContentProps {
@@ -31,24 +32,19 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   const location = useLocation();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
+  const { i18n } = useLingui();
   const [disableButtonSave, setDisableButtonSave] = useState<boolean>();
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
   const [disableButtonDelete, setDisableButtonDelete] = useState<boolean>(_id === null || _id === undefined);
 
 
   let testoOld = activityStore.activity.find((x) => _id === x._id);
-  const activityLabel: ActivityI = {
-    _id: undefined,
-    nome: "Attività",
-    subTesto: "Descrizione"
-  }
 
   const labelFamily = {
     email: "Email",
     emailFamily: user.type === 0 ? "Email" : "Email child",
   }
 
-  testoOld = activityLabel;
   const [subTesto, setSubTesto] = useState(activityStore.activity.find((x) => _id === x._id)?.subTesto);
 
   // Stato per i valori dei campi
@@ -202,7 +198,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
           <Grid xs={12} sm={6}>
             <TextField
               id="activity"
-              label={testoOld.nome}
+              label={i18n._("attivita")}
               variant="standard"
               value={formValues.activity} // Collega il valore allo stato
               onChange={handleChangeActivity} // Aggiorna lo stato quando cambia
@@ -213,7 +209,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
           <Grid xs={12} sm={6}>
             <TextField
               id="points"
-              label={'Punti'}
+              label={i18n._("punti")}
               variant="standard"
               value={formValues.points} // Collega il valore allo stato
               onChange={handleChangePoints} // Aggiorna lo stato quando cambia
@@ -226,7 +222,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
         </Grid>
         <TextField
           id="subTesto"
-          label={testoOld.subTesto}
+          label={i18n._("descrizione")}
           variant="standard"
           value={subTesto} // Collega il valore allo stato
           onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia

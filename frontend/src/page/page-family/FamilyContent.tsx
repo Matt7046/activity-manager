@@ -1,4 +1,4 @@
-import { i18n } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, FormControl, IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
@@ -26,6 +26,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   isVertical
 }) => {
   const { user, setUser } = useUser();
+  const { i18n } = useLingui();
   // Stato per i valori dei campi
   type FormValues = {
     [key: string]: number | undefined;
@@ -38,12 +39,6 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const [formErrors, setFormErrors] = useState<FormErrorValues>({
     newPoints: true,
   });
-  const labelFamily = {
-    email: "Email",
-    //emailFamily: "Email",
-    points: "Punti",
-    newPoints: "Operazione sui punti"
-  }
 
   const [isPlusIcon, setIsPlusIcon] = useState(true);
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
@@ -130,7 +125,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
           {/* Campo Points */}
           <Grid xs={12} sm={6}>
             <FormControl fullWidth variant="standard">
-              <InputLabel htmlFor="filled-points">{labelFamily.points}</InputLabel>
+              <InputLabel htmlFor="filled-points">{i18n._("punti")}</InputLabel>
               <Input
                 id="filled-adornment-points"
                 value={familyStore.getStore().points} // Collega il valore allo stato
@@ -143,7 +138,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
           {/* Campo New Points */}
           <Grid xs={12} sm={6}>
             <FormControl fullWidth variant="standard">
-              <InputLabel htmlFor="filled-adornment-new-points">{labelFamily.newPoints}</InputLabel>
+              <InputLabel htmlFor="filled-adornment-new-points">{i18n._("nuovi_punti")}</InputLabel>
               <Input
                 id="filled-adornment-new-points"
                 value={formValues.newPoints} // Collega il valore allo stato
@@ -152,7 +147,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
                 startAdornment={
                   <InputAdornment position="start">
                     <IconButton
-                      aria-label={'Add points'}
+                      aria-label={i18n._("add_punti")}
                       onClick={toggleIcon}
                       onMouseDown={handleMouseDownPassword}
                       onMouseUp={handleMouseUpPassword}

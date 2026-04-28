@@ -1,5 +1,4 @@
-import { Trans } from "@lingui/react";
-import { i18n } from "@lingui/core";
+import { Trans, useLingui } from "@lingui/react";
 import { Box, FormControl, Input, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
@@ -19,7 +18,7 @@ import operativeStore from "./store/OperativeStore";
 
 interface OperativeContentProps {
   user: UserI;
-  alertConfig:AlertConfig,
+  alertConfig: AlertConfig,
   isVertical: boolean;
 }
 
@@ -30,6 +29,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 }) => {
 
   const location = useLocation();
+  const { i18n } = useLingui();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingO, setIsLoadingO] = useState(true);
   const [disableButtonSave, setDisableButtonSave] = useState(true);
@@ -175,86 +175,84 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   if (isLoading || isLoadingO) {
     return <p><Trans id="caricamento" /></p>; // Mostra un loader mentre i dati vengono caricati
   }
-
-  const activityDes = 'Attività *';
-  const puntiDes = 'Punti';
+ 
 
   return (
     <>
-        <Box className ='box-operative-content'>
-          <Grid container spacing={2}>
-            {/* Prima riga */}
-            <Grid xs={12} sm={6} >
-              {/* Campo stringa 1 */}
-              <FormControl fullWidth >
-                <TextField
-                  label={i18n._("email")}
-                  value={operativeStore.emailField}
-                  onChange={(e) => operativeStore.setEmailField(e.target.value)}
-                  fullWidth
-                  margin="normal"
-                  disabled={true} // Disabilita il campo
-                />
-              </FormControl>
-            </Grid>
-            <Grid xs={12} sm={6} >
-              <FormControl className="form-control-operative" variant="standard">
-                <InputLabel htmlFor="filled-points">{puntiDes}</InputLabel>
-                <Input
-                  id="filled-adornment-points"
-                  value={operativeStore.points} // Collega il valore allo stato
-                  onChange={handleChangePoints} // Aggiorna lo stato quando cambia
-                  disabled={true}
-                />
-              </FormControl>
-            </Grid>
-
-            {/* Seconda riga */}
-            <Grid xs={12} sm={6}>
-              {/* Campo combobox */}
-              <FormControl fullWidth margin="normal">
-                <InputLabel id="select-label">{activityDes}
-                </InputLabel>
-                <Select
-                  labelId="select-label"
-                  value={formValues.activity}
-                  onChange={(e) => clickCombobox(e.target.value)}
-                  label={i18n._("attivita")}
-                  required={true}
-                >
-                  {operativeStore.activity.map((option) => (
-                    <MenuItem key={option._id} value={option._id}>
-                      {option.nome}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-            </Grid>
-            {/* Campo con punti */}
-            <Grid xs={12} sm={6}>
-              {/* Campo numerico */}
-              <FormControl fullWidth >
-                <TextField
-                  label={i18n._("punti_attivita")}
-                  type="number"
-                  value={operativeStore.pointsField}
-                  onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
-                  margin="normal"
-                  disabled={true} // Disabilita il campo
-
-                />
-              </FormControl>
-
-            </Grid>
+      <Box className='box-operative-content'>
+        <Grid container spacing={2}>
+          {/* Prima riga */}
+          <Grid xs={12} sm={6} >
+            {/* Campo stringa 1 */}
+            <FormControl fullWidth >
+              <TextField
+                label={i18n._("email")}
+                value={operativeStore.emailField}
+                onChange={(e) => operativeStore.setEmailField(e.target.value)}
+                fullWidth
+                margin="normal"
+                disabled={true} // Disabilita il campo
+              />
+            </FormControl>
+          </Grid>
+          <Grid xs={12} sm={6} >
+            <FormControl className="form-control-operative" variant="standard">
+              <InputLabel htmlFor="filled-points">{i18n._("punti")}</InputLabel>
+              <Input
+                id="filled-adornment-points"
+                value={operativeStore.points} // Collega il valore allo stato
+                onChange={handleChangePoints} // Aggiorna lo stato quando cambia
+                disabled={true}
+              />
+            </FormControl>
           </Grid>
 
-          {/* Pulsante Salva */}
-          <Grid container justifyContent="flex-end" spacing={1}>
-            <Button pulsanti={[pulsanteSave]} />
+          {/* Seconda riga */}
+          <Grid xs={12} sm={6}>
+            {/* Campo combobox */}
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="select-label">{i18n._("punti_attivitaobb")}
+              </InputLabel>
+              <Select
+                labelId="select-label"
+                value={formValues.activity}
+                onChange={(e) => clickCombobox(e.target.value)}
+                label={i18n._("attivita")}
+                required={true}
+              >
+                {operativeStore.activity.map((option) => (
+                  <MenuItem key={option._id} value={option._id}>
+                    {option.nome}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
           </Grid>
-        </Box>  
+          {/* Campo con punti */}
+          <Grid xs={12} sm={6}>
+            {/* Campo numerico */}
+            <FormControl fullWidth >
+              <TextField
+                label={i18n._("punti_attivita")}
+                type="number"
+                value={operativeStore.pointsField}
+                onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
+                margin="normal"
+                disabled={true} // Disabilita il campo
+
+              />
+            </FormControl>
+
+          </Grid>
+        </Grid>
+
+        {/* Pulsante Salva */}
+        <Grid container justifyContent="flex-end" spacing={1}>
+          <Button pulsanti={[pulsanteSave]} />
+
+        </Grid>
+      </Box>
     </>
   );
 

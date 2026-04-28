@@ -1,4 +1,4 @@
-import { i18n } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
@@ -8,11 +8,11 @@ import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import SettingsContent from './SettingsContent';
 
 
+
 const Settings: React.FC<{}> = ({ }) => {
   const { user, setUser } = useUser();
-  const subTitle = user.type === TypeUser.FAMILY ? i18n._("tutorato") : '';
-  const [title, setTitle] = useState<string>(i18n._("sezione_notifiche") + subTitle);
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
+  const { i18n } = useLingui();
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
@@ -41,7 +41,7 @@ const Settings: React.FC<{}> = ({ }) => {
   return (
     <>
       <PageLayout
-        title={title}
+        title={i18n._("sezione_impostazioni") + (TypeUser.FAMILY ? i18n._('tutorato') : '')}
         menuLaterale={menuLaterale}
         alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}

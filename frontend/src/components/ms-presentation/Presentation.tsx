@@ -1,4 +1,4 @@
-import { Trans } from "@lingui/react";
+import { Trans, useLingui } from "@lingui/react";
 import ReactIcon from '@mui/icons-material/Code'; // Potrebbe non esserci un'icona specifica, usa un generico
 import JavaIcon from '@mui/icons-material/Coffee'; // Esempio
 import HubIcon from '@mui/icons-material/Hub';
@@ -8,12 +8,12 @@ import PsychologyIcon from '@mui/icons-material/Psychology';
 import SearchIcon from '@mui/icons-material/Search';
 import MongoDBIcon from '@mui/icons-material/Storage'; // Esempio di icona Material UI
 import { Box, Button, Grid, IconButton, Typography } from '@mui/material';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SectionName } from '../../general/structure/Constant';
 import { navigateRouting } from '../../page/page-home/HomeContent';
 import BannerOpenSource from '../ms-banner/Banner';
 import "./Presentation.css";
+
 
 
 interface PresentationProps {
@@ -23,10 +23,8 @@ interface PresentationProps {
 
 
 const Presentation: React.FC<PresentationProps> = ({ }) => {
-  const [testoButton] = useState<string>('Entra');
-  const [testoEntry] = useState<string>('Benvenuto in Activity Manager');
-  const [testoDesc] = useState<string>('Gestisci attività, punti e molto altro in famiglia!');
   const navigate = useNavigate();
+  const { i18n } = useLingui();
 
   const technologies = [
     { name: 'MongoDB Cloud', icon: <MongoDBIcon fontSize="large" className="tech-icon" /> },
@@ -41,57 +39,57 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
 
   return (
     <>
-    <Box className="page-wrapper">
-      <BannerOpenSource />
-      <Box className="welcome-container">
-        <Typography
-          variant="h4"
-          component="label"
-          htmlFor="enter-button"
-          gutterBottom
-          fontWeight="bold"
-          className="welcome-description-title"
-        >
-          {testoEntry}
-        </Typography>
+      <Box className="page-wrapper">
+        <BannerOpenSource />
+        <Box className="welcome-container">
+          <Typography
+            variant="h4"
+            component="label"
+            htmlFor="enter-button"
+            gutterBottom
+            fontWeight="bold"
+            className="welcome-description-title"
+          >
+            <Trans id='testo_entry' />
+          </Typography>
 
-        <Typography
-          variant="body1"
-          gutterBottom
-          className="welcome-description"
-        >
-          {testoDesc}
-        </Typography>
+          <Typography
+            variant="body1"
+            gutterBottom
+            className="welcome-description"
+          >
+             <Trans id='testo_desc' />
+          </Typography>
 
-        <Button
-          id="enter-button"
-          className="enter-button"
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={() => navigateRouting(navigate, SectionName.HOME, {})}
-        >
-          {testoButton}
-        </Button>
-      </Box>
+          <Button
+            id="enter-button"
+            className="enter-button"
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => navigateRouting(navigate, SectionName.HOME, {})}
+          >
+             <Trans id='testo_button' />
+          </Button>
+        </Box>
 
-      <Box className="tech-footer-container">
-        <Typography variant="h6" gutterBottom>
-          <Trans id="tecnologie_che_utilizzo" />
-        </Typography>
-        <Grid container justifyContent="center" spacing={2}> {/* Ridotto leggermente lo spacing per mobile */}
-          {technologies.map((tech) => (
-            <Grid item key={tech.name} xs={4} sm={3} md={2}> {/* xs={4} permette di averne 3 per riga invece di 2 */}
-              <IconButton color="inherit" disabled style={{ padding: '8px' }}>
-                {tech.icon}
-              </IconButton>
-              <Typography variant="caption" display="block" sx={{ fontSize: '0.7rem' }}>
-                {tech.name}
-              </Typography>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
+        <Box className="tech-footer-container">
+          <Typography variant="h6" gutterBottom>
+            <Trans id="tecnologie_che_utilizzo" />
+          </Typography>
+          <Grid container justifyContent="center" spacing={2}> {/* Ridotto leggermente lo spacing per mobile */}
+            {technologies.map((tech) => (
+              <Grid item key={tech.name} xs={4} sm={3} md={2}> {/* xs={4} permette di averne 3 per riga invece di 2 */}
+                <IconButton color="inherit" disabled style={{ padding: '8px' }}>
+                  {tech.icon}
+                </IconButton>
+                <Typography variant="caption" display="block" sx={{ fontSize: '0.7rem' }}>
+                  {tech.name}
+                </Typography>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       </Box>
     </>
   );
