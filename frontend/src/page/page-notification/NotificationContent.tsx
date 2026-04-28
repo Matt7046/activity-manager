@@ -1,4 +1,4 @@
-import { i18n } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import { Pulsante } from "../../components/ms-button/Button";
 import DataGridComponent from '../../components/ms-data-grid/DataGrid';
-import { PopoverNotification } from "../../components/ms-popover/Popover";
 import { ButtonName, HttpStatus, StatusNotification } from "../../general/structure/Constant";
 import { getDateStringRegularFormat, NotificationI, ResponseI, UserI } from "../../general/structure/Utils";
 import { showMessage } from "../page-home/HomeContent";
@@ -24,6 +23,7 @@ interface NotificationContentProps {
 
 const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertConfig }) => {
   const [notifications, setNotifications] = useState<NotificationI[]>([]);
+  const { i18n } = useLingui();
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [rowCount, setRowCount] = useState(0);
@@ -32,7 +32,6 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
     pageSize: 5,
   });
   const notify: NotificationI[] = [];
-  const [popoverNotifications, setPopoverNotifications] = useState<PopoverNotification[]>([]);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');

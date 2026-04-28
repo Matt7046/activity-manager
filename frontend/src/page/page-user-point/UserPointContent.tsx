@@ -1,5 +1,4 @@
-import { i18n } from "@lingui/core";
-import { Trans } from "@lingui/react";
+import { Trans, useLingui } from "@lingui/react";
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Card, CardContent, Dialog, DialogContent, IconButton, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
@@ -34,9 +33,8 @@ const PointsContent: React.FC<PointsContentProps> = ({
 }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
-
+  const { i18n } = useLingui();
   const [openDialogLogFamily, setOpenDialogLogFamily] = useState(false)   // Controlla la visibilità del messaggio
-
   const [openDialogLogActivity, setOpenDialogLogActivity] = useState(false)
   const [testo, setTesto] = useState('');
   const [testoLog, setTestoLog] = useState<ActivityLogI[]>([]);

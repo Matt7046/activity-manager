@@ -1,115 +1,91 @@
 import { Trans } from "@lingui/react";
 import React from "react";
+import Language from "../../components/ms-language/Language";
+import "./PrivacyPolicy.css";
 
 const PrivacyPolicy: React.FC = () => {
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}><Trans id="privacy_policy" /></h1>
-      <p style={styles.text}>
-        La presente Privacy Policy descrive come raccogliamo, utilizziamo e
-        proteggiamo i tuoi dati personali quando utilizzi il nostro progetto
-        open source. La tua privacy è importante per noi, e ci impegniamo a
-        trattare i tuoi dati in conformità al Regolamento Generale sulla
-        Protezione dei Dati (GDPR).
+    <><div className="privacy-container">
+      {/* Contenitore per allineare il selettore lingua a destra */}
+      <div className="privacy-header">
+        <Language />
+      </div>
+      <h1 className="privacy-title">
+        <Trans id="privacy_policy" />
+      </h1>
+      <p className="privacy-text">
+        <Trans id="privacy_descrizione" />
       </p>
 
-      <h2 style={styles.subtitle}><Trans id="1_dati_personali_raccolti" /></h2>
-      <p style={styles.text}>
-        Raccogliamo i seguenti dati personali quando ti iscrivi alla nostra
-        newsletter o utilizzi i nostri servizi:
+      <h2 className="privacy-subtitle">
+        <Trans id="1_dati_personali_raccolti" />
+      </h2>
+      <p className="privacy-text">
+        <Trans id="raccogliamo_dati_desc" />
       </p>
-      <ul style={styles.list}>
+      <ul className="privacy-list">
         <li><Trans id="email" /></li>
-        <li>Eventuali altri dati forniti volontariamente tramite i moduli del
-            nostro sito</li>
+        <li><Trans id="altri_dati_volontari" /></li>
       </ul>
 
-      <h2 style={styles.subtitle}><Trans id="2_finalita_del_trattamento" /></h2>
-      <p style={styles.text}>
-        Utilizziamo i tuoi dati personali per i seguenti scopi:
+      <h2 className="privacy-subtitle">
+        <Trans id="2_finalita_del_trattamento" />
+      </h2>
+      <p className="privacy-text">
+        <Trans id="finalita_desc" />
       </p>
-      <ul style={styles.list}>
+      <ul className="privacy-list">
         <li><Trans id="inviarti_aggiornamenti_sul_progetto_open_source" /></li>
         <li><Trans id="comunicarti_nuove_funzionalita_eventi_o_opportunita_di_contribuire" /></li>
-        <li><Trans id="accedere_alla_applicazione" /> </li>
+        <li><Trans id="accedere_alla_applicazione" /></li>
       </ul>
 
-      <h2 style={styles.subtitle}><Trans id="3_conservazione_dei_dati" /></h2>
-      <p style={styles.text}>
-        I tuoi dati personali saranno conservati solo per il tempo necessario
-        per le finalità sopra indicate, salvo diversa richiesta legale o
-        consenso esplicito.
+      <h2 className="privacy-subtitle">
+        <Trans id="3_conservazione_dei_dati" />
+      </h2>
+      <p className="privacy-text">
+        <Trans id="conservazione_dati_desc" />
       </p>
 
-      <h2 style={styles.subtitle}><Trans id="4_diritti_dellutente" /></h2>
-      <p style={styles.text}>
-        Ai sensi del GDPR, hai il diritto di:
+      <h2 className="privacy-subtitle">
+        <Trans id="4_diritti_dellutente" />
+      </h2>
+      <p className="privacy-text">
+        <Trans id="diritti_utente_desc" />
       </p>
-      <ul style={styles.list}>
+      <ul className="privacy-list">
         <li><Trans id="accedere_ai_tuoi_dati_personali" /></li>
         <li><Trans id="richiedere_la_correzione_o_la_cancellazione_dei_tuoi_dati" /></li>
         <li><Trans id="revocare_il_consenso_al_trattamento" /></li>
         <li><Trans id="portabilita_dei_dati" /></li>
         <li><Trans id="opporsi_al_trattamento_dei_dati" /></li>
       </ul>
-      <p style={styles.text}>
-        Per esercitare questi diritti, puoi contattarci all'indirizzo email:{" "}
-        <a href="mailto:matteo.santangelo@colorsdev.tech" style={styles.link}>
-        <Trans id="matteosantangelocolorsdevtech" />
+      <p className="privacy-text">
+        <Trans id="per_esercitare_diritti" />{" "}
+        <a href="mailto:matteo.santangelo@colorsdev.tech" className="privacy-link">
+          matteo.santangelo@colorsdev.tech
         </a>.
       </p>
 
-      <h2 style={styles.subtitle}><Trans id="5_sicurezza_dei_dati" /></h2>
-      <p style={styles.text}>
-        Adottiamo misure tecniche e organizzative adeguate per proteggere i tuoi
-        dati personali da accessi non autorizzati, perdite o divulgazioni.
+      <h2 className="privacy-subtitle">
+        <Trans id="5_sicurezza_dei_dati" />
+      </h2>
+      <p className="privacy-text">
+        <Trans id="sicurezza_dati_desc" />
       </p>
 
-      <h2 style={styles.subtitle}><Trans id="6_modifiche_alla_privacy_policy" /></h2>
-      <p style={styles.text}>
-        Potremmo aggiornare questa Privacy Policy di tanto in tanto. Ti
-        invitiamo a controllare periodicamente questa pagina per eventuali
-        modifiche.
+      <h2 className="privacy-subtitle">
+        <Trans id="6_modifiche_alla_privacy_policy" />
+      </h2>
+      <p className="privacy-text">
+        <Trans id="modifiche_policy_desc" />
       </p>
 
-      <p style={styles.text}>
-        Ultimo aggiornamento: 18 gennaio 2025.
+      <p className="privacy-text">
+        <Trans id="ultimo_aggiornamento" />: 18 gennaio 2025.
       </p>
-    </div>
+    </div></>
   );
-};
-
-const styles = {
-  container: {
-    maxWidth: "800px",
-    margin: "0 auto",
-    padding: "20px",
-    fontFamily: "Arial, sans-serif",
-    lineHeight: "1.6",
-  },
-  title: {
-    fontSize: "32px",
-    fontWeight: "bold" as const,
-    marginBottom: "20px",
-  },
-  subtitle: {
-    fontSize: "24px",
-    fontWeight: "bold" as const,
-    marginTop: "20px",
-    marginBottom: "10px",
-  },
-  text: {
-    fontSize: "16px",
-    marginBottom: "10px",
-  },
-  list: {
-    paddingLeft: "20px",
-    marginBottom: "10px",
-  },
-  link: {
-    color: "#007BFF",
-    textDecoration: "none",
-  },
 };
 
 export default PrivacyPolicy;

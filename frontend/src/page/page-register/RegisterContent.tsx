@@ -1,5 +1,4 @@
-import { i18n } from "@lingui/core";
-import { Trans } from "@lingui/react";
+import { Trans, useLingui } from "@lingui/react";
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, Divider, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
@@ -21,12 +20,8 @@ import "./RegisterContent.css";
 interface RegisterContentProps {
   user: UserI;
   alertConfig: AlertConfig,
-  setTitle: (title: string) => void;
   isVertical: boolean;
-
 }
-
-
 export interface PointRegister {
   password: string;
   email: string;
@@ -35,11 +30,11 @@ export interface PointRegister {
 const RegisterContent: React.FC<RegisterContentProps> = ({
   user,
   alertConfig,
-  setTitle,
   isVertical
 }) => {
   const { setUser } = useUser(); //
   const location = useLocation();
+  const { i18n } = useLingui();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
   const labelRegister = {
