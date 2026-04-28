@@ -1,3 +1,6 @@
+import { Trans } from "@lingui/react";
+import MenuIcon from '@mui/icons-material/Menu';
+import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -30,44 +33,41 @@ export interface TypeAnchor {
 }
 
 const Drawer = observer((props: {
-  //key: number;
   sezioni: MenuLaterale[][];
   nameMenu: string;
   route?: string;
-  anchor: Anchor
+  anchor: Anchor;
 }) => {
-
-  const typeAnchor: TypeAnchor = {
+  const [statoComponente, setStatoComponente] = React.useState<TypeAnchor>({
     top: false,
     left: false,
     bottom: false,
     right: false,
-  }
-
-  const [statoComponente, setStatoComponente] = React.useState<TypeAnchor>(typeAnchor);
+  });
 
   return (
     <div>
-      {[props.anchor].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Button
-            className="drawer-toggle-button"
+      <Button
+        className="drawer-toggle-button"
+        onClick={toggleDrawer(props.anchor, true, setStatoComponente, statoComponente)}
+      >
+        <MenuIcon /> {/* Sostituito il testo con l'icona per coerenza grafica */}
+      </Button>
 
-            onClick={toggleDrawer(anchor, true, setStatoComponente, statoComponente)}>{props.nameMenu}
-          </Button>
-          <SwipeableDrawer
-            anchor={anchor}
-            open={statoComponente[anchor]}
-            onClose={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
-            onOpen={toggleDrawer(anchor, true, setStatoComponente, statoComponente)}
-          >
-            {listaItem(anchor, props.sezioni, setStatoComponente, statoComponente)}
-          </SwipeableDrawer>
-        </React.Fragment>
-      ))}
+      <SwipeableDrawer
+        anchor={props.anchor}
+        open={statoComponente[props.anchor]}
+        onClose={toggleDrawer(props.anchor, false, setStatoComponente, statoComponente)}
+        onOpen={toggleDrawer(props.anchor, true, setStatoComponente, statoComponente)}
+        PaperProps={{
+          sx: { elevation: 0 } // Rimuove l'ombra pesante di default
+        }}
+      >
+        {listaItem(props.anchor, props.sezioni, setStatoComponente, statoComponente)}
+      </SwipeableDrawer>
     </div>
   );
-})
+});
 
 const toggleDrawer = (
   anchor: keyof TypeAnchor, // Specifica che "anchor" deve essere una delle chiavi di TypeAnchor
@@ -91,43 +91,53 @@ const toggleDrawer = (
 
 
 
-const listaItem = (anchor: Anchor, sezioni: MenuLaterale[][], setStatoComponente: React.Dispatch<React.SetStateAction<TypeAnchor>>, statoComponente: TypeAnchor) => (
+const listaItem = (
+  anchor: Anchor,
+  sezioni: MenuLaterale[][],
+  setStatoComponente: React.Dispatch<React.SetStateAction<TypeAnchor>>,
+  statoComponente: TypeAnchor
+) => (
   <Box
     className={`drawer-box ${anchor === 'top' || anchor === 'bottom' ? 'drawer-horizontal' : 'drawer-vertical'}`}
-
     role="presentation"
     onClick={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
     onKeyDown={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
   >
-    <>
-      {sezioni.map((section, sectionIndex) => (
-        <div key={sectionIndex}>
-          <List>
-            {section.map((menulaterale, index) => (
-              <ListItem key={menulaterale.testo} disablePadding>
-                <ListItemButton
-                  className="drawer-list-item"
-                  onClick={() => {
-                    if (menulaterale.funzione) {
-                      menulaterale.funzione(); // Chiama la funzione associata a questo elemento
-                    }
-                  }}
-                >
-                  <ListItemIcon className="drawer-list-icon">
-                  {menulaterale.icon && <menulaterale.icon />} {/* Usa l'icona dinamica */}
-                  </ListItemIcon>
-                  <ListItemText primary={menulaterale.testo} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
+    {/* Header opzionale del menu */}
+    <Box sx={{ p: 2, borderBottom: '1px solid #eee' }}>
+      <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
+        <Trans id="menu_navigazione" />
+      </Typography>
+    </Box>
 
-          {sectionIndex !== sezioni.length - 1 && <Divider />} {/* Divider tra le sezioni */}
-        </div>
-      ))}
-    </>
+    {sezioni.map((section, sectionIndex) => (
+      <React.Fragment key={sectionIndex}>
+        <List sx={{ pt: 1, pb: 1 }}>
+          {section.map((menulaterale) => (
+            <ListItem key={menulaterale.testo} disablePadding>
+              <ListItemButton
+                className="drawer-list-item"
+                onClick={() => {
+                  if (menulaterale.funzione) {
+                    menulaterale.funzione();
+                  }
+                }}
+              >
+                <ListItemIcon className="drawer-list-icon">
+                  {menulaterale.icon && <menulaterale.icon fontSize="small" />}
+                </ListItemIcon>
+                <ListItemText
+                  primary={menulaterale.testo}
+                  primaryTypographyProps={{ fontSize: '0.9rem', fontWeight: 500 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        {sectionIndex !== sezioni.length - 1 && <Divider className="drawer-divider" />}
+      </React.Fragment>
+    ))}
   </Box>
 );
-
 
 export default Drawer;
