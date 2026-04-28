@@ -1,6 +1,5 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { i18n } from "@lingui/core";
-import { Trans } from "@lingui/react";
+import { Trans, useLingui } from "@lingui/react";
 import { Apple as AppleIcon, Facebook as FacebookIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // Points
 import EngineeringIcon from '@mui/icons-material/Engineering';
@@ -47,8 +46,8 @@ const HomeContent = () => (
 // Componente di autenticazione
 const GoogleAuthComponent = () => {
   const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
-
-
+// useLingui() farà scattare il re-render automatico al cambio lingua
+  const { i18n } = useLingui();
   const { user, setUser } = useUser();
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [loading, setLoading] = useState(false);
@@ -63,9 +62,6 @@ const GoogleAuthComponent = () => {
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [hiddenLogin, setHiddenLogin] = useState<any>(false); // Stato utente
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => { };
-  const [loginBase, setLoginBase] = useState('Simula login utente base'); // Stato per l'email
-  const [loginParentale, setLoginParentale] = useState('Simula login parentale'); // Stato per l'emailà
-  const [keepLoggedIn, setKeepLoggedIn] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
 
 
@@ -288,7 +284,6 @@ const GoogleAuthComponent = () => {
 
 
   };
-  const label = 'I login simulati non recuperano informazioni';
 
   const handleChangeUsername = (event: any): void => {
     setEmailLogin(event.target.value);
@@ -328,9 +323,6 @@ const GoogleAuthComponent = () => {
     throw new Error('Function not implemented.');
   }
 
-
-
-
   return (
     <>
 
@@ -367,7 +359,7 @@ const GoogleAuthComponent = () => {
               </Box>
               <Box mt={2} textAlign="center">
                 <Typography variant="body2">
-                  Non hai un account?{' '}
+                  <Trans id='nuovo_account' />
                   <Link to="/register" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 500 }}>
                     <Trans id="registrati" />
                   </Link>
@@ -375,10 +367,11 @@ const GoogleAuthComponent = () => {
               </Box>
               <Box mb={3}>
                 <TextField
+                  key={i18n.locale} // <--- Questa è la chiave del successo
                   id="emailFamily"
                   label={'INFO'}
                   variant="standard"
-                  value={label}
+                  value={i18n._('login_simulato')}
                   onChange={handleChangeEmailFamily}
                   fullWidth
                   disabled
@@ -395,7 +388,7 @@ const GoogleAuthComponent = () => {
                       onClick={() => simulateLogin(TypeUser.STANDARD)}
                       fullWidth
                     >
-                      {loginBase}
+                      <Trans id='login_simulato_utente_base' />
                     </ButtonMui>
                   </Grid>
 
@@ -406,7 +399,7 @@ const GoogleAuthComponent = () => {
                       onClick={() => simulateLogin(TypeUser.FAMILY)}
                       fullWidth
                     >
-                      {loginParentale}
+                      <Trans id='login_simulato_utente_parentale' />
                     </ButtonMui>
                   </Grid>
                 </Grid>
@@ -598,7 +591,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
           testo: SectionNameDesc.NOTIFICATION,
           icon: NotificationsIcon
         },
-         {
+        {
           funzione: null,
           testo: SectionNameDesc.SETTINGS,
           icon: SettingsIcon

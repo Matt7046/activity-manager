@@ -1,5 +1,4 @@
-import { i18n } from "@lingui/core";
-import { Trans } from "@lingui/react";
+import { Trans, useLingui } from "@lingui/react";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Box, Divider, Paper, Typography } from "@mui/material";
@@ -21,16 +20,18 @@ interface SettingsContentProps {
 
 const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) => {
 
+  const { i18n } = useLingui();
   // Funzione per l'eliminazione account
   const handleDeleteAccount = () => {
-    updateStatus({ ...user, status: StatusUserPoint.DISACTIVE },(message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
-    .then((response: ResponseI | undefined) => {
-            if (response?.status === HttpStatus.OK) {
-              console.log("Eliminazione account per:", user.emailUserCurrent);
-            }})
-    .catch((error) => {
-      console.error("Errore durante l'eliminazione dell'account:", error);
-    });      
+    updateStatus({ ...user, status: StatusUserPoint.DISACTIVE }, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
+      .then((response: ResponseI | undefined) => {
+        if (response?.status === HttpStatus.OK) {
+          console.log("Eliminazione account per:", user.emailUserCurrent);
+        }
+      })
+      .catch((error) => {
+        console.error("Errore durante l'eliminazione dell'account:", error);
+      });
   };
 
   const pulsanteElimina: Pulsante = {

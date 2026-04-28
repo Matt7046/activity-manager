@@ -1,4 +1,4 @@
-import { i18n } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, FormControl, IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
@@ -26,6 +26,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   isVertical
 }) => {
   const { user, setUser } = useUser();
+  const { i18n } = useLingui();
   // Stato per i valori dei campi
   type FormValues = {
     [key: string]: number | undefined;
