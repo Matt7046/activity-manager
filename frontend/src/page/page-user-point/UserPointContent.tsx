@@ -36,7 +36,6 @@ const PointsContent: React.FC<PointsContentProps> = ({
   const { i18n } = useLingui();
   const [openDialogLogFamily, setOpenDialogLogFamily] = useState(false)   // Controlla la visibilità del messaggio
   const [openDialogLogActivity, setOpenDialogLogActivity] = useState(false)
-  const [testo, setTesto] = useState('');
   const [testoLog, setTestoLog] = useState<ActivityLogI[]>([]);
   const [testoLogFamily, setTestoLogFamily] = useState<FamilyLogI[]>([]);
   const [testoLogUnpaged, setTestoLogUnpaged] = useState<ActivityLogI[]>([]);
@@ -307,7 +306,6 @@ const renderChildren3 = (open: boolean) => (
     return findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
-          setTesto(response.jsonText.numeroPunti);
           let nameImage: NameImageI[] = response.jsonText.nameImage?.map((x: string) => {
             return { name: x };
           }
@@ -320,13 +318,13 @@ const renderChildren3 = (open: boolean) => (
           }
 
           const CardTextAlign: CardTextAlign = {
-            textLeft: response.jsonText.numeroPunti
+            textLeft: i18n._("numero_punti") + response.jsonText.points
           }
 
           const textAlign1: CardTextAlign[] = [CardTextAlign]
 
           const cardText1: CardText = {
-            textLeftTitle: 'Descrizione',
+            textLeftTitle: i18n._("descrizione"),
             text: textAlign1
           }
 
@@ -335,13 +333,13 @@ const renderChildren3 = (open: boolean) => (
             return {
 
               textLeft: x.log,
-              textRight: x.usePoints + " point"
+              textRight: (-x.usePoints) + " point"
             }
           });
 
           const cardText2: CardText = {
-            textLeftTitle: 'Attività',
-            textRightTitle: 'Punti usati',
+            textLeftTitle: i18n._("attivita"),
+            textRightTitle: i18n._("variazione_punti"),
             text: textAlign2
           }
 
@@ -353,8 +351,8 @@ const renderChildren3 = (open: boolean) => (
           });
 
           const cardText3: CardText = {
-            textLeftTitle: 'Data',
-            textRightTitle: 'Operazione',
+            textLeftTitle: i18n._("data"),
+            textRightTitle: i18n._("operazione"),
             text: textAlign3
           }
 
