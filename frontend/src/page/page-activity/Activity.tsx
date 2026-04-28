@@ -2,7 +2,8 @@ import { useLingui } from "@lingui/react";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
-import { TypeUser } from "../../general/structure/Constant";
+import { MenuLaterale } from "../../components/ms-drawer/Drawer";
+import { SectionNameDesc } from "../../general/structure/Constant";
 import { getMenuLaterale, ResponseI } from '../../general/structure/Utils';
 import { showMessage } from '../page-home/HomeContent';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
@@ -93,11 +94,14 @@ const Activity: React.FC<{}> = ({ }) => {
   const setAllTesto = (response: ResponseI): void => {
     activityStore.setAllActivity(response);
   }
+
+  const section: MenuLaterale = {
+    testo: SectionNameDesc.ACTIVITY
+  }
   return (
     <>
       <PageLayout
-        title={i18n._("sezione_attivit") + (TypeUser.FAMILY ? i18n._('tutorato') : '')}
-        menuLaterale={menuLaterale}
+        section={section} menuLaterale={menuLaterale}
         alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
         handleClose={handleClose}
