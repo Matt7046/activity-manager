@@ -50,13 +50,33 @@
 }
 
 /* Righe delle azioni */
+/* Modifica la riga esistente per assicurare la distribuzione spaziale */
 .action-row {
   padding: 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* Spinge gli elementi ai lati opposti */
   flex-wrap: wrap;
   gap: 16px;
+}
+
+/* Aggiungi questa regola specifica per il contenitore del pulsante */
+.action-row > div:last-child {
+  margin-left: auto; /* Forza l'elemento a destra anche se va a riga nuova */
+}
+
+/* Opzionale: Allineamento per la sezione disabilitata (se vuoi coerenza) */
+.action-disabled {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Aggiunto per mobile */
+  opacity: 0.6;
+}
+
+.action-disabled > div:last-child {
+  margin-left: auto;
 }
 
 .action-info {
