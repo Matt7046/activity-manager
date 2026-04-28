@@ -1,3 +1,4 @@
+import { i18n } from "@lingui/core";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
@@ -6,11 +7,10 @@ import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import GamificationContent from './GamificationContent';
 
-
 const Gamification: React.FC<{}> = ({ }) => {
   const { user, setUser } = useUser();
-  const subTitle = user.type === TypeUser.FAMILY ? ' (tutorato)' : ''
-  const [title, setTitle] = useState<string>("Sezione sfide e premi" + subTitle);
+  const subTitle = user.type === TypeUser.FAMILY ? i18n._("tutorato") : ''
+  const [title, setTitle] = useState<string>(i18n._("sezione_sfide_premi") + subTitle);
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio

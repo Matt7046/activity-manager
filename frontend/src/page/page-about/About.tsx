@@ -1,16 +1,19 @@
+import { i18n } from "@lingui/core";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
+import { TypeUser } from "../../general/structure/Constant";
 import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import AboutContent from './AboutContent';
 
 
-const About: React.FC<{  }> = ({  }) => {
-
-  const [title, setTitle] = useState<string>("Sezione informazioni attività");
-  const navigate = useNavigate(); // Ottieni la funzione di navigazione
+const About: React.FC<{}> = ({ }) => {
   const { user, setUser } = useUser();
+  const subTitle = user.type === TypeUser.FAMILY ? i18n._("tutorato") : '';
+  const [title, setTitle] = useState<string>(i18n._("sezione_informazioni_attivit")+ subTitle);
+  const navigate = useNavigate(); // Ottieni la funzione di navigazione
+
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
@@ -25,7 +28,7 @@ const About: React.FC<{  }> = ({  }) => {
     };
 
     window.addEventListener("resize", handleResize);
-    return () => {     
+    return () => {
     };
   }, []);
 
@@ -37,7 +40,7 @@ const About: React.FC<{  }> = ({  }) => {
       <PageLayout
         title={title}
         menuLaterale={menuLaterale}
-        alertConfig={{open,setOpen,message,setMessage}}
+        alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}
