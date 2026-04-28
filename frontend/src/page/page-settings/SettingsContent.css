@@ -102,3 +102,9 @@
   justify-content: space-between;
   opacity: 0.6;
 }
+
+.popover-header-text {
+  padding-left: 23px;   /* Sposta il testo verso destra */
+  padding-top: 23px;    /* Opzionale: spazio sopra */
+  display: block;       /* Assicura che il padding venga applicato correttamente su tutta la riga */
+}
