@@ -24,5 +24,11 @@
 }
 .grid-menu{
     padding-top: 10px;
+}
 
+.box-layout-right-button {
+    padding-right: 10px;
+    display: flex;
+    align-items: center; /* Allinea verticalmente icone e bandierine */
+    gap: 8px; /* Spazio tra i pulsanti */
 }

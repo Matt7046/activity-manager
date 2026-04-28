@@ -1,3 +1,4 @@
+import { useLingui } from "@lingui/react";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
@@ -5,11 +6,10 @@ import { TypeUser } from '../../general/structure/Constant';
 import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import PointsContent from './UserPointContent';
-
 export interface UserPointsI {
   _id: string | undefined;
   email?: string;
-  password?:string;
+  password?: string;
   numeroPunti?: number;
   usePoints?: number;
   nameImage?: string;
@@ -34,8 +34,7 @@ export interface NameImageI {
 const Points: React.FC<{}> = ({ }) => {
 
   const { user, setUser } = useUser();
-  const subTitle = user.type === TypeUser.FAMILY ? ' (tutorato)' : ''
-  const [title, setTitle] = useState<string>("Sezione informazioni utente"+subTitle);
+  const { i18n } = useLingui();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
@@ -52,7 +51,7 @@ const Points: React.FC<{}> = ({ }) => {
     };
     window.addEventListener("resize", handleResize);
 
-   
+
 
     return () => {
       window.removeEventListener("resize", handleResize)
@@ -69,16 +68,16 @@ const Points: React.FC<{}> = ({ }) => {
     <>
       <PageLayout
 
-        title={title}
+        title={i18n._("sezione_informazioni_utente") + (TypeUser.FAMILY ? i18n._('tutorato') : '')}
         menuLaterale={menuLaterale}
-        alertConfig={{open,setOpen,message,setMessage}}
+        alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}
       >
         <PointsContent
           user={user}
-          alertConfig={{open,setOpen,message,setMessage}}
+          alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
         />
       </PageLayout>

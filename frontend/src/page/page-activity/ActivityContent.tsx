@@ -1,4 +1,4 @@
-import { i18n } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import { Box } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import { navigateRouting, showMessage } from "../page-home/HomeContent";
 import "./ActivityContent.css";
 import { findByIdentificativo } from "./service/ActivityService";
 import activityStore from "./store/ActivityStore";
+
 
 interface ActivityContentProps {
   user: UserI;
@@ -27,6 +28,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 }) => {
 
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
+  const { i18n } = useLingui();
   const [loading, setLoading] = useState(false);
   const flex = isVertical ? 'flex-start' : 'flex-end';
 

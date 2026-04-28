@@ -1,4 +1,4 @@
-import { i18n } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
@@ -9,8 +9,6 @@ import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import ActivityContent from './ActivityContent';
 import { fetchDataActivities } from './service/ActivityService';
 import activityStore from './store/ActivityStore';
-
-
 export interface ActivityI {
   _id: string | undefined;
   nome: string;
@@ -29,9 +27,8 @@ export interface ActivityLogI {
 
 const Activity: React.FC<{}> = ({ }) => {
 
+  const { i18n } = useLingui();
   const { user, setUser } = useUser();
-  const subTitle = user.type === TypeUser.FAMILY ? i18n._("tutorato") : '';
-  const [title, setTitle] = useState<string>(i18n._("sezione_attivit") + subTitle);
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(navigate, user)
   const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
@@ -96,11 +93,10 @@ const Activity: React.FC<{}> = ({ }) => {
   const setAllTesto = (response: ResponseI): void => {
     activityStore.setAllActivity(response);
   }
-
   return (
     <>
       <PageLayout
-        title={title}
+        title={i18n._("sezione_attivit") + (TypeUser.FAMILY ? i18n._('tutorato') : '')}
         menuLaterale={menuLaterale}
         alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
