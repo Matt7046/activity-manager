@@ -36,7 +36,7 @@ const About: React.FC<{}> = ({ }) => {
   return (
     <>
       <PageLayout
-        title={i18n._("sezione_attivit") + (TypeUser.FAMILY ? i18n._('tutorato') : '')}
+        title={i18n._("sezione_informazioni_attivit") + (TypeUser.FAMILY ? i18n._('tutorato') : '')}
         menuLaterale={menuLaterale}
         alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}

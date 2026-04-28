@@ -175,9 +175,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   if (isLoading || isLoadingO) {
     return <p><Trans id="caricamento" /></p>; // Mostra un loader mentre i dati vengono caricati
   }
-
-  const activityDes = 'Attività *';
-  const puntiDes = 'Punti';
+ 
 
   return (
     <>
@@ -199,7 +197,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
           </Grid>
           <Grid xs={12} sm={6} >
             <FormControl className="form-control-operative" variant="standard">
-              <InputLabel htmlFor="filled-points">{puntiDes}</InputLabel>
+              <InputLabel htmlFor="filled-points">{i18n._("punti")}</InputLabel>
               <Input
                 id="filled-adornment-points"
                 value={operativeStore.points} // Collega il valore allo stato
@@ -213,7 +211,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
           <Grid xs={12} sm={6}>
             {/* Campo combobox */}
             <FormControl fullWidth margin="normal">
-              <InputLabel id="select-label">{activityDes}
+              <InputLabel id="select-label">{i18n._("punti_attivitaobb")}
               </InputLabel>
               <Select
                 labelId="select-label"
