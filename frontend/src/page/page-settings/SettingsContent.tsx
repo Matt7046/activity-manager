@@ -51,7 +51,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
         <Box className="header-title-row">
           <SettingsIcon className="header-icon" />
           <Typography variant="h6" className="header-title">
-            <Trans id="impostazione profilo" />
+            <Trans id="impostazione_profilo" />
           </Typography>
         </Box>
         <Typography variant="body2" color="text.secondary">
