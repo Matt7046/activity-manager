@@ -64,6 +64,10 @@ const PointsContent: React.FC<PointsContentProps> = ({
     return () => { };
   }, [logCard]);
 
+  useEffect(() => {
+  getPoints();
+}, [i18n.locale]);
+
 
   useEffect(() => {
     if (cardData.length > 0) {
@@ -333,7 +337,7 @@ const renderChildren3 = (open: boolean) => (
             return {
 
               textLeft: x.log,
-              textRight: (-x.usePoints) + " point"
+              textRight: (-x.usePoints).toString() 
             }
           });
 
