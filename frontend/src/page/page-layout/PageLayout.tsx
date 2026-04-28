@@ -179,99 +179,60 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   return (
     <>
       <Box className="box-layout">
-        {isVertical ? (
-          <>
-            {/* Definiamo l'icona da usare. 
-    Se menuLaterale ha un'icona specifica la usiamo, altrimenti mettiamo un fallback */}
+        {/* INTESTAZIONE: Titolo e Icona (Sempre centrati) */}
+        <Box className="title-container">
+          {IconaTitolo && <IconaTitolo className="header-icon" />}
+          <Typography variant="h6" className="header-title">
+            <Label
+              _id={'title'}
+              text={sectionAttiva?.testo + (TypeUser.FAMILY === user?.type ? i18n._('tutorato') : '')}
+            />
+          </Typography>
+        </Box>
 
-            <Box className="title-container">
-              {/* Renderizza l'icona contenuta nell'oggetto section */}
-              {IconaTitolo && <IconaTitolo className="header-icon" />}
+        {/* RIGA COMANDI: Menu Drawer + Bottoni */}
+        <Grid
+          container
+          className={`grid-menu ${isVertical ? 'vertical-layout' : 'horizontal-layout'}`}
+          alignItems="center"
+        >
+          {/* Se il menu esiste, viene renderizzato a sinistra */}
+          {menuLaterale && menuLaterale.length > 0 ? (
+            <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
+          ) : (
+            /* Se il menu NON esiste, mettiamo un segnaposto invisibile o 
+               lasciamo che il CSS gestisca lo spazio */
+            <Box />
+          )}
 
-              <Typography variant="h6" className="header-title">
-                {/* Usiamo il testo contenuto in section, avvolto da strong */}
-                <Label _id={'title'} text={sectionAttiva?.testo + (TypeUser.FAMILY === user.type  ? i18n._('tutorato') : '')} />
-              </Typography>
-            </Box>
-            <Grid container justifyContent={!user?.emailUserCurrent ? 'flex-end' : 'space-between'} alignItems="center" spacing={2}>
+          {/* Aggiungiamo 'ml-auto' o gestiamo via CSS per spingere a destra */}
+          <Box className='box-layout-right-button'>
+            {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
+            <Button pulsanti={[pulsanteLogout]} />
+            <Language />
+            <Popover
+              notifications={popoverNotifications}
+              openAnchor={openAnchor}
+              handleCloseAnchor={handleCloseAnchor}
+              pulsanteNotification={pulsanteNotification}
+            />
+          </Box>
+        </Grid>
 
-
-              {menuLaterale && menuLaterale.length > 0 && (
-                <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
-              )}
-              <Box className='box-layout-right-button'>
-                {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
-                <Button pulsanti={[pulsanteLogout]} />
-                <Language />
-                <Popover
-                  notifications={popoverNotifications}
-                  openAnchor={openAnchor}
-                  handleCloseAnchor={handleCloseAnchor}
-                  pulsanteNotification={pulsanteNotification}
-                />
-              </Box>
-            </Grid>
-
-            {/* Riga 2: Email */}
-            <Grid container>
-              <Box className="box-layout-text-vertical">
-
-                {user?.emailUserCurrent && hiddenEmail !== true ? (
-                  <TextField
-                    id="emailFamily"
-                    label={user?.emailUserCurrent === user?.emailChild
-                      ? i18n._('email_registrazione')
-                      : i18n._('email_tutorato')}
-                    variant="standard"
-                    value={user?.emailChild}
-                    fullWidth
-                    disabled
-                  />
-                ) : null}
-              </Box>
-            </Grid>
-          </>
-        ) : (
-          <>
-
-            {/* Riga 1: Titolo centrato con classe CSS */}
-            <Box className="title-container">
-              {/* Renderizza l'icona contenuta nell'oggetto section */}
-              {IconaTitolo && <IconaTitolo className="header-icon" />}
-              <Typography variant="h6" className="header-title">
-                {/* Usiamo il testo contenuto in section, avvolto da strong */}
-                <Label _id={'title'} text={sectionAttiva?.testo + (TypeUser.FAMILY === user?.type  ? i18n._('tutorato') : '')} />
-              </Typography>
-            </Box>
-            <Grid container justifyContent="space-between" alignItems="center" className='grid-menu'>
-              {menuLaterale && menuLaterale.length > 0 && (
-                <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
-              )}
-              <Box className="box-layout-text">
-                {user?.emailUserCurrent && hiddenEmail !== true ? (
-                  <TextField
-                    id="emailFamily"
-                    label={user?.emailUserCurrent === user?.emailChild
-                      ? i18n._('email_registrazione')
-                      : i18n._('email_tutorato')}
-                    variant="standard"
-                    value={user?.emailChild}
-                    fullWidth
-                    disabled
-                  />
-                ) : null}
-              </Box>
-              <Box className='box-layout-right-button'>
-                {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
-                <Button pulsanti={[pulsanteLogout]} />
-                <Language />
-                <Popover
-                  notifications={popoverNotifications}
-                  openAnchor={openAnchor}
-                  handleCloseAnchor={handleCloseAnchor}
-                  pulsanteNotification={pulsanteNotification} />
-              </Box>
-            </Grid></>
+        {/* AREA EMAIL: Visibile solo se necessario */}
+        {user?.emailUserCurrent && !hiddenEmail && (
+          <Box className={isVertical ? "box-layout-text-vertical" : "box-layout-text"}>
+            <TextField
+              id="emailFamily"
+              label={user?.emailUserCurrent === user?.emailChild
+                ? i18n._('email_registrazione')
+                : i18n._('email_tutorato')}
+              variant="standard"
+              value={user?.emailChild}
+              fullWidth
+              disabled
+            />
+          </Box>
         )}
       </Box>
 
@@ -282,7 +243,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       {children}
     </>
   );
-
 }
 
 export default PageLayout;
