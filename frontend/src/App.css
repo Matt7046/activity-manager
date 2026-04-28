@@ -28,6 +28,13 @@
   color: #61dafb;
 }
 
+.presentation-header {
+    display: flex;
+    justify-content: flex-end; /* Sposta il contenuto tutto a destra */
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -35,6 +42,8 @@
   to {
     transform: rotate(360deg);
   }
+
+
 
 
 }

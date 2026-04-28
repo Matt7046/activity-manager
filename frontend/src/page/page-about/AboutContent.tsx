@@ -1,4 +1,4 @@
-import { i18n } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import { Box } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -13,6 +13,8 @@ import activityStore from "../page-activity/store/ActivityStore";
 import { navigateRouting, showMessage } from "../page-home/HomeContent";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./AboutContent.css";
+
+
 
 
 interface AboutContentProps {
@@ -31,6 +33,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   const location = useLocation();
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
+  const { i18n } = useLingui();
   const [disableButtonSave, setDisableButtonSave] = useState<boolean>();
   const { _id } = location.state || {}; // Ottieni il valore dallo stato
   const [disableButtonDelete, setDisableButtonDelete] = useState<boolean>(_id === null || _id === undefined);

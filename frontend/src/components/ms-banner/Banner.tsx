@@ -22,9 +22,7 @@ const BannerOpenSource: React.FC = () => {
     
         <form onSubmit={handleSubmit} className="form">
           <label className="text">
-            Iscriviti per ricevere aggiornamenti sul nostro progetto open source.
-            Tratteremo i tuoi dati personali esclusivamente per inviarti comunicazioni relative al progetto. 
-            Per maggiori dettagli, consulta la nostra{" "}
+            <Trans id="iscriviti"/>{" "}
             <label onClick={handleClick} className="link">
               <Trans id="privacy_policy" />
             </label>
