@@ -130,7 +130,7 @@
   "sezione_famiglia": "Family section",
   "sezione_attivit": "Activity section",
   "sezione_informazioni_utente": "User information section",
-  "sezione_impostazioni":"Settings",
+  "sezione_impostazioni": "Settings",
   "nuova_attivita": "New Activity",
   "login_simulato": "Simulated logins do not retrieve information",
   "sezione_sfide_premi": "Challenges and rewards section",
@@ -152,5 +152,18 @@
   "testo_entry": "Welcome to Activity Manager",
   "testo_button": "Enter",
   "testo_desc": "Manage activities, points, and much more within your family!",
-"iscriviti": "Subscribe to receive updates on our open-source project. We will process your personal data exclusively to send you project-related communications. For more details, please consult our"
+  "iscriviti": "Subscribe to receive updates on our open-source project. We will process your personal data exclusively to send you project-related communications. For more details, please consult our",
+  "variazione_punti": "Points change",
+  "numero_punti": "Available points: ",
+  "punti_attivitaobb":"Activity *",
+  "nuovi_punti": "Points operation",
+  "add_punti": "Add points",
+  "inviato_da": "Sent by: ",
+  "stato": "Status",
+  "data_inizio": "Start date",
+  "data_fine": "End date",
+  "filtra_periodo": "Filter by period",
+  "data_invio":"Date: ",
+  "aggiunti_punti": " Points added by: ",
+  "sottratti_punti": " Points deducted by: "
 }

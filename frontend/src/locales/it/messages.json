@@ -152,6 +152,18 @@
   "testo_entry":"Benvenuto in Activity Manager",
   "testo_button": "Entra",
   "testo_desc":"Gestisci attività, punti e molto altro in famiglia!",
-  "iscriviti":"Iscriviti per ricevere aggiornamenti sul nostro progetto open source.Tratteremo i tuoi dati personali esclusivamente per inviarti comunicazioni relative al progetto.Per maggiori dettagli, consulta la nostra"
-
+  "iscriviti":"Iscriviti per ricevere aggiornamenti sul nostro progetto open source.Tratteremo i tuoi dati personali esclusivamente per inviarti comunicazioni relative al progetto.Per maggiori dettagli, consulta la nostra",
+  "variazione_punti":"Variazione punti",
+  "numero_punti": "I Punti a disposizione sono: ",
+  "punti_attivitaobb":"Attività *",
+  "nuovi_punti":"Operazione punti",
+  "add_punti":" Aggiungi punti",
+  "inviato_da":"Inviato da: ",
+  "stato":"Stato",
+  "data_inizio":"Data inizio",
+  "data_fine":"Data fine",
+  "filtra_periodo":"Filtra per periodo",
+  "data_invio":"Data: ",
+  "aggiunti_punti":" Punti aggiunti da: ",
+  "sottratti_punti":" Punti sottratti da: "
 }
