@@ -1,50 +1,63 @@
-/* Stile per il bottone che apre il menu */
+/* Bottone di apertura: ora sembra un vero menu */
 .drawer-toggle-button {
-  font-weight: bold;
-  margin: 10px;
-  text-align: left!important;
-  justify-content: flex-start!important;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  text-transform: none; /* Rimuove il tutto maiuscolo di default di MUI */
+  color: #1976d2!important;
+  border: 1px solid #e0e0e0!important;
+  border-radius: 8px!important;
+  padding: 6px 16px!important;
+  transition: all 0.2s ease-in-out;
 }
 
 .drawer-toggle-button:hover {
-  background-color: #1565c0;
+  background-color: #f5f5f5!important;
+  border-color: #1976d2!important;
 }
 
-
-/* Lista voci menu */
-.drawer-list-item {
-  transition: background-color 0.2s ease;
-}
-
-.drawer-list-item:hover {
-  background-color: #e3f2fd;
-}
-
-/* Divider più sottile e con margini */
-.drawer-divider {
-  margin: 10px 0;
-  height: 1px;
-  background-color: #cfd8dc;
-}
-
-/* Icone uniformi */
-.drawer-list-icon {
-  color: red!important;
-}
-
+/* Container principale del Drawer */
 .drawer-box {
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   height: 100%;
-  padding: 10px 0;
   overflow-y: auto;
+  /* Contorno: riga sottile grigia per definire il menu */
+  border-right: 1px solid #e0e0e0; 
+  display: flex;
+  flex-direction: column;
 }
 
+/* Dimensioni fisse per pulizia visiva */
 .drawer-vertical {
-  width: 250px;
+  width: 280px; /* Leggermente più largo per il testo */
 }
 
 .drawer-horizontal {
   width: auto;
-  min-width: 200px;
+}
+
+/* Lista voci menu migliorata */
+.drawer-list-item {
+  margin: 4px 8px!important; /* Spazio tra i bottoni */
+  border-radius: 8px!important; /* Angoli arrotondati moderni */
+  transition: all 0.2s ease!important;
+}
+
+.drawer-list-item:hover {
+  background-color: #f0f7ff!important; /* Blu molto tenue */
+  color: #1976d2;
+}
+
+/* Icone: rimosso il rosso acceso per un look più professionale */
+.drawer-list-icon {
+  color: red!important; /* Grigio scuro Google style */
+  min-width: 40px!important;
+}
+
+.drawer-list-item:hover .drawer-list-icon {
+  color: #1976d2!important; /* L'icona diventa blu al passaggio */
+}
+
+/* Divider personalizzato */
+.drawer-divider {
+  margin: 8px 16px!important;
+  background-color: #eeeeee!important;
 }
