@@ -74,7 +74,7 @@ public class WebSocketService implements WebSocketHandler {
         notification.setUserReceiver(encryptDecryptConverter.convert(userReceiver));
         notification.setUserSender(encryptDecryptConverter.convert(userSender));
         notification.setDateSender(dateSender);
-        notification.setStatus(StatusNotification.SEND);
+        notification.setStatus(StatusNotification.NOT_READ);
         Notification response = notificationService.saveNotification(notification);
         Flux.fromIterable(sessions).filter(
                         session -> session.isOpen() && userReceiver.equals(session.getAttributes().get(identification)))
@@ -85,7 +85,7 @@ public class WebSocketService implements WebSocketHandler {
     }
 
     private Mono<WebSocketSession> saveNotificationStatusNotRead(WebSocketSession session, Notification notification, ObjectMapper objectMapper) {
-        notification.setStatus(StatusNotification.NOT_READ);
+        notification.setStatus(StatusNotification.SEND);
         notificationService.saveNotification(notification);
         return Mono.just(session);
     }
