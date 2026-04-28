@@ -1,14 +1,14 @@
+import { i18n } from "@lingui/core";
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import RegisterContent from './RegisterContent';
 
-
 const Register: React.FC<{}> = ({ }) => {
 
   const location = useLocation();
-  const [title, setTitle] = useState<string>("Sezione registrazione");
+  const [title, setTitle] = useState<string>(i18n._("sezione_registrazione"));
   const { user, setUser } = useUser();
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
