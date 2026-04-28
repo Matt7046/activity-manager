@@ -1,6 +1,5 @@
 import { Trans, useLingui } from "@lingui/react";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import SettingsIcon from '@mui/icons-material/Settings';
 import { Box, Divider, Paper, Typography } from "@mui/material";
 import React from "react";
 import { AlertConfig } from "../../components/ms-alert/Alert";
@@ -48,14 +47,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
   return (
     <Box className="popover-box">
       {/* INTESTAZIONE PAGINA */}
-      <Box className="profile-header">
-        <Box className="header-title-row">
-          <SettingsIcon className="header-icon" />
-          <Typography variant="h6" className="header-title">
-            <Trans id="impostazione_profilo" />
-          </Typography>
-        </Box>
-        <Typography variant="body2" color="text.secondary">
+
+      <Box className="popover-box">
+        {/* INTESTAZIONE PAGINA */}
+        <Typography variant="body2" color="text.secondary" className="popover-header-text">
           <Trans id="preferenze_account" /> <strong>{user.emailUserCurrent}</strong>
         </Typography>
       </Box>

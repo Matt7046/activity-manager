@@ -1,7 +1,8 @@
-import { i18n } from "@lingui/core";
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
+import { MenuLaterale } from "../../components/ms-drawer/Drawer";
+import { SectionNameDesc } from "../../general/structure/Constant";
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import RegisterContent from './RegisterContent';
 
@@ -32,11 +33,14 @@ const Register: React.FC<{}> = ({ }) => {
   const handleClose = () => {
     setOpen(false);
   };
+  const section: MenuLaterale = {
+    testo: SectionNameDesc.REGISTER
+  }
   return (
     <>
       <PageLayout
-        title={i18n._("sezione_registrazione")}
-        alertConfig={{open,setOpen,message,setMessage}}
+        section={section}
+        alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}
@@ -44,7 +48,7 @@ const Register: React.FC<{}> = ({ }) => {
       >
         <RegisterContent
           user={user}
-          alertConfig={{open,setOpen,message,setMessage}}
+          alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
         />
       </PageLayout>
