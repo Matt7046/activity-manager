@@ -2,13 +2,14 @@ import { extendObservable } from "mobx";
 
 class BaseStore {
     private static _token: string | null = null;
-        constructor() {
+    private static _lang: string | null = null;
+    constructor() {
         extendObservable(this, {
             // Proprietà e metodi comuni
         });
     }
 
-    getToken(): string|null {
+    getToken(): string | null {
         return localStorage.getItem('token'); // Salva il token nel localStorage
     }
     setToken(token: string) {
@@ -19,6 +20,15 @@ class BaseStore {
     clearToken() {
         BaseStore._token = null;
         localStorage.removeItem('token');
+    }
+
+    getLang(): string | null {
+        return localStorage.getItem('lang'); // Salva la lingua nel localStorage
+    }
+    
+    setLang(lang: string) {
+        BaseStore._lang = lang;
+        localStorage.setItem("lang", lang); // Salva la lingua nel localStorage
     }
 
     get isAuthenticated() {

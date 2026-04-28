@@ -1,3 +1,4 @@
+import { useLingui } from "@lingui/react";
 import { Box } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useRef, useState } from "react";
@@ -23,6 +24,7 @@ const GamificationContent: React.FC<GamificationContentProps> = ({
 }) => {
 
   const location = useLocation();
+  const { i18n } = useLingui();
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
   const [isWatching, setIsWatching] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
