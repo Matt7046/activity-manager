@@ -51,3 +51,33 @@
 .header-icon {
   font-size: 1.5rem;            /* Regola la dimensione della rotella */
 }
+
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 25px; /* Spazio sotto il titolo */
+  width: 100%;
+}
+
+.grid-menu {
+    display: flex;
+    width: 100%;
+    padding-bottom: 15px;
+}
+
+/* Quando è verticale, i bottoni vanno a destra e il menu a sinistra se presenti */
+.vertical-layout {
+    flex-direction: row; 
+    justify-content: space-between;
+}
+
+/* Quando è orizzontale, mantiene la distribuzione spaziale */
+.horizontal-layout {
+    justify-content: space-between;
+}
+
+.header-title strong {
+    font-weight: bold;
+}
