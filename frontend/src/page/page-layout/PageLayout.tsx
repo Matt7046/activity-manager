@@ -1,4 +1,4 @@
-import { i18n } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import { Box, TextField } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { googleLogout } from '@react-oauth/google';
@@ -9,6 +9,7 @@ import Alert, { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import Label from '../../components/ms-label/Label';
+import Language from "../../components/ms-language/Language";
 import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
 import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
@@ -47,12 +48,14 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   navigate,
 }) => {
   const { user, setUser } = useUser();
+  const { i18n } = useLingui();
   const logout = (): void => {
     googleLogout();
 
     setUser(null);
     navigateRouting(navigate, SectionName.ROOT, {})
   }
+
 
   const [openAnchor, setOpenAnchor] = useState(false);
   const notify: NotificationI[] = [];
@@ -98,8 +101,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           socketFamilyPoint.getSocket().send("ping");
         }
         else {
-          SocketFamilyPoint.reconnect(user,SocketURL.NOTIFICATION + user?.emailUserCurrent); 
-         }
+          SocketFamilyPoint.reconnect(user, SocketURL.NOTIFICATION + user?.emailUserCurrent);
+        }
       }, 30000);
       socketFamilyPoint.getSocket().onmessage = (event) => {
         console.log("Messaggio ricevuto:", event.data);
@@ -170,6 +173,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
 
 
+
+
   return (
     <>
       <Box className="box-layout">
@@ -186,6 +191,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
               <Box className='box-layout-right-button'>
                 {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
                 <Button pulsanti={[pulsanteLogout]} />
+                <Language />
                 <Popover
                   notifications={popoverNotifications}
                   openAnchor={openAnchor}
@@ -203,8 +209,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                   <TextField
                     id="emailFamily"
                     label={user?.emailUserCurrent === user?.emailChild
-                      ? 'email di registrazione'
-                      : 'Email tutelato'}
+                      ? i18n._('email_registrazione')
+                      : i18n._('email_tutorato')}
                     variant="standard"
                     value={user?.emailChild}
                     fullWidth
@@ -227,8 +233,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                   <TextField
                     id="emailFamily"
                     label={user?.emailUserCurrent === user?.emailChild
-                      ? 'email di registrazione'
-                      : 'Email tutelato'}
+                      ? i18n._('email_registrazione')
+                      : i18n._('email_tutorato')}
                     variant="standard"
                     value={user?.emailChild}
                     fullWidth
@@ -239,6 +245,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
               <Box className='box-layout-right-button'>
                 {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
                 <Button pulsanti={[pulsanteLogout]} />
+                <Language />
                 <Popover
                   notifications={popoverNotifications}
                   openAnchor={openAnchor}

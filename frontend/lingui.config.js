@@ -2,7 +2,7 @@ const { formatter } = require("@lingui/format-json");
 
 /** @type {import('@lingui/conf').LinguiConfig} */
 module.exports = {
-  locales: ["it"],
+  locales: ["en", "it"],
   sourceLocale: "it",
   catalogs: [
     {
