@@ -111,5 +111,10 @@ export const getDateStringRegularFormat = (data: Date): string => {
   return new Date(data).toLocaleDateString();
 }
 
+export const estraiNumeroPunti = (message: string): number => {
+  const match = message.match(/-?\d+(\.\d+)?/);  
+  return match ? parseFloat(match[0]) : 0;
+};
+
 
 
