@@ -2,7 +2,8 @@ import { useLingui } from "@lingui/react";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
-import { TypeUser } from "../../general/structure/Constant";
+import { MenuLaterale } from "../../components/ms-drawer/Drawer";
+import { SectionNameDesc } from "../../general/structure/Constant";
 import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import SettingsContent from './SettingsContent';
@@ -37,11 +38,14 @@ const Settings: React.FC<{}> = ({ }) => {
   const handleClose = () => {
     setOpen(false);
   };
+  const section: MenuLaterale = {
+    testo: SectionNameDesc.SETTINGS
+  }
 
   return (
     <>
       <PageLayout
-        title={i18n._("sezione_impostazioni") + (TypeUser.FAMILY ? i18n._('tutorato') : '')}
+        section={section}
         menuLaterale={menuLaterale}
         alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}

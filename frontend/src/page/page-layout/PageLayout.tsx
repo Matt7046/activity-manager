@@ -1,5 +1,5 @@
 import { useLingui } from "@lingui/react";
-import { Box, TextField } from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { googleLogout } from '@react-oauth/google';
 import React, { useEffect, useRef, useState } from 'react';
@@ -11,7 +11,7 @@ import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import Label from '../../components/ms-label/Label';
 import Language from "../../components/ms-language/Language";
 import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
-import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor } from '../../general/structure/Constant';
+import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
 import { SocketURL } from '../../general/structure/SocketUrl';
 import { estraiNumeroPunti, FamilyNotificationI, getDateStringRegularFormat, NotificationI, ResponseI } from '../../general/structure/Utils';
@@ -21,7 +21,7 @@ import "./PageLayout.css";
 
 
 interface PageLayoutProps {
-  title: string
+  section: MenuLaterale
   menuLaterale?: MenuLaterale[][];
   alertConfig: AlertConfig
   isVertical: boolean;
@@ -38,7 +38,7 @@ export interface TypeMessage {
 
 const PageLayout: React.FC<PageLayoutProps> = ({
 
-  title,
+  section,
   children,
   menuLaterale,
   alertConfig,
@@ -64,7 +64,12 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio  
 
-
+  // Cerca nel menu, se non lo trova usa l'oggetto section passato come fallback
+  // Se menuLaterale è null, usiamo un array vuoto per evitare errori su .flat()
+  const sectionAttiva = (menuLaterale ?? [])
+    .flat()
+    .find(item => item?.testo === section?.testo) ?? section;
+  const IconaTitolo = sectionAttiva?.icon;
   const handleClickAnchor = () => {
     getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3, StatusNotification.NOT_READ).then((response: ResponseI) => {
       setNotifications(response.jsonText);
@@ -153,7 +158,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     })
   }
 
-
   const pulsanteNotifiche: Pulsante = {
     icona: 'fas fa-clipboard',
     funzione: (event) => handleClickAnchor(), // Passi la funzione direttamente
@@ -172,17 +176,23 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     configDialogPulsante: { message: '', showDialog: false }
   };
 
-
-
-
-
   return (
     <>
       <Box className="box-layout">
         {isVertical ? (
           <>
-            {/* Riga 1: Menu + Pulsanti */}
-            <Label _id={'title'} text={title}></Label>
+            {/* Definiamo l'icona da usare. 
+    Se menuLaterale ha un'icona specifica la usiamo, altrimenti mettiamo un fallback */}
+
+            <Box className="title-container">
+              {/* Renderizza l'icona contenuta nell'oggetto section */}
+              {IconaTitolo && <IconaTitolo className="header-icon" />}
+
+              <Typography variant="h6" className="header-title">
+                {/* Usiamo il testo contenuto in section, avvolto da strong */}
+                <Label _id={'title'} text={sectionAttiva?.testo + (TypeUser.FAMILY === user.type  ? i18n._('tutorato') : '')} />
+              </Typography>
+            </Box>
             <Grid container justifyContent={!user?.emailUserCurrent ? 'flex-end' : 'space-between'} alignItems="center" spacing={2}>
 
 
@@ -224,7 +234,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         ) : (
           <>
 
-            <Label _id={'title'} text={title}></Label>
+            {/* Riga 1: Titolo centrato con classe CSS */}
+            <Box className="title-container">
+              {/* Renderizza l'icona contenuta nell'oggetto section */}
+              {IconaTitolo && <IconaTitolo className="header-icon" />}
+              <Typography variant="h6" className="header-title">
+                {/* Usiamo il testo contenuto in section, avvolto da strong */}
+                <Label _id={'title'} text={sectionAttiva?.testo + (TypeUser.FAMILY === user?.type  ? i18n._('tutorato') : '')} />
+              </Typography>
+            </Box>
             <Grid container justifyContent="space-between" alignItems="center" className='grid-menu'>
               {menuLaterale && menuLaterale.length > 0 && (
                 <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />

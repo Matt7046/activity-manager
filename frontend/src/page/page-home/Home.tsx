@@ -2,6 +2,7 @@ import { useLingui } from "@lingui/react";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
+import { SectionNameDesc } from "../../general/structure/Constant";
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import HomeContent from './HomeContent';
 
@@ -28,12 +29,13 @@ const Home: React.FC<{}> = ({ }) => {
     setOpen(false);
   };
 
-
-
+  const section: MenuLaterale = {
+    testo: SectionNameDesc.ROOT
+  }
   return (
     <>
       <PageLayout
-        title={title}
+        section={section}
         menuLaterale={menuLaterale}
         alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
