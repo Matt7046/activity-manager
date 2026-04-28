@@ -1,4 +1,4 @@
-import { i18n } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import { Box, TextField } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { googleLogout } from '@react-oauth/google';
@@ -9,11 +9,12 @@ import Alert, { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import Label from '../../components/ms-label/Label';
+import Language from "../../components/ms-language/Language";
 import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
 import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
 import { SocketURL } from '../../general/structure/SocketUrl';
-import { FamilyNotificationI, getDateStringRegularFormat, NotificationI, ResponseI } from '../../general/structure/Utils';
+import { estraiNumeroPunti, FamilyNotificationI, getDateStringRegularFormat, NotificationI, ResponseI } from '../../general/structure/Utils';
 import { navigateRouting, showMessage } from '../page-home/HomeContent';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
@@ -47,12 +48,14 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   navigate,
 }) => {
   const { user, setUser } = useUser();
+  const { i18n } = useLingui();
   const logout = (): void => {
     googleLogout();
 
     setUser(null);
     navigateRouting(navigate, SectionName.ROOT, {})
   }
+
 
   const [openAnchor, setOpenAnchor] = useState(false);
   const notify: NotificationI[] = [];
@@ -66,9 +69,10 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3, StatusNotification.NOT_READ).then((response: ResponseI) => {
       setNotifications(response.jsonText);
       const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
+        const punti = estraiNumeroPunti(x.message)
         const popoverNotification = {
-          message: x.message,
-          subText: ['Inviato da: ' + x.userSender, 'data: ' + getDateStringRegularFormat(x.dateSender)]
+          message: punti < 0 ? punti + i18n._("sottratti_punti") + x.userSender : punti + i18n._("aggiunti_punti") + x.userSender,
+          subText: [i18n._("inviato_da") + x.userSender, i18n._("data_invio") + getDateStringRegularFormat(x.dateSender)]
 
         }
         return popoverNotification;
@@ -98,8 +102,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           socketFamilyPoint.getSocket().send("ping");
         }
         else {
-          SocketFamilyPoint.reconnect(user,SocketURL.NOTIFICATION + user?.emailUserCurrent); 
-         }
+          SocketFamilyPoint.reconnect(user, SocketURL.NOTIFICATION + user?.emailUserCurrent);
+        }
       }, 30000);
       socketFamilyPoint.getSocket().onmessage = (event) => {
         console.log("Messaggio ricevuto:", event.data);
@@ -170,6 +174,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
 
 
+
+
   return (
     <>
       <Box className="box-layout">
@@ -186,6 +192,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
               <Box className='box-layout-right-button'>
                 {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
                 <Button pulsanti={[pulsanteLogout]} />
+                <Language />
                 <Popover
                   notifications={popoverNotifications}
                   openAnchor={openAnchor}
@@ -203,8 +210,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                   <TextField
                     id="emailFamily"
                     label={user?.emailUserCurrent === user?.emailChild
-                      ? 'email di registrazione'
-                      : 'Email tutelato'}
+                      ? i18n._('email_registrazione')
+                      : i18n._('email_tutorato')}
                     variant="standard"
                     value={user?.emailChild}
                     fullWidth
@@ -227,8 +234,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                   <TextField
                     id="emailFamily"
                     label={user?.emailUserCurrent === user?.emailChild
-                      ? 'email di registrazione'
-                      : 'Email tutelato'}
+                      ? i18n._('email_registrazione')
+                      : i18n._('email_tutorato')}
                     variant="standard"
                     value={user?.emailChild}
                     fullWidth
@@ -239,6 +246,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
               <Box className='box-layout-right-button'>
                 {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
                 <Button pulsanti={[pulsanteLogout]} />
+                <Language />
                 <Popover
                   notifications={popoverNotifications}
                   openAnchor={openAnchor}

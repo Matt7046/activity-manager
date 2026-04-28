@@ -2,6 +2,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import React, { createContext, useContext, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
+import Language from './components/ms-language/Language';
 import Presentation from './components/ms-presentation/Presentation';
 import About from './page/page-about/About';
 import Activity from './page/page-activity/Activity';
@@ -25,7 +26,7 @@ export const useUser = () => useContext(UserContext);
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   // Funzione per distruggere l'utente
-  const resetUser = () => setUser(null);  
+  const resetUser = () => setUser(null);
 
   return (
     <UserContext.Provider value={{ user, setUser, resetUser }}>
@@ -45,7 +46,9 @@ const AppComponent = () => {
   const location = useLocation();
   if (location.pathname === '/') {
     return (
-      <Presentation> </Presentation>
+      <><div className="presentation-header">
+        <Language />
+      </div><Presentation> </Presentation></>
     );
   }
   return (

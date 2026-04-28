@@ -1,12 +1,12 @@
+import { useLingui } from "@lingui/react";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import HomeContent from './HomeContent';
 
-
 const Home: React.FC<{}> = ({ }) => {
-
+  const { i18n } = useLingui();
   const [title, setTitle] = useState<string>('');
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale: MenuLaterale[][] = [];
@@ -28,14 +28,14 @@ const Home: React.FC<{}> = ({ }) => {
     setOpen(false);
   };
 
-  
+
 
   return (
     <>
       <PageLayout
         title={title}
         menuLaterale={menuLaterale}
-        alertConfig={{ open, setOpen, message, setMessage }}       
+        alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}>

@@ -1,4 +1,4 @@
-import { i18n } from "@lingui/core";
+import { Trans, useLingui } from "@lingui/react";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -8,9 +8,8 @@ import React, { useEffect, useState } from "react";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import { Pulsante } from "../../components/ms-button/Button";
 import DataGridComponent from '../../components/ms-data-grid/DataGrid';
-import { PopoverNotification } from "../../components/ms-popover/Popover";
 import { ButtonName, HttpStatus, StatusNotification } from "../../general/structure/Constant";
-import { getDateStringRegularFormat, NotificationI, ResponseI, UserI } from "../../general/structure/Utils";
+import { estraiNumeroPunti, getDateStringRegularFormat, NotificationI, ResponseI, UserI } from "../../general/structure/Utils";
 import { showMessage } from "../page-home/HomeContent";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./NotificationContent.css";
@@ -24,6 +23,7 @@ interface NotificationContentProps {
 
 const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertConfig }) => {
   const [notifications, setNotifications] = useState<NotificationI[]>([]);
+  const { i18n } = useLingui();
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [rowCount, setRowCount] = useState(0);
@@ -32,7 +32,6 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
     pageSize: 5,
   });
   const notify: NotificationI[] = [];
-  const [popoverNotifications, setPopoverNotifications] = useState<PopoverNotification[]>([]);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -113,15 +112,16 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
     return notifDate >= start && notifDate <= end;
   });
   // Definizione colonne UNICA (fuori dal render per performance)
+
   const columns: GridColDef[] = [
     {
       field: 'message',
-      headerName: 'Notifiche',
+      headerName: i18n._("notifiche"),
       flex: 1,
       renderCell: (params: GridRenderCellParams) => {
         const isExpanded = expandedRowId === params.id;
         const x = params.row as NotificationI;
-
+        const punti = estraiNumeroPunti(x.message)
         return (
           <Box sx={{ width: '100%' }}>
             <Box
@@ -136,7 +136,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
                   </Typography>
                 )}
                 <Typography className="notification-title">
-                  {x.message || "Aggiornamento"}
+                  {punti < 0 ? punti + i18n._("sottratti_punti") +  x.userSender : punti + i18n._("aggiunti_punti") + x.userSender}
                 </Typography>
               </Box>
               <KeyboardArrowDownIcon
@@ -150,9 +150,9 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
 
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
               <Box sx={{ pl: 6, pb: 2, bgcolor: 'inherit' }}>
-                <Typography variant="body2" color="text.secondary"><strong>Inviato da:</strong> {x.userSender}</Typography>
+                <Typography variant="body2" color="text.secondary"><strong><Trans id="inviato_da" /></strong> {x.userSender}</Typography>
                 <Divider sx={{ my: 1, opacity: 0.3 }} />
-                <Typography variant="body2" color="text.secondary"><strong>Stato:</strong> {x.status}</Typography>
+                <Typography variant="body2" color="text.secondary"><strong><Trans id="stato" /></strong> {x.status}</Typography>
               </Box>
             </Collapse>
           </Box>
@@ -167,11 +167,11 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
       <Box className="filter-container">
         <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 1 }}>
           <FilterListIcon sx={{ fontSize: 18, mr: 1, color: '#1976d2' }} />
-          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Filtra per periodo</Typography>
+          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}><Trans id="filtra_periodo" /></Typography>
         </Box>
 
         <Box className="filter-group">
-          <label className="filter-label">Data Inizio</label>
+          <label className="filter-label"><Trans id="data_inizio" /></label>
           <input
             type="date"
             className="date-input"
@@ -181,7 +181,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
         </Box>
 
         <Box className="filter-group">
-          <label className="filter-label">Data Fine</label>
+          <label className="filter-label"><Trans id="data_fine" /></label>
           <input
             type="date"
             className="date-input"
