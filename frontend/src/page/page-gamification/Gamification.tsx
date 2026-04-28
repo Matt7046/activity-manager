@@ -2,7 +2,8 @@ import { useLingui } from "@lingui/react";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../App';
-import { TypeUser } from '../../general/structure/Constant';
+import { MenuLaterale } from "../../components/ms-drawer/Drawer";
+import { SectionNameDesc } from '../../general/structure/Constant';
 import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import GamificationContent from './GamificationContent';
@@ -36,19 +37,22 @@ const Gamification: React.FC<{}> = ({ }) => {
     setOpen(false);
   };
 
+  const section: MenuLaterale = {
+    testo: SectionNameDesc.GAMIFICATION
+  }
   return (
     <>
       <PageLayout
-        title={i18n._("sezione_sfide_premi") + (TypeUser.FAMILY ? i18n._('tutorato') : '')}
+        section={section}
         menuLaterale={menuLaterale}
-        alertConfig={{open,setOpen,message,setMessage}}
+        alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
         handleClose={handleClose}
         navigate={useNavigate()}
       >
         <GamificationContent
           user={user}
-          alertConfig={{open,setOpen,message,setMessage}}
+          alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
         />
       </PageLayout>

@@ -17,9 +17,9 @@ import './Drawer.css';
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 export interface MenuLaterale {
-  funzione: ((...args: unknown[]) => unknown) | null; // Può essere una funzione o `null`
+  funzione?: ((...args: unknown[]) => unknown) | null; // Può essere una funzione o `null`
   testo: string
-  icon: OverridableComponent<SvgIconTypeMap<{}, "svg">>
+  icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>
 }
 
 export interface TypeAnchor {
