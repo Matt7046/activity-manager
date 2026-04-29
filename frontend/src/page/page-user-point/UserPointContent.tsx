@@ -365,7 +365,7 @@ const renderChildren3 = (open: boolean) => (
               _id: cardsDataId[0],
               text: cardText1,
               img: nameImage[0].name,
-              title: i18n._("punti"),
+              title: i18n._("punti_caps_lock"),
               loadImage: (image: FormData) => saveImage(cardsDataId[0], image, user),
               children: renderChildren1(),
             },
