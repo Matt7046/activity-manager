@@ -14,7 +14,7 @@ import Popover, { PopoverNotification } from '../../components/ms-popover/Popove
 import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
 import { SocketURL } from '../../general/structure/SocketUrl';
-import { estraiNumeroPunti, FamilyNotificationI, getDateStringRegularFormat, NotificationI, ResponseI } from '../../general/structure/Utils';
+import { estraiTestoKey, FamilyNotificationI, getDateStringRegularFormat, NotificationI, ResponseI } from '../../general/structure/Utils';
 import { navigateRouting, showMessage } from '../page-home/HomeContent';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
@@ -71,14 +71,13 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     .find(item => item?.testo === section?.testo) ?? section;
   const IconaTitolo = sectionAttiva?.icon;
   const handleClickAnchor = () => {
-    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3, StatusNotification.NOT_READ).then((response: ResponseI) => {
+    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3, StatusNotification.SEND).then((response: ResponseI) => {
       setNotifications(response.jsonText);
       const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
-        const punti = estraiNumeroPunti(x.message)
+        const testoKey = estraiTestoKey(x.message)
         const popoverNotification = {
-          message: punti < 0 ? punti + i18n._("sottratti_punti") + x.userSender : punti + i18n._("aggiunti_punti") + x.userSender,
+          message: testoKey?.testo + i18n._(testoKey.key),
           subText: [i18n._("inviato_da") + x.userSender, i18n._("data_invio") + getDateStringRegularFormat(x.dateSender)]
-
         }
         return popoverNotification;
 
