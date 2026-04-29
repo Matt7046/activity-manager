@@ -166,5 +166,11 @@
   "data_invio":"Date: ",
   "aggiunti_punti": " Points added by: ",
   "sottratti_punti": " Points deducted by: ",
-  "menu_navigazione": "Navigation menu"
+  "menu_navigazione": "Navigation menu", 
+  "no_descrizione": "No description",
+  "dettagli": "Activity name",
+  "esporta":"Export",
+  "stampa": "Print",
+  "nessun_risultato": "No results found"
+
 }
