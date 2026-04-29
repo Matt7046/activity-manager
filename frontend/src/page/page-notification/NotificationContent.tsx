@@ -162,7 +162,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
   ];
 
   return (
-    <Box className="popover-box">
+    <Box className="notification-container">
       {/* SEZIONE FILTRI */}
       <Box className="filter-container">
         <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 1 }}>
