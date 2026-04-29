@@ -90,6 +90,12 @@
   margin-top: 4px;
 }
 
+.delete-icon {
+  color: #2f84d3;
+  margin-right: 16px;
+  margin-top: 4px;
+}
+
 .action-title {
   font-weight: 600 !important;
 }
