@@ -1,24 +1,31 @@
-/* Container principale: usiamo flex per distribuire lo spazio verticalmente */
+/* 1. Assicurati che html e body non abbiano margini e occupino tutto lo schermo */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Occupa almeno tutto lo schermo */
+}
+
 .welcome-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Centra il contenuto verticalmente */
-  
-  /* Rimosso min-height: 50vh per dare spazio alla crescita naturale */
-  padding: 40px 20px; 
-  max-width: 5000px;
-  margin: 0 auto;
-  flex-grow: 1; /* Occupa lo spazio disponibile tra banner e footer */
+  justify-content: center;
+  padding: 60px 20px;
+  flex-grow: 1; /* IMPORTANTE: Questo spinge il footer verso il basso */
 }
 
 .tech-footer-container {
-  background-color: #2d3748; /* Mantiene lo sfondo blu scuro */
+  background-color: #2d3748;
   color: #f7fafc;
   text-align: center;
-  /* Aumentiamo il padding inferiore: sopra 24px, lati 10px, sotto 50px */
-  padding: 24px 10px 60px 10px; 
+  padding: 40px 10px 60px 10px;
   width: 100%;
+  /* flex-grow: 0; Qui non serve che cresca, deve solo stare al fondo */
 }
 
 /* Stile per le icone delle tecnologie */
@@ -38,29 +45,8 @@
 .welcome-description-title {
   text-align: center; /* Assicura che il testo sia centrato */
 }
-/* Il wrapper ora occupa tutta l'altezza dello schermo */
-.page-wrapper {
-  display: flex;
-  flex-direction: column;
-}/* Il wrapper ora occupa tutta l'altezza dello schermo */
-.page-wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Forza il contenitore a essere alto quanto lo schermo */
-  margin: 0;
-}
 
-/* Container centrale (Benvenuto) */
-.welcome-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px; 
-  max-width: 5000px;
-  margin: 0 auto;
-  /* Rimosso flex-grow qui per darlo alla sezione scura sotto */
-}
+
 
 /* Sezione Tecnologie (Footer) */
 .tech-footer-container {
