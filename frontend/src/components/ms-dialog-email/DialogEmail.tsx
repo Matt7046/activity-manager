@@ -43,7 +43,7 @@ return (
         {/* Box Istruzioni */}
         <div className="instruction-box">
           <Typography className="instruction-text">
-            <Trans id="seleziona_lindirizzo_email_del_tutor_per_procedere_con_lassegnazione" />
+            <Trans id="seleziona_lindirizzo_email_del_tutorato_per_procedere_con_lassegnazione" />
           </Typography>
         </div>
 
