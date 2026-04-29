@@ -223,11 +223,14 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           <Box className={isVertical ? "box-layout-text-vertical" : "box-layout-text"}>
             <TextField
               id="emailFamily"
-              label={user?.emailUserCurrent === user?.emailChild
-                ? i18n._('email_registrazione')
-                : i18n._('email_tutorato')}
+              className="form-control-operative"
+              label={
+                user?.emailUserCurrent === user?.emailChild
+                  ? i18n._('email_registrazione')
+                  : i18n._('email_tutorato')
+              }
               variant="standard"
-              value={user?.emailChild}
+              value={user?.emailChild || ''}
               fullWidth
               disabled
             />
