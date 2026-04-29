@@ -79,3 +79,53 @@
   background-color: inherit; /* Segue il colore della riga (bianco o azzurrino) */
 }
 
+/* 1. Applichiamo lo stesso wrapper di Schedule per margini e spazi */
+.notification-container {
+  flex-grow: 1;
+  width: 95%;            /* Come in Schedule.css */
+  max-width: 1400px;      /* Come in Schedule.css */
+  margin: 20px auto;      /* Centra e distanzia */
+  
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  
+  /* Imponiamo il box-sizing corretto per evitare sforamenti a destra */
+  padding: 24px;          /* Uniformato a Operative/Settings */
+  box-sizing: border-box; 
+  overflow: hidden;
+}
+
+/* 2. Sistemiamo l'area dei filtri affinché non esca dai bordi */
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 0 0 24px 0;    /* Rimosso padding laterale interno, usa quello del container */
+  background-color: transparent;
+  border-bottom: 2px solid #f1f3f5;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 3. Assicuriamoci che la griglia occupi tutto lo spazio ma non oltre */
+.grid-container {
+  width: 100% !important;
+  margin-top: 20px;
+  box-sizing: border-box;
+}
+
+/* 4. Fix per Mobile (stesse imposizioni di prima) */
+@media (max-width: 600px) {
+  .notification-container {
+    width: 100%;          /* Su mobile occupa tutta la larghezza */
+    margin: 0;
+    border-radius: 0;     /* Rimuove arrotondamento su mobile per continuità */
+    padding: 16px;        /* Spazio ridotto ma presente a destra/sinistra */
+  }
+  
+  .filter-group {
+    min-width: 100%;      /* I filtri vanno uno sotto l'altro su mobile */
+  }
+}
+
