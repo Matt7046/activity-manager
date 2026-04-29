@@ -159,3 +159,37 @@
     max-width: 320px;
     flex-shrink: 0;   /* Impedisce alle card di rimpicciolirsi */
 }
+
+/* Container principale: aggiungiamo protezione per lo spazio a destra */
+.points-content-container {
+    width: 100%;
+    padding: 24px; /* Allineato allo stile Settings/Operative */
+    box-sizing: border-box; /* Impedisce al padding di spingere fuori il contenuto */
+    overflow-x: hidden; /* Sicurezza extra contro lo scroll orizzontale */
+}
+
+/* Fix per le Grid di Material UI (Unstable_Grid2 o Grid) */
+.points-content-container .MuiGrid2-container,
+.points-content-container .MuiGrid-container {
+    margin: 0 !important; /* Rimuove i margini negativi che causano lo spazio a destra */
+    width: 100% !important;
+}
+
+/* Se hai dei Box o Paper all'interno, forzali nel box-model */
+.points-content-container .MuiBox-root,
+.points-content-container .MuiPaper-root {
+    box-sizing: border-box;
+}
+
+/* Ottimizzazione per mobile */
+@media (max-width: 600px) {
+    .points-content-container {
+        padding: 16px; /* Riduce leggermente il padding per dare più spazio al contenuto */
+    }
+    
+    /* Assicurati che le card non forzino larghezze fisse */
+    .log-card-item {
+        width: 100% !important;
+        margin-right: 0 !important;
+    }
+}
