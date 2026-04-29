@@ -119,7 +119,7 @@ const columns: GridColDef[] = [
   );
 
   return (
-    <Box className="schedule-container" sx={{ width: '100%', p: 2 }}>
+    <Box className="schedule-container">
       <DataGrid
         rows={rows}
         columns={columns}
