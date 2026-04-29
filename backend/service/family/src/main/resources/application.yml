@@ -6,8 +6,8 @@ spring:
     name: activityManager
 message:
   document:
-    points: "I Point a disposizione sono: "
-    add: " Punti aggiunti da "
-    remove: " Punti sottratti da  "
+    points: "?numero_punti?"
+    add: "?aggiunti_punti?"
+    remove: "?sottratti_punti?"
 notification:
   service: "familyService"

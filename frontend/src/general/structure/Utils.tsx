@@ -111,10 +111,23 @@ export const getDateStringRegularFormat = (data: Date): string => {
   return new Date(data).toLocaleDateString();
 }
 
-export const estraiNumeroPunti = (message: string): number => {
-  const match = message.match(/-?\d+(\.\d+)?/);  
-  return match ? parseFloat(match[0]) : 0;
+export const estraiTestoKey = (message: string): { testo: number; key: string } => {
+  // Dividiamo la stringa ogni volta che troviamo un '?'
+  // Esempio: "15?aggiunti_punti?user@simulated.com" -> ["15", "aggiunti_punti", "user@simulated.com"]
+  const parti = message.split('?');
+
+  return {
+    // Il primo elemento è il numero (lo convertiamo in number)
+    testo: parti[0] ? parseFloat(parti[0]) : 0,
+    
+    // Il secondo elemento è il tipo/descrizione
+    key: parti[1] ? parti[1].trim() : ""
+  };
 };
 
+// Esempio d'uso:
+// const result = estraiTestoKey("15?aggiunti_punti?user@simulated.com");
+// console.log(result.punti); // 15
+// console.log(result.tipo);  // "aggiunti_punti"
 
 
