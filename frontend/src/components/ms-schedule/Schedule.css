@@ -25,3 +25,84 @@
   display: flex;
   align-items: center;
 }
+
+/* Container principale della cella */
+.cell-container {
+  width: 100%;
+}
+
+/* Area cliccabile superiore (Header della riga) */
+.clickable-row-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  cursor: pointer;
+  overflow: hidden;
+  transition: opacity 0.2s;
+}
+
+.clickable-row-header:hover {
+  opacity: 0.8;
+}
+
+/* Icone Info e Freccia */
+.row-icon-info {
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.row-icon-arrow {
+  transition: transform 0.3s;
+  color: #666;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.row-icon-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+/* Contenitore del testo del titolo */
+.title-text-container {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.row-title {
+  font-weight: bold;
+  white-space: normal;
+  line-height: 1.2;
+  font-size: 16px;
+}
+
+/* Contenuto espandibile (Sotto-testo) */
+.expanded-content {
+  padding-left: 48px;
+  padding-bottom: 16px;
+  padding-right: 8px;
+}
+
+.subtesto-divider {
+  margin: 8px 0;
+  opacity: 0.3;
+}
+
+/* Container pulsanti azioni */
+.actions-container {
+  display: flex;
+  gap: 4px;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Ottimizzazione per Mobile (xs) */
+@media (max-width: 600px) {
+  .row-title {
+    font-size: 14px;
+  }
+  
+  .expanded-content {
+    padding-left: 32px;
+  }
+}

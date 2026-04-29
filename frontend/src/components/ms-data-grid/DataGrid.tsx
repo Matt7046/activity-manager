@@ -1,11 +1,10 @@
-import { DataGrid, GridCallbackDetails, GridPaginationModel } from "@mui/x-data-grid";
+import { useLingui } from "@lingui/react";
+import { Box } from '@mui/material';
+import { DataGrid, GridCallbackDetails, GridPaginationModel, GridToolbarContainer, GridToolbarExport } from "@mui/x-data-grid";
 import React from 'react';
-import Button from "../ms-button/Button";
+import Button, { Pulsante } from "../ms-button/Button";
 import "./DataGrid.css";
 
-import { Box } from '@mui/material';
-import { GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
-import { Pulsante } from "../ms-button/Button";
 
 interface DataGridComponentProps {
   rows: any[];
@@ -17,20 +16,20 @@ interface DataGridComponentProps {
   pulsanti?: Pulsante[];
 }
 
-const CustomToolbar = ({ pulsanti }: { pulsanti: Pulsante[] }) => {    return (
-      <GridToolbarContainer>
-        {/* Elementi a sinistra (opzionali, es: Export) */}
-        <GridToolbarExport />
+// Modifica la Toolbar per accettare la traduzione
+const CustomToolbar = ({ pulsanti }: { pulsanti: Pulsante[] }) => {
+  const { i18n } = useLingui();
+  return (
+    <GridToolbarContainer>
+      {/* Traduzione del pulsante Export */}
+      <GridToolbarExport printOptions={{ label: i18n._("esporta") }} csvOptions={{ label: i18n._("esporta") }} />
 
-        {/* Questo Box vuoto spinge tutto ciò che segue verso destra */}
-        <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{ flexGrow: 1 }} />
 
-        {/* Pulsante posizionato a destra */}
-        <Button pulsanti={pulsanti}></Button>
-      </GridToolbarContainer>
-    );
-  };
-
+      <Button pulsanti={pulsanti}></Button>
+    </GridToolbarContainer>
+  );
+};
 
 
 
@@ -44,7 +43,7 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({
   setPaginationModel,
   pulsanti
 }) => {
-
+  const { i18n } = useLingui();
   return (
     <DataGrid
       slots={{
@@ -54,6 +53,14 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({
         toolbar: {
           pulsanti: pulsanti || [], // Passa i pulsanti al CustomToolbar
         }
+      }}
+      // Traduzione globale dei testi della DataGrid
+      localeText={{
+        toolbarExport: i18n._("esporta"), // Testo principale del pulsante
+        toolbarExportLabel: i18n._("esporta"),
+        toolbarExportCSV: "CSV",
+        toolbarExportPrint: i18n._("stampa"),
+        noRowsLabel: i18n._("nessun_risultato") // Esempio extra
       }}
       rows={rows}
       columns={columns}
