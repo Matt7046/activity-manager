@@ -1,5 +1,6 @@
 import { Trans, useLingui } from "@lingui/react";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import { Box, Divider, Paper, Typography } from "@mui/material";
 import React from "react";
 import { AlertConfig } from "../../components/ms-alert/Alert";
@@ -10,7 +11,6 @@ import { showMessage } from "../page-home/HomeContent";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./SettingsContent.css"; // Riutilizziamo il CSS esistente
 import { updateStatus } from "./service/SettingsService";
-
 interface SettingsContentProps {
   user: UserI;
   alertConfig: AlertConfig;
@@ -88,14 +88,22 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
           <Divider />
 
           {/* ESEMPIO PROSSIMA AZIONE (Placeholder) */}
-          <Box className="action-disabled">
+
+          <Box className="action-row">
+            <Box className="action-info">
+              <EmailOutlinedIcon className="delete-icon" />
+              <Box>
+                <Typography variant="subtitle1" className="action-title">
+                  <Trans id="notifiche_email" />
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <Trans id="frequenza_avvisi" />
+                </Typography>
+              </Box>
+            </Box>
+
             <Box>
-              <Typography variant="subtitle1" className="action-title">
-                <Trans id="notifiche_email" />
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                <Trans id="frequenza_avvisi" />
-              </Typography>
+              <Button pulsanti={[]} />
             </Box>
           </Box>
         </Paper>
