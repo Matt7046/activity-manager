@@ -1,8 +1,34 @@
-.form-control-operative {
-    margin-top: 16px !important;
+/* Container principale simile alla struttura settings */
+.box-operative-content {
+    padding: 24px; /* Uniformiamo il padding ai settings */
+    width: 100%;
+    box-sizing: border-box; /* Fondamentale per evitare lo spazio a destra */
+}
+
+/* Assicuriamoci che la Grid non esca dai bordi */
+.box-operative-content .MuiGrid2-container {
+    margin: 0 !important;
     width: 100% !important;
 }
 
-.box-operative-content {
-    padding-left: 15px ; 
+/* Stile per i controlli del form */
+.form-control-operative {
+    margin-top: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box;
+}
+
+/* Allineamento dei pulsanti in fondo (come le action-row dei settings) */
+.box-operative-content > .MuiGrid2-container:last-child {
+    padding-top: 24px;
+    display: flex;
+    justify-content: flex-end; /* Spinge il pulsante a destra come in settings */
+    width: 100%;
+}
+
+/* Fix specifico per mobile per eliminare lo scroll/spazio laterale */
+@media (max-width: 600px) {
+    .box-operative-content {
+        padding: 16px; /* Riduciamo leggermente il padding su schermi molto piccoli */
+    }
 }
