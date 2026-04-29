@@ -9,7 +9,7 @@ import { AlertConfig } from "../../components/ms-alert/Alert";
 import { Pulsante } from "../../components/ms-button/Button";
 import DataGridComponent from '../../components/ms-data-grid/DataGrid';
 import { ButtonName, HttpStatus, StatusNotification } from "../../general/structure/Constant";
-import { estraiTestoKey, getDateStringRegularFormat, NotificationI, ResponseI, UserI } from "../../general/structure/Utils";
+import { estraiTestoKeyNotification, getDateStringRegularFormat, NotificationI, ResponseI, UserI } from "../../general/structure/Utils";
 import { showMessage } from "../page-home/HomeContent";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./NotificationContent.css";
@@ -121,7 +121,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
       renderCell: (params: GridRenderCellParams) => {
         const isExpanded = expandedRowId === params.id;
         const x = params.row as NotificationI;
-        const testoKey = estraiTestoKey(x.message)
+        const testoKey = estraiTestoKeyNotification(x.message)
         return (
           <Box sx={{ width: '100%' }}>
             <Box
@@ -136,7 +136,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
                   </Typography>
                 )}
                 <Typography className="notification-title">
-                  {testoKey?.testo + i18n._(testoKey.key) }
+                  {testoKey?.testo + i18n._(testoKey.key) + " " + testoKey.resto}
                 </Typography>
               </Box>
               <KeyboardArrowDownIcon
