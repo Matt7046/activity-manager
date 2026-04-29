@@ -1,106 +1,145 @@
-/* Container principale della Card */
+/* --- STRUTTURA CARD COMPLETA --- */
 .card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 580px;
-  max-height: 620px;
+  height: 540px !important; /* Altezza fissa per uniformità tra tutte le card */
   background: #ffffff;
-  border-radius: 24px !important; /* Coerente con le Dialog */
-  border: none !important; /* Rimosso il bordo blu */
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
-  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-  overflow: hidden;
+  border-radius: 24px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  border: 1px solid #eef2f6 !important;
+  overflow: hidden; /* Nasconde la barra di scorrimento esterna */
+  position: relative;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
+  border-color: #6366f1 !important;
+  box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Immagine della Card */
+/* --- IMMAGINE --- */
 .card-media {
-  height: 220px;
+  height: 160px !important; /* Ridotta per far spazio alle 5 righe senza scroll */
   margin: 12px;
-  border-radius: 18px !important; /* Arrotondata ma non circolare */
+  border-radius: 18px !important;
   object-fit: cover;
+  transition: transform 0.6s ease;
 }
 
-/* Contenuto della Card */
+.card:hover .card-media {
+  transform: scale(1.02);
+}
+
+/* --- CONTENUTO CENTRALE --- */
 .card-content {
-  padding: 20px !important;
+  padding: 10px 20px !important;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; 
 }
 
-/* Titolo principale */
+/* --- TITOLO --- */
 .card-title {
   font-weight: 800 !important;
-  color: #1e1b4b !important; /* Indigo scuro */
+  color: #0f172a !important;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 15px !important;
+  margin-bottom: 12px !important;
+  font-size: 1.10rem !important;
+  line-height: 1.2 !important;
+  text-align: center;
+  min-height: 2.4em; /* Spazio per titoli su due righe senza spostare il resto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Header delle colonne (ex rosso) */
+/* --- LISTA DATI (5 RIGHE FISSE) --- */
+.list-body {
+  margin-top: 5px;
+  height: 240px !important; /* Altezza calcolata per Header + 5 Righe */
+  overflow: hidden !important; /* ELIMINA LA TOOLBAR/SCROLLBAR */
+  padding: 0 !important;
+}
+
+/* Header della lista */
 .card-header-row {
-  background-color: #f8fafc !important; /* Grigio chiarissimo Blue-grey */
-  border-radius: 10px;
-  padding: 8px 12px;
-  margin-bottom: 12px !important;
-  border-bottom: 1px solid #e2e8f0;
+  background-color: #f1f5f9 !important;
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-bottom: 8px !important;
+  height: 35px;
+  display: flex;
+  align-items: center;
 }
 
 .card-header-text {
-  font-size: 0.75rem !important;
-  font-weight: 700 !important;
-  color: #64748b !important; /* Slate grey */
-  text-transform: uppercase;
-}
-
-/* Lista degli elementi */
-.card-list-item {
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.9rem !important;
-  background-color: transparent !important;
+  font-size: 0.65rem !important;
+  font-weight: 800 !important;
   color: #475569 !important;
-  transition: background-color 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* Effetto zebra leggerissimo sulle righe */
-.grid-row-item:nth-child(odd) .card-list-item {
-  background-color: #f1f5f9 !important;
+/* Singola riga della lista */
+.grid-row-item {
+  height: 38px !important; 
+  border-radius: 6px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
 }
 
-.list-body {
-  min-height: 220px;
-  margin-top: 10px;
+.grid-row-item:hover {
+  background-color: #f8fafc;
 }
 
-/* Azioni in basso */
+.grid-row-item:nth-child(even) .card-list-item {
+  background-color: rgba(248, 250, 252, 0.5);
+}
+
+/* Testo colonna sinistra */
+.card-list-item {
+  font-size: 0.85rem !important;
+  color: #475569 !important;
+  padding-left: 12px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Testo colonna destra (ALLINEATO A SINISTRA della sua cella) */
+.card-list-item-right {
+  text-align: left !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  padding-left: 8px !important;
+}
+
+/* --- FOOTER AZIONI --- */
 .card-actions-bottom {
-  padding: 16px 20px !important;
+  height: 60px !important;
   background-color: #f8fafc;
   border-top: 1px solid #f1f5f9;
+  margin-top: auto;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 20px !important;
 }
 
-.grid-card-data {
-  padding: 24px;
+.actions-inner-box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  gap: 8px;
 }
 
-.card-actions-bottom {
-    /* Padding interno per distanziare i pulsanti dai bordi della card */
-    padding: 16px 24px !important; 
-    
-    /* Margine superiore per distanziarli dalla descrizione/testo sopra */
-    margin-top: auto !important; 
-    
-    /* Assicuriamoci che non ci siano padding di default di MUI che disturbano */
-    display: flex !important;
-    align-items: center !important;
-}
-
-/* Se vuoi distanziare specificamente il contenitore dei bottoni */
-.card-actions-bottom .MuiGrid2-root {
-    gap: 12px; /* Spazio tra un bottone e l'altro se ce n'è più di uno */
+/* Stile per i puntini di sospensione se presenti */
+.card-list-item:contains('...') {
+  color: #94a3b8 !important;
+  text-align: center;
+  font-weight: bold;
 }

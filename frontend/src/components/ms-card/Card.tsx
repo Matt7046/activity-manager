@@ -138,7 +138,6 @@ const CardComponent = observer((props: CardProps) => {
         </Typography>
 
         <List className='list-body'>
-          {/* Header stilizzato come una "tabellina" pulita */}
           <Grid container className="card-header-row">
             <Grid xs={6}>
               <Typography className="card-header-text">
@@ -147,44 +146,37 @@ const CardComponent = observer((props: CardProps) => {
             </Grid>
             {propsCard.text.text.length > 0 && propsCard.text.text[0].textRight && (
               <Grid xs={6}>
-                <Typography className="card-header-text" sx={{ textAlign: 'right' }}>
+                <Typography className="card-header-text">
                   {propsCard.text.textRightTitle}
                 </Typography>
               </Grid>
             )}
           </Grid>
 
-          {/* Mappa dei dati con classe per righe alternate */}
-          {(propsCard.text.text.length > 0
-            ? propsCard.text.text
-            : [{ textLeft: "", textRight: "" }]
-          ).map((item: CardTextAlign, index: number) => (
-            <Grid container key={index} className="grid-row-item" alignItems="center">
-              <Grid xs={item.textRight ? 6 : 12}>
-                <Typography className="card-list-item">{item.textLeft}</Typography>
-              </Grid>
-              {item.textRight && (
-                <Grid xs={6}>
-                  <Typography className="card-list-item" sx={{ textAlign: 'right', fontWeight: 600 }}>
-                    {item.textRight}
-                  </Typography>
+          {/* Mappa dei dati */}
+          {(propsCard.text.text.length > 0 ? propsCard.text.text : [{ textLeft: "", textRight: "" }])
+            .map((item: CardTextAlign, index: number) => (
+              <Grid container key={index} className="grid-row-item" alignItems="center">
+                <Grid xs={item.textRight ? 6 : 12}>
+                  <Typography className="card-list-item">{item.textLeft}</Typography>
                 </Grid>
-              )}
-            </Grid>
-          ))}
+                {item.textRight && (
+                  <Grid xs={6}>
+                    <Typography className="card-list-item card-list-item-right">
+                      {item.textRight}
+                    </Typography>
+                  </Grid>
+                )}
+              </Grid>
+            ))}
         </List>
       </CardContent>
 
-    {/* MODIFICA QUI: Rendiamo la sezione azioni sempre presente */}
+      {/* Sezione Azioni Semplificata */}
       <CardActions className="card-actions-bottom">
-        <Grid container justifyContent="flex-end" sx={{ width: '100%' }}>
-          {/* Usiamo un Box con altezza minima. 
-             Se props.children esiste lo mostra, altrimenti lascia lo spazio vuoto
-          */}
-          <Box sx={{ minHeight: '15px', display: 'flex', alignItems: 'center' }}>
-            {props.children}
-          </Box>
-        </Grid>
+        <Box className="actions-inner-box">
+          {props.children}
+        </Box>
       </CardActions>
     </MuiCard>
   );
@@ -199,7 +191,7 @@ const CardGrid = ({ cardsData }: { cardsData: CardProps[] }) => {
           <CardComponent {...cardData} />
         </Grid>
       ))}
-    </Grid>
+    </Grid> 
   );
 };
 
