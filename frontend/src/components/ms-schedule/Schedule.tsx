@@ -22,7 +22,7 @@ export interface MsSchedule {
 const Schedule = observer((props: { schedule: MsSchedule }) => {
   const [expandedRowId, setExpandedRowId] = useState<number | string | null>(null);
 
-  const [paginationModel, setPaginationModel] = useState({
+ const [paginationModel, setPaginationModel] = useState({
     pageSize: 10,
     page: 0,
   });
@@ -128,6 +128,7 @@ const columns: GridColDef[] = [
         setPaginationModel={setPaginationModel}
         pulsanti={pulsantiToolbar} // Il pulsante NEW finirà nella Toolbar a destra
         rowCount={rows.length}
+        
       />
     </Box>
   );
