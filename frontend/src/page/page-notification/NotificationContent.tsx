@@ -191,7 +191,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
         </Box>
       </Box>
 
-      <Box className="grid-container" sx={{ height: 600, width: '100%' }}>
+      <Box className="grid-container">
         <DataGridComponent
           pulsanti={[pulsanteNotification]} // Se vuoi aggiungere pulsanti specifici per la toolbar, passali qui
           rows={filteredNotifications}
