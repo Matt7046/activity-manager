@@ -52,6 +52,7 @@
   "log_attivita": "ACTIVITY LOG",
   "data_operazione": "Operation date",
   "punti": "Points",
+  "punti_caps_lock": "POINTS",
   "descrizione": "Description",
   "nessuna_attivita_registrata": "No activity recorded.",
   "log_famiglia": "FAMILY LOG",
