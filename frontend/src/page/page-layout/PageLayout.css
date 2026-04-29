@@ -89,3 +89,28 @@
 .header-title strong {
     font-weight: bold;
 }
+
+/* Selettore mirato per la label del TextField */
+.box-layout-text .form-control-operative .MuiInputLabel-root,
+.box-layout-text-vertical .form-control-operative .MuiInputLabel-root {
+    font-weight: bold !important;
+    color: #2d3748 !important; /* Colore scuro per evidenziare il bold */
+}
+
+/* Stile per quando la label si rimpicciolisce (shrink) */
+.box-layout-text .form-control-operative .MuiInputLabel-shrink,
+.box-layout-text-vertical .form-control-operative .MuiInputLabel-shrink {
+    font-weight: bold !important;
+}
+
+/* Fix per assicurarci che il TextField non esca a destra */
+.form-control-operative {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Rimuoviamo eventuali margini negativi della Grid se il TextField è dentro una Grid */
+.MuiGrid2-container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}

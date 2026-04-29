@@ -71,7 +71,7 @@
   "annulla": "Annulla",
   "si_conferma": "Sì, conferma",
   "configurazione_tutorato": "Configurazione tutorato",
-  "seleziona_lindirizzo_email_del_tutor_per_procedere_con_lassegnazione": "Seleziona l'indirizzo email del tutor per procedere con l'assegnazione.",
+  "seleziona_lindirizzo_email_del_tutor_per_procedere_con_lassegnazione": "Seleziona l'indirizzo email del tutorato per procedere con l'assegnazione.",
   "conferma_scelta": "Conferma scelta",
   "01Uq1P": "Accedere ai tuoi dati personali",
   "0mFwJZ": "Accedere all'applicazione",
@@ -172,5 +172,7 @@
   "dettagli":"Nome attività",
   "esporta":"Esporta",
   "stampa":" Stampa",
-  "nessun_risultato":"Nessun Risultato"
+  "nessun_risultato":"Nessun Risultato",
+  "info_guadagno_punti_video":"Guarda i video formativi per accumulare punti bonus nel tuo profilo:",
+  "operazioni_attivita":"Registra le attività effettuate dal tutorato con l'utente : "
 }
