@@ -1,64 +1,72 @@
-
-
 .box-layout-text {
-    width: 80%;
+    width: 86%;
+    padding-left: 10px;
 }
 
 .box-layout {
-    padding-left: 15px;    
+    padding-left: 15px;
 }
 
 
 .box-layout-text-vertical {
-    width: 100%;
+    width: 90%;
     padding-left: 10px;
 }
 
 .hidden-email {
     visibility: hidden;
-  }
+}
 
 .box-layout-right-button {
-    
+
     padding-right: 10px;
     display: flex;
 }
-.grid-menu{
+
+.grid-menu {
     padding-top: 10px;
 }
 
 .box-layout-right-button {
     padding-right: 10px;
     display: flex;
-    align-items: center; /* Allinea verticalmente icone e bandierine */
-    gap: 8px; /* Spazio tra i pulsanti */
+    align-items: center;
+    /* Allinea verticalmente icone e bandierine */
+    /* Spazio tra i pulsanti */
 }
 
 .title-container {
-  display: flex;            /* Allinea icona e testo sulla stessa riga */
-  justify-content: center;   /* Centra tutto orizzontalmente */
-  align-items: center;       /* Allinea verticalmente icona e testo */
-  gap: 10px;                /* Spazio tra l'icona e il titolo */
-  padding-bottom: 20px;     /* Padding richiesto sotto la riga */
-  width: 100%;              /* Assicura che occupi tutto lo spazio per centrare */
+    padding-top: 30px;
+    display: flex;
+    /* Allinea icona e testo sulla stessa riga */
+    justify-content: center;
+    /* Centra tutto orizzontalmente */
+    align-items: center;
+    /* Allinea verticalmente icona e testo */
+    width: 100%;
+    /* Assicura che occupi tutto lo spazio per centrare */
 }
 
 .header-title {
-  font-weight: bold !important; /* Forza l'effetto strong */
-  margin: 0;                    /* Rimuove margini di default di Typography */
+    font-weight: bold !important;
+    /* Forza l'effetto strong */
+    margin: 0;
+    /* Rimuove margini di default di Typography */
 }
 
 .header-icon {
-  font-size: 1.5rem;            /* Regola la dimensione della rotella */
+    font-size: 1.5rem;
+    /* Regola la dimensione della rotella */
 }
 
 .title-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  padding-bottom: 25px; /* Spazio sotto il titolo */
-  width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 25px;
+    /* Spazio sotto il titolo */
+    width: 100%;
 }
 
 .grid-menu {
@@ -69,7 +77,7 @@
 
 /* Quando è verticale, i bottoni vanno a destra e il menu a sinistra se presenti */
 .vertical-layout {
-    flex-direction: row; 
+    flex-direction: row;
     justify-content: space-between;
 }
 

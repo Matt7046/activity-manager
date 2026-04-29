@@ -1,4 +1,25 @@
-/* Schedule.css */
+.schedule-container {
+  /* Permette alla tabella di occupare lo spazio centrale */
+  flex-grow: 1; 
+  
+  /* Definisce una larghezza massima leggibile */
+  width: 95%;
+  max-width: 1400px;
+  
+  /* Centra il contenitore e aggiunge distacco dall'alto/basso */
+  margin: 20px auto; 
+  
+  /* Altezza minima per evitare che la tabella "collassi" se vuota */
+  min-height: 400px;
+  
+  /* Importante per MUI DataGrid: assicura che il background sia pulito */
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  
+  /* Padding interno per non far toccare i bordi alla tabella */
+  padding: 10px;
+}
 
 .schedule-row {
   display: flex;
