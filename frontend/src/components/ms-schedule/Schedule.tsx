@@ -77,7 +77,7 @@ const columns: GridColDef[] = [
     },
     {
       field: 'actions',
-      headerName: 'Azioni',
+      headerName: i18n._('azioni'),
       flex: 1, // Occupa 1 parte su 12
       minWidth: 100,
       sortable: false,
