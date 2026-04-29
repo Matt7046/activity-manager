@@ -1,5 +1,5 @@
-import { useLingui } from "@lingui/react";
-import { Box } from "@mui/material";
+import { Trans, useLingui } from "@lingui/react";
+import { Box, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -63,15 +63,28 @@ const GamificationContent: React.FC<GamificationContentProps> = ({
     }
   }, [selectedVideo]);
   return (
-    <Box className="box-operative-content">
-      <Grid container spacing={2}>
+    <Box className="box-gamification-content">
+         {/* INTESTAZIONE PAGINA */}
+   
+         <Box className="box-gamification-content">
+           {/* INTESTAZIONE PAGINA */}
+           <Typography variant="body2" color="text.secondary" className="popover-header-text">
+             <Trans id="info_guadagno_punti_video" /> <strong>{user.emailUserCurrent}</strong>
+           </Typography>
+         </Box>
+   
+      <Grid container>
         <Grid xs={12}>
-          <VideoGrid
-            selectedVideo={selectedVideo}
-            handlePlayVideo={(videoId) => setSelectedVideo(videoId)}
-            alertConfig={alertConfig}
-            user={user} />
+          <Box className="video-grid-wrapper">
+            <VideoGrid
+              selectedVideo={selectedVideo}
+              handlePlayVideo={(videoId) => setSelectedVideo(videoId)}
+              alertConfig={alertConfig}
+              user={user} />
+          </Box>
         </Grid>
+
+        {/* Se aggiungerai altri elementi sotto, seguiranno il padding corretto */}
       </Grid>
     </Box>
   );

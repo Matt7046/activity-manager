@@ -32,3 +32,30 @@
         padding: 16px; /* Riduciamo leggermente il padding su schermi molto piccoli */
     }
 }
+
+.popover-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Forza gli elementi figli a sinistra */
+  justify-content: flex-start;
+  text-align: left !important; /* Forza l'allineamento del testo a sinistra */
+  padding-right: 30px;
+  width: 100%;
+  max-width: 350px;
+  box-sizing: border-box;
+}
+
+.popover-box .MuiTypography-root {
+  text-align: left !important; /* Sovrascrive eventuali stili di Material UI */
+  width: 100%;                 /* Assicura che la Typography occupi tutto lo spazio */
+  display: block;              /* Evita comportamenti inline che centrano il testo */
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* Gestione dell'email in grassetto */
+.popover-box strong {
+  display: inline-block;
+  text-align: left;
+  word-break: break-all; /* Impedisce all'email di uscire a destra */
+}

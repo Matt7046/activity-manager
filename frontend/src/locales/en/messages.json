@@ -71,7 +71,7 @@
   "annulla": "Cancel",
   "si_conferma": "Yes, confirm",
   "configurazione_tutorato": "Tutoring configuration",
-  "seleziona_lindirizzo_email_del_tutor_per_procedere_con_lassegnazione": "Select the tutor's email address to proceed with the assignment.",
+  "seleziona_lindirizzo_email_del_tutorato_per_procedere_con_lassegnazione": "Select the tutee's email address to proceed with the assignment.",
   "conferma_scelta": "Confirm choice",
   "01Uq1P": "Access your personal data",
   "0mFwJZ": "Access the application",
@@ -156,7 +156,7 @@
   "iscriviti": "Subscribe to receive updates on our open-source project. We will process your personal data exclusively to send you project-related communications. For more details, please consult our",
   "variazione_punti": "Points change",
   "numero_punti": "Available points: ",
-  "punti_attivitaobb":"Activity *",
+  "punti_attivitaobb": "Activity *",
   "nuovi_punti": "Points operation",
   "add_punti": "Add points",
   "inviato_da": "Sent by: ",
@@ -164,14 +164,15 @@
   "data_inizio": "Start date",
   "data_fine": "End date",
   "filtra_periodo": "Filter by period",
-  "data_invio":"Date: ",
+  "data_invio": "Date: ",
   "aggiunti_punti": " Points added by: ",
   "sottratti_punti": " Points deducted by: ",
-  "menu_navigazione": "Navigation menu", 
+  "menu_navigazione": "Navigation menu",
   "no_descrizione": "No description",
   "dettagli": "Activity name",
-  "esporta":"Export",
+  "esporta": "Export",
   "stampa": "Print",
-  "nessun_risultato": "No results found"
-
+  "nessun_risultato": "No results found",
+  "info_guadagno_punti_video": "Watch educational videos to earn bonus points for your profile:",
+  "operazioni_attivita": "Record activities performed for the tutee with the user: "
 }

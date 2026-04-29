@@ -1,5 +1,5 @@
 import { Trans, useLingui } from "@lingui/react";
-import { Box, FormControl, Input, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Box, FormControl, Input, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -175,19 +175,24 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   if (isLoading || isLoadingO) {
     return <p><Trans id="caricamento" /></p>; // Mostra un loader mentre i dati vengono caricati
   }
- 
+
 
   return (
     <>
       <Box className='box-operative-content'>
         <Grid container spacing={2}>
+          <Grid xs={12} sm={12}>
+            <Typography variant="body2" color="text.secondary">
+              <Trans id="operazioni_attivita" /> <strong>{user.emailUserCurrent}</strong>
+            </Typography>
+          </Grid>
           {/* Prima riga */}
           <Grid xs={12} sm={6} >
             {/* Campo stringa 1 */}
             <FormControl fullWidth >
               <TextField
                 label={i18n._("email")}
-                value={operativeStore.emailField}
+                value={user.emailChild}
                 onChange={(e) => operativeStore.setEmailField(e.target.value)}
                 fullWidth
                 margin="normal"
