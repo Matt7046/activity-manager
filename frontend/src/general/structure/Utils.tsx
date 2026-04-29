@@ -111,17 +111,20 @@ export const getDateStringRegularFormat = (data: Date): string => {
   return new Date(data).toLocaleDateString();
 }
 
-export const estraiTestoKey = (message: string): { testo: number; key: string } => {
+export const estraiTestoKeyNotification = (message: string): { testo: number; key: string, resto : string } => {
   // Dividiamo la stringa ogni volta che troviamo un '?'
   // Esempio: "15?aggiunti_punti?user@simulated.com" -> ["15", "aggiunti_punti", "user@simulated.com"]
-  const parti = message.split('?');
+  const parti = message.split('?lang?');
 
   return {
     // Il primo elemento è il numero (lo convertiamo in number)
     testo: parti[0] ? parseFloat(parti[0]) : 0,
     
     // Il secondo elemento è il tipo/descrizione
-    key: parti[1] ? parti[1].trim() : ""
+    key: parti[1] ? parti[1].trim() : "",
+
+    // Usiamo slice(2) per prendere tutti gli elementi dall'indice 2 in poi
+    resto: parti.slice(2).join('?')
   };
 };
 

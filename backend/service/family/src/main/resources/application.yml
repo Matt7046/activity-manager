@@ -6,8 +6,8 @@ spring:
     name: activityManager
 message:
   document:
-    points: "?numero_punti?"
-    add: "?aggiunti_punti?"
-    remove: "?sottratti_punti?"
+    points: "?lang?numero_punti?lang?"
+    add: "?lang?aggiunti_punti?lang?"
+    remove: "?lang?sottratti_punti?lang?"
 notification:
   service: "familyService"
