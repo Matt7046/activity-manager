@@ -45,10 +45,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
   };
 
   return (
-    <Box className="popover-box">
+    <Box className="settings-box">
       {/* INTESTAZIONE PAGINA */}
 
-      <Box className="popover-box">
+      <Box className="settings-box">
         {/* INTESTAZIONE PAGINA */}
         <Typography variant="body2" color="text.secondary" className="popover-header-text">
           <Trans id="preferenze_account" /> <strong>{user.emailUserCurrent}</strong>
