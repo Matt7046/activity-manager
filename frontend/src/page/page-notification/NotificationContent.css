@@ -10,7 +10,8 @@
 
 .filter-group {
   flex: 1;
-  min-width: 200px; /* Si mette in colonna su dispositivi piccoli */
+  min-width: 200px;
+  /* Si mette in colonna su dispositivi piccoli */
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -54,7 +55,8 @@
 
 /* Righe alterne: azzurro chiarissimo per le righe pari */
 .notification-item:nth-child(even) {
-  background-color: #edf3fd; /* Azzurro molto tenue */
+  background-color: #edf3fd;
+  /* Azzurro molto tenue */
 }
 
 /* Righe bianche per le dispari */
@@ -64,35 +66,35 @@
 
 /* Hover più evidente per distinguere la riga su cui si trova il mouse */
 .notification-item:hover {
-  background-color: #cee0f6 !important; /* Azzurro un po' più marcato */
+  background-color: #cee0f6 !important;
+  /* Azzurro un po' più marcato */
 }
 
 /* Se la riga è espansa, manteniamo un colore di sfondo che dia continuità */
 .notification-header.is-expanded {
-  background-color: #d8effe; /* Azzurro cielo quando aperto */
+  background-color: #d8effe;
+  /* Azzurro cielo quando aperto */
   border-bottom: 1px solid #bbdefb;
 }
 
 /* Stile per i dettagli quando la riga è espansa */
 .notification-details {
   padding: 0 24px 20px 48px;
-  background-color: inherit; /* Segue il colore della riga (bianco o azzurrino) */
+  background-color: inherit;
+  /* Segue il colore della riga (bianco o azzurrino) */
 }
 
 /* 1. Applichiamo lo stesso wrapper di Schedule per margini e spazi */
 .notification-container {
-  flex-grow: 1;
-  width: 95%;            /* Come in Schedule.css */
-  max-width: 1400px;      /* Come in Schedule.css */
-  margin: 20px auto;      /* Centra e distanzia */
-  
+  padding: 24px;
+  /* Uniformiamo il padding ai settings */
+  width: 100%;
+  box-sizing: border-box;
+  /* Fondamentale per evitare lo spazio a destra */
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  
-  /* Imponiamo il box-sizing corretto per evitare sforamenti a destra */
-  padding: 24px;          /* Uniformato a Operative/Settings */
-  box-sizing: border-box; 
+  box-sizing: border-box;
   overflow: hidden;
 }
 
@@ -101,7 +103,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  padding: 0 0 24px 0;    /* Rimosso padding laterale interno, usa quello del container */
+  padding: 0 0 24px 0;
+  /* Rimosso padding laterale interno, usa quello del container */
   background-color: transparent;
   border-bottom: 2px solid #f1f3f5;
   width: 100%;
@@ -118,14 +121,17 @@
 /* 4. Fix per Mobile (stesse imposizioni di prima) */
 @media (max-width: 600px) {
   .notification-container {
-    width: 100%;          /* Su mobile occupa tutta la larghezza */
+    width: 100%;
+    /* Su mobile occupa tutta la larghezza */
     margin: 0;
-    border-radius: 0;     /* Rimuove arrotondamento su mobile per continuità */
-    padding: 16px;        /* Spazio ridotto ma presente a destra/sinistra */
+    border-radius: 0;
+    /* Rimuove arrotondamento su mobile per continuità */
+    padding: 16px;
+    /* Spazio ridotto ma presente a destra/sinistra */
   }
-  
+
   .filter-group {
-    min-width: 100%;      /* I filtri vanno uno sotto l'altro su mobile */
+    min-width: 100%;
+    /* I filtri vanno uno sotto l'altro su mobile */
   }
 }
-
