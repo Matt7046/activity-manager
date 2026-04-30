@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { baseStore } from '../../general/structure/BaseStore';
 import "./Language.css";
 
-interface LanguageProps {}
+interface LanguageProps { }
 
 const Language: React.FC<LanguageProps> = () => {
   const [langAnchor, setLangAnchor] = useState<null | HTMLElement>(null);
@@ -22,13 +22,21 @@ const Language: React.FC<LanguageProps> = () => {
     setLangAnchor(null);
   };
 
+  const flags: Record<string, string> = {
+    it: '🇮🇹',
+    en: '🇺🇸',
+    fr: '🇫🇷',
+    de: '🇩🇪',
+    es: '🇪🇸',
+    pt: '🇵🇹'
+  };
+
   return (
     <>
       <IconButton onClick={handleOpenLang} color="primary">
         <span style={{ fontSize: '20px' }}>
           {/* Mostriamo la bandiera della lingua ATTUALE */}
-          {i18n.locale === 'it' ? '🇮🇹' : '🇺🇸'}
-        </span>
+          {flags[i18n.locale] || '🌐'}        </span>
       </IconButton>
       <Menu
         anchorEl={langAnchor}
@@ -37,6 +45,10 @@ const Language: React.FC<LanguageProps> = () => {
       >
         <MenuItem onClick={() => handleSelectLang('it')}>🇮🇹 Italiano</MenuItem>
         <MenuItem onClick={() => handleSelectLang('en')}>🇺🇸 English</MenuItem>
+        <MenuItem onClick={() => handleSelectLang('fr')}>🇫🇷 Français</MenuItem>
+        <MenuItem onClick={() => handleSelectLang('de')}>🇩🇪 Deutsch</MenuItem>
+        <MenuItem onClick={() => handleSelectLang('es')}>🇪🇸 Español</MenuItem>
+        <MenuItem onClick={() => handleSelectLang('pt')}>🇵🇹 Português</MenuItem>
       </Menu>
     </>
   );
