@@ -76,7 +76,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
         const testoKey = estraiTestoKeyNotification(x.message)
         const popoverNotification = {
-          message: testoKey?.testo + i18n._(testoKey.key) + " " + testoKey.resto,
+          message: testoKey?.testo +" " + i18n._(testoKey.key) + " " + testoKey.resto,
           subText: [i18n._("inviato_da") + x.userSender, i18n._("data_invio") + getDateStringRegularFormat(x.dateSender)]
         }
         return popoverNotification;
@@ -112,10 +112,13 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       socketFamilyPoint.getSocket().onmessage = (event) => {
         console.log("Messaggio ricevuto:", event.data);
         const familyNotification: FamilyNotificationI = JSON.parse(event.data);
+        const testoKey = estraiTestoKeyNotification(familyNotification.message)
+        const message = testoKey?.testo +" " + i18n._(testoKey.key) + " " + testoKey.resto
         const typeMessage: TypeMessage = {
-          message: [familyNotification.message],
+          message: [message],
           typeMessage: TypeAlertColor.INFO
         }
+
         showMessage(alertConfig.setOpen, alertConfig.setMessage, typeMessage);
       };
       socketFamilyPoint.getSocket().onclose = () => {
