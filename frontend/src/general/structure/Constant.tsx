@@ -72,11 +72,18 @@ export enum ButtonName {
   BACK = "return",
 }
 
-export const StatusNotification = {
+export enum StatusNotification  {
+  READ = 'READ',
+  RECEIVE = 'RECEIVE',
+  NOT_READ = "NOT_READ",
+  ALL = "ALL",
+}
+
+export const StatusNotificationTranslate = {
+
   get READ() { return i18n._('read'); }, // Usa la chiave corretta del tuo JSON
   get RECEIVE() { return i18n._('receive'); },
   get NOT_READ() { return i18n._('not_read'); },
   get ALL() { return i18n._('all'); },
-  ROOT: ''
 };
 

@@ -153,7 +153,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
               <Box sx={{ pl: 6, pb: 2, bgcolor: 'inherit' }}>
                 <Typography variant="body2" color="text.secondary"><strong><Trans id="inviato_da" /></strong> {x.userSender}</Typography>
                 <Divider sx={{ my: 1, opacity: 0.3 }} />
-                <Typography variant="body2" color="text.secondary"><strong><Trans id="stato" /></strong> {x.status}</Typography>
+                <Typography variant="body2" color="text.secondary"><strong><Trans id="stato" /></strong> {i18n._(x.status.toLowerCase())}</Typography>
               </Box>
             </Collapse>
           </Box>
