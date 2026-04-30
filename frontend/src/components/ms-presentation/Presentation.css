@@ -1,13 +1,14 @@
-/* 1. Assicurati che html e body non abbiano margini e occupino tutto lo schermo */
 html, body {
   height: 100%;
   margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Blocca lo scroll orizzontale a livello radice */
 }
 
 .page-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Occupa almeno tutto lo schermo */
+  min-height: 92dvh; /* Occupa almeno tutto lo schermo */
 }
 
 .welcome-container {
@@ -72,4 +73,10 @@ html, body {
 
 .welcome-description-title {
   text-align: center;
+}
+
+/* Aggiungi questo in Presentation.css */
+
+.tech-item {
+  padding-bottom: 24px; /* Aumenta questo valore per avere più spazio tra le righe */
 }
