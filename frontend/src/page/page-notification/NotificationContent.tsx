@@ -136,7 +136,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
                   </Typography>
                 )}
                 <Typography className="notification-title">
-                  {testoKey?.testo + i18n._(testoKey.key) + " " + testoKey.resto}
+                  {testoKey?.testo +" " + i18n._(testoKey.key) + " " + testoKey.resto}
                 </Typography>
               </Box>
               <KeyboardArrowDownIcon
