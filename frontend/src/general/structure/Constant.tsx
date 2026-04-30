@@ -75,7 +75,7 @@ export enum ButtonName {
 
 export enum StatusNotification {
   READ = 'READ',
-  SEND = 'SEND',
+  RECEIVE = 'RECEIVE',
   NOT_READ = "NOT_READ",
   ALL = "ALL"
 }
