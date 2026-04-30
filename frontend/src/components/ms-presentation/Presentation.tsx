@@ -58,7 +58,7 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
             gutterBottom
             className="welcome-description"
           >
-             <Trans id='testo_desc' />
+            <Trans id='testo_desc' />
           </Typography>
 
           <Button
@@ -69,7 +69,7 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
             size="large"
             onClick={() => navigateRouting(navigate, SectionName.HOME, {})}
           >
-             <Trans id='testo_button' />
+            <Trans id='testo_button' />
           </Button>
         </Box>
 
@@ -77,13 +77,14 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
           <Typography variant="h6" gutterBottom>
             <Trans id="tecnologie_che_utilizzo" />
           </Typography>
-          <Grid container justifyContent="center" spacing={2}> {/* Ridotto leggermente lo spacing per mobile */}
+          <Grid container > {/* Ridotto leggermente lo spacing per mobile */}
             {technologies.map((tech) => (
-              <Grid item key={tech.name} xs={4} sm={3} md={2}> {/* xs={4} permette di averne 3 per riga invece di 2 */}
-                <IconButton color="inherit" disabled style={{ padding: '8px' }}>
+              /* xs={3} garantisce 4 elementi per riga (12 / 3 = 4) */
+              <Grid item key={tech.name} xs={4} sm={3} md={3} className="tech-item">
+                <IconButton color="inherit" disabled>
                   {tech.icon}
                 </IconButton>
-                <Typography variant="caption" display="block" sx={{ fontSize: '0.7rem' }}>
+                <Typography variant="caption" display="block">
                   {tech.name}
                 </Typography>
               </Grid>
