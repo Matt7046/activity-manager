@@ -175,5 +175,8 @@
   "nessun_risultato": "Sin resultado",
   "info_guadagno_punti_video": "Mira los vídeos de formación para acumular puntos extra en tu perfil:",
   "operazioni_attivita": "Registrar las actividades realizadas por el tutor con el usuario:",
-  "azioni": "Comportamiento"
+  "azioni": "Comportamiento",
+  "read": "Ya leí",
+  "receive": "Recibió",
+  "not_read": "No leído"
 }
