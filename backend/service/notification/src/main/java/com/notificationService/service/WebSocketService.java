@@ -85,7 +85,7 @@ public class WebSocketService implements WebSocketHandler {
     }
 
     private Mono<WebSocketSession> saveNotificationStatusNotRead(WebSocketSession session, Notification notification, ObjectMapper objectMapper) {
-        notification.setStatus(StatusNotification.SEND);
+        notification.setStatus(StatusNotification.RECEIVE);
         notificationService.saveNotification(notification);
         return Mono.just(session);
     }

@@ -14,7 +14,7 @@ import Popover, { PopoverNotification } from '../../components/ms-popover/Popove
 import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
 import { SocketURL } from '../../general/structure/SocketUrl';
-import { estraiTestoKeyNotification, FamilyNotificationI, getDateStringRegularFormat, NotificationI, ResponseI } from '../../general/structure/Utils';
+import { FamilyNotificationI, getDateStringRegularFormat, getTranslatedNotification, NotificationI, ResponseI } from '../../general/structure/Utils';
 import { navigateRouting, showMessage } from '../page-home/HomeContent';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
@@ -71,12 +71,12 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     .find(item => item?.testo === section?.testo) ?? section;
   const IconaTitolo = sectionAttiva?.icon;
   const handleClickAnchor = () => {
-    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3, StatusNotification.SEND).then((response: ResponseI) => {
+    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3, StatusNotification.NOT_READ).then((response: ResponseI) => {
       setNotifications(response.jsonText);
       const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
-        const testoKey = estraiTestoKeyNotification(x.message)
+        const testoKey = getTranslatedNotification(x.message, i18n)
         const popoverNotification = {
-          message: testoKey?.testo +" " + i18n._(testoKey.key) + " " + testoKey.resto,
+          message: testoKey,
           subText: [i18n._("inviato_da") + x.userSender, i18n._("data_invio") + getDateStringRegularFormat(x.dateSender)]
         }
         return popoverNotification;
@@ -112,8 +112,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       socketFamilyPoint.getSocket().onmessage = (event) => {
         console.log("Messaggio ricevuto:", event.data);
         const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-        const testoKey = estraiTestoKeyNotification(familyNotification.message)
-        const message = testoKey?.testo +" " + i18n._(testoKey.key) + " " + testoKey.resto
+        const testoKey = getTranslatedNotification(familyNotification.message, i18n)
+        const message = testoKey
         const typeMessage: TypeMessage = {
           message: [message],
           typeMessage: TypeAlertColor.INFO
