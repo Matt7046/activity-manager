@@ -1,7 +1,9 @@
+import { I18n } from "@lingui/core";
 import { NavigateFunction } from "react-router-dom";
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { sezioniMenu, sezioniMenuIniziale } from "../../page/page-home/HomeContent";
 import { SectionName, TypeUser } from "./Constant";
+
 
 export const myDisplayer = ((some: string, value: string) => {
   if (document.getElementById(some)) {
@@ -111,21 +113,21 @@ export const getDateStringRegularFormat = (data: Date): string => {
   return new Date(data).toLocaleDateString();
 }
 
-export const estraiTestoKeyNotification = (message: string): { testo: number; key: string, resto : string } => {
-  // Dividiamo la stringa ogni volta che troviamo un '?'
-  // Esempio: "15?aggiunti_punti?user@simulated.com" -> ["15", "aggiunti_punti", "user@simulated.com"]
+export const getTranslatedNotification = (message: string, i18n: I18n): string => {
+  if (!message) return "";
+
+  // Dividiamo la stringa usando il separatore specifico
   const parti = message.split('?lang?');
 
-  return {
-    // Il primo elemento è il numero (lo convertiamo in number)
-    testo: parti[0] ? parseFloat(parti[0]) : 0,
-    
-    // Il secondo elemento è il tipo/descrizione
-    key: parti[1] ? parti[1].trim() : "",
+  const valore = parti[0] ? parti[0].trim(): "";
+  const key = parti[1] ? parti[1].trim() : "";
+  const resto = parti.slice(2).join(' '); // Uniamo il resto con uno spazio per leggibilità
 
-    // Usiamo slice(2) per prendere tutti gli elementi dall'indice 2 in poi
-    resto: parti.slice(2).join('?')
-  };
+  // Traduciamo la chiave usando i18n._()
+  const traduzione = key ? i18n._(key) : "";
+
+  // Componiamo il messaggio finale: "15 Punti aggiunti user@simulated.com"
+  return `${valore}` + " " + `${traduzione}` + " " +`${resto}`.trim();
 };
 
 // Esempio d'uso:
