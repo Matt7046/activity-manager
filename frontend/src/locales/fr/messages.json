@@ -175,5 +175,8 @@
   "nessun_risultato": "Aucun résultat",
   "info_guadagno_punti_video": "Regardez les vidéos de formation pour accumuler des points bonus dans votre profil :",
   "operazioni_attivita": "Enregistrer les activités réalisées par le tuteur auprès de l'utilisateur :",
-  "azioni": "Actes"
+  "azioni": "Actes",
+  "read": "Déjà lu",
+  "receive": "Reçu",
+  "not_read": "Non lu"
 }

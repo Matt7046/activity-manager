@@ -175,5 +175,8 @@
   "nessun_risultato": "Kein Ergebnis",
   "info_guadagno_punti_video": "Sehen Sie sich die Schulungsvideos an, um Bonuspunkte in Ihrem Profil zu sammeln:",
   "operazioni_attivita": "Erfassen Sie die Aktivitäten, die der Tutor mit dem Benutzer durchführt:",
-  "azioni": "Aktionen"
+  "azioni": "Aktionen",
+  "read": "Schon gelesen",
+  "receive": "Erhalten",
+  "not_read": "Ungelesen"
 }
