@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 public enum StatusNotification {
     READ(1),
     NOT_READ(2),
-    SEND(3);
+    RECEIVE(3);
 
     private final int value;
 
