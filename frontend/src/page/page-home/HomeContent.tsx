@@ -46,7 +46,7 @@ const HomeContent = () => (
 // Componente di autenticazione
 const GoogleAuthComponent = () => {
   const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
-// useLingui() farà scattare il re-render automatico al cambio lingua
+  // useLingui() farà scattare il re-render automatico al cambio lingua
   const { i18n } = useLingui();
   const { user, setUser } = useUser();
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
@@ -378,32 +378,33 @@ const GoogleAuthComponent = () => {
                 />
               </Box>
 
-              {/* Buttons: Login Simulation and Google Login */}
               {!hiddenLogin && (
-                <Grid container spacing={2}>
-                  <Grid xs={12} sm={6}>
+                <Grid container spacing={2} alignItems="stretch"> {/* stretch forza i figli ad avere la stessa altezza */}
+                  <Grid xs={12} sm={6} sx={{ display: 'flex' }}> {/* display flex permette al bottone di espandersi */}
                     <ButtonMui
                       variant="contained"
                       color="primary"
                       onClick={() => simulateLogin(TypeUser.STANDARD)}
                       fullWidth
+                      sx={{ height: '100%' }} // Forza il bottone a occupare tutta l'altezza della Grid
                     >
                       <Trans id='login_simulato_utente_base' />
                     </ButtonMui>
                   </Grid>
 
-                  <Grid xs={12} sm={6} >
+                  <Grid xs={12} sm={6} sx={{ display: 'flex' }}>
                     <ButtonMui
                       variant="contained"
                       color="primary"
                       onClick={() => simulateLogin(TypeUser.FAMILY)}
                       fullWidth
+                      sx={{ height: '100%' }} // Seguirà l'altezza del primo se il primo è più alto
                     >
                       <Trans id='login_simulato_utente_parentale' />
                     </ButtonMui>
                   </Grid>
                 </Grid>
-              )}
+              )}          
 
               <Box mb={2} className='box-login'>
                 <TextField

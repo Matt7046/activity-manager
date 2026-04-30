@@ -22,6 +22,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "axios": "^1.7.9",
+    "google-translate-api-x": "^10.7.2",
     "mobx": "^6.13.5",
     "mobx-react": "^7.6.0",
     "react": "^18.2.0",
@@ -38,7 +39,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint '**/*.{js,mjs,cjs,ts,jsx,tsx}'",
     "lang:extract": "lingui extract",
-    "lang:compile": "lingui compile"
+    "lang:compile": "lingui compile",
+    "translate": "node translate.js"
   },
   "eslintConfig": {
     "extends": []
