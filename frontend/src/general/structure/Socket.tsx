@@ -6,8 +6,13 @@ class Socket {
   private webSocket: WebSocket;
 
   public constructor(user: UserI, url: string) {
-    console.log("WebSocket inizializzato per", user?.emailUserCurrent);
-    this.webSocket = new WebSocket(url);
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'; 
+    const host = window.location.hostname; 
+    const port = '';
+    const path = url.includes('?') ? url.substring(url.indexOf('/ws/')) : url;
+    const socketUrl = `${protocol}//${host}${port}${path}`;    
+    console.log("WebSocket collegato a:", socketUrl);
+    this.webSocket = new WebSocket(socketUrl);
   }
 
   static getInstance(user: UserI, url: string): Socket {
@@ -15,8 +20,6 @@ class Socket {
       Socket.instance = new Socket(user, url);
     }
     return Socket.instance;
-
-
   }
 
   getSocket(): WebSocket {
