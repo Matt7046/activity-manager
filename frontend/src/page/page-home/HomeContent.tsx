@@ -431,17 +431,7 @@ const GoogleAuthComponent = () => {
                     ),
                   }}
                 />
-              </Box>
-
-              {/* Mantieni connessione 
-              <Box mb={2} display="flex" alignItems="center">
-                <Checkbox
-                  checked={keepLoggedIn}
-                  onChange={handleKeepLoggedIn}
-                />
-                <Typography variant="body2"><Trans id="mantieni_la_connessione_su_questo_dispositivo" /></Typography>
-              </Box>
-            */}
+              </Box>         
               <ButtonMui
                 variant="contained"
                 fullWidth
