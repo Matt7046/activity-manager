@@ -1,23 +1,27 @@
-
 .welcome-container1 {
-
+  /* Riduciamo o azzeriamo il margine superiore */
+  margin-top: 10px !important; 
+  
   color: hwb(211 80% 12%);
-  max-width: 5000px; /* Mantiene la larghezza massima */
-  margin-left: auto; /* Centra orizzontalmente se la larghezza è inferiore a max-width */
-  margin-right: auto; /* Centra orizzontalmente se la larghezza è inferiore a max-width */
-}
-
-/* Se vuoi che gli elementi interni siano centrati orizzontalmente nel contenitore */
-.welcome-container1 > * {
-  width: 100%; /* Fai in modo che gli elementi figli occupino tutta la larghezza */
+  max-width: 5000px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .login-paper {
-  /* top | horizontal | bottom */
-  padding: 0 32px 32px; 
+  /* Riduciamo il padding interno superiore della Paper se necessario */
+  padding: 16px 32px 32px; /* Era 0 32px 32px */
   max-width: 400px;
   width: 100%;
   border-radius: 16px;
+  
+  /* Se vuoi che la card stessa "salga" verso l'alto */
+  margin-top: 0; 
+}
+
+/* Rimuoviamo eventuali margini interni del Box di login che spingono in basso */
+.box-login {
+  padding-top: 5px !important; /* Ridotto da 10px */
 }
 .login-button {
   background-color: #0070f3;
@@ -45,9 +49,6 @@
 .google-button {
   border: none;
   padding: 0;
-}
-.box-login{
-  padding-top: 10px!important;
 }
 .box-accedi{
   padding-top: 10px;
