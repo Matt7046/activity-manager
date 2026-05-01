@@ -1,15 +1,16 @@
 /* Container principale: ereditiamo la logica di Operative/Settings */
 .box-gamification-content {
-    padding: auto;  
+    padding-right: 40px; /* Aumenta solo il lato destro */
 }
-
-/* Fix per i margini negativi della Grid di Material UI */
-
 /* Stile per i controlli e video */
 .form-control-operative {
     margin-top: 16px !important;
+    padding: 12px 20px; /* Aggiunto padding interno per rendere l'area più ampia */
     width: 100% !important;
     box-sizing: border-box;
+    
+    /* Se vuoi distanziarlo specificamente dal contenuto sottostante */
+    margin-bottom: 20px; 
 }
 
 /* Assicuriamoci che la griglia dei video sia contenuta correttamente */
@@ -18,4 +19,3 @@
     margin-top: 20px;
     box-sizing: border-box;
 }
-

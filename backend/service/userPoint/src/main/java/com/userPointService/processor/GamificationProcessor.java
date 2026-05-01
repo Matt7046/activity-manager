@@ -163,7 +163,8 @@ public class GamificationProcessor {
 
     private boolean matchesYouTubeLogic(VideoDTO video, String topic) {
         // Se il topic è vuoto, non filtriamo nulla
-        if (topic == null || topic.isBlank()) {
+        if (topic == null || topic.isBlank() || topic.equalsIgnoreCase("tutorial")
+             || topic.equalsIgnoreCase("corso") || topic.equalsIgnoreCase("tutorial corso")) {
             return true;
         }
         String title = video.getTitle().toLowerCase();

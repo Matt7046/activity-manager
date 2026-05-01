@@ -26,7 +26,8 @@ export const SectionNameDesc = {
   get REGISTER() { return i18n._('sezione_registrazione'); },
   get NOTIFICATION() { return i18n._('notifiche'); },
   get SETTINGS() { return i18n._('impostazione_profilo'); },
-  ROOT: ''
+  get ROOT() { return i18n._('home'); },
+
 };
 
 export enum StatusUserPoint {
