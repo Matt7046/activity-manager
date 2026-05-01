@@ -27,7 +27,7 @@ const GamificationContent: React.FC<GamificationContentProps> = ({
   const { i18n } = useLingui();
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
   const [isWatching, setIsWatching] = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState< string | null>(null);
   const useWatchTime = (isActive: boolean) => {
     const secondsRef = useRef(0);
     const intervalRef = useRef<any>(null);

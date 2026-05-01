@@ -178,5 +178,8 @@
   "azioni": "Actes",
   "read": "Déjà lu",
   "receive": "Reçu",
-  "not_read": "Non lu"
+  "not_read": "Non lu",
+  "mostra_preferiti": "Favoris",
+  "elimina_dai_preferiti": "Supprimer des favoris",
+  "vuoi_eliminare_questo_video_dai_preferiti": "Voulez-vous supprimer cette vidéo de vos favoris"
 }

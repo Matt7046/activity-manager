@@ -8,6 +8,15 @@ import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import GamificationContent from './GamificationContent';
 
+
+export interface FavoriteI {
+  _id?: string | undefined;
+  videoId : string;
+  email: string;
+  videoIds? : string[];
+
+}
+
 const Gamification: React.FC<{}> = ({ }) => {
   const { user, setUser } = useUser();
   const { i18n } = useLingui();
