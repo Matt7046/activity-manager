@@ -40,33 +40,44 @@ public class GamificationProcessor {
         return gamificationService.fetchVideos(topic)
                 .map(json -> json.get("items"))
                 .flatMapMany(Flux::fromIterable)
-                .map(item -> mapSearchToDTO(item, email))
                 .filter(this::isEducational)
-                .collectList() // Otteniamo la lista completa
-                .map(videoList -> {
-                    // Ordinamento alfabetico per titolo (Case-Insensitive)
-                    videoList.sort((v1, v2) -> v1.getTitle().compareToIgnoreCase(v2.getTitle()));
+                .collectList() // 1. Raccogliamo prima tutti i video
+                .flatMap(videoItems -> {
+                    // 2. Estraiamo solo i videoId per la query bulk
+                    List<String> videoIds = videoItems.stream()
+                            .map(item -> {
+                                JsonNode idNode = item.path("id");
+                                return idNode.isObject() ? idNode.path("videoId").asText() : idNode.asText();
+                            })
+                            .toList();
+                    Favorite favorite = new Favorite();
+                    favorite.setVideoIds(videoIds);
+                    favorite.setEmail(email);
+                    // 1. Ottieni la lista di oggetti Favorite
+                    List<Favorite> favorites = gamificationService.findByEmailAndVideoIdIn(favorite);
 
-                    return new ResponseDTO(videoList, ActivityHttpStatus.OK.value(), new ArrayList<>());
+                    // 2. Trasformala in una lista di Stringhe (solo i videoId)
+                    List<String> favoriteVideoIds = favorites.stream()
+                            .map(Favorite::getVideoId) // Estrae il videoId da ogni oggetto
+                            .toList();
+
+                    // 4. Mappiamo i DTO usando la lista dei preferiti per il confronto
+                    List<VideoDTO> videoList = videoItems.stream()
+                            .map(item -> mapSearchToDTO(item, favoriteVideoIds))
+                            .sorted((v1, v2) -> v1.getTitle().compareToIgnoreCase(v2.getTitle()))
+                            .toList();
+
+                    return Mono.just(new ResponseDTO(videoList, ActivityHttpStatus.OK.value(), new ArrayList<>()));
                 });
     }
 
-    private VideoDTO mapSearchToDTO(JsonNode item, String email) {
-        // Gestione ID sicura (visto che l'id in 'search' è un oggetto)
+    private VideoDTO mapSearchToDTO(JsonNode item, List<String> favoriteVideoIds) {
         JsonNode idNode = item.path("id");
         String videoId = idNode.isObject() ? idNode.path("videoId").asText() : idNode.asText();
-
         JsonNode snippet = item.path("snippet");
 
-        // Creazione oggetto per il controllo preferiti
-        Favorite favorite = new Favorite();
-        favorite.setVideoId(videoId);
-        favorite.setEmail(email);
-
-        // ATTENZIONE: Se findByEmailAndVideoId chiama un DB bloccante (MongoRepository
-        // standard),
-        // questa operazione rallenterà il flusso. Se possibile, rendila asincrona.
-        Boolean isFavorite = gamificationService.findByEmailAndVideoId(favorite);
+        // Adesso il controllo è istantaneo in memoria (O(1) o O(n))
+        boolean isFavorite = favoriteVideoIds.contains(videoId);
 
         return new VideoDTO(
                 videoId,
@@ -74,7 +85,7 @@ public class GamificationProcessor {
                 snippet.path("description").asText(""),
                 snippet.path("thumbnails").path("medium").path("url").asText(""),
                 snippet.path("channelTitle").asText(""),
-                isFavorite != null && isFavorite); // Gestione null safety per il Boolean
+                isFavorite);
     }
 
     private VideoDTO mapVideosToDTO(JsonNode item) {
@@ -103,6 +114,10 @@ public class GamificationProcessor {
     }
 
     private boolean isEducational(VideoDTO v) {
+        return true;
+    }
+
+    private boolean isEducational(JsonNode v) {
         return true;
     }
 
@@ -145,6 +160,7 @@ public class GamificationProcessor {
                     return new ResponseDTO(videoList, ActivityHttpStatus.OK.value(), new ArrayList<>());
                 });
     }
+
     private boolean matchesYouTubeLogic(VideoDTO video, String topic) {
         // Se il topic è vuoto, non filtriamo nulla
         if (topic == null || topic.isBlank()) {
