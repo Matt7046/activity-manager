@@ -1,4 +1,5 @@
 import { useLingui } from "@lingui/react";
+import LoginIcon from '@mui/icons-material/Login';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
@@ -8,7 +9,6 @@ import HomeContent from './HomeContent';
 
 const Home: React.FC<{}> = ({ }) => {
   const { i18n } = useLingui();
-  const [title, setTitle] = useState<string>('');
   const navigate = useNavigate(); // Ottieni la funzione di navigazione
   const menuLaterale: MenuLaterale[][] = [];
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
@@ -30,7 +30,8 @@ const Home: React.FC<{}> = ({ }) => {
   };
 
   const section: MenuLaterale = {
-    testo: SectionNameDesc.ROOT
+    testo: SectionNameDesc.ROOT,
+    icon: LoginIcon
   }
   return (
     <>
