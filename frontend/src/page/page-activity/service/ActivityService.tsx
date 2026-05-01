@@ -38,7 +38,7 @@ export const deleteAboutById = async (_id: string, funzioneMessage?:(message?: T
     _id = _id ? _id : '-1';
     const path = PATH_ACTIVITY +'/toggle'+ `/${_id}`;
     const showSuccess = true;
-    const data = await deleteData(path,  setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
+    const data = await deleteData(path, null, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
     return data;
   } catch (error) {
   }
