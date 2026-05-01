@@ -35,18 +35,6 @@
     /* Spazio tra i pulsanti */
 }
 
-.title-container {
-    padding-top: 30px;
-    display: flex;
-    /* Allinea icona e testo sulla stessa riga */
-    justify-content: center;
-    /* Centra tutto orizzontalmente */
-    align-items: center;
-    /* Allinea verticalmente icona e testo */
-    width: 100%;
-    /* Assicura che occupi tutto lo spazio per centrare */
-}
-
 .header-title {
     font-weight: bold !important;
     /* Forza l'effetto strong */
@@ -60,11 +48,10 @@
 }
 
 .title-container {
+    padding-top: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    padding-bottom: 25px;
     /* Spazio sotto il titolo */
     width: 100%;
 }
