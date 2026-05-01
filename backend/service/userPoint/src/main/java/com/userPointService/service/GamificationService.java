@@ -106,8 +106,13 @@ public class GamificationService {
     public Boolean findByEmailAndVideoId(Favorite favorite) {
         Optional<Favorite> favoriteDB = favoriteRepository.findByEmailAndVideoId(favorite.getEmail(),
                 favorite.getVideoId());
-        // Se è presente, allora cancelliamo
         return favoriteDB.isPresent();
+    }
+
+    public List<Favorite> findByEmailAndVideoIdIn(Favorite favorite) {
+        List<Favorite> favoriteDB = favoriteRepository.findByEmailAndVideoIdIn(favorite.getEmail(),
+                favorite.getVideoIds());
+        return favoriteDB;
     }
 
 }
