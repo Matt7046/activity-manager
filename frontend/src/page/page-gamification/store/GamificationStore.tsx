@@ -39,6 +39,10 @@ export class GamificationStore extends BaseStore {
     this.video = video;
   }
 
+  getVideo() {
+    return this.video;
+  }
+
   setMinutes(minutes: number) {
     this.minutes = minutes;
   }
