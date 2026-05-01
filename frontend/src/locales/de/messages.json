@@ -178,5 +178,8 @@
   "azioni": "Aktionen",
   "read": "Schon gelesen",
   "receive": "Erhalten",
-  "not_read": "Ungelesen"
+  "not_read": "Ungelesen",
+  "mostra_preferiti": "Favoriten",
+  "elimina_dai_preferiti": "Aus Favoriten löschen",
+  "vuoi_eliminare_questo_video_dai_preferiti": "Möchten Sie dieses Video aus Ihren Favoriten löschen?"
 }

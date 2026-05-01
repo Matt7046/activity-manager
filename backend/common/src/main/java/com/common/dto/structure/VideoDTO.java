@@ -13,4 +13,5 @@ public class VideoDTO {
     private String description;
     private String thumbnail;
     private String channelTitle;
+    private Boolean favorite;
 }

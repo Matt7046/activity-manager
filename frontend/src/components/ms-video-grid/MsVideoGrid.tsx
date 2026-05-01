@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { ResponseI, UserI } from '../../general/structure/Utils';
 import { ActivityLogI } from '../../page/page-activity/Activity';
 import { savePointsAndLog } from '../../page/page-activity/service/ActivityService';
-import { fetchDataVideo } from '../../page/page-gamification/service/GamificationService';
+import { FavoriteI } from "../../page/page-gamification/Gamification";
+import { deleteFavorite, fetchVideo, fetchVideosFavorites, saveFavorite } from '../../page/page-gamification/service/GamificationService';
 import gamificationStore from '../../page/page-gamification/store/GamificationStore';
 import { showMessage } from '../../page/page-home/HomeContent';
 import { TypeMessage } from '../../page/page-layout/PageLayout';
@@ -16,6 +17,7 @@ export interface VideoI {
   title: string;
   thumbnail: string;
   channelTitle: string;
+  favorite: boolean
 }
 
 type Props = {
@@ -26,23 +28,40 @@ type Props = {
 };
 
 
-const fetchOptions = async (testo: string) => {
-  try {
-    return fetchDataVideo(testo).then((response: ResponseI | undefined) => {
-      gamificationStore.setVideo(response?.jsonText ?? []);
-      return response;
-    }).catch((error) => {
-      console.error('Error fetching options:', error);
-    });
-  } catch (error) {
-    console.error('Error fetching options:', error);
-  }
-};
+
 
 const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [videos, setVideos] = useState<VideoI[]>([]);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
+  const fetchOptions = async (testo: string) => {
+    try {
+      if (showFavoritesOnly) {
+        // Caso: Solo Favoriti
+        return fetchVideosFavorites(testo, user.emailChild)
+          .then((response: ResponseI | undefined) => {
+            gamificationStore.setVideo(response?.jsonText ?? []);
+            return response;
+          })
+          .catch((error) => {
+            console.error('Error fetching favorites:', error);
+          });
+      } else {
+        // Caso: Ricerca normale
+        return fetchVideo(testo, user.emailChild)
+          .then((response: ResponseI | undefined) => {
+            gamificationStore.setVideo(response?.jsonText ?? []);
+            return response;
+          })
+          .catch((error) => {
+            console.error('Error fetching data video:', error);
+          });
+      }
+    } catch (error) {
+      console.error('General error in fetchOptions:', error);
+    }
+  };
 
   const savePoints = () => {
     const emailFind = user.emailChild ? user.emailChild : user.email;
@@ -89,7 +108,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
     }
   }
 
-  const createButtonTrophy = (videoId: string): Pulsante[] => [
+  const createButtonTrophy = (videoId: VideoI): Pulsante[] => [
     {
       icona: "fas fa-trophy",
       nome: "red",
@@ -113,27 +132,52 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
   ];
 
 
-  const createButtonPreferiti = (videoId: string): Pulsante[] => [
-
+  const createButtonPreferiti = (video: VideoI): Pulsante[] => [
     {
       icona: "fas fa-star",
-      nome: "blue",
-      title: i18n._("aggiungi_ai_preferiti"),
-      funzione: () => console.log("Preferito:", videoId),
+      nome:  video.favorite ? 'red': "blue",
+      // 1. Aggiunta virgola qui sotto
+      title: video.favorite ? i18n._("elimina_dai_preferiti") : i18n._("aggiungi_ai_preferiti"),
+      funzione: () => {
+        console.log("Azione su preferito:", video.videoId);
+        const favorite: FavoriteI = {
+          email: user.emailChild,
+          videoId: video.videoId
+        };
+        if (video.favorite) {
+          deleteFavorite(favorite, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
+            .then((response: ResponseI | undefined) => {
+              // Opzionale: ricarica i preferiti dopo l'eliminazione per aggiornare la griglia
+              fetchOptions(searchQuery).then((res) => {
+                if (res) setVideos(res.jsonText);
+              });
+            });
+        } else {
+          saveFavorite(favorite, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
+            .then((response: ResponseI | undefined) => {
+               fetchOptions(searchQuery).then((res) => {
+                if (res) setVideos(res.jsonText);
+              });
+            });
+        }
+      },
       configDialogPulsante: {
         showDialog: true,
-        message: i18n._("vuoi_aggiungere_questo_video_ai_preferiti")
+        // 2. Messaggio dinamico basato sull'azione
+        message: video.favorite
+          ? i18n._("vuoi_eliminare_questo_video_dai_preferiti")
+          : i18n._("vuoi_aggiungere_questo_video_ai_preferiti")
       }
     },
   ];
 
-  const createButtonWatch = (videoId: string): Pulsante[] => [
+  const createButtonWatch = (videoId: VideoI): Pulsante[] => [
     {
       icona: "fas fa-play",
       nome: "blue",
       title: i18n._("guarda_video"),
       // Attiva la visualizzazione del player e nasconde la griglia
-      funzione: () => onPlayClick(videoId),
+      funzione: () => onPlayClick(videoId.videoId),
       configDialogPulsante: {
         showDialog: false,
         message: ""
@@ -142,12 +186,14 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
   ];
 
 
-  const createButtons = (videoId: string): Pulsante[] => {
+  const createButtons = (videoId: VideoI): Pulsante[] => {
     return createButtonWatch(videoId).concat(createButtonPreferiti(videoId))
   }
 
   const createButtonsSelectedVideo = (videoId: string): Pulsante[] => {
-    return createButtonPreferiti(videoId).concat(createButtonTrophy(videoId))
+    const videoI: VideoI[] = gamificationStore.getVideo();
+    const video = videoI.find((v) => v.videoId === videoId);
+    return createButtonPreferiti(video!).concat(createButtonTrophy(video!))
   }
 
   return (
@@ -165,6 +211,18 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
 
         <Button pulsanti={[searchButton(searchQuery)]} />
       </div>
+      {/* --- NUOVO FILTRO FAVORITI --- */}
+      <div className="filter-container">
+        <label className="favorite-filter">
+          <input
+            type="checkbox"
+            checked={showFavoritesOnly}
+            onChange={(e) => setShowFavoritesOnly(e.target.checked)}
+          />
+          <span>{i18n._("mostra_preferiti")}</span>
+        </label>
+      </div>
+      {/* --------------------------- */}
 
       {/* 🎬 PLAYER SE VIDEO SELEZIONATO */}
       {selectedVideo ? (
@@ -195,7 +253,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
                 />
 
                 <div className="video-overlay">
-                  <Button pulsanti={createButtons(video.videoId)} />
+                  <Button pulsanti={createButtons(video)} />
                 </div>
               </div>
 

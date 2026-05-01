@@ -178,5 +178,8 @@
   "azioni": "Comportamiento",
   "read": "Ya leí",
   "receive": "Recibió",
-  "not_read": "No leído"
+  "not_read": "No leído",
+  "mostra_preferiti": "Favoritos",
+  "elimina_dai_preferiti": "Eliminar de favoritos",
+  "vuoi_eliminare_questo_video_dai_preferiti": "¿Quieres eliminar este vídeo de tus favoritos?"
 }
