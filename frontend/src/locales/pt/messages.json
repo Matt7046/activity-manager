@@ -181,6 +181,7 @@
   "not_read": "Não lido",
   "mostra_preferiti": "Favoritos",
   "elimina_dai_preferiti": "Excluir dos favoritos",
-  "vuoi_eliminare_questo_video_dai_preferiti": "Deseja excluir este vídeo dos seus favoritos",
-  "github_repo": "Repositório GitHub"
+  "vuoi_eliminare_questo_video_dai_preferiti": "Quer excluir este vídeo dos seus favoritos?",
+  "github_repo": "Repositório GitHub",
+  "home": "Conecte-se"
 }

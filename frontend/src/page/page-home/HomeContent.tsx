@@ -353,10 +353,7 @@ const GoogleAuthComponent = () => {
         {/* Main Login Box */}
         <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
           <Box display="flex" justifyContent="center" mt={6} px={2} className="welcome-container1">
-            <Paper elevation={3} className="login-paper">
-              <Box mb={3}>
-                <Typography variant="h5" align="center" gutterBottom><Trans id="accedi" /></Typography>
-              </Box>
+            <Paper elevation={3} className="login-paper">              
               <Box mt={2} textAlign="center">
                 <Typography variant="body2">
                   <Trans id='nuovo_account' />
