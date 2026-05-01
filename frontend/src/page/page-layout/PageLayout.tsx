@@ -51,8 +51,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const { i18n } = useLingui();
   const logout = (): void => {
     googleLogout();
-
     setUser(null);
+    SocketFamilyPoint.resetInstance();
     navigateRouting(navigate, SectionName.ROOT, {})
   }
 
@@ -182,15 +182,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     <>
       <Box className="box-layout">
         {/* INTESTAZIONE: Titolo e Icona (Sempre centrati) */}
-        <Box className="title-container">
-          {IconaTitolo && <IconaTitolo className="header-icon" />}
-          <Typography variant="h6" className="header-title">
-            <Label
-              _id={'title'}
-              text={sectionAttiva?.testo + (TypeUser.FAMILY === user?.type ? i18n._('tutorato') : '')}
-            />
-          </Typography>
-        </Box>
+
 
         {/* RIGA COMANDI: Menu Drawer + Bottoni */}
         <Grid
@@ -218,6 +210,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
               handleCloseAnchor={handleCloseAnchor}
               pulsanteNotification={pulsanteNotification}
             />
+          </Box>
+          <Box className="title-container">
+            {IconaTitolo && <IconaTitolo className="header-icon" />}
+            <Typography variant="h6" className="header-title">
+              <Label
+                _id={'title'}
+                text={sectionAttiva?.testo + (TypeUser.FAMILY === user?.type ? i18n._('tutorato') : '')}
+              />
+            </Typography>
           </Box>
         </Grid>
 
