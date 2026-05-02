@@ -183,5 +183,8 @@
   "elimina_dai_preferiti": "Delete from favorites",
   "vuoi_eliminare_questo_video_dai_preferiti": "Do you want to delete this video from your favorites?",
   "github_repo": "GitHub Repo",
-  "home": "Login"
+  "home": "Login",
+  "vuoi_aggiungere_punti": "Do you want to add points to the tutoring?",
+  "vuoi_sottrarre_punti": "Do you want to deduct points from tutoring?",
+  "conferma_operazione": "Confirm operation"
 }

@@ -20,5 +20,6 @@ public class LogFamily {
     private String log;
     private Date  date;
     private OperationTypeLogFamily operations;
+    private Integer usePoints;
 
 }
