@@ -183,5 +183,8 @@
   "elimina_dai_preferiti": "Excluir dos favoritos",
   "vuoi_eliminare_questo_video_dai_preferiti": "Quer excluir este vídeo dos seus favoritos?",
   "github_repo": "Repositório GitHub",
-  "home": "Conecte-se"
+  "home": "Conecte-se",
+  "vuoi_aggiungere_punti": "Quer somar pontos à tutoria?",
+  "vuoi_sottrarre_punti": "Você quer deduzir pontos de aulas particulares?",
+  "conferma_operazione": "Confirmar operação"
 }

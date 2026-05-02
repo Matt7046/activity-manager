@@ -89,7 +89,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
     nome: ButtonName.BLUE,
     disableButton: disableButtonSave,
     title: i18n._("salva"),
-    configDialogPulsante: { message: i18n._("vuoi_salvare_il_record"), showDialog: true }
+    configDialogPulsante: { message: isPlusIcon ? i18n._("vuoi_aggiungere_punti") : i18n._("vuoi_sottrarre_punti") , showDialog: true }
   };
 
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {

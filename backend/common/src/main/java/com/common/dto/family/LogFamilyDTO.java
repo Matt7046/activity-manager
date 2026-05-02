@@ -20,5 +20,6 @@ public class LogFamilyDTO implements InterfaceDTO {
     private Date  date;
     private OperationTypeLogFamily operations;
     private UserPointDTO point;
+    private Integer usePoints;
 
 }

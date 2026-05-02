@@ -1,4 +1,4 @@
-import { Trans } from "@lingui/react";
+import { Trans, useLingui } from "@lingui/react";
 import { Button as ButtonMui, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab } from '@mui/material'; // Importato Fab
 import { observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
@@ -24,10 +24,9 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
 
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState('CONFERMA OPERAZIONE');
-
   const [currentFunction, setCurrentFunction] = useState<(() => any) | null>(null);
   const [messageTitle, setMessageTitle] = useState<string>('');
+  const { i18n } = useLingui();
 
 
   const handleClickOpen = (funzione: (...args: any[]) => any, configDialogPulsante: configDialogPulsante) => {
@@ -99,7 +98,7 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
         {/* Header dedicato */}
         <div className="dialog-header">
           <DialogTitle className='dialog-title-custom'>
-            {title}
+            {i18n._("conferma_operazione")}
           </DialogTitle>
         </div>
 
