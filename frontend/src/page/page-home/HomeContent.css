@@ -21,7 +21,7 @@
 
 /* Rimuoviamo eventuali margini interni del Box di login che spingono in basso */
 .box-login {
-  padding-top: 5px !important; /* Ridotto da 10px */
+  padding-top: 15px !important; /* Ridotto da 10px */
 }
 .login-button {
   background-color: #0070f3;
