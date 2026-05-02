@@ -153,13 +153,17 @@
     background: #94a3b8;
 }
 
-/* Forza ogni card ad avere una larghezza fissa nello scroll */
+/* Forza ogni card ad avere una larghezza più contenuta nello scroll */
 .log-card-scroll-item {
-    min-width: 320px; /* Larghezza di ogni card */
-    max-width: 320px;
-    flex-shrink: 0;   /* Impedisce alle card di rimpicciolirsi */
+    width: 200px;      /* Ridotto da 320px */
+    flex-shrink: 0;    /* Impedisce il rimpicciolimento */
+    margin-right: 8px; /* Recupera un po' di spazio visivo */
 }
 
+/* Opzionale: Rendi le card leggermente più compatte internamente */
+.log-card-item .MuiCardContent-root {
+    padding: 20px !important; /* Ridotto il padding interno */
+}
 /* --- FIX SPAZIATURA LATERALE (MOBILE & DESKTOP) --- */
 
 .points-content-container {
@@ -179,18 +183,3 @@
     padding: 0 !important;
 }
 
-/* Ottimizzazione specifica per mobile */
-@media (max-width: 600px) {
-    .points-content-container {
-        padding: 20px !important; /* Padding generoso ai lati del contenitore */
-    }
-    
-    #cardData {
-        padding: 0 10px; /* Spazio extra per staccare le card dai bordi del telefono */
-    }
-
-    .log-card-item {
-        width: 100% !important;
-        margin-right: 0 !important;
-    }
-}
