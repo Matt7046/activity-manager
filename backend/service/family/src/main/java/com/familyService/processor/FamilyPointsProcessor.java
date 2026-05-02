@@ -110,6 +110,7 @@ public class FamilyPointsProcessor {
         dto.setPerformedByEmail(userPointDTO.getEmailUserCurrent());
         dto.setReceivedByEmail(userPointDTO.getEmail());
         dto.setPoint(userPointDTO);
+        dto.setUsePoints(userPointDTO.getUsePoints());
         return dto;
     }
     private FamilyNotificationDTO getFamilyNotificationDTO(UserPointDTO userPointDTO) {

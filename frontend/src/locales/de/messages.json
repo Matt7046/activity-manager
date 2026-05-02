@@ -183,5 +183,8 @@
   "elimina_dai_preferiti": "Aus Favoriten löschen",
   "vuoi_eliminare_questo_video_dai_preferiti": "Möchten Sie dieses Video aus Ihren Favoriten löschen?",
   "github_repo": "GitHub-Repo",
-  "home": "Login"
+  "home": "Login",
+  "vuoi_aggiungere_punti": "Möchten Sie der Nachhilfe Punkte hinzufügen?",
+  "vuoi_sottrarre_punti": "Möchten Sie Punkte von der Nachhilfe abziehen?",
+  "conferma_operazione": "Bestätigen Sie den Vorgang"
 }

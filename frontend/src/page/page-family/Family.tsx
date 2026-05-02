@@ -16,6 +16,7 @@ export interface FamilyLogI {
   receivedByEmail: string;
   date: Date;
   operations: string;
+  usePoints: number;
 
 }
 
