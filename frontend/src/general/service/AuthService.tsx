@@ -1,3 +1,4 @@
+"use client";
 import { TypeMessage } from "../../page/page-layout/PageLayout";
 import { PATH_AUTH, postDataToken } from "./AxiosService";
 

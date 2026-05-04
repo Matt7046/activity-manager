@@ -1,12 +1,13 @@
+"use client";
 import { Trans } from "@lingui/react";
+import { useRouter } from 'next/navigation';
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { SectionName } from "../../general/structure/Constant";
 import { navigateRouting } from "../../page/page-home/HomeContent";
 import "./Banner.css"; // <-- Importa il CSS
 
 const BannerOpenSource: React.FC = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,7 +15,7 @@ const BannerOpenSource: React.FC = () => {
   };
 
 const handleClick = () => {
-    navigateRouting(navigate, SectionName.POLICY, { newLogin: true });
+    navigateRouting(router, SectionName.POLICY, { newLogin: true });
   };
 
   return (

@@ -144,7 +144,7 @@
   "raccogliamo_dati_desc": "Recopilamos los siguientes datos personales cuando se suscribe a nuestro boletín informativo o utiliza nuestros servicios:",
   "altri_dati_volontari": "Cualquier otro dato proporcionado voluntariamente a través de los formularios de nuestro sitio",
   "finalita_desc": "Utilizamos sus datos personales para los siguientes fines:",
-  "conservazione_dati_desc": "Sus datos personales se almacenarán únicamente durante el tiempo necesario para los fines indicados anteriormente, salvo que la ley o el consentimiento explícito exijan lo contrario.",
+  "conservazione_dati_desc": "Sus datos personales se conservarán únicamente durante el tiempo necesario para las finalidades indicadas anteriormente, salvo que la ley o consentimiento explícito exija lo contrario.",
   "diritti_utente_desc": "Según el RGPD, tienes derecho a:",
   "per_esercitare_diritti": "Para ejercer estos derechos, puede contactar con nosotros en la dirección de correo electrónico:",
   "sicurezza_dati_desc": "Tomamos medidas técnicas y organizativas apropiadas para proteger sus datos personales contra acceso no autorizado, pérdida o divulgación.",
@@ -186,5 +186,7 @@
   "home": "Acceso",
   "vuoi_aggiungere_punti": "¿Quieres sumar puntos a la tutoría?",
   "vuoi_sottrarre_punti": "¿Quieres descontar puntos de las tutorías?",
-  "conferma_operazione": "Confirmar operación"
+  "conferma_operazione": "Confirmar operación",
+  "operazioni_famiglia": "Registrar las operaciones realizadas por el tutor con el usuario:",
+  "operazioni_attivita_child": "Registrar las actividades realizadas con el usuario:"
 }

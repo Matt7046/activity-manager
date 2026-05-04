@@ -1,3 +1,4 @@
+"use client";
 import { deleteData, getData, PATH_GAMIFICATION, postData } from "../../../general/service/AxiosService";
 import { ResponseI } from "../../../general/structure/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";

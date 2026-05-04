@@ -144,7 +144,7 @@
   "raccogliamo_dati_desc": "We collect the following personal data when you sign up for our newsletter or use our services:",
   "altri_dati_volontari": "Any other data provided voluntarily through the forms on our site",
   "finalita_desc": "We use your personal data for the following purposes:",
-  "conservazione_dati_desc": "Your personal data will be stored only for the time necessary for the purposes indicated above, unless otherwise required by law or explicit consent.",
+  "conservazione_dati_desc": "Your personal data will be kept only for the time necessary for the purposes indicated above, unless otherwise required by law or explicit consent.",
   "diritti_utente_desc": "Under the GDPR, you have the right to:",
   "per_esercitare_diritti": "To exercise these rights, you can contact us at the email address:",
   "sicurezza_dati_desc": "We take appropriate technical and organizational measures to protect your personal data from unauthorized access, loss or disclosure.",
@@ -186,5 +186,7 @@
   "home": "Login",
   "vuoi_aggiungere_punti": "Do you want to add points to the tutoring?",
   "vuoi_sottrarre_punti": "Do you want to deduct points from tutoring?",
-  "conferma_operazione": "Confirm operation"
+  "conferma_operazione": "Confirm operation",
+  "operazioni_famiglia": "Record the operations carried out by the tutor with the user:",
+  "operazioni_attivita_child": "Record the activities carried out with the user:"
 }

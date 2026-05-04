@@ -186,5 +186,7 @@
   "home":"Login",
   "vuoi_aggiungere_punti":"Vuoi aggiungere i punti al tutorato?",
   "vuoi_sottrarre_punti":"Vuoi sottrarre i punti al tutorato?",
-  "conferma_operazione":"Conferma operazione"
+  "conferma_operazione":"Conferma operazione",    
+  "operazioni_famiglia":"Registra le operazioni effettuate dal tutorato con l'utente : ",
+  "operazioni_attivita_child":"Registra le attività effettuate con l'utente : ",
 }

@@ -1,3 +1,4 @@
+"use client";
 import { TypeMessage } from "../../page/page-layout/PageLayout";
 import { ResponseI } from "../structure/Utils";
 import { PATH_IMAGE, postData } from "./AxiosService";

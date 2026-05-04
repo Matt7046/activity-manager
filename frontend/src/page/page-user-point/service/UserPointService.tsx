@@ -1,3 +1,4 @@
+"use client";
 import { PATH_USER_POINT, postData } from "../../../general/service/AxiosService";
 import { ResponseI, UserI } from "../../../general/structure/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";

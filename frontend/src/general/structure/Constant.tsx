@@ -1,3 +1,4 @@
+"use client";
 import { i18n } from "@lingui/core";
 
 export enum SectionName {
@@ -36,7 +37,7 @@ export enum StatusUserPoint {
 }
 
 export const IMAGE = {
-  SERVER: process.env.REACT_APP_IMAGE_SERVER
+  SERVER: process.env.NEXT_PUBLIC_IMAGE_SERVER
 }
 
 export enum HttpStatus {

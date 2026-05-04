@@ -1,3 +1,4 @@
+"use client";
 import { Trans } from "@lingui/react";
 import React from "react";
 import Language from "../../components/ms-language/Language";

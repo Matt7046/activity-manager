@@ -1,7 +1,8 @@
+"use client";
+import { useUser } from '@/context/UserContext';
 import { useLingui } from "@lingui/react";
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../App';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionNameDesc } from "../../general/structure/Constant";
 import { getMenuLaterale, ResponseI } from '../../general/structure/Utils';
@@ -30,8 +31,8 @@ const Activity: React.FC<{}> = ({ }) => {
 
   const { i18n } = useLingui();
   const { user, setUser } = useUser();
-  const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const menuLaterale = getMenuLaterale(navigate, user)
+  const router = useRouter(); // Ottieni la funzione di navigazione
+  const menuLaterale = getMenuLaterale(router, user)
   const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
@@ -105,7 +106,7 @@ const Activity: React.FC<{}> = ({ }) => {
         alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
         handleClose={handleClose}
-        navigate={useNavigate()}
+        navigate={useRouter()}
 
       >
         <ActivityContent

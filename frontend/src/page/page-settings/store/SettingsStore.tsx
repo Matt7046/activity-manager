@@ -1,3 +1,4 @@
+"use client";
 import { makeObservable } from 'mobx';
 import BaseStore from '../../../general/structure/BaseStore';
 

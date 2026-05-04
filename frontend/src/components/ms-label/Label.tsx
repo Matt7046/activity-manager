@@ -1,3 +1,4 @@
+"use client";
 import { observer } from 'mobx-react';
 import './Label.css';
 

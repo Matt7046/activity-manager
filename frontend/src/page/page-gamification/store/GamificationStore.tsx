@@ -1,3 +1,4 @@
+"use client";
 import { makeObservable, observable } from 'mobx';
 import { VideoI } from '../../../components/ms-video-grid/MsVideoGrid';
 import BaseStore from '../../../general/structure/BaseStore';

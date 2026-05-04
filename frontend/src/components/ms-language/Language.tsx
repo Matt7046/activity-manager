@@ -1,5 +1,6 @@
+"use client";
 import { i18n } from "@lingui/core";
-import { IconButton, Menu, MenuItem } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
 import { baseStore } from '../../general/structure/BaseStore';
 import "./Language.css";
@@ -33,23 +34,28 @@ const Language: React.FC<LanguageProps> = () => {
 
   return (
     <>
-      <IconButton onClick={handleOpenLang} color="primary">
-        <span style={{ fontSize: '20px' }}>
-          {/* Mostriamo la bandiera della lingua ATTUALE */}
-          {flags[i18n.locale] || '🌐'}        </span>
-      </IconButton>
-      <Menu
-        anchorEl={langAnchor}
-        open={Boolean(langAnchor)}
-        onClose={() => setLangAnchor(null)}
-      >
-        <MenuItem onClick={() => handleSelectLang('it')}>🇮🇹 Italiano</MenuItem>
-        <MenuItem onClick={() => handleSelectLang('en')}>🇺🇸 English</MenuItem>
-        <MenuItem onClick={() => handleSelectLang('fr')}>🇫🇷 Français</MenuItem>
-        <MenuItem onClick={() => handleSelectLang('de')}>🇩🇪 Deutsch</MenuItem>
-        <MenuItem onClick={() => handleSelectLang('es')}>🇪🇸 Español</MenuItem>
-        <MenuItem onClick={() => handleSelectLang('pt')}>🇵🇹 Português</MenuItem>
-      </Menu>
+      {/* Contenitore per allineare i pulsanti in alto a destra */}
+      <Box display="flex" justifyContent="flex-end" px={2} mt={1}>
+        <IconButton onClick={handleOpenLang} color="primary">
+          <span style={{ fontSize: '20px' }}>
+            {/* Mostriamo la bandiera della lingua ATTUALE */}
+            {flags[i18n.locale as keyof typeof flags] || '🌐'}
+          </span>
+        </IconButton>
+
+        <Menu
+          anchorEl={langAnchor}
+          open={Boolean(langAnchor)}
+          onClose={() => setLangAnchor(null)}
+        >
+          <MenuItem onClick={() => handleSelectLang('it')}>🇮🇹 Italiano</MenuItem>
+          <MenuItem onClick={() => handleSelectLang('en')}>🇺🇸 English</MenuItem>
+          <MenuItem onClick={() => handleSelectLang('fr')}>🇫🇷 Français</MenuItem>
+          <MenuItem onClick={() => handleSelectLang('de')}>🇩🇪 Deutsch</MenuItem>
+          <MenuItem onClick={() => handleSelectLang('es')}>🇪🇸 Español</MenuItem>
+          <MenuItem onClick={() => handleSelectLang('pt')}>🇵🇹 Português</MenuItem>
+        </Menu>
+      </Box>
     </>
   );
 }

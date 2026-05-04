@@ -1,12 +1,13 @@
+"use client";
 import { Trans, useLingui } from "@lingui/react";
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, Divider, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 
+import { useUser } from '@/context/UserContext';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useUser } from '../../App';
 import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, SectionName } from '../../general/structure/Constant';
@@ -33,10 +34,9 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
   isVertical
 }) => {
   const { setUser } = useUser(); //
-  const location = useLocation();
+  const pathname = usePathname();
   const { i18n } = useLingui();
-  const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const { _id } = location.state || {}; // Ottieni il valore dallo stato
+  const router = useRouter(); // Ottieni la funzione di navigazione
   const labelRegister = {
     email: "Email di registazione",
     emailFiglio: "Email Figlio",
@@ -123,7 +123,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
     }
     setUser(null);
     return saveUser({ ...userData, password: password, emailFigli: arrayDiOggetti, pointFigli: emailFigli }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((x: ResponseI) => {
-      navigateRouting(navigate, SectionName.ROOT, { newLogin: true })
+      navigateRouting(router, SectionName.ROOT, { newLogin: true })
     })
   }
   const handleChangePoints = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
@@ -153,13 +153,21 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
           value={password}
           onChange={handleChangePassword}
           fullWidth
-          InputProps={{
-            endAdornment: (
-              <IconButton onClick={togglePasswordVisibility}>
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            ),
-          }}
+          /* Corretto l'annidamento e le chiusure delle parentesi */
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={togglePasswordVisibility}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }, // Chiude input
+          }} // Chiude slotProps
         />
       </Box>
 
@@ -181,32 +189,36 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
           <Box className="box-child" key={index} mb={2}>
             <Grid container spacing={2} alignItems="center">
               {/* Email del figlio */}
-              <Grid xs={9}>
+              <Grid size={{ xs: 9 }}>
                 <TextField
                   label={`Email Figlio ${index + 1}`}
                   variant="outlined"
                   fullWidth
                   value={emailFiglio.email}
                   onChange={(e) => handleChangeEmailRegister(index, e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <IconButton
-                          aria-label={i18n._("remove")}
-                          onClick={() => toggleIcon(index)}
-                          onMouseDown={handleMouseDownPassword}
-                          onMouseUp={handleMouseUpPassword}
-                          edge="end"
-                        >
-                          <RemoveIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
+                  /* In MUI v6 usiamo slotProps invece di InputProps */
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton
+                            aria-label={i18n._("remove")}
+                            onClick={() => toggleIcon(index)}
+                            onMouseDown={handleMouseDownPassword}
+                            onMouseUp={handleMouseUpPassword}
+                            edge="start" // Cambiato in start perché è uno startAdornment
+                          >
+                            <RemoveIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }, // Chiude input
+                  }} // Chiude slotProps
                 />
+
               </Grid>
               {/* Points del figlio (fisso 100) */}
-              <Grid xs={3}>
+              <Grid size={{ xs: 3 }}>
                 <TextField
                   label={labelRegister.points}
                   value={100}

@@ -1,7 +1,8 @@
+"use client";
 import { useLingui } from "@lingui/react";
 import { Box } from "@mui/material";
+import { useRouter } from 'next/navigation';
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import { Pulsante } from "../../components/ms-button/Button";
 import Schedule, { MsSchedule } from "../../components/ms-schedule/Schedule";
@@ -27,7 +28,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
   isVertical
 }) => {
 
-  const navigate = useNavigate(); // Ottieni la funzione di navigazione
+  const router = useRouter(); // Ottieni la funzione di navigazione
   const { i18n } = useLingui();
   const [loading, setLoading] = useState(false);
   const flex = isVertical ? 'flex-start' : 'flex-end';
@@ -39,7 +40,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
 
   const pulsanteNew: Pulsante = {
     icona: 'fas fa-plus',
-    funzione: () => navigateRouting(navigate, SectionName.ABOUT, {}),
+    funzione: () => navigateRouting(router, SectionName.ABOUT, {}),
     nome: ButtonName.NEW,
     title: i18n._("nuovo_documento"),
     configDialogPulsante: { message: '', showDialog: false },
@@ -76,7 +77,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
       .then((response) => {
         if (response?.status === HttpStatus.OK) {
           activityStore.setActivityById(_id, response.jsonText);
-          navigateRouting(navigate, SectionName.ABOUT, { _id })
+          navigateRouting(router, SectionName.ABOUT, { _id })
         }
       })
       .catch((error) => {

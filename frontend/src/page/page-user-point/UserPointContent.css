@@ -1,9 +1,17 @@
 /* --- Dialog Generale dei Log --- */
 .dialog-log-custom .MuiPaper-root {
-  border-radius: 28px !important; /* Molto stondato e moderno */
+  border-radius: 28px !important;
+  /* Molto stondato e moderno */
   padding: 10px;
-  background-color: #fcfcfd; /* Sfondo appena percepibile */
+  background-color: #fcfcfd;
+  /* Sfondo appena percepibile */
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.custom-padding {
+  padding-top: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 
 /* --- Header Stilizzato --- */
@@ -19,7 +27,8 @@
 /* Titolo Header (es. LOG FAMIGLIA) */
 .log-title-text {
   font-weight: 800 !important;
-  color: #4338ca !important; /* Indigo */
+  color: #4338ca !important;
+  /* Indigo */
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 1.1rem !important;
@@ -27,13 +36,15 @@
 
 /* --- Area Contenuto (Grid) --- */
 .log-content-area {
-  padding: 32px !important; /* Più spazio interno */
+  padding: 32px !important;
+  /* Più spazio interno */
 }
 
 /* --- Mini-Card del Singolo Log --- */
 .log-card-item {
   background: #ffffff !important;
-  border-radius: 20px !important; /* Coerente con l'header */
+  border-radius: 20px !important;
+  /* Coerente con l'header */
   border: 1px solid #f1f5f9 !important;
   transition: all 0.3s ease !important;
   height: 100%;
@@ -54,7 +65,8 @@
 .log-label {
   font-size: 0.7rem !important;
   font-weight: 700 !important;
-  color: #94a3b8 !important; /* Slate grey chiaro */
+  color: #94a3b8 !important;
+  /* Slate grey chiaro */
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 6px !important;
@@ -63,9 +75,11 @@
 /* Valore (La data vera e propria, l'operazione) */
 .log-value {
   font-size: 0.95rem !important;
-  color: #1e293b !important; /* Quasi nero */
+  color: #1e293b !important;
+  /* Quasi nero */
   font-weight: 600 !important;
-  margin-bottom: 20px !important; /* Spazio sotto il valore */
+  margin-bottom: 20px !important;
+  /* Spazio sotto il valore */
 }
 
 /* Valore evidenziato (es. FAMILY_ADD) */
@@ -75,7 +89,8 @@
   padding: 4px 10px;
   border-radius: 8px;
   display: inline-block;
-  font-family: 'Roboto Mono', monospace; /* Font monospace per codici */
+  font-family: 'Roboto Mono', monospace;
+  /* Font monospace per codici */
   font-size: 0.85rem !important;
 }
 
@@ -85,13 +100,15 @@
   padding: 4px 10px;
   border-radius: 8px;
   display: inline-block;
-  font-family: 'Roboto Mono', monospace; /* Font monospace per codici */
+  font-family: 'Roboto Mono', monospace;
+  /* Font monospace per codici */
   font-size: 0.85rem !important;
 }
 
 /* --- Footer della Mini-Card (Da/A) --- */
 .log-card-footer {
-  margin-top: auto; /* Spinge il footer in basso */
+  margin-top: auto;
+  /* Spinge il footer in basso */
   padding-top: 16px;
   border-top: 1px solid #f1f5f9;
 }
@@ -126,51 +143,60 @@
 
 /* Contenitore esterno che abilita lo scroll */
 .log-scroll-container {
-    display: flex;
-    overflow-x: auto; /* Abilita lo scroll orizzontale */
-    gap: 20px;       /* Spazio tra le card */
-    padding: 20px 10px 30px 10px; /* Spazio per l'ombra delle card */
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch; /* Scroll fluido su mobile */
+  display: flex;
+  overflow-x: auto;
+  /* Abilita lo scroll orizzontale */
+  gap: 20px;
+  /* Spazio tra le card */
+  padding: 20px 10px 30px 10px;
+  /* Spazio per l'ombra delle card */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  /* Scroll fluido su mobile */
 }
 
 /* Nascondi la barra di scorrimento brutta */
 .log-scroll-container::-webkit-scrollbar {
-    height: 8px;
+  height: 8px;
 }
 
 .log-scroll-container::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 10px;
+  background: #f1f5f9;
+  border-radius: 10px;
 }
 
 .log-scroll-container::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
+  background: #cbd5e1;
+  border-radius: 10px;
 }
 
 .log-scroll-container::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+  background: #94a3b8;
 }
 
 /* Forza ogni card ad avere una larghezza più contenuta nello scroll */
 .log-card-scroll-item {
-    width: 200px;      /* Ridotto da 320px */
-    flex-shrink: 0;    /* Impedisce il rimpicciolimento */
-    margin-right: 8px; /* Recupera un po' di spazio visivo */
+  width: 200px;
+  /* Ridotto da 320px */
+  flex-shrink: 0;
+  /* Impedisce il rimpicciolimento */
+  margin-right: 8px;
+  /* Recupera un po' di spazio visivo */
 }
 
 /* Opzionale: Rendi le card leggermente più compatte internamente */
 .log-card-item .MuiCardContent-root {
-    padding: 20px !important; /* Ridotto il padding interno */
+  padding: 20px !important;
+  /* Ridotto il padding interno */
 }
+
 /* --- FIX SPAZIATURA LATERALE (MOBILE & DESKTOP) --- */
 
 .points-content-container {
-    width: 100%;
-    padding: 24px; 
-    box-sizing: border-box;
-    overflow-x: hidden; 
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* Rimuove i margini negativi delle Grid che causano l'effetto "attaccato" o lo scroll orizzontale */
@@ -178,8 +204,7 @@
 .points-content-container .MuiGrid-container,
 #cardData .MuiGrid2-container,
 #cardData .MuiGrid-container {
-    margin: 0 !important; 
-    width: 100% !important;
-    padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  padding: 0 !important;
 }
-

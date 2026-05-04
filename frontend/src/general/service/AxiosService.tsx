@@ -1,3 +1,4 @@
+"use client";
 import axios from 'axios';
 import { TypeMessage } from '../../page/page-layout/PageLayout';
 import apiConfig from '../structure/ApiConfig';

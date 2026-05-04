@@ -1,10 +1,11 @@
-import { useLingui } from "@lingui/react";
+"use client";
+import { useUser } from '@/context/UserContext';
+import { Trans, useLingui } from "@lingui/react";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { Box, FormControl, IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import { Box, FormControl, IconButton, Input, InputAdornment, InputLabel, TextField, Typography } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import React, { useEffect, useState } from "react";
-import { useUser } from '../../App';
 import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus } from '../../general/structure/Constant';
@@ -15,9 +16,8 @@ import "./FamilyContent.css";
 import { savePointsByFamily } from './service/FamilyService';
 import familyStore from './store/FamilyStore';
 
-
 interface FamilyContentProps {
-  alertConfig:AlertConfig
+  alertConfig: AlertConfig;
   isVertical: boolean;
 }
 
@@ -25,33 +25,20 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   alertConfig,
   isVertical
 }) => {
-  const { user, setUser } = useUser();
+  const { user } = useUser();
   const { i18n } = useLingui();
-  // Stato per i valori dei campi
+  
   type FormValues = {
     [key: string]: number | undefined;
   };
+
   const [disableButtonSave, setDisableButtonSave] = useState(true);
   const [formValues, setFormValues] = useState<FormValues>({
     newPoints: 0,
   });
 
-  const [formErrors, setFormErrors] = useState<FormErrorValues>({
-    newPoints: true,
-  });
-
   const [isPlusIcon, setIsPlusIcon] = useState(true);
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
-
-
-
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
-
-  const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
 
   const toggleIcon = () => {
     setIsPlusIcon((prev) => !prev);
@@ -60,116 +47,113 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   useEffect(() => {
     const emailFind = user.emailChild;
 
-    findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((response: ResponseI | undefined) => {
-      if (response) {
-        if (response.status === HttpStatus.OK) {
-          const errors: FormErrorValues = verifyForm(formValues);
-          setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
-          familyStore.setPoints(response.jsonText.points); // Update the state with the new value
-          familyStore.setEmail(user.email);
-        }
+    findByEmail({ ...user, email: emailFind }, (message: any) => 
+      showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
+    ).then((response: ResponseI | undefined) => {
+      if (response && response.status === HttpStatus.OK) {
+        familyStore.setPoints(response.jsonText.points);
+        familyStore.setEmail(user.email);
+        const errors: FormErrorValues = verifyForm(formValues);
+        setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0);
       }
-    })
-
-
-    // Pulisci il listener al dismount
-    return () => { };
+    });
   }, [inizialLoad]);
 
   useEffect(() => {
     const errors: FormErrorValues = verifyForm(formValues);
-    setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
-    // Puoi aggiungere altre azioni da eseguire quando formValues cambia
-  }, [formValues]); // Dipendenza su formValues
-
+    setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0);
+  }, [formValues]);
 
   const pulsanteBlue: Pulsante = {
     icona: 'fas fa-solid fa-floppy-disk',
-    funzione: () => salvaRecord(user), // Passi la funzione direttamente
+    funzione: () => salvaRecord(user),
     nome: ButtonName.BLUE,
     disableButton: disableButtonSave,
     title: i18n._("salva"),
-    configDialogPulsante: { message: isPlusIcon ? i18n._("vuoi_aggiungere_punti") : i18n._("vuoi_sottrarre_punti") , showDialog: true }
-  };
-
-  const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => {
-    familyStore.setEmail(event.target.value); // Updat
-  };
-
-
-  const handleChangePoints = (event: React.ChangeEvent<HTMLInputElement>) => {
-    familyStore.setPoints(parseInt(event.target.value)); // Update the state with the new value
-  };
-
-  const handleChangeNewPoints = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues({ ...formValues, newPoints: parseInt(event.target.value) })
-  };
-
-  const handleClose = () => {
-    alertConfig.setOpen(false);
+    configDialogPulsante: { 
+      message: isPlusIcon ? i18n._("vuoi_aggiungere_punti") : i18n._("vuoi_sottrarre_punti"), 
+      showDialog: true 
+    }
   };
 
   const salvaRecord = (userData: any): Promise<any> => {
-    const pointsWithPlus = isPlusIcon ? formValues.newPoints : - formValues.newPoints!;
-    userData.email = user.emailChild;
-    return savePointsByFamily({ ...userData, usePoints: pointsWithPlus }, (message: any) => showMessage(alertConfig.setOpen,alertConfig.setMessage, message)).then((x) => {
-      familyStore.setPoints(parseInt(x?.jsonText.points)); // Update the state with the new value
-    })
-  }
+    const pointsWithPlus = isPlusIcon ? formValues.newPoints : - (formValues.newPoints || 0);
+    const dataToSend = { ...userData, email: user.emailChild, usePoints: pointsWithPlus };
+    
+    return savePointsByFamily(dataToSend, (message: any) => 
+      showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
+    ).then((x) => {
+      if (x?.jsonText?.points !== undefined) {
+        familyStore.setPoints(parseInt(x.jsonText.points));
+      }
+    });
+  };
+
   return (
-    <>
-      <Box className='box-family'>
-        <Grid container spacing={2}>
-          {/* Campo emailFamily */}
-       
-          {/* Campo Points */}
-          <Grid xs={12} sm={6}>
-            <FormControl fullWidth variant="standard">
-              <InputLabel htmlFor="filled-points">{i18n._("punti")}</InputLabel>
-              <Input
-                id="filled-adornment-points"
-                value={familyStore.getStore().points} // Collega il valore allo stato
-                onChange={handleChangePoints} // Aggiorna lo stato quando cambia
-                disabled={true}
-              />
-            </FormControl>
-          </Grid>
-
-          {/* Campo New Points */}
-          <Grid xs={12} sm={6}>
-            <FormControl fullWidth variant="standard">
-              <InputLabel htmlFor="filled-adornment-new-points">{i18n._("nuovi_punti")}</InputLabel>
-              <Input
-                id="filled-adornment-new-points"
-                value={formValues.newPoints} // Collega il valore allo stato
-                onChange={handleChangeNewPoints} // Aggiorna lo stato quando cambia
-                type={'number'}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <IconButton
-                      aria-label={i18n._("add_punti")}
-                      onClick={toggleIcon}
-                      onMouseDown={handleMouseDownPassword}
-                      onMouseUp={handleMouseUpPassword}
-                      edge="end"
-                    >
-                      {isPlusIcon ? <AddIcon /> : <RemoveIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-          </Grid>
+    <Box className='box-family-content'>
+      <Grid container spacing={2}>
+        {/* Titolo con email - TESTO RICHIESTO AGGIUNTO QUI */}
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="body2" color="text.secondary">
+            <Trans id="operazioni_famiglia" /> <strong>{user?.emailUserCurrent}</strong>
+          </Typography>
         </Grid>
 
-        {/* Pulsanti */}
-        <Grid container justifyContent="flex-end" spacing={2} className='button-right-bottom'>
-          <Button pulsanti={[pulsanteBlue]} />
+        {/* Prima riga: Email (Disabilitata) e Punti Attuali */}
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <FormControl fullWidth>
+            <TextField
+              label={i18n._("email")}
+              value={user?.emailChild}
+              fullWidth
+              margin="normal"
+              disabled={true}
+            />
+          </FormControl>
         </Grid>
+
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <FormControl className="form-control-family" variant="standard" fullWidth>
+            <InputLabel htmlFor="points-current">{i18n._("punti")}</InputLabel>
+            <Input
+              id="points-current"
+              value={familyStore.getStore().points}
+              disabled={true}
+            />
+          </FormControl>
+        </Grid>
+
+        {/* Seconda riga: Input Nuovi Punti con Toggle Icon */}
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <FormControl fullWidth variant="standard" className="form-control-family">
+            <InputLabel htmlFor="new-points-input">{i18n._("nuovi_punti")}</InputLabel>
+            <Input
+              id="new-points-input"
+              value={formValues.newPoints}
+              onChange={(e) => setFormValues({ ...formValues, newPoints: parseInt(e.target.value) || 0 })}
+              type="number"
+              startAdornment={
+                <InputAdornment position="start">
+                  <IconButton
+                    aria-label={i18n._("add_punti")}
+                    onClick={toggleIcon}
+                    edge="end"
+                  >
+                    {isPlusIcon ? <AddIcon color="primary" /> : <RemoveIcon color="error" />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+        </Grid>
+      </Grid>
+
+      {/* Pulsante Salva - Allineato a destra come Operative */}
+      <Box display="flex" justifyContent="flex-end" mt={3}>
+        <Button pulsanti={[pulsanteBlue]} />
       </Box>
-    </>
+    </Box>
   );
-
-}
+};
 
 export default FamilyContent;

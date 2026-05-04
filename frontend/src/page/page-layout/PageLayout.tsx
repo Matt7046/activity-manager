@@ -1,10 +1,12 @@
+"use client";
 import { useLingui } from "@lingui/react";
 import { Box, TextField, Typography } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
 import { googleLogout } from '@react-oauth/google';
 import React, { useEffect, useRef, useState } from 'react';
-import { NavigateFunction } from 'react-router-dom';
-import { useUser } from '../../App';
+
+import { useUser } from '@/context/UserContext';
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Alert, { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
@@ -27,7 +29,7 @@ interface PageLayoutProps {
   isVertical: boolean;
   hiddenEmail?: boolean;
   handleClose: () => void;
-  navigate: NavigateFunction; // Gestione padding dinamico
+  navigate: AppRouterInstance; // Gestione padding dinamico
   children: React.ReactNode; // Contenuto specifico della maschera
 }
 export interface TypeMessage {

@@ -1,3 +1,4 @@
+"use client";
 import BaseStore from '../../../general/structure/BaseStore';
 import { ResponseI } from '../../../general/structure/Utils';
 import { ActivityI } from '../Activity';

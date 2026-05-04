@@ -1,3 +1,4 @@
+"use client";
 import { Trans, useLingui } from "@lingui/react";
 import ReactIcon from '@mui/icons-material/Code'; // Potrebbe non esserci un'icona specifica, usa un generico
 import JavaIcon from '@mui/icons-material/Coffee'; // Esempio
@@ -7,8 +8,9 @@ import SpringBootIcon from '@mui/icons-material/PlayCircleFilled'; // Esempio
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import SearchIcon from '@mui/icons-material/Search';
 import MongoDBIcon from '@mui/icons-material/Storage'; // Esempio di icona Material UI
-import { Box, Button, Grid, IconButton, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Box, Button, IconButton, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import { useRouter } from 'next/navigation';
 import { SectionName } from '../../general/structure/Constant';
 import { navigateRouting } from '../../page/page-home/HomeContent';
 import BannerOpenSource from '../ms-banner/Banner';
@@ -23,7 +25,7 @@ interface PresentationProps {
 
 
 const Presentation: React.FC<PresentationProps> = ({ }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { i18n } = useLingui();
 
   const technologies = [
@@ -67,7 +69,7 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
             variant="contained"
             color="primary"
             size="large"
-            onClick={() => navigateRouting(navigate, SectionName.HOME, {})}
+            onClick={() => navigateRouting(router, SectionName.HOME, {})}
           >
             <Trans id='testo_button' />
           </Button>
@@ -77,10 +79,19 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
           <Typography variant="h6" gutterBottom>
             <Trans id="tecnologie_che_utilizzo" />
           </Typography>
-          <Grid container > {/* Ridotto leggermente lo spacing per mobile */}
+          <Grid container spacing={1}> {/* Ridotto lo spacing per mobile */}
             {technologies.map((tech) => (
-              /* xs={3} garantisce 4 elementi per riga (12 / 3 = 4) */
-              <Grid item key={tech.name} xs={4} sm={3} md={3} className="tech-item">
+              /* In MUI v6: 
+                 - Rimosso 'item'
+                 - Tutti i breakpoint dentro 'size'
+                 - size 3 = 4 elementi per riga
+                 - size 4 = 3 elementi per riga
+              */
+              <Grid
+                key={tech.name}
+                size={{ xs: 4, sm: 3, md: 3 }}
+                className="tech-item"
+              >
                 <IconButton color="inherit" disabled>
                   {tech.icon}
                 </IconButton>

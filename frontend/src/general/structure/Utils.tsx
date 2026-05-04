@@ -1,5 +1,7 @@
+"use client";
 import { I18n } from "@lingui/core";
-import { NavigateFunction } from "react-router-dom";
+
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { sezioniMenu, sezioniMenuIniziale } from "../../page/page-home/HomeContent";
 import { SectionName, TypeUser } from "./Constant";
@@ -71,7 +73,7 @@ export type FormErrorValues = {
 };
 
 
-export const getMenuLaterale = (navigate: NavigateFunction, user: UserI): MenuLaterale[][] => {
+export const getMenuLaterale = (navigate: AppRouterInstance, user: UserI): MenuLaterale[][] => {
   const sezioniMenuI = sezioniMenuIniziale(user);
   let menuLaterale: MenuLaterale[][] = [];
   if (user?.type === TypeUser.FAMILY || user?.type === TypeUser.NEW_USER) {

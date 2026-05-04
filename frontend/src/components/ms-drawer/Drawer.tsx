@@ -1,3 +1,4 @@
+"use client";
 import { Trans } from "@lingui/react";
 import MenuIcon from '@mui/icons-material/Menu';
 import { Typography } from '@mui/material';

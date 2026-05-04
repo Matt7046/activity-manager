@@ -1,3 +1,4 @@
+"use client";
 import { Trans } from "@lingui/react";
 import { Box, Divider, Popover, Typography } from '@mui/material';
 import React from 'react';

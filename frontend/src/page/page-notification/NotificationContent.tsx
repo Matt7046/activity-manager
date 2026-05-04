@@ -1,3 +1,4 @@
+"use client";
 import { Trans, useLingui } from "@lingui/react";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
@@ -52,7 +53,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
   const fetchNotifications = React.useCallback(() => {
     setLoading(true);
     getNotificationsByIdentificativo(
-      user.emailUserCurrent,
+      user?.emailUserCurrent,
       paginationModel.page,
       100,
       StatusNotification.ALL,
@@ -65,7 +66,7 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
       }
       setLoading(false);
     });
-  }, [user.emailUserCurrent, paginationModel, startDate, endDate]);
+  }, [user?.emailUserCurrent, paginationModel, startDate, endDate]);
 
   const pulsanteNotification: Pulsante = {
     icona: 'fas fa-check-circle',

@@ -1,9 +1,10 @@
+"use client";
 import { Trans, useLingui } from "@lingui/react";
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Card, CardContent, Dialog, DialogContent, IconButton, Typography } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps, CardText, CardTextAlign } from "../../components/ms-card/Card";
@@ -32,7 +33,7 @@ const PointsContent: React.FC<PointsContentProps> = ({
   isVertical
 }) => {
 
-  const navigate = useNavigate(); // Ottieni la funzione di navigazione
+  const router = useRouter(); // Ottieni la funzione di navigazione
   const { i18n } = useLingui();
   const [openDialogLogFamily, setOpenDialogLogFamily] = useState(false)   // Controlla la visibilità del messaggio
   const [openDialogLogActivity, setOpenDialogLogActivity] = useState(false)
@@ -455,8 +456,8 @@ const PointsContent: React.FC<PointsContentProps> = ({
 
   return (
     <>
-      <div className="row">
-        <Box >
+      <div className="row custom-padding">
+        <Box>
           <div id="cardData">
             <CardGrid cardsData={cardData} />
           </div>

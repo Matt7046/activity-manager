@@ -1,8 +1,26 @@
-.box-family{
-    padding-right: 15px;
-    padding-left: 15px;
+/* Container principale allineato a OperativeContent */
+.box-family-content {
+    padding: 24px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.button-right-bottom{
-    margin-top: 15px;
+/* Allineamento Grid */
+.box-family-content .MuiGrid2-container {
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+/* Margini controlli */
+.form-control-family {
+    margin-top: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box;
+}
+
+/* Fix Mobile */
+@media (max-width: 600px) {
+    .box-family-content {
+        padding: 16px;
+    }
 }

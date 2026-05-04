@@ -1,3 +1,6 @@
+"use client";
+
+import { useUser } from '@/context/UserContext';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Trans, useLingui } from "@lingui/react";
 import { Apple as AppleIcon, Facebook as FacebookIcon, Visibility, VisibilityOff } from '@mui/icons-material';
@@ -10,23 +13,22 @@ import ListAltIcon from '@mui/icons-material/ListAlt'; // Activity
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings'; // Operative
 import StarIcon from '@mui/icons-material/Star';
-import { Box, Button as ButtonMui, CircularProgress, Divider, IconButton, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
+import { Box, Button as ButtonMui, CircularProgress, Divider, IconButton, Link as MuiLink, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import LinkNext from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Link, NavigateFunction, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { useUser } from '../../App';
 import Alert from '../../components/ms-alert/Alert';
+import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
 import { MenuLaterale } from '../../components/ms-drawer/Drawer';
+import { getToken } from '../../general/service/AuthService';
+import { baseStore } from '../../general/structure/BaseStore';
 import { SectionName, SectionNameDesc, ServerMessage, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import { ResponseI, UserI } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
-import PrivacyPolicy from '../page-privacy-policy/PrivacyPolicy';
 import { getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
-
-import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
-import { getToken } from '../../general/service/AuthService';
-import { baseStore } from '../../general/structure/BaseStore';
 import "./HomeContent.css";
 
 
@@ -45,7 +47,7 @@ const HomeContent = () => (
 
 // Componente di autenticazione
 const GoogleAuthComponent = () => {
-  const navigate = useNavigate();  // Qui chiami useNavigate correttamente all'interno di un componente
+  const router = useRouter();  // Qui chiami useNavigate correttamente all'interno di un componente
   // useLingui() farà scattare il re-render automatico al cambio lingua
   const { i18n } = useLingui();
   const { user, setUser } = useUser();
@@ -58,7 +60,7 @@ const GoogleAuthComponent = () => {
   const [emailOptions, setEmailOptions] = React.useState<string[]>([]); // Lo stato è un array di stringhe
   const [emailLogin, setEmailLogin] = useState(''); // Stato per l'email
   const [passwordLogin, setPasswordLogin] = useState(''); // Stato per l'email
-  const location = useLocation();
+  const location = usePathname();
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [hiddenLogin, setHiddenLogin] = useState<any>(false); // Stato utente
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => { };
@@ -96,7 +98,7 @@ const GoogleAuthComponent = () => {
 
   useEffect(() => {
 
-    if (location.pathname === '/home') {
+    if (location === '/home') {
 
       // Stato per userData
       setCurrentUser({
@@ -109,7 +111,7 @@ const GoogleAuthComponent = () => {
       setUser(null);
       check = true;
     }
-    setHiddenLogin(location.pathname === '/privacy-policy')
+    setHiddenLogin(location === '/privacy-policy')
     return () => {
     };
   }, [location]);
@@ -119,11 +121,11 @@ const GoogleAuthComponent = () => {
       // Naviga solo quando `user` è stato aggiornato
       if (user.type === 2 && !check) {
 
-        navigateRouting(navigate, SectionName.REGISTER, {});
+        navigateRouting(router, SectionName.REGISTER, {});
         check = true;
       }
       else if ((user.type === 0 || user.type === 1) && !check) {
-        navigateRouting(navigate, SectionName.ACTIVITY, {});
+        navigateRouting(router, SectionName.ACTIVITY, {});
         check = false;
       }
     }
@@ -334,9 +336,7 @@ const GoogleAuthComponent = () => {
       </Grid>
 
       {/* Route Privacy Policy */}
-      <Routes>
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      </Routes>
+
       <>
         {/* Alert */}
         <Grid container justifyContent="flex-end" className="layout-alert" sx={{ mt: 2 }}>
@@ -346,20 +346,29 @@ const GoogleAuthComponent = () => {
         </Grid>
 
         {/* Route Privacy Policy */}
-        <Routes>
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        </Routes>
+
 
         {/* Main Login Box */}
         <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
           <Box display="flex" justifyContent="center" mt={6} px={2} className="welcome-container1">
-            <Paper elevation={3} className="login-paper">              
+            <Paper elevation={3} className="login-paper">
               <Box mt={2} textAlign="center">
                 <Typography variant="body2">
                   <Trans id='nuovo_account' />
-                  <Link to="/register" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 500 }}>
+                  <MuiLink
+                    component={LinkNext}
+                    href="/register"
+                    sx={{
+                      textDecoration: 'none',
+                      color: '#1976d2',
+                      fontWeight: 500,
+                      '&:hover': {
+                        textDecoration: 'underline', // Opzionale: aggiunge un feedback al passaggio del mouse
+                      }
+                    }}
+                  >
                     <Trans id="registrati" />
-                  </Link>
+                  </MuiLink>
                 </Typography>
               </Box>
               <Box mb={3}>
@@ -377,31 +386,31 @@ const GoogleAuthComponent = () => {
 
               {!hiddenLogin && (
                 <Grid container spacing={2} alignItems="stretch"> {/* stretch forza i figli ad avere la stessa altezza */}
-                  <Grid xs={12} sm={6} sx={{ display: 'flex' }}> {/* display flex permette al bottone di espandersi */}
+                  <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
                     <ButtonMui
                       variant="contained"
                       color="primary"
                       onClick={() => simulateLogin(TypeUser.STANDARD)}
                       fullWidth
-                      sx={{ height: '100%' }} // Forza il bottone a occupare tutta l'altezza della Grid
+                      sx={{ height: '100%' }}
                     >
                       <Trans id='login_simulato_utente_base' />
                     </ButtonMui>
                   </Grid>
 
-                  <Grid xs={12} sm={6} sx={{ display: 'flex' }}>
+                  <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
                     <ButtonMui
                       variant="contained"
                       color="primary"
                       onClick={() => simulateLogin(TypeUser.FAMILY)}
                       fullWidth
-                      sx={{ height: '100%' }} // Seguirà l'altezza del primo se il primo è più alto
+                      sx={{ height: '100%' }}
                     >
                       <Trans id='login_simulato_utente_parentale' />
                     </ButtonMui>
                   </Grid>
                 </Grid>
-              )}          
+              )}
 
               <Box mb={2} className='box-login'>
                 <TextField
@@ -431,7 +440,7 @@ const GoogleAuthComponent = () => {
                     ),
                   }}
                 />
-              </Box>         
+              </Box>
               <ButtonMui
                 variant="contained"
                 fullWidth
@@ -501,10 +510,18 @@ const GoogleAuthComponent = () => {
 
 };
 
-export const navigateRouting = (navigate: NavigateFunction, path: SectionName, params: any) => {
-  navigate(`/${path}`, { state: params }); // Passa i parametri come stato
-};
 
+export const navigateRouting = (router: AppRouterInstance, path: string, params?: any) => {
+  // Verifichiamo che params esista, non sia nullo e abbia almeno una chiave
+  const hasParams = params && typeof params === 'object' && Object.keys(params).length > 0;
+
+  if (hasParams) {
+    const queryString = new URLSearchParams(params).toString();
+    router.push(`/${path}?${queryString}`);
+  } else {
+    router.push(`/${path}`);
+  }
+};
 export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
   if (user === undefined || user === null) {
     return [[]];
@@ -601,7 +618,7 @@ export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage
 
 export const sezioniMenu = (
   sezioni: MenuLaterale[][],
-  navigate: NavigateFunction,
+  navigate: AppRouterInstance,
   path: SectionName,
   params: any,
   indice: number
