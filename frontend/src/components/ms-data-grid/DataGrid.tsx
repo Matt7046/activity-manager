@@ -14,6 +14,12 @@ import React from 'react';
 import Button, { Pulsante } from "../ms-button/Button";
 import "./DataGrid.css";
 
+
+declare module '@mui/x-data-grid' {
+  interface ToolbarPropsOverrides {
+    pulsanti: any[]; // Oppure usa il tuo tipo specifico: Pulsante[]
+  }
+}
 interface DataGridComponentProps {
   rows: any[];
   columns: any[];
@@ -29,21 +35,25 @@ interface CustomToolbarProps extends GridToolbarProps {
   pulsanti?: Pulsante[];
 }
 
+
+
 // 2. Modifichiamo il componente per accettare le props estese
 const CustomToolbar = (props: CustomToolbarProps) => {
   const { i18n } = useLingui();
   // Estraiamo 'pulsanti' e passiamo il resto (altre props della toolbar) al container
   const { pulsanti, ...other } = props;
 
-  return (
+ return (
     <GridToolbarContainer {...other}>
-      <GridToolbarExport 
-        printOptions={{ label: i18n._("esporta") }} 
-        csvOptions={{ label: i18n._("esporta") }} 
-      />
+      {/* CORREZIONE: Rimosse printOptions e csvOptions che causavano l'errore.
+          Il testo "esporta" viene ora ereditato dal localeText definito nel DataGrid.
+      */}
+      <GridToolbarExport />
+      
       <Box sx={{ flexGrow: 1 }} />
+      
       {/* Passiamo l'array di pulsanti al tuo componente Button personalizzato */}
-      <Button pulsanti={pulsanti || []}></Button>
+      <Button pulsanti={pulsanti || []} />
     </GridToolbarContainer>
   );
 };
