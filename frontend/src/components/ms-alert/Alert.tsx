@@ -1,3 +1,4 @@
+"use client";
 import { Box, Alert as MuiAlert, Snackbar, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { TypeAlertColor } from '../../general/structure/Constant';

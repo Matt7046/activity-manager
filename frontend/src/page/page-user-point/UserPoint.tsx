@@ -1,14 +1,15 @@
+"use client";
+import { useUser } from '@/context/UserContext';
 import { useLingui } from "@lingui/react";
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../App';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionNameDesc } from '../../general/structure/Constant';
 import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import PointsContent from './UserPointContent';
 export interface UserPointsI {
-  _id: string | undefined;
+  _id?: string | undefined;
   email?: string;
   password?: string;
   numeroPunti?: number;
@@ -36,8 +37,8 @@ const Points: React.FC<{}> = ({ }) => {
 
   const { user, setUser } = useUser();
   const { i18n } = useLingui();
-  const navigate = useNavigate(); // Ottieni la funzione di navigazione
-  const menuLaterale = getMenuLaterale(navigate, user);
+  const router = useRouter(); // Ottieni la funzione di navigazione
+  const menuLaterale = getMenuLaterale(router, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
@@ -76,7 +77,7 @@ const Points: React.FC<{}> = ({ }) => {
         alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
         handleClose={handleClose}
-        navigate={useNavigate()}
+        navigate={useRouter()}
       >
         <PointsContent
           user={user}

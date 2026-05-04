@@ -1,28 +1,36 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-
-    "target": "esnext",                   // Aggiorna il target a "esnext" per supportare le caratteristiche moderne
-    "moduleResolution": "node16",          // Cambia a "node16" per una risoluzione dei moduli compatibile con ESLint
-    "module": "node16",                    // Usa "esnext" per i moduli ECMAScript moderni
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"                     // Supporta JSX per React 17+
+    "jsx": "react-jsx",
+    "incremental": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": [
-    "src"
-, "src/components/.tsx"  ]
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
 }

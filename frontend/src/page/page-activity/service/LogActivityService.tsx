@@ -1,3 +1,4 @@
+"use client";
 import { PATH_ACTIVITY, PATH_LOGACTIVITY, postData } from "../../../general/service/AxiosService";
 import { ResponseI } from "../../../general/structure/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";

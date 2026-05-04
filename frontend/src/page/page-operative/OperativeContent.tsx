@@ -1,11 +1,13 @@
+"use client";
 import { Trans, useLingui } from "@lingui/react";
 import { Box, FormControl, Input, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
+import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import Button, { Pulsante } from "../../components/ms-button/Button";
-import { ButtonName, HttpStatus } from "../../general/structure/Constant";
+import { ButtonName, HttpStatus, TypeUser } from "../../general/structure/Constant";
 import { FormErrorValues, ResponseI, UserI, verifyForm } from "../../general/structure/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivities, savePointsAndLog } from "../page-activity/service/ActivityService";
@@ -28,7 +30,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   isVertical
 }) => {
 
-  const location = useLocation();
+  const pathname = usePathname();
   const { i18n } = useLingui();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingO, setIsLoadingO] = useState(true);
@@ -57,11 +59,11 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   useEffect(() => {
     const errors: FormErrorValues = verifyForm(formValues);
     setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
-    if (user.type === 1) {
-      operativeStore.setEmailField(user.email);
+    if (user?.type === 1) {
+      operativeStore.setEmailField(user?.email);
     }
     else {
-      operativeStore.setEmailField(user.emailChild);
+      operativeStore.setEmailField(user?.emailChild);
     }
   }, [formValues]);
 
@@ -90,7 +92,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
   const fetchOptions = () => {
     try {
-      const emailFind = user.emailChild ? user.emailChild : user.email;
+      const emailFind = user?.emailChild ? user?.emailChild : user?.email;
 
       return fetchDataActivities({ ...user, email: emailFind }).then((response: ResponseI | undefined) => {
         setIsLoadingO(false);
@@ -103,7 +105,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
 
   const fetchPoints = () => {
     try {
-      const emailFind = user.emailChild ? user.emailChild : user.email;
+      const emailFind = user?.emailChild ? user?.emailChild : user?.email;
 
       findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((response: ResponseI | undefined) => {
         if (response) {
@@ -181,43 +183,47 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
     <>
       <Box className='box-operative-content'>
         <Grid container spacing={2}>
-          <Grid xs={12} sm={12}>
+          {/* Titolo con email */}
+          <Grid size={{ xs: 12, sm: 12 }}>
             <Typography variant="body2" color="text.secondary">
-              <Trans id="operazioni_attivita" /> <strong>{user.emailUserCurrent}</strong>
+            {user?.type === TypeUser.FAMILY ? (
+      <Trans id="operazioni_attivita" />
+    ) : (
+       <Trans id="operazioni_attivita_child" />
+    )} <strong>{user?.emailUserCurrent}</strong>
             </Typography>
           </Grid>
+
           {/* Prima riga */}
-          <Grid xs={12} sm={6} >
-            {/* Campo stringa 1 */}
-            <FormControl fullWidth >
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormControl fullWidth>
               <TextField
                 label={i18n._("email")}
-                value={user.emailChild}
+                value={user?.emailChild}
                 onChange={(e) => operativeStore.setEmailField(e.target.value)}
                 fullWidth
                 margin="normal"
-                disabled={true} // Disabilita il campo
+                disabled={true}
               />
             </FormControl>
           </Grid>
-          <Grid xs={12} sm={6} >
-            <FormControl className="form-control-operative" variant="standard">
+
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormControl className="form-control-operative" variant="standard" fullWidth>
               <InputLabel htmlFor="filled-points">{i18n._("punti")}</InputLabel>
               <Input
                 id="filled-adornment-points"
-                value={operativeStore.points} // Collega il valore allo stato
-                onChange={handleChangePoints} // Aggiorna lo stato quando cambia
+                value={operativeStore.points}
+                onChange={handleChangePoints}
                 disabled={true}
               />
             </FormControl>
           </Grid>
 
           {/* Seconda riga */}
-          <Grid xs={12} sm={6}>
-            {/* Campo combobox */}
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl fullWidth margin="normal">
-              <InputLabel id="select-label">{i18n._("punti_attivitaobb")}
-              </InputLabel>
+              <InputLabel id="select-label">{i18n._("punti_attivitaobb")}</InputLabel>
               <Select
                 labelId="select-label"
                 value={formValues.activity}
@@ -232,35 +238,30 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
                 ))}
               </Select>
             </FormControl>
-
           </Grid>
+
           {/* Campo con punti */}
-          <Grid xs={12} sm={6}>
-            {/* Campo numerico */}
-            <FormControl fullWidth >
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormControl fullWidth>
               <TextField
                 label={i18n._("punti_attivita")}
                 type="number"
                 value={operativeStore.pointsField}
                 onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
                 margin="normal"
-                disabled={true} // Disabilita il campo
-
+                disabled={true}
               />
             </FormControl>
-
           </Grid>
         </Grid>
 
-        {/* Pulsante Salva */}
-        <Grid container justifyContent="flex-end" spacing={1}>
+        {/* Pulsante Salva - Allineato a destra */}
+        <Box display="flex" justifyContent="flex-end" mt={2}>
           <Button pulsanti={[pulsanteSave]} />
-
-        </Grid>
+        </Box>
       </Box>
     </>
   );
-
 };
 
 

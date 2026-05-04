@@ -1,3 +1,4 @@
+"use client";
 import { i18n } from "@lingui/core";
 import { useState } from 'react';
 import { ResponseI, UserI } from '../../general/structure/Utils';
@@ -135,7 +136,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
   const createButtonPreferiti = (video: VideoI): Pulsante[] => [
     {
       icona: "fas fa-star",
-      nome:  video.favorite ? 'red': "blue",
+      nome: video.favorite ? 'red' : "blue",
       // 1. Aggiunta virgola qui sotto
       title: video.favorite ? i18n._("elimina_dai_preferiti") : i18n._("aggiungi_ai_preferiti"),
       funzione: () => {
@@ -155,7 +156,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
         } else {
           saveFavorite(favorite, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
             .then((response: ResponseI | undefined) => {
-               fetchOptions(searchQuery).then((res) => {
+              fetchOptions(searchQuery).then((res) => {
                 if (res) setVideos(res.jsonText);
               });
             });
@@ -197,7 +198,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
   }
 
   return (
-    <div className="container">
+    <> {/* <--- AGGIUNTO FRAGMENT OBBLIGATORIO */}
 
       {/* 🔍 SEARCH SEMPRE VISIBILE */}
       <div className="search-container">
@@ -208,9 +209,9 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-input"
         />
-
         <Button pulsanti={[searchButton(searchQuery)]} />
       </div>
+
       {/* --- NUOVO FILTRO FAVORITI --- */}
       <div className="filter-container">
         <label className="favorite-filter">
@@ -222,7 +223,6 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
           <span>{i18n._("mostra_preferiti")}</span>
         </label>
       </div>
-      {/* --------------------------- */}
 
       {/* 🎬 PLAYER SE VIDEO SELEZIONATO */}
       {selectedVideo ? (
@@ -243,31 +243,31 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
       ) : (
         /* 🎥 GRID SE NESSUN VIDEO SELEZIONATO */
         <div className="video-grid">
-          {videos.map((video: VideoI) => (
-            <div key={video.videoId} className="video-card">
-              <div className="video-thumbnail-container">
-                <img
-                  src={video.thumbnail}
-                  alt={video.title}
-                  className="video-thumbnail"
-                />
-
-                <div className="video-overlay">
-                  <Button pulsanti={createButtons(video)} />
+          {
+            videos.map((video: VideoI) => (
+              <div key={video.videoId} className="video-card">
+                <div className="video-thumbnail-container">
+                  <img
+                    src={video.thumbnail}
+                    alt={video.title}
+                    className="video-thumbnail"
+                  />
+                  <div className="video-overlay">
+                    <Button pulsanti={createButtons(video)} />
+                  </div>
+                </div>
+                <div className="video-info">
+                  <h4>{video.title}</h4>
+                  <p>{video.channelTitle}</p>
                 </div>
               </div>
-
-              <div className="video-info">
-                <h4>{video.title}</h4>
-                <p>{video.channelTitle}</p>
-              </div>
-            </div>
-          ))}
+            ))          
+          }
         </div>
       )}
 
-    </div>
+    </> // <--- CHIUSURA FRAGMENT
   );
-};
+}
 
-export default VideoGrid;
+  export default VideoGrid;

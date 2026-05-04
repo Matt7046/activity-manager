@@ -1,3 +1,4 @@
+"use client";
 import { Trans, useLingui } from "@lingui/react";
 import { Button as ButtonMui, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab } from '@mui/material'; // Importato Fab
 import { observer } from 'mobx-react';

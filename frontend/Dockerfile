@@ -1,29 +1,36 @@
-# Usa l'immagine di base di Node.js 14
-FROM node:14-alpine as builder
+# Fase 1: Builder
+# Utilizziamo Node 20 (LTS) per soddisfare i requisiti di Next.js >= 20.9.0
+FROM node:20-alpine AS builder
 
-# Imposta la directory di lavoro nel container
 WORKDIR /app
 
-# Copia il file package.json e package-lock.json
+# Copia i file di configurazione delle dipendenze
 COPY package.json package-lock.json ./
 
-# Installa le dipendenze
-RUN npm install
+# Installazione con --legacy-peer-deps per gestire i conflitti MUI v6/React 18
+RUN npm install --legacy-peer-deps
 
-# Copia tutti i file sorgenti nel container
+# Copia tutto il codice sorgente
 COPY . .
 
-# Costruisci l'app per la produzione
+# Costruisci l'applicazione Next.js
 RUN npm run build
 
-# Usa un'immagine più leggera per servire il front-end
-FROM nginx:alpine
+# Fase 2: Runner (Produzione)
+FROM node:20-alpine AS runner
 
-# Copia i file buildati nella directory predefinita di Nginx
-COPY --from=builder /app/build /usr/share/nginx/html
+WORKDIR /app
 
-# Espone la porta 80 per il front-end
-EXPOSE 80
+ENV NODE_ENV=production
 
-# Comando di avvio per Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Copiamo i file necessari dalla fase di build
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+
+# Espone la porta 3000 (standard per Next.js)
+EXPOSE 3000
+
+# Avviamo il server Next.js
+CMD ["npm", "start"]

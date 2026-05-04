@@ -1,3 +1,4 @@
+"use client";
 import { Trans, useLingui } from "@lingui/react";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
@@ -51,7 +52,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
       <Box className="settings-box">
         {/* INTESTAZIONE PAGINA */}
         <Typography variant="body2" color="text.secondary" className="popover-header-text">
-          <Trans id="preferenze_account" /> <strong>{user.emailUserCurrent}</strong>
+          <Trans id="preferenze_account" /> <strong>{user?.emailUserCurrent}</strong>
         </Typography>
       </Box>
 

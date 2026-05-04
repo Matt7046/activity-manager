@@ -144,7 +144,7 @@
   "raccogliamo_dati_desc": "Wenn Sie sich für unseren Newsletter anmelden oder unsere Dienste nutzen, erheben wir folgende personenbezogene Daten:",
   "altri_dati_volontari": "Alle anderen Daten, die Sie freiwillig über die Formulare auf unserer Website angeben",
   "finalita_desc": "Wir nutzen Ihre personenbezogenen Daten für folgende Zwecke:",
-  "conservazione_dati_desc": "Ihre personenbezogenen Daten werden nur so lange gespeichert, wie es für die oben genannten Zwecke erforderlich ist, sofern keine anderslautenden gesetzlichen Bestimmungen oder eine ausdrückliche Einwilligung vorliegen.",
+  "conservazione_dati_desc": "Ihre personenbezogenen Daten werden nur so lange aufbewahrt, wie es für die oben genannten Zwecke erforderlich ist, sofern keine anderslautenden gesetzlichen Bestimmungen oder eine ausdrückliche Einwilligung vorliegen.",
   "diritti_utente_desc": "Nach der DSGVO haben Sie das Recht:",
   "per_esercitare_diritti": "Um diese Rechte auszuüben, können Sie uns unter der E-Mail-Adresse kontaktieren:",
   "sicurezza_dati_desc": "Wir ergreifen geeignete technische und organisatorische Maßnahmen, um Ihre personenbezogenen Daten vor unbefugtem Zugriff, Verlust oder Offenlegung zu schützen.",
@@ -186,5 +186,7 @@
   "home": "Login",
   "vuoi_aggiungere_punti": "Möchten Sie der Nachhilfe Punkte hinzufügen?",
   "vuoi_sottrarre_punti": "Möchten Sie Punkte von der Nachhilfe abziehen?",
-  "conferma_operazione": "Bestätigen Sie den Vorgang"
+  "conferma_operazione": "Bestätigen Sie den Vorgang",
+  "operazioni_famiglia": "Zeichnen Sie die vom Tutor mit dem Benutzer durchgeführten Vorgänge auf:",
+  "operazioni_attivita_child": "Erfassen Sie die mit dem Benutzer durchgeführten Aktivitäten:"
 }

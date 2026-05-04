@@ -1,3 +1,4 @@
+"use client";
 import { i18n } from "@lingui/core";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -127,7 +128,6 @@ const columns: GridColDef[] = [
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}
         pulsanti={pulsantiToolbar} // Il pulsante NEW finirà nella Toolbar a destra
-        rowCount={rows.length}
         
       />
     </Box>

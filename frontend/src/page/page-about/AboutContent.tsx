@@ -1,9 +1,10 @@
+"use client";
 import { useLingui } from "@lingui/react";
 import { Box } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Unstable_Grid2';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus, SectionName, TypeUser } from "../../general/structure/Constant";
 import { FormErrorValues, UserI, verifyForm } from "../../general/structure/Utils";
@@ -30,11 +31,12 @@ const AboutContent: React.FC<AboutContentProps> = ({
   isVertical
 }) => {
 
-  const location = useLocation();
-  const navigate = useNavigate(); // Ottieni la funzione di navigazione
+  const pathname = usePathname();
+  const router = useRouter(); // Ottieni la funzione di navigazione
   const { i18n } = useLingui();
   const [disableButtonSave, setDisableButtonSave] = useState<boolean>();
-  const { _id } = location.state || {}; // Ottieni il valore dallo stato
+  const searchParams = useSearchParams();
+  const _id = searchParams.get('id');
   const [disableButtonDelete, setDisableButtonDelete] = useState<boolean>(_id === null || _id === undefined);
 
 
@@ -150,21 +152,21 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   // Crea l'array dei pulsanti in base all'orientamento
 
-  const cancellaRecord = (_id: string): void => {
+  const cancellaRecord = (_id: string | null): void => {
 
     deleteAboutById(_id, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
-          navigateRouting(navigate, SectionName.ACTIVITY, {})
+          navigateRouting(router, SectionName.ACTIVITY, {})
         }
       }
     })
   }
   const returnActivity = (): void => {
-    navigateRouting(navigate, SectionName.ACTIVITY, {})
+    navigateRouting(router, SectionName.ACTIVITY, {})
   }
 
-  const salvaRecord = (_id: string): void => {
+  const salvaRecord = (_id: string | null): void => {
     const emailFind = user.emailChild ? user.emailChild : user.email;
     const testo = {
       ...user,
@@ -177,7 +179,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
     saveActivity(testo, (message?: TypeMessage) => showMessage(setOpen, setMessage, message)).then((response) => {
       if (response?.jsonText) {
         setDisableButtonDelete(false);
-        navigateRouting(navigate, SectionName.ACTIVITY, {})
+        navigateRouting(router, SectionName.ACTIVITY, {})
       }
     })
   }
@@ -195,29 +197,32 @@ const AboutContent: React.FC<AboutContentProps> = ({
           disabled={true}
         />
         <Grid container spacing={2}>
-          <Grid xs={12} sm={6}>
-            <TextField
-              id="activity"
-              label={i18n._("attivita")}
-              variant="standard"
-              value={formValues.activity} // Collega il valore allo stato
-              onChange={handleChangeActivity} // Aggiorna lo stato quando cambia
-              fullWidth
-              required={true}
-            />
-          </Grid>
-          <Grid xs={12} sm={6}>
-            <TextField
-              id="points"
-              label={i18n._("punti")}
-              variant="standard"
-              value={formValues.points} // Collega il valore allo stato
-              onChange={handleChangePoints} // Aggiorna lo stato quando cambia
-              fullWidth
-              type="number"
-              disabled={user.type === TypeUser.STANDARD}
-              required={true}
-            />
+          <Grid container spacing={2}> {/* Assicurati che ci sia il container sopra */}
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                id="activity"
+                label={i18n._("attivita")}
+                variant="standard"
+                value={formValues.activity}
+                onChange={handleChangeActivity}
+                fullWidth
+                required={true}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                id="points"
+                label={i18n._("punti")}
+                variant="standard"
+                value={formValues.points}
+                onChange={handleChangePoints}
+                fullWidth
+                type="number"
+                disabled={user.type === TypeUser.STANDARD}
+                required={true}
+              />
+            </Grid>
           </Grid>
         </Grid>
         <TextField
@@ -229,7 +234,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
           fullWidth
           multiline
           rows={10} // Numero di righe visibili per il campo
-         />
+        />
         <Grid container justifyContent="space-between" spacing={2} className='grid-button-about'>
           <Button pulsanti={[pulsanteReturn]} />
 

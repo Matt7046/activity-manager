@@ -1,3 +1,4 @@
+"use client";
 import { extendObservable } from "mobx";
 
 class BaseStore {

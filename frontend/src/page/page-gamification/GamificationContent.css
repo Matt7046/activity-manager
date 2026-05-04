@@ -1,21 +1,31 @@
-/* Container principale: ereditiamo la logica di Operative/Settings */
+/* GamificationContent.css */
+
 .box-gamification-content {
-    padding-right: 40px; /* Aumenta solo il lato destro */
-}
-/* Stile per i controlli e video */
-.form-control-operative {
-    margin-top: 16px !important;
-    padding: 12px 20px; /* Aggiunto padding interno per rendere l'area più ampia */
-    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* CAMBIA DA center/flex-start A stretch */
+    width: 100%;
+    padding-top: 24px;
+    padding-left: 25px;
+    padding-right: 20px;
     box-sizing: border-box;
-    
-    /* Se vuoi distanziarlo specificamente dal contenuto sottostante */
-    margin-bottom: 20px; 
 }
 
-/* Assicuriamoci che la griglia dei video sia contenuta correttamente */
 .video-grid-wrapper {
-    width: 100%;
-    margin-top: 20px;
-    box-sizing: border-box;
+    width: 100% !important;
 }
+/* Rimuoviamo il test dei 200px */
+.box-typography {
+    width: 100%;
+    padding-left: 0; /* Reset del test precedente */
+    margin-bottom: 5px;
+}
+
+/* Stile del testo */
+.popover-header-text {
+    text-align: left;
+    color: #5f6368;
+    font-size: 0.95rem;
+    margin: 0 !important; /* Rimuove margini di default di MUI che potrebbero spostarlo */
+}
+

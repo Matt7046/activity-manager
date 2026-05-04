@@ -1,3 +1,4 @@
+"use client";
 import { getData, PATH_NOTIFICATION, postData } from "../../../general/service/AxiosService";
 import { NotificationI, ResponseI } from "../../../general/structure/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";

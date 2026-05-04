@@ -1,7 +1,8 @@
+"use client";
+import { useUser } from '@/context/UserContext';
 import { useLingui } from "@lingui/react";
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../App';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionNameDesc } from "../../general/structure/Constant";
 import { getMenuLaterale } from '../../general/structure/Utils';
@@ -24,10 +25,10 @@ const Family: React.FC<{}> = ({ }) => {
 
 
 
-  const navigate = useNavigate(); // Ottieni la funzione di navigazione
+  const router = useRouter(); // Ottieni la funzione di navigazione
   const { user, setUser } = useUser();
   const { i18n } = useLingui();
-  const menuLaterale = getMenuLaterale(navigate, user);
+  const menuLaterale = getMenuLaterale(router, user);
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
@@ -62,7 +63,7 @@ const Family: React.FC<{}> = ({ }) => {
         alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
         handleClose={handleClose}
-        navigate={useNavigate()}
+        navigate={useRouter()}
       >
         <FamilyContent
           alertConfig={{ open, setOpen, message, setMessage }}

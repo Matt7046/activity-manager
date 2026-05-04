@@ -1,13 +1,15 @@
+"use client";
 import { Trans, useLingui } from "@lingui/react";
 import { Box, Typography } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
+import { usePathname } from 'next/navigation';
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import VideoGrid from "../../components/ms-video-grid/MsVideoGrid";
 import { UserI } from "../../general/structure/Utils";
-import "./GamificationContent.css";
 import gamificationStore from "./store/GamificationStore";
+
+import "./GamificationContent.css";
 
 
 interface GamificationContentProps {
@@ -23,11 +25,11 @@ const GamificationContent: React.FC<GamificationContentProps> = ({
   isVertical
 }) => {
 
-  const location = useLocation();
+  const pathname = usePathname();
   const { i18n } = useLingui();
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
   const [isWatching, setIsWatching] = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState< string | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const useWatchTime = (isActive: boolean) => {
     const secondsRef = useRef(0);
     const intervalRef = useRef<any>(null);
@@ -64,28 +66,20 @@ const GamificationContent: React.FC<GamificationContentProps> = ({
   }, [selectedVideo]);
   return (
     <Box className="box-gamification-content">
-         {/* INTESTAZIONE PAGINA */}
-   
-         <Box className="box-gamification-content">
-           {/* INTESTAZIONE PAGINA */}
-           <Typography variant="body2" color="text.secondary" className="popover-header-text">
-             <Trans id="info_guadagno_punti_video" /> <strong>{user.emailUserCurrent}</strong>
-           </Typography>
-         </Box>
-   
-      <Grid container>
-        <Grid xs={12}>
-          <Box className="video-grid-wrapper">
-            <VideoGrid
-              selectedVideo={selectedVideo}
-              handlePlayVideo={(videoId) => setSelectedVideo(videoId)}
-              alertConfig={alertConfig}
-              user={user} />
-          </Box>
-        </Grid>
-
-        {/* Se aggiungerai altri elementi sotto, seguiranno il padding corretto */}
+        <Typography variant="body2" color="text.secondary" className="popover-header-text">
+          <Trans id="info_guadagno_punti_video" /> <strong>{user?.emailUserCurrent}</strong>
+        </Typography>
+      <Grid size={{ xs: 12 }}>
+        <Box className="video-grid-wrapper">
+          <VideoGrid
+            selectedVideo={selectedVideo}
+            handlePlayVideo={(videoId) => setSelectedVideo(videoId)}
+            alertConfig={alertConfig}
+            user={user} />
+        </Box>
       </Grid>
+
+      {/* Se aggiungerai altri elementi sotto, seguiranno il padding corretto */}
     </Box>
   );
 

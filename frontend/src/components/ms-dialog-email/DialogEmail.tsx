@@ -1,3 +1,4 @@
+"use client";
 import { Trans } from "@lingui/react";
 import { Button as ButtonMui, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import React, { useState } from 'react';

@@ -186,5 +186,7 @@
   "home": "Se connecter",
   "vuoi_aggiungere_punti": "Voulez-vous ajouter des points au tutorat ?",
   "vuoi_sottrarre_punti": "Voulez-vous déduire des points du tutorat ?",
-  "conferma_operazione": "Confirmer l'opération"
+  "conferma_operazione": "Confirmer l'opération",
+  "operazioni_famiglia": "Enregistrer les opérations réalisées par le tuteur auprès de l'utilisateur :",
+  "operazioni_attivita_child": "Enregistrez les activités réalisées avec l'utilisateur :"
 }

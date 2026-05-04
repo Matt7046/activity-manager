@@ -1,77 +1,50 @@
 {
-  "name": "demots",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@craco/craco": "^7.1.0",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@fortawesome/fontawesome-free": "^6.7.1",
-    "@fortawesome/fontawesome-svg-core": "^6.7.1",
-    "@fortawesome/free-solid-svg-icons": "^6.7.1",
-    "@fortawesome/react-fontawesome": "^0.2.2",
-    "@mui/icons-material": "^5.4.1",
-    "@mui/material": "^5.4.1",
-    "@mui/x-data-grid": "^6.0.0",
-    "@react-oauth/google": "^0.12.1",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.12",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "axios": "^1.7.9",
-    "google-translate-api-x": "^10.7.2",
-    "mobx": "^6.13.5",
-    "mobx-react": "^7.6.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.16.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint '**/*.{js,mjs,cjs,ts,jsx,tsx}'",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
     "lang:extract": "lingui extract",
     "lang:compile": "lingui compile",
     "translate": "node translate.js"
   },
-  "eslintConfig": {
-    "extends": []
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "@lingui/core": "^5.9.5",
+    "@lingui/react": "^5.9.5",
+    "@mui/icons-material": "^6.1.0",
+    "@mui/material": "^6.5.0",
+    "@mui/styled-engine": "^9.0.0",
+    "@mui/styled-engine-sc": "^9.0.0",
+    "@mui/system": "^6.5.0",
+    "@mui/utils": "^9.0.0",
+    "@mui/x-data-grid": "^7.29.13",
+    "@react-oauth/google": "^0.13.5",
+    "axios": "^1.16.0",
+    "google-translate-api-x": "^10.7.2",
+    "mobx": "^6.15.0",
+    "mobx-react": "^9.2.1",
+    "next": "16.2.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.16.0",
     "@lingui/cli": "^5.9.5",
     "@lingui/format-json": "^5.9.5",
     "@lingui/macro": "^5.9.5",
-    "@typescript-eslint/eslint-plugin": "^8.18.0",
-    "@typescript-eslint/parser": "^8.18.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "babel-plugin-macros": "^3.1.0",
-    "eslint": "^8.00.0",
-    "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^5.1.0",
-    "globals": "^15.13.0",
-    "typescript-eslint": "^8.18.0"
-  },
-  "engines": {
-    "node": "14.x"
+    "eslint": "^9",
+    "eslint-config-next": "16.2.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

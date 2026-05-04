@@ -1,3 +1,4 @@
+"use client";
 // socketSingleton.ts
 import Socket from "./Socket";
 import { UserI } from "./Utils";

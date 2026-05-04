@@ -4,6 +4,9 @@ services:
   frontend:   
     image: docker.io/matt7046/frontend:1.0.1
     container_name: frontend
+    # Aggiungi questo per evitare che il container si chiuda in certi ambienti
+    stdin_open: true
+    tty: true
     env_file:
       - .env
     networks:
@@ -58,6 +61,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      # Rimosso il volume statico: ora Next.js è un server vivo
     ports:
       - "80:80"
       - "443:443"

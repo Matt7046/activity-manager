@@ -1,3 +1,4 @@
+"use client";
 import BaseStore from '../../../general/structure/BaseStore';
 
 export class AboutStore extends BaseStore {

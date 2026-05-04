@@ -1,3 +1,4 @@
+"use client";
 import { action, makeObservable, observable } from 'mobx';
 import BaseStore from '../../../general/structure/BaseStore';
 
@@ -6,7 +7,7 @@ export class FamilyStore extends BaseStore {
 
 
   @observable points: number = 0;
-  @observable email: string = 'pippo';
+  @observable email: string = '';
   constructor() {    
     super(); // Inizializza la classe base
     makeObservable(this);
