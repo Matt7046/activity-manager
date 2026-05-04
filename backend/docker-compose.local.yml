@@ -7,6 +7,10 @@ services:
       dockerfile: Dockerfile
     image: docker.io/matt7046/frontend:1.0.1
     container_name: frontend
+    # Aggiungi questo per evitare che il container si chiuda in certi ambienti
+    stdin_open: true
+    tty: true
+
     networks:
       - app-network    
 
@@ -55,7 +59,6 @@ services:
     container_name: nginx
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - /root/app/frontend-build:/usr/share/nginx/html:ro
     ports:
       - "80:80"
     depends_on:
