@@ -3,7 +3,7 @@ import { Trans, useLingui } from "@lingui/react";
 import { Box, FormControl, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from "react";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus, SectionName, TypeUser } from "../../general/structure/Constant";
@@ -18,6 +18,7 @@ import "./AboutContent.css";
 
 
 interface AboutContentProps {
+  identificativo: string;
   user: UserI;
   setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,6 +26,7 @@ interface AboutContentProps {
 }
 
 const AboutContent: React.FC<AboutContentProps> = ({
+  identificativo,
   user,
   setMessage,
   setOpen,
@@ -35,10 +37,10 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const router = useRouter(); // Ottieni la funzione di navigazione
   const { i18n } = useLingui();
   const [disableButtonSave, setDisableButtonSave] = useState<boolean>();
-  const searchParams = useSearchParams();
-  const _id = searchParams.get('_id');
-  const [disableButtonDelete, setDisableButtonDelete] = useState<boolean>(_id === null || _id === undefined);
-  const [subTesto, setSubTesto] = useState(activityStore.activity.find((x) => _id === x._id)?.subTesto);
+  const [disableButtonDelete, setDisableButtonDelete] = useState<boolean>(identificativo === null || identificativo === undefined);
+  const descrizione = activityStore.activity.find((x) => identificativo === x._id)?.subTesto;
+  const [subTesto, setSubTesto] = useState(descrizione);
+
 
   // Stato per i valori dei campi
   type FormValues = {
@@ -47,8 +49,8 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
 
   const [formValues, setFormValues] = useState<FormValues>({
-    activity: activityStore.activity.find((x) => _id === x._id)?.nome,
-    points: activityStore.activity.find((x) => _id === x._id)?.points,
+    activity: activityStore.activity.find((x) => identificativo === x._id)?.nome,
+    points: activityStore.activity.find((x) => identificativo === x._id)?.points,
   });
 
   const [formErrors, setFormErrors] = useState<FormErrorValues>({
@@ -63,6 +65,18 @@ const AboutContent: React.FC<AboutContentProps> = ({
     // Puoi aggiungere altre azioni da eseguire quando formValues cambia
   }, [formValues]); // Dipendenza su formValues
 
+  useEffect(() => {
+    if (identificativo === null || identificativo === undefined) {
+      setSubTesto("");
+
+      // Reset dei campi del form a stringhe vuote
+      setFormValues({
+        activity: "",
+        points: 0,
+      })
+    }
+    // Puoi aggiungere altre azioni da eseguire quando formValues cambia
+  }, [identificativo]); // Dipendenza su formValues
 
   const handleButtonClick = () => {
     const errors: FormErrorValues = verifyForm(formValues);
@@ -70,7 +84,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
     // Procedi solo se non ci sono errori
     if (Object.keys(errors).filter((key) => errors[key] === true).length === 0) {
-      salvaRecord(_id); // Chiama la funzione per salvare i dati
+      salvaRecord(identificativo); // Chiama la funzione per salvare i dati
     } else {
       const erroriCampi = Object.keys(formErrors).filter((key) => errors[key] === true);
       let errorFields: string[] = [];
@@ -87,11 +101,11 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   const pulsanteRed: Pulsante = {
     icona: 'fas fa-solid fa-trash',
-    funzione: () => cancellaRecord(_id), // Passi la funzione direttamente
+    funzione: () => cancellaRecord(identificativo), // Passi la funzione direttamente
     disableButton: disableButtonDelete,
     nome: ButtonName.RED,
     title: i18n._("elimina"),
-    visibility: _id ? true : false,
+    visibility: identificativo ? true : false,
     configDialogPulsante: { message: i18n._("vuoi_eliminare_il_record"), showDialog: true }
 
   };
@@ -181,11 +195,11 @@ const AboutContent: React.FC<AboutContentProps> = ({
         {/* Intestazione */}
         <Grid size={{ xs: 12 }}>
           <Typography variant="body2" color="text.secondary">
-            {user?.type === TypeUser.FAMILY ? (
-              <Trans id="dettaglio_attivita" />
+            {user?.type === TypeUser.FAMILY && !identificativo ? (
+               <><Trans id="dettaglio_attivita" /><strong>{user?.emailUserCurrent}</strong></>
             ) : (
-              <Trans id="dettaglio_attivita_child" />
-            )} <strong>{user?.emailUserCurrent}</strong>
+              <><Trans id="dettaglio_attivita_child" /><strong>{user?.emailChild}</strong></>
+            )}
           </Typography>
         </Grid>
 
