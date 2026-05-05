@@ -12,7 +12,12 @@
 
     docker-compose up --scale activity-service=3 --scale auth-service=3 --scale family-service=3 --scale image-service=3 --scale user-point-service=3   --scale notification-service=3
 
-#FILE ENV EMPY
+
+#FILE ENV EMPY_FRONTEND
+    NEXT_PUBLIC_IMAGE_SERVER=
+
+
+#FILE ENV EMPY_BACKEND
 
     # Database MongoDB
     MONGO_URI=

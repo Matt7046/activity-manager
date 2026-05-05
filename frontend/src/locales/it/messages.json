@@ -189,4 +189,7 @@
   "conferma_operazione":"Conferma operazione",    
   "operazioni_famiglia":"Registra le operazioni effettuate dal tutorato con l'utente : ",
   "operazioni_attivita_child":"Registra le attività effettuate con l'utente : ",
+  "dettaglio_attivita":"Crea Nuova attività con l'utente: ",
+  "dettaglio_attivita_child":"Questa è l'attività dell'utente: ",
+  "lista_attivita": "Lista attività"
 }

@@ -536,7 +536,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
         },
         {
           funzione: null,
-          testo: SectionNameDesc.ABOUT,
+          testo: SectionNameDesc.ABOUT(null),
           icon: InfoIcon
         },
         {

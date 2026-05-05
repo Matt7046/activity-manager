@@ -44,6 +44,7 @@
 
 .header-icon {
     font-size: 1.5rem;
+    color: #2f84d3;
     /* Regola la dimensione della rotella */
 }
 
@@ -81,7 +82,8 @@
 .box-layout-text .form-control-operative .MuiInputLabel-root,
 .box-layout-text-vertical .form-control-operative .MuiInputLabel-root {
     font-weight: bold !important;
-    color: #2d3748 !important; /* Colore scuro per evidenziare il bold */
+    color: #2d3748 !important;
+    /* Colore scuro per evidenziare il bold */
 }
 
 /* Stile per quando la label si rimpicciolisce (shrink) */

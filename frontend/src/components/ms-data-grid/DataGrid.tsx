@@ -17,7 +17,7 @@ import "./DataGrid.css";
 
 declare module '@mui/x-data-grid' {
   interface ToolbarPropsOverrides {
-    pulsanti: any[]; // Oppure usa il tuo tipo specifico: Pulsante[]
+    pulsanti: Pulsante[];
   }
 }
 interface DataGridComponentProps {

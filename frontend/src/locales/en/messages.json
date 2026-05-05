@@ -188,5 +188,8 @@
   "vuoi_sottrarre_punti": "Do you want to deduct points from tutoring?",
   "conferma_operazione": "Confirm operation",
   "operazioni_famiglia": "Record the operations carried out by the tutor with the user:",
-  "operazioni_attivita_child": "Record the activities carried out with the user:"
+  "operazioni_attivita_child": "Record the activities carried out with the user:",
+  "dettaglio_attivita": "Create New Task with User:",
+  "dettaglio_attivita_child": "This is the user activity:",
+  "lista_attivita": "Task list"
 }
