@@ -44,13 +44,13 @@ const AboutContent: React.FC<AboutContentProps> = ({
 
   // Stato per i valori dei campi
   type FormValues = {
-    [key: string]: string | number | undefined;
+    [key: string]: string | number;
   };
 
 
   const [formValues, setFormValues] = useState<FormValues>({
-    activity: activityStore.activity.find((x) => identificativo === x._id)?.nome,
-    points: activityStore.activity.find((x) => identificativo === x._id)?.points,
+    activity: activityStore.activity.find((x) => identificativo === x._id)?.nome ?? "",
+    points: activityStore.activity.find((x) => identificativo === x._id)?.points ?? 0,
   });
 
   const [formErrors, setFormErrors] = useState<FormErrorValues>({
@@ -196,7 +196,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
         <Grid size={{ xs: 12 }}>
           <Typography variant="body2" color="text.secondary">
             {user?.type === TypeUser.FAMILY && !identificativo ? (
-               <><Trans id="dettaglio_attivita" /><strong>{user?.emailUserCurrent}</strong></>
+              <><Trans id="dettaglio_attivita" /><strong>{user?.emailUserCurrent}</strong></>
             ) : (
               <><Trans id="dettaglio_attivita_child" /><strong>{user?.emailChild}</strong></>
             )}
@@ -204,7 +204,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
         </Grid>
 
         {/* Email sola lettura */}
-        <Grid size={{ xs: 6 }}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <FormControl fullWidth>
             <TextField
               label={i18n._("email")}
@@ -253,7 +253,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
             onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia
             fullWidth
             multiline
-            rows={10}
+            rows={5}
           />
         </Grid>
 
