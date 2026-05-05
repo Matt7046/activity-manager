@@ -18,10 +18,11 @@ export enum SectionName {
 
 export const SectionNameDesc = {
   get POLICY() { return i18n._('privacy_policy'); }, // Usa la chiave corretta del tuo JSON
-  get ACTIVITY() { return i18n._('attivita'); },
+  get ACTIVITY() { return i18n._('lista_attivita'); },
   get GAMIFICATION() { return i18n._('completa_e_guadagna_punti'); },
-  get ABOUT() { return i18n._('nuova_attivita'); },
-  get POINTS() { return i18n._('sezione_informazioni_utente'); },
+  ABOUT(_id: string | null) {
+    return _id ? i18n._('attivita') : i18n._('nuova_attivita');
+  }, get POINTS() { return i18n._('sezione_informazioni_utente'); },
   get OPERATIVE() { return i18n._('sezione_operativa'); },
   get FAMILY() { return i18n._('sezione_famiglia'); },
   get REGISTER() { return i18n._('sezione_registrazione'); },
@@ -74,7 +75,7 @@ export enum ButtonName {
   BACK = "return",
 }
 
-export enum StatusNotification  {
+export enum StatusNotification {
   READ = 'READ',
   RECEIVE = 'RECEIVE',
   NOT_READ = "NOT_READ",

@@ -1,8 +1,21 @@
-.box-about{
-    padding-right: 15px;
-    padding-left: 15px;
+.box-about {
+    padding-right: 40px;
+    padding-left: 23px;
+    /* Sposta il testo verso destra */
+    padding-top: 23px;
+    /* Opzionale: spazio sopra */
+    display: block;
+    /* Assicura che il padding venga applicato correttamente su tutta la riga */
 }
 
-.grid-button-about{
+.grid-button-about {
     padding-top: 10px;
+}
+
+.about-action-row {
+    display: flex;
+    justify-content: space-between;
+    /* Spinge i blocchi ai due estremi */
+    align-items: center;
+    width: 100%;
 }

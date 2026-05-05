@@ -188,5 +188,8 @@
   "vuoi_sottrarre_punti": "¿Quieres descontar puntos de las tutorías?",
   "conferma_operazione": "Confirmar operación",
   "operazioni_famiglia": "Registrar las operaciones realizadas por el tutor con el usuario:",
-  "operazioni_attivita_child": "Registrar las actividades realizadas con el usuario:"
+  "operazioni_attivita_child": "Registrar las actividades realizadas con el usuario:",
+  "dettaglio_attivita": "Crear nueva tarea con usuario:",
+  "dettaglio_attivita_child": "Esta es la actividad del usuario:",
+  "lista_attivita": "lista de tareas"
 }

@@ -188,5 +188,8 @@
   "vuoi_sottrarre_punti": "Voulez-vous déduire des points du tutorat ?",
   "conferma_operazione": "Confirmer l'opération",
   "operazioni_famiglia": "Enregistrer les opérations réalisées par le tuteur auprès de l'utilisateur :",
-  "operazioni_attivita_child": "Enregistrez les activités réalisées avec l'utilisateur :"
+  "operazioni_attivita_child": "Enregistrez les activités réalisées avec l'utilisateur :",
+  "dettaglio_attivita": "Créer une nouvelle tâche avec l'utilisateur :",
+  "dettaglio_attivita_child": "Voici l'activité de l'utilisateur :",
+  "lista_attivita": "Liste des tâches"
 }

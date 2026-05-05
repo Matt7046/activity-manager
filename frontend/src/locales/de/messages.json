@@ -188,5 +188,8 @@
   "vuoi_sottrarre_punti": "Möchten Sie Punkte von der Nachhilfe abziehen?",
   "conferma_operazione": "Bestätigen Sie den Vorgang",
   "operazioni_famiglia": "Zeichnen Sie die vom Tutor mit dem Benutzer durchgeführten Vorgänge auf:",
-  "operazioni_attivita_child": "Erfassen Sie die mit dem Benutzer durchgeführten Aktivitäten:"
+  "operazioni_attivita_child": "Erfassen Sie die mit dem Benutzer durchgeführten Aktivitäten:",
+  "dettaglio_attivita": "Neue Aufgabe mit Benutzer erstellen:",
+  "dettaglio_attivita_child": "Dies ist die Benutzeraktivität:",
+  "lista_attivita": "Aufgabenliste"
 }

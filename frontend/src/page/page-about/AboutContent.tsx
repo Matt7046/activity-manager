@@ -1,6 +1,6 @@
 "use client";
-import { useLingui } from "@lingui/react";
-import { Box } from "@mui/material";
+import { Trans, useLingui } from "@lingui/react";
+import { Box, FormControl, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -36,17 +36,8 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const { i18n } = useLingui();
   const [disableButtonSave, setDisableButtonSave] = useState<boolean>();
   const searchParams = useSearchParams();
-  const _id = searchParams.get('id');
+  const _id = searchParams.get('_id');
   const [disableButtonDelete, setDisableButtonDelete] = useState<boolean>(_id === null || _id === undefined);
-
-
-  let testoOld = activityStore.activity.find((x) => _id === x._id);
-
-  const labelFamily = {
-    email: "Email",
-    emailFamily: user.type === 0 ? "Email" : "Email child",
-  }
-
   const [subTesto, setSubTesto] = useState(activityStore.activity.find((x) => _id === x._id)?.subTesto);
 
   // Stato per i valori dei campi
@@ -185,64 +176,83 @@ const AboutContent: React.FC<AboutContentProps> = ({
   }
 
   return (
-    <>
-      <Box className='box-about'>
-        <TextField
-          id="emailFamily"
-          label={labelFamily.email}
-          variant="standard"
-          value={user.email} // Collega il valore allo stato
-          onChange={handleChangeEmailFamily} // Aggiorna lo stato quando cambia
-          fullWidth
-          disabled={true}
-        />
-        <Grid container spacing={2}>
-          <Grid container spacing={2}> {/* Assicurati che ci sia il container sopra */}
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
-                id="activity"
-                label={i18n._("attivita")}
-                variant="standard"
-                value={formValues.activity}
-                onChange={handleChangeActivity}
-                fullWidth
-                required={true}
-              />
-            </Grid>
-
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
-                id="points"
-                label={i18n._("punti")}
-                variant="standard"
-                value={formValues.points}
-                onChange={handleChangePoints}
-                fullWidth
-                type="number"
-                disabled={user.type === TypeUser.STANDARD}
-                required={true}
-              />
-            </Grid>
-          </Grid>
+    <Box className='box-about'>
+      <Grid container spacing={3}>
+        {/* Intestazione */}
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="body2" color="text.secondary">
+            {user?.type === TypeUser.FAMILY ? (
+              <Trans id="dettaglio_attivita" />
+            ) : (
+              <Trans id="dettaglio_attivita_child" />
+            )} <strong>{user?.emailUserCurrent}</strong>
+          </Typography>
         </Grid>
-        <TextField
-          id="subTesto"
-          label={i18n._("descrizione")}
-          variant="standard"
-          value={subTesto} // Collega il valore allo stato
-          onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia
-          fullWidth
-          multiline
-          rows={10} // Numero di righe visibili per il campo
-        />
-        <Grid container justifyContent="space-between" spacing={2} className='grid-button-about'>
-          <Button pulsanti={[pulsanteReturn]} />
 
-          <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
+        {/* Email sola lettura */}
+        <Grid size={{ xs: 6 }}>
+          <FormControl fullWidth>
+            <TextField
+              label={i18n._("email")}
+              value={user?.emailChild}
+              fullWidth
+              margin="normal"
+              disabled={true}
+            />
+          </FormControl>
         </Grid>
-      </Box >
-    </>
+
+        {/* Riga Attività e Punti */}
+        <Grid size={{ xs: 12, sm: 8 }}>
+          <TextField
+            id="activity"
+            label={i18n._("attivita")}
+            variant="standard"
+            value={formValues.activity}
+            onChange={handleChangeActivity}
+            disabled={user?.type === TypeUser.STANDARD}
+
+            fullWidth
+            required={true}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, sm: 4 }}>
+          <TextField
+            label={i18n._("punti")}
+            variant="standard"
+            type="number"
+            value={formValues.points}
+            onChange={handleChangePoints}
+            fullWidth
+            disabled={user?.type === TypeUser.STANDARD}
+            required
+          />
+        </Grid>
+
+        {/* Descrizione Multiline */}
+        <Grid size={{ xs: 12 }}>
+          <TextField
+            label={i18n._("descrizione")}
+            variant="standard"
+            value={subTesto}
+            onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia
+            fullWidth
+            multiline
+            rows={10}
+          />
+        </Grid>
+
+        <Box className="about-action-row">
+          <Box>
+            <Button pulsanti={[pulsanteReturn]} />
+          </Box>
+          <Box display="flex" gap={1}>
+            <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
+          </Box>
+        </Box>
+      </Grid>
+    </Box>
   );
-}
-
+};
 export default AboutContent;

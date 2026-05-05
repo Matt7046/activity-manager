@@ -1,14 +1,14 @@
 "use client";
 import { useUser } from '@/context/UserContext';
 import { useLingui } from "@lingui/react";
-import { useRouter } from 'next/navigation';
+import InfoIcon from '@mui/icons-material/Info'; // About
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionNameDesc } from "../../general/structure/Constant";
 import { getMenuLaterale } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import AboutContent from './AboutContent';
-
 
 const About: React.FC<{}> = ({ }) => {
   const { user, setUser } = useUser();
@@ -19,7 +19,8 @@ const About: React.FC<{}> = ({ }) => {
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
-
+  const searchParams = useSearchParams();
+  const _id = searchParams.get('_id');
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,7 +37,8 @@ const About: React.FC<{}> = ({ }) => {
     setOpen(false);
   };
   const section: MenuLaterale = {
-    testo: SectionNameDesc.ABOUT
+    testo: SectionNameDesc.ABOUT(_id),
+    icon: InfoIcon
   }
 
   return (
