@@ -88,7 +88,7 @@
   "B3i3M+": "Description",
   "O3oNi5": "E-mail",
   "IC7sDH": "Envoyer un e-mail aux enfants",
-  "niVDhn": "Eseguito da / a",
+  "niVDhn": "Effectué par / à",
   "n/CHDo": "Adresse email",
   "30Xmmv": "Adresse email",
   "JATAs2": "Vous envoyer des mises à jour sur le projet open source",
@@ -188,9 +188,9 @@
   "vuoi_sottrarre_punti": "Voulez-vous déduire des points du tutorat ?",
   "conferma_operazione": "Confirmer l'opération",
   "operazioni_famiglia": "Enregistrer les opérations réalisées par le tuteur auprès de l'utilisateur :",
-  "operazioni_attivita_child": "Registra le attività effettuate con l'utente : ",
+  "operazioni_attivita_child": "Enregistrez les activités réalisées avec l'utilisateur :",
   "dettaglio_attivita": "Créer une nouvelle tâche avec l'utilisateur :",
   "dettaglio_attivita_child": "Voici l'activité de l'utilisateur :",
   "lista_attivita": "Liste des tâches",
-  "register": "Inscrivez-vous avec l'email, il est conseillé de créer un email ad hoc par projet pour l'enfant vous pouvez utiliser child@simulated.com si vous souhaitez essayer la fonctionnalité de connexion par mot de passe entrez un email ad hoc pour l'enfant"
+  "register": "Pour terminer le processus, enregistrez votre e-mail en tant que tuteur et un e-mail séparé pour chaque tutorat. Nous vous recommandons de créer une adresse e-mail dédiée pour chaque profil. Si vous souhaitez tester la fonctionnalité de connexion, vous pouvez utiliser child@simulated.com pour l'une des sessions de tutorat, ou saisir les adresses réelles créées spécifiquement pour eux."
 }
