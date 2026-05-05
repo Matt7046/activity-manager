@@ -532,21 +532,26 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
         {
           funzione: null,
           testo: SectionNameDesc.ACTIVITY,
+          path: SectionName.ACTIVITY,
           icon: ListAltIcon
         },
         {
           funzione: null,
           testo: SectionNameDesc.ABOUT(null),
+          path: SectionName.ABOUT,
+
           icon: InfoIcon
         },
         {
           funzione: null,
           testo: SectionNameDesc.POINTS,
+          path: SectionName.POINTS,
           icon: EmojiEventsIcon
         },
         {
           funzione: null,
           testo: SectionNameDesc.OPERATIVE,
+          path: SectionName.OPERATIVE,
           icon: EngineeringIcon
         },
       ],
@@ -554,16 +559,19 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
         {
           funzione: null,
           testo: SectionNameDesc.FAMILY,
+          path: SectionName.FAMILY,
           icon: GroupIcon
         },
         {
           funzione: null,
           testo: SectionNameDesc.NOTIFICATION,
+          path: SectionName.NOTIFICATION,
           icon: NotificationsIcon
         },
         {
           funzione: null,
           testo: SectionNameDesc.SETTINGS,
+          path: SectionName.SETTINGS,
           icon: SettingsIcon
         },
       ]
@@ -572,20 +580,27 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
     return [
       [
         {
-          funzione: null, testo: SectionNameDesc.ACTIVITY,
+          funzione: null,
+          testo: SectionNameDesc.ACTIVITY,
+          path: SectionName.ACTIVITY,
           icon: ListAltIcon
         },
         {
           funzione: null,
           testo: SectionNameDesc.GAMIFICATION,
+          path: SectionName.GAMIFICATION,
           icon: StarIcon
         },
         {
-          funzione: null, testo: SectionNameDesc.POINTS,
+          funzione: null,
+          testo: SectionNameDesc.POINTS,
+          path: SectionName.POINTS,
           icon: EmojiEventsIcon
         },
         {
-          funzione: null, testo: SectionNameDesc.OPERATIVE,
+          funzione: null,
+          testo: SectionNameDesc.OPERATIVE,
+          path: SectionName.OPERATIVE,
           icon: EngineeringIcon
         },
 
@@ -594,11 +609,13 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
         {
           funzione: null,
           testo: SectionNameDesc.NOTIFICATION,
+          path: SectionName.NOTIFICATION,
           icon: NotificationsIcon
         },
         {
           funzione: null,
           testo: SectionNameDesc.SETTINGS,
+          path: SectionName.SETTINGS,
           icon: SettingsIcon
         }
       ]
