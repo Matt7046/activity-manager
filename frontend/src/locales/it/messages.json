@@ -192,5 +192,5 @@
   "dettaglio_attivita":"Crea Nuova attività con l'utente: ",
   "dettaglio_attivita_child":"Questa è l'attività dell'utente: ",
   "lista_attivita": "Lista attività",
-  "register":"Registrati con la email, è consigliabile creare una email ad hoc per progetto per il figlio puoi usare la child@simulated.com se vuoi provare la funzionalità di login con password inserisci una email ad hoc per il figlio"
+  "register":"Per completare la procedura, registra la tua email come tutore e un'email distinta per ogni tutorato. Ti consigliamo di creare un indirizzo email dedicato per ciascun profilo. Se desideri testare la funzionalità di login, puoi utilizzare child@simulated.com per uno dei tutorati, oppure inserire gli indirizzi reali creati appositamente per loro"
 }
