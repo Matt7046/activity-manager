@@ -191,5 +191,6 @@
   "operazioni_attivita_child": "Registrar las actividades realizadas con el usuario:",
   "dettaglio_attivita": "Crear nueva tarea con usuario:",
   "dettaglio_attivita_child": "Esta es la actividad del usuario:",
-  "lista_attivita": "lista de tareas"
+  "lista_attivita": "lista de tareas",
+  "register": "Regístrese con el correo electrónico, es recomendable crear un correo electrónico ad hoc por proyecto para el niño. Puede usar child@simulated.com si desea probar la funcionalidad de inicio de sesión con contraseña, ingrese un correo electrónico ad hoc para el niño."
 }

@@ -88,7 +88,7 @@
   "B3i3M+": "Description",
   "O3oNi5": "E-mail",
   "IC7sDH": "Envoyer un e-mail aux enfants",
-  "niVDhn": "Effectué par / à",
+  "niVDhn": "Eseguito da / a",
   "n/CHDo": "Adresse email",
   "30Xmmv": "Adresse email",
   "JATAs2": "Vous envoyer des mises à jour sur le projet open source",
@@ -96,7 +96,7 @@
   "4EwuIe": "JOURNAL DE FAMILLE",
   "fKEfR7": "matteo.santangelo@colorsdev.tech",
   "5CAPml": "Aucun journal familial trouvé.",
-  "EiNALc": "Nessuna attività registrata.",
+  "EiNALc": "Aucune activité enregistrée.",
   "NUzDiN": "Aucune nouvelle notification",
   "R2zaEs": "Opération",
   "yf3vEG": "S'opposer au traitement des données",
@@ -137,7 +137,7 @@
   "sezione_sfide_premi": "Section défis et prix",
   "nuovo_account": "Vous n'avez pas de compte ?",
   "login_simulato_utente_base": "Simuler la connexion utilisateur de base",
-  "login_simulato_utente_parentale": "Simula login parentale",
+  "login_simulato_utente_parentale": "Simuler la connexion parentale",
   "email_tutorato": "Tutorat par e-mail",
   "email_registrazione": "Courriel d'inscription",
   "privacy_descrizione": "Cette politique de confidentialité décrit comment nous collectons, utilisons et protégeons vos données personnelles lorsque vous utilisez notre projet open source. Votre vie privée est importante pour nous et nous nous engageons à traiter vos données conformément au Règlement Général sur la Protection des Données (RGPD).",
@@ -188,8 +188,9 @@
   "vuoi_sottrarre_punti": "Voulez-vous déduire des points du tutorat ?",
   "conferma_operazione": "Confirmer l'opération",
   "operazioni_famiglia": "Enregistrer les opérations réalisées par le tuteur auprès de l'utilisateur :",
-  "operazioni_attivita_child": "Enregistrez les activités réalisées avec l'utilisateur :",
+  "operazioni_attivita_child": "Registra le attività effettuate con l'utente : ",
   "dettaglio_attivita": "Créer une nouvelle tâche avec l'utilisateur :",
   "dettaglio_attivita_child": "Voici l'activité de l'utilisateur :",
-  "lista_attivita": "Liste des tâches"
+  "lista_attivita": "Liste des tâches",
+  "register": "Inscrivez-vous avec l'email, il est conseillé de créer un email ad hoc par projet pour l'enfant vous pouvez utiliser child@simulated.com si vous souhaitez essayer la fonctionnalité de connexion par mot de passe entrez un email ad hoc pour l'enfant"
 }

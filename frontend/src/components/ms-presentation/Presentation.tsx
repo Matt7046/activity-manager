@@ -1,4 +1,5 @@
 "use client";
+import { navigateRouting } from "@/general/structure/Utils";
 import { Trans, useLingui } from "@lingui/react";
 import NextjsIcon from '@mui/icons-material/ChangeHistory';
 import ReactIcon from '@mui/icons-material/Code'; // Potrebbe non esserci un'icona specifica, usa un generico
@@ -14,7 +15,6 @@ import { Box, Button, IconButton, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useRouter } from 'next/navigation';
 import { SectionName } from '../../general/structure/Constant';
-import { navigateRouting } from '../../page/page-home/HomeContent';
 import BannerOpenSource from '../ms-banner/Banner';
 import "./Presentation.css";
 

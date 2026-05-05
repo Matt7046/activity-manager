@@ -1,13 +1,12 @@
 "use client";
 import { i18n } from "@lingui/core";
 import { useState } from 'react';
-import { ResponseI, UserI } from '../../general/structure/Utils';
+import { ResponseI, showMessage, UserI } from '../../general/structure/Utils';
 import { ActivityLogI } from '../../page/page-activity/Activity';
 import { savePointsAndLog } from '../../page/page-activity/service/ActivityService';
 import { FavoriteI } from "../../page/page-gamification/Gamification";
 import { deleteFavorite, fetchVideo, fetchVideosFavorites, saveFavorite } from '../../page/page-gamification/service/GamificationService';
 import gamificationStore from '../../page/page-gamification/store/GamificationStore';
-import { showMessage } from '../../page/page-home/HomeContent';
 import { TypeMessage } from '../../page/page-layout/PageLayout';
 import { AlertConfig } from '../ms-alert/Alert';
 import Button, { Pulsante } from '../ms-button/Button';

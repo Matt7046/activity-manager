@@ -16,10 +16,10 @@ import Popover, { PopoverNotification } from '../../components/ms-popover/Popove
 import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
 import { SocketURL } from '../../general/structure/SocketUrl';
-import { FamilyNotificationI, getDateStringRegularFormat, getTranslatedNotification, NotificationI, ResponseI } from '../../general/structure/Utils';
-import { navigateRouting, showMessage } from '../page-home/HomeContent';
+import { FamilyNotificationI, getDateStringRegularFormat, getTranslatedNotification, navigateRouting, NotificationI, ResponseI, showMessage } from '../../general/structure/Utils';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
+
 
 
 interface PageLayoutProps {
@@ -204,7 +204,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           {/* Aggiungiamo 'ml-auto' o gestiamo via CSS per spingere a destra */}
           <Box className='box-layout-right-button'>
             {/* Mostra il bottone notifiche solo se NON siamo in home */}
-            {sectionAttiva.path !== SectionName.HOME && (
+            {(sectionAttiva.path !== SectionName.HOME && sectionAttiva.path !== SectionName.REGISTER) && (
               <>
                 <Button pulsanti={[pulsanteNotifiche]} />
                 <Popover

@@ -7,8 +7,7 @@ import React from "react";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus, StatusUserPoint } from "../../general/structure/Constant";
-import { ResponseI, UserI } from "../../general/structure/Utils";
-import { showMessage } from "../page-home/HomeContent";
+import { ResponseI, showMessage, UserI } from "../../general/structure/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./SettingsContent.css"; // Riutilizziamo il CSS esistente
 import { updateStatus } from "./service/SettingsService";
