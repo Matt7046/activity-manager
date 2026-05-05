@@ -4,29 +4,19 @@ import { useUser } from '@/context/UserContext';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Trans, useLingui } from "@lingui/react";
 import { Apple as AppleIcon, Facebook as FacebookIcon, Visibility, VisibilityOff } from '@mui/icons-material';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // Points
-import EngineeringIcon from '@mui/icons-material/Engineering';
 import GoogleIcon from '@mui/icons-material/Google';
-import GroupIcon from '@mui/icons-material/Group'; // 
-import InfoIcon from '@mui/icons-material/Info'; // About
-import ListAltIcon from '@mui/icons-material/ListAlt'; // Activity
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import SettingsIcon from '@mui/icons-material/Settings'; // Operative
-import StarIcon from '@mui/icons-material/Star';
 import { Box, Button as ButtonMui, CircularProgress, Divider, IconButton, Link as MuiLink, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import LinkNext from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { ReactNode, useEffect, useState } from 'react';
 import Alert from '../../components/ms-alert/Alert';
 import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
-import { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import { getToken } from '../../general/service/AuthService';
 import { baseStore } from '../../general/structure/BaseStore';
-import { SectionName, SectionNameDesc, ServerMessage, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
-import { ResponseI, UserI } from '../../general/structure/Utils';
+import { SectionName, ServerMessage, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
+import { navigateRouting, ResponseI, showMessage } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
 import { getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
 import "./HomeContent.css";
@@ -511,148 +501,6 @@ const GoogleAuthComponent = () => {
 };
 
 
-export const navigateRouting = (router: AppRouterInstance, path: string, params?: any) => {
-  // Verifichiamo che params esista, non sia nullo e abbia almeno una chiave
-  const hasParams = params && typeof params === 'object' && Object.keys(params).length > 0;
 
-  if (hasParams) {
-    const queryString = new URLSearchParams(params).toString();
-    router.push(`/${path}?${queryString}`);
-  } else {
-    router.push(`/${path}`);
-  }
-};
-export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
-  if (user === undefined || user === null) {
-    return [[]];
-  }
-  if (user?.type === TypeUser.FAMILY || user.type === TypeUser.NEW_USER) {
-    return [
-      [
-        {
-          funzione: null,
-          testo: SectionNameDesc.ACTIVITY,
-          path: SectionName.ACTIVITY,
-          icon: ListAltIcon
-        },
-        {
-          funzione: null,
-          testo: SectionNameDesc.ABOUT(null),
-          path: SectionName.ABOUT,
-
-          icon: InfoIcon
-        },
-        {
-          funzione: null,
-          testo: SectionNameDesc.POINTS,
-          path: SectionName.POINTS,
-          icon: EmojiEventsIcon
-        },
-        {
-          funzione: null,
-          testo: SectionNameDesc.OPERATIVE,
-          path: SectionName.OPERATIVE,
-          icon: EngineeringIcon
-        },
-      ],
-      [
-        {
-          funzione: null,
-          testo: SectionNameDesc.FAMILY,
-          path: SectionName.FAMILY,
-          icon: GroupIcon
-        },
-        {
-          funzione: null,
-          testo: SectionNameDesc.NOTIFICATION,
-          path: SectionName.NOTIFICATION,
-          icon: NotificationsIcon
-        },
-        {
-          funzione: null,
-          testo: SectionNameDesc.SETTINGS,
-          path: SectionName.SETTINGS,
-          icon: SettingsIcon
-        },
-      ]
-    ];
-  } else {
-    return [
-      [
-        {
-          funzione: null,
-          testo: SectionNameDesc.ACTIVITY,
-          path: SectionName.ACTIVITY,
-          icon: ListAltIcon
-        },
-        {
-          funzione: null,
-          testo: SectionNameDesc.GAMIFICATION,
-          path: SectionName.GAMIFICATION,
-          icon: StarIcon
-        },
-        {
-          funzione: null,
-          testo: SectionNameDesc.POINTS,
-          path: SectionName.POINTS,
-          icon: EmojiEventsIcon
-        },
-        {
-          funzione: null,
-          testo: SectionNameDesc.OPERATIVE,
-          path: SectionName.OPERATIVE,
-          icon: EngineeringIcon
-        },
-
-      ],
-      [
-        {
-          funzione: null,
-          testo: SectionNameDesc.NOTIFICATION,
-          path: SectionName.NOTIFICATION,
-          icon: NotificationsIcon
-        },
-        {
-          funzione: null,
-          testo: SectionNameDesc.SETTINGS,
-          path: SectionName.SETTINGS,
-          icon: SettingsIcon
-        }
-      ]
-    ];
-  }
-}
-
-export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage, onlyError?: boolean) => {
-  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage, titleMessage: message?.titleMessage } : { titleMessage: "Errore nella richiesta", message: [ServerMessage.SERVER_DOWN], typeMessage: 'error' };
-  if (!onlyError || onlyError && message?.typeMessage === TypeAlertColor.ERROR) {
-    setOpen(true);
-  }
-  setMessage(messageBE);
-}
-
-
-
-export const sezioniMenu = (
-  sezioni: MenuLaterale[][],
-  navigate: AppRouterInstance,
-  path: SectionName,
-  params: any,
-  indice: number
-): MenuLaterale[][] => {
-
-  // Calcola la posizione (riga e colonna) per assegnare la funzione
-  const numeroRighe = sezioni.length;
-  const lunghezzaRiga = sezioni[0].length;
-
-  const riga = Math.floor(indice / lunghezzaRiga);
-  const colonna = indice % lunghezzaRiga;
-
-  // Verifica che riga e colonna siano validi e assegna la funzione dinamica
-  if (riga < numeroRighe && colonna < sezioni[riga].length) {
-    sezioni[riga][colonna].funzione = () => navigateRouting(navigate, path, params);
-  }
-  return sezioni;
-};
 
 export default HomeContent;

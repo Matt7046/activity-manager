@@ -1,9 +1,10 @@
 "use client";
 import { useUser } from '@/context/UserContext';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
-import { SectionNameDesc } from "../../general/structure/Constant";
+import { SectionName, SectionNameDesc } from "../../general/structure/Constant";
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import RegisterContent from './RegisterContent';
 
@@ -35,7 +36,9 @@ const Register: React.FC<{}> = ({ }) => {
     setOpen(false);
   };
   const section: MenuLaterale = {
-    testo: SectionNameDesc.REGISTER
+    testo: SectionNameDesc.REGISTER,
+    path: SectionName.REGISTER,
+    icon: AppRegistrationIcon
   }
   return (
     <>

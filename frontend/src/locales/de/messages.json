@@ -191,5 +191,6 @@
   "operazioni_attivita_child": "Erfassen Sie die mit dem Benutzer durchgeführten Aktivitäten:",
   "dettaglio_attivita": "Neue Aufgabe mit Benutzer erstellen:",
   "dettaglio_attivita_child": "Dies ist die Benutzeraktivität:",
-  "lista_attivita": "Aufgabenliste"
+  "lista_attivita": "Aufgabenliste",
+  "register": "Registrieren Sie sich mit der E-Mail. Es empfiehlt sich, pro Projekt eine Ad-hoc-E-Mail für das Kind zu erstellen. Sie können child@simulated.com verwenden, wenn Sie die Passwort-Anmeldefunktion ausprobieren möchten, und geben Sie eine Ad-hoc-E-Mail für das Kind ein"
 }

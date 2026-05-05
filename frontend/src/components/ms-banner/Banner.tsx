@@ -1,9 +1,9 @@
 "use client";
+import { navigateRouting } from "@/general/structure/Utils";
 import { Trans } from "@lingui/react";
 import { useRouter } from 'next/navigation';
 import React from "react";
 import { SectionName } from "../../general/structure/Constant";
-import { navigateRouting } from "../../page/page-home/HomeContent";
 import "./Banner.css"; // <-- Importa il CSS
 
 const BannerOpenSource: React.FC = () => {
