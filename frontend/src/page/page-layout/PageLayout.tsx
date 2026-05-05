@@ -203,15 +203,21 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
           {/* Aggiungiamo 'ml-auto' o gestiamo via CSS per spingere a destra */}
           <Box className='box-layout-right-button'>
-            {location.pathname !== '/home' && <Button pulsanti={[pulsanteNotifiche]} />}
+            {/* Mostra il bottone notifiche solo se NON siamo in home */}
+            {sectionAttiva.path !== SectionName.HOME && (
+              <>
+                <Button pulsanti={[pulsanteNotifiche]} />
+                <Popover
+                  notifications={popoverNotifications}
+                  openAnchor={openAnchor}
+                  handleCloseAnchor={handleCloseAnchor}
+                  pulsanteNotification={pulsanteNotification}
+                />
+              </>
+            )}
+
             <Button pulsanti={[pulsanteLogout]} />
             <Language />
-            <Popover
-              notifications={popoverNotifications}
-              openAnchor={openAnchor}
-              handleCloseAnchor={handleCloseAnchor}
-              pulsanteNotification={pulsanteNotification}
-            />
           </Box>
           <Box className="title-container">
             {IconaTitolo && <IconaTitolo className="header-icon" />}

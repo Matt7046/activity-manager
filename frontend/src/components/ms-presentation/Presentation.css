@@ -35,6 +35,8 @@ html, body {
 
 /* Testo della descrizione */
 .welcome-description {
+  padding-top: 30px;
+  padding-bottom: 30px;
   line-height: 1.6;
   margin-bottom: 24px;
   color: #94a3b8;
@@ -79,4 +81,8 @@ html, body {
 
 .tech-item {
   padding-bottom: 24px; /* Aumenta questo valore per avere più spazio tra le righe */
+}
+
+.enter-button  {
+  padding-top: 1px;
 }

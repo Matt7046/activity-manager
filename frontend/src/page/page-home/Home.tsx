@@ -4,7 +4,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
-import { SectionNameDesc } from "../../general/structure/Constant";
+import { SectionName, SectionNameDesc } from "../../general/structure/Constant";
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import HomeContent from './HomeContent';
 
@@ -32,6 +32,7 @@ const Home: React.FC<{}> = ({ }) => {
 
   const section: MenuLaterale = {
     testo: SectionNameDesc.ROOT,
+    path:SectionName.HOME,
     icon: LoginIcon
   }
   return (

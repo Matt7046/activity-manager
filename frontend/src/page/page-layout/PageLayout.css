@@ -43,8 +43,9 @@
 }
 
 .header-icon {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     color: #2f84d3;
+    padding-right: 10px;
     /* Regola la dimensione della rotella */
 }
 
