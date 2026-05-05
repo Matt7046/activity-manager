@@ -23,6 +23,7 @@ type Anchor = 'top' | 'left' | 'bottom' | 'right';
 export interface MenuLaterale {
   funzione?: ((...args: unknown[]) => unknown) | null; // Può essere una funzione o `null`
   testo: string
+  path?: string
   icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>
 }
 

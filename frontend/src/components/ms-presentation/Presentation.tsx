@@ -1,5 +1,6 @@
 "use client";
 import { Trans, useLingui } from "@lingui/react";
+import NextjsIcon from '@mui/icons-material/ChangeHistory';
 import ReactIcon from '@mui/icons-material/Code'; // Potrebbe non esserci un'icona specifica, usa un generico
 import JavaIcon from '@mui/icons-material/Coffee'; // Esempio
 import HubIcon from '@mui/icons-material/Hub';
@@ -7,7 +8,8 @@ import Inventory2Icon from '@mui/icons-material/Inventory2';
 import SpringBootIcon from '@mui/icons-material/PlayCircleFilled'; // Esempio
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import SearchIcon from '@mui/icons-material/Search';
-import MongoDBIcon from '@mui/icons-material/Storage'; // Esempio di icona Material UI
+import MongoDBIcon from '@mui/icons-material/Storage';
+import TranslateIcon from '@mui/icons-material/Translate';
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useRouter } from 'next/navigation';
@@ -28,16 +30,18 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
   const router = useRouter();
   const { i18n } = useLingui();
 
-  const technologies = [
-    { name: 'MongoDB Cloud', icon: <MongoDBIcon fontSize="large" className="tech-icon" /> },
-    { name: 'React', icon: <ReactIcon fontSize="large" className="tech-icon" /> },
-    { name: 'Java', icon: <JavaIcon fontSize="large" className="tech-icon" /> },
-    { name: 'Spring Boot', icon: <SpringBootIcon fontSize="large" className="tech-icon" /> },
-    { name: 'ElasticSearch', icon: <SearchIcon fontSize="large" className="tech-icon" /> },
-    { name: 'RabbitMQ', icon: <HubIcon fontSize="large" className="tech-icon" /> },
-    { name: 'Docker', icon: <Inventory2Icon fontSize="large" className="tech-icon" /> },
-    { name: 'GPT (AI)', icon: <PsychologyIcon fontSize="large" className="tech-icon" /> },
-  ];
+const technologies = [
+  { name: 'MongoDB Cloud', icon: <MongoDBIcon fontSize="large" className="tech-icon" /> },
+  { name: 'React', icon: <ReactIcon fontSize="large" className="tech-icon" /> },
+  { name: 'Next.js', icon: <NextjsIcon fontSize="large" className="tech-icon" /> }, // Aggiunto
+  { name: 'Java', icon: <JavaIcon fontSize="large" className="tech-icon" /> },
+  { name: 'Spring Boot', icon: <SpringBootIcon fontSize="large" className="tech-icon" /> },
+  { name: 'ElasticSearch', icon: <SearchIcon fontSize="large" className="tech-icon" /> },
+  { name: 'RabbitMQ', icon: <HubIcon fontSize="large" className="tech-icon" /> },
+  { name: 'Docker', icon: <Inventory2Icon fontSize="large" className="tech-icon" /> },
+  { name: 'GPT (AI)', icon: <PsychologyIcon fontSize="large" className="tech-icon" /> },
+  { name: 'Lingui', icon: <TranslateIcon fontSize="large" className="tech-icon" /> }, // Aggiunto
+];
 
   return (
     <>
@@ -58,8 +62,7 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
           <Typography
             variant="body1"
             gutterBottom
-            className="welcome-description"
-          >
+            className="welcome-description"          >
             <Trans id='testo_desc' />
           </Typography>
 
@@ -89,7 +92,7 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
               */
               <Grid
                 key={tech.name}
-                size={{ xs: 4, sm: 3, md: 3 }}
+                size={{ xs: 4, sm: 2, md: 2 }}
                 className="tech-item"
               >
                 <IconButton color="inherit" disabled>
