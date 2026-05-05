@@ -52,6 +52,7 @@ const About: React.FC<{}> = ({ }) => {
         navigate={useRouter()}
       >
         <AboutContent
+          identificativo = {_id!}
           user={user}
           setMessage={setMessage}
           setOpen={setOpen}
