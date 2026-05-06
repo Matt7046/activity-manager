@@ -16,7 +16,7 @@ import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
 import TechFooter from '../../components/ms-tech-footer/TechFooter';
 import { getToken } from '../../general/service/AuthService';
 import { baseStore } from '../../general/structure/BaseStore';
-import { SectionName, ServerMessage, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
+import { CLIENT_GOOGLE, SectionName, ServerMessage, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import { navigateRouting, ResponseI, showMessage } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
 import { getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
@@ -31,7 +31,7 @@ interface UserProviderProps {
 
 // Componente principale, avvolto da GoogleOAuthProvider
 const HomeContent = () => (
-  <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId= {CLIENT_GOOGLE.SERVER! } >
     <GoogleAuthComponent />
   </GoogleOAuthProvider>
 );
