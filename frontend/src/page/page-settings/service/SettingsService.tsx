@@ -13,5 +13,17 @@ export const updateStatus = async (userDTO: UserPointsI, funzioneMessage?: (mess
     return data;
   } catch (error) {
   }
+  
 };
+
+export const savePassword = async (userDTO: UserPointsI, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) => {
+  try {
+    const path = PATH_USER_POINT + `/dati/user/password`;
+    const showSuccess = true;
+    const data = await postData(path, userDTO, setLoading, funzioneMessage, showSuccess);
+    return data;
+  } catch (error) {
+  }
+};
+
 

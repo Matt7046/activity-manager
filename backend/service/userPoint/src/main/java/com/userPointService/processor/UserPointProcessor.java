@@ -161,4 +161,16 @@ public class UserPointProcessor {
         });
     }
 
+    @Transactional
+    public Mono<ResponseDTO> saveUserPassword(UserPointDTO userPointDTO) {
+       return Mono.fromCallable(() -> {
+            UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);       
+
+            if (userPointSave.getEmailUserCurrent() != null) {
+                userPointSave = userPointService.saveUserPassword(userPointSave);
+            }
+            return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent()),
+                    ActivityHttpStatus.OK.value(), new ArrayList<>());
+        });   
+    }
 }

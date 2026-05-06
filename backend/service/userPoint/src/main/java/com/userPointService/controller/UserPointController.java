@@ -43,6 +43,12 @@ public class UserPointController {
         return processor.saveUser(userPointDTO);
     }
 
+       @PostMapping("/dati/user/password")
+    public Mono<ResponseDTO> saveUserPassword(@RequestBody UserPointDTO userPointDTO) {
+        return processor.saveUserPassword(userPointDTO);
+    }
+
+
     @PostMapping("/dati/login")
     public Mono<ResponseDTO> login(@RequestBody UserPointDTO userPointDTO) {
         return processor.login(userPointDTO);
