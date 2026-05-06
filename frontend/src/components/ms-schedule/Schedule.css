@@ -1,15 +1,16 @@
 .schedule-container {
-  padding: 24px;
+  padding: var(--space-3);
   /* Uniformiamo il padding ai settings */
   width: 100%;
   box-sizing: border-box;
   /* Fondamentale per evitare lo spazio a destra */
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
   height: 550px;
   /* Padding interno per non far toccare i bordi alla tabella */
-  padding: 10px;
+  padding: var(--space-3);
 }
 
 .schedule-row {
@@ -26,19 +27,19 @@
 .col-display {
   display: flex;
   align-items: center;
-  margin: 10px 0 0 0;
+  margin: var(--space-3) 0 0 0;
   /* Ridotto il margine inferiore */
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: var(--color-text);
   line-height: 1;
   /* Forza il testo a non occupare spazio extra */
 }
 
 /* Assicuriamoci che la riga che contiene i bottoni sia flessibile */
 .new-button-container {
-  padding-top: 20px;
-  padding-bottom: 16px;
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-4);
   display: flex;
   align-items: center;
 }
@@ -70,7 +71,7 @@
 
 .row-icon-arrow {
   transition: transform 0.3s;
-  color: #666;
+  color: var(--color-text-muted);
   margin-left: 8px;
   flex-shrink: 0;
 }

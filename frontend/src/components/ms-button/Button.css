@@ -3,8 +3,8 @@
 /* Container dei pulsanti */
 .col-button-container {
   display: flex;
-  gap: 10px; /* Gap ridotto per i mini pulsanti */
-  padding: 5px;
+  gap: var(--space-3); /* Gap ridotto per i mini pulsanti */
+  padding: var(--space-2);
 }
 
 /* Stile base per il FAB mini (40x40px) perfettamente tondo */
@@ -18,7 +18,8 @@
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer;
-  transition: all 0.3s ease !important; /* Transizione fluida */
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important; /* Transizione fluida */
+  border: 1px solid var(--color-border) !important;
   
   /* Mantieni la tua transform originale (leggera rotazione) */
   transform: scale(1.05) rotate(-1deg);
@@ -32,76 +33,64 @@
 
 /* Pulsante rosso - CHIARO, SFUMATO E LUCIDO */
 .button-red {
-  background-color: #ffcccc; /* Colore di base CHIARISSIMO (rosa pallido) */
-  color: #c62828; /* Colore dell'icona (un rosso scuro deciso per contrasto) */
+  background-color: var(--color-danger-soft-2) !important;
+  color: var(--color-danger-text-strong);
   
   /* Abbiamo preso il tuo box-shadow originale e lo abbiamo adattato per renderlo più chiaro e sfumato
      1. Un gradient di base per la sfumatura.
      2. L'effetto "glossy" (luce in alto) e "depth" (ombra interna) - questo è il segreto.
      3. L'ombra esterna originale. */
   
-  background-image: linear-gradient(135deg, #fffcfc 0%, #ffcccc 60%) !important;
-  box-shadow: rgba(187, 44, 44, 0.45) 0 -15px 12px -8px inset, /* Ombra interna inferiore per profondità */
-              rgba(255, 255, 255, 0.8) 0 4px 4px 0 inset,      /* Luce superiore per effetto lucido */
-              rgba(187, 44, 44, .25) 0 1px 2px,               /* Ombra esterna originale */
-              rgba(187, 44, 44, .2) 0 4px 8px;
+  background-image: none !important;
+  box-shadow: var(--shadow-sm);
 }
 
 .button-red:hover {
-  background-color: #ff9999; /* Colore leggermente più scuro per l'hover */
-  background-image: linear-gradient(135deg, #fffcfc 0%, #ff9999 60%) !important;
-  box-shadow: rgba(187, 44, 44, 0.5) 0 -15px 12px -8px inset,
-              rgba(255, 255, 255, 0.8) 0 4px 4px 0 inset,
-              rgba(187, 44, 44, .3) 0 4px 12px;
-  transform: translateY(-2px) scale(1.05) rotate(-1deg);
+  background-color: var(--color-danger-soft-3) !important;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .button-red:disabled {
   opacity: 0.3;
   pointer-events: none;
   cursor: not-allowed;
-  background-color: #ffcccc !important;
+  background-color: var(--color-danger-soft-2) !important;
 }
 
 /* Pulsante blu - CHIARO, SFUMATO E LUCIDO */
 .button-blue {
-  background-color: #ccccff; /* Colore di base CHIARISSIMO (celeste pallido) */
-  color: #283593; /* Colore dell'icona (un blu scuro deciso per contrasto) */
+  background-color: var(--color-primary-soft-alt) !important;
+  color: var(--color-primary-hover);
   
   /* Stesso principio del rosso, adattato per il blu */
   
-  background-image: linear-gradient(135deg, #fcfcff 0%, #ccccff 60%) !important;
-  box-shadow: rgba(44, 53, 187, 0.45) 0 -15px 12px -8px inset,
-              rgba(255, 255, 255, 0.8) 0 4px 4px 0 inset,
-              rgba(44, 53, 187, .25) 0 1px 2px,
-              rgba(44, 53, 187, .2) 0 4px 8px;
+  background-image: none !important;
+  box-shadow: var(--shadow-sm);
 }
 
 .button-blue:hover {
-  background-color: #9999ff; /* Colore leggermente più scuro per l'hover */
-  background-image: linear-gradient(135deg, #fcfcff 0%, #9999ff 60%) !important;
-  box-shadow: rgba(44, 53, 187, 0.5) 0 -15px 12px -8px inset,
-              rgba(255, 255, 255, 0.8) 0 4px 4px 0 inset,
-              rgba(44, 53, 187, .3) 0 4px 12px;
-  transform: translateY(-2px) scale(1.05) rotate(-1deg);
+  background-color: var(--color-primary-soft-alt) !important;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .button-blue:disabled {
   opacity: 0.3;
   pointer-events: none;
   cursor: not-allowed;
-  background-color: #ccccff !important;
+  background-color: var(--color-primary-soft-alt) !important;
 }
 
 /* --- Il resto del tuo CSS (Divider, Dialog) rimane invariato --- */
-.popover-divider { margin-top: 8px; margin-bottom: 8px; }
-.dialog-custom .MuiPaper-root { border-radius: 24px !important; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important; }
-.dialog-header { background-color: #f9fafb; padding: 24px !important; border-bottom: 1px solid #f3f4f6; }
-.dialog-title-custom { font-weight: 800 !important; color: #111827 !important; text-align: center; margin: 0 !important; font-size: 1.25rem !important; }
-.dialog-message-container { background-color: #fff1f2; border: 1px solid #fecaca; border-radius: 16px; padding: 20px; margin: 16px 0; }
-.dialog-text-custom { text-align: left; color: #991b1b !important; font-weight: 500 !important; line-height: 1.5 !important; }
-.dialog-actions-custom { padding: 16px 24px 24px !important; justify-content: center !important; gap: 16px !important; }
-.dialog-button-confirm { background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%) !important; color: white !important; text-transform: none !important; font-weight: 600 !important; padding: 10px 32px !important; border-radius: 12px !important; box-shadow: 0 4px 6px -1px rgba(67, 56, 202, 0.4) !important; transition: all 0.2s ease-in-out !important; }
-.dialog-button-confirm:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(67, 56, 202, 0.4) !important; }
-.dialog-button-cancel { color: #6b7280 !important; text-transform: none !important; font-weight: 600 !important; padding: 10px 24px !important; border-radius: 12px !important; }
-.dialog-button-cancel:hover { background-color: #f3f4f6 !important; }
+.popover-divider { margin-top: var(--space-2); margin-bottom: var(--space-2); }
+.dialog-custom .MuiPaper-root { border-radius: var(--radius-lg) !important; overflow: hidden; box-shadow: var(--shadow-md) !important; border: 1px solid var(--color-border); }
+.dialog-header { background-color: var(--color-surface-soft); padding: var(--space-6) !important; border-bottom: 1px solid var(--color-border); }
+.dialog-title-custom { font-weight: 800 !important; color: var(--color-text) !important; text-align: center; margin: 0 !important; font-size: 1.25rem !important; }
+.dialog-message-container { background-color: var(--color-danger-soft); border: 1px solid var(--color-danger-soft-3); border-radius: var(--radius-lg); padding: var(--space-5); margin: var(--space-4) 0; }
+.dialog-text-custom { text-align: left; color: var(--color-danger-text) !important; font-weight: 500 !important; line-height: 1.5 !important; }
+.dialog-actions-custom { padding: var(--space-4) var(--space-6) var(--space-6) !important; justify-content: center !important; gap: var(--space-4) !important; }
+.dialog-button-confirm { background: var(--color-primary) !important; color: white !important; text-transform: none !important; font-weight: 600 !important; padding: 10px 32px !important; border-radius: var(--radius-lg) !important; box-shadow: var(--shadow-sm) !important; transition: all 0.2s ease-in-out !important; }
+.dialog-button-confirm:hover { transform: translateY(-1px); box-shadow: var(--shadow-md) !important; }
+.dialog-button-cancel { color: var(--color-text-muted) !important; text-transform: none !important; font-weight: 600 !important; padding: 10px 24px !important; border-radius: var(--radius-lg) !important; }
+.dialog-button-cancel:hover { background-color: var(--color-surface-soft) !important; }

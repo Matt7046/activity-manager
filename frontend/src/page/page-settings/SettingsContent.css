@@ -1,21 +1,20 @@
-/* --- Header della Pagina --- */
 .profile-header {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 16px;
+  padding: var(--space-4);
 }
 
 .header-title-row {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
 }
 
 .header-icon {
   font-size: 22px;
-  margin-right: 8px;
-  color: #1976d2;
+  margin-right: var(--space-2);
+  color: var(--color-primary);
 }
 
 .header-title {
@@ -27,70 +26,77 @@
   display: block;
 }
 
-/* --- Contenitore e Card --- */
 .settings-content {
-  padding: 24px;
+  padding: var(--space-6);
 }
 
 .settings-section-card {
-  border: 1px solid #dfe6e9;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .section-header {
-  padding: 16px;
-  background-color: #f8f9fa;
+  padding: var(--space-4);
+  background-color: var(--color-surface-soft);
 }
 
 .section-title {
   font-weight: 700 !important;
-  color: #2d3436;
+  color: var(--color-text);
 }
 
-/* --- Righe delle Azioni (Proporzioni 10/2 fisse) --- */
-.action-row, 
+.action-row,
 .action-disabled {
-  padding: 20px; /* Ridotto leggermente per mobile */
+  padding: var(--space-5);
   display: flex;
-  flex-direction: row; /* Forza la riga orizzontale */
-  flex-wrap: nowrap;   /* Impedisce di andare a capo */
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .action-disabled {
   opacity: 0.6;
 }
 
-/* Info: Occupa l'80% circa (10 parti) */
 .action-info {
-  flex: 0 0 80%; 
+  flex: 0 0 80%;
   display: flex;
   align-items: flex-start;
-  min-width: 0; /* Permette al testo di non "pushare" fuori il pulsante */
+  min-width: 0;
 }
 
-/* Bottone: Occupa il 20% circa (2 parti) */
 .action-button-container {
   flex: 0 0 20%;
   display: flex;
   justify-content: flex-end;
-  min-width: fit-content; /* Evita che il pulsante si restringa troppo */
+  min-width: fit-content;
 }
 
 .delete-icon {
-  color: #2f84d3;
-  margin-right: 12px;
+  color: var(--color-primary);
+  margin-right: var(--space-3);
   margin-top: 4px;
-  flex-shrink: 0; /* Impedisce all'icona di rimpicciolirsi */
+  flex-shrink: 0;
 }
 
 .action-title {
   font-weight: 600 !important;
-  word-break: break-word; /* Se il titolo è lungo, va a capo lui e non il pulsante */
+  word-break: break-word;
 }
 
-/* Rimosse le media query che invertivano il layout */
+@media (max-width: 600px) {
+  .settings-content {
+    padding: var(--space-4);
+  }
+
+  .action-row,
+  .action-disabled {
+    padding: var(--space-4);
+  }
+}

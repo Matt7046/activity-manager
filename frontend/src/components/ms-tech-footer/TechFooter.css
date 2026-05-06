@@ -1,0 +1,51 @@
+.techf-footer {
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+  text-align: center;
+  padding: var(--space-4) var(--space-3);
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: auto;
+}
+
+.techf-title {
+  font-weight: 700 !important;
+  margin-bottom: var(--space-3) !important;
+}
+
+.techf-grid {
+  width: 100%;
+}
+
+.techf-item {
+  padding-bottom: var(--space-3);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.techf-icon {
+  color: var(--color-primary) !important;
+}
+
+.techf-name {
+  color: var(--color-footer-text);
+  opacity: 0.9;
+}
+
+.techf-item .MuiIconButton-root.Mui-disabled {
+  color: var(--color-primary) !important;
+  opacity: 1 !important;
+}
+
+@media (max-width: 700px) {
+  .techf-footer {
+    padding: var(--space-3) var(--space-2);
+  }
+
+  .techf-item {
+    padding-bottom: var(--space-2);
+  }
+}
+

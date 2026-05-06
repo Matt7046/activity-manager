@@ -1,14 +1,19 @@
 .button-right{
-    padding-top: 20px!important;
+    padding-top: var(--space-5)!important;
 }
 .box-child{
-    padding-top: 10px;
+    padding-top: var(--space-5);
 }
 .box-register{
     padding-top: 35px;
-    padding-left:23px;
-    padding-right:23px;
+    padding-left: 23px;
+    padding-right: 23px;
 }
-.box-child{
-    padding-top: 20px;
+
+@media (max-width: 600px) {
+    .box-register {
+        padding-top: var(--space-5);
+        padding-left: var(--space-4);
+        padding-right: var(--space-4);
+    }
 }

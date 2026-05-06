@@ -13,6 +13,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import React, { ReactNode, useEffect, useState } from 'react';
 import Alert from '../../components/ms-alert/Alert';
 import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
+import TechFooter from '../../components/ms-tech-footer/TechFooter';
 import { getToken } from '../../general/service/AuthService';
 import { baseStore } from '../../general/structure/BaseStore';
 import { SectionName, ServerMessage, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
@@ -327,166 +328,169 @@ const GoogleAuthComponent = () => {
 
       {/* Route Privacy Policy */}
 
-      <>
-        {/* Alert */}
-        <Grid container justifyContent="flex-end" className="layout-alert" sx={{ mt: 2 }}>
-          {open && (
-            <Alert onClose={handleClose} message={message} />
-          )}
-        </Grid>
+      <Box className="home-page-shell">
+        <Box className="home-page-main">
+          {/* Alert */}
+          <Grid container justifyContent="flex-end" className="layout-alert" sx={{ mt: 2 }}>
+            {open && (
+              <Alert onClose={handleClose} message={message} />
+            )}
+          </Grid>
 
-        {/* Route Privacy Policy */}
+          {/* Main Login Box */}
+          <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
+            <Box display="flex" justifyContent="center" mt={6} px={2} className="welcome-container1">
+              <Paper elevation={3} className="login-paper">
+                <Box mb={3} className="box-pulsanti-login">
+
+                  {!hiddenLogin && (
+                    <Grid container spacing={2} alignItems="stretch"> {/* stretch forza i figli ad avere la stessa altezza */}
+                      <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+                        <ButtonMui
+                          variant="contained"
+                          color="primary"
+                          onClick={() => simulateLogin(TypeUser.STANDARD)}
+                          fullWidth
+                          className="simulated-login-button"
+                          sx={{ height: '100%' }}
+                        >
+                          <Trans id='login_simulato_utente_base' />
+                        </ButtonMui>
+                      </Grid>
+
+                      <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+                        <ButtonMui
+                          variant="contained"
+                          color="primary"
+                          onClick={() => simulateLogin(TypeUser.FAMILY)}
+                          fullWidth
+                          className="simulated-login-button"
+                          sx={{ height: '100%' }}
+                        >
+                          <Trans id='login_simulato_utente_parentale' />
+                        </ButtonMui>
+                      </Grid>
+                    </Grid>
+
+                  )}
+
+                </Box>
 
 
-        {/* Main Login Box */}
-        <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
-          <Box display="flex" justifyContent="center" mt={6} px={2} className="welcome-container1">
-            <Paper elevation={3} className="login-paper">
-              <Box mt={2} textAlign="center">
-                <Typography variant="body2">
-                  <Trans id='nuovo_account' />
-                  <MuiLink
-                    component={LinkNext}
-                    href="/register"
-                    sx={{
-                      textDecoration: 'none',
-                      color: '#1976d2',
-                      fontWeight: 500,
-                      '&:hover': {
-                        textDecoration: 'underline', // Opzionale: aggiunge un feedback al passaggio del mouse
-                      }
+                <Box mb={2} className='box-login'>
+                  <TextField
+                    id="username"
+                    label={i18n._("indirizzo_email")}
+                    variant="outlined"
+                    value={emailLogin}
+                    onChange={handleChangeUsername}
+                    fullWidth
+                  />
+                </Box>
+
+                <Box mb={2} >
+                  <TextField
+                    id="password"
+                    label={i18n._("password")}
+                    variant="outlined"
+                    type={showPassword ? 'text' : 'password'}
+                    value={passwordLogin}
+                    onChange={handleChangePassword}
+                    fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton onClick={togglePasswordVisibility}>
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      ),
                     }}
-                  >
-                    <Trans id="registrati" />
-                  </MuiLink>
-                </Typography>
-              </Box>
-              <Box mb={3} className="box-pulsanti-login">
+                  />
+                </Box>
+                <ButtonMui
+                  variant="contained"
+                  fullWidth
+                  onClick={handleLogin}
+                  className="login-button"
+                >
+                  <Trans id="accedi" />
+                </ButtonMui>
 
-                {!hiddenLogin && (
-                  <Grid container spacing={2} alignItems="stretch"> {/* stretch forza i figli ad avere la stessa altezza */}
-                    <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
-                      <ButtonMui
-                        variant="contained"
-                        color="primary"
-                        onClick={() => simulateLogin(TypeUser.STANDARD)}
-                        fullWidth
-                        sx={{ height: '100%' }}
-                      >
-                        <Trans id='login_simulato_utente_base' />
-                      </ButtonMui>
-                    </Grid>
+                <Box mt={2} textAlign="center" className="register-annotation">
+                  <Typography variant="body2">
+                    <Trans id='nuovo_account' />{" "}
+                    <MuiLink
+                      component={LinkNext}
+                      href="/register"
+                      sx={{
+                        textDecoration: 'none',
+                        color: 'var(--color-primary)',
+                        fontWeight: 600,
+                        '&:hover': {
+                          textDecoration: 'underline',
+                        }
+                      }}
+                    >
+                      <Trans id="registrati" />
+                    </MuiLink>
+                  </Typography>
+                </Box>
 
-                    <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
-                      <ButtonMui
-                        variant="contained"
-                        color="primary"
-                        onClick={() => simulateLogin(TypeUser.FAMILY)}
-                        fullWidth
-                        sx={{ height: '100%' }}
-                      >
-                        <Trans id='login_simulato_utente_parentale' />
-                      </ButtonMui>
-                    </Grid>
+                {/* Divider */}
+                <Box display="flex" alignItems="center" mb={2} className='box-accedi'>
+                  <Divider sx={{ flexGrow: 1 }} />
+                  <Typography sx={{ mx: 2 }} variant="body2" color="textSecondary">
+                    <Trans id="oppure_accedi_con" />
+                  </Typography>
+                  <Divider sx={{ flexGrow: 1 }} />
+                </Box>
+
+                {/* Login Social */}
+                <Grid container spacing={2} justifyContent="center">
+                  <Grid>
+                    <IconButton onClick={handleAppleLogin} className="social-button" disabled>
+                      <AppleIcon />
+                    </IconButton>
                   </Grid>
+                  <Grid>
+                    <IconButton onClick={handleFacebookLogin} className="social-button" disabled>
+                      <FacebookIcon />
+                    </IconButton>
+                  </Grid>
+                  <Grid>
+                    <IconButton
+                      className="social-button google-button"
+                      onClick={() => login()}                  >
+                      <GoogleIcon />
+                    </IconButton>
+                  </Grid>
+                </Grid>
 
-                )}
-
-              </Box>
-
-
-              <Box mb={2} className='box-login'>
-                <TextField
-                  id="username"
-                  label={i18n._("indirizzo_email")}
-                  variant="outlined"
-                  value={emailLogin}
-                  onChange={handleChangeUsername}
-                  fullWidth
+                {/* Dialog */}
+                <DialogEmail
+                  openD={openD}
+                  handleCloseD={handleCloseD}
+                  emailOptions={emailOptions}
+                  handleEmailChange={handleEmailChange}
+                  handleConfirm={handleConfirm}
+                  email={emailConfirmDialog}
+                  simulated={simulated}
+                  emailUserCurrent={emailLogin}
                 />
-              </Box>
 
-              <Box mb={2} >
-                <TextField
-                  id="password"
-                  label={i18n._("password")}
-                  variant="outlined"
-                  type={showPassword ? 'text' : 'password'}
-                  value={passwordLogin}
-                  onChange={handleChangePassword}
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton onClick={togglePasswordVisibility}>
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    ),
-                  }}
-                />
-              </Box>
-              <ButtonMui
-                variant="contained"
-                fullWidth
-                onClick={handleLogin}
-                className="login-button"
-              >
-                <Trans id="accedi" />
-              </ButtonMui>
+              </Paper>
+            </Box>
+          </GoogleOAuthProvider>
 
-              {/* Divider */}
-              <Box display="flex" alignItems="center" mb={2} className='box-accedi'>
-                <Divider sx={{ flexGrow: 1 }} />
-                <Typography sx={{ mx: 2 }} variant="body2" color="textSecondary">
-                  <Trans id="oppure_accedi_con" />
-                </Typography>
-                <Divider sx={{ flexGrow: 1 }} />
-              </Box>
+          {/* Loader */}
+          {loading && (
+            <Box display="flex" justifyContent="center" mt={4}>
+              <CircularProgress />
+            </Box>
+          )}
+        </Box>
 
-              {/* Login Social */}
-              <Grid container spacing={2} justifyContent="center">
-                <Grid>
-                  <IconButton onClick={handleAppleLogin} className="social-button" disabled>
-                    <AppleIcon />
-                  </IconButton>
-                </Grid>
-                <Grid>
-                  <IconButton onClick={handleFacebookLogin} className="social-button" disabled>
-                    <FacebookIcon />
-                  </IconButton>
-                </Grid>
-                <Grid>
-                  <IconButton
-                    className="social-button google-button"
-                    onClick={() => login()}                  >
-                    <GoogleIcon />
-                  </IconButton>
-                </Grid>
-              </Grid>
-
-              {/* Dialog */}
-              <DialogEmail
-                openD={openD}
-                handleCloseD={handleCloseD}
-                emailOptions={emailOptions}
-                handleEmailChange={handleEmailChange}
-                handleConfirm={handleConfirm}
-                email={emailConfirmDialog}
-                simulated={simulated}
-                emailUserCurrent={emailLogin}
-              />
-
-            </Paper>
-          </Box>
-        </GoogleOAuthProvider>
-
-        {/* Loader */}
-        {loading && (
-          <Box display="flex" justifyContent="center" mt={4}>
-            <CircularProgress />
-          </Box>
-        )}
-      </>
-
+      </Box>
+      {!hiddenLogin && <TechFooter />}
 
     </>
   );

@@ -1,4 +1,11 @@
 .box-activity{
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: var(--space-4);
+    padding-left: var(--space-4);
+}
+
+@media (max-width: 600px) {
+    .box-activity {
+        padding-right: var(--space-3);
+        padding-left: var(--space-3);
+    }
 }
