@@ -192,7 +192,11 @@
   "dettaglio_attivita": "Neue Aufgabe mit Benutzer erstellen:",
   "dettaglio_attivita_child": "Dies ist die Benutzeraktivität:",
   "lista_attivita": "Aufgabenliste",
+<<<<<<< HEAD
   "register": "Registrieren Sie sich mit der E-Mail. Es empfiehlt sich, pro Projekt eine Ad-hoc-E-Mail für das Kind zu erstellen. Sie können child@simulated.com verwenden, wenn Sie die Passwort-Anmeldefunktion ausprobieren möchten, und geben Sie eine Ad-hoc-E-Mail für das Kind ein",
   "login_simulati": "Simulierte Anmeldungen rufen keine Informationen ab, sondern fragen die Datenbank genauso ab wie echte Benutzer. Es wird ein Passwort generiert und an eine nicht existierende Adresse gesendet",
   "login_simulati_title": "Anmerkung"
+=======
+  "register": "Um den Vorgang abzuschließen, registrieren Sie Ihre E-Mail-Adresse als Tutor und eine separate E-Mail-Adresse für jede Nachhilfe. Wir empfehlen, für jedes Profil eine eigene E-Mail-Adresse einzurichten. Wenn Sie die Login-Funktionalität testen möchten, können Sie für eine der Nachhilfesitzungen child@simulated.com verwenden oder die speziell dafür erstellten echten Adressen eingeben"
+>>>>>>> 48642965387e2dab06ee3d209522a3fe43e071d1
 }
