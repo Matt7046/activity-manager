@@ -192,5 +192,8 @@
   "dettaglio_attivita":"Crea Nuova attività con l'utente: ",
   "dettaglio_attivita_child":"Questa è l'attività dell'utente: ",
   "lista_attivita": "Lista attività",
-  "register":"Registrati con la email, è consigliabile creare una email ad hoc per progetto per il figlio puoi usare la child@simulated.com se vuoi provare la funzionalità di login con password inserisci una email ad hoc per il figlio"
+  "register":"Registrati con la email, è consigliabile creare una email ad hoc per progetto per il figlio puoi usare la child@simulated.com se vuoi provare la funzionalità di login con password inserisci una email ad hoc per il figlio",
+  "login_simulati":"I login simulati non recuperano informazioni ma effettuano query al database esattamente come gli utenti reali, viene generata una password è mandata ad un indirizzo inesistente",
+  "login_simulati_title":"Annotazione"         
+
 }

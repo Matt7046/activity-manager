@@ -192,61 +192,67 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           className={`grid-menu ${isVertical ? 'vertical-layout' : 'horizontal-layout'}`}
           alignItems="center"
         >
-          {/* Se il menu esiste, viene renderizzato a sinistra */}
-          {menuLaterale && menuLaterale.length > 0 ? (
-            <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
-          ) : (
-            /* Se il menu NON esiste, mettiamo un segnaposto invisibile o 
-               lasciamo che il CSS gestisca lo spazio */
-            <Box />
-          )}
-
-          {/* Aggiungiamo 'ml-auto' o gestiamo via CSS per spingere a destra */}
-          <Box className='box-layout-right-button'>
-            {/* Mostra il bottone notifiche solo se NON siamo in home */}
-            {(sectionAttiva.path !== SectionName.HOME && sectionAttiva.path !== SectionName.REGISTER) && (
-              <>
-                <Button pulsanti={[pulsanteNotifiche]} />
-                <Popover
-                  notifications={popoverNotifications}
-                  openAnchor={openAnchor}
-                  handleCloseAnchor={handleCloseAnchor}
-                  pulsanteNotification={pulsanteNotification}
-                />
-              </>
-            )}
-
-            <Button pulsanti={[pulsanteLogout]} />
-            <Language />
-          </Box>
           <Box className="title-container">
             {IconaTitolo && <IconaTitolo className="header-icon" />}
             <Typography variant="h6" className="header-title">
               <Label
                 _id={'title'}
-                text={sectionAttiva?.testo + (TypeUser.FAMILY === user?.type ? i18n._('tutorato') : '')}
+                text={sectionAttiva?.testo?.toUpperCase() + (TypeUser.FAMILY === user?.type ? i18n._('tutorato')?.toUpperCase() : '')}
               />
             </Typography>
           </Box>
+          {/* Se il menu esiste, viene renderizzato a sinistra */}
+          <Box  className ="box-menu-laterale">
+            {menuLaterale && menuLaterale.length > 0 && (
+              <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
+            )}
+
+            {/* SPACER: Questo Box con flexGrow: 1 spinge tutto ciò che segue a destra.
+    Funziona sia che il Drawer sia presente, sia che sia assente.
+*/}
+            <Box sx={{ flexGrow: 1 }} />
+
+            {/* Contenitore pulsanti: ora sarà SEMPRE allineato a destra */}
+            <Box className='box-layout-right-button'>
+              {/* Mostra il bottone notifiche solo se NON siamo in home o in registrazione */}
+              {(sectionAttiva.path !== SectionName.HOME && sectionAttiva.path !== SectionName.REGISTER) && (
+                <>
+                  <Button pulsanti={[pulsanteNotifiche]} />
+                  <Popover
+                    notifications={popoverNotifications}
+                    openAnchor={openAnchor}
+                    handleCloseAnchor={handleCloseAnchor}
+                    pulsanteNotification={pulsanteNotification}
+                  />
+                </>
+              )}
+
+              <Button pulsanti={[pulsanteLogout]} />
+              <Language />
+            </Box>
+          </Box>
         </Grid>
 
-        {/* AREA EMAIL: Visibile solo se necessario */}
-        {user?.emailUserCurrent && !hiddenEmail && (
+        {/* AREA EMAIL: Visibile se presente, altrimenti mostra disclaimer login simulati */}
+        {(
           <Box className={isVertical ? "box-layout-text-vertical" : "box-layout-text"}>
             <TextField
               id="emailFamily"
               className="form-control-operative"
               label={
-                user?.emailUserCurrent === user?.emailChild
-                  ? i18n._('email_registrazione')
-                  : i18n._('email_tutorato')
+                user?.emailUserCurrent && !hiddenEmail
+                  ? (user?.emailUserCurrent === user?.emailChild ? i18n._('email_registrazione') : i18n._('email_tutorato'))
+                  : i18n._('login_simulati_title')
               }
               variant="standard"
-              value={user?.emailChild || ''}
+              value={user?.emailChild || i18n._('login_simulati')}
               fullWidth
               disabled
+              multiline // <--- Abilita il wrapping del testo
+              maxRows={4} // Opzionale: limita l'altezza massima
             />
           </Box>
+
         )}
       </Box>
 

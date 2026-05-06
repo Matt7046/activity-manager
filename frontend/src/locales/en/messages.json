@@ -192,5 +192,7 @@
   "dettaglio_attivita": "Create New Task with User:",
   "dettaglio_attivita_child": "This is the user activity:",
   "lista_attivita": "Task list",
-  "register": "Register with the email, it is advisable to create an ad hoc email per project for the child you can use child@simulated.com if you want to try the password login functionality enter an ad hoc email for the child"
+  "register": "Register with the email, it is advisable to create an ad hoc email per project for the child you can use child@simulated.com if you want to try the password login functionality enter an ad hoc email for the child",
+  "login_simulati": "Simulated logins do not retrieve information but query the database exactly like real users, a password is generated and sent to a non-existent address",
+  "login_simulati_title": "Annotation"
 }
