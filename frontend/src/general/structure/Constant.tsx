@@ -41,6 +41,11 @@ export const IMAGE = {
   SERVER: process.env.NEXT_PUBLIC_IMAGE_SERVER
 }
 
+export const CLIENT_GOOGLE = {
+  SERVER: process.env.NEXT_PUBLIC_CLIENT_GOOGLE_ID
+}
+
+
 export enum HttpStatus {
   OK = 200,
   CREATED = 201,
