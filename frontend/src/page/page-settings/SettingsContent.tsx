@@ -67,7 +67,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
           <Divider />
 
           {/* AZIONE: ELIMINAZIONE ACCOUNT */}
-          <Box className="action-row">
+          <Box className="action-row settings-action-card">
             <Box className="action-info">
               <DeleteForeverIcon className="delete-icon" />
               <Box>
@@ -80,7 +80,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
               </Box>
             </Box>
 
-            <Box>
+            <Box className="action-button-container">
               <Button pulsanti={[pulsanteElimina]} />
             </Box>
           </Box>
@@ -89,7 +89,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
 
           {/* ESEMPIO PROSSIMA AZIONE (Placeholder) */}
 
-          <Box className="action-row">
+          <Box className="action-row settings-action-card">
             <Box className="action-info">
               <EmailOutlinedIcon className="delete-icon" />
               <Box>
@@ -102,7 +102,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
               </Box>
             </Box>
 
-            <Box>
+            <Box className="action-button-container">
               <Button pulsanti={[]} />
             </Box>
           </Box>

@@ -38,6 +38,11 @@
   box-shadow: var(--shadow-sm);
 }
 
+.settings-section-card > .MuiDivider-root {
+  margin: 0 var(--space-4);
+  border-color: var(--color-border);
+}
+
 .section-header {
   padding: var(--space-4);
   background-color: var(--color-surface-soft);
@@ -60,22 +65,49 @@
   gap: var(--space-3);
 }
 
+.settings-action-card {
+  background: var(--color-info-soft-2);
+  border: 1px solid var(--color-info-soft-4);
+  border-radius: var(--radius-md);
+  margin: var(--space-3) var(--space-5);
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Extra respiro laterale così il pulsante non è incollato al bordo destro della card */
+.action-row.settings-action-card {
+  padding-left: var(--space-5);
+  padding-right: var(--space-6);
+  box-sizing: border-box;
+}
+
+.settings-action-card:hover {
+  background: var(--color-info-soft);
+  border-color: var(--color-primary-soft-alt);
+}
+
 .action-disabled {
   opacity: 0.6;
 }
 
 .action-info {
-  flex: 0 0 80%;
+  flex: 1 1 auto;
   display: flex;
   align-items: flex-start;
   min-width: 0;
 }
 
 .action-button-container {
-  flex: 0 0 20%;
+  flex: 0 0 auto;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   min-width: fit-content;
+  padding-left: var(--space-4);
+}
+
+.settings-action-card .action-button-container {
+  margin-right: var(--space-1);
 }
 
 .delete-icon {
@@ -88,6 +120,7 @@
 .action-title {
   font-weight: 600 !important;
   word-break: break-word;
+  color: var(--color-text);
 }
 
 @media (max-width: 600px) {
@@ -98,5 +131,9 @@
   .action-row,
   .action-disabled {
     padding: var(--space-4);
+  }
+
+  .settings-action-card {
+    margin: var(--space-2) var(--space-3);
   }
 }

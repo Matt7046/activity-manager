@@ -14,10 +14,18 @@ import React from 'react';
 import Button, { Pulsante } from "../ms-button/Button";
 import "./DataGrid.css";
 
+/** Allinea il blocco pulsanti toolbar (es. Nuovo) alla colonna azioni con stesso rapporto flex delle colonne. */
+export interface ToolbarColumnSplit {
+  mainFlex: number;
+  actionFlex: number;
+  mainMinWidth?: number;
+  actionMinWidth?: number;
+}
 
 declare module '@mui/x-data-grid' {
   interface ToolbarPropsOverrides {
     pulsanti: Pulsante[];
+    toolbarColumnSplit?: ToolbarColumnSplit;
   }
 }
 interface DataGridComponentProps {
@@ -28,31 +36,66 @@ interface DataGridComponentProps {
   paginationModel: GridPaginationModel;
   setPaginationModel?: ((model: GridPaginationModel, details: GridCallbackDetails<any>) => void) | undefined;
   pulsanti?: Pulsante[];
+  toolbarColumnSplit?: ToolbarColumnSplit;
 }
 
-// 1. Definiamo un'interfaccia che estende GridToolbarProps per includere i tuoi pulsanti
 interface CustomToolbarProps extends GridToolbarProps {
   pulsanti?: Pulsante[];
+  toolbarColumnSplit?: ToolbarColumnSplit;
 }
 
-
-
-// 2. Modifichiamo il componente per accettare le props estese
 const CustomToolbar = (props: CustomToolbarProps) => {
-  const { i18n } = useLingui();
-  // Estraiamo 'pulsanti' e passiamo il resto (altre props della toolbar) al container
-  const { pulsanti, ...other } = props;
+  const { pulsanti, toolbarColumnSplit, sx: toolbarSx, ...toolbarRest } = props;
 
- return (
-    <GridToolbarContainer {...other}>
-      {/* CORREZIONE: Rimosse printOptions e csvOptions che causavano l'errore.
-          Il testo "esporta" viene ora ereditato dal localeText definito nel DataGrid.
-      */}
+  if (toolbarColumnSplit) {
+    const { mainFlex, actionFlex, mainMinWidth = 0, actionMinWidth = 0 } = toolbarColumnSplit;
+    const sxMerged = [
+      {
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        flexWrap: 'nowrap',
+      } as const,
+      ...(toolbarSx ? (Array.isArray(toolbarSx) ? toolbarSx : [toolbarSx]) : []),
+    ];
+    return (
+      <GridToolbarContainer {...toolbarRest} sx={sxMerged}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            flexGrow: mainFlex,
+            flexBasis: 0,
+            minWidth: mainMinWidth,
+            overflow: 'hidden',
+          }}
+        >
+          <GridToolbarExport />
+        </Box>
+        <Box
+          sx={{
+            flexGrow: actionFlex,
+            flexBasis: 0,
+            minWidth: actionMinWidth,
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            pl: 1,
+            pr: 1,
+            boxSizing: 'border-box',
+          }}
+        >
+          <Button pulsanti={pulsanti || []} />
+        </Box>
+      </GridToolbarContainer>
+    );
+  }
+
+  return (
+    <GridToolbarContainer sx={toolbarSx} {...toolbarRest}>
       <GridToolbarExport />
-      
       <Box sx={{ flexGrow: 1 }} />
-      
-      {/* Passiamo l'array di pulsanti al tuo componente Button personalizzato */}
       <Button pulsanti={pulsanti || []} />
     </GridToolbarContainer>
   );
@@ -65,19 +108,20 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({
   loading,
   paginationModel,
   setPaginationModel,
-  pulsanti
+  pulsanti,
+  toolbarColumnSplit,
 }) => {
   const { i18n } = useLingui();
 
   return (
     <DataGrid
-      // 3. Ora CustomToolbar è compatibile con il tipo richiesto da slots.toolbar
       slots={{
         toolbar: CustomToolbar as React.JSXElementConstructor<GridToolbarProps>,
       }}
       slotProps={{
         toolbar: {
           pulsanti: pulsanti || [],
+          ...(toolbarColumnSplit ? { toolbarColumnSplit } : {}),
         }
       }}
       localeText={{

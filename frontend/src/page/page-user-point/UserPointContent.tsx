@@ -62,7 +62,7 @@ const UserPointContent: React.FC<PointsContentProps> = ({
   }, [logCard]);
 
   const pulsanteLog: Pulsante = {
-    icona: 'fas fa-clipboard',
+    icona: 'fas fa-history',
     funzione: () => {
       setOpenDialogLogActivity(true);
       navigateRouting(router, "log-user-point", { "type": "activity" })
@@ -74,7 +74,7 @@ const UserPointContent: React.FC<PointsContentProps> = ({
   };
 
   const pulsanteLogFamily: Pulsante = {
-    icona: 'fas fa-clipboard',
+    icona: 'fas fa-history',
     funzione: () => {
       setOpenDialogLogFamily(true);
       navigateRouting(router, "log-user-point", { "type": "family" })
