@@ -9,7 +9,7 @@
 }
 
 .grid-button-about {
-    padding-top: 10px;
+    padding-top: var(--space-3);
 }
 
 .about-action-row {
@@ -18,4 +18,10 @@
     /* Spinge i blocchi ai due estremi */
     align-items: center;
     width: 100%;
+}
+
+@media (max-width: 600px) {
+    .box-about {
+        padding: var(--space-4);
+    }
 }

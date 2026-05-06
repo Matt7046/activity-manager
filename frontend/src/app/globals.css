@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f1f5f9;
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --color-border: #e2e8f0;
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-danger: #ef4444;
+  --color-success: #10b981;
+  --color-white: #ffffff;
+  --color-muted-300: #94a3b8;
+  --color-muted-500: #64748b;
+  --color-info: #3b82f6;
+  --color-info-soft: #e6eeff;
+  --color-info-soft-2: #edf3fd;
+  --color-info-soft-3: #d8effe;
+  --color-info-soft-4: #bbdefb;
+  --color-primary-soft: #eef2ff;
+  --color-primary-soft-hover: #f5f3ff;
+  --color-primary-soft-alt: #e0e7ff;
+  --color-danger-soft: #fef2f2;
+  --color-danger-soft-2: #fee2e2;
+  --color-danger-soft-3: #fecaca;
+  --color-danger-text: #991b1b;
+  --color-danger-text-strong: #b91c1c;
+  --color-warning: #f59e0b;
+  --color-warning-text: #92400e;
+  --color-info-text: #1e40af;
+  --color-footer-bg: #2d3748;
+  --color-footer-text: #f7fafc;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-round: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 6px 18px rgba(15, 23, 42, 0.08);
+
+  --font-sans-modern: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans-modern);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+* {
+  box-sizing: border-box;
 }

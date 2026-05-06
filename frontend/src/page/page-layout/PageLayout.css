@@ -1,10 +1,12 @@
 .box-layout-text {
-    width: 86%;
-    padding-left: 10px;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .box-layout {
-    padding-left: 15px;
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
 }
 
 .box-menu-laterale {
@@ -17,8 +19,9 @@
 }
 
 .box-layout-text-vertical {
-    width: 90%;
-    padding-left: 10px;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .hidden-email {
@@ -26,8 +29,7 @@
 }
 
 .box-layout-right-button {
-
-    padding-right: 10px;
+    padding-right: var(--space-3);
     display: flex;
 }
 
@@ -36,7 +38,7 @@
 }
 
 .box-layout-right-button {
-    padding-right: 10px;
+    padding-right: var(--space-3);
     display: flex;
     align-items: center;
     /* Allinea verticalmente icone e bandierine */
@@ -44,32 +46,44 @@
 }
 
 .header-title {
-    font-weight: bold !important;
-    /* Forza l'effetto strong */
+    font-weight: 800 !important;
     margin: 0;
-    /* Rimuove margini di default di Typography */
+    font-size: 1rem !important;
+    letter-spacing: 0.04em;
+    color: var(--color-primary-hover);
+    line-height: 1;
+}
+
+.header-title-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: var(--radius-lg);
+    background: var(--color-primary-soft);
+    border: 1px solid var(--color-primary-soft-alt);
+    box-shadow: var(--shadow-sm);
 }
 
 .header-icon {
-    font-size: 2.5rem;
-    color: #2f84d3;
-    padding-right: 5px;
-    /* Regola la dimensione della rotella */
+    font-size: 1.35rem;
+    color: var(--color-primary);
+    padding-right: var(--space-2);
 }
 
 .title-container {
-    padding-top: 1px;
+    padding-top: var(--space-1);
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Spazio sotto il titolo */
+    gap: var(--space-2);
     width: 100%;
 }
 
 .grid-menu {
     display: flex;
     width: 100%;
-    padding-bottom: 15px;
+    padding-bottom: var(--space-4);
 }
 
 /* Quando è verticale, i bottoni vanno a destra e il menu a sinistra se presenti */
@@ -84,14 +98,14 @@
 }
 
 .header-title strong {
-    font-weight: bold;
+    font-weight: 800;
 }
 
 /* Selettore mirato per la label del TextField */
 .box-layout-text .form-control-operative .MuiInputLabel-root,
 .box-layout-text-vertical .form-control-operative .MuiInputLabel-root {
     font-weight: bold !important;
-    color: #2d3748 !important;
+    color: var(--color-text) !important;
     /* Colore scuro per evidenziare il bold */
 }
 
@@ -111,4 +125,26 @@
 .MuiGrid2-container {
     margin-left: 0 !important;
     margin-right: 0 !important;
+}
+
+@media (max-width: 600px) {
+    .header-title-badge {
+        padding: 8px 12px;
+    }
+
+    .header-title {
+        font-size: 0.88rem !important;
+    }
+
+    .box-layout-text,
+    .box-layout-text-vertical {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .box-layout {
+        padding-left: var(--space-2);
+        padding-right: var(--space-2);
+    }
 }

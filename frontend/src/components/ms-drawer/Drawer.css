@@ -2,25 +2,25 @@
 .drawer-toggle-button {
   font-weight: 600;
   text-transform: none; /* Rimuove il tutto maiuscolo di default di MUI */
-  color: #1976d2!important;
-  border: 1px solid #e0e0e0!important;
-  border-radius: 8px!important;
+  color: var(--color-primary)!important;
+  border: 1px solid var(--color-border)!important;
+  border-radius: var(--radius-sm)!important;
   padding: 6px 16px!important;
   transition: all 0.2s ease-in-out;
 }
 
 .drawer-toggle-button:hover {
-  background-color: #f5f5f5!important;
-  border-color: #1976d2!important;
+  background-color: var(--color-surface-soft)!important;
+  border-color: var(--color-primary)!important;
 }
 
 /* Container principale del Drawer */
 .drawer-box {
-  background-color: #ffffff;
+  background-color: var(--color-surface);
   height: 100%;
   overflow-y: auto;
   /* Contorno: riga sottile grigia per definire il menu */
-  border-right: 1px solid #e0e0e0; 
+  border-right: 1px solid var(--color-border); 
   display: flex;
   flex-direction: column;
 }
@@ -37,27 +37,27 @@
 /* Lista voci menu migliorata */
 .drawer-list-item {
   margin: 4px 8px!important; /* Spazio tra i bottoni */
-  border-radius: 8px!important; /* Angoli arrotondati moderni */
+  border-radius: var(--radius-sm)!important; /* Angoli arrotondati moderni */
   transition: all 0.2s ease!important;
 }
 
 .drawer-list-item:hover {
-  background-color: #f0f7ff!important; /* Blu molto tenue */
-  color: #1976d2;
+  background-color: var(--color-info-soft)!important; /* Blu molto tenue */
+  color: var(--color-primary);
 }
 
 /* Icone: rimosso il rosso acceso per un look più professionale */
 .drawer-list-icon {
-  color: red!important; /* Grigio scuro Google style */
+  color: var(--color-primary)!important;
   min-width: 40px!important;
 }
 
 .drawer-list-item:hover .drawer-list-icon {
-  color: #1976d2!important; /* L'icona diventa blu al passaggio */
+  color: var(--color-primary)!important; /* L'icona diventa blu al passaggio */
 }
 
 /* Divider personalizzato */
 .drawer-divider {
   margin: 8px 16px!important;
-  background-color: #eeeeee!important;
+  background-color: var(--color-border)!important;
 }

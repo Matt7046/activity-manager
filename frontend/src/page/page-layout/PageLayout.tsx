@@ -193,13 +193,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           alignItems="center"
         >
           <Box className="title-container">
-            {IconaTitolo && <IconaTitolo className="header-icon" />}
-            <Typography variant="h6" className="header-title">
-              <Label
-                _id={'title'}
-                text={sectionAttiva?.testo?.toUpperCase() + (TypeUser.FAMILY === user?.type ? i18n._('tutorato')?.toUpperCase() : '')}
-              />
-            </Typography>
+            <Box className="header-title-badge">
+              {IconaTitolo && <IconaTitolo className="header-icon" />}
+              <Typography variant="h6" className="header-title">
+                <Label
+                  _id={'title'}
+                  text={sectionAttiva?.testo?.toUpperCase() + (TypeUser.FAMILY === user?.type ? i18n._('tutorato')?.toUpperCase() : '')}
+                />
+              </Typography>
+            </Box>
           </Box>
           {/* Se il menu esiste, viene renderizzato a sinistra */}
           <Box  className ="box-menu-laterale">

@@ -1,51 +1,53 @@
-/* Area Filtri in alto */
 .filter-container {
   display: flex;
   flex-wrap: wrap;
-  background-color: #ffffff;
-  border-bottom: 2px solid #f1f3f5;
+  gap: var(--space-4);
+  padding: 0 0 var(--space-6) 0;
+  background-color: transparent;
+  border-bottom: 1px solid var(--color-border);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .filter-group {
   flex: 1;
   min-width: 200px;
-  /* Si mette in colonna su dispositivi piccoli */
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .filter-label {
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #b2bec3;
+  color: var(--color-muted-300);
   letter-spacing: 0.5px;
 }
 
 .date-input {
   padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #dfe6e9;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
   font-family: inherit;
   font-size: 0.9rem;
-  color: #2d3436;
+  color: var(--color-text);
   outline: none;
   transition: border-color 0.2s;
 }
 
 .date-input:focus {
-  border-color: #1976d2;
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 /* Badge della data sulla notifica */
 .notification-date-badge {
   font-size: 0.7rem;
-  background: #f1f3f5;
+  background: var(--color-surface-soft);
   padding: 4px 8px;
-  border-radius: 4px;
-  color: #636e72;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
   font-weight: 600;
   margin-bottom: 4px;
   display: inline-block;
@@ -53,26 +55,26 @@
 
 /* Righe alterne: azzurro chiarissimo per le righe pari */
 .notification-item:nth-child(even) {
-  background-color: #edf3fd;
+  background-color: var(--color-info-soft-2);
   /* Azzurro molto tenue */
 }
 
 /* Righe bianche per le dispari */
 .notification-item:nth-child(odd) {
-  background-color: #ffffff;
+  background-color: var(--color-surface);
 }
 
 /* Hover più evidente per distinguere la riga su cui si trova il mouse */
 .notification-item:hover {
-  background-color: #cee0f6 !important;
+  background-color: var(--color-info-soft) !important;
   /* Azzurro un po' più marcato */
 }
 
 /* Se la riga è espansa, manteniamo un colore di sfondo che dia continuità */
 .notification-header.is-expanded {
-  background-color: #d8effe;
+  background-color: var(--color-info-soft-3);
   /* Azzurro cielo quando aperto */
-  border-bottom: 1px solid #bbdefb;
+  border-bottom: 1px solid var(--color-info-soft-4);
 }
 
 /* Stile per i dettagli quando la riga è espansa */
@@ -84,31 +86,25 @@
 
 /* 1. Applichiamo lo stesso wrapper di Schedule per margini e spazi */
 .notification-container {
-  padding: 24px;
-  /* Uniformiamo il padding ai settings */
+  padding: var(--space-6);
   width: 100%;
   box-sizing: border-box;
-  /* Fondamentale per evitare lo spazio a destra */
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  box-sizing: border-box;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
   overflow: hidden;
 }
-/* Se vuoi che le righe espanse non rompano il layout ma siano scrollabili internamente */
-/* Impedisce alla griglia di collassare */
 
 .grid-container {
-  padding: 24px;
-  /* Uniformiamo il padding ai settings */
-  width: 100%;
+  width: 100% !important;
+  margin-top: var(--space-5);
   box-sizing: border-box;
-  /* Fondamentale per evitare lo spazio a destra */
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);  
-  /* Padding interno per non far toccare i bordi alla tabella */
-  padding: 10px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  padding: var(--space-3);
   height: 550px;
 }
 
@@ -117,41 +113,21 @@
   min-height: 300px;
 }
 
-
-/* 2. Sistemiamo l'area dei filtri affinché non esca dai bordi */
-.filter-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding: 0 0 24px 0;
-  /* Rimosso padding laterale interno, usa quello del container */
-  background-color: transparent;
-  border-bottom: 2px solid #f1f3f5;
-  width: 100%;
-  box-sizing: border-box;
+@media (max-width: 900px) {
+  .notification-details {
+    padding: 0 var(--space-4) var(--space-4) var(--space-6);
+  }
 }
 
-/* 3. Assicuriamoci che la griglia occupi tutto lo spazio ma non oltre */
-.grid-container {
-  width: 100% !important;
-  margin-top: 20px;
-  box-sizing: border-box;
-}
-
-/* 4. Fix per Mobile (stesse imposizioni di prima) */
 @media (max-width: 600px) {
   .notification-container {
     width: 100%;
-    /* Su mobile occupa tutta la larghezza */
     margin: 0;
-    border-radius: 0;
-    /* Rimuove arrotondamento su mobile per continuità */
-    padding: 16px;
-    /* Spazio ridotto ma presente a destra/sinistra */
+    border-radius: var(--radius-sm);
+    padding: var(--space-4);
   }
 
   .filter-group {
     min-width: 100%;
-    /* I filtri vanno uno sotto l'altro su mobile */
   }
 }

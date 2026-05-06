@@ -2,22 +2,24 @@
 .grid-container {
   height: 600px; /* O 100% se il parent ha altezza definita */
   width: 100%;
-  background: white;
-  border-radius: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
 /* Stile Zebra per le righe della DataGrid */
 .MuiDataGrid-row:nth-child(even) {
-  background-color: #edf3fd !important;
+  background-color: var(--color-surface-soft) !important;
 }
 
 .MuiDataGrid-row:nth-child(odd) {
-  background-color: #ffffff !important;
+  background-color: var(--color-surface) !important;
 }
 
 .MuiDataGrid-row:hover {
-  background-color: #cee0f6 !important;
+  background-color: var(--color-info-soft) !important;
 }
 
 /* Rimuoviamo i bordi delle celle per farla sembrare una lista pulita */
@@ -26,7 +28,7 @@
 }
 
 .MuiDataGrid-columnHeaders {
-  background-color: #f8f9fa;
-  border-bottom: 2px solid #f1f3f5 !important;
+  background-color: var(--color-surface-soft);
+  border-bottom: 1px solid var(--color-border) !important;
   font-weight: 700;
 }

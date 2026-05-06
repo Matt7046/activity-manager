@@ -5,9 +5,9 @@
     flex-direction: column;
     align-items: stretch; /* CAMBIA DA center/flex-start A stretch */
     width: 100%;
-    padding-top: 24px;
-    padding-left: 25px;
-    padding-right: 20px;
+    padding-top: var(--space-6);
+    padding-left: var(--space-6);
+    padding-right: var(--space-5);
     box-sizing: border-box;
 }
 
@@ -18,14 +18,20 @@
 .box-typography {
     width: 100%;
     padding-left: 0; /* Reset del test precedente */
-    margin-bottom: 5px;
+    margin-bottom: var(--space-2);
 }
 
 /* Stile del testo */
 .popover-header-text {
     text-align: left;
-    color: #5f6368;
+    color: var(--color-text-muted);
     font-size: 0.95rem;
     margin: 0 !important; /* Rimuove margini di default di MUI che potrebbero spostarlo */
+}
+
+@media (max-width: 600px) {
+    .box-gamification-content {
+        padding: var(--space-4);
+    }
 }
 

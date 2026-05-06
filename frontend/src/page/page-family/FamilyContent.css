@@ -1,6 +1,6 @@
 /* Container principale allineato a OperativeContent */
 .box-family-content {
-    padding: 24px;
+    padding: var(--space-6);
     width: 100%;
     box-sizing: border-box;
 }
@@ -13,7 +13,7 @@
 
 /* Margini controlli */
 .form-control-family {
-    margin-top: 16px !important;
+    margin-top: var(--space-4) !important;
     width: 100% !important;
     box-sizing: border-box;
 }
@@ -21,6 +21,6 @@
 /* Fix Mobile */
 @media (max-width: 600px) {
     .box-family-content {
-        padding: 16px;
+        padding: var(--space-4);
     }
 }

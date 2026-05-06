@@ -3,26 +3,26 @@
   display: flex;
   flex-direction: column;
   height: 540px !important; /* Altezza fissa per uniformità tra tutte le card */
-  background: #ffffff;
-  border-radius: 24px !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-  border: 1px solid #eef2f6 !important;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+  border: 1px solid var(--color-border) !important;
   overflow: hidden; /* Nasconde la barra di scorrimento esterna */
   position: relative;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  border-color: #6366f1 !important;
-  box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-4px);
+  border-color: var(--color-primary) !important;
+  box-shadow: var(--shadow-md) !important;
 }
 
 /* --- IMMAGINE --- */
 .card-media {
   height: 160px !important; /* Ridotta per far spazio alle 5 righe senza scroll */
-  margin: 12px;
-  border-radius: 18px !important;
+  margin: var(--space-3);
+  border-radius: var(--radius-lg) !important;
   object-fit: cover;
   transition: transform 0.6s ease;
 }
@@ -33,7 +33,7 @@
 
 /* --- CONTENUTO CENTRALE --- */
 .card-content {
-  padding: 10px 20px !important;
+  padding: var(--space-3) var(--space-5) !important;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -43,7 +43,7 @@
 /* --- TITOLO --- */
 .card-title {
   font-weight: 800 !important;
-  color: #0f172a !important;
+  color: var(--color-text) !important;
   text-transform: uppercase;
   margin-bottom: 12px !important;
   font-size: 1.10rem !important;
@@ -65,9 +65,9 @@
 
 /* Header della lista */
 .card-header-row {
-  background-color: #f1f5f9 !important;
-  border-radius: 8px;
-  padding: 6px 12px;
+  background-color: var(--color-surface-soft) !important;
+  border-radius: var(--radius-sm);
+  padding: 6px var(--space-3);
   margin-bottom: 8px !important;
   height: 35px;
   display: flex;
@@ -77,7 +77,7 @@
 .card-header-text {
   font-size: 0.65rem !important;
   font-weight: 800 !important;
-  color: #475569 !important;
+  color: var(--color-text-muted) !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -85,7 +85,7 @@
 /* Singola riga della lista */
 .grid-row-item {
   height: 38px !important; 
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   margin-bottom: 2px;
   display: flex;
   align-items: center;
@@ -93,7 +93,7 @@
 }
 
 .grid-row-item:hover {
-  background-color: #f8fafc;
+  background-color: var(--color-surface-soft);
 }
 
 .grid-row-item:nth-child(even) .card-list-item {
@@ -103,8 +103,8 @@
 /* Testo colonna sinistra */
 .card-list-item {
   font-size: 0.85rem !important;
-  color: #475569 !important;
-  padding-left: 12px !important;
+  color: var(--color-text-muted) !important;
+  padding-left: var(--space-3) !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -114,19 +114,19 @@
 .card-list-item-right {
   text-align: left !important;
   font-weight: 700 !important;
-  color: #1e293b !important;
-  padding-left: 8px !important;
+  color: var(--color-text) !important;
+  padding-left: var(--space-2) !important;
 }
 
 /* --- FOOTER AZIONI --- */
 .card-actions-bottom {
   height: 60px !important;
-  background-color: #f8fafc;
-  border-top: 1px solid #f1f5f9;
+  background-color: var(--color-surface-soft);
+  border-top: 1px solid var(--color-border);
   margin-top: auto;
   display: flex !important;
   align-items: center !important;
-  padding: 0 20px !important;
+  padding: 0 var(--space-5) !important;
 }
 
 .actions-inner-box {
@@ -134,12 +134,12 @@
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 /* Stile per i puntini di sospensione se presenti */
 .card-list-item:contains('...') {
-  color: #94a3b8 !important;
+  color: var(--color-muted-300) !important;
   text-align: center;
   font-weight: bold;
 }
