@@ -98,6 +98,15 @@ public class UserPointService {
         return userPoint;
     }
 
+      public UserPoint saveUserPassword(UserPoint userPoint) {
+        UserPoint existsUser = userPointRepository.findUserByEmailAll(userPoint.getEmailUserCurrent());
+        if (existsUser != null) {
+            existsUser.setPassword(userPoint.getPassword());
+        }
+        userPoint = userPointRepository.save(existsUser);
+        return userPoint;
+    }
+
     public Long getTypeUser(UserPoint point) {
         UserPoint existUserPointOnFigli = userPointRepository.findUserByEmail(point.getEmailUserCurrent());
         return existUserPointOnFigli != null ? existUserPointOnFigli.getType() : 2L;

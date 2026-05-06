@@ -1,9 +1,7 @@
 package com.userPointService.controller;
 
-import com.common.data.gamification.Favorite;
 import com.common.dto.gamification.FavoriteDTO;
 import com.common.dto.structure.ResponseDTO;
-import com.common.dto.user.UserPointDTO;
 import com.userPointService.processor.GamificationProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

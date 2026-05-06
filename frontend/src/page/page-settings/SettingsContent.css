@@ -123,6 +123,13 @@
   color: var(--color-text);
 }
 
+/* Spazio sopra il campo rispetto al testo descrittivo (solo margin, niente padding sul TextField). */
+.settings-password-wrap {
+  display: block;
+  width: 100%;
+  margin-top: var(--space-4);
+}
+
 @media (max-width: 600px) {
   .settings-content {
     padding: var(--space-4);
