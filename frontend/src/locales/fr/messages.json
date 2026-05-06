@@ -192,7 +192,7 @@
   "dettaglio_attivita": "Créer une nouvelle tâche avec l'utilisateur :",
   "dettaglio_attivita_child": "Voici l'activité de l'utilisateur :",
   "lista_attivita": "Liste des tâches",
-  "register": "Inscrivez-vous avec l'email, il est conseillé de créer un email ad hoc par projet pour l'enfant vous pouvez utiliser child@simulated.com si vous souhaitez essayer la fonctionnalité de connexion par mot de passe entrez un email ad hoc pour l'enfant",
+  "register": "Inscrivez-vous par email, il est conseillé de créer un email ad hoc pour le projet. Pour l'enfant, vous pouvez utiliser child@simulated.com. Si vous souhaitez essayer la fonction de connexion par mot de passe, saisissez une adresse e-mail spécifique pour votre enfant",
   "login_simulati": "Les connexions simulées ne récupèrent pas d'informations mais interrogent la base de données exactement comme les utilisateurs réels, un mot de passe est généré et envoyé à une adresse inexistante",
   "login_simulati_title": "Annotation"
 }

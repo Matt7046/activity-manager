@@ -192,7 +192,7 @@
   "dettaglio_attivita": "Neue Aufgabe mit Benutzer erstellen:",
   "dettaglio_attivita_child": "Dies ist die Benutzeraktivität:",
   "lista_attivita": "Aufgabenliste",
-  "register": "Registrieren Sie sich mit der E-Mail. Es empfiehlt sich, pro Projekt eine Ad-hoc-E-Mail für das Kind zu erstellen. Sie können child@simulated.com verwenden, wenn Sie die Passwort-Anmeldefunktion ausprobieren möchten, und geben Sie eine Ad-hoc-E-Mail für das Kind ein",
+  "register": "Registrieren Sie sich per E-Mail. Es empfiehlt sich, eine Ad-hoc-E-Mail für das Projekt zu erstellen. Für das Kind können Sie child@simulated.com verwenden. Wenn Sie die Passwort-Anmeldefunktion ausprobieren möchten, geben Sie eine bestimmte E-Mail-Adresse für Ihr Kind ein",
   "login_simulati": "Simulierte Anmeldungen rufen keine Informationen ab, sondern fragen die Datenbank genauso ab wie echte Benutzer. Es wird ein Passwort generiert und an eine nicht existierende Adresse gesendet",
   "login_simulati_title": "Anmerkung"
 }
