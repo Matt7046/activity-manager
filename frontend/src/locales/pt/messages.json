@@ -192,5 +192,7 @@
   "dettaglio_attivita": "Criar nova tarefa com usuário:",
   "dettaglio_attivita_child": "Esta é a atividade do usuário:",
   "lista_attivita": "Lista de tarefas",
-  "register": "Para completar o processo, cadastre seu e-mail como tutor e um e-mail separado para cada tutoria. Recomendamos a criação de um endereço de e-mail dedicado para cada perfil. Se quiser testar a funcionalidade de login, você pode usar child@simulated.com para uma das sessões de tutoria ou inserir os endereços reais criados especificamente para eles"
+  "register": "Cadastre-se com o email, é aconselhável criar um email ad hoc por projeto para a criança você pode usar child@simulated.com se quiser experimentar a funcionalidade de login com senha insira um email ad hoc para a criança",
+  "login_simulati": "Logins simulados não recuperam informações, mas consultam o banco de dados exatamente como usuários reais, uma senha é gerada e enviada para um endereço inexistente",
+  "login_simulati_title": "Anotação"
 }

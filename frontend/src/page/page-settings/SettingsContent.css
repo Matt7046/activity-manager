@@ -1,14 +1,9 @@
-/* Contenitore principale del popover */
-.popover-box {
-  min-width: 350px; /* Larghezza suggerita per popover */
-}
-
-/* Header della pagina */
+/* --- Header della Pagina --- */
 .profile-header {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 16px; /* Esempio di spaziatura standard */
+  padding: 16px;
 }
 
 .header-title-row {
@@ -27,12 +22,16 @@
   font-weight: 700 !important;
 }
 
-/* Contenitore del contenuto */
+.settings-header-text {
+  padding: 23px 0 0 23px;
+  display: block;
+}
+
+/* --- Contenitore e Card --- */
 .settings-content {
   padding: 24px;
 }
 
-/* Paper/Card per le sezioni */
 .settings-section-card {
   border: 1px solid #dfe6e9;
   border-radius: 8px;
@@ -49,59 +48,49 @@
   color: #2d3436;
 }
 
-/* Righe delle azioni */
-/* Modifica la riga esistente per assicurare la distribuzione spaziale */
-.action-row {
-  padding: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Spinge gli elementi ai lati opposti */
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-
-
-/* Opzionale: Allineamento per la sezione disabilitata (se vuoi coerenza) */
+/* --- Righe delle Azioni (Proporzioni 10/2 fisse) --- */
+.action-row, 
 .action-disabled {
-  padding: 24px;
+  padding: 20px; /* Ridotto leggermente per mobile */
   display: flex;
+  flex-direction: row; /* Forza la riga orizzontale */
+  flex-wrap: nowrap;   /* Impedisce di andare a capo */
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap; /* Aggiunto per mobile */
+  width: 100%;
+  gap: 12px;
+}
+
+.action-disabled {
   opacity: 0.6;
 }
 
-.action-disabled > div:last-child {
-  margin-left: auto;
-}
-
+/* Info: Occupa l'80% circa (10 parti) */
 .action-info {
+  flex: 0 0 80%; 
   display: flex;
   align-items: flex-start;
+  min-width: 0; /* Permette al testo di non "pushare" fuori il pulsante */
+}
+
+/* Bottone: Occupa il 20% circa (2 parti) */
+.action-button-container {
+  flex: 0 0 20%;
+  display: flex;
+  justify-content: flex-end;
+  min-width: fit-content; /* Evita che il pulsante si restringa troppo */
 }
 
 .delete-icon {
   color: #2f84d3;
-  margin-right: 16px;
+  margin-right: 12px;
   margin-top: 4px;
+  flex-shrink: 0; /* Impedisce all'icona di rimpicciolirsi */
 }
 
 .action-title {
   font-weight: 600 !important;
+  word-break: break-word; /* Se il titolo è lungo, va a capo lui e non il pulsante */
 }
 
-/* Stato disabilitato/placeholder */
-.action-disabled {
-  padding: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  opacity: 0.6;
-}
-
-.settings-header-text {
-  padding-left: 23px;   /* Sposta il testo verso destra */
-  padding-top: 23px;    /* Opzionale: spazio sopra */
-  display: block;       /* Assicura che il padding venga applicato correttamente su tutta la riga */
-}
+/* Rimosse le media query che invertivano il layout */

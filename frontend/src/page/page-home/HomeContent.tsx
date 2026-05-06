@@ -361,46 +361,39 @@ const GoogleAuthComponent = () => {
                   </MuiLink>
                 </Typography>
               </Box>
-              <Box mb={3}>
-                <TextField
-                  key={i18n.locale} // <--- Questa è la chiave del successo
-                  id="emailFamily"
-                  label={'INFO'}
-                  variant="standard"
-                  value={i18n._('login_simulato')}
-                  onChange={handleChangeEmailFamily}
-                  fullWidth
-                  disabled
-                />
+              <Box mb={3} className="box-pulsanti-login">
+
+                {!hiddenLogin && (
+                  <Grid container spacing={2} alignItems="stretch"> {/* stretch forza i figli ad avere la stessa altezza */}
+                    <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+                      <ButtonMui
+                        variant="contained"
+                        color="primary"
+                        onClick={() => simulateLogin(TypeUser.STANDARD)}
+                        fullWidth
+                        sx={{ height: '100%' }}
+                      >
+                        <Trans id='login_simulato_utente_base' />
+                      </ButtonMui>
+                    </Grid>
+
+                    <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+                      <ButtonMui
+                        variant="contained"
+                        color="primary"
+                        onClick={() => simulateLogin(TypeUser.FAMILY)}
+                        fullWidth
+                        sx={{ height: '100%' }}
+                      >
+                        <Trans id='login_simulato_utente_parentale' />
+                      </ButtonMui>
+                    </Grid>
+                  </Grid>
+
+                )}
+
               </Box>
 
-              {!hiddenLogin && (
-                <Grid container spacing={2} alignItems="stretch"> {/* stretch forza i figli ad avere la stessa altezza */}
-                  <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
-                    <ButtonMui
-                      variant="contained"
-                      color="primary"
-                      onClick={() => simulateLogin(TypeUser.STANDARD)}
-                      fullWidth
-                      sx={{ height: '100%' }}
-                    >
-                      <Trans id='login_simulato_utente_base' />
-                    </ButtonMui>
-                  </Grid>
-
-                  <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
-                    <ButtonMui
-                      variant="contained"
-                      color="primary"
-                      onClick={() => simulateLogin(TypeUser.FAMILY)}
-                      fullWidth
-                      sx={{ height: '100%' }}
-                    >
-                      <Trans id='login_simulato_utente_parentale' />
-                    </ButtonMui>
-                  </Grid>
-                </Grid>
-              )}
 
               <Box mb={2} className='box-login'>
                 <TextField

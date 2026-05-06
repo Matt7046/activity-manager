@@ -7,6 +7,15 @@
     padding-left: 15px;
 }
 
+.box-menu-laterale {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Spinge gli elementi ai lati opposti */
+    width: 100%;
+    padding: 0 16px;
+    /* Opzionale, per dare un po' di respiro ai lati */
+}
 
 .box-layout-text-vertical {
     width: 90%;
@@ -24,7 +33,7 @@
 }
 
 .grid-menu {
-    padding-top: 10px;
+    padding-top: 1px;
 }
 
 .box-layout-right-button {
@@ -50,7 +59,7 @@
 }
 
 .title-container {
-    padding-top: 5px;
+    padding-top: 1px;
     display: flex;
     justify-content: center;
     align-items: center;
