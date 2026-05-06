@@ -127,8 +127,8 @@ const columns: GridColDef[] = [
         loading={false}
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}
-        pulsanti={pulsantiToolbar} // Il pulsante NEW finirà nella Toolbar a destra
-        
+        pulsanti={pulsantiToolbar}
+        toolbarColumnSplit={{ mainFlex: 11, actionFlex: 1, mainMinWidth: 150, actionMinWidth: 100 }}
       />
     </Box>
   );

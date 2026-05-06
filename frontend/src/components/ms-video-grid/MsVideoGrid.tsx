@@ -1,5 +1,6 @@
 "use client";
 import { i18n } from "@lingui/core";
+import SearchIcon from "@mui/icons-material/Search";
 import { useState } from 'react';
 import { ResponseI, showMessage, UserI } from '../../general/structure/Utils';
 import { ActivityLogI } from '../../page/page-activity/Activity';
@@ -199,16 +200,27 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
   return (
     <> {/* <--- AGGIUNTO FRAGMENT OBBLIGATORIO */}
 
-      {/* 🔍 SEARCH SEMPRE VISIBILE */}
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder={i18n._("cerca_video")}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-input"
-        />
-        <Button pulsanti={[searchButton(searchQuery)]} />
+      {/* 🔍 Ricerca video: label + campo con icona per chiarezza */}
+      <div className="search-stack">
+        <label className="search-label" htmlFor="gamification-video-search">
+          {i18n._("ricerca_video")}
+        </label>
+        <div className="search-container">
+          <div className="search-field-shell">
+            <SearchIcon className="search-field-icon" aria-hidden focusable={false} />
+            <input
+              id="gamification-video-search"
+              type="search"
+              placeholder={i18n._("cerca_video")}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+              autoComplete="off"
+              enterKeyHint="search"
+            />
+          </div>
+          <Button pulsanti={[searchButton(searchQuery)]} />
+        </div>
       </div>
 
       {/* --- NUOVO FILTRO FAVORITI --- */}
