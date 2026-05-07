@@ -1,24 +1,22 @@
-#per compilare il front end
-    docker network create backend_app-network || true
-    docker build -t frontend:1.0.1 .
-    docker rm -f frontend
+# Avvio in locale (istanza singola per servizio)
 
-#per avviare due istanze
+## Frontend in sviluppo
+    npm run dev
 
-    docker run -d --name frontend --network backend_app-network -p 3000:80 frontend:1.0.1 
-    docker run -d --name frontend --network backend_app-network -p 3001:80 frontend:1.0.1
+## Stack Docker locale (backend + nginx + frontend containerizzato)
+    docker compose -f backend/docker-compose.localhost.yml down
+    docker compose -f backend/docker-compose.localhost.yml up --build
 
-#per containerizzate il backend con 3 istanze di ogni microservizio.
+> Nota: in locale non usiamo piu lo scaling con `--scale`.
+> Il file `docker-compose.localhost.yml` avvia una sola istanza per ogni microservizio.
 
-    docker-compose up --scale activity-service=3 --scale auth-service=3 --scale family-service=3 --scale image-service=3 --scale user-point-service=3   --scale notification-service=3
-
-
-#FILE ENV EMPY_FRONTEND
+## Frontend env (`.env.local`)
+    # Client
     NEXT_PUBLIC_IMAGE_SERVER=
     NEXT_PUBLIC_CLIENT_GOOGLE_ID=
 
 
-#FILE ENV EMPY_BACKEND
+## Backend env (`backend/local.env`)
 
     # Database MongoDB
     MONGO_URI=

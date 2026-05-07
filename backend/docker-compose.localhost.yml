@@ -1,0 +1,215 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    image: docker.io/matt7046/frontend:1.0.1
+    container_name: frontend
+    # Aggiungi questo per evitare che il container si chiuda in certi ambienti
+    stdin_open: true
+    tty: true
+    env_file:
+      - local.env
+
+    networks:
+      - app-network    
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - 'RABBITMQ_DEFAULT_PASS=password'
+      - 'RABBITMQ_DEFAULT_USER=username'
+    env_file:
+      - local.env
+    networks:
+      - app-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.9.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ELASTIC_PASSWORD=password
+      - xpack.security.enabled=true
+
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.keystore.path=certs/elastic-certificates.p12
+      - xpack.security.http.ssl.keystore.password=password
+      - xpack.security.transport.ssl.enabled=false
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -k -u elastic:password https://localhost:9200 >/dev/null 2>&1 || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./elasticsearch/certs:/usr/share/elasticsearch/config/certs:ro
+      - esdata:/usr/share/elasticsearch/data
+    env_file:
+      - local.env
+    networks:      
+      - app-network
+      
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx.local.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - image-service
+      - user-point-service
+      - activity-service
+      - auth-service
+      - family-service
+      - notification-service
+    env_file:
+      - local.env
+    networks:
+      - app-network
+
+  user-point-service:
+    depends_on:
+      - rabbitmq
+    image: docker.io/matt7046/user-point-service:1.0.0
+    build:
+      context: ./ 
+      dockerfile: service/userPoint/Dockerfile
+    env_file:
+      - local.env
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/userPoint/src/main/resources/certificate:/app/certificate
+    networks:
+      - app-network
+
+  activity-service:
+    image: docker.io/matt7046/activity-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/activity/Dockerfile
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    env_file:
+      - local.env
+    
+    environment:     
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: username
+      SPRING_RABBITMQ_PASSWORD: password
+    volumes:
+      # Mappiamo la cartella dove hai salvato il file .p12
+      # Assicurati che il file si chiami elastic-truststore.p12 dentro quella cartella
+      - ./service/activity/src/main/resources/certificate:/app/certificate
+
+    networks:
+      - app-network
+
+  # RIMOSSO: "sleep infinity" (altrimenti l'app Java non parte mai)
+  # Il container userà l'ENTRYPOINT definito nel tuo Dockerfile
+
+  auth-service:
+    depends_on:
+      - rabbitmq
+    image: docker.io/matt7046/auth-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/auth/Dockerfile
+    env_file:
+      - local.env
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/auth/src/main/resources/certificate:/app/certificate      
+    networks:
+      - app-network
+
+  family-service:
+    depends_on:
+      - rabbitmq
+    image: docker.io/matt7046/family-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/family/Dockerfile
+    env_file:
+      - local.env
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/family/src/main/resources/certificate:/app/certificate
+    networks:
+      - app-network
+
+  notification-service:
+    depends_on:
+      - rabbitmq
+    image: docker.io/matt7046/notification-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/notification/Dockerfile
+    env_file:
+      - local.env
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/notification/src/main/resources/certificate:/app/certificate
+    networks:
+      - app-network
+
+  image-service:
+    depends_on:
+      - rabbitmq
+    image: docker.io/matt7046/image-service:1.0.0
+    build:
+      context: ./
+      dockerfile: service/image/Dockerfile
+    env_file:
+      - local.env
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=username
+      - SPRING_RABBITMQ_PASSWORD=password
+    volumes:
+      - ./service/image/src/main/resources/certificate:/app/certificate
+    networks:
+      - app-network
+volumes:
+  esdata:     
+
+networks:
+  app-network:
+    driver: bridge
+    external: true
+
+
+
