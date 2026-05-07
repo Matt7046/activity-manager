@@ -262,7 +262,7 @@ services:
           - image-service
 
 volumes:
-  esdata:     
+  esdata:
 
 networks:
   app-network:
