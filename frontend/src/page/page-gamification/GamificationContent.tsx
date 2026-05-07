@@ -66,20 +66,21 @@ const GamificationContent: React.FC<GamificationContentProps> = ({
   }, [selectedVideo]);
   return (
     <Box className="box-gamification-content">
-        <Typography variant="body2" color="text.secondary" className="popover-header-text">
-          <Trans id="info_guadagno_punti_video" /> <strong>{user?.emailUserCurrent}</strong>
-        </Typography>
-      <Grid size={{ xs: 12 }}>
-        <Box className="video-grid-wrapper">
-          <VideoGrid
-            selectedVideo={selectedVideo}
-            handlePlayVideo={(videoId) => setSelectedVideo(videoId)}
-            alertConfig={alertConfig}
-            user={user} />
-        </Box>
-      </Grid>
+      <Typography variant="body2" color="text.secondary" className="popover-header-text">
+        <Trans id="info_guadagno_punti_video" /> <strong>{user?.emailUserCurrent}</strong>
+      </Typography>
 
-      {/* Se aggiungerai altri elementi sotto, seguiranno il padding corretto */}
+      <Box className="gamification-section-card">
+        <Grid size={{ xs: 12 }}>
+          <Box className="video-grid-wrapper">
+            <VideoGrid
+              selectedVideo={selectedVideo}
+              handlePlayVideo={(videoId) => setSelectedVideo(videoId)}
+              alertConfig={alertConfig}
+              user={user} />
+          </Box>
+        </Grid>
+      </Box>
     </Box>
   );
 

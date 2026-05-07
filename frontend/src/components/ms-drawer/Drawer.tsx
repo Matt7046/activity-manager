@@ -61,9 +61,6 @@ const Drawer = observer((props: {
         open={statoComponente[props.anchor]}
         onClose={toggleDrawer(props.anchor, false, setStatoComponente, statoComponente)}
         onOpen={toggleDrawer(props.anchor, true, setStatoComponente, statoComponente)}
-        PaperProps={{
-          sx: { elevation: 0 } // Rimuove l'ombra pesante di default
-        }}
       >
         {listaItem(props.anchor, props.sezioni, setStatoComponente, statoComponente)}
       </SwipeableDrawer>
@@ -106,15 +103,15 @@ const listaItem = (
     onKeyDown={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
   >
     {/* Header opzionale del menu */}
-    <Box sx={{ p: 2, borderBottom: '1px solid #eee' }}>
-      <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
+    <Box className="drawer-header">
+      <Typography variant="h6" className="drawer-header-title">
         <Trans id="menu_navigazione" />
       </Typography>
     </Box>
 
     {sezioni.map((section, sectionIndex) => (
       <React.Fragment key={sectionIndex}>
-        <List sx={{ pt: 1, pb: 1 }}>
+        <List className="drawer-list">
           {section.map((menulaterale) => (
             <ListItem key={menulaterale.testo} disablePadding>
               <ListItemButton

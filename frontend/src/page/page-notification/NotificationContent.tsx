@@ -1,9 +1,10 @@
 "use client";
 import { Trans, useLingui } from "@lingui/react";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { Box, Collapse, Divider, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Collapse, Divider, Typography } from "@mui/material";
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import React, { useEffect, useState } from "react";
 import { AlertConfig } from "../../components/ms-alert/Alert";
@@ -31,17 +32,11 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
     page: 0,
     pageSize: 5,
   });
-  const notify: NotificationI[] = [];
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [expandedRowId, setExpandedRowId] = useState<number | string | null>(null);
   const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio  
   const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
-
-  const handleToggle = (index: number) => {
-    setExpandedIndex(prev => (prev === index ? null : index));
-  };
 
   useEffect(() => {
     fetchNotifications();
@@ -124,13 +119,13 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
         const testoKey = getTranslatedNotification(x.message, i18n)
 
         return (
-          <Box sx={{ width: '100%' }}>
+          <Box className="notification-row-cell">
             <Box
-              sx={{ display: 'flex', alignItems: 'center', py: 1, cursor: 'pointer' }}
+              className={`notification-row-header ${isExpanded ? 'is-expanded' : ''}`}
               onClick={() => setExpandedRowId(isExpanded ? null : params.id)}
             >
-              <InfoOutlinedIcon sx={{ mr: 2, color: isExpanded ? '#1976d2' : '#b2bec3' }} />
-              <Box sx={{ flexGrow: 1 }}>
+              <InfoOutlinedIcon className={`notification-row-info ${isExpanded ? 'is-expanded' : ''}`} />
+              <Box className="notification-row-main">
                 {x.dateSender && (
                   <Typography className="notification-date-badge">
                     {getDateStringRegularFormat(x.dateSender)}
@@ -141,18 +136,14 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
                 </Typography>
               </Box>
               <KeyboardArrowDownIcon
-                sx={{
-                  transform: isExpanded ? 'rotate(180deg)' : 'none',
-                  transition: '0.3s',
-                  color: '#666'
-                }}
+                className={`notification-row-arrow ${isExpanded ? 'is-expanded' : ''}`}
               />
             </Box>
 
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              <Box sx={{ pl: 6, pb: 2, bgcolor: 'inherit' }}>
+              <Box className="notification-row-details">
                 <Typography variant="body2" color="text.secondary"><strong><Trans id="inviato_da" /></strong> {x.userSender}</Typography>
-                <Divider sx={{ my: 1, opacity: 0.3 }} />
+                <Divider className="notification-row-divider" />
                 <Typography variant="body2" color="text.secondary"><strong><Trans id="stato" /></strong> {i18n._(x.status.toLowerCase())}</Typography>
               </Box>
             </Collapse>
@@ -165,34 +156,42 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
   return (
     <Box className="notification-container">
       {/* SEZIONE FILTRI */}
-      <Box className="filter-container">
-        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 1 }}>
-          <FilterListIcon sx={{ fontSize: 18, mr: 1, color: '#1976d2' }} />
-          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}><Trans id="filtra_periodo" /></Typography>
-        </Box>
+      <Accordion className="notification-filter-accordion" disableGutters>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon className="notification-filter-expand-icon" />}
+          className="notification-filter-summary"
+        >
+          <Box className="notification-filter-header">
+            <FilterListIcon className="notification-filter-icon" />
+            <Typography variant="subtitle2" className="notification-filter-title"><Trans id="filtra_periodo" /></Typography>
+          </Box>
+        </AccordionSummary>
+        <AccordionDetails className="notification-filter-details">
+          <Box className="notification-filter-container">
+            <Box className="notification-filter-group">
+              <label className="notification-filter-label"><Trans id="data_inizio" /></label>
+              <input
+                type="date"
+                className="notification-date-input"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </Box>
 
-        <Box className="filter-group">
-          <label className="filter-label"><Trans id="data_inizio" /></label>
-          <input
-            type="date"
-            className="date-input"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-        </Box>
+            <Box className="notification-filter-group">
+              <label className="notification-filter-label"><Trans id="data_fine" /></label>
+              <input
+                type="date"
+                className="notification-date-input"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </Box>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
 
-        <Box className="filter-group">
-          <label className="filter-label"><Trans id="data_fine" /></label>
-          <input
-            type="date"
-            className="date-input"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-        </Box>
-      </Box>
-
-      <Box className="grid-container">
+      <Box className="notification-grid-container">
         <DataGridComponent
           pulsanti={[pulsanteNotification]} // Se vuoi aggiungere pulsanti specifici per la toolbar, passali qui
           rows={filteredNotifications}

@@ -33,7 +33,6 @@ const PopoverComponent: React.FC<PopoverComponentProps> = ({
       open={openAnchor}
       anchorEl={anchorEl}
       onClose={handleCloseAnchor}
-      // Cambiato in right per non coprire l'icona
       anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'right',
@@ -65,8 +64,8 @@ const PopoverComponent: React.FC<PopoverComponentProps> = ({
             </Box>
           ))
         ) : (
-          <Box sx={{ p: 3, textAlign: 'center' }}>
-            <Typography sx={{ color: '#94a3b8', fontSize: '0.85rem' }}>
+          <Box className="notification-empty">
+            <Typography className="notification-empty-text">
               <Trans id="nessuna_nuova_notifica" />
             </Typography>
           </Box>

@@ -1,18 +1,61 @@
-.filter-container {
+.notification-filter-container {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-4);
-  padding: 0 0 var(--space-6) 0;
-  background-color: var(--color-info-soft-2);
-  border: 1px solid var(--color-info-soft-4);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  border-bottom: 1px solid var(--color-border);
+  padding: 0;
   width: 100%;
   box-sizing: border-box;
 }
 
-.filter-group {
+.notification-filter-accordion {
+  width: 100%;
+  margin-bottom: var(--space-5);
+  background-color: var(--color-info-soft-2) !important;
+  border: 1px solid var(--color-info-soft-4);
+  border-radius: var(--radius-lg) !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+
+.notification-filter-accordion::before {
+  display: none;
+}
+
+.notification-filter-summary {
+  min-height: 48px !important;
+  padding: 0 var(--space-4) !important;
+}
+
+.notification-filter-summary .MuiAccordionSummary-content {
+  margin: var(--space-2) 0 !important;
+}
+
+.notification-filter-expand-icon {
+  color: var(--color-primary);
+}
+
+.notification-filter-details {
+  padding: 0 var(--space-4) var(--space-4) !important;
+}
+
+.notification-filter-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.notification-filter-icon {
+  font-size: 18px !important;
+  margin-right: var(--space-2);
+  color: var(--color-primary);
+}
+
+.notification-filter-title {
+  font-weight: 700 !important;
+  color: var(--color-text);
+}
+
+.notification-filter-group {
   flex: 1;
   min-width: 200px;
   display: flex;
@@ -20,7 +63,7 @@
   gap: var(--space-2);
 }
 
-.filter-label {
+.notification-filter-label {
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -28,7 +71,7 @@
   letter-spacing: 0.5px;
 }
 
-.date-input {
+.notification-date-input {
   padding: 10px 14px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
@@ -39,9 +82,9 @@
   transition: border-color 0.2s;
 }
 
-.date-input:focus {
+.notification-date-input:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 
 /* Badge della data sulla notifica */
@@ -56,35 +99,47 @@
   display: inline-block;
 }
 
-/* Righe alterne: azzurro chiarissimo per le righe pari */
-.notification-item:nth-child(even) {
-  background-color: var(--color-info-soft-2);
-  /* Azzurro molto tenue */
+.notification-row-cell {
+  width: 100%;
 }
 
-/* Righe bianche per le dispari */
-.notification-item:nth-child(odd) {
-  background-color: var(--color-surface);
+.notification-row-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: var(--space-2) 0;
 }
 
-/* Hover più evidente per distinguere la riga su cui si trova il mouse */
-.notification-item:hover {
-  background-color: var(--color-info-soft) !important;
-  /* Azzurro un po' più marcato */
+.notification-row-info {
+  margin-right: var(--space-3);
+  color: var(--color-muted-300);
 }
 
-/* Se la riga è espansa, manteniamo un colore di sfondo che dia continuità */
-.notification-header.is-expanded {
-  background-color: var(--color-info-soft-3);
-  /* Azzurro cielo quando aperto */
-  border-bottom: 1px solid var(--color-info-soft-4);
+.notification-row-info.is-expanded {
+  color: var(--color-primary);
 }
 
-/* Stile per i dettagli quando la riga è espansa */
-.notification-details {
-  padding: 0 24px 20px 48px;
-  background-color: inherit;
-  /* Segue il colore della riga (bianco o azzurrino) */
+.notification-row-main {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.notification-row-arrow {
+  color: var(--color-muted-500);
+  transition: transform 0.3s ease;
+}
+
+.notification-row-arrow.is-expanded {
+  transform: rotate(180deg);
+}
+
+.notification-row-details {
+  padding: 0 var(--space-2) var(--space-2) 48px;
+}
+
+.notification-row-divider {
+  margin: var(--space-2) 0 !important;
+  opacity: 0.3;
 }
 
 /* 1. Applichiamo lo stesso wrapper di Schedule per margini e spazi */
@@ -99,9 +154,8 @@
   overflow: hidden;
 }
 
-.grid-container {
+.notification-grid-container {
   width: 100% !important;
-  margin-top: var(--space-5);
   box-sizing: border-box;
   background-color: var(--color-surface);
   border-radius: var(--radius-lg);
@@ -112,12 +166,12 @@
 }
 
 /* Se vuoi che le righe espanse non rompano il layout ma siano scrollabili internamente */
-.grid-container .MuiDataGrid-main {
+.notification-grid-container .MuiDataGrid-main {
   min-height: 300px;
 }
 
 @media (max-width: 900px) {
-  .notification-details {
+  .notification-row-details {
     padding: 0 var(--space-4) var(--space-4) var(--space-6);
   }
 }
@@ -130,7 +184,15 @@
     padding: var(--space-4);
   }
 
-  .filter-group {
+  .notification-filter-group {
     min-width: 100%;
+  }
+
+  .notification-filter-summary {
+    padding: 0 var(--space-3) !important;
+  }
+
+  .notification-filter-details {
+    padding: 0 var(--space-3) var(--space-3) !important;
   }
 }

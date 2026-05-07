@@ -69,6 +69,28 @@
   line-height: 1.4;
 }
 
+.alert-mui-custom {
+  width: 100%;
+  border-radius: 16px !important;
+}
+
+.alert-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.alert-title-text {
+  font-weight: 800 !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase;
+  margin-bottom: 4px !important;
+}
+
+.alert-body-text {
+  font-size: 0.85rem !important;
+  opacity: 0.9;
+}
+
 /* Animazione di entrata */
 @keyframes slideInRight {
   from { transform: translateX(100%); opacity: 0; }

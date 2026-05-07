@@ -6,16 +6,18 @@
 
 .home-page-main {
   flex: 1 1 auto;
-    min-height:57dvh;
-
+  min-height:57dvh;
 }
 
 .welcome-container1 {
-  margin-top: var(--space-2) !important;
+  margin-top: var(--space-6);
+  padding-inline: var(--space-2);
   color: var(--color-text-muted);
   max-width: 5000px;
   margin-left: auto;
   margin-right: auto;
+  display: flex;
+  justify-content: center;
 }
 
 .login-paper {
@@ -80,15 +82,50 @@
 
 .box-accedi {
   padding-top: 1px;
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-2);
 }
 
 .register-annotation {
+  margin-top: var(--space-2);
   margin-bottom: var(--space-3);
   color: var(--color-text-muted);
+  text-align: center;
+}
+
+.register-link {
+  text-decoration: none;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.register-link:hover {
+  text-decoration: underline;
 }
 
 .box-pulsanti-login {
   padding-top: var(--space-3);
+}
+
+.simulated-login-grid {
+  display: flex;
+}
+
+.simulated-login-button-full {
+  height: 100%;
+}
+
+.box-accedi-divider {
+  flex-grow: 1;
+}
+
+.box-accedi-text {
+  margin-inline: var(--space-2) !important;
+}
+
+.layout-alert-spaced {
+  margin-top: var(--space-2) !important;
 }
 
 @media (max-width: 600px) {

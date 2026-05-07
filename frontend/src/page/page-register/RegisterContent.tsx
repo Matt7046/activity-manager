@@ -106,9 +106,9 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
   };
 
   const pulsanteBlue: Pulsante = {
-    icona: 'fas fa-solid fa-floppy-disk',
+    icona: 'fas fa-circle-check',
     funzione: () => salvaRecord(user), // Passi la funzione direttamente
-    nome: 'blue',
+    nome: ButtonName.RED,
     title: i18n._("salva"),
     configDialogPulsante: { message: i18n._("vuoi_registrarti"), showDialog: true }
   };
@@ -131,121 +131,117 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
 
   return (
     <>
-      {/* Campi di registrazione principali */}
-      <Box mb={3} className='box-register'>
+      <Box className='box-register-content'>
         <Grid size={{ xs: 12, sm: 12 }}>
           <Box mb={3} className='testo-register'>
-
             <Typography variant="body2" color="text.secondary">
-              <strong> <Trans id="register" /></strong>
+              <strong><Trans id="register" /></strong>
             </Typography>
           </Box>
-
         </Grid>
-        <TextField
-          label={i18n._("email")}
-          variant="outlined"
-          fullWidth
-          value={email}
-          onChange={handleChangeEmail}
-          disabled={user?.email !== undefined}
-        />
 
+        <Box className="register-section-card">
+          {/* Campi di registrazione principali */}
+          <Box className='box-register'>
+            <TextField
+              label={i18n._("email")}
+              variant="outlined"
+              fullWidth
+              value={email}
+              onChange={handleChangeEmail}
+              disabled={user?.email !== undefined}
+            />
 
-        <Box mb={2} >
-          <TextField
-            id="password"
-            label={i18n._("password")}
-            variant="outlined"
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            onChange={handleChangePassword}
-            fullWidth
-            /* Corretto l'annidamento e le chiusure delle parentesi */
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={togglePasswordVisibility}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }, // Chiude input
-            }} // Chiude slotProps
-          />
-        </Box>
+            <Box mb={2}>
+              <TextField
+                id="password"
+                label={i18n._("password")}
+                variant="outlined"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={handleChangePassword}
+                fullWidth
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={togglePasswordVisibility}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            </Box>
 
+            {/* Divider */}
+            <Box mb={2}>
+              <Divider className="register-divider" />
+              <Typography variant="body2" color="textSecondary">
+                <strong><Trans id="email_figli" /></strong>
+              </Typography>
+              <Divider className="register-divider" />
 
-
-
-        {/* Divider */}
-        <Box mb={2}>
-          <Divider sx={{ flexGrow: 1 }} />
-          <Typography variant="body2" color="textSecondary">
-            <strong><Trans id="email_figli" /></strong>
-          </Typography>
-          <Divider sx={{ flexGrow: 1 }} />
-
-          {/* Email dei figli */}
-          <Box>
-            {emailFigli.map((emailFiglio, index) => (
-              <Box className="box-child" key={index} mb={2}>
-                <Grid container spacing={2} alignItems="center">
-                  {/* Email del figlio */}
-                  <Grid size={{ xs: 9 }}>
-                    <TextField
-                      label={`Email Figlio ${index + 1}`}
-                      variant="outlined"
-                      fullWidth
-                      value={emailFiglio.email}
-                      onChange={(e) => handleChangeEmailRegister(index, e.target.value)}
-                      /* In MUI v6 usiamo slotProps invece di InputProps */
-                      slotProps={{
-                        input: {
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <IconButton
-                                aria-label={i18n._("remove")}
-                                onClick={() => toggleIcon(index)}
-                                onMouseDown={handleMouseDownPassword}
-                                onMouseUp={handleMouseUpPassword}
-                                edge="start" // Cambiato in start perché è uno startAdornment
-                              >
-                                <RemoveIcon />
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }, // Chiude input
-                      }} // Chiude slotProps
-                    />
-
-                  </Grid>
-                  {/* Points del figlio (fisso 100) */}
-                  <Grid size={{ xs: 3 }}>
-                    <TextField
-                      label={labelRegister.points}
-                      value={100}
-                      disabled
-                      type="number"
-                      variant="outlined" // uguale agli altri
-                      fullWidth
-                    />
-                  </Grid>
-                </Grid>
+              {/* Email dei figli */}
+              <Box>
+                {emailFigli.map((emailFiglio, index) => (
+                  <Box className="box-child" key={index} mb={2}>
+                    <Grid container spacing={2} alignItems="center">
+                      {/* Email del figlio */}
+                      <Grid size={{ xs: 9 }}>
+                        <TextField
+                          label={`Email Figlio ${index + 1}`}
+                          variant="outlined"
+                          fullWidth
+                          value={emailFiglio.email}
+                          onChange={(e) => handleChangeEmailRegister(index, e.target.value)}
+                          slotProps={{
+                            input: {
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <IconButton
+                                    aria-label={i18n._("remove")}
+                                    onClick={() => toggleIcon(index)}
+                                    onMouseDown={handleMouseDownPassword}
+                                    onMouseUp={handleMouseUpPassword}
+                                    edge="start"
+                                  >
+                                    <RemoveIcon />
+                                  </IconButton>
+                                </InputAdornment>
+                              ),
+                            },
+                          }}
+                        />
+                      </Grid>
+                      {/* Points del figlio (fisso 100) */}
+                      <Grid size={{ xs: 3 }}>
+                        <TextField
+                          label={labelRegister.points}
+                          value={100}
+                          disabled
+                          type="number"
+                          variant="outlined"
+                          fullWidth
+                        />
+                      </Grid>
+                    </Grid>
+                  </Box>
+                ))}
               </Box>
-            ))}
-          </Box >
-        </Box>
+            </Box>
 
-        {/* Pulsanti */}
-        < Grid container justifyContent="flex-end" spacing={2} className="button-right" >
-          <Button pulsanti={[pulsanteNew]} />
-          <Button pulsanti={[pulsanteBlue]} />
-        </Grid >
+            {/* Pulsanti */}
+            <Grid container justifyContent="flex-end" spacing={2} className="button-right">
+              <Button pulsanti={[pulsanteNew]} />
+              <Button pulsanti={[pulsanteBlue]} />
+            </Grid>
+          </Box>
+        </Box>
       </Box>
     </>
   );

@@ -70,14 +70,13 @@ const Alert: React.FC<CustomAlertProps> = ({ message, onClose }) => {
         iconMapping={{
           // Puoi personalizzare le icone qui se vuoi
         }}
-        sx={{ width: '100%', borderRadius: '16px' }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography sx={{ fontWeight: 800, fontSize: '0.85rem', textTransform: 'uppercase', mb: 0.5 }}>
+        <Box className="alert-content">
+          <Typography className="alert-title-text">
             {message.titleMessage}
               </Typography>
           {message?.message?.map((msg, index) => (
-            <Typography key={index} sx={{ fontSize: '0.85rem', opacity: 0.9 }}>
+            <Typography key={index} className="alert-body-text">
               {msg}
             </Typography>
           ))}

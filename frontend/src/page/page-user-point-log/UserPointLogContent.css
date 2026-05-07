@@ -1,5 +1,12 @@
 
 /* --- Mini-Card del Singolo Log --- */
+.log-header-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-3);
+  gap: var(--space-2);
+}
+
 .log-card-item {
   background: var(--color-surface) !important;
   border-radius: var(--radius-lg) !important;
@@ -81,4 +88,15 @@
 .log-card-scroll-item {
   width: 280px; /* Dimensione leggermente aumentata per leggibilità */
   flex-shrink: 0;
+}
+
+.log-card-content {
+  padding: var(--space-5) !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.log-footer-text-italic {
+  font-style: italic;
 }

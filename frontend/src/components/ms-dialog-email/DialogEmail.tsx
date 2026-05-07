@@ -41,30 +41,32 @@ return (
       </div>
 
       <DialogContent className="dialog-body" >
-        {/* Box Istruzioni */}
-        <div className="instruction-box">
-          <Typography className="instruction-text">
-            <Trans id="seleziona_lindirizzo_email_del_tutorato_per_procedere_con_lassegnazione" />
-          </Typography>
-        </div>
+        <div className="dialog-email-section-card">
+          {/* Box Istruzioni */}
+          <div className="instruction-box">
+            <Typography className="instruction-text">
+              <Trans id="seleziona_lindirizzo_email_del_tutorato_per_procedere_con_lassegnazione" />
+            </Typography>
+          </div>
 
-        {/* Form Field */}
-        <InputLabel sx={{ ml: 1, fontSize: '0.85rem', fontWeight: 600, color: '#4b5563' }}>
-          <Trans id="indirizzo_email" />
-        </InputLabel>
-        <Select
-          value={email}
-          onChange={(event: any) => handleEmailChange(event)}
-          fullWidth
-          className="dialog-select-custom"
-          displayEmpty
-        >
-          {emailOptions?.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </Select>
+          {/* Form Field */}
+          <InputLabel className="dialog-email-label">
+            <Trans id="indirizzo_email" />
+          </InputLabel>
+          <Select
+            value={email}
+            onChange={(event: any) => handleEmailChange(event)}
+            fullWidth
+            className="dialog-select-custom"
+            displayEmpty
+          >
+            {emailOptions?.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
       </DialogContent>
 
       <DialogActions className="dialog-actions-custom">

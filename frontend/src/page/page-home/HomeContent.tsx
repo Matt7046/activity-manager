@@ -320,7 +320,7 @@ const GoogleAuthComponent = () => {
     <>
 
       {/* Alert */}
-      <Grid container justifyContent="flex-end" className="layout-alert" sx={{ mt: 2 }}>
+      <Grid container justifyContent="flex-end" className="layout-alert layout-alert-spaced">
         {open && (
           <Alert onClose={handleClose} message={message} />
         )}
@@ -330,42 +330,33 @@ const GoogleAuthComponent = () => {
 
       <Box className="home-page-shell">
         <Box className="home-page-main">
-          {/* Alert */}
-          <Grid container justifyContent="flex-end" className="layout-alert" sx={{ mt: 2 }}>
-            {open && (
-              <Alert onClose={handleClose} message={message} />
-            )}
-          </Grid>
-
           {/* Main Login Box */}
           <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
-            <Box display="flex" justifyContent="center" mt={6} px={2} className="welcome-container1">
+            <Box className="welcome-container1">
               <Paper elevation={3} className="login-paper">
                 <Box mb={3} className="box-pulsanti-login">
 
                   {!hiddenLogin && (
                     <Grid container spacing={2} alignItems="stretch"> {/* stretch forza i figli ad avere la stessa altezza */}
-                      <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+                      <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
                         <ButtonMui
                           variant="contained"
                           color="primary"
                           onClick={() => simulateLogin(TypeUser.STANDARD)}
                           fullWidth
-                          className="simulated-login-button"
-                          sx={{ height: '100%' }}
+                          className="simulated-login-button simulated-login-button-full"
                         >
                           <Trans id='login_simulato_utente_base' />
                         </ButtonMui>
                       </Grid>
 
-                      <Grid size={{ xs: 12, sm: 6 }} sx={{ display: 'flex' }}>
+                      <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
                         <ButtonMui
                           variant="contained"
                           color="primary"
                           onClick={() => simulateLogin(TypeUser.FAMILY)}
                           fullWidth
-                          className="simulated-login-button"
-                          sx={{ height: '100%' }}
+                          className="simulated-login-button simulated-login-button-full"
                         >
                           <Trans id='login_simulato_utente_parentale' />
                         </ButtonMui>
@@ -415,20 +406,13 @@ const GoogleAuthComponent = () => {
                   <Trans id="accedi" />
                 </ButtonMui>
 
-                <Box mt={2} textAlign="center" className="register-annotation">
+                <Box className="register-annotation">
                   <Typography variant="body2">
                     <Trans id='nuovo_account' />{" "}
                     <MuiLink
                       component={LinkNext}
                       href="/register"
-                      sx={{
-                        textDecoration: 'none',
-                        color: 'var(--color-primary)',
-                        fontWeight: 600,
-                        '&:hover': {
-                          textDecoration: 'underline',
-                        }
-                      }}
+                      className="register-link"
                     >
                       <Trans id="registrati" />
                     </MuiLink>
@@ -436,12 +420,12 @@ const GoogleAuthComponent = () => {
                 </Box>
 
                 {/* Divider */}
-                <Box display="flex" alignItems="center" mb={2} className='box-accedi'>
-                  <Divider sx={{ flexGrow: 1 }} />
-                  <Typography sx={{ mx: 2 }} variant="body2" color="textSecondary">
+                <Box className='box-accedi'>
+                  <Divider className="box-accedi-divider" />
+                  <Typography className="box-accedi-text" variant="body2" color="textSecondary">
                     <Trans id="oppure_accedi_con" />
                   </Typography>
-                  <Divider sx={{ flexGrow: 1 }} />
+                  <Divider className="box-accedi-divider" />
                 </Box>
 
                 {/* Login Social */}
