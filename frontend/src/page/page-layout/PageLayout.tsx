@@ -51,6 +51,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 }) => {
   const { user, setUser } = useUser();
   const { i18n } = useLingui();
+
+  useEffect(() => {
+    // Block direct access to internal pages when user context is missing.
+if (!user?.email && section.path !== SectionName.ROOT && section.path !== SectionName.HOME) {      navigateRouting(navigate, SectionName.ROOT, {});
+    }
+  }, [user, navigate]);
+
+
+
   const logout = (): void => {
     googleLogout();
     setUser(null);

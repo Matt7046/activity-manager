@@ -1,0 +1,78 @@
+.personality-container {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: var(--space-6);
+  font-family: var(--font-sans-modern);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+.personality-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-4);
+}
+
+.personality-title {
+  font-size: 1.95rem;
+  font-weight: 800;
+  margin-bottom: var(--space-5);
+  color: var(--color-text);
+}
+
+.personality-identity-card {
+  background-color: var(--color-info-soft-2);
+  border: 1px solid var(--color-info-soft-4);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.personality-subtitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-3);
+  color: var(--color-primary-hover);
+}
+
+.personality-subtitle-small {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-2);
+  color: var(--color-text);
+}
+
+.personality-text {
+  font-size: 1rem;
+  margin-bottom: var(--space-3);
+  color: var(--color-text);
+}
+
+.personality-preline {
+  white-space: pre-line;
+}
+
+.personality-list {
+  margin: 0 0 var(--space-3) var(--space-5);
+  padding: 0;
+}
+
+.personality-list li {
+  margin-bottom: var(--space-1);
+}
+
+@media (max-width: 600px) {
+  .personality-container {
+    padding: var(--space-4);
+  }
+
+  .personality-title {
+    font-size: 1.5rem;
+  }
+
+  .personality-subtitle {
+    font-size: 1.15rem;
+  }
+}
