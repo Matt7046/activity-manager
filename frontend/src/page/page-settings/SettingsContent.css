@@ -61,22 +61,23 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: auto;
   gap: var(--space-3);
+  box-sizing: border-box;
 }
 
 .settings-action-card {
   background: var(--color-info-soft-2);
   border: 1px solid var(--color-info-soft-4);
   border-radius: var(--radius-md);
-  margin: var(--space-3) var(--space-5);
+  margin: var(--space-3) var(--space-4);
   box-shadow: var(--shadow-sm);
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 /* Più aria intorno al contenuto (stesso trattamento per tutte le righe/card) */
 .action-row.settings-action-card {
-  padding: var(--space-6);
+  padding: var(--space-5);
   box-sizing: border-box;
 }
 
@@ -124,7 +125,7 @@
 }
 
 .settings-action-card .action-button-container {
-  margin-right: var(--space-1);
+  margin-right: 0;
 }
 
 .delete-icon {

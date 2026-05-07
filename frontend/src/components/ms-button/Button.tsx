@@ -103,8 +103,8 @@ const Button = observer((props: { pulsanti: Pulsante[] }) => {
           </DialogTitle>
         </div>
 
-        <DialogContent >
-          {/* Testo avvolto da un contenitore stilizzato */}
+        <DialogContent className="dialog-body-custom">
+          {/* Sezione interna in stile card soft coerente col progetto */}
           <div className="dialog-message-container">
             <DialogContentText className='dialog-text-custom'>
               {messageTitle || "Sei sicuro di voler procedere con questa operazione?"}

@@ -1,4 +1,5 @@
 "use client";
+import { ButtonName } from "@/general/structure/Constant";
 import { i18n } from "@lingui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from 'react';
@@ -91,7 +92,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
   const searchButton = (testo: string): Pulsante => {
     return {
       icona: "fas fa-search",
-      nome: "blue",
+      nome: ButtonName.BLUE,
       title: i18n._("ricerca_video"),
       funzione: () => {
         console.log("Ricerca video:", testo)
@@ -175,7 +176,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
   const createButtonWatch = (videoId: VideoI): Pulsante[] => [
     {
       icona: "fas fa-play",
-      nome: "blue",
+      nome: ButtonName.RED,
       title: i18n._("guarda_video"),
       // Attiva la visualizzazione del player e nasconde la griglia
       funzione: () => onPlayClick(videoId.videoId),
@@ -188,7 +189,7 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
 
 
   const createButtons = (videoId: VideoI): Pulsante[] => {
-    return createButtonWatch(videoId).concat(createButtonPreferiti(videoId))
+    return createButtonPreferiti(videoId).concat(createButtonWatch(videoId))
   }
 
   const createButtonsSelectedVideo = (videoId: string): Pulsante[] => {

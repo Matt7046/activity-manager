@@ -120,7 +120,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   };
 
   const pulsanteSave: Pulsante = {
-    icona: 'fas fa-save',
+    icona: 'fas fa-circle-check',
     funzione: () => handleButtonClick(),
     nome: ButtonName.RED,
     disableButton: disableButtonSave,
