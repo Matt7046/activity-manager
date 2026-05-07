@@ -72,6 +72,20 @@
   background-color: var(--color-primary-hover) !important;
 }
 
+.personality-link-row {
+  margin-top: var(--space-3) !important;
+}
+
+.personality-link {
+  text-decoration: none;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.personality-link:hover {
+  text-decoration: underline;
+}
+
 @media (max-height: 900px) {
   .welcome-container {
     padding: var(--space-2) var(--space-4) var(--space-2);

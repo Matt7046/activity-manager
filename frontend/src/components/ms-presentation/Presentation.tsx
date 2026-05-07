@@ -1,7 +1,8 @@
 "use client";
 import { navigateRouting } from "@/general/structure/Utils";
-import { Trans } from "@lingui/react";
-import { Box, Button, Typography } from '@mui/material';
+import { Trans, useLingui } from "@lingui/react";
+import { Box, Button, Link as MuiLink, Typography } from '@mui/material';
+import LinkNext from "next/link";
 import { useRouter } from 'next/navigation';
 import { SectionName } from '../../general/structure/Constant';
 import BannerOpenSource from '../ms-banner/Banner';
@@ -18,6 +19,7 @@ interface PresentationProps {
 
 const Presentation: React.FC<PresentationProps> = ({ }) => {
   const router = useRouter();
+  const { i18n } = useLingui();
 
   return (
     <>
@@ -53,6 +55,12 @@ const Presentation: React.FC<PresentationProps> = ({ }) => {
             >
               <Trans id='testo_button' />
             </Button>
+
+            <Typography variant="body2" className="personality-link-row">
+              <MuiLink component={LinkNext} href="/personality" className="personality-link">
+                {i18n._("personality_discover_link")}
+              </MuiLink>
+            </Typography>
           </Box>
         </Box>
       </Box>

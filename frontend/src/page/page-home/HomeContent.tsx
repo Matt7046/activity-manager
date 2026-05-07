@@ -417,6 +417,11 @@ const GoogleAuthComponent = () => {
                       <Trans id="registrati" />
                     </MuiLink>
                   </Typography>
+                  <Typography variant="body2" className="personality-annotation">
+                    <MuiLink component={LinkNext} href="/personality" className="register-link">
+                      {i18n._("personality_discover_link")}
+                    </MuiLink>
+                  </Typography>
                 </Box>
 
                 {/* Divider */}
