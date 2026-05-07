@@ -1,59 +1,41 @@
 @echo off
+setlocal
 
+rem Torna alla directory principale
+cd ..
+cd ..
 
-rem Torna alla directory principale e esegui mvn clean install
-cd..
-cd..
-
-
+rem --- FRONTEND ---
 cd frontend
-if exist "node_modules" (
-    echo La cartella node_modules esiste.
-) else (
-    echo La cartella node_modules non esiste.
-    echo Procedo con l'esecuzione di npm install...
-    call npm install
-)
 
-docker network create app-network
-echo Build dell'immagine...
+rem Crea la rete solo se non esiste
+docker network inspect app-network >nul 2>&1 || docker network create app-network
+
+echo Build dell'immagine frontend...
 docker build -t frontend:1.0.1 .
 
-REM Fermare e rimuovere un container se esiste (frontend)
-FOR /F %%i IN ('docker ps -aq -f "name=^frontend$"') DO docker rm -f %%i
+echo Pulizia profonda container sulla porta 3001...
+rem Questo comando trova e killa qualsiasi container che stia occupando la porta 3001
+for /f "tokens=*" %%i in ('docker ps -q --filter "publish=3001"') do (
+    echo Trovato container %%i sulla porta 3001. Rimozione in corso...
+    docker rm -f %%i
+)
 
-echo Avvio container frontend sulla porta 3000...
-docker run -d --name frontend0 --network app-network -p 3000:80 frontend:1.0.1
+rem Per sicurezza, rimuoviamo anche se esiste un container di nome frontend0
+docker rm -f frontend0 >nul 2>&1
 
-REM Fermare e rimuovere un container se esiste (frontend1)
-FOR /F %%i IN ('docker ps -aq -f "name=^frontend1$"') DO docker rm -f %%i
+echo Avvio container frontend sulla porta 3001...
+docker run -d --name frontend0 --network app-network -p 3001:3000 frontend:1.0.1
 
-echo Avvio container frontend1 sulla porta 3001...
-docker run -d --name frontend1 --network app-network -p 3001:80 frontend:1.0.1
-
-
-@echo off
-
+rem --- BACKEND ---
 cd ..
 cd backend
-@echo off
 
-setlocal
-set container_id=backend
-IF DEFINED container_id (
-    echo Fermando e rimuovendo il container: "backend"
-    docker-compose down
-    echo container chiamato "backend" eliminato.
+echo Gestione Backend con Docker Compose (localhost)...
+call docker-compose -f docker-compose.localhost.yml down
 
-) ELSE (
-    echo Nessun container chiamato "backend" trovato.
-)
-endlocal
+echo Avvio dei container con Docker Compose (localhost)...
+call docker-compose -f docker-compose.localhost.yml up --build
 
-echo Avvio dei container con Docker Compose...
-call docker-compose up --build
-
-
+echo Operazione completata!
 pause
-
-
