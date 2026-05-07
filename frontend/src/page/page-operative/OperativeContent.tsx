@@ -185,78 +185,83 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
           {/* Titolo con email */}
           <Grid size={{ xs: 12, sm: 12 }}>
             <Typography variant="body2" color="text.secondary">
-            {user?.type === TypeUser.FAMILY ? (
-      <Trans id="operazioni_attivita" />
-    ) : (
-       <Trans id="operazioni_attivita_child" />
-    )} <strong>{user?.emailUserCurrent}</strong>
+              {user?.type === TypeUser.FAMILY ? (
+                <Trans id="operazioni_attivita" />
+              ) : (
+                <Trans id="operazioni_attivita_child" />
+              )}{" "}
+              <strong>{user?.emailUserCurrent}</strong>
             </Typography>
-          </Grid>
-
-          {/* Prima riga */}
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <FormControl fullWidth>
-              <TextField
-                label={i18n._("email")}
-                value={user?.emailChild}
-                onChange={(e) => operativeStore.setEmailField(e.target.value)}
-                fullWidth
-                margin="normal"
-                disabled={true}
-              />
-            </FormControl>
-          </Grid>
-
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <FormControl className="form-control-operative" variant="standard" fullWidth>
-              <InputLabel htmlFor="filled-points">{i18n._("punti")}</InputLabel>
-              <Input
-                id="filled-adornment-points"
-                value={operativeStore.points}
-                onChange={handleChangePoints}
-                disabled={true}
-              />
-            </FormControl>
-          </Grid>
-
-          {/* Seconda riga */}
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="select-label">{i18n._("punti_attivitaobb")}</InputLabel>
-              <Select
-                labelId="select-label"
-                value={formValues.activity}
-                onChange={(e) => clickCombobox(e.target.value)}
-                label={i18n._("attivita")}
-                required={true}
-              >
-                {operativeStore.activity.map((option) => (
-                  <MenuItem key={option._id} value={option._id}>
-                    {option.nome}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          {/* Campo con punti */}
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <FormControl fullWidth>
-              <TextField
-                label={i18n._("punti_attivita")}
-                type="number"
-                value={operativeStore.pointsField}
-                onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
-                margin="normal"
-                disabled={true}
-              />
-            </FormControl>
           </Grid>
         </Grid>
 
-        {/* Pulsante Salva - Allineato a destra */}
-        <Box display="flex" justifyContent="flex-end" mt={2}>
-          <Button pulsanti={[pulsanteSave]} />
+        <Box className="operative-section-card">
+          <Grid container spacing={2}>
+            {/* Prima riga */}
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <FormControl fullWidth>
+                <TextField
+                  label={i18n._("email")}
+                  value={user?.emailChild}
+                  onChange={(e) => operativeStore.setEmailField(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  disabled={true}
+                />
+              </FormControl>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <FormControl className="form-control-operative" variant="standard" fullWidth>
+                <InputLabel htmlFor="filled-points">{i18n._("punti")}</InputLabel>
+                <Input
+                  id="filled-adornment-points"
+                  value={operativeStore.points}
+                  onChange={handleChangePoints}
+                  disabled={true}
+                />
+              </FormControl>
+            </Grid>
+
+            {/* Seconda riga */}
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="select-label">{i18n._("punti_attivitaobb")}</InputLabel>
+                <Select
+                  labelId="select-label"
+                  value={formValues.activity}
+                  onChange={(e) => clickCombobox(e.target.value)}
+                  label={i18n._("attivita")}
+                  required={true}
+                >
+                  {operativeStore.activity.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.nome}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            {/* Campo con punti */}
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <FormControl fullWidth>
+                <TextField
+                  label={i18n._("punti_attivita")}
+                  type="number"
+                  value={operativeStore.pointsField}
+                  onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
+                  margin="normal"
+                  disabled={true}
+                />
+              </FormControl>
+            </Grid>
+          </Grid>
+
+          {/* Pulsante Salva - Allineato a destra */}
+          <Box display="flex" justifyContent="flex-end" mt={3}>
+            <Button pulsanti={[pulsanteSave]} />
+          </Box>
         </Box>
       </Box>
     </>

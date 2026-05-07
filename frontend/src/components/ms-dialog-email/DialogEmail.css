@@ -28,6 +28,14 @@
   padding: var(--space-6) !important;
 }
 
+.dialog-email-section-card {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-info-soft-2);
+  border: 1px solid var(--color-info-soft-4);
+  box-shadow: var(--shadow-sm);
+}
+
 /* Box per l'istruzione/messaggio */
 .instruction-box {
   background-color: var(--color-primary-soft);
@@ -41,6 +49,13 @@
   color: var(--color-primary-hover);
   font-size: 0.9rem;
   font-weight: 500;
+}
+
+.dialog-email-label {
+  margin-left: var(--space-1);
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: var(--color-muted-500) !important;
 }
 
 /* Stilizzazione del Select */

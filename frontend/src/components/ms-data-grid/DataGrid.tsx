@@ -49,43 +49,12 @@ const CustomToolbar = (props: CustomToolbarProps) => {
 
   if (toolbarColumnSplit) {
     const { mainFlex, actionFlex, mainMinWidth = 0, actionMinWidth = 0 } = toolbarColumnSplit;
-    const sxMerged = [
-      {
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%',
-        flexWrap: 'nowrap',
-      } as const,
-      ...(toolbarSx ? (Array.isArray(toolbarSx) ? toolbarSx : [toolbarSx]) : []),
-    ];
     return (
-      <GridToolbarContainer {...toolbarRest} sx={sxMerged}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-            flexGrow: mainFlex,
-            flexBasis: 0,
-            minWidth: mainMinWidth,
-            overflow: 'hidden',
-          }}
-        >
+      <GridToolbarContainer {...toolbarRest} className="datagrid-toolbar datagrid-toolbar-split">
+        <Box className="datagrid-toolbar-main" data-main-flex={mainFlex} data-main-min-width={mainMinWidth}>
           <GridToolbarExport />
         </Box>
-        <Box
-          sx={{
-            flexGrow: actionFlex,
-            flexBasis: 0,
-            minWidth: actionMinWidth,
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            pl: 1,
-            pr: 1,
-            boxSizing: 'border-box',
-          }}
-        >
+        <Box className="datagrid-toolbar-actions" data-action-flex={actionFlex} data-action-min-width={actionMinWidth}>
           <Button pulsanti={pulsanti || []} />
         </Box>
       </GridToolbarContainer>
@@ -93,9 +62,9 @@ const CustomToolbar = (props: CustomToolbarProps) => {
   }
 
   return (
-    <GridToolbarContainer sx={toolbarSx} {...toolbarRest}>
+    <GridToolbarContainer {...toolbarRest} className="datagrid-toolbar">
       <GridToolbarExport />
-      <Box sx={{ flexGrow: 1 }} />
+      <Box className="datagrid-toolbar-spacer" />
       <Button pulsanti={pulsanti || []} />
     </GridToolbarContainer>
   );
@@ -143,12 +112,6 @@ const DataGridComponent: React.FC<DataGridComponentProps> = ({
       disableColumnMenu
       disableRowSelectionOnClick
       hideFooterSelectedRowCount
-      // Ottimizzazione MUI v6 per celle con altezza dinamica
-      sx={{
-        '& .MuiDataGrid-cell': {
-          py: 1,
-        },
-      }}
     />
   );
 };

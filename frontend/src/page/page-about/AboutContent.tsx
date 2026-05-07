@@ -110,7 +110,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   };
 
   const pulsanteBlue: Pulsante = {
-    icona: 'fas fa-solid fa-floppy-disk',
+    icona: 'fas fa-circle-check',
     funzione: () => handleButtonClick(), // Passi la funzione direttamente
     disableButton: disableButtonSave,
     nome: ButtonName.BLUE,
@@ -201,70 +201,73 @@ const AboutContent: React.FC<AboutContentProps> = ({
             )}
           </Typography>
         </Grid>
-
-        {/* Email sola lettura */}
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <FormControl fullWidth>
-            <TextField
-              label={i18n._("email")}
-              value={user?.emailChild}
-              fullWidth
-              margin="normal"
-              disabled={true}
-            />
-          </FormControl>
-        </Grid>
-
-        {/* Riga Attività e Punti */}
-        <Grid size={{ xs: 12, sm: 8 }}>
-          <TextField
-            id="activity"
-            label={i18n._("attivita")}
-            variant="standard"
-            value={formValues.activity}
-            onChange={handleChangeActivity}
-            disabled={user?.type === TypeUser.STANDARD}
-
-            fullWidth
-            required={true}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, sm: 4 }}>
-          <TextField
-            label={i18n._("punti")}
-            variant="standard"
-            type="number"
-            value={formValues.points}
-            onChange={handleChangePoints}
-            fullWidth
-            disabled={user?.type === TypeUser.STANDARD}
-            required
-          />
-        </Grid>
-
-        {/* Descrizione Multiline */}
-        <Grid size={{ xs: 12 }}>
-          <TextField
-            label={i18n._("descrizione")}
-            variant="standard"
-            value={subTesto}
-            onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia
-            fullWidth
-            multiline
-            rows={5}
-          />
-        </Grid>
-
-        <Box className="about-action-row">
-          <Box>
-            <Button pulsanti={[pulsanteReturn]} />
-          </Box>
-          <Box display="flex" gap={1}>
-            <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
-          </Box>
-        </Box>
       </Grid>
+
+      <Box className="about-section-card">
+        <Grid container spacing={3}>
+          {/* Email sola lettura */}
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormControl fullWidth>
+              <TextField
+                label={i18n._("email")}
+                value={user?.emailChild}
+                fullWidth
+                margin="normal"
+                disabled={true}
+              />
+            </FormControl>
+          </Grid>
+
+          {/* Riga Attività e Punti */}
+          <Grid size={{ xs: 12, sm: 8 }}>
+            <TextField
+              id="activity"
+              label={i18n._("attivita")}
+              variant="standard"
+              value={formValues.activity}
+              onChange={handleChangeActivity}
+              disabled={user?.type === TypeUser.STANDARD}
+              fullWidth
+              required={true}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 4 }}>
+            <TextField
+              label={i18n._("punti")}
+              variant="standard"
+              type="number"
+              value={formValues.points}
+              onChange={handleChangePoints}
+              fullWidth
+              disabled={user?.type === TypeUser.STANDARD}
+              required
+            />
+          </Grid>
+
+          {/* Descrizione Multiline */}
+          <Grid size={{ xs: 12 }}>
+            <TextField
+              label={i18n._("descrizione")}
+              variant="standard"
+              value={subTesto}
+              onChange={handleChangeSubTesto} // Aggiorna lo stato quando cambia
+              fullWidth
+              multiline
+              rows={5}
+            />
+          </Grid>
+
+          <Box className="about-action-row">
+            <Box>
+              <Button pulsanti={[pulsanteReturn]} />
+            </Box>
+            <Box className="about-action-buttons">
+              <Button pulsanti={[pulsanteRed, pulsanteBlue]} />
+            </Box>
+          </Box>
+        </Grid>
+      </Box>
     </Box>
   );
 };

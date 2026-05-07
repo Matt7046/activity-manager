@@ -1,26 +1,37 @@
-/* Container principale allineato a OperativeContent */
 .box-family-content {
-    padding: var(--space-6);
-    width: 100%;
-    box-sizing: border-box;
+  padding: var(--space-6);
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
 }
 
-/* Allineamento Grid */
-.box-family-content .MuiGrid2-container {
-    margin: 0 !important;
-    width: 100% !important;
+.family-section-card {
+  margin-top: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-info-soft-2);
+  border: 1px solid var(--color-info-soft-4);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Margini controlli */
 .form-control-family {
-    margin-top: var(--space-4) !important;
-    width: 100% !important;
-    box-sizing: border-box;
+  margin-top: var(--space-4) !important;
+  width: 100% !important;
+  box-sizing: border-box;
 }
 
-/* Fix Mobile */
 @media (max-width: 600px) {
-    .box-family-content {
-        padding: var(--space-4);
-    }
+  .box-family-content {
+    padding: var(--space-4);
+    border-radius: var(--radius-sm);
+  }
+
+  .family-section-card {
+    padding: var(--space-4);
+    margin-top: var(--space-3);
+  }
 }

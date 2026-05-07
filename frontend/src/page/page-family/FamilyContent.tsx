@@ -97,59 +97,63 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
             <Trans id="operazioni_famiglia" /> <strong>{user?.emailUserCurrent}</strong>
           </Typography>
         </Grid>
-
-        {/* Prima riga: Email (Disabilitata) e Punti Attuali */}
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <FormControl fullWidth>
-            <TextField
-              label={i18n._("email")}
-              value={user?.emailChild}
-              fullWidth
-              margin="normal"
-              disabled={true}
-            />
-          </FormControl>
-        </Grid>
-
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <FormControl className="form-control-family" variant="standard" fullWidth>
-            <InputLabel htmlFor="points-current">{i18n._("punti")}</InputLabel>
-            <Input
-              id="points-current"
-              value={familyStore.getStore().points}
-              disabled={true}
-            />
-          </FormControl>
-        </Grid>
-
-        {/* Seconda riga: Input Nuovi Punti con Toggle Icon */}
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <FormControl fullWidth variant="standard" className="form-control-family">
-            <InputLabel htmlFor="new-points-input">{i18n._("nuovi_punti")}</InputLabel>
-            <Input
-              id="new-points-input"
-              value={formValues.newPoints}
-              onChange={(e) => setFormValues({ ...formValues, newPoints: parseInt(e.target.value) || 0 })}
-              type="number"
-              startAdornment={
-                <InputAdornment position="start">
-                  <IconButton
-                    aria-label={i18n._("add_punti")}
-                    onClick={toggleIcon}
-                    edge="end"
-                  >
-                    {isPlusIcon ? <AddIcon color="primary" /> : <RemoveIcon color="error" />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-        </Grid>
       </Grid>
 
-      {/* Pulsante Salva - Allineato a destra come Operative */}
-      <Box display="flex" justifyContent="flex-end" mt={3}>
-        <Button pulsanti={[pulsanteBlue]} />
+      <Box className="family-section-card">
+        <Grid container spacing={2}>
+          {/* Prima riga: Email (Disabilitata) e Punti Attuali */}
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormControl fullWidth>
+              <TextField
+                label={i18n._("email")}
+                value={user?.emailChild}
+                fullWidth
+                margin="normal"
+                disabled={true}
+              />
+            </FormControl>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormControl className="form-control-family" variant="standard" fullWidth>
+              <InputLabel htmlFor="points-current">{i18n._("punti")}</InputLabel>
+              <Input
+                id="points-current"
+                value={familyStore.getStore().points}
+                disabled={true}
+              />
+            </FormControl>
+          </Grid>
+
+          {/* Seconda riga: Input Nuovi Punti con Toggle Icon */}
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormControl fullWidth variant="standard" className="form-control-family">
+              <InputLabel htmlFor="new-points-input">{i18n._("nuovi_punti")}</InputLabel>
+              <Input
+                id="new-points-input"
+                value={formValues.newPoints}
+                onChange={(e) => setFormValues({ ...formValues, newPoints: parseInt(e.target.value) || 0 })}
+                type="number"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <IconButton
+                      aria-label={i18n._("add_punti")}
+                      onClick={toggleIcon}
+                      edge="end"
+                    >
+                      {isPlusIcon ? <AddIcon color="primary" /> : <RemoveIcon color="error" />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
+
+        {/* Pulsante Salva - Allineato a destra come Operative */}
+        <Box display="flex" justifyContent="flex-end" mt={3}>
+          <Button pulsanti={[pulsanteBlue]} />
+        </Box>
       </Box>
     </Box>
   );

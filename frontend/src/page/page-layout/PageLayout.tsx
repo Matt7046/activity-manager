@@ -204,15 +204,13 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             </Box>
           </Box>
           {/* Se il menu esiste, viene renderizzato a sinistra */}
-          <Box  className ="box-menu-laterale">
+            <Box  className ="box-menu-laterale">
             {menuLaterale && menuLaterale.length > 0 && (
               <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
             )}
 
-            {/* SPACER: Questo Box con flexGrow: 1 spinge tutto ciò che segue a destra.
-    Funziona sia che il Drawer sia presente, sia che sia assente.
-*/}
-            <Box sx={{ flexGrow: 1 }} />
+            {/* SPACER: Questo Box con flex-grow spinge tutto ciò che segue a destra */}
+            <Box className="box-layout-spacer" />
 
             {/* Contenitore pulsanti: ora sarà SEMPRE allineato a destra */}
             <Box className='box-layout-right-button'>

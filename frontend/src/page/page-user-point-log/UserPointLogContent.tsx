@@ -67,7 +67,7 @@ const LogUserPointContent: React.FC<LogUserPointContentProps> = ({ user, alertCo
 
   return (
     <Box className="points-content-container">
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, gap: 2 }}>
+      <Box className="log-header-bar">
         <IconButton onClick={() => router.back()}>
           <ArrowBackIcon />
         </IconButton>
@@ -81,14 +81,14 @@ const LogUserPointContent: React.FC<LogUserPointContentProps> = ({ user, alertCo
           {logsActivity.length > 0 ? logsActivity.map((item, index) => (
             <div className="log-card-scroll-item" key={index}>
               <Card className="log-card-item" elevation={0}>
-                <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <CardContent className="log-card-content">
                   <Typography className="log-label"><Trans id="data_operazione" /></Typography>
                   <Typography className="log-value">{getDateStringExtendsFormat(item.date)}</Typography>
                   <Typography className="log-label"><Trans id="punti" /></Typography>
                   <Typography className="log-value"><span className="points-badge">{item.usePoints}</span></Typography>
                   <div className="log-card-footer">
                     <Typography className="log-label"><Trans id="descrizione" /></Typography>
-                    <Typography className="log-footer-text" sx={{ fontStyle: 'italic' }}>{item.log}</Typography>
+                    <Typography className="log-footer-text log-footer-text-italic">{item.log}</Typography>
                   </div>
                 </CardContent>
               </Card>
@@ -100,7 +100,7 @@ const LogUserPointContent: React.FC<LogUserPointContentProps> = ({ user, alertCo
           {logsFamily.length > 0 ? logsFamily.map((item, index) => (
             <div className="log-card-scroll-item" key={index}>
               <Card className="log-card-item" elevation={0}>
-                <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <CardContent className="log-card-content">
                   <Typography className="log-label"><Trans id="data" /></Typography>
                   <Typography className="log-value">{getDateStringExtendsFormat(item.date)}</Typography>
                   <Typography className="log-label"><Trans id="operazione" /></Typography>

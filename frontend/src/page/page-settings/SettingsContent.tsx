@@ -124,7 +124,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
           <Box className="action-row settings-action-card">
             <Box className="action-info">
               <DeleteForeverIcon className="delete-icon" />
-              <Box>
+              <Box className="settings-action-text-block">
                 <Typography variant="subtitle1" className="action-title">
                   <Trans id="elimina_account" />
                 </Typography>
@@ -145,7 +145,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
           <Box className="action-row settings-action-card">
             <Box className="action-info">
               <LockResetOutlinedIcon className="delete-icon" />
-              <Box>
+              <Box className="settings-action-text-block">
                 <Typography variant="subtitle1" className="action-title">
                   <Trans id="password_account" />
                 </Typography>
@@ -154,6 +154,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
                 </Typography>
                 <Box className="settings-password-wrap">
                 <TextField
+                  className="settings-textfield settings-password-textfield"
                   id="settings-new-password"
                   label={i18n._("nuova_password")}
                   type={showPassword ? "text" : "password"}
@@ -164,9 +165,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
                   fullWidth
                   autoComplete="new-password"
                   helperText={i18n._("settings_password_min_hint")}
+                  InputLabelProps={{ shrink: true }}
                   InputProps={{
                     endAdornment: (
-                      <InputAdornment position="end">
+                      <InputAdornment className="settings-password-adornment" position="end">
                         <IconButton
                           aria-label={showPassword ? i18n._("nascondi_password") : i18n._("mostra_password")}
                           onClick={() => setShowPassword((v) => !v)}
@@ -195,7 +197,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
           <Box className="action-row settings-action-card">
             <Box className="action-info">
               <EmailOutlinedIcon className="delete-icon" />
-              <Box>
+              <Box className="settings-action-text-block">
                 <Typography variant="subtitle1" className="action-title">
                   <Trans id="notifiche_email" />
                 </Typography>
