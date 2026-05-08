@@ -2,7 +2,6 @@
 import { Trans } from "@lingui/react";
 import { Paper } from "@mui/material";
 import React from "react";
-import Language from "../../components/ms-language/Language";
 import "./PrivacyPolicyContent.css";
 
 const PagePrivacyPolicyContent: React.FC = () => {
@@ -12,7 +11,6 @@ const PagePrivacyPolicyContent: React.FC = () => {
         <Paper elevation={3} className="privacy-paper">
           <div className="privacy-container">
             <div className="privacy-header">
-              <Language />
             </div>
             <h1 className="privacy-title">
               <Trans id="privacy_policy" />

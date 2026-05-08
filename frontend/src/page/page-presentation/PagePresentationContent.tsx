@@ -18,38 +18,40 @@ const PagePresentationContent: React.FC = () => {
       <Box className="page-wrapper">
         <BannerOpenSource />
         <Box className="welcome-container">
-          <Box className="hero-content">
-            <Typography
-              variant="h4"
-              component="label"
-              htmlFor="enter-button"
-              gutterBottom
-              fontWeight="bold"
-              className="welcome-description-title"
-            >
-              <Trans id="testo_entry" />
-            </Typography>
+          <Box className="hero-frame">
+            <Box className="hero-content">
+              <Typography
+                variant="h4"
+                component="label"
+                htmlFor="enter-button"
+                gutterBottom
+                fontWeight="bold"
+                className="welcome-description-title"
+              >
+                <Trans id="testo_entry" />
+              </Typography>
 
-            <Typography variant="body1" gutterBottom className="welcome-description">
-              <Trans id="testo_desc" />
-            </Typography>
+              <Typography variant="body1" gutterBottom className="welcome-description">
+                <Trans id="testo_desc" />
+              </Typography>
 
-            <Button
-              id="enter-button"
-              className="enter-button"
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={() => navigateRouting(router, SectionName.HOME, {})}
-            >
-              <Trans id="testo_button" />
-            </Button>
+              <Button
+                id="enter-button"
+                className="enter-button"
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={() => navigateRouting(router, SectionName.HOME, {})}
+              >
+                <Trans id="testo_button" />
+              </Button>
 
-            <Typography variant="body2" className="personality-link-row">
-              <MuiLink component={LinkNext} href="/personality" className="personality-link">
-                {i18n._("personality_discover_link")}
-              </MuiLink>
-            </Typography>
+              <Typography variant="body2" className="personality-link-row">
+                <MuiLink component={LinkNext} href="/personality" className="personality-link">
+                  {i18n._("personality_discover_link")}
+                </MuiLink>
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Box>
