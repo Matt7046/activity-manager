@@ -73,7 +73,7 @@
 
 .points-badge {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-on-primary);
   padding: 4px 12px;
   border-radius: var(--radius-sm);
   font-weight: 800;

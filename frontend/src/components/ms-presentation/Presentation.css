@@ -1,9 +1,28 @@
+.presentation-page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text);
+}
+
+.presentation-page .presentation-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--space-2) var(--space-3) 0;
+}
+
+.presentation-page .page-wrapper {
+  flex: 1;
+}
+
+.presentation-page .tech-wrapper {
+  margin-top: auto;
+}
 
 .page-wrapper {
   display: flex;
   flex-direction: column;
   min-height: 62dvh;
-
 }
 
 .welcome-container {
@@ -19,20 +38,22 @@
   text-align: center;
 }
 
+/* Come la sezione "Tecnologie" (`.techf-footer`) — stessa banda scura, non card chiara */
 .hero-frame {
   max-width: 940px;
   width: 100%;
   margin: 0 auto;
   padding: var(--space-5);
-  background-color: var(--color-surface-soft);
-  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  background-color: var(--color-footer-bg);
+  background-image: none;
+  color: var(--color-footer-text);
 }
 
-.tech-wrapper{
+.tech-wrapper {
   padding-bottom: var(--space-0);
-
 }
 
 .welcome-description {
@@ -40,7 +61,7 @@
   padding-bottom: var(--space-2);
   line-height: 1.6;
   margin-bottom: var(--space-2);
-  color: var(--color-muted-300);
+  color: rgba(226, 232, 240, 0.92);
   text-align: center;
   max-width: 860px;
   margin-left: auto;
@@ -51,15 +72,12 @@
   text-align: center;
   margin-bottom: var(--space-1) !important;
   font-size: clamp(1.75rem, 2.8vw, 2.4rem) !important;
-  letter-spacing: -0.02em;
-  color: var(--color-text);
+  letter-spacing: 0.04em;
+  color: var(--color-text-bright);
+  font-weight: 200 !important;
 }
 
-.enter-button,
-.enter-button.MuiButton-containedPrimary {
-  padding-top: 1px;
-  background-color: #1976d2 !important;
-  color: var(--color-white) !important;
+.enter-button.MuiButton-root {
   text-transform: uppercase !important;
   font-weight: 700 !important;
   font-size: 16px !important;
@@ -68,18 +86,6 @@
   border-radius: var(--radius-lg) !important;
   padding-left: var(--space-5) !important;
   padding-right: var(--space-5) !important;
-  box-shadow: var(--shadow-sm) !important;
-}
-
-.enter-button:hover,
-.enter-button.MuiButton-containedPrimary:hover {
-  background-color: var(--color-primary-hover) !important;
-  box-shadow: var(--shadow-md) !important;
-}
-
-.enter-button:active,
-.enter-button.MuiButton-containedPrimary:active {
-  background-color: var(--color-primary-hover) !important;
 }
 
 .personality-link-row {
@@ -88,11 +94,12 @@
 
 .personality-link {
   text-decoration: none;
-  color: var(--color-primary);
+  color: var(--color-info-text);
   font-weight: 600;
 }
 
 .personality-link:hover {
+  color: #bfdbfe;
   text-decoration: underline;
 }
 
@@ -106,7 +113,6 @@
     padding-bottom: var(--space-1);
     margin-bottom: var(--space-2);
   }
-
 }
 
 @media (max-width: 700px) {
