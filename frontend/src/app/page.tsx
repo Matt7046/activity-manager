@@ -1,14 +1,4 @@
 "use client";
-import Language from '@/components/ms-language/Language';
-import Presentation from '@/components/ms-presentation/Presentation';
+import PagePresentation from '@/page/page-presentation/PagePresentation';
 
-export default function LandingPage() {
-  return (
-    <>
-      <div className="presentation-header">
-        <Language />
-      </div>
-      <Presentation />
-    </>
-  );
-}
+export default PagePresentation;

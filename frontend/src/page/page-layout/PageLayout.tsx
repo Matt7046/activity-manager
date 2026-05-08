@@ -54,7 +54,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
   useEffect(() => {
     // Block direct access to internal pages when user context is missing.
-if (!user?.email && section.path !== SectionName.ROOT && section.path !== SectionName.HOME && section.path !== SectionName.REGISTER) {      navigateRouting(navigate, SectionName.ROOT, {});
+if (!user?.email && section.path !== SectionName.ROOT && section.path !== SectionName.HOME && section.path !== SectionName.REGISTER && section.path !== SectionName.PERSONALITY ) { 
+       navigateRouting(navigate, SectionName.ROOT, {});
     }
   }, [user, navigate]);
 
@@ -224,7 +225,7 @@ if (!user?.email && section.path !== SectionName.ROOT && section.path !== Sectio
             {/* Contenitore pulsanti: ora sarà SEMPRE allineato a destra */}
             <Box className='box-layout-right-button'>
               {/* Mostra il bottone notifiche solo se NON siamo in home o in registrazione */}
-              {(sectionAttiva.path !== SectionName.HOME && sectionAttiva.path !== SectionName.REGISTER) && (
+              {(sectionAttiva.path !== SectionName.HOME && sectionAttiva.path !== SectionName.REGISTER &&  sectionAttiva.path !== SectionName.PERSONALITY) && (
                 <>
                   <Button pulsanti={[pulsanteNotifiche]} />
                   <Popover
@@ -242,8 +243,8 @@ if (!user?.email && section.path !== SectionName.ROOT && section.path !== Sectio
           </Box>
         </Grid>
 
-        {/* AREA EMAIL: Visibile se presente, altrimenti mostra disclaimer login simulati */}
-        {(
+        {/* AREA EMAIL/ANNOTAZIONE */}
+        {!hiddenEmail && (
           <Box className={isVertical ? "box-layout-text-vertical" : "box-layout-text"}>
             <TextField
               id="emailFamily"
@@ -261,7 +262,6 @@ if (!user?.email && section.path !== SectionName.ROOT && section.path !== Sectio
               maxRows={4} // Opzionale: limita l'altezza massima
             />
           </Box>
-
         )}
       </Box>
 
