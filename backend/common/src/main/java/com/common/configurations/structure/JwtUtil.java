@@ -6,21 +6,24 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.common.security.EmailNormalization;
+
 @Component
 public class JwtUtil {
 
     @Autowired
     PropertiesKey propertiesKey;
 
-    // Crea una chiave segreta in modo sicuro
-  
-    // Metodo per generare il token
-    public String generateToken(String username) {
+    public String generateToken(String userEmail) {
+        String subject = EmailNormalization.normalize(userEmail);
+        if (subject == null || subject.isEmpty()) {
+            throw new IllegalArgumentException("Email utente obbligatoria per il token.");
+        }
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 ora
-                .signWith(propertiesKey.getSecretKey()) // Firma con la chiave segreta
+                .signWith(propertiesKey.getSecretKey())
                 .compact();
     }
 

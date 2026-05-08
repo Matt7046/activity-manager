@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.common.dto.structure.ResponseDTO;
 import reactor.core.publisher.Mono;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@CrossOrigin(origins = "https://webapp-tn6q.onrender.com")
 @RequestMapping("api/family")
 public class FamilyController {
 
@@ -31,7 +29,7 @@ public class FamilyController {
     }
 
     @PostMapping("/log/tutor")
-    public Mono<ResponseDTO> getLogActivityByEmail(@RequestBody UserPointDTO userPointDTO) throws Exception {
+    public Mono<ResponseDTO> getLogActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
         return familyPointsProcessor.logFamilyByEmail(userPointDTO);
     }
 }

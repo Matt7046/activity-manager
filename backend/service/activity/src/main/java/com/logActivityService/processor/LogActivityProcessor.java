@@ -6,6 +6,7 @@ import com.common.dto.activity.LogActivityDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.dto.user.UserPointDTO;
 import com.common.mapper.LogActivityToUserPointMapper;
+import com.common.security.ResourceAccessClient;
 import com.common.structure.status.ActivityHttpStatus;
 import com.common.dto.family.LogFamilyDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,6 +40,8 @@ public class LogActivityProcessor {
     private LogActivityToUserPointMapper logActivityToUserPointMapper;
     @Autowired
     private LogActivityMapper logActivityMapper;
+    @Autowired
+    private ResourceAccessClient resourceAccessClient;
     @Value("${app.rabbitmq.exchange.point.exchangeName}")
     private String exchangePoint;
     @Value("${app.rabbitmq.exchange.point.routingKey.logActivity}")
@@ -46,19 +49,23 @@ public class LogActivityProcessor {
     @Value("${app.rabbitmq.exchange.point.routingKey.logFamily}")
     private String routingKeyLogFamily;
 
-
     public Mono<ResponseDTO> logAttivitaByEmail(UserPointDTO userPointDTO) {
-        int page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
-        int size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
-        List<LogActivityDTO> logAttivitaUnica =  logActivityService.logAttivitaByEmail(userPointDTO, pageable).stream()
-                .map(logActivityMapper::toDTO)
-                .collect(Collectors.toList());
-        return Mono.just(new ResponseDTO(logAttivitaUnica, ActivityHttpStatus.OK.value(), new ArrayList<>()));
+        return resourceAccessClient.assertCanAccess(userPointDTO.getEmail())
+                .then(Mono.fromCallable(() -> {
+                    int page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
+                    int size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
+                    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
+                    List<LogActivityDTO> logAttivitaUnica = logActivityService.logAttivitaByEmail(userPointDTO, pageable).stream()
+                            .map(logActivityMapper::toDTO)
+                            .collect(Collectors.toList());
+                    return new ResponseDTO(logAttivitaUnica, ActivityHttpStatus.OK.value(), new ArrayList<>());
+                }));
     }
 
     public Mono<ResponseDTO> savePoints(LogActivityDTO logActivityDTO) {
-        return processPoints(logActivityDTO);
+        return resourceAccessClient.assertFamilyTransfer(logActivityDTO.getEmailUserCurrent(),
+                logActivityDTO.getEmail())
+                .then(processPoints(logActivityDTO));
     }
 
     private Mono<ResponseDTO> processPoints(LogActivityDTO logActivityDTO) {
@@ -87,8 +94,7 @@ public class LogActivityProcessor {
             LogActivity sub = logActivityService.saveLogActivity(logActivityDTO);
             return new ResponseDTO(logActivityMapper.toDTO(sub), ActivityHttpStatus.OK.value(), new ArrayList<>());
         }).doOnError(response1 -> {
-            // Invia l'evento dopo il salvataggio del log in modo asincrono
-            Mono.fromRunnable(() -> notificationComponent.inviaNotifica(logActivityDTO.getPoint(), exchangePoint, routingKeyLogActivity)).subscribe();  // Avvia il runnable senza bloccare il flusso
+            Mono.fromRunnable(() -> notificationComponent.inviaNotifica(logActivityDTO.getPoint(), exchangePoint, routingKeyLogActivity)).subscribe();
         });
     }
 
@@ -98,7 +104,6 @@ public class LogActivityProcessor {
         }
         return logActivityWebService.saveLogFamily(logFamilyDTO)
                 .doOnSuccess(response1 -> {
-                    // Azioni con la response
                     if (!response1.getErrors().isEmpty()) {
                         notificationComponent.inviaNotifica(logFamilyDTO.getPoint(), exchangePoint, routingKeyLogActivity);
                         ObjectMapper mapper = new ObjectMapper();
@@ -109,5 +114,3 @@ public class LogActivityProcessor {
                 .subscribeOn(Schedulers.boundedElastic());
     }
 }
-
-

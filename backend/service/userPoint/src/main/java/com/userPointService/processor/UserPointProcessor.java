@@ -10,6 +10,7 @@ import com.common.dto.user.UserPointDTO;
 import com.common.dto.user.UserPointWithChildDTO;
 import com.common.mapper.UserPointMapper;
 import com.common.mapper.UserPointToPointMapper;
+import com.userPointService.service.UserPointAccessService;
 import com.common.structure.exception.NotFoundException;
 import com.common.structure.status.ActivityHttpStatus;
 import com.userPointService.service.UserPointService;
@@ -37,6 +38,8 @@ public class UserPointProcessor {
     private NotificationComponent notificationComponent;
     @Autowired
     private EncryptDecryptConverter encryptDecryptConverter;
+    @Autowired
+    private UserPointAccessService userPointAccessService;
     @Value("${rabbitmq.exchange.name.notification}")
     private String notificationExchange;
     @Value("${rabbitmq.routingKey.email}")
@@ -47,8 +50,9 @@ public class UserPointProcessor {
     private String message;
 
     @Transactional
-    public Mono<ResponseDTO> findByEmail(UserPointDTO userPointDTO) {
+    public Mono<ResponseDTO> findByEmail(UserPointDTO userPointDTO, String principalEmail) {
         return Mono.fromCallable(() -> {
+            userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailChild());
             UserPoint sub = userPointMapper.fromDTO(userPointDTO);
             UserPoint item = userPointService.findByEmailAndType(sub.getEmailChild(), 0L);
             if (item != null) {
@@ -61,8 +65,9 @@ public class UserPointProcessor {
     }
 
     @Transactional
-    public Mono<ResponseDTO> getEmailChild(UserPointDTO userPointDTO) {
+    public Mono<ResponseDTO> getEmailChild(UserPointDTO userPointDTO, String principalEmail) {
         return Mono.fromCallable(() -> {
+            userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailUserCurrent());
             UserPoint sub = userPointMapper.fromDTO(userPointDTO);
             UserPoint userList = userPointService.getEmailChild(sub);
             sub.setEmailFigli(userList.getEmailFigli());
@@ -72,20 +77,31 @@ public class UserPointProcessor {
     }
 
     @Transactional
-    public Mono<ResponseDTO> getTypeUser(UserPointDTO userPointDTO) {
+    public Mono<ResponseDTO> getTypeUser(UserPointDTO userPointDTO, String principalEmail) {
         return Mono.fromCallable(() -> {
+            userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailUserCurrent());
             UserPoint sub = userPointMapper.fromDTO(userPointDTO);
             Long itemId = userPointService.getTypeUser(sub);
             String emailUserCurrent = userPointDTO.getEmailUserCurrent();
-            return new ResponseDTO(new UserDTO(itemId, itemId == 2, emailUserCurrent), ActivityHttpStatus.OK.value(),
+            return new ResponseDTO(new UserDTO(itemId, itemId == 2L, emailUserCurrent), ActivityHttpStatus.OK.value(),
                     new ArrayList<>());
         });
     }
 
     @Transactional
-    public Mono<ResponseDTO> saveUser(UserPointDTO userPointDTO) {
-        // Una volta completata la chiamata points, salva il log e crea la response
+    public Mono<ResponseDTO> saveUser(UserPointDTO userPointDTO, String principalEmail) {
         return Mono.fromCallable(() -> {
+            userPointAccessService.requireSelf(principalEmail, userPointDTO.getEmailUserCurrent());
+            return registerInternal(userPointDTO);
+        });
+    }
+
+    @Transactional
+    public Mono<ResponseDTO> register(UserPointDTO userPointDTO) {
+        return Mono.fromCallable(() -> registerInternal(userPointDTO));
+    }
+
+    private ResponseDTO registerInternal(UserPointDTO userPointDTO) {
             UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);
             List<UserPoint> userChild = userPointSave.getPointFigli().stream().map(userPointToPointMapper::toChange)
                     .toList();
@@ -107,7 +123,6 @@ public class UserPointProcessor {
             }
             return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent()),
                     ActivityHttpStatus.OK.value(), new ArrayList<>());
-        });
     }
 
     @Transactional
@@ -115,18 +130,21 @@ public class UserPointProcessor {
         return Mono.fromCallable(() -> {
             UserPoint userPointLogin = userPointMapper.fromDTO(userPointDTO);
             UserPoint userPointResponse = userPointService.login(userPointLogin);
-            UserPointDTO userPointDTOResponse = null;
-            if (userPointResponse != null) {
-                userPointDTOResponse = userPointMapper.toDTO(userPointResponse);
-                userPointDTOResponse.setEmailUserCurrent(userPointDTO.getEmail());
+            if (userPointResponse == null || userPointResponse.getEmail() == null
+                    || userPointResponse.get_id() == null) {
+                return new ResponseDTO((Object) null, 401, new ArrayList<>(List.of("Credenziali non valide")));
             }
+            UserPointDTO userPointDTOResponse = userPointMapper.toDTO(userPointResponse);
+            userPointDTOResponse.setEmailUserCurrent(userPointDTO.getEmail());
             return new ResponseDTO(userPointDTOResponse, ActivityHttpStatus.OK.value(), new ArrayList<>());
         });
     }
 
     @Transactional
-    public Mono<ResponseDTO> savePoints(UserPointDTO userPointDTO) {
+    public Mono<ResponseDTO> savePoints(UserPointDTO userPointDTO, String principalEmail) {
         return Mono.fromCallable(() -> {
+            userPointAccessService.requireFamilyPointsTransfer(principalEmail, userPointDTO.getEmailUserCurrent(),
+                    userPointDTO.getEmail());
             Boolean operations = userPointDTO.getOperation() != null && userPointDTO.getOperation();
             userPointDTO.setOperation(operations);
             UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);
@@ -137,8 +155,9 @@ public class UserPointProcessor {
     }
 
     @Transactional
-    public Mono<ResponseDTO> saveUserImage(UserPointDTO userPointDTO) {
+    public Mono<ResponseDTO> saveUserImage(UserPointDTO userPointDTO, String principalEmail) {
         return Mono.fromCallable(() -> {
+            userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailChild());
             UserPoint points = userPointMapper.fromDTO(userPointDTO);
             points = userPointService.saveUserImage(points);
             UserPointDTO subDTO = userPointMapper.toDTO(points);
@@ -152,8 +171,9 @@ public class UserPointProcessor {
         notificationComponent.inviaNotifica(dto, notificationExchange, routingKeyEmail);
     }
 
-    public Mono<ResponseDTO> updateStatus(UserPointDTO userPointDTO) {
+    public Mono<ResponseDTO> updateStatus(UserPointDTO userPointDTO, String principalEmail) {
         return Mono.fromCallable(() -> {
+            userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailUserCurrent());
             UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);
             UserPoint points = userPointService.updateStatus(userPointSave);
             UserPointDTO subDTO = userPointMapper.toDTO(points);
@@ -162,15 +182,19 @@ public class UserPointProcessor {
     }
 
     @Transactional
-    public Mono<ResponseDTO> saveUserPassword(UserPointDTO userPointDTO) {
-       return Mono.fromCallable(() -> {
-            UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);       
+    public Mono<ResponseDTO> saveUserPassword(UserPointDTO userPointDTO, String principalEmail) {
+        return Mono.fromCallable(() -> {
+            userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailUserCurrent());
+            return saveUserPasswordInternal(userPointDTO);
+        });
+    }
 
-            if (userPointSave.getEmailUserCurrent() != null) {
-                userPointSave = userPointService.saveUserPassword(userPointSave);
-            }
-            return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent()),
-                    ActivityHttpStatus.OK.value(), new ArrayList<>());
-        });   
+    private ResponseDTO saveUserPasswordInternal(UserPointDTO userPointDTO) {
+        UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);
+        if (userPointSave.getEmailUserCurrent() != null) {
+            userPointSave = userPointService.saveUserPassword(userPointSave);
+        }
+        return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent()),
+                ActivityHttpStatus.OK.value(), new ArrayList<>());
     }
 }

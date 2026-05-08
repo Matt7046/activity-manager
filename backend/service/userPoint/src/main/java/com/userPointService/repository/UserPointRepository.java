@@ -2,15 +2,16 @@ package com.userPointService.repository;
 
 import java.util.List;
 
-import com.common.data.user.UserPoint;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.Update;
 import org.springframework.stereotype.Repository;
 
+import com.common.data.user.UserPoint;
+
 @Repository
 public interface UserPointRepository extends MongoRepository<UserPoint, String> {
-    // Puoi aggiungere metodi personalizzati se necessario
+
     List<UserPoint> findAll();
 
     @Query("{'email': ?0, 'type': ?1 , 'status': 1}")
@@ -43,5 +44,4 @@ public interface UserPointRepository extends MongoRepository<UserPoint, String> 
     @Query("{ 'email': ?0 }")
     @Update("{ '$set': { 'status': ?1 } }")
     Integer updateStatus(String string, Integer status);
-
 }

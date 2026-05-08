@@ -5,10 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @EnableMongoRepositories(basePackages = {
-        "com.familyService.repository",
+        "com.familyService.repository"
 })
 @SpringBootApplication(scanBasePackages = {
         "com.familyService",
+        "com.common.security",
         "com.common.configurations.mongodb",
         "com.common.configurations.config",
         "com.common.configurations.encrypt",   

@@ -82,7 +82,10 @@ services:
 
   user-point-service:
     depends_on:
-      - rabbitmq
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     image: docker.io/matt7046/user-point-service:1.0.0
     build:
       context: ./ 
@@ -130,7 +133,10 @@ services:
 
   auth-service:
     depends_on:
-      - rabbitmq
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     image: docker.io/matt7046/auth-service:1.0.0
     build:
       context: ./
@@ -149,7 +155,10 @@ services:
 
   family-service:
     depends_on:
-      - rabbitmq
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     image: docker.io/matt7046/family-service:1.0.0
     build:
       context: ./
@@ -168,7 +177,10 @@ services:
 
   notification-service:
     depends_on:
-      - rabbitmq
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     image: docker.io/matt7046/notification-service:1.0.0
     build:
       context: ./
@@ -187,7 +199,10 @@ services:
 
   image-service:
     depends_on:
-      - rabbitmq
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     image: docker.io/matt7046/image-service:1.0.0
     build:
       context: ./

@@ -10,6 +10,7 @@ import com.common.dto.user.UserPointDTO;
 import com.common.dto.family.FamilyNotificationDTO;
 import com.common.mapper.LogFamilyMapper;
 import com.common.mapper.UserPointMapper;
+import com.common.security.ResourceAccessClient;
 import com.common.structure.status.ActivityHttpStatus;
 import com.common.structure.exception.NotFoundException;
 import com.familyService.service.FamilyService;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
 public class FamilyPointsProcessor {
 
     @Autowired
-    private FamilyWebService familyWebService;   
+    private FamilyWebService familyWebService;
     @Autowired
     private FamilyService familyService;
     @Autowired
@@ -38,7 +39,9 @@ public class FamilyPointsProcessor {
     @Autowired
     private UserPointMapper userPointMapper;
     @Autowired
-    private NotificationComponent notificationComponent; 
+    private NotificationComponent notificationComponent;
+    @Autowired
+    private ResourceAccessClient resourceAccessClient;
 
     @Value("${rabbitmq.exchange.name.notification}")
     private String notificationExchange;
@@ -66,40 +69,60 @@ public class FamilyPointsProcessor {
     }
 
     private Mono<ResponseDTO> processPoints(UserPointDTO userPointDTO) {
-        userPointDTO.setOperation(true);
-        return familyWebService.savePointsByFamily(userPointDTO)
-                .flatMap(userPoint -> {                 
-                    saveLogFamily(createLogFamily(userPointDTO));
-                    inviaNotifica(userPointDTO);
-                    return Mono.just((new ResponseDTO(userPoint, ActivityHttpStatus.OK.value(), new ArrayList<>())));
-                });
+        return resourceAccessClient.assertFamilyTransfer(userPointDTO.getEmailUserCurrent(),
+                userPointDTO.getEmail())
+                .then(Mono.defer(() -> {
+                    userPointDTO.setOperation(true);
+                    return familyWebService.savePointsByFamily(userPointDTO)
+                            .flatMap(userPoint -> {
+                                persistLogFamilyFromUserPoint(userPointDTO);
+                                inviaNotifica(userPointDTO);
+                                return Mono.just((new ResponseDTO(userPoint, ActivityHttpStatus.OK.value(), new ArrayList<>())));
+                            });
+                }));
     }
 
-    public Mono<ResponseDTO> saveLogFamily(LogFamilyDTO logFamilyDTO) {
+    private void persistLogFamilyFromUserPoint(UserPointDTO userPointDTO) {
+        LogFamilyDTO logFamilyDTO = createLogFamily(userPointDTO);
         try {
             LogFamily family = logFamilyMapper.fromDTO(logFamilyDTO);
-            family = familyService.saveLogFamily(family);
-            logFamilyDTO = logFamilyMapper.toDTO(family);
-            ResponseDTO response = new ResponseDTO(logFamilyDTO, ActivityHttpStatus.OK.value(),
-                    new ArrayList<>());
-            return Mono.just(response);
+            familyService.saveLogFamily(family);
         } catch (Exception e) {
             notificationComponent.inviaNotifica(logFamilyDTO.getPoint(), pointExchange, routingKeyPoint);
             throw new NotFoundException(e.getMessage());
         }
     }
 
-    public Mono<ResponseDTO> logFamilyByEmail(UserPointDTO userPointDTO)  {
-        int page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
-        int size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
-        UserPoint userPoint = userPointMapper.fromDTO(userPointDTO);
-        List<LogFamily> familyList = familyService.getLogFamily(userPoint, pageable);
-        List<LogFamilyDTO> logFamilyDTOList = familyList.stream()
-                .map(logFamilyMapper::toDTO).collect(Collectors.toList());
-        ResponseDTO response = new ResponseDTO(logFamilyDTOList, ActivityHttpStatus.OK.value(),
-                new ArrayList<>());
-        return Mono.just(response);
+    public Mono<ResponseDTO> saveLogFamily(LogFamilyDTO logFamilyDTO) {
+        return resourceAccessClient.assertSelf(logFamilyDTO.getPerformedByEmail())
+                .then(resourceAccessClient.assertCanAccess(logFamilyDTO.getReceivedByEmail()))
+                .then(Mono.fromCallable(() -> {
+                    try {
+                        LogFamily family = logFamilyMapper.fromDTO(logFamilyDTO);
+                        family = familyService.saveLogFamily(family);
+                        LogFamilyDTO logFamilyDTONew = logFamilyMapper.toDTO(family);
+                        return new ResponseDTO(logFamilyDTONew, ActivityHttpStatus.OK.value(),
+                                new ArrayList<>());
+                    } catch (Exception e) {
+                        notificationComponent.inviaNotifica(logFamilyDTO.getPoint(), pointExchange, routingKeyPoint);
+                        throw new NotFoundException(e.getMessage());
+                    }
+                }));
+    }
+
+    public Mono<ResponseDTO> logFamilyByEmail(UserPointDTO userPointDTO) {
+        return resourceAccessClient.assertCanAccess(userPointDTO.getEmail())
+                .then(Mono.fromCallable(() -> {
+                    int page = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? 0 : userPointDTO.getPage();
+                    int size = userPointDTO.getUnpaged() != null && userPointDTO.getUnpaged() ? Integer.MAX_VALUE : userPointDTO.getSize();
+                    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc(userPointDTO.getField())));
+                    UserPoint userPoint = userPointMapper.fromDTO(userPointDTO);
+                    List<LogFamily> familyList = familyService.getLogFamily(userPoint, pageable);
+                    List<LogFamilyDTO> logFamilyDTOList = familyList.stream()
+                            .map(logFamilyMapper::toDTO).collect(Collectors.toList());
+                    return new ResponseDTO(logFamilyDTOList, ActivityHttpStatus.OK.value(),
+                            new ArrayList<>());
+                }));
     }
 
     private LogFamilyDTO createLogFamily(UserPointDTO userPointDTO) {

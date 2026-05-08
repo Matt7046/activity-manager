@@ -7,6 +7,7 @@ import com.common.data.activity.Activity;
 import com.common.data.activity.event.ActivityCreateEvent;
 import com.common.dto.activity.ActivityDTO;
 import com.common.dto.structure.ResponseDTO;
+import com.common.security.ResourceAccessClient;
 import com.common.structure.status.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,44 +24,51 @@ public class ActivityCommandProcessor {
     EncryptDecryptConverter encryptDecryptConverter;
     @Autowired
     private RabbitMQSearchPublisher commandSearchPublisher;
+    @Autowired
+    private ResourceAccessClient resourceAccessClient;
     @Value("${app.rabbitmq.exchange.point.exchangeName}")
     private String exchangePoint;
     @Value("${app.rabbitmq.exchange.point.routingKey.commandSaveActivity}")
     private String routingKeySaveActivity;
     @Value("${app.rabbitmq.exchange.point.routingKey.commandDeleteActivity}")
     private String routingKeyDeleteActivity;
-    @Value("${rabbitmq.exchange.name.activity.search.exchangeName}")
-    private String exchangeActivitySearch;
-    @Value("${error.document.notFound}")
-    private String errorDocument;
 
     public Mono<ResponseDTO> saveActivity(ActivityDTO activityDTO) {
-        String emailCriypt = encryptDecryptConverter.convert(activityDTO.getEmail());
-        activityDTO.setEmail(emailCriypt);
-        return Mono.fromCallable(() -> {
-            Activity activity = activityService.saveActivity(activityDTO);
-            return new ResponseDTO(activity, ActivityHttpStatus.OK.value(), new ArrayList<>());
-        }).doOnSuccess(response1 -> {
-            // Invia l'evento dopo il salvataggio del log in modo asincrono
-            Mono.fromRunnable(() -> {
-                ActivityCreateEvent event = new ActivityCreateEvent(response1.getJsonText());
-                commandSearchPublisher.publishCreate(event); // usa il tuo RabbitMQSearchPublisher
+        return resourceAccessClient.assertCanAccess(activityDTO.getEmail())
+                .then(Mono.fromCallable(() -> {
+                    String emailCriypt = encryptDecryptConverter.convert(activityDTO.getEmail());
+                    activityDTO.setEmail(emailCriypt);
+                    Activity activity = activityService.saveActivity(activityDTO);
+                    return new ResponseDTO(activity, ActivityHttpStatus.OK.value(), new ArrayList<>());
+                }))
+                .doOnSuccess(response1 -> {
+                    Mono.fromRunnable(() -> {
+                        ActivityCreateEvent event = new ActivityCreateEvent(response1.getJsonText());
+                        commandSearchPublisher.publishCreate(event);
 
-            }).subscribe(); // Avvia il runnable senza bloccare il flusso
-        });
+                    }).subscribe();
+                });
     }
 
     public Mono<ResponseDTO> deleteByIdentificativo(String identificativo) {
         String _id = encryptDecryptConverter.decrypt(identificativo);
-        return Mono.fromCallable(() -> {
-            Long _idL = activityService.deleteByIdentificativo(_id);
-            return new ResponseDTO(_idL, ActivityHttpStatus.OK.value(), new ArrayList<>());
-        }).doOnSuccess(response1 -> {
-            // Invia l'evento dopo il salvataggio del log in modo asincrono
-            Mono.fromRunnable(() -> {
-                commandSearchPublisher.publishDeleteEnriched(_id); // u
-            }).subscribe(); // Avvia il runnable senza bloccare il flusso
-        });
+        return Mono.fromCallable(() -> activityService.findByIdentificativo(_id))
+                .flatMap(existing -> {
+                    if (existing != null) {
+                        String ownerPlain = encryptDecryptConverter.decrypt(existing.getEmail());
+                        return resourceAccessClient.assertCanAccess(ownerPlain).thenReturn(_id);
+                    }
+                    return Mono.just(_id);
+                })
+                .flatMap(id -> Mono.fromCallable(() -> {
+                    Long _idL = activityService.deleteByIdentificativo(id);
+                    return new ResponseDTO(_idL, ActivityHttpStatus.OK.value(), new ArrayList<>());
+                }))
+                .doOnSuccess(response1 -> {
+                    Mono.fromRunnable(() -> {
+                        commandSearchPublisher.publishDeleteEnriched(_id);
+                    }).subscribe();
+                });
 
     }
 }
