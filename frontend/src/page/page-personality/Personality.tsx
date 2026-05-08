@@ -7,7 +7,7 @@ import React from "react";
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionName } from "../../general/structure/Constant";
 import PageLayout, { TypeMessage } from "../page-layout/PageLayout";
-import PagePrivacyPolicyContent from "./PrivacyPolicyContent";
+import PagePersonalityContent from "./PersonalityContent";
 
 const PagePersonality: React.FC = () => {
   const { i18n } = useLingui();
@@ -22,7 +22,7 @@ const PagePersonality: React.FC = () => {
   }, []);
 
   const section: MenuLaterale = {
-    testo: i18n._("privacy_policy"),
+    testo: i18n._("personality_page_title"),
     path: SectionName.PERSONALITY,
     icon: PsychologyIcon,
   };
@@ -34,8 +34,9 @@ const PagePersonality: React.FC = () => {
       isVertical={isVertical}
       handleClose={() => setOpen(false)}
       navigate={useRouter()}
-      hiddenEmail={true}    >
-      <PagePrivacyPolicyContent />
+      hiddenEmail={true}
+    >
+      <PagePersonalityContent />
     </PageLayout>
   );
 };

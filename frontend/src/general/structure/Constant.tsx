@@ -13,6 +13,8 @@ export enum SectionName {
   HOME = 'home',
   NOTIFICATION = `notification`,
   SETTINGS = `settings`,
+  PERSONALITY = 'personality',
+  PRIVACY = 'privacy',
   ROOT = ''
 }
 
@@ -28,6 +30,8 @@ export const SectionNameDesc = {
   get REGISTER() { return i18n._('sezione_registrazione'); },
   get NOTIFICATION() { return i18n._('notifiche'); },
   get SETTINGS() { return i18n._('impostazione_profilo'); },
+  get PERSONALITY() { return i18n._('notifiche'); },
+  get PRIVACY() { return i18n._('impostazione_profilo'); },
   get ROOT() { return i18n._('home'); },
 
 };

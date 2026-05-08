@@ -1,5 +1,5 @@
 "use client";
 
-import PersonalityPage from "@/page/page-personality/PersonalityPage";
+import Personality from "@/page/page-personality/Personality";
 
-export default PersonalityPage;
+export default Personality;

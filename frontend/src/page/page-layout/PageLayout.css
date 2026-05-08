@@ -54,8 +54,8 @@
     margin: 0;
     font-size: 1rem !important;
     letter-spacing: 0.04em;
-    color: var(--color-primary-hover);
-    line-height: 1;
+    color: var(--color-primary);
+    line-height: 1.2;
 }
 
 .header-title-badge {
@@ -64,19 +64,20 @@
     justify-content: center;
     padding: 10px 16px;
     border-radius: var(--radius-lg);
-    background: var(--color-primary-soft-alt);
-    border: 1px solid var(--color-primary);
-    box-shadow: var(--shadow-sm);
+    background: color-mix(in srgb, var(--color-primary) 10%, white);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 35%, white);
+    box-shadow: none;
 }
 
 .header-icon {
     font-size: 1.35rem;
-    color: var(--color-primary);
+    color: color-mix(in srgb, var(--color-primary) 80%, white);
     padding-right: var(--space-2);
 }
 
 .title-container {
-    padding-top: var(--space-1);
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
     display: flex;
     justify-content: center;
     align-items: center;
