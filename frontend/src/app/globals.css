@@ -1,37 +1,44 @@
 @import "tailwindcss";
 
 :root {
-  --color-bg: #eef2f7;
-  --color-surface: #ffffff;
-  --color-surface-soft: #e9eef5;
-  --color-text: #0f172a;
-  --color-text-muted: #475569;
-  --color-border: #e2e8f0;
-  --color-primary: #1565c0;
-  --color-primary-hover: #0d47a1;
-  --color-danger: #ef4444;
-  --color-success: #10b981;
-  --color-white: #ffffff;
+  /* Base dark (portfolio / global) */
+  --color-bg-solid: #060910;
+  --color-bg: #060910;
+  --color-surface: #070c14;
+  --color-surface-soft: #0f1626;
+  --color-surface-elevated: rgba(18, 26, 43, 0.92);
+  --color-text: #e8eff7;
+  --color-text-muted: #cbd5e1;
+  --color-border: rgba(59, 130, 246, 0.26);
+  --color-border-strong: rgba(59, 130, 246, 0.42);
+  --color-primary: #60a5fa;
+  --color-primary-hover: #3b82f6;
+  --color-danger: #f87171;
+  --color-success: #34d399;
+  /* Testo quasi bianco mai puro #fff */
+  --color-text-bright: #e5edf9;
+  /* Testo su sfondi blu/primari saturati */
+  --color-on-primary: #071018;
   --color-muted-300: #94a3b8;
   --color-muted-500: #64748b;
-  --color-info: #3b82f6;
-  --color-info-soft: #e6eeff;
-  --color-info-soft-2: #edf3fd;
-  --color-info-soft-3: #d8effe;
-  --color-info-soft-4: #bbdefb;
-  --color-primary-soft: #e3f2fd;
-  --color-primary-soft-hover: #d6ecfc;
-  --color-primary-soft-alt: #bbdefb;
-  --color-danger-soft: #fef2f2;
-  --color-danger-soft-2: #fee2e2;
-  --color-danger-soft-3: #fecaca;
-  --color-danger-text: #991b1b;
-  --color-danger-text-strong: #b91c1c;
-  --color-warning: #f59e0b;
-  --color-warning-text: #92400e;
-  --color-info-text: #1e40af;
-  --color-footer-bg: #2d3748;
-  --color-footer-text: #f7fafc;
+  --color-info: #60a5fa;
+  --color-info-soft: rgba(37, 99, 235, 0.14);
+  --color-info-soft-2: rgba(37, 99, 235, 0.18);
+  --color-info-soft-3: rgba(37, 99, 235, 0.08);
+  --color-info-soft-4: rgba(59, 130, 246, 0.35);
+  --color-primary-soft: rgba(59, 130, 246, 0.12);
+  --color-primary-soft-hover: rgba(59, 130, 246, 0.2);
+  --color-primary-soft-alt: rgba(59, 130, 246, 0.22);
+  --color-danger-soft: rgba(248, 113, 113, 0.1);
+  --color-danger-soft-2: rgba(248, 113, 113, 0.18);
+  --color-danger-soft-3: rgba(248, 113, 113, 0.28);
+  --color-danger-text: #fecaca;
+  --color-danger-text-strong: #fca5a5;
+  --color-warning: #fbbf24;
+  --color-warning-text: #fde68a;
+  --color-info-text: #93c5fd;
+  --color-footer-bg: rgba(4, 8, 16, 0.92);
+  --color-footer-text: #e2e8f0;
 
   --space-0: 2px;
   --space-1: 4px;
@@ -47,8 +54,9 @@
   --radius-lg: 12px;
   --radius-round: 999px;
 
-  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 8px 20px rgba(15, 23, 42, 0.1);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 0 32px rgba(37, 99, 235, 0.15);
 
   --font-sans-modern: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
@@ -60,9 +68,21 @@
   --font-mono: var(--font-geist-mono);
 }
 
+html {
+  color-scheme: dark;
+  min-height: 100%;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 30%, #1a3a5c 0%, transparent 55%),
+    radial-gradient(ellipse 60% 45% at 75% 85%, #0d2137 0%, transparent 52%),
+    linear-gradient(180deg, #060a12 0%, var(--color-bg-solid) 48%, #050810 100%);
+  background-color: #050810;
+  background-attachment: fixed;
+}
+
 body {
   margin: 0;
-  background: var(--color-bg);
+  min-height: 100dvh;
+  background: transparent;
   color: var(--color-text);
   font-family: var(--font-sans-modern);
   overflow-x: hidden;
@@ -70,4 +90,8 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+.MuiIconButton-colorPrimary {
+  color: var(--color-primary) !important;
 }

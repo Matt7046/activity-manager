@@ -10,7 +10,7 @@ const PagePersonalityContent: React.FC = () => {
 
   return (
     <div className="personality-shell">
-      <Paper elevation={3} className="personality-paper">
+      <Paper elevation={0} className="personality-paper">
         <div className="personality-container">
           <div className="personality-identity-card">
             <h2 className="personality-subtitle">{t("profilo_anagrafico")}</h2>

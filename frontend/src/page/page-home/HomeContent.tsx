@@ -333,7 +333,7 @@ const GoogleAuthComponent = () => {
           {/* Main Login Box */}
           <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
             <Box className="welcome-container1">
-              <Paper elevation={3} className="login-paper">
+              <Paper elevation={0} className="login-paper">
                 <Box mb={3} className="box-pulsanti-login">
 
                   {!hiddenLogin && (

@@ -8,7 +8,7 @@ const PagePrivacyPolicyContent: React.FC = () => {
   return (
     <>
       <div className="privacy-shell">
-        <Paper elevation={3} className="privacy-paper">
+        <Paper elevation={0} className="privacy-paper">
           <div className="privacy-container">
             <div className="privacy-header">
             </div>

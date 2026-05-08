@@ -78,7 +78,7 @@
 
 .button-confirm-custom {
   background: var(--color-primary) !important;
-  color: white !important;
+  color: var(--color-on-primary) !important;
   text-transform: none !important;
   font-weight: 600 !important;
   padding: 10px 28px !important;

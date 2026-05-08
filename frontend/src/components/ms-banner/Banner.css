@@ -1,52 +1,52 @@
-/* BannerOpenSource.css */
-
+/* Come la banda "Tecnologie" (TechFooter): stesso fondo e contorno blu */
 .banner {
-    background-color: var(--color-surface-soft);
-    padding: var(--space-5);
-    text-align: center;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    margin: var(--space-5) auto;
-    border: 1px solid var(--color-border);
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-  
-  .text {
-    font-size: 14px;
-    margin-bottom: var(--space-2);
-    color: var(--color-text)
-  }
-  
-  .input {
-    padding: var(--space-3);
-    font-size: 14px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border);
-  }
-  
-  .button {
-    padding: var(--space-3);
-    font-size: 14px;
-    color: var(--color-white);
-    background-color: var(--color-primary);
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-  }
-  
-  .thank-you-message {
-    font-size: 16px;
-    color: var(--color-success);
-  }
-  
-  .link {
-    color: var(--color-primary);
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  
+  background-color: var(--color-footer-bg);
+  padding: var(--space-5);
+  text-align: center;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  margin: var(--space-5) auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.text {
+  font-size: 14px;
+  margin-bottom: var(--space-2);
+  color: var(--color-footer-text);
+}
+
+.input {
+  padding: var(--space-3);
+  font-size: 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.button {
+  padding: var(--space-3);
+  font-size: 14px;
+  color: var(--color-on-primary);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.thank-you-message {
+  font-size: 16px;
+  color: var(--color-success);
+}
+
+.link {
+  color: var(--color-info-text);
+  text-decoration: underline;
+  cursor: pointer;
+}
