@@ -9,7 +9,8 @@ public enum ActivityHttpStatus {
     ARITHMETIC(2),
     OK(200),
     INTERNAL_SERVER_ERROR(500),
-    DATABASE_ERROR(401);
+    DATABASE_ERROR(401),
+    FORBIDDEN(403);
 
     private final int value;
 

@@ -1,11 +1,19 @@
 # STAGE 1: Build
 FROM maven:3.9-amazoncorretto-17 AS build
 WORKDIR /app
-# Copia tutto il contenuto del modulo activity-servicecd.c
+# Cache dependencies first
+COPY pom.xml ./pom.xml
+COPY common/pom.xml ./common/pom.xml
+COPY service/image/pom.xml ./service/image/pom.xml
+COPY service/auth/pom.xml ./service/auth/pom.xml
+COPY service/userPoint/pom.xml ./service/userPoint/pom.xml
+COPY service/family/pom.xml ./service/family/pom.xml
+COPY service/notification/pom.xml ./service/notification/pom.xml
+COPY service/activity/pom.xml ./service/activity/pom.xml
+RUN mvn -pl service/activity -am -DskipTests dependency:go-offline
+# Copy sources and build
 COPY . .
-# Esegui la build (salta i test per velocizzare)
-RUN mvn clean package 
-ENV JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5008"
+RUN mvn -pl service/activity -am -DskipTests package
 # STAGE 2: Runtime
 FROM mcr.microsoft.com/openjdk/jdk:17-azurelinux
 WORKDIR /app

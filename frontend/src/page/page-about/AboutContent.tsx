@@ -36,7 +36,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
   const router = useRouter(); // Ottieni la funzione di navigazione
   const { i18n } = useLingui();
   const [disableButtonSave, setDisableButtonSave] = useState<boolean>();
-  const [disableButtonDelete, setDisableButtonDelete] = useState<boolean>(identificativo === null || identificativo === undefined);
+  const [disableButtonDelete, setDisableButtonDelete] = useState<boolean>(identificativo === null || identificativo === undefined  || user?.type === TypeUser.STANDARD);
   const descrizione = activityStore.activity.find((x) => identificativo === x._id)?.subTesto;
   const [subTesto, setSubTesto] = useState(descrizione);
 

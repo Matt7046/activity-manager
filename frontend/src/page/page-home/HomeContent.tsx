@@ -186,7 +186,7 @@ const GoogleAuthComponent = () => {
       //   token: fakeResponse.credential,
       type: type
     };
-    getToken({ email: currentUser.email, password: 'password' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
+    getToken({ email: currentUser.emailUserCurrent, password: 'password' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
       baseStore.setToken(tokenData?.jsonText?.token);
 
       setCurrentUser(user);

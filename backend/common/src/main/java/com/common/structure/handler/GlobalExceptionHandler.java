@@ -6,8 +6,10 @@ import java.util.List;
 import com.common.structure.status.ActivityHttpStatus;
 import com.common.structure.exception.ArithmeticCustomException;
 import com.common.structure.exception.DecryptException;
+import com.common.structure.exception.ForbiddenException;
 import com.common.structure.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,6 +44,14 @@ public class GlobalExceptionHandler {
         error.add(ex.getMessage());
         ResponseDTO errorResponse = new ResponseDTO(null, ActivityHttpStatus.DECRYPT.value(), error);
         return ResponseEntity.ok(errorResponse);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ResponseDTO> handleForbiddenException(ForbiddenException ex) {
+        List<String> error = new ArrayList<>();
+        error.add(ex.getMessage());
+        ResponseDTO errorResponse = new ResponseDTO(null, ActivityHttpStatus.FORBIDDEN.value(), error);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
 
 

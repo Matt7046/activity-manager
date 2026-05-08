@@ -9,7 +9,9 @@ import SpringBootIcon from "@mui/icons-material/PlayCircleFilled";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import SearchIcon from "@mui/icons-material/Search";
 import MongoDBIcon from "@mui/icons-material/Storage";
+import SecurityIcon from "@mui/icons-material/Security";
 import TranslateIcon from "@mui/icons-material/Translate";
+import WebIcon from "@mui/icons-material/Web";
 import { Trans } from "@lingui/react";
 import { Box, IconButton, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
@@ -24,6 +26,8 @@ const technologies = [
   { name: "ElasticSearch", icon: <SearchIcon fontSize="large" className="techf-icon" /> },
   { name: "RabbitMQ", icon: <HubIcon fontSize="large" className="techf-icon" /> },
   { name: "Docker", icon: <Inventory2Icon fontSize="large" className="techf-icon" /> },
+  { name: "Nginx", icon: <WebIcon fontSize="large" className="techf-icon" /> },
+  { name: "JWT Token", icon: <SecurityIcon fontSize="large" className="techf-icon" /> },
   { name: "GPT (AI)", icon: <PsychologyIcon fontSize="large" className="techf-icon" /> },
   { name: "Lingui", icon: <TranslateIcon fontSize="large" className="techf-icon" /> },
 ];

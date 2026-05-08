@@ -2,6 +2,7 @@ package com.userPointService.controller;
 
 import com.common.dto.gamification.FavoriteDTO;
 import com.common.dto.structure.ResponseDTO;
+import com.common.security.ReactiveJwt;
 import com.userPointService.processor.GamificationProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,22 +16,26 @@ public class GamificationController {
 
     @GetMapping("videos/{topic}/{email}")
     public Mono<ResponseDTO> fetchVideos(@PathVariable String topic, @PathVariable String email) {
-        return processor.fetchVideos(topic, email);
+        return ReactiveJwt.currentSubject()
+                .flatMap(principal -> processor.fetchVideos(topic, email, principal));
     }
 
     @PostMapping("videos/favorite")
     public Mono<ResponseDTO> saveFavorite(@RequestBody FavoriteDTO favorite) {
-        return processor.saveFavorite(favorite);
+        return ReactiveJwt.currentSubject()
+                .flatMap(principal -> processor.saveFavorite(favorite, principal));
     }
 
     @DeleteMapping("videos/favorite")
     public Mono<ResponseDTO> deleteFavorite(@RequestBody FavoriteDTO favorite) {
-        return processor.deleteFavorite(favorite);
+        return ReactiveJwt.currentSubject()
+                .flatMap(principal -> processor.deleteFavorite(favorite, principal));
     }
 
     @GetMapping("videos/favorite/{topic}/{email}")
     public Mono<ResponseDTO> fetchVideosFavorites(@PathVariable String topic, @PathVariable String email) {
-        return processor.fetchVideosFavorites(topic, email);
+        return ReactiveJwt.currentSubject()
+                .flatMap(principal -> processor.fetchVideosFavorites(topic, email, principal));
     }
 
 }

@@ -54,7 +54,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
   useEffect(() => {
     // Block direct access to internal pages when user context is missing.
-if (!user?.email && section.path !== SectionName.ROOT && section.path !== SectionName.HOME) {      navigateRouting(navigate, SectionName.ROOT, {});
+if (!user?.email && section.path !== SectionName.ROOT && section.path !== SectionName.HOME && section.path !== SectionName.REGISTER) {      navigateRouting(navigate, SectionName.ROOT, {});
     }
   }, [user, navigate]);
 
