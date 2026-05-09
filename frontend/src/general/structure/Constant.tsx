@@ -99,3 +99,5 @@ export const StatusNotificationTranslate = {
   get ALL() { return i18n._('all'); },
 };
 
+
+export const STORAGE_KEY = 'activity-manager-theme';
