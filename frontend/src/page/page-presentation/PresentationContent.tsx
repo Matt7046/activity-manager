@@ -4,12 +4,12 @@ import { Trans, useLingui } from "@lingui/react";
 import { Box, Button, Link as MuiLink, Typography } from "@mui/material";
 import LinkNext from "next/link";
 import { useRouter } from "next/navigation";
-import { SectionName } from "../../general/structure/Constant";
 import BannerOpenSource from "../../components/ms-banner/Banner";
-import TechFooter from "../../components/ms-tech-footer/TechFooter";
 import "../../components/ms-presentation/Presentation.css";
+import TechFooter from "../../components/ms-tech-footer/TechFooter";
+import { SectionName } from "../../general/structure/Constant";
 
-const PagePresentationContent: React.FC = () => {
+const PresentationContent: React.FC = () => {
   const router = useRouter();
   const { i18n } = useLingui();
 
@@ -62,4 +62,4 @@ const PagePresentationContent: React.FC = () => {
   );
 };
 
-export default PagePresentationContent;
+export default PresentationContent;

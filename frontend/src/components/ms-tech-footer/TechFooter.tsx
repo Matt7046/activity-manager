@@ -1,7 +1,6 @@
 "use client";
 
 import NextjsIcon from "@mui/icons-material/ChangeHistory";
-import ReactIcon from "@mui/icons-material/Code";
 import JavaIcon from "@mui/icons-material/Coffee";
 import HubIcon from "@mui/icons-material/Hub";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
@@ -15,11 +14,24 @@ import WebIcon from "@mui/icons-material/Web";
 import { Trans } from "@lingui/react";
 import { Box, IconButton, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import type { ReactNode } from "react";
 import "./TechFooter.css";
 
-const technologies = [
+const cdLogo = (
+  <img
+    src="/logo-colorsdev.png"
+    alt=""
+    width={36}
+    height={36}
+    className="techf-logo-brand"
+    loading="lazy"
+    decoding="async"
+  />
+);
+
+const technologies: { name: string; icon: ReactNode; brandLogo?: boolean }[] = [
   { name: "MongoDB Cloud", icon: <MongoDBIcon fontSize="large" className="techf-icon" /> },
-  { name: "React", icon: <ReactIcon fontSize="large" className="techf-icon" /> },
+  { name: "colorsdev.tech", icon: cdLogo, brandLogo: true },
   { name: "Next.js", icon: <NextjsIcon fontSize="large" className="techf-icon" /> },
   { name: "Java", icon: <JavaIcon fontSize="large" className="techf-icon" /> },
   { name: "Spring Boot", icon: <SpringBootIcon fontSize="large" className="techf-icon" /> },
@@ -42,7 +54,7 @@ const TechFooter = () => {
         {technologies.map((tech) => (
           <Grid key={tech.name} size={{ xs: 5, sm: 2, md: 2 }} className="techf-item">
             <IconButton color="inherit" disabled>
-              {tech.icon}
+              <span className={`techf-icon-wrap${tech.brandLogo ? " techf-icon-wrap-brand" : ""}`}>{tech.icon}</span>
             </IconButton>
             <Typography variant="caption" display="block" className="techf-name">
               {tech.name}
