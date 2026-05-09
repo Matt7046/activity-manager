@@ -1,5 +1,5 @@
 "use client";
-import { PATH_USER_POINT, postData } from "../../../general/service/AxiosService";
+import { PATH_USER_POINT, postData, postDataPublic } from "../../../general/service/AxiosService";
 import { ResponseI, UserI } from "../../../general/structure/Utils";
 import { TypeMessage } from "../../page-layout/PageLayout";
 import { UserPointsI } from "../UserPoint";
@@ -37,10 +37,10 @@ export const getTypeUser = async (userDTO: any,funzioneMessage?: (message?: Type
 };
 
 
-export const saveUser = async (userDTO: UserPointsI, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) => {
+export const register = async (userDTO: UserPointsI, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) => {
   try {
     const path = PATH_USER_POINT + `/dati/user`;
-    const data = await postData(path, userDTO, setLoading, funzioneMessage,); // Usa l'URL dinamico
+    const data = await postDataPublic(path, userDTO, setLoading, funzioneMessage,); // Usa l'URL dinamico
     return data;
   } catch (error) {
   }

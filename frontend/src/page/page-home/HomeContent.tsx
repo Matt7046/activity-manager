@@ -358,7 +358,7 @@ const GoogleAuthComponent = () => {
     }
 
     resetPassword(
-      { email, emailUserCurrent: email },
+      { emailUserCurrent: email },
       (dialogMessage?: TypeMessage) => showMessage(setOpen, setMessage, dialogMessage, true),
       setLoading
     ).then(() => {

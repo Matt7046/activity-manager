@@ -83,9 +83,9 @@ public class UserPointProcessor {
         return Mono.fromCallable(() -> {
             userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailUserCurrent());
             UserPoint sub = userPointMapper.fromDTO(userPointDTO);
-            Long itemId = userPointService.getTypeUser(sub);
+            Integer itemId = userPointService.getTypeUser(sub);
             String emailUserCurrent = userPointDTO.getEmailUserCurrent();
-            return new ResponseDTO(new UserDTO(itemId, itemId == 2L, emailUserCurrent), ActivityHttpStatus.OK.value(),
+            return new ResponseDTO(new UserDTO(itemId, itemId == 2, emailUserCurrent), ActivityHttpStatus.OK.value(),
                     new ArrayList<>());
         });
     }
@@ -135,11 +135,13 @@ public class UserPointProcessor {
     private ResponseDTO resetPasswordInternal(UserPointDTO userPointDTO) {
         UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);
         String tempPassword = UUID.randomUUID().toString().substring(0, 8);
-        if (userPointSave.getEmail() != null) {
+        if (userPointSave.getEmailUserCurrent() != null) {
             userPointSave = userPointService.getUserByEmail(userPointSave);
             if (userPointSave != null) {
                 UserPointDTO dto = userPointMapper.toDTO(userPointSave);
-                dto.setPassword(encryptDecryptConverter.convert(tempPassword));
+                dto.setPassword(tempPassword);
+                dto.setEmailUserCurrent(userPointDTO.getEmailUserCurrent());
+                saveUserPassword(dto);
                 inviaNotifica(dto, null);
             }
         }
@@ -212,12 +214,18 @@ public class UserPointProcessor {
         });
     }
 
-    private ResponseDTO saveUserPasswordInternal(UserPointDTO userPointDTO) {
+    public ResponseDTO saveUserPasswordInternal(UserPointDTO userPointDTO) {
         UserPoint userPointSave = userPointMapper.fromDTO(userPointDTO);
         if (userPointSave.getEmailUserCurrent() != null) {
-            userPointSave = userPointService.saveUserPassword(userPointSave);
+            userPointService.saveUserPassword(userPointSave);
         }
-        return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent()),
+        return new ResponseDTO(new UserDTO(userPointSave.getType(), false, userPointDTO.getEmailUserCurrent()),
                 ActivityHttpStatus.OK.value(), new ArrayList<>());
+    }
+
+
+    @Transactional
+    public Mono<ResponseDTO> saveUserPassword(UserPointDTO userPointDTO) {
+        return Mono.just(saveUserPasswordInternal(userPointDTO));
     }
 }

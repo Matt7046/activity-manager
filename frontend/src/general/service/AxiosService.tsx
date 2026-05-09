@@ -21,7 +21,7 @@ const apiClient = () => {
 
 
 
-const apiClientToken = () => {
+const apiClientPublic = () => {
   return axios.create({
     baseURL: apiConfig.baseURL,
     timeout: 20000,
@@ -78,7 +78,7 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
   }
 };
 
-export const postDataToken = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
+export const postDataPublic = async (endpoint: string, data: any, setLoading?: (loading: boolean) => void,
   funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
 ) => {
 
@@ -87,7 +87,7 @@ export const postDataToken = async (endpoint: string, data: any, setLoading?: (l
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
-    const response = await apiClientToken().post(endpoint, data);
+    const response = await apiClientPublic().post(endpoint, data);
     response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
     const message: TypeMessage = {
       titleMessage: response.data.status === HttpStatus.OK ? "Successo nella richiesta" : "Errore nella richiesta",

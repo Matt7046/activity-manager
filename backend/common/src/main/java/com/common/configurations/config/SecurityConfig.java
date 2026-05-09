@@ -1,5 +1,7 @@
 package com.common.configurations.config;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -55,6 +57,12 @@ public class SecurityConfig implements WebFluxConfigurer {
     @Value("${app.page.address.sitemap}")
     private String sitemapAddress;
 
+    @Value("${app.page.address.register}")
+    private String registerAddress;
+
+    @Value("${app.page.address.reset.password}")
+    private String resetPasswordAddress;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 
@@ -74,7 +82,8 @@ public class SecurityConfig implements WebFluxConfigurer {
                         .pathMatchers(tokenAddress).permitAll()
                         .pathMatchers(webSocketAddress).permitAll()
                         .pathMatchers(loginAddress).permitAll()
-                        .pathMatchers("/api/userpoint/dati/user").permitAll()
+                        .pathMatchers(registerAddress).permitAll()
+                        .pathMatchers(resetPasswordAddress).permitAll()
                         .pathMatchers(sitemapAddress).permitAll()
                         .pathMatchers(HttpMethod.OPTIONS, allAddress).permitAll()
                         .anyExchange().authenticated())

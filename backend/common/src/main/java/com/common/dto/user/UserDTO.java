@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // Genera un costruttore con tutti i campi
 public class UserDTO implements InterfaceDTO {
 
-	private Long typeUser; // Identificatore unico
+	private Integer typeUser; // Identificatore unico
     private Boolean newUser;
     private String emailUserCurrent;
 	
