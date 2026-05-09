@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  /* Base dark (portfolio / global) */
-  --color-bg-solid: #060910;
-  --color-bg: #060910;
+  /* Base dark (portfolio / global) — grigi neutri, coerenti col gradiente pagina */
+  --color-bg-solid: #08080a;
+  --color-bg: #08080a;
   --color-surface: #070c14;
   --color-surface-soft: #0f1626;
   --color-surface-elevated: rgba(18, 26, 43, 0.92);
@@ -59,6 +59,86 @@
   --shadow-glow: 0 0 32px rgba(37, 99, 235, 0.15);
 
   --font-sans-modern: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Stack unico letto anche da body (Tailwind Preflight spesso tinta solo il body) */
+  --page-bg-layers:
+    radial-gradient(ellipse 130% 95% at 50% -12%, rgba(168, 168, 178, 0.2) 0%, transparent 48%),
+    radial-gradient(ellipse 105% 78% at 48% 30%, rgba(92, 92, 102, 0.45) 0%, transparent 60%),
+    radial-gradient(ellipse 72% 58% at 90% 90%, rgba(28, 28, 34, 0.85) 0%, transparent 56%),
+    linear-gradient(
+      188deg,
+      #26262c 0%,
+      #151518 24%,
+      var(--color-bg-solid) 50%,
+      #070708 78%,
+      #030304 100%
+    );
+  --page-bg-fallback: #040405;
+}
+
+/* Tema chiaro: centro con gradiente; piastre grigio; tutti i grigi leggermente schiariti vs la versione precedente */
+html[data-theme="light"] {
+  --color-bg-solid: #dbe0e9;
+  --color-bg: #e4e9f3;
+  /* Superfici “input” / campi: più chiare sulle piastre scure */
+  --color-surface: #d4dae6;
+  --color-surface-soft: #cad1df;
+  --color-surface-elevated: #898e9b;
+  --color-text: #111111;
+  --color-text-muted: #141414;
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-strong: rgba(0, 0, 0, 0.2);
+  --color-primary: #3a3a3a;
+  --color-primary-hover: #171717;
+  --color-danger: #b91c1c;
+  --color-success: #15803d;
+  --color-text-bright: #0a0a0a;
+  --color-on-primary: #fafafa;
+  --color-muted-300: #737373;
+  --color-muted-500: #525252;
+  --color-info: #525252;
+  --color-info-soft: rgba(0, 0, 0, 0.06);
+  --color-info-soft-2: rgba(0, 0, 0, 0.09);
+  --color-info-soft-3: rgba(0, 0, 0, 0.04);
+  --color-info-soft-4: rgba(0, 0, 0, 0.14);
+  --color-primary-soft: rgba(0, 0, 0, 0.07);
+  --color-primary-soft-hover: rgba(0, 0, 0, 0.11);
+  --color-primary-soft-alt: rgba(0, 0, 0, 0.13);
+  --color-danger-soft: rgba(185, 28, 28, 0.1);
+  --color-danger-soft-2: rgba(185, 28, 28, 0.16);
+  --color-danger-soft-3: rgba(185, 28, 28, 0.22);
+  --color-danger-text: #991b1b;
+  --color-danger-text-strong: #7f1d1d;
+  --color-warning: #a16207;
+  --color-warning-text: #78350f;
+  --color-info-text: #262626;
+  --color-banner-bg: #858993;
+  --color-footer-bg: #8a8f9a;
+  --color-footer-text: #151515;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.07);
+  --shadow-md: 0 8px 22px rgba(0, 0, 0, 0.11);
+  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.05);
+
+  /* Lati più scuri, centro più chiaro (scalati tutti più chiari) */
+  --page-bg-layers:
+    linear-gradient(180deg, rgba(142, 146, 155, 0.18) 0%, transparent 38%),
+    linear-gradient(
+      90deg,
+      #8c919c 0%,
+      #9ea2ac 12%,
+      #c2c8d4 35%,
+      #e8ecf4 47%,
+      #f5f7fc 50%,
+      #e8ecf4 53%,
+      #c2c8d4 65%,
+      #9ea2ac 88%,
+      #8c919c 100%
+    );
+  --page-bg-fallback: #b8bdc8;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
 }
 
 @theme inline {
@@ -71,18 +151,18 @@
 html {
   color-scheme: dark;
   min-height: 100%;
-  background:
-    radial-gradient(ellipse 90% 70% at 50% 30%, #1a3a5c 0%, transparent 55%),
-    radial-gradient(ellipse 60% 45% at 75% 85%, #0d2137 0%, transparent 52%),
-    linear-gradient(180deg, #060a12 0%, var(--color-bg-solid) 48%, #050810 100%);
-  background-color: #050810;
+  background: var(--page-bg-layers);
+  background-color: var(--page-bg-fallback);
   background-attachment: fixed;
 }
 
 body {
   margin: 0;
   min-height: 100dvh;
-  background: transparent;
+  /* Preflight/MUI possono impostare background sul body: !important mantiene visibile lo stack su html */
+  background: var(--page-bg-layers) !important;
+  background-color: var(--page-bg-fallback) !important;
+  background-attachment: fixed !important;
   color: var(--color-text);
   font-family: var(--font-sans-modern);
   overflow-x: hidden;

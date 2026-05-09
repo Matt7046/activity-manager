@@ -236,5 +236,7 @@
   "password_reset_title": "Passwort zurücksetzen",
   "password_reset_send": "Senden",
   "password_reset_email_required": "Geben Sie eine E-Mail-Adresse ein.",
-  "password_reset_email_invalid": "Geben Sie eine gültige E-Mail-Adresse ein."
+  "password_reset_email_invalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+  "theme_switch_to_light": "Zum Hellmodus wechseln",
+  "theme_switch_to_dark": "Zum Dunkelmodus wechseln"
 }

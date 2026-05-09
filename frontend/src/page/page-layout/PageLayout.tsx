@@ -12,6 +12,7 @@ import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import Label from '../../components/ms-label/Label';
 import Language from "../../components/ms-language/Language";
+import ThemeToggle from "../../components/ms-theme-toggle/ThemeToggle";
 import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
 import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
@@ -238,6 +239,7 @@ if (!user?.email && section.path !== SectionName.ROOT && section.path !== Sectio
               )}
 
               <Button pulsanti={[pulsanteLogout]} />
+              <ThemeToggle />
               <Language />
             </Box>
           </Box>

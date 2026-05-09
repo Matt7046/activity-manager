@@ -236,6 +236,7 @@
   "password_reset_title": "Ripristino password",
   "password_reset_send": "Invia",
   "password_reset_email_required": "Inserisci un indirizzo email.",
-  "password_reset_email_invalid": "Inserisci un indirizzo email valido."         
-
+  "password_reset_email_invalid": "Inserisci un indirizzo email valido.",
+  "theme_switch_to_light": "Passa al tema chiaro",
+  "theme_switch_to_dark": "Passa al tema scuro"
 }

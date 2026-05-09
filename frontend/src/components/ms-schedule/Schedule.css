@@ -64,11 +64,6 @@
 }
 
 /* Icone Info e Freccia */
-.row-icon-info {
-  margin-right: 8px;
-  flex-shrink: 0;
-}
-
 .row-icon-arrow {
   transition: transform 0.3s;
   color: var(--color-text-muted);
@@ -78,6 +73,16 @@
 
 .row-icon-arrow.expanded {
   transform: rotate(180deg);
+}
+
+.row-icon-info {
+  margin-right: 8px;
+  flex-shrink: 0;
+  color: var(--color-muted-300);
+}
+
+.row-icon-info.row-icon-info--expanded {
+  color: var(--color-primary-hover);
 }
 
 /* Contenitore del testo del titolo */

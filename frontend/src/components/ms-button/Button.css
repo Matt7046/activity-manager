@@ -109,3 +109,31 @@
 .dialog-button-confirm:hover { transform: translateY(-1px); box-shadow: var(--shadow-md) !important; }
 .dialog-button-cancel { color: var(--color-text-muted) !important; text-transform: none !important; font-weight: 600 !important; padding: 10px 24px !important; border-radius: var(--radius-lg) !important; }
 .dialog-button-cancel:hover { background-color: var(--color-surface-soft) !important; }
+
+/* Tema chiaro: FAB ancora distinguibili, blu → grigio antracite (icone chiare sul bottone) */
+html[data-theme="light"] .button-blue {
+  background: linear-gradient(180deg, #5c5c5c 0%, #454545 40%, #383838 72%, #2d2d2d 100%) !important;
+  color: #fafafa !important;
+  border: 1px solid rgba(0, 0, 0, 0.35) !important;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.12),
+    0 3px 10px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="light"] .button-blue i {
+  color: #fafafa !important;
+  filter: none;
+}
+
+html[data-theme="light"] .button-blue:hover {
+  background: linear-gradient(180deg, #6b6b6b 0%, #525252 38%, #404040 72%, #333 100%) !important;
+}
+
+html[data-theme="light"] .button-red {
+  color: #fafafa !important;
+}
+
+html[data-theme="light"] .button-red i {
+  color: #fafafa !important;
+}

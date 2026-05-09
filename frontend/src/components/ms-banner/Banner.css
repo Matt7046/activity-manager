@@ -1,12 +1,16 @@
 /* Come la banda "Tecnologie" (TechFooter): stesso fondo e contorno blu */
 .banner {
-  background-color: var(--color-footer-bg);
+  background-color: var(--color-banner-bg, var(--color-footer-bg));
   padding: var(--space-5);
   text-align: center;
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(37, 99, 235, 0.22);
+  border: 1px solid var(--color-border-strong);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
   margin: var(--space-5) auto;
+}
+
+html[data-theme="light"] .banner {
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
 }
 
 .form {

@@ -45,8 +45,8 @@
     padding-right: var(--space-3);
     display: flex;
     align-items: center;
+    gap: var(--space-1);
     /* Allinea verticalmente icone e bandierine */
-    /* Spazio tra i pulsanti */
 }
 
 .header-title {
@@ -66,7 +66,7 @@
     border-radius: var(--radius-lg);
     background: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
     border: 1px solid var(--color-border-strong);
-    box-shadow: 0 0 20px rgba(37, 99, 235, 0.12), inset 0 1px 0 rgba(148, 180, 226, 0.06);
+    box-shadow: var(--shadow-sm), inset 0 1px 0 var(--color-primary-soft);
 }
 
 .header-icon {
