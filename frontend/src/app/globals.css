@@ -76,18 +76,21 @@
   --page-bg-fallback: #040405;
 }
 
-/* Tema chiaro: centro con gradiente; piastre grigio; tutti i grigi leggermente schiariti vs la versione precedente */
+/*
+ * Tema chiaro: scala da un blu “PlayStation-ish” compatibile col FAB .button-blue (≈ #0369a1 / #075985),
+ * schiarito verso il centro — grigi freddi con leggerezza di tonalità sul blu Petrolio/PS.
+ */
 html[data-theme="light"] {
-  --color-bg-solid: #dbe0e9;
-  --color-bg: #e4e9f3;
-  /* Superfici “input” / campi: più chiare sulle piastre scure */
-  --color-surface: #d4dae6;
-  --color-surface-soft: #cad1df;
-  --color-surface-elevated: #898e9b;
+  --color-bg-solid: #e6edf9;
+  --color-bg: #ebeff9;
+  /* Superfici / campi */
+  --color-surface: #e1e9f8;
+  --color-surface-soft: #d5def0;
+  --color-surface-elevated: #98a9c4;
   --color-text: #111111;
   --color-text-muted: #141414;
-  --color-border: rgba(0, 0, 0, 0.1);
-  --color-border-strong: rgba(0, 0, 0, 0.2);
+  --color-border: rgba(20, 55, 95, 0.12);
+  --color-border-strong: rgba(15, 50, 90, 0.2);
   --color-primary: #3a3a3a;
   --color-primary-hover: #171717;
   --color-danger: #b91c1c;
@@ -112,29 +115,28 @@ html[data-theme="light"] {
   --color-warning: #a16207;
   --color-warning-text: #78350f;
   --color-info-text: #262626;
-  --color-banner-bg: #858993;
-  --color-footer-bg: #8a8f9a;
+  --color-banner-bg: #77899f;
+  --color-footer-bg: #7d8fa4;
   --color-footer-text: #151515;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.07);
   --shadow-md: 0 8px 22px rgba(0, 0, 0, 0.11);
   --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.05);
 
-  /* Lati più scuri, centro più chiaro (scalati tutti più chiari) */
   --page-bg-layers:
-    linear-gradient(180deg, rgba(142, 146, 155, 0.18) 0%, transparent 38%),
+    linear-gradient(180deg, rgba(7, 89, 133, 0.14) 0%, transparent 40%),
     linear-gradient(
       90deg,
-      #8c919c 0%,
-      #9ea2ac 12%,
-      #c2c8d4 35%,
-      #e8ecf4 47%,
-      #f5f7fc 50%,
-      #e8ecf4 53%,
-      #c2c8d4 65%,
-      #9ea2ac 88%,
-      #8c919c 100%
+      #97a5bb 0%,
+      #a9b8cc 14%,
+      #c9d4e9 37%,
+      #e9effa 47%,
+      #f2f6fe 50%,
+      #e9effa 53%,
+      #c9d4e9 63%,
+      #a9b8cc 86%,
+      #97a5bb 100%
     );
-  --page-bg-fallback: #b8bdc8;
+  --page-bg-fallback: #c3cee2;
 }
 
 html[data-theme="light"] {

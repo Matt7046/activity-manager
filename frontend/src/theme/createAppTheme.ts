@@ -151,8 +151,8 @@ export function createAppTheme(mode: AppColorMode): Theme {
         dark: '#525252',
       },
       background: {
-        default: '#d9dee9',
-        paper: '#8a8f9a',
+        default: '#dfe7fa',
+        paper: '#95a8c4',
       },
       text: {
         primary: '#0a0a0a',

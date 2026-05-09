@@ -225,6 +225,10 @@ if (!user?.email && section.path !== SectionName.ROOT && section.path !== Sectio
 
             {/* Contenitore pulsanti: ora sarà SEMPRE allineato a destra */}
             <Box className='box-layout-right-button'>
+              <Box className="box-layout-theme-lang-group">
+                <ThemeToggle placement="header" />
+                <Language placement="header" />
+              </Box>
               {/* Mostra il bottone notifiche solo se NON siamo in home o in registrazione */}
               {(sectionAttiva.path !== SectionName.HOME && sectionAttiva.path !== SectionName.REGISTER &&  sectionAttiva.path !== SectionName.PERSONALITY) && (
                 <>
@@ -239,8 +243,6 @@ if (!user?.email && section.path !== SectionName.ROOT && section.path !== Sectio
               )}
 
               <Button pulsanti={[pulsanteLogout]} />
-              <ThemeToggle />
-              <Language />
             </Box>
           </Box>
         </Grid>
