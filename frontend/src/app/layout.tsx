@@ -18,11 +18,6 @@ export const metadata: Metadata = {
   metadataBase,
   title: 'Activity Manager',
   description: 'Activity Manager',
-  icons: {
-    icon: [{ url: '/logo-colorsdev.png', type: 'image/png', sizes: '512x512' }],
-    shortcut: '/logo-colorsdev.png',
-    apple: '/logo-colorsdev.png',
-  },
   openGraph: {
     title: 'Activity Manager',
     description: 'Activity Manager',
