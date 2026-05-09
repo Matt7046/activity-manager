@@ -54,7 +54,7 @@ public class UserPointProcessor {
     @Transactional
     public Mono<ResponseDTO> findByEmail(UserPointDTO userPointDTO, String principalEmail) {
         return Mono.fromCallable(() -> {
-            userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailChild());
+            userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailUserCurrent());
             UserPoint sub = userPointMapper.fromDTO(userPointDTO);
             UserPoint item = userPointService.findByEmailAndType(sub.getEmailChild(), 0L);
             if (item != null) {
