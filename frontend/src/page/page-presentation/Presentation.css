@@ -1,0 +1,39 @@
+
+.presentation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distribuisce lo spazio tra i blocchi */
+  padding: 10px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Div vuoto per bilanciare il centro se necessario */
+.header-spacer {
+  flex: 1;
+  display: flex;
+}
+
+.techf-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex: 2; /* Dà più spazio al centro */
+}
+
+.techf-item {
+  text-align: center;
+  min-width: 60px;
+}
+
+.language-container {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.techf-name {
+  margin-top: 4px;
+}

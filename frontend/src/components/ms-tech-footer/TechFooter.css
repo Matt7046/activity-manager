@@ -31,6 +31,24 @@
   color: var(--color-primary) !important;
 }
 
+.techf-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.techf-icon-wrap-brand .techf-logo-brand {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+
+.techf-logo-brand {
+  border-radius: 10px;
+  object-fit: contain;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.25);
+}
+
 .techf-name {
   color: var(--color-footer-text);
   opacity: 0.9;

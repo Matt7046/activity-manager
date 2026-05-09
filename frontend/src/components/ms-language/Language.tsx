@@ -5,9 +5,14 @@ import { useState } from 'react';
 import { baseStore } from '../../general/structure/BaseStore';
 import "./Language.css";
 
-interface LanguageProps { }
+export type LanguagePlacement = 'default' | 'header';
 
-const Language: React.FC<LanguageProps> = () => {
+interface LanguageProps {
+  /** `header`: stessa riga toolbar (presentation), senza margin-top extra sul contenitore. */
+  placement?: LanguagePlacement;
+}
+
+const Language: React.FC<LanguageProps> = ({ placement = 'default' }) => {
   const [langAnchor, setLangAnchor] = useState<null | HTMLElement>(null);
   // Stato locale usato per forzare il re-render del pulsante lingua.
   const [currentLang, setCurrentLang] = useState(i18n.locale);
@@ -38,7 +43,13 @@ const Language: React.FC<LanguageProps> = () => {
   return (
     <>
       {/* Contenitore per allineare i pulsanti in alto a destra */}
-      <Box display="flex" justifyContent="flex-end" px={2} mt={1}>
+      <Box
+        display="flex"
+        justifyContent="flex-end"
+        px={placement === 'header' ? 0 : 2}
+        mt={placement === 'header' ? 0 : 1}
+        className={placement === 'header' ? 'language-toolbar-header' : undefined}
+      >
         <IconButton onClick={handleOpenLang} color="primary">
           <img
             src={currentLanguage.flagUrl}
