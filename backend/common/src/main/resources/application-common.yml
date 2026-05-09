@@ -67,6 +67,9 @@ app:
       policy: /api/privacy-policy
       login: /api/userpoint/dati/login
       sitemap: /sitemap.xml
+      register: /api/userpoint/dati/user
+      reset:
+        password: /api/userpoint/dati/user/reset/password
     service:
         image: http://image-service:8080
         auth: http://auth-service:8080

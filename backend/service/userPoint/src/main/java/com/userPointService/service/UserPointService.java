@@ -40,8 +40,8 @@ public class UserPointService {
     public UserPoint getUserByEmail(UserPoint userPoint) {
         UserPoint existingUserPoint = userPointRepository.findUserByEmail(userPoint.getEmailUserCurrent());
         if (existingUserPoint == null) {
-            UserPoint userPointList = userPointRepository.findByOnFigli(userPoint.getEmailUserCurrent());
-            existingUserPoint = userPointList;
+            UserPoint userPointChild = userPointRepository.findByOnFigli(userPoint.getEmailUserCurrent());
+            existingUserPoint = userPointChild;
         }
         if (existingUserPoint == null) {
             return new UserPoint();
@@ -107,9 +107,9 @@ public class UserPointService {
         return userPoint;
     }
 
-    public Long getTypeUser(UserPoint point) {
+    public Integer getTypeUser(UserPoint point) {
         UserPoint existUserPointOnFigli = userPointRepository.findUserByEmail(point.getEmailUserCurrent());
-        return existUserPointOnFigli != null ? existUserPointOnFigli.getType() : 2L;
+        return existUserPointOnFigli != null ? existUserPointOnFigli.getType() : 2;
     }
 
     public UserPoint saveUserImage(UserPoint userPoint) {
@@ -165,4 +165,4 @@ public class UserPointService {
         UserPoint existingUserPoint = userPointRepository.findUserByEmail(userPointSave.getEmailUserCurrent());
         return existingUserPoint;
     }
-}
+ }

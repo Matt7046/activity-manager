@@ -44,4 +44,5 @@ public interface UserPointRepository extends MongoRepository<UserPoint, String> 
     @Query("{ 'email': ?0 }")
     @Update("{ '$set': { 'status': ?1 } }")
     Integer updateStatus(String string, Integer status);
+
 }

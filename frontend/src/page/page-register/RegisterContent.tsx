@@ -12,7 +12,7 @@ import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, SectionName } from '../../general/structure/Constant';
 import { navigateRouting, ResponseI, showMessage, UserI } from "../../general/structure/Utils";
-import { saveUser } from '../page-user-point/service/UserPointService';
+import { register } from '../page-user-point/service/UserPointService';
 import "./RegisterContent.css";
 
 
@@ -121,7 +121,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
       userData = { email: email, emailFigli: email, emailUserCurrent: email, password: password }
     }
     setUser(null);
-    return saveUser({ ...userData, password: password, emailFigli: arrayDiOggetti, pointFigli: emailFigli }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((x: ResponseI) => {
+    return register({ ...userData, password: password, emailFigli: arrayDiOggetti, pointFigli: emailFigli }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((x: ResponseI) => {
       navigateRouting(router, SectionName.ROOT, { newLogin: true })
     })
   }
