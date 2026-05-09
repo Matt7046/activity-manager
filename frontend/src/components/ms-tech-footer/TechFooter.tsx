@@ -1,17 +1,18 @@
 "use client";
 
+import { Trans } from "@lingui/react";
 import NextjsIcon from "@mui/icons-material/ChangeHistory";
+import ReactIcon from "@mui/icons-material/Code";
 import JavaIcon from "@mui/icons-material/Coffee";
 import HubIcon from "@mui/icons-material/Hub";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import SpringBootIcon from "@mui/icons-material/PlayCircleFilled";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import SearchIcon from "@mui/icons-material/Search";
-import MongoDBIcon from "@mui/icons-material/Storage";
 import SecurityIcon from "@mui/icons-material/Security";
+import MongoDBIcon from "@mui/icons-material/Storage";
 import TranslateIcon from "@mui/icons-material/Translate";
 import WebIcon from "@mui/icons-material/Web";
-import { Trans } from "@lingui/react";
 import { Box, IconButton, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import type { ReactNode } from "react";
@@ -31,7 +32,7 @@ const cdLogo = (
 
 const technologies: { name: string; icon: ReactNode; brandLogo?: boolean }[] = [
   { name: "MongoDB Cloud", icon: <MongoDBIcon fontSize="large" className="techf-icon" /> },
-  { name: "colorsdev.tech", icon: cdLogo, brandLogo: true },
+  { name: "React", icon: <ReactIcon fontSize="large" className="techf-icon" /> },
   { name: "Next.js", icon: <NextjsIcon fontSize="large" className="techf-icon" /> },
   { name: "Java", icon: <JavaIcon fontSize="large" className="techf-icon" /> },
   { name: "Spring Boot", icon: <SpringBootIcon fontSize="large" className="techf-icon" /> },
