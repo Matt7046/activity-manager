@@ -231,5 +231,10 @@
   "lista_attivita": "Aufgabenliste",
   "register": "Registrieren Sie sich per E-Mail. Es empfiehlt sich, eine Ad-hoc-E-Mail für das Projekt zu erstellen. Für das Kind können Sie child@simulated.com verwenden. Wenn Sie die Passwort-Anmeldefunktion ausprobieren möchten, geben Sie eine bestimmte E-Mail-Adresse für Ihr Kind ein",
   "login_simulati": "Simulierte Anmeldungen rufen keine Informationen ab, sondern fragen die Datenbank genauso ab wie echte Benutzer. Es wird ein Passwort generiert und an eine nicht existierende Adresse gesendet",
-  "login_simulati_title": "Anmerkung"
+  "login_simulati_title": "Anmerkung",
+  "password_reset_link": "Passwort zurücksetzen",
+  "password_reset_title": "Passwort zurücksetzen",
+  "password_reset_send": "Senden",
+  "password_reset_email_required": "Geben Sie eine E-Mail-Adresse ein.",
+  "password_reset_email_invalid": "Geben Sie eine gültige E-Mail-Adresse ein."
 }

@@ -231,5 +231,10 @@
   "lista_attivita": "Liste des tâches",
   "register": "Inscrivez-vous par email, il est conseillé de créer un email ad hoc pour le projet. Pour l'enfant, vous pouvez utiliser child@simulated.com. Si vous souhaitez essayer la fonction de connexion par mot de passe, saisissez une adresse e-mail spécifique pour votre enfant",
   "login_simulati": "Les connexions simulées ne récupèrent pas d'informations mais interrogent la base de données exactement comme les utilisateurs réels, un mot de passe est généré et envoyé à une adresse inexistante",
-  "login_simulati_title": "Annotation"
+  "login_simulati_title": "Annotation",
+  "password_reset_link": "Réinitialiser le mot de passe",
+  "password_reset_title": "Réinitialisation du mot de passe",
+  "password_reset_send": "Envoyer",
+  "password_reset_email_required": "Saisissez une adresse e-mail.",
+  "password_reset_email_invalid": "Saisissez une adresse e-mail valide."
 }

@@ -30,4 +30,11 @@ public class EmailProcessor {
         UserPointDTO response = userPointMapper.toDTO(userPoint);
         return Mono.just(new ResponseDTO(response, ActivityHttpStatus.OK.value(), new ArrayList<>()));
     }
+
+        public Mono<ResponseDTO> sendPasswordEmail(UserPointWithChildDTO userPointDTO) {
+        UserPoint userPoint = userPointMapper.fromDTO(userPointDTO.getUserPoint());
+        userPoint = emailService.sendPasswordEmail(userPoint);
+        UserPointDTO response = userPointMapper.toDTO(userPoint);
+        return Mono.just(new ResponseDTO(response, ActivityHttpStatus.OK.value(), new ArrayList<>()));
+    }
 }

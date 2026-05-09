@@ -231,5 +231,10 @@
   "lista_attivita": "lista de tareas",
   "register": "Regístrate con correo electrónico, es recomendable crear un correo electrónico ad hoc para el proyecto. Para el niño puede utilizar child@simulated.com. Si desea probar la función de inicio de sesión con contraseña, ingrese un correo electrónico específico para su hijo",
   "login_simulati": "Los inicios de sesión simulados no recuperan información, sino que consultan la base de datos exactamente como los usuarios reales; se genera una contraseña y se envía a una dirección inexistente.",
-  "login_simulati_title": "Anotación"
+  "login_simulati_title": "Anotación",
+  "password_reset_link": "Restablecer contraseña",
+  "password_reset_title": "Restablecer contraseña",
+  "password_reset_send": "Enviar",
+  "password_reset_email_required": "Introduce una dirección de correo.",
+  "password_reset_email_invalid": "Introduce una dirección de correo válida."
 }

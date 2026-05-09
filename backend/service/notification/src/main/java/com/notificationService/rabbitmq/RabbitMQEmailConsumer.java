@@ -1,7 +1,6 @@
 package com.notificationService.rabbitmq;
 
 import com.common.dto.user.UserPointWithChildDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.notificationService.processor.EmailProcessor;
 import com.rabbitmq.client.Channel;
@@ -18,12 +17,11 @@ public class RabbitMQEmailConsumer {
     @Autowired
     EmailProcessor emailProcessor;
 
-
-
     @RabbitListener(queues = "email.queue", ackMode = "MANUAL")
     public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
 
-        // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
+        // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ
+        // Management UI
         try {
             // Thread.sleep(20000); // 5 secondi
             receive(jsonMessage, 0);
@@ -40,7 +38,12 @@ public class RabbitMQEmailConsumer {
         watch.stop();
         ObjectMapper objectMapper = new ObjectMapper();
         UserPointWithChildDTO userPointDTO = objectMapper.readValue(in, UserPointWithChildDTO.class);
-        emailProcessor.sendPasswordEmailChild(userPointDTO);
+        if (userPointDTO.getUserPointChild() == null) {
+            emailProcessor.sendPasswordEmail(userPointDTO);
+
+        } else {
+            emailProcessor.sendPasswordEmailChild(userPointDTO);
+        }
     }
 
     private void doWork(String in) throws InterruptedException {

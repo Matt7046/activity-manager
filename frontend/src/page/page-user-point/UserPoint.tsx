@@ -16,6 +16,7 @@ export interface UserPointsI {
   usePoints?: number;
   nameImage?: string;
   status?: number;
+  emailUserCurrent?: string
 }
 
 

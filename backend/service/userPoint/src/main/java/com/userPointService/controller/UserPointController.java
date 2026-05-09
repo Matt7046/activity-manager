@@ -40,6 +40,12 @@ public class UserPointController {
         return processor.register(userPointDTO);
     }
 
+    
+      @PostMapping("/dati/user/reset/password")
+    public Mono<ResponseDTO> resetPassword(@RequestBody UserPointDTO userPointDTO) {
+        return processor.resetPassword(userPointDTO);
+    }
+
     @PostMapping("/dati/user/password")
     public Mono<ResponseDTO> saveUserPassword(@RequestBody UserPointDTO userPointDTO) {
         return ReactiveJwt.currentSubject()
