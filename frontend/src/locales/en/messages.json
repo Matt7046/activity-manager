@@ -236,5 +236,7 @@
   "password_reset_title": "Reset password",
   "password_reset_send": "Send",
   "password_reset_email_required": "Enter an email address.",
-  "password_reset_email_invalid": "Enter a valid email address."
+  "password_reset_email_invalid": "Enter a valid email address.",
+  "theme_switch_to_light": "Switch to light theme",
+  "theme_switch_to_dark": "Switch to dark theme"
 }

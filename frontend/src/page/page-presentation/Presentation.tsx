@@ -1,6 +1,7 @@
 "use client";
 
 import Language from "@/components/ms-language/Language";
+import ThemeToggle from "@/components/ms-theme-toggle/ThemeToggle";
 import "@/components/ms-presentation/Presentation.css";
 import { IconButton, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
@@ -48,7 +49,8 @@ const PagePresentation: React.FC = () => {
 
         {/* Pulsante lingua allineato a destra */}
         <div className="language-container">
-          <Language />
+          <ThemeToggle placement="header" />
+          <Language placement="header" />
         </div>
 
       </div>

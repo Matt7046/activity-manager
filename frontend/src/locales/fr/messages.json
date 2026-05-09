@@ -236,5 +236,7 @@
   "password_reset_title": "Réinitialisation du mot de passe",
   "password_reset_send": "Envoyer",
   "password_reset_email_required": "Saisissez une adresse e-mail.",
-  "password_reset_email_invalid": "Saisissez une adresse e-mail valide."
+  "password_reset_email_invalid": "Saisissez une adresse e-mail valide.",
+  "theme_switch_to_light": "Passer au thème clair",
+  "theme_switch_to_dark": "Passer au thème sombre"
 }

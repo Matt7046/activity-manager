@@ -236,5 +236,7 @@
   "password_reset_title": "Redefinição de senha",
   "password_reset_send": "Enviar",
   "password_reset_email_required": "Digite um endereço de e-mail.",
-  "password_reset_email_invalid": "Digite um endereço de e-mail válido."
+  "password_reset_email_invalid": "Digite um endereço de e-mail válido.",
+  "theme_switch_to_light": "Mudar para tema claro",
+  "theme_switch_to_dark": "Mudar para tema escuro"
 }

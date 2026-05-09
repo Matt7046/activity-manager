@@ -236,5 +236,7 @@
   "password_reset_title": "Restablecer contraseña",
   "password_reset_send": "Enviar",
   "password_reset_email_required": "Introduce una dirección de correo.",
-  "password_reset_email_invalid": "Introduce una dirección de correo válida."
+  "password_reset_email_invalid": "Introduce una dirección de correo válida.",
+  "theme_switch_to_light": "Cambiar a tema claro",
+  "theme_switch_to_dark": "Cambiar a tema oscuro"
 }

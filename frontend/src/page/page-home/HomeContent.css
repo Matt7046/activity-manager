@@ -2,6 +2,12 @@
   display: flex;
   flex-direction: column;
   padding-top: var(--space-0);
+  min-height: 100dvh;
+  color: var(--color-text);
+  /* Stesso trattamento della presentation: gradiente fisso sulla colonna contenuti */
+  background: var(--page-bg-layers);
+  background-color: var(--page-bg-fallback);
+  background-attachment: fixed;
 }
 
 .home-page-main {
@@ -25,10 +31,16 @@
   max-width: 400px;
   width: 100%;
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(37, 99, 235, 0.22);
+  border: 1px solid var(--color-border-strong);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-  background: var(--color-footer-bg);
+  /* Piastra come hero Presentation; MUI Paper non deve sovrascrivere */
+  background-color: var(--color-surface-elevated) !important;
+  background-image: none !important;
   margin-top: 0;
+}
+
+html[data-theme="light"] .login-paper {
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.26);
 }
 
 /* Rimuoviamo eventuali margini interni del Box di login che spingono in basso */

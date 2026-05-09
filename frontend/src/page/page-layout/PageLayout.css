@@ -32,11 +32,6 @@
     visibility: hidden;
 }
 
-.box-layout-right-button {
-    padding-right: var(--space-3);
-    display: flex;
-}
-
 .grid-menu {
     padding-top: 1px;
 }
@@ -45,8 +40,19 @@
     padding-right: var(--space-3);
     display: flex;
     align-items: center;
-    /* Allinea verticalmente icone e bandierine */
-    /* Spazio tra i pulsanti */
+    gap: var(--space-2);
+}
+
+/* Tema + lingua affiancati e allineati; gruppo più a sinistra (più vicino al titolo/menu) */
+.box-layout-theme-lang-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    margin-inline-end: calc(-1 * var(--space-1));
+}
+
+.box-layout-theme-lang-group .MuiIconButton-root {
+    padding: 8px;
 }
 
 .header-title {
@@ -66,7 +72,7 @@
     border-radius: var(--radius-lg);
     background: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
     border: 1px solid var(--color-border-strong);
-    box-shadow: 0 0 20px rgba(37, 99, 235, 0.12), inset 0 1px 0 rgba(148, 180, 226, 0.06);
+    box-shadow: var(--shadow-sm), inset 0 1px 0 var(--color-primary-soft);
 }
 
 .header-icon {

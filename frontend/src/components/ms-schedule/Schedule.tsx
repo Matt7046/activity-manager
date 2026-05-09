@@ -50,10 +50,7 @@ const columns: GridColDef[] = [
               className="clickable-row-header"
               onClick={() => setExpandedRowId(isExpanded ? null : params.id)}
             >
-              <InfoOutlinedIcon
-                className="row-icon-info"
-                style={{ color: isExpanded ? '#1976d2' : '#b2bec3' }}
-              />
+              <InfoOutlinedIcon className={`row-icon-info ${isExpanded ? 'row-icon-info--expanded' : ''}`} />
               <Box className="title-text-container">
                 <Typography className="row-title">
                   {row.nome}

@@ -82,9 +82,9 @@
   letter-spacing: 0.05em;
 }
 
-/* Singola riga della lista */
+/* Singola riga della lista (stesso zebra della DataGrid Activity: DataGrid.css) */
 .grid-row-item {
-  height: 38px !important; 
+  height: 38px !important;
   border-radius: var(--radius-sm);
   margin-bottom: 2px;
   display: flex;
@@ -92,12 +92,22 @@
   transition: background-color 0.2s ease;
 }
 
-.grid-row-item:hover {
-  background-color: var(--color-surface-soft);
+/* Header è il primo figlio; le righe dati partono da nth-child(2) */
+.list-body > .grid-row-item:nth-child(even) {
+  background-color: var(--color-surface) !important;
 }
 
-.grid-row-item:nth-child(even) .card-list-item {
-  background-color: rgba(248, 250, 252, 0.5);
+.list-body > .grid-row-item:nth-child(odd) {
+  background-color: var(--color-surface-soft) !important;
+}
+
+.grid-row-item:hover {
+  background-color: var(--color-info-soft) !important;
+}
+
+.card-list-item,
+.card-list-item-right {
+  background-color: transparent !important;
 }
 
 /* Testo colonna sinistra */

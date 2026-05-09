@@ -566,8 +566,8 @@ const GoogleAuthComponent = () => {
           )}
         </Box>
 
+        {!hiddenLogin && <TechFooter />}
       </Box>
-      {!hiddenLogin && <TechFooter />}
 
     </>
   );
