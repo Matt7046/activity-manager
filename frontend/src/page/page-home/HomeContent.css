@@ -108,6 +108,14 @@
   text-decoration: underline;
 }
 
+.reset-password-link {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
 .box-pulsanti-login {
   padding-top: var(--space-3);
 }

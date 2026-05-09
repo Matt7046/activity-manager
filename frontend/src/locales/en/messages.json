@@ -231,5 +231,10 @@
   "lista_attivita": "Task list",
   "register": "Register with email, it is advisable to create an ad hoc email for the project. For the child you can use child@simulated.com. If you want to try the password login feature, enter a specific email for your child",
   "login_simulati": "Simulated logins do not retrieve information but query the database exactly like real users, a password is generated and sent to a non-existent address",
-  "login_simulati_title": "Annotation"
+  "login_simulati_title": "Annotation",
+  "password_reset_link": "Reset password",
+  "password_reset_title": "Reset password",
+  "password_reset_send": "Send",
+  "password_reset_email_required": "Enter an email address.",
+  "password_reset_email_invalid": "Enter a valid email address."
 }

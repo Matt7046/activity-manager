@@ -231,5 +231,10 @@
   "lista_attivita": "Lista de tarefas",
   "register": "Cadastre-se com email, é aconselhável criar um email ad hoc para o projeto. Para a criança você pode usar child@simulated.com. Se você quiser experimentar o recurso de login com senha, insira um e-mail específico para seu filho",
   "login_simulati": "Logins simulados não recuperam informações, mas consultam o banco de dados exatamente como usuários reais, uma senha é gerada e enviada para um endereço inexistente",
-  "login_simulati_title": "Anotação"
+  "login_simulati_title": "Anotação",
+  "password_reset_link": "Redefinir senha",
+  "password_reset_title": "Redefinição de senha",
+  "password_reset_send": "Enviar",
+  "password_reset_email_required": "Digite um endereço de e-mail.",
+  "password_reset_email_invalid": "Digite um endereço de e-mail válido."
 }

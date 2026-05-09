@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // Genera un costruttore con tutti i campi
 public class LoginRequest {
     private String email;
-    private String password;   
+    private String password;
+    private Boolean googleLogin;
+    private String googleAccessToken;
 
     // Getter e Setter
 }

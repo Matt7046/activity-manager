@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Trans, useLingui } from "@lingui/react";
 import { Apple as AppleIcon, Facebook as FacebookIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
-import { Box, Button as ButtonMui, CircularProgress, Divider, IconButton, Link as MuiLink, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
+import { Box, Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Link as MuiLink, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import LinkNext from 'next/link';
@@ -21,6 +21,7 @@ import { navigateRouting, ResponseI, showMessage } from '../../general/structure
 import { TypeMessage } from '../page-layout/PageLayout';
 import { getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
 import "./HomeContent.css";
+import { resetPassword } from './service/HomeService';
 
 
 
@@ -31,7 +32,7 @@ interface UserProviderProps {
 
 // Componente principale, avvolto da GoogleOAuthProvider
 const HomeContent = () => (
-  <GoogleOAuthProvider clientId= {CLIENT_GOOGLE.SERVER! } >
+  <GoogleOAuthProvider clientId={CLIENT_GOOGLE.SERVER!} >
     <GoogleAuthComponent />
   </GoogleOAuthProvider>
 );
@@ -56,6 +57,9 @@ const GoogleAuthComponent = () => {
   const [hiddenLogin, setHiddenLogin] = useState<any>(false); // Stato utente
   const handleChangeEmailFamily = (event: React.ChangeEvent<HTMLInputElement>) => { };
   const [showPassword, setShowPassword] = useState(false);
+  const [openResetDialog, setOpenResetDialog] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
 
@@ -186,7 +190,7 @@ const GoogleAuthComponent = () => {
       //   token: fakeResponse.credential,
       type: type
     };
-    getToken({ email: currentUser.emailUserCurrent, password: 'password' }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
+    getToken({ email: currentUser.emailUserCurrent, password: 'password', googleLogin: false }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
       baseStore.setToken(tokenData?.jsonText?.token);
 
       setCurrentUser(user);
@@ -207,16 +211,16 @@ const GoogleAuthComponent = () => {
       currentUser.type = emailChild?.length > 0 ? currentUser.type : 2;
     }).then(x => {
       getTypeUser(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
-        setEmailLogin(x?.jsonText.emailUserCurrent);
+        setEmailLogin(x?.jsonText?.emailUserCurrent ?? '');
         switch (x?.jsonText?.typeUser) {
           case TypeUser.STANDARD: {
-            setEmailLogin(currentUser.email);
+            setEmailLogin(currentUser.email ?? '');
             setSimulated(TypeUser.STANDARD);
             setUser({ ...currentUser, type: x.jsonText.typeUser, emailChild: currentUser.emailUserCurrent, emailUserCurrent: x.jsonText.emailUserCurrent });
             break;
           }
           case TypeUser.FAMILY: {
-            setEmailLogin(currentUser.email);
+            setEmailLogin(currentUser.email ?? '');
             setSimulated(TypeUser.FAMILY);
             handleOpenD();
             break;
@@ -257,11 +261,19 @@ const GoogleAuthComponent = () => {
         const userDataGoogle = await userDataResponse.json();
         userDataGoogle.emailUserCurrent = userDataGoogle.email;
         userDataGoogle.emailChild = userDataGoogle.email;
-        setEmailLogin(userDataGoogle.email);
+        getToken({
+          email: userDataGoogle.emailUserCurrent,
+          googleLogin: true,
+          googleAccessToken: accessToken
+        }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
+          baseStore.setToken(tokenData?.jsonText?.token);
+          setEmailLogin(userDataGoogle.email ?? '');
 
-        //setUser({ ...userData, type: 1 });
-        setCurrentUser(userDataGoogle);
-        showDialog(1, true, userDataGoogle);
+          //setUser({ ...userData, type: 1 });
+          setCurrentUser(userDataGoogle);
+          showDialog(1, true, userDataGoogle);
+        })
+
       } else {
         console.error('Failed to fetch user data:', userDataResponse.status);
       }
@@ -293,10 +305,10 @@ const GoogleAuthComponent = () => {
 
   const handleLogin = (event: any): void => {
     const user = { _id: undefined, email: emailLogin, password: passwordLogin }
-    getToken({ email: user.email, password: user.password }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
+    getToken({ email: user.email, password: user.password, googleLogin: false }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
       baseStore.setToken(tokenData?.jsonText?.token);
       oldLogin(user).then(x => {
-        if(x.jsonText.type !== undefined && x.jsonText.type !== null) {
+        if (x.jsonText.type !== undefined && x.jsonText.type !== null) {
           const currentUser = x.jsonText;
           openHome(currentUser, false, setLoading)
         }
@@ -315,6 +327,44 @@ const GoogleAuthComponent = () => {
   const handleFacebookLogin = (event: any): void => {
     throw new Error('Function not implemented.');
   }
+
+  const handleOpenResetDialog = (): void => {
+    setResetEmail(emailLogin || '');
+    setOpenResetDialog(true);
+  };
+
+  const handleCloseResetDialog = (): void => {
+    setOpenResetDialog(false);
+  };
+
+  const handleConfirmResetPassword = (): void => {
+    const email = resetEmail.trim();
+    if (!email) {
+      showMessage(setOpen, setMessage, {
+        typeMessage: TypeAlertColor.ERROR,
+        titleMessage: i18n._("password_reset_title"),
+        message: [i18n._("password_reset_email_required")],
+      });
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      showMessage(setOpen, setMessage, {
+        typeMessage: TypeAlertColor.ERROR,
+        titleMessage: i18n._("password_reset_title"),
+        message: [i18n._("password_reset_email_invalid")],
+      });
+      return;
+    }
+
+    resetPassword(
+      { email, emailUserCurrent: email },
+      (dialogMessage?: TypeMessage) => showMessage(setOpen, setMessage, dialogMessage, true),
+      setLoading
+    ).then(() => {
+      setOpenResetDialog(false);
+    });
+  };
 
   return (
     <>
@@ -373,7 +423,7 @@ const GoogleAuthComponent = () => {
                     id="username"
                     label={i18n._("indirizzo_email")}
                     variant="outlined"
-                    value={emailLogin}
+                    value={emailLogin ?? ''}
                     onChange={handleChangeUsername}
                     fullWidth
                   />
@@ -422,6 +472,16 @@ const GoogleAuthComponent = () => {
                       {i18n._("personality_discover_link")}
                     </MuiLink>
                   </Typography>
+                  <Typography variant="body2" className="personality-annotation">
+                    <MuiLink
+                      component="button"
+                      type="button"
+                      className="register-link reset-password-link"
+                      onClick={handleOpenResetDialog}
+                    >
+                      {i18n._("password_reset_link")}
+                    </MuiLink>
+                  </Typography>
                 </Box>
 
                 {/* Divider */}
@@ -465,6 +525,34 @@ const GoogleAuthComponent = () => {
                   simulated={simulated}
                   emailUserCurrent={emailLogin}
                 />
+
+                <Dialog
+                  open={openResetDialog}
+                  onClose={handleCloseResetDialog}
+                  fullWidth
+                  maxWidth="xs"
+                >
+                  <DialogTitle>{i18n._("password_reset_title")}</DialogTitle>
+                  <DialogContent>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="reset-password-email"
+                      label={i18n._("indirizzo_email")}
+                      type="email"
+                      fullWidth
+                      variant="outlined"
+                      value={resetEmail}
+                      onChange={(event) => setResetEmail(event.target.value)}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <ButtonMui onClick={handleCloseResetDialog}>{i18n._("annulla")}</ButtonMui>
+                    <ButtonMui onClick={handleConfirmResetPassword} variant="contained">
+                      {i18n._("password_reset_send")}
+                    </ButtonMui>
+                  </DialogActions>
+                </Dialog>
 
               </Paper>
             </Box>

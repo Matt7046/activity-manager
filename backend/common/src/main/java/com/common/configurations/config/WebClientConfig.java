@@ -138,4 +138,12 @@ public class WebClientConfig {
                                 .baseUrl(baseUrl)
                                 .build();
         }
+
+        
+        @Bean
+        public WebClient webClientGoogle(@Value("${google.base-url}") String baseUrl) {
+                     WebClient googleClient = WebClient.create(baseUrl);
+                     return googleClient;
+        }
+
 }

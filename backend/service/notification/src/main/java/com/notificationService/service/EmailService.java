@@ -29,4 +29,15 @@ public class EmailService {
         });
         return userPoint;
     }
+
+    @Transactional
+    public UserPoint sendPasswordEmail(UserPoint userPoint)  {
+            try {
+                mailSenderService.sendEmail(encryptDecryptConverter.decrypt(userPoint.getEmail()), "Reset Password",encryptDecryptConverter.decrypt(userPoint.getPassword()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        
+        return userPoint;
+    }
 }
