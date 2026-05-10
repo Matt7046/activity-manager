@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Base dark (portfolio / global) — grigi neutri, coerenti col gradiente pagina */
+  /* Base dark (Invariata) */
   --color-bg-solid: #08080a;
   --color-bg: #08080a;
   --color-surface: #070c14;
@@ -15,9 +15,7 @@
   --color-primary-hover: #3b82f6;
   --color-danger: #f87171;
   --color-success: #34d399;
-  /* Testo quasi bianco mai puro #fff */
   --color-text-bright: #e5edf9;
-  /* Testo su sfondi blu/primari saturati */
   --color-on-primary: #071018;
   --color-muted-300: #94a3b8;
   --color-muted-500: #64748b;
@@ -40,6 +38,11 @@
   --color-footer-bg: rgba(4, 8, 16, 0.92);
   --color-footer-text: #e2e8f0;
 
+  /* Link brand (tema dark): blu leggibile su sfondo scuro; in light vedi html[data-theme="light"] */
+  --color-link-ui: #3b82f6;
+  --color-link-ui-hover: #2563eb;
+  --color-link-ui-muted: #60a5fa;
+
   --space-0: 2px;
   --space-1: 4px;
   --space-2: 8px;
@@ -60,7 +63,6 @@
 
   --font-sans-modern: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
-  /* Stack unico letto anche da body (Tailwind Preflight spesso tinta solo il body) */
   --page-bg-layers:
     radial-gradient(ellipse 130% 95% at 50% -12%, rgba(168, 168, 178, 0.2) 0%, transparent 48%),
     radial-gradient(ellipse 105% 78% at 48% 30%, rgba(92, 92, 102, 0.45) 0%, transparent 60%),
@@ -76,104 +78,48 @@
   --page-bg-fallback: #040405;
 }
 
-/*
- * Tema chiaro: scala da un blu “PlayStation-ish” compatibile col FAB .button-blue (≈ #0369a1 / #075985),
- * schiarito verso il centro — grigi freddi con leggerezza di tonalità sul blu Petrolio/PS.
- */
-html[data-theme="light"] {
-  --color-bg-solid: #e6edf9;
-  --color-bg: #ebeff9;
-  /* Superfici / campi */
-  --color-surface: #e1e9f8;
-  --color-surface-soft: #d5def0;
-  --color-surface-elevated: #98a9c4;
-  --color-text: #111111;
-  --color-text-muted: #141414;
-  --color-border: rgba(20, 55, 95, 0.12);
-  --color-border-strong: rgba(15, 50, 90, 0.2);
-  --color-primary: #3a3a3a;
-  --color-primary-hover: #171717;
-  --color-danger: #b91c1c;
-  --color-success: #15803d;
-  --color-text-bright: #0a0a0a;
-  --color-on-primary: #fafafa;
-  --color-muted-300: #737373;
-  --color-muted-500: #525252;
-  --color-info: #525252;
-  --color-info-soft: rgba(0, 0, 0, 0.06);
-  --color-info-soft-2: rgba(0, 0, 0, 0.09);
-  --color-info-soft-3: rgba(0, 0, 0, 0.04);
-  --color-info-soft-4: rgba(0, 0, 0, 0.14);
-  --color-primary-soft: rgba(0, 0, 0, 0.07);
-  --color-primary-soft-hover: rgba(0, 0, 0, 0.11);
-  --color-primary-soft-alt: rgba(0, 0, 0, 0.13);
-  --color-danger-soft: rgba(185, 28, 28, 0.1);
-  --color-danger-soft-2: rgba(185, 28, 28, 0.16);
-  --color-danger-soft-3: rgba(185, 28, 28, 0.22);
-  --color-danger-text: #991b1b;
-  --color-danger-text-strong: #7f1d1d;
-  --color-warning: #a16207;
-  --color-warning-text: #78350f;
-  --color-info-text: #262626;
-  --color-banner-bg: #77899f;
-  --color-footer-bg: #7d8fa4;
-  --color-footer-text: #151515;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.07);
-  --shadow-md: 0 8px 22px rgba(0, 0, 0, 0.11);
-  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.05);
-
-  --page-bg-layers:
-    linear-gradient(180deg, rgba(7, 89, 133, 0.14) 0%, transparent 40%),
-    linear-gradient(
-      90deg,
-      #97a5bb 0%,
-      #a9b8cc 14%,
-      #c9d4e9 37%,
-      #e9effa 47%,
-      #f2f6fe 50%,
-      #e9effa 53%,
-      #c9d4e9 63%,
-      #a9b8cc 86%,
-      #97a5bb 100%
-    );
-  --page-bg-fallback: #c3cee2;
-}
-
 html[data-theme="light"] {
   color-scheme: light;
-}
 
-@theme inline {
-  --color-background: var(--color-bg);
-  --color-foreground: var(--color-text);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Link e Brand: Blu più profondo e meno "neon" */
+  --color-link-ui: #1d4ed8;
+  --color-link-ui-hover: #1e40af;
+  --color-link-ui-muted: #60a5fa;
 
-html {
-  color-scheme: dark;
-  min-height: 100%;
-  background: var(--page-bg-layers);
-  background-color: var(--page-bg-fallback);
-  background-attachment: fixed;
-}
+  /* Sfondi: Qui sta il segreto. Usiamo un tono "Slate" molto chiaro */
+  --color-bg-solid: #f1f5f9; 
+  --color-bg: #f8fafc; 
 
-body {
-  margin: 0;
-  min-height: 100dvh;
-  /* Preflight/MUI possono impostare background sul body: !important mantiene visibile lo stack su html */
-  background: var(--page-bg-layers) !important;
-  background-color: var(--page-bg-fallback) !important;
-  background-attachment: fixed !important;
-  color: var(--color-text);
-  font-family: var(--font-sans-modern);
-  overflow-x: hidden;
-}
+  /* Superfici: La card bianca ora risalterà perché lo sfondo è un gradino più scuro */
+  --color-surface: #ffffff;
+  --color-surface-soft: #f1f5f9;
+  --color-surface-elevated: #ffffff;
 
-* {
-  box-sizing: border-box;
-}
+  /* Testo: Slate 900 per il corpo, Slate 700 per il secondario */
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --color-text-bright: #020617;
 
-.MuiIconButton-colorPrimary {
-  color: var(--color-primary) !important;
+  /* Bordi: Molto sottili, quasi impercettibili */
+  --color-border: rgba(148, 163, 184, 0.2);
+  --color-border-strong: rgba(148, 163, 184, 0.4);
+
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-on-primary: #ffffff;
+
+  /* Footer: Un contrasto leggero per chiudere la pagina */
+  --color-footer-bg: #e2e8f0;
+  --color-footer-text: #1e293b;
+
+  /* Ombre: Rendiamole più profonde per dare tridimensionalità */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.05);
+
+  /* Gradienti di sfondo: Meno invasivi, solo un accenno di profondità */
+  --page-bg-layers:
+    radial-gradient(at 50% 0%, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
+    linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+  --page-bg-fallback: #f8fafc;
 }

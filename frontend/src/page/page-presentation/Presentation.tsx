@@ -1,11 +1,12 @@
 "use client";
 
 import Language from "@/components/ms-language/Language";
-import ThemeToggle from "@/components/ms-theme-toggle/ThemeToggle";
 import "@/components/ms-presentation/Presentation.css";
+import ThemeToggle from "@/components/ms-theme-toggle/ThemeToggle";
 import { IconButton, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
 import PresentationContent from "./PresentationContent";
+import "./PresentationContent.css";
 
 const cdLogo = (
   <img

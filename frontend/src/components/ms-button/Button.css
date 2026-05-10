@@ -110,7 +110,7 @@
 .dialog-button-cancel { color: var(--color-text-muted) !important; text-transform: none !important; font-weight: 600 !important; padding: 10px 24px !important; border-radius: var(--radius-lg) !important; }
 .dialog-button-cancel:hover { background-color: var(--color-surface-soft) !important; }
 
-/* Tema chiaro: FAB ancora distinguibili, blu → grigio antracite (icone chiare sul bottone) */
+/* Tema chiaro: FAB distinguibili (grigio antracite), non il blu brand dei link */
 html[data-theme="light"] .button-blue {
   background: linear-gradient(180deg, #5c5c5c 0%, #454545 40%, #383838 72%, #2d2d2d 100%) !important;
   color: #fafafa !important;
