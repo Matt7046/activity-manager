@@ -8,6 +8,7 @@ import BannerOpenSource from "../../components/ms-banner/Banner";
 import "../../components/ms-presentation/Presentation.css";
 import TechFooter from "../../components/ms-tech-footer/TechFooter";
 import { SectionName } from "../../general/structure/Constant";
+import "./PresentationContent.css";
 
 const PresentationContent: React.FC = () => {
   const router = useRouter();

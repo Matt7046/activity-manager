@@ -49,8 +49,12 @@ html[data-theme="light"] .banner {
   color: var(--color-success);
 }
 
-.link {
-  color: var(--color-info-text);
+.banner .link {
+  color: var(--color-link-ui) !important;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.banner .link:hover {
+  color: var(--color-link-ui-hover) !important;
 }

@@ -148,17 +148,18 @@ html[data-theme="light"] .hero-frame {
 }
 
 .personality-link-row {
-  margin-top: var(--space-3) !important;
+  margin-top: var(--space-6) !important;
 }
 
-.personality-link {
+/* MuiLink applica il primary del tema (grigio in light): serve il suffisso + !important per le variabili brand */
+.presentation-page a.personality-link.MuiLink-root {
   text-decoration: none;
-  color: var(--color-info-text);
   font-weight: 600;
+  color: var(--color-link-ui) !important;
 }
 
-.personality-link:hover {
-  color: var(--color-primary-hover);
+.presentation-page a.personality-link.MuiLink-root:hover {
+  color: var(--color-link-ui-hover) !important;
   text-decoration: underline;
 }
 

@@ -27,12 +27,11 @@ const handleClick = () => {
               <Trans id="privacy_policy" />
             </label>
             {" | "} 
-            <a 
-              href="https://github.com/Matt7046/activity-manager" 
-              target="_blank" 
+            <a
+              href="https://github.com/Matt7046/activity-manager"
+              target="_blank"
               rel="noopener noreferrer"
               className="link"
-              style={{ cursor: 'pointer', textDecoration: 'none' }}
             >
                 <Trans id="github_repo" />
             </a>
