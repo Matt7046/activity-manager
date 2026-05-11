@@ -1,5 +1,5 @@
 /* Activity Manager SW: cache base + network first per navigazione */
-const CACHE_NAME = "activity-manager-v2";
+const CACHE_NAME = "activity-manager-v3";
 const PRECACHE_URLS = ["/", "/manifest.webmanifest", "/favicon.png", "/pwa/icon-192.png", "/pwa/icon-512.png"];
 
 self.addEventListener("install", (event) => {

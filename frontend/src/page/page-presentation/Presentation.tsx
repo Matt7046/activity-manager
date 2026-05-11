@@ -38,8 +38,15 @@ const PagePresentation: React.FC = () => {
                   {tech.icon}
                 </span>
               </IconButton>
-              <Typography variant="caption" display="block" className="techf-name">
-                {tech.name}
+              <Typography variant="caption" display="block" component="div" className="techf-name">
+                {tech.name.includes(".") ? (
+                  <>
+                    <span className="techf-name-prefix">{tech.name.slice(0, tech.name.indexOf("."))}</span>
+                    <span className="techf-name-tech">{tech.name.slice(tech.name.indexOf("."))}</span>
+                  </>
+                ) : (
+                  tech.name
+                )}
               </Typography>
             </div>
           ))}

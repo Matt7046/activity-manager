@@ -10,7 +10,7 @@ const commonTypography = {
 
 export type AppColorMode = 'light' | 'dark';
 
-export function createAppTheme(mode: AppColorMode): Theme {
+export const createAppTheme = (mode: AppColorMode): Theme => {
   if (mode === 'dark') {
     return createTheme({
       palette: {
@@ -256,4 +256,4 @@ export function createAppTheme(mode: AppColorMode): Theme {
       },
     },
   });
-}
+};
