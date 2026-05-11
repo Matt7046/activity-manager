@@ -62,26 +62,21 @@
   line-height: 1.2;
 }
 
-.presentation-page .presentation-header .techf-name-prefix {
-  color: var(--color-text-muted);
-}
-
-/* ".tech": metà blu (tono “c”), metà viola (tono “d”) */
+/* Testo dominio sotto il logo: bianco in dark, nero in light */
+.presentation-page .presentation-header .techf-name-prefix,
 .presentation-page .presentation-header .techf-name-tech {
   font-weight: 600;
-  background: linear-gradient(90deg, var(--color-link-ui) 0%, var(--color-link-ui) 50%, #9333ea 50%, #9333ea 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
 }
 
+html[data-theme="light"] .presentation-page .presentation-header .techf-name-prefix,
 html[data-theme="light"] .presentation-page .presentation-header .techf-name-tech {
-  background: linear-gradient(90deg, var(--color-link-ui) 0%, var(--color-link-ui) 50%, #7e22ce 50%, #7e22ce 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  color: #000000;
+  -webkit-text-fill-color: #000000;
 }
 
 .presentation-page .presentation-header-spacer {
