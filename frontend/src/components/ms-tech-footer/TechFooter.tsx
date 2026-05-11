@@ -20,7 +20,7 @@ import "./TechFooter.css";
 
 const cdLogo = (
   <img
-    src="/logo-colorsdev.png"
+    src="/logo-colorsdev-v2.png"
     alt=""
     width={36}
     height={36}

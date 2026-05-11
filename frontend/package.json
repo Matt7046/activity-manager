@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "pwa:assets": "node scripts/generate-pwa-assets.mjs",
+    "logo:v2": "node scripts/generate-logo-colorsdev-v2.mjs",
     "favicon": "node scripts/generate-favicon.js",
     "lang:extract": "lingui extract",
     "lang:compile": "lingui compile",

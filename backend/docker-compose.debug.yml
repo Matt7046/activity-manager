@@ -103,6 +103,7 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/userPoint/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     networks:
       - app-network
 
@@ -129,9 +130,8 @@ services:
       - SPRING_RABBITMQ_USERNAME=username
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
-      # Mappiamo la cartella dove hai salvato il file .p12
-      # Assicurati che il file si chiami elastic-truststore.p12 dentro quella cartella
       - ./service/activity/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
 
     networks:
       - app-network
@@ -161,7 +161,8 @@ services:
       - SPRING_RABBITMQ_USERNAME=username
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
-      - ./service/auth/src/main/resources/certificate:/app/certificate      
+      - ./service/auth/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     networks:
       - app-network
 
@@ -188,6 +189,7 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/family/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     networks:
       - app-network
 
@@ -214,6 +216,7 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/notification/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     networks:
       - app-network
 
@@ -240,6 +243,7 @@ services:
       - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/image/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     networks:
       - app-network
 volumes:

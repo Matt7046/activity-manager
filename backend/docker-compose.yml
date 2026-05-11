@@ -102,6 +102,7 @@ services:
     image: docker.io/matt7046/user-point-service:1.0.0
     volumes:
       - ./service/userPoint/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env
     networks:
@@ -118,6 +119,7 @@ services:
     image: docker.io/matt7046/user-point-service:1.0.0
     volumes:
       - ./service/userPoint/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env
     networks:
@@ -134,6 +136,7 @@ services:
     image: docker.io/matt7046/activity-service:1.0.0
     volumes:
       - ./service/activity/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env
     networks:
@@ -150,6 +153,7 @@ services:
     image: docker.io/matt7046/activity-service:1.0.0
     volumes:
       - ./service/activity/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env
     networks:
@@ -165,7 +169,8 @@ services:
         condition: service_started
     image: docker.io/matt7046/auth-service:1.0.0
     volumes:
-      - ./service/auth/src/main/resources/certificate:/app/certificate 
+      - ./service/auth/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env     
     networks:
@@ -181,7 +186,8 @@ services:
         condition: service_started
     image: docker.io/matt7046/auth-service:1.0.0
     volumes:
-      - ./service/auth/src/main/resources/certificate:/app/certificate 
+      - ./service/auth/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env     
     networks:
@@ -198,6 +204,7 @@ services:
     image: docker.io/matt7046/family-service:1.0.0
     volumes:
       - ./service/family/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env
     networks:
@@ -214,6 +221,7 @@ services:
     image: docker.io/matt7046/family-service:1.0.0
     volumes:
       - ./service/family/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env
     networks:
@@ -230,6 +238,7 @@ services:
     image: docker.io/matt7046/notification-service:1.0.0
     volumes:
       - ./service/notification/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env
     networks:
@@ -246,6 +255,7 @@ services:
     image: docker.io/matt7046/notification-service:1.0.0
     volumes:
       - ./service/notification/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env
     networks:
@@ -262,6 +272,7 @@ services:
     image: docker.io/matt7046/image-service:1.0.0
     volumes:
       - ./service/image/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env
     networks:
@@ -278,6 +289,7 @@ services:
     image: docker.io/matt7046/image-service:1.0.0
     volumes:
       - ./service/image/src/main/resources/certificate:/app/certificate
+      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     env_file:
       - .env
     networks:

@@ -13,14 +13,13 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3) 0;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
   box-sizing: border-box;
 }
 
 /*
- * Logo header: stili qui (non solo TechFooter.css) così valgono subito al primo paint.
- * MUI IconButton disabled usa opacity ridotta → il PNG sembra su un “fondo grigio”.
+ * Logo header (PNG v2 rettangolare). IconButton disabled: forza opacità e toglie padding extra.
  */
 .presentation-page .presentation-header .presentation-header-brand-btn.MuiIconButton-root.Mui-disabled {
   opacity: 1 !important;
@@ -28,14 +27,39 @@
   color: inherit !important;
 }
 
+.presentation-page .presentation-header .presentation-header-brand-btn.MuiIconButton-root {
+  padding: 0;
+  min-height: 0;
+  height: auto;
+  width: auto;
+}
+
 .presentation-page .presentation-header .presentation-header-brand-logo {
   display: block;
-  width: 70px;
+  width: auto;
   height: 70px;
+  max-width: min(280px, 72vw);
   object-fit: contain;
   border-radius: 0 !important;
   box-shadow: none !important;
   opacity: 1 !important;
+}
+
+.presentation-page .presentation-header .techf-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.presentation-page .presentation-header .techf-icon-wrap {
+  line-height: 0;
+}
+
+.presentation-page .presentation-header .techf-name {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 2px;
+  line-height: 1.2;
 }
 
 .presentation-page .presentation-header-spacer {
