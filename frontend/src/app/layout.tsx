@@ -32,11 +32,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Activity Manager',
     description: 'Activity Manager',
-    images: ['/logo-colorsdev.png'],
+    images: ['/logo-colorsdev-v2.png'],
   },
   twitter: {
     card: 'summary',
-    images: ['/logo-colorsdev.png'],
+    images: ['/logo-colorsdev-v2.png'],
   },
 };
 
