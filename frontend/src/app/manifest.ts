@@ -16,11 +16,57 @@ const iarcRatingId =
     ? process.env.NEXT_PUBLIC_IARC_RATING_ID
     : undefined;
 
+/** Store Microsoft (es. 9N…): https://apps.microsoft.com/store/detail/… */
+const buildRelatedApplications = (): { platform: string; url: string; id?: string }[] => {
+  const out: { platform: string; url: string; id?: string }[] = [];
+  const msId = process.env.NEXT_PUBLIC_MS_STORE_PRODUCT_ID?.trim();
+  if (msId) {
+    out.push({
+      platform: 'windows',
+      url: `https://apps.microsoft.com/store/detail/${encodeURIComponent(msId)}`,
+      id: msId,
+    });
+  }
+  const playUrl = process.env.NEXT_PUBLIC_PLAY_STORE_URL?.trim();
+  if (playUrl) {
+    out.push({ platform: 'play', url: playUrl });
+  }
+  return out;
+}
+
+/** Origini extra per `scope_extensions` (serve file `.well-known/web-app-origin-association` su ciascuna origine). CSV in NEXT_PUBLIC_PWA_SCOPE_EXTENSIONS. */
+const buildScopeExtensions = (): { origin: string }[] | undefined => {
+  const csv = process.env.NEXT_PUBLIC_PWA_SCOPE_EXTENSIONS?.trim();
+  if (csv) {
+    const list: { origin: string }[] = [];
+    for (const part of csv.split(',')) {
+      const raw = part.trim().replace(/\/$/, '');
+      if (!raw) continue;
+      try {
+        list.push({ origin: new URL(raw).origin });
+      } catch {
+        /* skip invalid */
+      }
+    }
+    if (list.length) return list;
+  }
+  if (scopeExtensionOrigin) return [{ origin: scopeExtensionOrigin }];
+  return undefined;
+}
+
 /**
  * Manifest per PWA / PWABuilder.
- * Alcuni campi avanzati non sono nel tipo `MetadataRoute.Manifest` di Next: cast finale.
+ * Campi incubation / Edge oltre il tipo `MetadataRoute.Manifest` di Next: cast finale.
+ *
+ * Env opzionali (produzione / packaging):
+ * - NEXT_PUBLIC_MS_STORE_PRODUCT_ID, NEXT_PUBLIC_PLAY_STORE_URL → related_applications
+ * - NEXT_PUBLIC_IARC_RATING_ID → iarc_rating_id (da questionario IARC / Microsoft Partner)
+ * - NEXT_PUBLIC_PWA_SCOPE_EXTENSIONS (CSV origini) o NEXT_PUBLIC_PWA_SCOPE_EXTENSION_ORIGIN → scope_extensions
  */
-export default function manifest(): MetadataRoute.Manifest {
+const manifest = (): MetadataRoute.Manifest => {
+  const relatedApplications = buildRelatedApplications();
+  const scopeExtensions = buildScopeExtensions();
+
   const manifestBody = {
     id: `${site}/`,
     name: 'Activity Manager',
@@ -36,8 +82,8 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: '#0b1220',
     theme_color: '#0b1220',
     categories: ['productivity', 'lifestyle'],
-    prefer_related_applications: false,
-    related_applications: [] as { platform: string; url: string; id?: string }[],
+    prefer_related_applications: relatedApplications.length > 0,
+    related_applications: relatedApplications,
     icons: [
       {
         src: '/pwa/icon-192.png',
@@ -115,9 +161,15 @@ export default function manifest(): MetadataRoute.Manifest {
     edge_side_panel: {
       preferred_width: 400,
     },
-    ...(scopeExtensionOrigin
+    /** Edge / Chromium: integrazione “Nuova nota” (campo opzionale PWABuilder). */
+    note_taking: {
+      new_note_url: `${site}/`,
+    },
+    /** Apertura link dalla PWA (WICG manifest-incubations). */
+    handle_links: 'preferred',
+    ...(scopeExtensions?.length
       ? {
-          scope_extensions: [{ origin: scopeExtensionOrigin }],
+          scope_extensions: scopeExtensions,
         }
       : {}),
     ...(iarcRatingId
@@ -128,4 +180,6 @@ export default function manifest(): MetadataRoute.Manifest {
   };
 
   return manifestBody as MetadataRoute.Manifest;
-}
+};
+
+export default manifest;
