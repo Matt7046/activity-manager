@@ -50,3 +50,5 @@ backend/.vscode/
 **/*.cer
 
 
+# File locali / prove in public (es. association non da versionare); se servono in repo, rimuovi questa riga.
+frontend/public/.well-known/
