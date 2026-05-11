@@ -59,7 +59,7 @@ const buildScopeExtensions = (): { origin: string }[] | undefined => {
  * Campi incubation / Edge oltre il tipo `MetadataRoute.Manifest` di Next: cast finale.
  *
  * Env opzionali (produzione / packaging):
- * - NEXT_PUBLIC_MS_STORE_PRODUCT_ID, NEXT_PUBLIC_PLAY_STORE_URL → related_applications
+ * - NEXT_PUBLIC_MS_STORE_PRODUCT_ID, NEXT_PUBLIC_PLAY_STORE_URL → related_applications (solo se valorizzati)
  * - NEXT_PUBLIC_IARC_RATING_ID → iarc_rating_id (da questionario IARC / Microsoft Partner)
  * - NEXT_PUBLIC_PWA_SCOPE_EXTENSIONS (CSV origini) o NEXT_PUBLIC_PWA_SCOPE_EXTENSION_ORIGIN → scope_extensions
  */
@@ -82,8 +82,12 @@ const manifest = (): MetadataRoute.Manifest => {
     background_color: '#0b1220',
     theme_color: '#0b1220',
     categories: ['productivity', 'lifestyle'],
-    prefer_related_applications: relatedApplications.length > 0,
-    related_applications: relatedApplications,
+    ...(relatedApplications.length > 0
+      ? {
+          prefer_related_applications: true as const,
+          related_applications: relatedApplications,
+        }
+      : {}),
     icons: [
       {
         src: '/pwa/icon-192.png',
@@ -98,6 +102,12 @@ const manifest = (): MetadataRoute.Manifest => {
         purpose: 'any',
       },
       {
+        src: '/pwa/icon-maskable-192.png',
+        sizes: '192x192',
+        type: 'image/png',
+        purpose: 'maskable',
+      },
+      {
         src: '/pwa/icon-maskable-512.png',
         sizes: '512x512',
         type: 'image/png',
@@ -110,12 +120,14 @@ const manifest = (): MetadataRoute.Manifest => {
         sizes: '1280x720',
         type: 'image/png',
         form_factor: 'wide',
+        label: 'Activity Manager — desktop',
       },
       {
         src: '/pwa/screenshot-narrow.png',
         sizes: '390x844',
         type: 'image/png',
         form_factor: 'narrow',
+        label: 'Activity Manager — mobile',
       },
     ],
     shortcuts: [
