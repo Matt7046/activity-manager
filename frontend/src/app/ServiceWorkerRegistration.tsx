@@ -1,4 +1,4 @@
-"use client"; // Assicurati che ci sia se usi Next.js App Router, dato l'uso di useEffect
+"use client";
 
 import { useEffect } from "react";
 
@@ -6,17 +6,13 @@ export const ServiceWorkerRegistration = () => {
   useEffect(() => {
     if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
 
-    const onLoad = () => {
-      navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {});
-    };
-
-    if (document.readyState === "complete") {
-      onLoad();
-    } else {
-      window.addEventListener("load", onLoad, { once: true });
-    }
-
-    return () => window.removeEventListener("load", onLoad);
+    navigator.serviceWorker
+      .register("/sw.js", { scope: "/" })
+      .then((reg) => {
+        // Trigger update check all'avvio per rendere più veloce il refresh dello SW.
+        reg.update().catch(() => {});
+      })
+      .catch(() => {});
   }, []);
 
   return null;
