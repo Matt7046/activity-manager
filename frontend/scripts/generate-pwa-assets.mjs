@@ -1,7 +1,8 @@
 /**
- * Genera icone PWA e favicon da public/logo-colorsdev-v2.png.
- * Solo ridimensionamento (fit: contain, sfondo trasparente): niente compositing
- * su piastre colorate, niente ritagli “creativi” sul logo.
+ * Genera icone PWA, favicon e screenshot da public/logo-colorsdev-v2.png
+ * (logo completo con scritta). Un’unica sorgente per tutti gli output.
+ *
+ * Solo resize (fit contain / inside), sfondo trasparente.
  *
  * Uso: node scripts/generate-pwa-assets.mjs  (anche come prebuild in package.json)
  */
@@ -72,7 +73,7 @@ const main = async () => {
   await screenshot("screenshot-wide.png", 1280, 720);
   await screenshot("screenshot-narrow.png", 390, 844);
 
-  console.log("[pwa] Asset generati da logo-colorsdev-v2.png (solo resize/contain).");
+  console.log("[pwa] Asset generati da logo-colorsdev-v2.png (icone + screenshot con scritta).");
 };
 
 main().catch((err) => {
