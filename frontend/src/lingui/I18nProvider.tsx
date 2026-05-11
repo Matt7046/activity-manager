@@ -19,7 +19,7 @@ i18n.load({
   pt: ptMessages,
 });
 
-export function LinguiClientProvider({ children }: { children: React.ReactNode }) {
+export const LinguiClientProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -33,4 +33,4 @@ export function LinguiClientProvider({ children }: { children: React.ReactNode }
   if (!isLoaded) return null;
 
   return <I18nProvider i18n={i18n}>{children}</I18nProvider>;
-}
+};

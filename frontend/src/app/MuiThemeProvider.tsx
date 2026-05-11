@@ -17,10 +17,11 @@ const DynamicMuiInner = ({ children }: { children: React.ReactNode }) => {
   );
 }
 
-export function MuiThemeProvider({ children }: { children: React.ReactNode }) {
+const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ThemeModeProvider>
       <DynamicMuiInner>{children}</DynamicMuiInner>
     </ThemeModeProvider>
   );
 }
+export default MuiThemeProvider;

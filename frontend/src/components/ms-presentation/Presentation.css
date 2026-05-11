@@ -18,6 +18,26 @@
   box-sizing: border-box;
 }
 
+/*
+ * Logo header: stili qui (non solo TechFooter.css) così valgono subito al primo paint.
+ * MUI IconButton disabled usa opacity ridotta → il PNG sembra su un “fondo grigio”.
+ */
+.presentation-page .presentation-header .presentation-header-brand-btn.MuiIconButton-root.Mui-disabled {
+  opacity: 1 !important;
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+.presentation-page .presentation-header .presentation-header-brand-logo {
+  display: block;
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
 .presentation-page .presentation-header-spacer {
   min-width: 0;
 }

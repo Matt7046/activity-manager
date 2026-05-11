@@ -49,9 +49,11 @@ html[data-theme="light"] .techf-footer {
 }
 
 .techf-logo-brand {
-  border-radius: 10px;
+  display: block;
   object-fit: contain;
-  box-shadow: 0 0 0 1px var(--color-border);
+  /* Nessun bordo/raggio “piastra”: su PNG trasparenti il box-shadow sembra un riquadro grigio */
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .techf-footer .techf-name.MuiTypography-root {
@@ -62,6 +64,7 @@ html[data-theme="light"] .techf-footer {
 .techf-item .MuiIconButton-root.Mui-disabled {
   color: var(--color-link-ui) !important;
   opacity: 1 !important;
+  background-color: transparent !important;
 }
 
 /* Light: titolo, etichette e icone MUI in nero */
@@ -80,6 +83,7 @@ html[data-theme="light"] .techf-footer .techf-name.MuiTypography-root {
 
 html[data-theme="light"] .techf-item .MuiIconButton-root.Mui-disabled {
   color: #0a0a0a !important;
+  background-color: transparent !important;
 }
 
 @media (max-width: 700px) {

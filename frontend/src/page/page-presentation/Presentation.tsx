@@ -12,9 +12,9 @@ const cdLogo = (
   <img
     src="/logo-colorsdev.png"
     alt=""
-    width={36}
-    height={36}
-    className="techf-logo-brand"
+    width={50}
+    height={50}
+    className="presentation-header-brand-logo"
     loading="lazy"
     decoding="async"
   />
@@ -36,7 +36,7 @@ const PagePresentation: React.FC = () => {
         <div className="techf-container">
           {aziende.map((tech) => (
             <div key={tech.name} className="techf-item">
-              <IconButton color="inherit" disabled>
+              <IconButton color="inherit" disabled className="presentation-header-brand-btn">
                 <span className={`techf-icon-wrap${tech.brandLogo ? " techf-icon-wrap-brand" : ""}`}>
                   {tech.icon}
                 </span>
