@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "node scripts/generate-pwa-assets.mjs",
     "start": "next start",
     "lint": "eslint",
+    "pwa:assets": "node scripts/generate-pwa-assets.mjs",
     "favicon": "node scripts/generate-favicon.js",
     "lang:extract": "lingui extract",
     "lang:compile": "lingui compile",
