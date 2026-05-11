@@ -59,7 +59,8 @@ const buildScopeExtensions = (): { origin: string }[] | undefined => {
  * Campi incubation / Edge oltre il tipo `MetadataRoute.Manifest` di Next: cast finale.
  *
  * Env opzionali (produzione / packaging):
- * - NEXT_PUBLIC_MS_STORE_PRODUCT_ID, NEXT_PUBLIC_PLAY_STORE_URL → related_applications (solo se valorizzati)
+ * - NEXT_PUBLIC_MS_STORE_PRODUCT_ID, NEXT_PUBLIC_PLAY_STORE_URL → related_applications
+ *   (prefer_related_applications resta false così la PWA resta installabile da Chrome)
  * - NEXT_PUBLIC_IARC_RATING_ID → iarc_rating_id (da questionario IARC / Microsoft Partner)
  * - NEXT_PUBLIC_PWA_SCOPE_EXTENSIONS (CSV origini) o NEXT_PUBLIC_PWA_SCOPE_EXTENSION_ORIGIN → scope_extensions
  */
@@ -77,14 +78,20 @@ const manifest = (): MetadataRoute.Manifest => {
     start_url: '/',
     scope: '/',
     display: 'standalone',
-    display_override: ['window-controls-overlay', 'tabbed', 'standalone', 'minimal-ui'],
+    /** Prima `standalone`: così Chrome mobile applica subito una modalità installabile (WCO/tabbed sono più desktop). */
+    display_override: ['standalone', 'minimal-ui', 'window-controls-overlay', 'tabbed'],
     orientation: 'any',
     background_color: '#0b1220',
     theme_color: '#0b1220',
     categories: ['productivity', 'lifestyle'],
+    /**
+     * `prefer_related_applications: true` + `related_applications` su Android fa preferire
+     * lo store nativo e blocca promozione / beforeinstallprompt per la PWA web (web.dev install criteria).
+     * Lasciamo `false` così resta installabile da Chrome; le app correlate restano solo indicative.
+     */
     ...(relatedApplications.length > 0
       ? {
-          prefer_related_applications: true as const,
+          prefer_related_applications: false as const,
           related_applications: relatedApplications,
         }
       : {}),
