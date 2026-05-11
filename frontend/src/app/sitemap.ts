@@ -13,6 +13,12 @@ const sitemap = (): MetadataRoute.Sitemap => [
     changeFrequency: 'yearly',
     priority: 0.8,
   },
+  {
+    url: 'https://activity-manager.colorsdev.tech/personality',
+    lastModified: new Date(),
+    changeFrequency: 'yearly',
+    priority: 0.8,
+  },
   // NOTA: Non inserire /dashboard o rotte private qui!
 ];
 
