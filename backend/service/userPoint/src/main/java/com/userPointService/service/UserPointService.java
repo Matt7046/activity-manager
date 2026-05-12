@@ -3,6 +3,7 @@ package com.userPointService.service;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.user.UserPoint;
 import com.common.structure.exception.ArithmeticCustomException;
+import com.common.structure.exception.ForbiddenException;
 import com.common.structure.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -210,6 +211,7 @@ public class UserPointService {
             }
             String enc = op.getEmail().trim();
             if (Boolean.TRUE.equals(op.getOperation())) {
+                assertCandidateNotAlreadyParent(enc);
                 ensureChildUserPointCreated(enc, newChildrenOut);
                 if (!emails.contains(enc)) {
                     emails.add(enc);
@@ -220,6 +222,22 @@ public class UserPointService {
         }
         existing.setEmailFigli(emails);
         return userPointRepository.save(existing);
+    }
+
+    /**
+     * Un utente già genitore (tipo famiglia o con figli in {@code emailFigli}) non può essere aggiunto come figlio.
+     */
+    private void assertCandidateNotAlreadyParent(String emailEncrypted) {
+        UserPoint existing = userPointRepository.findUserByEmailAll(emailEncrypted);
+        if (existing == null) {
+            return;
+        }
+        boolean hasFigli = existing.getEmailFigli() != null && !existing.getEmailFigli().isEmpty();
+        boolean isFamilyAccount = Integer.valueOf(1).equals(existing.getType());
+        if (hasFigli || isFamilyAccount) {
+            throw new ForbiddenException(
+                    "Questo utente è già genitore (account famiglia o ha figli registrati) e non può essere aggiunto come figlio.");
+        }
     }
 
     private void ensureChildUserPointCreated(String emailEncrypted, List<UserPoint> newChildrenOut) {

@@ -156,14 +156,9 @@ public class FamilyPointsProcessor {
     }
 
     public Mono<ResponseDTO> updateChildByEmail(UserPointWithChildDTO userPoint) {
-          return resourceAccessClient.assertCanAccess(userPoint.getUserPoint().getEmailUserCurrent())
-                .then(Mono.defer(() -> {
-                    return familyWebService.updateChildByEmail(userPoint)
-                            .flatMap(userPointResponse -> {
-                                return Mono.just((new ResponseDTO(userPointResponse, ActivityHttpStatus.OK.value(), new ArrayList<>())));
-                            });
-                }));
-    }   
+        return resourceAccessClient.assertCanAccess(userPoint.getUserPoint().getEmailUserCurrent())
+                .then(Mono.defer(() -> familyWebService.updateChildByEmail(userPoint)));
+    }
 
 
 }

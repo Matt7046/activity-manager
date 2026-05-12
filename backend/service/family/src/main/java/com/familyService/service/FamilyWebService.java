@@ -36,16 +36,13 @@ public class FamilyWebService {
                 }).subscribeOn(Schedulers.boundedElastic()));
     }
 
-    public Mono<UserPointDTO> updateChildByEmail(UserPointWithChildDTO userPointWithChild) {
-       return webClientPoint.post()
-                .uri(userPointPath+"/dati/user/update/child")
+    /** Propaga il {@link ResponseDTO} dello user-point (successo o errore applicativo con HTTP 200). */
+    public Mono<ResponseDTO> updateChildByEmail(UserPointWithChildDTO userPointWithChild) {
+        return webClientPoint.post()
+                .uri(userPointPath + "/dati/user/update/child")
                 .bodyValue(userPointWithChild)
                 .retrieve()
-                .bodyToMono(ResponseDTO.class)
-                .flatMap(responseDTO -> Mono.fromCallable(() -> {
-                    UserPointDTO subDTO = new ObjectMapper().convertValue(responseDTO.getJsonText(), UserPointDTO.class);
-                    return subDTO;
-                }).subscribeOn(Schedulers.boundedElastic()));
+                .bodyToMono(ResponseDTO.class);
     }
 
 

@@ -75,6 +75,9 @@ export function getGitHubOAuthRedirectUri(): string | undefined {
   if (hostname === "localhost" || hostname === "127.0.0.1") {
     return `${window.location.origin}${GITHUB_OAUTH_CALLBACK_PATH}`;
   }
+    if (hostname === "activity-manager.colorsdev.tech" || hostname === "173.212.220.20") {
+    return `${window.location.origin}${GITHUB_OAUTH_CALLBACK_PATH}`;
+  }
   return undefined;
 }
 
