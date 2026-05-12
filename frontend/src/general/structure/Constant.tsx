@@ -54,14 +54,14 @@ export const CLIENT_GITHUB = {
 }
 
 
-/** Path OAuth GitHub di default (se `NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI` è vuota su localhost). */
-const GITHUB_OAUTH_CALLBACK_PATH = "/oauth/github/callback";
+/** Path OAuth GitHub (deve coincidere con “Authorization callback URL” su GitHub, es. …/home). */
+const GITHUB_OAUTH_CALLBACK_PATH = "/home";
 
 /**
  * Redirect URI verso GitHub: in produzione usa `NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI`.
- * In locale (localhost / 127.0.0.1), se la variabile è vuota, usa `window.location.origin` + path,
- * così funziona sia sulla porta 3000 sia sulla 3001 senza cambiare `.env`.
- * Su GitHub OAuth App vanno registrate tutte le URL che usi (es. …:3000/… e …:3001/…).
+ * In locale (localhost / 127.0.0.1), se la variabile è vuota, usa `window.location.origin` + `/home`
+ * (stesso path del `useEffect` su Home che inoltra `code` al popup opener).
+ * Su GitHub OAuth App vanno registrate tutte le URL che usi (es. …:3000/home e …:3001/home).
  */
 export function getGitHubOAuthRedirectUri(): string | undefined {
   const fromEnv = process.env.NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI?.trim();

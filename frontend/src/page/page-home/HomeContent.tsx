@@ -430,7 +430,7 @@ const GoogleAuthComponent = () => {
         titleMessage: "GitHub",
         typeMessage: TypeAlertColor.ERROR,
         message: [
-          "Configura NEXT_PUBLIC_CLIENT_GITHUB_ID. Per produzione imposta anche NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI (es. https://…/oauth/github/callback). In locale su localhost la redirect si ricava dalla porta corrente se la variabile è vuota; registra su GitHub tutte le URL usate (es. :3000 e :3001).",
+          "Configura NEXT_PUBLIC_CLIENT_GITHUB_ID. Per produzione imposta anche NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI (es. https://…/home). In locale su localhost la redirect è …/home sulla porta corrente se la variabile è vuota; registra su GitHub tutte le URL usate (es. :3000/home e :3001/home).",
         ],
       });
       return;

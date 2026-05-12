@@ -1,45 +1,28 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 /**
- * GitHub OAuth redirect in popup: ?code=&state= → postMessage all’opener (Home), poi chiudi.
- * Registra la stessa URL come “Authorization callback URL” nell’OAuth App GitHub.
+ * Compatibilità: vecchia “Authorization callback URL” …/oauth/github/callback.
+ * Il flusso attuale usa `/home` come redirect_uri (allineato al useEffect su Home).
  */
 export default function GitHubOAuthCallbackPage() {
-  const [hint, setHint] = useState("Completamento accesso GitHub…");
+  const router = useRouter();
+  const [hint, setHint] = useState("Reindirizzamento…");
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
-    const state = params.get("state");
-    const error = params.get("error");
-    const errorDescription = params.get("error_description");
-
-    if (error) {
-      setHint(errorDescription ?? error);
-      if (window.opener) {
-        window.opener.postMessage(
-          { type: "github-oauth", error, errorDescription },
-          window.location.origin,
-        );
-      }
+    const search = window.location.search;
+    if (search && (search.includes("code=") || search.includes("error="))) {
+      router.replace(`/home${search}`);
       return;
     }
-
-    if (window.opener && code) {
-      window.opener.postMessage({ type: "github-oauth", code, state }, window.location.origin);
-      window.close();
-      return;
-    }
-
     setHint("Parametri OAuth mancanti. Apri il login dalla pagina Home.");
-  }, []);
+  }, [router]);
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="body2">{hint}</Typography>
-    </Box>
+    <div style={{ padding: 24, fontSize: 14 }}>
+      {hint}
+    </div>
   );
 }
