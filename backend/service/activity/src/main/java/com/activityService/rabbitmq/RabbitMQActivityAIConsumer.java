@@ -11,6 +11,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import reactor.core.publisher.Mono;
@@ -18,6 +20,8 @@ import java.io.IOException;
 
 @Component
 public class RabbitMQActivityAIConsumer {
+
+    private static final Logger log = LoggerFactory.getLogger(RabbitMQActivityAIConsumer.class);
 
     private final SearchPublisher searchPublisher;
     @Autowired
@@ -65,7 +69,11 @@ public class RabbitMQActivityAIConsumer {
             }).doOnError(error -> {
             // Invia l'evento dopo il salvataggio del log in modo asincrono
             Mono.fromRunnable(() -> {
-                System.out.println("Errore durante il salvataggio dei punti: " + error.getMessage());
+                log.warn("[search.ai.queue] categorizzazione GPT fallita per activityId={} nome=\"{}\" — {}: {}",
+                        event._id(),
+                        event.nome(),
+                        error.getClass().getSimpleName(),
+                        error.getMessage());
                 ActivityEnrichedEvent eventEnriched = new ActivityEnrichedEvent(
                         event._id(),
                         event.subTesto(),
