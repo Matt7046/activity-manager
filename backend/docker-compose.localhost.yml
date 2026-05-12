@@ -22,9 +22,6 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-    environment:
-      - 'RABBITMQ_DEFAULT_PASS=password'
-      - 'RABBITMQ_DEFAULT_USER=username'
     env_file:
       - local.env
     networks:
@@ -92,11 +89,6 @@ services:
       dockerfile: service/userPoint/Dockerfile
     env_file:
       - local.env
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/userPoint/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
@@ -115,12 +107,6 @@ services:
         condition: service_started
     env_file:
       - local.env
-    
-    environment:     
-      SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_PORT: 5672
-      SPRING_RABBITMQ_USERNAME: username
-      SPRING_RABBITMQ_PASSWORD: password
     volumes:
       - ./service/activity/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
@@ -143,11 +129,6 @@ services:
       dockerfile: service/auth/Dockerfile
     env_file:
       - local.env
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/auth/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
@@ -166,11 +147,6 @@ services:
       dockerfile: service/family/Dockerfile
     env_file:
       - local.env
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/family/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
@@ -189,11 +165,6 @@ services:
       dockerfile: service/notification/Dockerfile
     env_file:
       - local.env
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/notification/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
@@ -212,11 +183,6 @@ services:
       dockerfile: service/image/Dockerfile
     env_file:
       - local.env
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/image/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro

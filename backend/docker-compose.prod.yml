@@ -32,12 +32,10 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      - 'RABBITMQ_DEFAULT_PASS=password'
-      - 'RABBITMQ_DEFAULT_USER=username'
+    # Nessuna ports: — AMQP e management solo sulla rete Docker (non esposti su Internet).
+    # Opzionale sulla macchina host: "127.0.0.1:15672:15672" per la UI via SSH tunnel.
+    env_file:
+      - .env
     networks:
       - app-network
 
