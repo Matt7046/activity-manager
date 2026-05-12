@@ -140,14 +140,16 @@ export const getTranslatedNotification = (message: string, i18n: I18n): string =
 };
 
 export const navigateRouting = (router: AppRouterInstance, path: string, params?: any) => {
-  // Verifichiamo che params esista, non sia nullo e abbia almeno una chiave
   const hasParams = params && typeof params === 'object' && Object.keys(params).length > 0;
+  const slug = (path ?? '').toString().replace(/^\/+/, '');
+  const base = slug === '' ? '/' : `/${slug}`;
 
   if (hasParams) {
     const queryString = new URLSearchParams(params).toString();
-    router.push(`/${path}?${queryString}`);
+    const url = base === '/' ? `/?${queryString}` : `${base}?${queryString}`;
+    router.push(url);
   } else {
-    router.push(`/${path}`);
+    router.push(base);
   }
 };
 export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {

@@ -17,7 +17,7 @@ import Popover, { PopoverNotification } from '../../components/ms-popover/Popove
 import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
 import { SocketURL } from '../../general/structure/SocketUrl';
-import { FamilyNotificationI, getDateStringRegularFormat, getTranslatedNotification, navigateRouting, NotificationI, ResponseI, showMessage } from '../../general/structure/Utils';
+import { FamilyNotificationI, getDateStringRegularFormat, getTranslatedNotification, NotificationI, ResponseI, showMessage } from '../../general/structure/Utils';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
 
@@ -54,11 +54,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const { i18n } = useLingui();
 
   useEffect(() => {
-    // Block direct access to internal pages when user context is missing.
-if (!user?.email && section.path !== SectionName.ROOT && section.path !== SectionName.HOME && section.path !== SectionName.REGISTER && section.path !== SectionName.PERSONALITY ) { 
-       navigateRouting(navigate, SectionName.ROOT, {});
+    // Accesso a pagine interne senza utente: vai alla root (presentazione), non a URL malformati tipo "//".
+    if (!user?.email && section.path !== SectionName.ROOT && section.path !== SectionName.HOME && section.path !== SectionName.REGISTER && section.path !== SectionName.PERSONALITY) {
+      navigate.replace('/');
     }
-  }, [user, navigate]);
+  }, [user, navigate, section.path]);
 
 
 
@@ -66,7 +66,7 @@ if (!user?.email && section.path !== SectionName.ROOT && section.path !== Sectio
     googleLogout();
     setUser(null);
     SocketFamilyPoint.resetInstance();
-    navigateRouting(navigate, SectionName.ROOT, {})
+    navigate.replace('/');
   }
 
 
