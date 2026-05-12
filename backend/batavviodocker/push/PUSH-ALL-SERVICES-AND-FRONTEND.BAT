@@ -2,10 +2,10 @@
 setlocal
 
 echo.
-echo Push immagini Docker Hub — solo microservizi (SENZA frontend)
-echo (usa PUSH-ALL-SERVICES-AND-FRONTEND.BAT per includere il frontend)
+echo Push immagini Docker Hub — frontend + tutti i microservizi
 echo.
 
+call :pushImage "docker.io/matt7046/frontend:1.0.1"
 call :pushImage "docker.io/matt7046/user-point-service:1.0.0"
 call :pushImage "docker.io/matt7046/activity-service:1.0.0"
 call :pushImage "docker.io/matt7046/auth-service:1.0.0"

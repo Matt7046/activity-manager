@@ -2,7 +2,8 @@
 setlocal
 
 echo ==================================================
-echo Rebuild completo (stack prod / docker-compose.prod.yml)
+echo Rebuild tutti i microservizi — SENZA frontend
+echo (prod: docker-compose.prod.yml)
 echo ==================================================
 
 call "%~dp0REBUILD-USERPOINT.BAT"
@@ -25,7 +26,8 @@ if errorlevel 1 goto :fail
 
 echo.
 echo ==================================================
-echo Rebuild completato con successo.
+echo Rebuild microservizi completato (frontend non incluso).
+echo Per includere il frontend: REBUILD-ALL-SERVICES-AND-FRONTEND.BAT
 echo ==================================================
 exit /b 0
 
