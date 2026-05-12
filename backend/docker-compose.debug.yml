@@ -22,9 +22,6 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-    environment:
-      - 'RABBITMQ_DEFAULT_PASS=password'
-      - 'RABBITMQ_DEFAULT_USER=username'
     env_file:
       - local.env
     networks:
@@ -94,10 +91,6 @@ services:
       - local.env
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/userPoint/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
@@ -122,10 +115,6 @@ services:
     
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5008
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/activity/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
@@ -153,10 +142,6 @@ services:
       - local.env
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5010
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/auth/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
@@ -180,10 +165,6 @@ services:
       - local.env
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5011
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/family/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
@@ -207,10 +188,6 @@ services:
       - local.env
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5012
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/notification/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
@@ -234,10 +211,6 @@ services:
       - local.env
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5013
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=username
-      - SPRING_RABBITMQ_PASSWORD=password
     volumes:
       - ./service/image/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
