@@ -1,0 +1,8 @@
+# Non portare in immagine (build Next usa next.config + dotenv)
+local.env
+
+node_modules
+.next
+.git
+*.md
+.env*.local

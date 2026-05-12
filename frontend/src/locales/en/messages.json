@@ -238,5 +238,6 @@
   "password_reset_email_required": "Enter an email address.",
   "password_reset_email_invalid": "Enter a valid email address.",
   "theme_switch_to_light": "Switch to light theme",
-  "theme_switch_to_dark": "Switch to dark theme"
+  "theme_switch_to_dark": "Switch to dark theme",
+  "email_duplicate_figli": "Duplicate child emails are not allowed."
 }

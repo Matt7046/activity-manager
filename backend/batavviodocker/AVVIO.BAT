@@ -31,11 +31,11 @@ rem --- BACKEND ---
 cd ..
 cd backend
 
-echo Gestione Backend con Docker Compose (localhost)...
-call docker-compose -f docker-compose.localhost.yml down
+echo Gestione Backend con Docker Compose (localhost + porte microservizi)...
+call docker-compose -f docker-compose.localhost.yml -f docker-compose.microservice-ports.yml down
 
-echo Avvio dei container con Docker Compose (localhost)...
-call docker-compose -f docker-compose.localhost.yml up --build
+echo Avvio dei container con Docker Compose (localhost + porte microservizi)...
+call docker-compose -f docker-compose.localhost.yml -f docker-compose.microservice-ports.yml up --build
 
 echo Operazione completata!
 pause

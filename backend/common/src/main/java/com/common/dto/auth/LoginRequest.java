@@ -13,5 +13,14 @@ public class LoginRequest {
     private Boolean googleLogin;
     private String googleAccessToken;
 
+    /** OAuth GitHub (web flow): code + redirect_uri devono coincidere con l’app GitHub. */
+    private Boolean githubLogin;
+    private String githubCode;
+    private String githubRedirectUri;
+
+    /** OAuth Facebook: stesso schema di Google (email da Graph + access token utente). */
+    private Boolean facebookLogin;
+    private String facebookAccessToken;
+
     // Getter e Setter
 }

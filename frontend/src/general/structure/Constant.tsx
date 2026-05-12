@@ -49,6 +49,40 @@ export const CLIENT_GOOGLE = {
   SERVER: process.env.NEXT_PUBLIC_CLIENT_GOOGLE_ID
 }
 
+export const CLIENT_GITHUB = {
+  SERVER: process.env.NEXT_PUBLIC_CLIENT_GITHUB_ID
+}
+
+
+/** Path OAuth GitHub di default (se `NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI` è vuota su localhost). */
+const GITHUB_OAUTH_CALLBACK_PATH = "/oauth/github/callback";
+
+/**
+ * Redirect URI verso GitHub: in produzione usa `NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI`.
+ * In locale (localhost / 127.0.0.1), se la variabile è vuota, usa `window.location.origin` + path,
+ * così funziona sia sulla porta 3000 sia sulla 3001 senza cambiare `.env`.
+ * Su GitHub OAuth App vanno registrate tutte le URL che usi (es. …:3000/… e …:3001/…).
+ */
+export function getGitHubOAuthRedirectUri(): string | undefined {
+  const fromEnv = process.env.NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI?.trim();
+  if (fromEnv) {
+    return fromEnv;
+  }
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+  const { hostname } = window.location;
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    return `${window.location.origin}${GITHUB_OAUTH_CALLBACK_PATH}`;
+  }
+  return undefined;
+}
+
+/** Facebook Login: App ID pubblico (SDK + Graph). */
+export const CLIENT_FACEBOOK = {
+  APP_ID: process.env.NEXT_PUBLIC_CLIENT_FACEBOOK_APP_ID,
+}
+
 
 export enum HttpStatus {
   OK = 200,
@@ -101,3 +135,6 @@ export const StatusNotificationTranslate = {
 
 
 export const STORAGE_KEY = 'activity-manager-theme';
+
+
+

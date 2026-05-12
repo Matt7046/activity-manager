@@ -11,10 +11,13 @@ import PointsContent from './UserPointContent';
 export interface UserPointsI {
   _id?: string | undefined;
   email?: string;
+  emailChild?:string;
   password?: string;
   numeroPunti?: number;
   usePoints?: number;
   nameImage?: string;
+  /** _id della card (stringa qualsiasi): aggiorna solo quell'immagine in imagesBySlot. */
+  imageCardId?: string;
   status?: number;
   emailUserCurrent?: string
 }

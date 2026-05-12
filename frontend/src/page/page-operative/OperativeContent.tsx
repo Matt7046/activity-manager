@@ -202,7 +202,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
               <FormControl fullWidth>
                 <TextField
                   label={i18n._("email")}
-                  value={user?.emailChild}
+                  value={user?.emailChild ?? ""}
                   onChange={(e) => operativeStore.setEmailField(e.target.value)}
                   fullWidth
                   margin="normal"

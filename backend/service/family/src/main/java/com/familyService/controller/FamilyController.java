@@ -2,6 +2,7 @@ package com.familyService.controller;
 
 import com.common.dto.family.LogFamilyDTO;
 import com.common.dto.user.UserPointDTO;
+import com.common.dto.user.UserPointWithChildDTO;
 import com.familyService.processor.FamilyPointsProcessor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,5 +32,10 @@ public class FamilyController {
     @PostMapping("/log/tutor")
     public Mono<ResponseDTO> getLogActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
         return familyPointsProcessor.logFamilyByEmail(userPointDTO);
+    }
+
+    @PostMapping("/dati/child")
+    public Mono<ResponseDTO> updateChildByEmail(@RequestBody UserPointWithChildDTO body) {
+        return familyPointsProcessor.updateChildByEmail(body);
     }
 }

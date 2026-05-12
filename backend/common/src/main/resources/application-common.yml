@@ -96,6 +96,14 @@ google:
   api-key: ${GOOGLE_CLIENT_ID}
   base-url: https://www.googleapis.com
 
+github:
+  client-id: ${GITHUB_CLIENT_ID:}
+  client-secret: ${GITHUB_CLIENT_SECRET:}
+
+facebook:
+  app-id: ${FACEBOOK_APP_ID:}
+  app-secret: ${FACEBOOK_APP_SECRET:}
+
 rabbitmq:
   exchange:
     name:

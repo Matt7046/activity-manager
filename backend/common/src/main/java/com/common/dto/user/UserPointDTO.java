@@ -1,10 +1,7 @@
 package com.common.dto.user;
 
 import java.util.List;
-
-import com.common.data.notification.StatusUserPoint;
 import com.common.dto.structure.InterfaceDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +23,8 @@ public class UserPointDTO implements InterfaceDTO {
     private String numeroPunti;
     private Integer usePoints;
     private String nameImage;
+    /** _id della card: aggiorna solo quell'immagine (chiave in imagesBySlot). */
+    private String imageCardId;
     private Boolean operation;
     private String emailUserCurrent;
     private Integer page;

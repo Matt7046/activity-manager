@@ -3,20 +3,31 @@
 import { useUser } from '@/context/UserContext';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Trans, useLingui } from "@lingui/react";
-import { Apple as AppleIcon, Facebook as FacebookIcon, Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import GoogleIcon from '@mui/icons-material/Google';
 import { Box, Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Link as MuiLink, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import LinkNext from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import Alert from '../../components/ms-alert/Alert';
 import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
 import TechFooter from '../../components/ms-tech-footer/TechFooter';
 import { getToken } from '../../general/service/AuthService';
 import { baseStore } from '../../general/structure/BaseStore';
-import { CLIENT_GOOGLE, SectionName, ServerMessage, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
+import {
+  CLIENT_FACEBOOK,
+  CLIENT_GITHUB,
+  CLIENT_GOOGLE,
+  getGitHubOAuthRedirectUri,
+  SectionName,
+  ServerMessage,
+  TypeAlertColor,
+  TypeUser,
+} from '../../general/structure/Constant';
 import { navigateRouting, ResponseI, showMessage } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
 import { getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
@@ -60,6 +71,10 @@ const GoogleAuthComponent = () => {
   const [openResetDialog, setOpenResetDialog] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const githubOAuthStateRef = useRef<string>("");
+  const githubHomePopupBridgeDoneRef = useRef(false);
+  const facebookSdkInitRef = useRef(false);
 
 
 
@@ -138,6 +153,36 @@ const GoogleAuthComponent = () => {
 
     // Pulisci il listener al dismount
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const appId = CLIENT_FACEBOOK.APP_ID;
+    if (!appId || facebookSdkInitRef.current) {
+      return;
+    }
+    facebookSdkInitRef.current = true;
+    (window as unknown as { fbAsyncInit?: () => void }).fbAsyncInit = function () {
+      const FB = (window as unknown as { FB?: { init: (c: object) => void } }).FB;
+      if (FB) {
+        FB.init({
+          appId,
+          cookie: true,
+          xfbml: false,
+          version: "v19.0",
+        });
+      }
+    };
+    const id = "facebook-jssdk";
+    if (document.getElementById(id)) {
+      return;
+    }
+    const js = document.createElement("script");
+    js.id = id;
+    js.src = "https://connect.facebook.net/it_IT/sdk.js";
+    js.async = true;
+    js.defer = true;
+    const fbs = document.getElementsByTagName("script")[0];
+    fbs?.parentNode?.insertBefore(js, fbs);
   }, []);
 
 
@@ -282,6 +327,194 @@ const GoogleAuthComponent = () => {
     }
   }
 
+  async function completeGithubLogin(code: string) {
+    const redirectUri = getGitHubOAuthRedirectUri();
+    if (!redirectUri) {
+      return;
+    }
+    try {
+      const tokenData = await getToken(
+        {
+          githubLogin: true,
+          githubCode: code,
+          githubRedirectUri: redirectUri,
+        },
+        (message: any) => showMessage(setOpen, setMessage, message, true),
+        setLoading,
+      );
+      const email = tokenData?.jsonText?.email as string | undefined;
+      const token = tokenData?.jsonText?.token as string | undefined;
+      if (!email || !token) {
+        return;
+      }
+      baseStore.setToken(token);
+      const userDataGithub = {
+        email,
+        emailUserCurrent: email,
+        emailChild: email,
+        name: email.split("@")[0] ?? email,
+        type: TypeUser.FAMILY,
+      };
+      setEmailLogin(email);
+      setCurrentUser(userDataGithub);
+      showDialog(1, true, userDataGithub);
+    } catch (error) {
+      console.error("Error completing GitHub login", error);
+    }
+  }
+
+  /** Callback GitHub = `/home`: il popup torna su Home con ?code=; inoltra all’opener e chiude. */
+  useEffect(() => {
+    if (location !== "/home" || typeof window === "undefined") {
+      return;
+    }
+    if (!window.opener) {
+      return;
+    }
+    if (githubHomePopupBridgeDoneRef.current) {
+      return;
+    }
+    const p = new URLSearchParams(window.location.search);
+    const err = p.get("error");
+    if (err) {
+      githubHomePopupBridgeDoneRef.current = true;
+      window.opener.postMessage(
+        { type: "github-oauth", error: err, errorDescription: p.get("error_description") },
+        window.location.origin,
+      );
+      window.close();
+      return;
+    }
+    const code = p.get("code");
+    const state = p.get("state");
+    if (!code || !state) {
+      return;
+    }
+    githubHomePopupBridgeDoneRef.current = true;
+    window.opener.postMessage({ type: "github-oauth", code, state }, window.location.origin);
+    window.close();
+  }, [location]);
+
+  useEffect(() => {
+    const onMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) {
+        return;
+      }
+      if (event.data?.type !== "github-oauth") {
+        return;
+      }
+      if (event.data?.error) {
+        showMessage(setOpen, setMessage, {
+          titleMessage: "GitHub",
+          typeMessage: TypeAlertColor.ERROR,
+          message: [String(event.data.errorDescription ?? event.data.error)],
+        });
+        return;
+      }
+      if (
+        event.data?.code &&
+        event.data?.state === githubOAuthStateRef.current &&
+        getGitHubOAuthRedirectUri()
+      ) {
+        void completeGithubLogin(String(event.data.code));
+      }
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, []);
+
+  function startGithubLogin() {
+    const redirectUri = getGitHubOAuthRedirectUri();
+    if (!CLIENT_GITHUB.SERVER || !redirectUri) {
+      showMessage(setOpen, setMessage, {
+        titleMessage: "GitHub",
+        typeMessage: TypeAlertColor.ERROR,
+        message: [
+          "Configura NEXT_PUBLIC_CLIENT_GITHUB_ID. Per produzione imposta anche NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI (es. https://…/oauth/github/callback). In locale su localhost la redirect si ricava dalla porta corrente se la variabile è vuota; registra su GitHub tutte le URL usate (es. :3000 e :3001).",
+        ],
+      });
+      return;
+    }
+    const state = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    githubOAuthStateRef.current = state;
+    const url =
+      `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(CLIENT_GITHUB.SERVER)}` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      `&scope=${encodeURIComponent("user:email")}` +
+      `&state=${encodeURIComponent(state)}`;
+    window.open(url, "github_oauth", "width=520,height=720");
+  }
+
+  async function fetchFacebookUserData(accessToken: string) {
+    try {
+      const userDataResponse = await fetch(
+        `https://graph.facebook.com/me?fields=id,name,email&access_token=${encodeURIComponent(accessToken)}`,
+      );
+      const userDataFacebook = await userDataResponse.json();
+      if (!userDataResponse.ok || !userDataFacebook.email) {
+        console.error("Facebook userinfo", userDataFacebook);
+        showMessage(setOpen, setMessage, {
+          titleMessage: "Facebook",
+          typeMessage: TypeAlertColor.ERROR,
+          message: [userDataFacebook.error?.message ?? "Email non disponibile da Facebook"],
+        });
+        return;
+      }
+      userDataFacebook.emailUserCurrent = userDataFacebook.email;
+      userDataFacebook.emailChild = userDataFacebook.email;
+      userDataFacebook.type = TypeUser.FAMILY;
+      getToken(
+        {
+          email: userDataFacebook.emailUserCurrent,
+          facebookLogin: true,
+          facebookAccessToken: accessToken,
+        },
+        (message: any) => showMessage(setOpen, setMessage, message, true),
+        setLoading,
+      ).then((tokenData) => {
+        baseStore.setToken(tokenData?.jsonText?.token);
+        setEmailLogin(userDataFacebook.email ?? "");
+        setCurrentUser(userDataFacebook);
+        showDialog(1, true, userDataFacebook);
+      });
+    } catch (error) {
+      console.error("Error fetching Facebook user data", error);
+    }
+  }
+
+  function handleFacebookLogin(): void {
+    if (!CLIENT_FACEBOOK.APP_ID) {
+      showMessage(setOpen, setMessage, {
+        titleMessage: "Facebook",
+        typeMessage: TypeAlertColor.ERROR,
+        message: ["Configura NEXT_PUBLIC_CLIENT_FACEBOOK_APP_ID"],
+      });
+      return;
+    }
+    const FB = (window as unknown as { FB?: { login: (cb: (r: unknown) => void, o?: { scope: string }) => void } })
+      .FB;
+    if (!FB) {
+      showMessage(setOpen, setMessage, {
+        titleMessage: "Facebook",
+        typeMessage: TypeAlertColor.ERROR,
+        message: ["SDK Facebook non ancora caricato, riprova tra un secondo."],
+      });
+      return;
+    }
+    FB.login(
+      (response: unknown) => {
+        const r = response as {
+          authResponse?: { accessToken?: string };
+          status?: string;
+        };
+        if (r.status === "connected" && r.authResponse?.accessToken) {
+          void fetchFacebookUserData(r.authResponse.accessToken);
+        }
+      },
+      { scope: "email" },
+    );
+  }
+
   // Simulazione del login con Google
   const simulateLogin = (type: number) => {
     setSimulated(type);
@@ -317,14 +550,6 @@ const GoogleAuthComponent = () => {
   }
 
   const handleKeepLoggedIn = (event: any): void => {
-    throw new Error('Function not implemented.');
-  }
-
-  const handleAppleLogin = (event: any): void => {
-    throw new Error('Function not implemented.');
-  }
-
-  const handleFacebookLogin = (event: any): void => {
     throw new Error('Function not implemented.');
   }
 
@@ -381,7 +606,6 @@ const GoogleAuthComponent = () => {
       <Box className="home-page-shell">
         <Box className="home-page-main">
           {/* Main Login Box */}
-          <GoogleOAuthProvider clientId="549622774155-atv0j0qj40r1vpl1heibaughtf0t2lon.apps.googleusercontent.com">
             <Box className="welcome-container1">
               <Paper elevation={0} className="login-paper">
                 <Box mb={3} className="box-pulsanti-login">
@@ -496,19 +720,35 @@ const GoogleAuthComponent = () => {
                 {/* Login Social */}
                 <Grid container spacing={2} justifyContent="center">
                   <Grid>
-                    <IconButton onClick={handleAppleLogin} className="social-button" disabled>
-                      <AppleIcon />
+                    <IconButton
+                      type="button"
+                      onClick={startGithubLogin}
+                      className="social-button"
+                      disabled={!CLIENT_GITHUB.SERVER || !getGitHubOAuthRedirectUri()}
+                      aria-label="GitHub"
+                    >
+                      <GitHubIcon />
                     </IconButton>
                   </Grid>
                   <Grid>
-                    <IconButton onClick={handleFacebookLogin} className="social-button" disabled>
+                    <IconButton
+                      type="button"
+                      onClick={handleFacebookLogin}
+                      className="social-button"
+                      disabled={!CLIENT_FACEBOOK.APP_ID}
+                      aria-label="Facebook"
+                    >
                       <FacebookIcon />
                     </IconButton>
                   </Grid>
                   <Grid>
                     <IconButton
+                      type="button"
                       className="social-button google-button"
-                      onClick={() => login()}                  >
+                      onClick={() => login()}
+                      disabled={!CLIENT_GOOGLE.SERVER}
+                      aria-label="Google"
+                    >
                       <GoogleIcon />
                     </IconButton>
                   </Grid>
@@ -556,7 +796,6 @@ const GoogleAuthComponent = () => {
 
               </Paper>
             </Box>
-          </GoogleOAuthProvider>
 
           {/* Loader */}
           {loading && (

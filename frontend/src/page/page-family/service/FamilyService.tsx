@@ -27,3 +27,22 @@ export const savePointsByFamily = async (user: any, funzioneMessage?: (message?:
 
 };
 
+export type UserPointWithChildPayload = {
+  userPoint: { emailUserCurrent: string };
+  userPointChild: { email: string; operation: boolean }[];
+};
+
+export const updateChildrenByFamily = async (
+  body: UserPointWithChildPayload,
+  funzioneMessage?: (message?: TypeMessage) => void,
+  setLoading?: (loading: boolean) => void,
+  showSuccess?: boolean,
+): Promise<ResponseI | undefined> => {
+  try {
+    const path = PATH_FAMILY + `/dati/child`;
+    const data = await postData(path, body, setLoading, funzioneMessage, showSuccess ?? true);
+    return data;
+  } catch (error) {
+  }
+};
+
