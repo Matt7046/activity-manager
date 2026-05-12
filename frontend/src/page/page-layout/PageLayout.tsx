@@ -17,7 +17,7 @@ import Popover, { PopoverNotification } from '../../components/ms-popover/Popove
 import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
 import { SocketURL } from '../../general/structure/SocketUrl';
-import { FamilyNotificationI, getDateStringRegularFormat, getTranslatedNotification, NotificationI, ResponseI, showMessage } from '../../general/structure/Utils';
+import { FamilyNotificationI, getDateStringRegularFormat, getTranslatedNotification, navigateRouting, NotificationI, ResponseI, showMessage } from '../../general/structure/Utils';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
 
@@ -54,9 +54,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const { i18n } = useLingui();
 
   useEffect(() => {
-    // Accesso a pagine interne senza utente: vai alla root (presentazione), non a URL malformati tipo "//".
     if (!user?.email && section.path !== SectionName.ROOT && section.path !== SectionName.HOME && section.path !== SectionName.REGISTER && section.path !== SectionName.PERSONALITY) {
-      navigate.replace('/');
+      navigateRouting(navigate, SectionName.ROOT, {});
     }
   }, [user, navigate, section.path]);
 
@@ -66,7 +65,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     googleLogout();
     setUser(null);
     SocketFamilyPoint.resetInstance();
-    navigate.replace('/');
+    navigateRouting(navigate, SectionName.ROOT, {});
   }
 
 
