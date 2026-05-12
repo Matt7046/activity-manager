@@ -143,13 +143,22 @@ export const navigateRouting = (router: AppRouterInstance, path: string, params?
   const hasParams = params && typeof params === 'object' && Object.keys(params).length > 0;
   const slug = (path ?? '').toString().replace(/^\/+/, '');
   const base = slug === '' ? '/' : `/${slug}`;
+  const isRoot = slug === '';
+
+  const go = (url: string) => {
+    if (isRoot) {
+      router.replace(url);
+    } else {
+      router.push(url);
+    }
+  };
 
   if (hasParams) {
     const queryString = new URLSearchParams(params).toString();
     const url = base === '/' ? `/?${queryString}` : `${base}?${queryString}`;
-    router.push(url);
+    go(url);
   } else {
-    router.push(base);
+    go(base);
   }
 };
 export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
