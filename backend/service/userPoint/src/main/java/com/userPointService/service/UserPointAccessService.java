@@ -4,10 +4,12 @@ import com.common.configurations.encrypt.EncryptDecryptConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.common.data.user.UserPoint;
 import com.common.security.EmailNormalization;
 import com.common.structure.exception.ForbiddenException;
+import com.common.data.user.UserPoint;
 import com.userPointService.repository.UserPointRepository;
+
+import java.util.List;
 
 @Service
 public class UserPointAccessService {
@@ -32,16 +34,20 @@ public class UserPointAccessService {
             return true;
         }
         String emailResourceCrypt = encryptDecryptConverter.convert(r);
-        UserPoint tutor = userPointRepository.findByOnFigli(emailResourceCrypt);
-        if (tutor == null) {
-            // Alcune chiamate GET arrivano in plain-text; fallback su valore non cifrato.
-            tutor = userPointRepository.findByOnFigli(r);
+        List<UserPoint> tutors = userPointRepository.findAllParentsHavingChildInEmailFigli(emailResourceCrypt);
+        if (tutors.isEmpty()) {
+            // Alcune chiamate arrivano in plain-text; fallback su valore non cifrato.
+            tutors = userPointRepository.findAllParentsHavingChildInEmailFigli(r);
         }
-        if (tutor == null || tutor.getEmail() == null) {
-            return false;
+        for (UserPoint tutor : tutors) {
+            if (tutor != null && tutor.getEmail() != null) {
+                String emailTutor = safeDecrypt(tutor.getEmail());
+                if (p.equals(EmailNormalization.normalize(emailTutor))) {
+                    return true;
+                }
+            }
         }
-        String emailTutor = safeDecrypt(tutor.getEmail());
-        return p.equals(EmailNormalization.normalize(emailTutor));
+        return false;
     }
 
     private String safeDecrypt(String value) {
