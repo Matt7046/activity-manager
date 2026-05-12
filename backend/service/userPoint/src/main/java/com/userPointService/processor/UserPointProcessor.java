@@ -184,7 +184,7 @@ public class UserPointProcessor {
     @Transactional
     public Mono<ResponseDTO> saveUserImage(UserPointDTO userPointDTO, String principalEmail) {
         return Mono.fromCallable(() -> {
-            userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailChild());
+            userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailUserCurrent());
             UserPoint points = userPointMapper.fromDTO(userPointDTO);
             points = userPointService.saveUserImage(points);
             UserPointDTO subDTO = userPointMapper.toDTO(points);
