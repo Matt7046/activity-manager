@@ -76,6 +76,7 @@ public class LogActivityProcessor {
         logFamilyDTO.setDate(new Date());
         logFamilyDTO.setPerformedByEmail(logActivityDTO.getEmailUserCurrent());
         logFamilyDTO.setReceivedByEmail(logActivityDTO.getEmail());
+        logFamilyDTO.setUsePoints(logActivityDTO.getUsePoints());
         return logActivityWebService.savePoints(userPointDTO)
                 .flatMap(response ->
                         saveLog(userPointDTO, logActivityDTO)

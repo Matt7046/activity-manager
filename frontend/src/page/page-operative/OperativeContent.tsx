@@ -229,7 +229,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
                 <InputLabel id="select-label">{i18n._("punti_attivitaobb")}</InputLabel>
                 <Select
                   labelId="select-label"
-                  value={formValues.activity}
+                  value={formValues?.activity ?? ""}
                   onChange={(e) => clickCombobox(e.target.value)}
                   label={i18n._("attivita")}
                   required={true}
@@ -249,7 +249,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
                 <TextField
                   label={i18n._("punti_attivita")}
                   type="number"
-                  value={operativeStore.pointsField}
+                  value={operativeStore?.pointsField ?? 0}
                   onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
                   margin="normal"
                   disabled={true}

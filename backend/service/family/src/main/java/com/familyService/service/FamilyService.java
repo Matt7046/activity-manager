@@ -2,7 +2,6 @@ package com.familyService.service;
 
 import com.common.data.family.LogFamily;
 import com.common.data.user.UserPoint;
-import com.common.mapper.LogFamilyMapper;
 import com.familyService.repository.FamilyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,10 +19,7 @@ public class FamilyService {
 
     @Autowired
     private FamilyRepository repository;
-
-    @Autowired
-    private LogFamilyMapper logFamilyMapper;
-
+    
     @Transactional
     public LogFamily saveLogFamily(LogFamily family) {
         return  repository.save(family);
