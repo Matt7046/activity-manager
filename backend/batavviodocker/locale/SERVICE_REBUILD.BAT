@@ -4,15 +4,14 @@ setlocal
 if "%~1"=="" (
   echo Uso: SERVICE_REBUILD.BAT nome-servizio
   echo Esempio: SERVICE_REBUILD.BAT activity-service
+  echo File: docker-compose.localhost.yml + docker-compose.microservice-ports.yml
   exit /b 1
 )
 
 set SERVICE_NAME=%~1
-rem Due file: base + porte host/JDWP sui microservizi (stesso stack di AVVIO.BAT).
-rem Senza il secondo file, dopo rm/up il container riparte senza -p sulle porte HTTP/JDWP.
 set COMPOSE_OPTS=-f docker-compose.localhost.yml -f docker-compose.microservice-ports.yml
 
-cd /d "%~dp0.."
+cd /d "%~dp0..\.."
 
 echo.
 echo [1/3] Build immagine per %SERVICE_NAME%...

@@ -2,7 +2,7 @@
 setlocal
 
 echo ==================================================
-echo Rebuild completo microservizi backend
+echo Rebuild completo (stack prod / docker-compose.prod.yml)
 echo ==================================================
 
 call "%~dp0REBUILD-USERPOINT.BAT"
