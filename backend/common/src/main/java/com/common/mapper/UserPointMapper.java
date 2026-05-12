@@ -7,9 +7,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import com.common.data.user.UserPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = {PointMapper.class})
+@Mapper(componentModel = "spring", uses = { PointMapper.class })
 public abstract class UserPointMapper {
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
@@ -17,10 +19,13 @@ public abstract class UserPointMapper {
     // Da Entity a DTO
     public abstract UserPointDTO toDTO(UserPoint points);
 
-
     // Da DTO a Entity
     public abstract UserPoint fromDTO(UserPointDTO userPointDto);
 
+    public abstract List<UserPointDTO> toDTO(List<UserPoint> points);
+
+    // Da DTO a Entity
+    public abstract List<UserPoint> fromDTO(List<UserPointDTO> userPointDto);
 
     @AfterMapping
     protected void decryptField(UserPoint point, @MappingTarget UserPointDTO dto) {
@@ -37,7 +42,8 @@ public abstract class UserPointMapper {
             dto.setPassword(encryptDecryptConverter.decrypt(point.getPassword()));
         }
         if (dto.getEmailFigli() != null) {
-            dto.setEmailFigli(point.getEmailFigli().stream().map(encryptDecryptConverter::decrypt).collect(Collectors.toList()));
+            dto.setEmailFigli(
+                    point.getEmailFigli().stream().map(encryptDecryptConverter::decrypt).collect(Collectors.toList()));
         }
     }
 
@@ -56,11 +62,9 @@ public abstract class UserPointMapper {
             point.setPassword(encryptDecryptConverter.convert(dto.getPassword()));
         }
         if (point.getEmailFigli() != null) {
-            point.setEmailFigli(point.getEmailFigli().stream().map(encryptDecryptConverter::convert).collect(Collectors.toList()));
+            point.setEmailFigli(
+                    point.getEmailFigli().stream().map(encryptDecryptConverter::convert).collect(Collectors.toList()));
         }
 
     }
 }
-
-
-

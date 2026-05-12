@@ -2,6 +2,7 @@ package com.userPointService.processor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -58,8 +59,10 @@ public class UserPointProcessor {
             UserPoint sub = userPointMapper.fromDTO(userPointDTO);
             UserPoint item = userPointService.findByEmailAndType(sub.getEmailChild(), 0L);
             if (item != null) {
+                Map<String, String> bySlot = userPointService.resolveNameImagesBySlot(item);
+                List<String> orderedPaths = new ArrayList<>(bySlot.values());
                 PointRDTO record = new PointRDTO(item.getPoints(), message.concat(item.getPoints().toString()),
-                        item.getNameImages());
+                        orderedPaths, bySlot);
                 return new ResponseDTO(record, ActivityHttpStatus.OK.value(), new ArrayList<>());
             }
             throw new NotFoundException(errorDocument + userPointDTO.getEmail());
@@ -227,5 +230,28 @@ public class UserPointProcessor {
     @Transactional
     public Mono<ResponseDTO> saveUserPassword(UserPointDTO userPointDTO) {
         return Mono.just(saveUserPasswordInternal(userPointDTO));
+    }
+
+    @Transactional
+    public Mono<ResponseDTO> updateChildByEmail(UserPointWithChildDTO body, String principalEmail) {
+        return Mono.fromCallable(() -> {
+            if (body == null || body.getUserPoint() == null || body.getUserPoint().getEmailUserCurrent() == null) {
+                throw new NotFoundException(errorDocument + "emailUserCurrent");
+            }
+            userPointAccessService.requireCanAccess(principalEmail, body.getUserPoint().getEmailUserCurrent());
+            UserPoint parentKey = userPointMapper.fromDTO(body.getUserPoint());
+            List<UserPoint> ops = body.getUserPointChild() != null ? userPointMapper.fromDTO( body.getUserPointChild()) : new ArrayList<>();
+            List<UserPoint> newChildren = new ArrayList<>();
+            UserPoint updated = userPointService.updateChildByEmail(parentKey, ops, newChildren);
+            if (!newChildren.isEmpty()) {
+                UserPointDTO parentDto = userPointMapper.toDTO(updated);
+                if (body.getUserPoint().getEmailUserCurrent() != null) {
+                    parentDto.setEmailUserCurrent(body.getUserPoint().getEmailUserCurrent());
+                }
+                inviaNotifica(parentDto, newChildren);
+            }
+            UserPointDTO subDTO = userPointMapper.toDTO(updated);
+            return new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
+        });
     }
 }

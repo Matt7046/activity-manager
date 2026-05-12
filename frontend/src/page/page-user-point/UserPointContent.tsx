@@ -43,7 +43,7 @@ const UserPointContent: React.FC<PointsContentProps> = ({
   const [cardData, setCardData] = useState<CardProps[]>([]);
   const [changePoint, setChangePoint] = useState<boolean>(false);
   const [nameImage, setNameImage] = useState<NameImageI[]>([]);
-  const cardsDataId: string[] = ["userPointCard1", "userPointCard2", "userPointCard3"];
+  const cardsDataId: string[] = ["0", "1", "2"];
 
   useEffect(() => {
     getLogAttivita(user, false).then((response: void) => {
@@ -85,11 +85,17 @@ const UserPointContent: React.FC<PointsContentProps> = ({
     configDialogPulsante: { message: '', showDialog: false }
   };
 
-  const saveImage = (_id: string, image: FormData, userPoint: UserPointsI): Promise<string> => {
+  const saveImage = (imageCardId: string, image: FormData): Promise<string> => {
     return upload(image, () => showMessage(alertConfig.setOpen, alertConfig.setMessage)).then((response) => {
       const url = response?.jsonText.url;
       const fileName = url.substring(url.lastIndexOf('upload/'));
-      const payload = { ...userPoint, nameImage: fileName, email: user.emailChild };
+      const payload: UserPointsI = {
+        email: user.emailChild,
+        emailChild: user.emailChild,
+        emailUserCurrent: user.emailUserCurrent,
+        nameImage: fileName,
+        imageCardId,
+      };
       return saveUserImage(payload, () => showMessage(alertConfig.setOpen, alertConfig.setMessage)).then(() => {
         setChangePoint(!changePoint);
         return fileName;
@@ -169,13 +175,11 @@ const UserPointContent: React.FC<PointsContentProps> = ({
     return findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((response: ResponseI | undefined) => {
       if (response) {
         if (response.status === HttpStatus.OK) {
-          let nameImage: NameImageI[] = response.jsonText.nameImage?.map((x: string) => {
-            return { name: x };
-          }
-          )
-          nameImage = nameImage ? nameImage : [];
+          const bySlot: Record<string, string> = response.jsonText.nameImagesBySlot ?? {};
+          const urlForCard = (id: string) => bySlot[id]?.trim() ?? '';
+
+          let nameImage: NameImageI[] = cardsDataId.map((id) => ({ name: urlForCard(id) }));
           setNameImage(nameImage);
-          // Completa l'array fino a 3 elementi con { name: '' }
           while (nameImage.length < 3) {
             nameImage.push({ name: '' });
           }
@@ -225,7 +229,7 @@ const UserPointContent: React.FC<PointsContentProps> = ({
               text: cardText1,
               img: nameImage[0].name,
               title: i18n._("punti_caps_lock"),
-              loadImage: (image: FormData) => saveImage(cardsDataId[0], image, user),
+              loadImage: (image: FormData) => saveImage(cardsDataId[0], image),
               children: renderChildren1(),
             },
             {
@@ -234,7 +238,7 @@ const UserPointContent: React.FC<PointsContentProps> = ({
               text: cardText2,
               img: nameImage[1].name,
               title: i18n._("log_attivita"),
-              loadImage: (image: FormData) => saveImage(cardsDataId[1], image, user),
+              loadImage: (image: FormData) => saveImage(cardsDataId[1], image),
               children: renderChildren2(),
             },
             {
@@ -243,7 +247,7 @@ const UserPointContent: React.FC<PointsContentProps> = ({
               text: cardText3,
               img: nameImage[2].name,
               title: i18n._("log_famiglia"),
-              loadImage: (image: FormData) => saveImage(cardsDataId[2], image, user),
+              loadImage: (image: FormData) => saveImage(cardsDataId[2], image),
               children: renderChildren3(),
             }
           ];

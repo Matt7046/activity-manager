@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/run-dev.cjs",
     "build": "next build",
     "prebuild": "node scripts/generate-pwa-assets.mjs",
     "start": "next start",
@@ -36,6 +36,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "dotenv": "^16.6.1",
     "@lingui/cli": "^5.9.5",
     "@lingui/format-json": "^5.9.5",
     "@lingui/macro": "^5.9.5",

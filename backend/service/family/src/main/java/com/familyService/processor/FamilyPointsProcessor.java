@@ -7,6 +7,7 @@ import com.common.data.user.UserPoint;
 import com.common.dto.family.LogFamilyDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.dto.user.UserPointDTO;
+import com.common.dto.user.UserPointWithChildDTO;
 import com.common.dto.family.FamilyNotificationDTO;
 import com.common.mapper.LogFamilyMapper;
 import com.common.mapper.UserPointMapper;
@@ -153,6 +154,16 @@ public class FamilyPointsProcessor {
         FamilyNotificationDTO dto = getFamilyNotificationDTO(userPointDTO);
         notificationComponent.inviaNotifica(dto, notificationExchange, routingKeyNotification);
     }
+
+    public Mono<ResponseDTO> updateChildByEmail(UserPointWithChildDTO userPoint) {
+          return resourceAccessClient.assertCanAccess(userPoint.getUserPoint().getEmailUserCurrent())
+                .then(Mono.defer(() -> {
+                    return familyWebService.updateChildByEmail(userPoint)
+                            .flatMap(userPointResponse -> {
+                                return Mono.just((new ResponseDTO(userPointResponse, ActivityHttpStatus.OK.value(), new ArrayList<>())));
+                            });
+                }));
+    }   
 
 
 }

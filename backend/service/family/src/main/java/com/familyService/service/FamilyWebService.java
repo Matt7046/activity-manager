@@ -3,11 +3,14 @@ package com.familyService.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.common.dto.structure.ResponseDTO;
 import com.common.dto.user.UserPointDTO;
+import com.common.dto.user.UserPointWithChildDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -25,6 +28,18 @@ public class FamilyWebService {
          return webClientPoint.post()
                 .uri(userPointPath+"/dati/user/operation")
                 .bodyValue(userPointDTO)
+                .retrieve()
+                .bodyToMono(ResponseDTO.class)
+                .flatMap(responseDTO -> Mono.fromCallable(() -> {
+                    UserPointDTO subDTO = new ObjectMapper().convertValue(responseDTO.getJsonText(), UserPointDTO.class);
+                    return subDTO;
+                }).subscribeOn(Schedulers.boundedElastic()));
+    }
+
+    public Mono<UserPointDTO> updateChildByEmail(UserPointWithChildDTO userPointWithChild) {
+       return webClientPoint.post()
+                .uri(userPointPath+"/dati/user/update/child")
+                .bodyValue(userPointWithChild)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class)
                 .flatMap(responseDTO -> Mono.fromCallable(() -> {

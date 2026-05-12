@@ -13,5 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // Genera un costruttore con tutti i campi
 public class LoginResponse implements InterfaceDTO {
     private String token;
+    /** Email soggetto JWT (utile dopo OAuth GitHub lato client). */
+    private String email;
 
 }

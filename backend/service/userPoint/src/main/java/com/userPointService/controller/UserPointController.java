@@ -1,6 +1,7 @@
 package com.userPointService.controller;
 
 import com.common.dto.user.UserPointDTO;
+import com.common.dto.user.UserPointWithChildDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.security.ReactiveJwt;
 import com.userPointService.processor.UserPointProcessor;
@@ -73,6 +74,12 @@ public class UserPointController {
     public Mono<ResponseDTO> updateStatus(@RequestBody UserPointDTO userPointDTO) {
         return ReactiveJwt.currentSubject()
                 .flatMap(principal -> processor.updateStatus(userPointDTO, principal));
+    }
+
+    @PostMapping("/dati/user/update/child")
+    public Mono<ResponseDTO> updateChildByEmail(@RequestBody UserPointWithChildDTO body) {
+        return ReactiveJwt.currentSubject()
+                .flatMap(principal -> processor.updateChildByEmail(body, principal));
     }
 
 }

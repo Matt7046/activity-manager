@@ -24,6 +24,11 @@
   box-sizing: border-box;
 }
 
+.family-child-row {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 @media (max-width: 600px) {
   .box-family-content {
     padding: var(--space-4);

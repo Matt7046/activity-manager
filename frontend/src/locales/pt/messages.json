@@ -238,5 +238,6 @@
   "password_reset_email_required": "Digite um endereço de e-mail.",
   "password_reset_email_invalid": "Digite um endereço de e-mail válido.",
   "theme_switch_to_light": "Mudar para tema claro",
-  "theme_switch_to_dark": "Mudar para tema escuro"
+  "theme_switch_to_dark": "Mudar para tema escuro",
+  "email_duplicate_figli": "Não são permitidos e-mails duplicados entre os filhos."
 }

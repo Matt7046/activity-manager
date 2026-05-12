@@ -8,13 +8,15 @@ if "%~1"=="" (
 )
 
 set SERVICE_NAME=%~1
-set COMPOSE_FILE=docker-compose.localhost.yml
+rem Due file: base + porte host/JDWP sui microservizi (stesso stack di AVVIO.BAT).
+rem Senza il secondo file, dopo rm/up il container riparte senza -p sulle porte HTTP/JDWP.
+set COMPOSE_OPTS=-f docker-compose.localhost.yml -f docker-compose.microservice-ports.yml
 
 cd /d "%~dp0.."
 
 echo.
 echo [1/3] Build immagine per %SERVICE_NAME%...
-call docker compose -f %COMPOSE_FILE% build %SERVICE_NAME%
+call docker compose %COMPOSE_OPTS% build %SERVICE_NAME%
 if errorlevel 1 (
   echo Build fallita.
   exit /b 1
@@ -22,11 +24,11 @@ if errorlevel 1 (
 
 echo.
 echo [2/3] Stop e rimozione container %SERVICE_NAME%...
-call docker compose -f %COMPOSE_FILE% rm -f -s %SERVICE_NAME%
+call docker compose %COMPOSE_OPTS% rm -f -s %SERVICE_NAME%
 
 echo.
 echo [3/3] Avvio %SERVICE_NAME% con dipendenze...
-call docker compose -f %COMPOSE_FILE% up -d %SERVICE_NAME%
+call docker compose %COMPOSE_OPTS% up -d %SERVICE_NAME%
 if errorlevel 1 (
   echo Avvio fallito.
   exit /b 1

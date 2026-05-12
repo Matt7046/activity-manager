@@ -238,5 +238,6 @@
   "password_reset_email_required": "Geben Sie eine E-Mail-Adresse ein.",
   "password_reset_email_invalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
   "theme_switch_to_light": "Zum Hellmodus wechseln",
-  "theme_switch_to_dark": "Zum Dunkelmodus wechseln"
+  "theme_switch_to_dark": "Zum Dunkelmodus wechseln",
+  "email_duplicate_figli": "Doppelte E-Mail-Adressen bei den Kindern sind nicht erlaubt."
 }

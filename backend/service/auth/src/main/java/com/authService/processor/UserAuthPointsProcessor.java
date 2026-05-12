@@ -25,10 +25,16 @@ public class UserAuthPointsProcessor {
     public Mono<ResponseDTO> getToken(LoginRequest loginRequest) {
         return authService.validateLogin(loginRequest)
                 .filter(valid -> valid)
-                .map(ignored -> jwtUtil.generateToken(loginRequest.getEmail()))
-                .map(token -> new ResponseDTO(new LoginResponse(token), ActivityHttpStatus.OK.value(),
-                        new ArrayList<>()))
-                .switchIfEmpty(Mono.fromSupplier(() -> new ResponseDTO(new LoginResponse(""), 401,
+                .map(ignored -> {
+                    String email = loginRequest.getEmail();
+                    String token = jwtUtil.generateToken(email);
+                    LoginResponse body = new LoginResponse();
+                    body.setToken(token);
+                    body.setEmail(email);
+                    return new ResponseDTO(body, ActivityHttpStatus.OK.value(),
+                            new ArrayList<>());
+                })
+                .switchIfEmpty(Mono.fromSupplier(() -> new ResponseDTO(new LoginResponse(), 401,
                         new ArrayList<>(List.of("Credenziali non valide")))));
     }
 }

@@ -1,0 +1,51 @@
+# Porte host + JDWP per i microservizi Java (come docker-compose.debug.yml).
+# Usare SEMPRE insieme a docker-compose.localhost.yml, altrimenti dopo un rebuild
+# (SERVICE_REBUILD / docker compose up -d <servizio>) i container ripartono senza -p.
+#
+# Esempio:
+#   docker compose -f docker-compose.localhost.yml -f docker-compose.microservice-ports.yml up -d
+#
+version: '3.8'
+
+services:
+  user-point-service:
+    ports:
+      - "8083:8080"
+      - "5006:5006"
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006
+
+  activity-service:
+    ports:
+      - "8084:8080"
+      - "5008:5008"
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5008
+
+  auth-service:
+    ports:
+      - "8086:8080"
+      - "5010:5010"
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5010
+
+  family-service:
+    ports:
+      - "8087:8080"
+      - "5011:5011"
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5011
+
+  notification-service:
+    ports:
+      - "8088:8080"
+      - "5012:5012"
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5012
+
+  image-service:
+    ports:
+      - "8089:8080"
+      - "5013:5013"
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5013
