@@ -39,12 +39,12 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   const { i18n } = useLingui();
 
   type FormValues = {
-    [key: string]: number | undefined;
+    newPoints: string;
   };
 
   const [disableButtonSave, setDisableButtonSave] = useState(true);
   const [formValues, setFormValues] = useState<FormValues>({
-    newPoints: 0,
+    newPoints: '0',
   });
 
   const [isPlusIcon, setIsPlusIcon] = useState(true);
@@ -212,7 +212,9 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
   };
 
   const salvaRecord = (userData: any): Promise<any> => {
-    const pointsWithPlus = isPlusIcon ? formValues.newPoints : - (formValues.newPoints || 0);
+    const n = parseInt(formValues.newPoints, 10);
+    const amount = Number.isFinite(n) && !Number.isNaN(n) ? n : 0;
+    const pointsWithPlus = isPlusIcon ? amount : -amount;
     const dataToSend = { ...userData, email: user.emailChild, usePoints: pointsWithPlus };
 
     return savePointsByFamily(dataToSend, (message: any) =>
@@ -240,7 +242,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
             <FormControl fullWidth>
               <TextField
                 label={i18n._("email")}
-                value={user?.emailChild}
+                value={user?.emailChild ?? "" }
                 fullWidth
                 margin="normal"
                 disabled={true}
@@ -265,7 +267,7 @@ const FamilyContent: React.FC<FamilyContentProps> = ({
               <Input
                 id="new-points-input"
                 value={formValues.newPoints}
-                onChange={(e) => setFormValues({ ...formValues, newPoints: parseInt(e.target.value) || 0 })}
+                onChange={(e) => setFormValues({ ...formValues, newPoints: e.target.value })}
                 type="number"
                 startAdornment={
                   <InputAdornment position="start">

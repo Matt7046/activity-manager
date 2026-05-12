@@ -20,6 +20,10 @@ public interface UserPointRepository extends MongoRepository<UserPoint, String> 
     @Query("{'emailFigli': {$in: [?0]}}")
     UserPoint findByOnFigli(String email);
 
+    /** Tutti i genitori che hanno {@code email} (cifrata o in chiaro) in {@code emailFigli}. */
+    @Query("{'emailFigli': {$in: [?0]}}")
+    List<UserPoint> findAllParentsHavingChildInEmailFigli(String email);
+
     @Query(value = "{ 'emailFigli': { '$in': ?0 } }")
     List<UserPoint> findByEmailIn(List<String> emailFigli);
 

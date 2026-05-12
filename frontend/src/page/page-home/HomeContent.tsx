@@ -541,7 +541,7 @@ const GoogleAuthComponent = () => {
     getToken({ email: user.email, password: user.password, googleLogin: false }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
       baseStore.setToken(tokenData?.jsonText?.token);
       oldLogin(user).then(x => {
-        if (x.jsonText.type !== undefined && x.jsonText.type !== null) {
+        if (x?.jsonText?.type !== undefined && x?.jsonText?.type !== null) {
           const currentUser = x.jsonText;
           openHome(currentUser, false, setLoading)
         }
