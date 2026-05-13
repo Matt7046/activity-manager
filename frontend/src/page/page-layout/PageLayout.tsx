@@ -16,7 +16,7 @@ import ThemeToggle from "../../components/ms-theme-toggle/ThemeToggle";
 import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
 import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
-import { SocketURL } from '../../general/structure/SocketUrl';
+import { notificationWebSocketUrl } from '../../general/structure/SocketUrl';
 import { FamilyNotificationI, getDateStringRegularFormat, getTranslatedNotification, navigateRouting, NotificationI, ResponseI, showMessage } from '../../general/structure/Utils';
 import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
 import "./PageLayout.css";
@@ -110,7 +110,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
   useEffect(() => {
     if (user) {
-      const socketFamilyPoint = SocketFamilyPoint.getInstance(user, SocketURL.NOTIFICATION + user?.emailUserCurrent);
+      const socketFamilyPoint = SocketFamilyPoint.getInstance(user, notificationWebSocketUrl(user?.emailUserCurrent));
       socketRef.current = socketFamilyPoint.getSocket();
       // Ping ogni 30 secondi
       pingIntervalRef.current = setInterval(() => {
@@ -118,7 +118,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           socketFamilyPoint.getSocket().send("ping");
         }
         else {
-          SocketFamilyPoint.reconnect(user, SocketURL.NOTIFICATION + user?.emailUserCurrent);
+          SocketFamilyPoint.reconnect(user, notificationWebSocketUrl(user?.emailUserCurrent));
         }
       }, 30000);
       socketFamilyPoint.getSocket().onmessage = (event) => {
