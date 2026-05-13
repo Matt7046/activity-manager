@@ -1,8 +1,10 @@
 "use client";
 import axios from 'axios';
+import { i18n } from "@lingui/core";
 import { TypeMessage } from '../../page/page-layout/PageLayout';
 import apiConfig from '../structure/ApiConfig';
-import { HttpStatus, ServerMessage, TypeAlertColor } from '../structure/Constant';
+import { HttpStatus, TypeAlertColor } from '../structure/Constant';
+import { getServerUnavailableMessage, translateApiMessages } from '../structure/Utils';
 
 const apiClient = () => {
   const token = localStorage.getItem('token');
@@ -46,7 +48,7 @@ export const getData = async (endpoint: string, data: any, setLoading?: (loading
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [getServerUnavailableMessage()] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -71,7 +73,7 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [getServerUnavailableMessage()] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -97,7 +99,7 @@ export const postDataPublic = async (endpoint: string, data: any, setLoading?: (
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [getServerUnavailableMessage()] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -127,7 +129,7 @@ export const postDataFormData = async (endpoint: string, data: any, setLoading?:
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [getServerUnavailableMessage()] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -155,7 +157,7 @@ export const putData = async (endpoint: string, data: any, setLoading?: (loading
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [getServerUnavailableMessage()] }, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -190,7 +192,7 @@ export const deleteData = async (
     eseguiAlert(funzioneMessage!, {
       titleMessage: "Errore nella richiesta",
       typeMessage: TypeAlertColor.ERROR,
-      message: [ServerMessage.SERVER_DOWN]
+      message: [getServerUnavailableMessage()]
     }, showSuccess);
     throw error;
   } finally {
@@ -206,7 +208,7 @@ export const showMessageForm = async (setLoading?: (loading: boolean) => void,
   setLoading = setLoading ?? (() => { });
   setLoading(true);  // Mostra lo spinner prima della richiesta
   try {
-    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [ServerMessage.SERVER_DOWN] }, showSuccess);
+    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [getServerUnavailableMessage()] }, showSuccess);
     return 'ok'; // Restituisce i dati della risposta
   } catch (error: any) {
     throw error;
@@ -221,10 +223,12 @@ export const eseguiAlert = (funzioneMessage: (message?: TypeMessage) => void, me
   response = response ?? { data: { status: HttpStatus.BAD_REQUEST, errors: messaggiAlert } }
 
   if (funzioneMessage) {
-    message.message = response.data.errors;
+    const errs = response.data.errors;
     if (response.data.status !== HttpStatus.OK) {
       message.titleMessage = "Errore nella richiesta"
       message.typeMessage = TypeAlertColor.ERROR
+      const rawList = Array.isArray(errs) ? errs : errs != null ? [String(errs)] : [];
+      message.message = translateApiMessages(rawList, i18n);
     } else {
       message.titleMessage = "Successo nella richiesta"
       message.message = ['Operazione eseguita con successo']
@@ -240,7 +244,8 @@ export const PATH_ACTIVITY = 'activity';
 export const PATH_GAMIFICATION = 'gamification';
 export const PATH_USER_POINT = 'userpoint';
 export const PATH_OPERATIVE = 'operative';
-export const PATH_FAMILY = 'family';
+export const PATH_FAMILY_POINT = 'family-point';
+export const PATH_FAMILY_LOG = 'family-log';
 export const PATH_LOGACTIVITY = 'logactivity';
 export const PATH_NOTIFICATION = 'notification';
 

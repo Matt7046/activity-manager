@@ -70,7 +70,6 @@ services:
       - user-point-service
       - activity-service
       - auth-service
-      - family-service
       - notification-service
     env_file:
       - local.env
@@ -144,29 +143,6 @@ services:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5010
     volumes:
       - ./service/auth/src/main/resources/certificate:/app/certificate
-      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
-    networks:
-      - app-network
-
-  family-service:
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_started
-    image: docker.io/matt7046/family-service:1.0.0
-    build:
-      context: ./
-      dockerfile: service/family/Dockerfile
-    ports:
-      - "8087:8080"
-      - "5011:5011"
-    env_file:
-      - local.env
-    environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5011
-    volumes:
-      - ./service/family/src/main/resources/certificate:/app/certificate
       - ./elasticsearch/certs:/app/elasticsearch/certs:ro
     networks:
       - app-network

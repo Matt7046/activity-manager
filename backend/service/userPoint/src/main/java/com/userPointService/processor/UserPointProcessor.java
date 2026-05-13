@@ -22,6 +22,8 @@ import com.common.dto.user.UserPointWithChildDTO;
 import com.common.mapper.UserPointMapper;
 import com.common.mapper.UserPointToPointMapper;
 import com.common.structure.exception.NotFoundException;
+import com.common.structure.messages.NotFoundMessages;
+import com.common.structure.messages.UnauthorizedMessages;
 import com.common.structure.status.ActivityHttpStatus;
 import com.userPointService.service.UserPointAccessService;
 import com.userPointService.service.UserPointService;
@@ -43,13 +45,15 @@ public class UserPointProcessor {
     private EncryptDecryptConverter encryptDecryptConverter;
     @Autowired
     private UserPointAccessService userPointAccessService;
+    @Autowired
+    private NotFoundMessages notFoundMessages;
+    @Autowired
+    private UnauthorizedMessages unauthorizedMessages;
     @Value("${rabbitmq.exchange.name.notification}")
     private String notificationExchange;
     @Value("${rabbitmq.routingKey.email}")
     private String routingKeyEmail;
-    @Value("${error.document.notFound}")
-    private String errorDocument;
-    @Value("${error.document.points}")
+    @Value("${message.document.points}")
     private String message;
 
     @Transactional
@@ -65,7 +69,7 @@ public class UserPointProcessor {
                         orderedPaths, bySlot);
                 return new ResponseDTO(record, ActivityHttpStatus.OK.value(), new ArrayList<>());
             }
-            throw new NotFoundException(errorDocument + userPointDTO.getEmail());
+            throw new NotFoundException(notFoundMessages.userByEmail());
         });
     }
 
@@ -159,7 +163,8 @@ public class UserPointProcessor {
             UserPoint userPointResponse = userPointService.login(userPointLogin);
             if (userPointResponse == null || userPointResponse.getEmail() == null
                     || userPointResponse.get_id() == null) {
-                return new ResponseDTO((Object) null, 401, new ArrayList<>(List.of("Credenziali non valide")));
+                return new ResponseDTO((Object) null, 401,
+                        new ArrayList<>(List.of(unauthorizedMessages.invalidCredentials())));
             }
             UserPointDTO userPointDTOResponse = userPointMapper.toDTO(userPointResponse);
             userPointDTOResponse.setEmailUserCurrent(userPointDTO.getEmail());
@@ -236,7 +241,7 @@ public class UserPointProcessor {
     public Mono<ResponseDTO> updateChildByEmail(UserPointWithChildDTO body, String principalEmail) {
         return Mono.fromCallable(() -> {
             if (body == null || body.getUserPoint() == null || body.getUserPoint().getEmailUserCurrent() == null) {
-                throw new NotFoundException(errorDocument + "emailUserCurrent");
+                throw new NotFoundException(notFoundMessages.payloadEmailUserCurrent());
             }
             userPointAccessService.requireCanAccess(principalEmail, body.getUserPoint().getEmailUserCurrent());
             UserPoint parentKey = userPointMapper.fromDTO(body.getUserPoint());

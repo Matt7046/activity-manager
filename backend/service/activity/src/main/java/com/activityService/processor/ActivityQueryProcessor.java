@@ -9,9 +9,9 @@ import com.common.dto.user.UserPointDTO;
 import com.common.mapper.ActivityMapper;
 import com.common.security.ResourceAccessClient;
 import com.common.structure.exception.NotFoundException;
+import com.common.structure.messages.NotFoundMessages;
 import com.common.structure.status.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -27,8 +27,8 @@ public class ActivityQueryProcessor {
     @Autowired
     private ActivityMapper activityMapper;
 
-    @Value("${error.document.notFound}")
-    private String errorDocument;
+    @Autowired
+    private NotFoundMessages notFoundMessages;
 
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
@@ -52,7 +52,7 @@ public class ActivityQueryProcessor {
         return Mono.fromCallable(() -> activityService.findByIdentificativo(userPointDTO.get_id()))
                 .flatMap(item -> {
                     if (item == null) {
-                        return Mono.error(new NotFoundException(errorDocument + userPointDTO.get_id()));
+                        return Mono.error(new NotFoundException(notFoundMessages.activityById()));
                     }
                     String ownerPlain = encryptDecryptConverter.decrypt(item.getEmail());
                     return resourceAccessClient.assertCanAccess(ownerPlain).thenReturn(item);

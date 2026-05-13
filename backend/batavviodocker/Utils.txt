@@ -1,7 +1,6 @@
 docker compose up -d --no-deps user-point-service-1 user-point-service-2
 docker compose up -d --no-deps activity-service-1 activity-service-2
 docker compose up -d --no-deps auth-service-1 auth-service-2
-docker compose up -d --no-deps family-service-1 family-service-2
 docker compose up -d --no-deps notification-service-1 notification-service-2
 docker compose up -d --no-deps image-service-1 image-service-2
 docker compose up -d --no-deps frontend-1 frontend-2

@@ -11,6 +11,7 @@ import com.common.dto.access.CanAccessRequest;
 import com.common.dto.access.FamilyTransferCheckRequest;
 import com.common.dto.access.SelfCheckRequest;
 import com.common.structure.exception.ForbiddenException;
+import com.common.structure.messages.ForbiddenMessages;
 import com.userPointService.service.UserPointAccessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +24,11 @@ public class InternalAccessController {
     private static final Logger log = LoggerFactory.getLogger(InternalAccessController.class);
 
     private final UserPointAccessService accessService;
+    private final ForbiddenMessages forbiddenMessages;
 
-    public InternalAccessController(UserPointAccessService accessService) {
+    public InternalAccessController(UserPointAccessService accessService, ForbiddenMessages forbiddenMessages) {
         this.accessService = accessService;
+        this.forbiddenMessages = forbiddenMessages;
     }
 
     @PostMapping("/can-access")
@@ -66,7 +69,7 @@ public class InternalAccessController {
                     if (p instanceof Jwt j) {
                         return Mono.just(j);
                     }
-                    return Mono.error(new ForbiddenException("Autenticazione richiesta."));
+                    return Mono.error(new ForbiddenException(forbiddenMessages.authenticationRequired()));
                 });
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.common.security.EmailNormalization;
 import com.common.structure.exception.ForbiddenException;
+import com.common.structure.messages.ForbiddenMessages;
 import com.common.data.user.UserPoint;
 import com.userPointService.repository.UserPointRepository;
 
@@ -15,13 +16,14 @@ import java.util.List;
 public class UserPointAccessService {
 
     private final UserPointRepository userPointRepository;
+    private final ForbiddenMessages forbiddenMessages;
 
     @Autowired
     private EncryptDecryptConverter encryptDecryptConverter;
 
-
-    public UserPointAccessService(UserPointRepository userPointRepository) {
+    public UserPointAccessService(UserPointRepository userPointRepository, ForbiddenMessages forbiddenMessages) {
         this.userPointRepository = userPointRepository;
+        this.forbiddenMessages = forbiddenMessages;
     }
 
     public boolean canAccess(String principalEmail, String targetEmail) {
@@ -60,10 +62,10 @@ public class UserPointAccessService {
 
     public void requireCanAccess(String principalEmail, String resourceEmail) {
         if (resourceEmail == null || resourceEmail.isBlank()) {
-            throw new ForbiddenException("Risorsa non autorizzata.");
+            throw new ForbiddenException(forbiddenMessages.resourceMissing());
         }
         if (!canAccess(principalEmail, resourceEmail)) {
-            throw new ForbiddenException("Accesso negato per questa risorsa.");
+            throw new ForbiddenException(forbiddenMessages.accessDeniedResource());
         }
     }
 
@@ -71,10 +73,10 @@ public class UserPointAccessService {
         String p = EmailNormalization.normalize(principalEmail);
         String e = EmailNormalization.normalize(emailUserCurrent);
         if (e == null || e.isEmpty()) {
-            throw new ForbiddenException("Identità richiesta mancante.");
+            throw new ForbiddenException(forbiddenMessages.identityMissing());
         }
         if (!e.equals(p)) {
-            throw new ForbiddenException("Operazione non consentita per altri utenti.");
+            throw new ForbiddenException(forbiddenMessages.operationNotSelf());
         }
     }
 

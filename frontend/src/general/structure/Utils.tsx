@@ -1,5 +1,5 @@
 "use client";
-import { I18n } from "@lingui/core";
+import { I18n, i18n } from "@lingui/core";
 
 import { TypeMessage } from "@/page/page-layout/PageLayout";
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // Points
@@ -12,7 +12,7 @@ import SettingsIcon from '@mui/icons-material/Settings'; // Operative
 import StarIcon from '@mui/icons-material/Star';
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
-import { SectionName, SectionNameDesc, ServerMessage, TypeAlertColor, TypeUser } from "./Constant";
+import { SectionName, SectionNameDesc, TypeAlertColor, TypeUser } from "./Constant";
 
 export const myDisplayer = ((some: string, value: string) => {
   if (document.getElementById(some)) {
@@ -122,21 +122,27 @@ export const getDateStringRegularFormat = (data: Date): string => {
   return new Date(data).toLocaleDateString();
 }
 
-export const getTranslatedNotification = (message: string, i18n: I18n): string => {
+export const getTranslatedNotification = (message: string, i18nInstance: I18n): string => {
   if (!message) return "";
 
-  // Dividiamo la stringa usando il separatore specifico
   const parti = message.split('?lang?');
-
-  const valore = parti[0] ? parti[0].trim(): "";
+  const valore = parti[0] ? parti[0].trim() : "";
   const key = parti[1] ? parti[1].trim() : "";
-  const resto = parti.slice(2).join(' '); // Uniamo il resto con uno spazio per leggibilità
+  const resto = parti.slice(2).join(' ').trim();
 
-  // Traduciamo la chiave usando i18n._()
-  const traduzione = key ? i18n._(key) : "";
+  const traduzione = key ? i18nInstance._(key) : "";
+  return [valore, traduzione, resto].filter(Boolean).join(' ').trim();
+};
 
-  // Componiamo il messaggio finale: "15 Punti aggiunti user@simulated.com"
-  return `${valore}` + " " + `${traduzione}` + " " +`${resto}`.trim();
+/** Messaggio server non raggiungibile (usa catalogo Lingui, stesso {@code i18n} del provider). */
+export const getServerUnavailableMessage = (): string => i18n._('server_unavailable');
+
+/** Lista messaggi API/WS in formato {@code ?lang?chiave?lang?} o testo libero. */
+export const translateApiMessages = (errors: string[] | undefined | null, i18nInstance: I18n): string[] => {
+  if (!errors?.length) {
+    return [];
+  }
+  return errors.map((e) => getTranslatedNotification(String(e), i18nInstance));
 };
 
 export const navigateRouting = (router: AppRouterInstance, path: string, params?: any) => {
@@ -263,7 +269,7 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
 }
 
 export const showMessage = (setOpen: any, setMessage: any, message?: TypeMessage, onlyError?: boolean) => {
-  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage, titleMessage: message?.titleMessage } : { titleMessage: "Errore nella richiesta", message: [ServerMessage.SERVER_DOWN], typeMessage: 'error' };
+  const messageBE = message?.message ? { message: message?.message, typeMessage: message?.typeMessage, titleMessage: message?.titleMessage } : { titleMessage: "Errore nella richiesta", message: [getServerUnavailableMessage()], typeMessage: 'error' };
   if (!onlyError || onlyError && message?.typeMessage === TypeAlertColor.ERROR) {
     setOpen(true);
   }

@@ -9,7 +9,7 @@ import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
+
 @Component
 public class RabbitMQNotificationConsumer {
 
@@ -19,30 +19,11 @@ public class RabbitMQNotificationConsumer {
 
     @RabbitListener(queues = "notifications.queue", ackMode = "MANUAL")
     public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
-
-             // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ Management UI
         try {
-            // Thread.sleep(20000); // 5 secondi
-            receive(jsonMessage, 0);
-            channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
-        } catch (InterruptedException | IOException e) {
+            webSocketService.sendNotification(jsonMessage);
+            channel.basicAck(tag, false);
+        } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    public void receive(String in, int receiver) throws InterruptedException, JsonProcessingException {
-        StopWatch watch = new StopWatch();
-        watch.start();
-        doWork(in);
-        watch.stop();
-        webSocketService.sendNotification(in);
-    }
-
-    private void doWork(String in) throws InterruptedException {
-        for (char ch : in.toCharArray()) {
-            if (ch == '.') {
-                Thread.sleep(1000);
-            }
         }
     }
 }

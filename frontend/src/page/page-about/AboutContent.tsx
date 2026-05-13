@@ -210,7 +210,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
             <FormControl fullWidth>
               <TextField
                 label={i18n._("email")}
-                value={user?.emailChild}
+                value={user?.emailChild ?? ""}
                 fullWidth
                 margin="normal"
                 disabled={true}
@@ -237,7 +237,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
               label={i18n._("punti")}
               variant="standard"
               type="number"
-              value={formValues.points}
+              value={formValues.points ?? 0}
               onChange={handleChangePoints}
               fullWidth
               disabled={user?.type === TypeUser.STANDARD}
