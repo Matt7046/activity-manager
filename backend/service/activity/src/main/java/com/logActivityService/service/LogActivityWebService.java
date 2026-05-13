@@ -19,15 +19,11 @@ public class LogActivityWebService {
     @Qualifier("webClientPoint")
     private WebClient webClientPoint;
 
-    @Autowired
-    @Qualifier("webClientFamily")
-    private WebClient webClientFamily;
-
     @Value("${app.page.path.userpoint}")
     private String userPointPath;
 
-    @Value("${app.page.path.family}")
-    private String familyPath;
+    @Value("${app.page.path.family-log}")
+    private String familyLogPath;
     public Mono<ResponseDTO> savePoints(UserPointDTO userPointDTO) {
         return webClientPoint.post()
                 .uri(userPointPath + "/dati/user/operation")
@@ -46,8 +42,8 @@ public class LogActivityWebService {
     }
 
     public Mono<ResponseDTO> saveLogFamily(LogFamilyDTO logFamilyDTO) {
-        return webClientFamily.post()
-                .uri(familyPath+"/log")
+        return webClientPoint.post()
+                .uri(familyLogPath + "/log")
                 .bodyValue(logFamilyDTO)
                 .retrieve()
                 .bodyToMono(ResponseDTO.class);

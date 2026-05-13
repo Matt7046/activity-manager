@@ -3,7 +3,7 @@ setlocal
 
 if "%~1"=="" (
   echo Uso: PROD_SERVICE_REBUILD.BAT nome-logico
-  echo Esempi: family-service   activity-service   frontend
+  echo Esempi: user-point-service   activity-service   frontend
   echo Ricrea entrambe le repliche *-1 e *-2 dopo build su *-1.
   echo Opzionale: set PROD_REBUILD_USE_CACHE=1 per build piu^ veloce ^(usa cache Docker^).
   exit /b 1
@@ -16,7 +16,6 @@ set "REPLICAS="
 if /i "%LOG%"=="user-point-service" set BUILD=user-point-service-1& set REPLICAS=user-point-service-1 user-point-service-2& goto :run
 if /i "%LOG%"=="activity-service" set BUILD=activity-service-1& set REPLICAS=activity-service-1 activity-service-2& goto :run
 if /i "%LOG%"=="auth-service" set BUILD=auth-service-1& set REPLICAS=auth-service-1 auth-service-2& goto :run
-if /i "%LOG%"=="family-service" set BUILD=family-service-1& set REPLICAS=family-service-1 family-service-2& goto :run
 if /i "%LOG%"=="notification-service" set BUILD=notification-service-1& set REPLICAS=notification-service-1 notification-service-2& goto :run
 if /i "%LOG%"=="image-service" set BUILD=image-service-1& set REPLICAS=image-service-1 image-service-2& goto :run
 if /i "%LOG%"=="frontend" set BUILD=frontend-1& set REPLICAS=frontend-1 frontend-2& goto :run

@@ -29,13 +29,6 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5010
 
-  family-service:
-    ports:
-      - "8087:8080"
-      - "5011:5011"
-    environment:
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5011
-
   notification-service:
     ports:
       - "8088:8080"

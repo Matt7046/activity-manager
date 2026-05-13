@@ -5,6 +5,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
 import com.common.configurations.structure.PropertiesKey;
+import com.common.structure.messages.DecryptMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
@@ -17,6 +18,8 @@ public class EncryptDecryptConverter implements Converter<String, String> {
 
     @Autowired
     PropertiesKey propertiesKey;
+    @Autowired
+    DecryptMessages decryptMessages;
     @Value("${app.algorithm1}")
     private String alghorithm;
 
@@ -50,7 +53,7 @@ public class EncryptDecryptConverter implements Converter<String, String> {
             byte[] encryptedData = cipher.doFinal(data.getBytes());
             return Base64.getEncoder().encodeToString(encryptedData);
         } catch (Exception e) {
-            throw new DecryptException(e.getMessage());
+            throw new DecryptException(decryptMessages.operationFailed());
         }
     }
 
@@ -64,7 +67,7 @@ public class EncryptDecryptConverter implements Converter<String, String> {
             byte[] decryptedData = cipher.doFinal(decodedData);
             return new String(decryptedData);
         } catch (Exception e) {
-            throw new DecryptException(e.getMessage());
+            throw new DecryptException(decryptMessages.operationFailed());
         }
     }
 }

@@ -86,8 +86,6 @@ services:
       - activity-service-2
       - auth-service-1
       - auth-service-2
-      - family-service-1
-      - family-service-2
       - notification-service-1
       - notification-service-2
     networks:
@@ -204,43 +202,6 @@ services:
       app-network:
         aliases:
           - auth-service
-
-  family-service-1:
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_started
-    image: docker.io/matt7046/family-service:1.0.0
-    build:
-      context: ./
-      dockerfile: service/family/Dockerfile
-    volumes:
-      - ./service/family/src/main/resources/certificate:/app/certificate
-      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
-    env_file:
-      - .env
-    networks:
-      app-network:
-        aliases:
-          - family-service
-
-  family-service-2:
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_started
-    image: docker.io/matt7046/family-service:1.0.0
-    volumes:
-      - ./service/family/src/main/resources/certificate:/app/certificate
-      - ./elasticsearch/certs:/app/elasticsearch/certs:ro
-    env_file:
-      - .env
-    networks:
-      app-network:
-        aliases:
-          - family-service
 
   notification-service-1:
     depends_on:

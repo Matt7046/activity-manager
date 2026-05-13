@@ -8,6 +8,7 @@ import com.common.dto.access.CanAccessRequest;
 import com.common.dto.access.FamilyTransferCheckRequest;
 import com.common.dto.access.SelfCheckRequest;
 import com.common.structure.exception.ForbiddenException;
+import com.common.structure.messages.ForbiddenMessages;
 
 import reactor.core.publisher.Mono;
 
@@ -18,9 +19,12 @@ import reactor.core.publisher.Mono;
 public class ResourceAccessClient {
 
     private final WebClient webClientPoint;
+    private final ForbiddenMessages forbiddenMessages;
 
-    public ResourceAccessClient(@Qualifier("webClientPoint") WebClient webClientPoint) {
+    public ResourceAccessClient(@Qualifier("webClientPoint") WebClient webClientPoint,
+            ForbiddenMessages forbiddenMessages) {
         this.webClientPoint = webClientPoint;
+        this.forbiddenMessages = forbiddenMessages;
     }
 
     public Mono<Void> assertCanAccess(String resourceEmail) {
@@ -29,7 +33,7 @@ public class ResourceAccessClient {
                 .bodyValue(new CanAccessRequest(resourceEmail))
                 .retrieve()
                 .onStatus(status -> status.value() == 403,
-                        response -> Mono.error(new ForbiddenException("Accesso negato per questa risorsa.")))
+                        response -> Mono.error(new ForbiddenException(forbiddenMessages.accessDeniedResource())))
                 .toBodilessEntity()
                 .then();
     }
@@ -40,7 +44,7 @@ public class ResourceAccessClient {
                 .bodyValue(new SelfCheckRequest(email))
                 .retrieve()
                 .onStatus(status -> status.value() == 403,
-                        response -> Mono.error(new ForbiddenException("Operazione non consentita per altri utenti.")))
+                        response -> Mono.error(new ForbiddenException(forbiddenMessages.operationNotSelf())))
                 .toBodilessEntity()
                 .then();
     }
@@ -51,7 +55,7 @@ public class ResourceAccessClient {
                 .bodyValue(new FamilyTransferCheckRequest(emailUserCurrent, targetEmail))
                 .retrieve()
                 .onStatus(status -> status.value() == 403,
-                        response -> Mono.error(new ForbiddenException("Operazione famiglia non consentita.")))
+                        response -> Mono.error(new ForbiddenException(forbiddenMessages.familyOperationDenied())))
                 .toBodilessEntity()
                 .then();
     }

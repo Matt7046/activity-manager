@@ -9,11 +9,6 @@ spring:
     username: username
     password: password
 
-error:
-  http: "Errore HTTP: "
-  document:
-    notFound: 'Documento non trovato con identificativo: '
-
 app:
   rabbitmq:
     exchange:

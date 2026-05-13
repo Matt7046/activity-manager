@@ -4,53 +4,46 @@ import com.common.dto.user.UserPointWithChildDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.notificationService.processor.EmailProcessor;
 import com.rabbitmq.client.Channel;
+import java.io.IOException;
+import java.time.Duration;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
 
 @Component
 public class RabbitMQEmailConsumer {
 
+    private static final Duration EMAIL_TIMEOUT = Duration.ofMinutes(3);
+
     @Autowired
-    EmailProcessor emailProcessor;
+    private EmailProcessor emailProcessor;
 
     @RabbitListener(queues = "email.queue", ackMode = "MANUAL")
     public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
-
-        // Simula un ritardo prima dell'ACK per vedere il messaggio su RabbitMQ
-        // Management UI
         try {
-            // Thread.sleep(20000); // 5 secondi
-            receive(jsonMessage, 0);
-            channel.basicAck(tag, false); // Conferma il messaggio SOLO dopo l'elaborazion
+            ObjectMapper objectMapper = new ObjectMapper();
+            UserPointWithChildDTO userPointDTO = objectMapper.readValue(jsonMessage, UserPointWithChildDTO.class);
+            if (userPointDTO.getUserPointChild() == null) {
+                emailProcessor.sendPasswordEmail(userPointDTO).block(EMAIL_TIMEOUT);
+            } else {
+                emailProcessor.sendPasswordEmailChild(userPointDTO).block(EMAIL_TIMEOUT);
+            }
+            channel.basicAck(tag, false);
         } catch (Exception e) {
+            nackSafely(channel, tag);
             throw new RuntimeException(e);
         }
     }
 
-    public void receive(String in, int receiver) throws Exception {
-        StopWatch watch = new StopWatch();
-        watch.start();
-        doWork(in);
-        watch.stop();
-        ObjectMapper objectMapper = new ObjectMapper();
-        UserPointWithChildDTO userPointDTO = objectMapper.readValue(in, UserPointWithChildDTO.class);
-        if (userPointDTO.getUserPointChild() == null) {
-            emailProcessor.sendPasswordEmail(userPointDTO);
-
-        } else {
-            emailProcessor.sendPasswordEmailChild(userPointDTO);
-        }
-    }
-
-    private void doWork(String in) throws InterruptedException {
-        for (char ch : in.toCharArray()) {
-            if (ch == '.') {
-                Thread.sleep(1000);
+    private static void nackSafely(Channel channel, long tag) {
+        try {
+            if (channel.isOpen()) {
+                channel.basicNack(tag, false, false);
             }
+        } catch (IOException ignored) {
+            // canale già chiuso
         }
     }
 }

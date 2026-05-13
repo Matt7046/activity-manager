@@ -2,6 +2,7 @@ package com.logActivityService.controller;
 
 import com.common.dto.user.UserPointDTO;
 import com.common.dto.activity.LogActivityDTO;
+import com.common.security.ReactiveJwt;
 import com.logActivityService.processor.LogActivityProcessor;
 import com.common.dto.structure.ResponseDTO;
 import reactor.core.publisher.Mono;
@@ -17,14 +18,24 @@ public class LogActivityController {
 
     @Autowired
     private LogActivityProcessor logActivityProcessor;
+    @Autowired
+    private ReactiveJwt reactiveJwt;
 
     @PostMapping("/log")
     public Mono<ResponseDTO> logActivityByEmail(@RequestBody UserPointDTO userPointDTO) {
-        return logActivityProcessor.logAttivitaByEmail(userPointDTO);
+        return reactiveJwt.currentSubject()
+                .flatMap(principal -> {
+                    userPointDTO.setEmailUserCurrent(principal);
+                    return logActivityProcessor.logAttivitaByEmail(userPointDTO);
+                });
     }
 
     @PostMapping("/dati")
     public Mono<ResponseDTO> savePointsAndLog(@RequestBody LogActivityDTO logActivityDTO) {
-        return logActivityProcessor.savePoints(logActivityDTO);
+        return reactiveJwt.currentSubject()
+                .flatMap(principal -> {
+                    logActivityDTO.setEmailUserCurrent(principal);
+                    return logActivityProcessor.savePoints(logActivityDTO);
+                });
     }
 }

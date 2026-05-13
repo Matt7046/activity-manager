@@ -9,7 +9,6 @@ echo.
 call :pushImage "docker.io/matt7046/user-point-service:1.0.0"
 call :pushImage "docker.io/matt7046/activity-service:1.0.0"
 call :pushImage "docker.io/matt7046/auth-service:1.0.0"
-call :pushImage "docker.io/matt7046/family-service:1.0.0"
 call :pushImage "docker.io/matt7046/notification-service:1.0.0"
 call :pushImage "docker.io/matt7046/image-service:1.0.0"
 

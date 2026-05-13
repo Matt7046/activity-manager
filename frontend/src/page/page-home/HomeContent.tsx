@@ -24,7 +24,6 @@ import {
   CLIENT_GOOGLE,
   getGitHubOAuthRedirectUri,
   SectionName,
-  ServerMessage,
   TypeAlertColor,
   TypeUser,
 } from '../../general/structure/Constant';
@@ -239,7 +238,6 @@ const GoogleAuthComponent = () => {
       baseStore.setToken(tokenData?.jsonText?.token);
 
       setCurrentUser(user);
-      const message = { message: [ServerMessage.SERVER_DOWN], typeMessage: TypeAlertColor.ERROR };
       showDialog(type, false);
     })
   };

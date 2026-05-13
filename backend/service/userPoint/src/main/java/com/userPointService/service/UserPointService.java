@@ -5,8 +5,10 @@ import com.common.data.user.UserPoint;
 import com.common.structure.exception.ArithmeticCustomException;
 import com.common.structure.exception.ForbiddenException;
 import com.common.structure.exception.NotFoundException;
+import com.common.structure.messages.ArithmeticMessages;
+import com.common.structure.messages.ForbiddenMessages;
+import com.common.structure.messages.NotFoundMessages;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.userPointService.repository.UserPointRepository;
 import java.util.ArrayList;
@@ -23,12 +25,12 @@ public class UserPointService {
     private UserPointRepository userPointRepository;
     @Autowired
     private EncryptDecryptConverter encryptDecryptConverter;
-
-    @Value("${error.document.arithmetic}")
-    private String arithmeticProperties;
-
-    @Value("${error.document.notFound}")
-    private String errorDocumentNotFound;
+    @Autowired
+    private ForbiddenMessages forbiddenMessages;
+    @Autowired
+    private ArithmeticMessages arithmeticMessages;
+    @Autowired
+    private NotFoundMessages notFoundMessages;
 
     public List<UserPoint> findAll() {
         return userPointRepository.findAll();
@@ -70,7 +72,7 @@ public class UserPointService {
         Integer delta = userPoint.getOperation() ? userPoint.getUsePoints() : -userPoint.getUsePoints();
         int updatedPoint = existingUserPoint.getPoints() + delta;
         if (updatedPoint < 0) {
-            throw new ArithmeticCustomException(arithmeticProperties);
+            throw new ArithmeticCustomException(arithmeticMessages.negativePoints());
         }
         existingUserPoint.setPoints(updatedPoint);
         userPointRepository.save(existingUserPoint);
@@ -202,22 +204,21 @@ public class UserPointService {
     public UserPoint updateChildByEmail(UserPoint parentKey, List<UserPoint> childOps, List<UserPoint> newChildrenOut) {
         UserPoint existing = userPointRepository.findUserByEmail(parentKey.getEmailUserCurrent());
         if (existing == null) {
-            throw new NotFoundException(errorDocumentNotFound + parentKey.getEmailUserCurrent());
+            throw new NotFoundException(notFoundMessages.parentUpdate());
         }
         List<String> emails = new ArrayList<>(Optional.ofNullable(existing.getEmailFigli()).orElseGet(ArrayList::new));
         for (UserPoint op : Optional.ofNullable(childOps).orElseGet(List::of)) {
-            if (op == null || op.getEmail() == null || op.getEmail().isBlank()) {
-                continue;
-            }
-            String enc = op.getEmail().trim();
-            if (Boolean.TRUE.equals(op.getOperation())) {
-                assertCandidateNotAlreadyParent(enc);
-                ensureChildUserPointCreated(enc, newChildrenOut);
-                if (!emails.contains(enc)) {
-                    emails.add(enc);
+            if (op != null && op.getEmail() != null && !op.getEmail().isBlank()) {
+                String enc = op.getEmail().trim();
+                if (Boolean.TRUE.equals(op.getOperation())) {
+                    assertCandidateNotAlreadyParent(enc);
+                    ensureChildUserPointCreated(enc, newChildrenOut);
+                    if (!emails.contains(enc)) {
+                        emails.add(enc);
+                    }
+                } else {
+                    emails.remove(enc);
                 }
-            } else {
-                emails.remove(enc);
             }
         }
         existing.setEmailFigli(emails);
@@ -235,8 +236,7 @@ public class UserPointService {
         boolean hasFigli = existing.getEmailFigli() != null && !existing.getEmailFigli().isEmpty();
         boolean isFamilyAccount = Integer.valueOf(1).equals(existing.getType());
         if (hasFigli || isFamilyAccount) {
-            throw new ForbiddenException(
-                    "Questo utente è già genitore (account famiglia o ha figli registrati) e non può essere aggiunto come figlio.");
+            throw new ForbiddenException(forbiddenMessages.cannotAddChildIsParent());
         }
     }
 

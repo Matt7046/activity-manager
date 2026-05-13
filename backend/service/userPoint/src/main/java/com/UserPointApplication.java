@@ -3,9 +3,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@EnableMongoRepositories(basePackages = "com.userPointService.repository")
+@EnableMongoRepositories(basePackages = {
+        "com.userPointService.repository",
+        "com.familyLogService.repository"
+})
 @SpringBootApplication(scanBasePackages = {
         "com.userPointService",
+        "com.familyPointService",
+        "com.familyLogService",
         "com.common.security",
         "com.common.configurations.mongodb",
     "com.common.configurations.config",

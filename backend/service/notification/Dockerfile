@@ -8,7 +8,6 @@ COPY service/image/pom.xml ./service/image/pom.xml
 COPY service/auth/pom.xml ./service/auth/pom.xml
 COPY service/activity/pom.xml ./service/activity/pom.xml
 COPY service/userPoint/pom.xml ./service/userPoint/pom.xml
-COPY service/family/pom.xml ./service/family/pom.xml
 COPY service/notification/pom.xml ./service/notification/pom.xml
 RUN mvn -pl service/notification -am -DskipTests dependency:go-offline
 # Copy sources and build

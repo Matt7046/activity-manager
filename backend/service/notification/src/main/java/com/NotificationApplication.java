@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 })
 @SpringBootApplication(scanBasePackages = {
         "com.notificationService",
+        "com.common.security",
         "com.common.configurations.mongodb",
         "com.common.configurations.config",
         "com.common.configurations.encrypt",   

@@ -76,14 +76,14 @@ app:
         auth: http://auth-service:8080
         activity: http://activity-service:8080
         userpoint: http://user-point-service:8080
-        family: http://family-service:8080       
     path:
       image: /api/image
       auth: /api/auth
       activity: /api/activity
       logactivity: /api/logactivity
       userpoint: /api/userpoint
-      family: /api/family
+      family-point: /api/family-point
+      family-log: /api/family-log
   rabbitmq:
     notification:
       exchange:
@@ -126,7 +126,40 @@ rabbitmq:
         enriched: activity.search.enriched
 message:
   error:
-    generic: Errore generico
+    generic: "?lang?error_generic?lang?"
+  exceptions:
+    forbidden:
+      resource-missing: "?lang?forbidden_resource_missing?lang?"
+      access-denied-resource: "?lang?forbidden_access_denied_resource?lang?"
+      identity-missing: "?lang?forbidden_identity_missing?lang?"
+      operation-not-self: "?lang?forbidden_operation_not_self?lang?"
+      family-operation-denied: "?lang?forbidden_family_operation_denied?lang?"
+      authentication-required: "?lang?autenticazione_richiesta?lang?"
+      notification-no-receiver: "?lang?forbidden_notification_no_receiver?lang?"
+      email-invalid-payload: "?lang?forbidden_email_invalid_payload?lang?"
+      cannot-add-child-is-parent: "?lang?forbidden_cannot_add_child_is_parent?lang?"
+    not-found:
+      user-by-email: "?lang?not_found_user_by_email?lang?"
+      activity-by-id: "?lang?not_found_activity_by_id?lang?"
+      parent-update: "?lang?not_found_parent_update?lang?"
+      persist-log-family: "?lang?not_found_persist_log_family?lang?"
+      payload-email-user-current: "?lang?not_found_payload_email_user_current?lang?"
+    arithmetic:
+      negative-points: "?lang?arithmetic_negative_points?lang?"
+    decrypt:
+      operation-failed: "?lang?decrypt_operation_failed?lang?"
+    http:
+      generic: "?lang?errore_http?lang?"
+    unauthorized:
+      invalid-credentials: "?lang?invalid_credentials?lang?"
+
+  document:
+    points: "?lang?point_disposizione?lang?"
+    add: "?lang?aggiunti_punti?lang?"
+    remove: "?lang?sottratti_punti?lang?"
+
+notification:
+  service: "familyService"
 
 cloudinary:
   cloud_name: ${CLOUDINARY_NAME}

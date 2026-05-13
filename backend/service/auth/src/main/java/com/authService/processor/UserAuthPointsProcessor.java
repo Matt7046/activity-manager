@@ -5,6 +5,7 @@ import com.common.configurations.structure.JwtUtil;
 import com.common.dto.auth.LoginRequest;
 import com.common.dto.auth.LoginResponse;
 import com.common.dto.structure.ResponseDTO;
+import com.common.structure.messages.UnauthorizedMessages;
 import com.common.structure.status.ActivityHttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,9 @@ public class UserAuthPointsProcessor {
     @Autowired
     AuthService authService;
 
+    @Autowired
+    UnauthorizedMessages unauthorizedMessages;
+
     public Mono<ResponseDTO> getToken(LoginRequest loginRequest) {
         return authService.validateLogin(loginRequest)
                 .filter(valid -> valid)
@@ -35,6 +39,6 @@ public class UserAuthPointsProcessor {
                             new ArrayList<>());
                 })
                 .switchIfEmpty(Mono.fromSupplier(() -> new ResponseDTO(new LoginResponse(), 401,
-                        new ArrayList<>(List.of("Credenziali non valide")))));
+                        new ArrayList<>(List.of(unauthorizedMessages.invalidCredentials())))));
     }
 }

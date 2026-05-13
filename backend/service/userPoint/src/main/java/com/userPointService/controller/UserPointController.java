@@ -17,22 +17,24 @@ import reactor.core.publisher.Mono;
 public class UserPointController {
     @Autowired
     private UserPointProcessor processor;
+    @Autowired
+    private ReactiveJwt reactiveJwt;
 
     @PostMapping("find")
     public Mono<ResponseDTO> findByEmail(@RequestBody UserPointDTO userPointDTO) {
-        return ReactiveJwt.currentSubject()
+        return reactiveJwt.currentSubject()
                 .flatMap(principal -> processor.findByEmail(userPointDTO, principal));
     }
 
     @PostMapping("child")
     public Mono<ResponseDTO> getEmailChild(@RequestBody UserPointDTO userPointDTO) {
-        return ReactiveJwt.currentSubject()
+        return reactiveJwt.currentSubject()
                 .flatMap(principal -> processor.getEmailChild(userPointDTO, principal));
     }
 
     @PostMapping("/dati")
     public Mono<ResponseDTO> getTypeUser(@RequestBody UserPointDTO userPointDTO) {
-        return ReactiveJwt.currentSubject()
+        return reactiveJwt.currentSubject()
                 .flatMap(principal -> processor.getTypeUser(userPointDTO, principal));
     }
 
@@ -49,7 +51,7 @@ public class UserPointController {
 
     @PostMapping("/dati/user/password")
     public Mono<ResponseDTO> saveUserPassword(@RequestBody UserPointDTO userPointDTO) {
-        return ReactiveJwt.currentSubject()
+        return reactiveJwt.currentSubject()
                 .flatMap(principal -> processor.saveUserPassword(userPointDTO, principal));
     }
 
@@ -60,25 +62,25 @@ public class UserPointController {
 
     @PostMapping("/dati/user/operation")
     public Mono<ResponseDTO> savePoints(@RequestBody UserPointDTO userPointDTO) {
-        return ReactiveJwt.currentSubject()
+        return reactiveJwt.currentSubject()
                 .flatMap(principal -> processor.savePoints(userPointDTO, principal));
     }
 
     @PostMapping("/dati/user/image")
     public Mono<ResponseDTO> saveUserImage(@RequestBody UserPointDTO userPointDTO) {
-        return ReactiveJwt.currentSubject()
+        return reactiveJwt.currentSubject()
                 .flatMap(principal -> processor.saveUserImage(userPointDTO, principal));
     }
 
     @PostMapping("/dati/user/status")
     public Mono<ResponseDTO> updateStatus(@RequestBody UserPointDTO userPointDTO) {
-        return ReactiveJwt.currentSubject()
+        return reactiveJwt.currentSubject()
                 .flatMap(principal -> processor.updateStatus(userPointDTO, principal));
     }
 
     @PostMapping("/dati/user/update/child")
     public Mono<ResponseDTO> updateChildByEmail(@RequestBody UserPointWithChildDTO body) {
-        return ReactiveJwt.currentSubject()
+        return reactiveJwt.currentSubject()
                 .flatMap(principal -> processor.updateChildByEmail(body, principal));
     }
 

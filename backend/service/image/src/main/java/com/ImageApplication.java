@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
         "com.imageService",
+        "com.common.security",
         "com.common.configurations.mongodb",
         "com.common.configurations.config",
         "com.common.configurations.encrypt",   
