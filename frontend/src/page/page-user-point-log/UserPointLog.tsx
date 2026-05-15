@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionName, SectionNameDesc } from '../../general/structure/Constant';
-import { getMenuLaterale, getSectionMenuIcon } from '../../general/structure/Utils';
+import { getMenuLaterale, getSectionAnnotazione, getSectionMenuIcon } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import PointsContent from './UserPointLogContent';
 
@@ -48,6 +48,7 @@ const LogPoints: React.FC<{}> = ({ }) => {
     testo: SectionNameDesc.POINTS,
     path: SectionName.LOG_USER_POINT,
     icon: getSectionMenuIcon(SectionName.LOG_USER_POINT),
+    annotazione: getSectionAnnotazione(SectionName.LOG_USER_POINT),
   };
   return (
     <>
@@ -58,6 +59,7 @@ const LogPoints: React.FC<{}> = ({ }) => {
           menuLaterale={menuLaterale}
           alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
+          showEmail={true}
           handleClose={handleClose}
           navigate={router}
         >

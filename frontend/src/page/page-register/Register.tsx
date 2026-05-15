@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionName, SectionNameDesc } from "../../general/structure/Constant";
-import { getSectionMenuIcon } from '../../general/structure/Utils';
+import { getSectionAnnotazione, getSectionMenuIcon } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import RegisterContent from './RegisterContent';
 
@@ -39,16 +39,17 @@ const Register: React.FC<{}> = ({ }) => {
     testo: SectionNameDesc.REGISTER,
     path: SectionName.REGISTER,
     icon: getSectionMenuIcon(SectionName.REGISTER),
-  }
+    annotazione: getSectionAnnotazione(SectionName.REGISTER),
+  };
   return (
     <>
       <PageLayout
         section={section}
         alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
+        showEmail={false}
         handleClose={handleClose}
         navigate={useRouter()}
-        hiddenEmail={true}
       >
         <RegisterContent
           user={user}

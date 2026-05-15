@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
  * Compatibilità: vecchia “Authorization callback URL” …/oauth/github/callback.
  * Il flusso attuale usa `/home` come redirect_uri (allineato al useEffect su Home).
  */
-export default function GitHubOAuthCallbackPage() {
+const GitHubOAuthCallbackPage = () => {
   const router = useRouter();
   const [hint, setHint] = useState("Reindirizzamento…");
 
@@ -26,3 +26,5 @@ export default function GitHubOAuthCallbackPage() {
     </div>
   );
 }
+
+export default GitHubOAuthCallbackPage;

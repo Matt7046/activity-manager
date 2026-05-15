@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionName, SectionNameDesc } from "../../general/structure/Constant";
-import { getMenuLaterale, getSectionMenuIcon } from '../../general/structure/Utils';
+import { getMenuLaterale, getSectionAnnotazione, getSectionMenuIcon } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import AboutContent from './AboutContent';
 
@@ -40,6 +40,7 @@ const About: React.FC<{}> = ({ }) => {
     testo: SectionNameDesc.ABOUT(_id),
     path: SectionName.ABOUT,
     icon: getSectionMenuIcon(SectionName.ABOUT),
+    annotazione: getSectionAnnotazione(SectionName.ABOUT, { aboutId: _id }),
   };
 
   return (
@@ -50,6 +51,7 @@ const About: React.FC<{}> = ({ }) => {
           menuLaterale={menuLaterale}
           alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
+          showEmail={true}
           handleClose={handleClose}
           navigate={router}
         >

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionName } from "../../general/structure/Constant";
-import { getSectionMenuIcon } from "../../general/structure/Utils";
+import { getSectionAnnotazione, getSectionMenuIcon } from "../../general/structure/Utils";
 import PageLayout, { TypeMessage } from "../page-layout/PageLayout";
 import PagePersonalityContent from "./PersonalityContent";
 
@@ -25,6 +25,7 @@ const PagePersonality: React.FC = () => {
     testo: i18n._("personality_page_title"),
     path: SectionName.PERSONALITY,
     icon: getSectionMenuIcon(SectionName.PERSONALITY),
+    annotazione: getSectionAnnotazione(SectionName.PERSONALITY),
   };
 
   return (
@@ -32,9 +33,9 @@ const PagePersonality: React.FC = () => {
       section={section}
       alertConfig={{ open, setOpen, message, setMessage }}
       isVertical={isVertical}
+      showEmail={false}
       handleClose={() => setOpen(false)}
       navigate={useRouter()}
-      hiddenEmail={true}
     >
       <PagePersonalityContent />
     </PageLayout>

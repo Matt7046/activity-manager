@@ -173,7 +173,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
       return;
     }
     facebookSdkInitRef.current = true;
-    (window as unknown as { fbAsyncInit?: () => void }).fbAsyncInit = function () {
+    (window as unknown as { fbAsyncInit?: () => void }).fbAsyncInit = () => {
       const FB = (window as unknown as { FB?: { init: (c: object) => void } }).FB;
       if (FB) {
         FB.init({
@@ -338,7 +338,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
     }
   }
 
-  async function completeGithubLogin(code: string) {
+  const completeGithubLogin = async (code: string) => {
     const redirectUri = getGitHubOAuthRedirectUri();
     if (!redirectUri) {
       return;
@@ -373,7 +373,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
     } catch (error) {
       console.error("Error completing GitHub login", error);
     }
-  }
+  };
 
   /** Callback GitHub = `/home`: il popup torna su Home con ?code=; inoltra all’opener e chiude. */
   useEffect(() => {
@@ -457,7 +457,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
     window.open(url, "github_oauth", "width=520,height=720");
   }
 
-  async function fetchFacebookUserData(accessToken: string) {
+  const fetchFacebookUserData = async (accessToken: string) => {
     try {
       const userDataResponse = await fetch(
         `https://graph.facebook.com/me?fields=id,name,email&access_token=${encodeURIComponent(accessToken)}`,
@@ -492,9 +492,9 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
     } catch (error) {
       console.error("Error fetching Facebook user data", error);
     }
-  }
+  };
 
-  function handleFacebookLogin(): void {
+  const handleFacebookLogin = (): void => {
     if (!CLIENT_FACEBOOK.APP_ID) {
       showMessage(setOpen, setMessage, {
         titleMessage: "Facebook",
@@ -525,7 +525,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
       },
       { scope: "email" },
     );
-  }
+  };
 
   // Simulazione del login con Google
   const simulateLogin = (type: number) => {
@@ -658,7 +658,6 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
                     )}
                     {demoPanelOpen && (
                       <Box className="home-demo-panel">
-
                         <Grid container spacing={2} alignItems="stretch">
                           <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
                             <ButtonMui
