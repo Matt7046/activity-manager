@@ -175,6 +175,8 @@
   "nuovo_account": "Vous n'avez pas de compte ?",
   "login_simulato_utente_base": "Simuler la connexion utilisateur de base",
   "login_simulato_utente_parentale": "Simuler la connexion parentale",
+  "home_demo_link": "Essayer la démo",
+  "home_demo_back": "Connexion avec un compte",
   "email_tutorato": "Tutorat par e-mail",
   "email_registrazione": "Courriel d'inscription",
   "privacy_descrizione": "Cette politique de confidentialité décrit comment nous collectons, utilisons et protégeons vos données personnelles lorsque vous utilisez notre projet open source. Votre vie privée est importante pour nous et nous nous engageons à traiter vos données conformément au Règlement Général sur la Protection des Données (RGPD).",

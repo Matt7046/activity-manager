@@ -175,6 +175,8 @@
   "nuovo_account": "Don't have an account?",
   "login_simulato_utente_base": "Simulate basic user login",
   "login_simulato_utente_parentale": "Simulate parental login",
+  "home_demo_link": "Try the demo",
+  "home_demo_back": "Sign in with account",
   "email_tutorato": "Email tutoring",
   "email_registrazione": "Registration email",
   "privacy_descrizione": "This Privacy Policy describes how we collect, use and protect your personal data when you use our open source project. Your privacy is important to us, and we are committed to processing your data in accordance with the General Data Protection Regulation (GDPR).",

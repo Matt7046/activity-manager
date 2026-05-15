@@ -132,6 +132,49 @@ html[data-theme="light"] .login-paper {
   padding-top: var(--space-3);
 }
 
+.home-demo-cta {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: var(--space-2) 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: clamp(1.35rem, 4.5vw, 1.75rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-primary) !important;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.home-demo-cta:hover {
+  color: var(--color-primary-hover) !important;
+  text-decoration: underline;
+  transform: scale(1.02);
+}
+
+.home-demo-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding-top: var(--space-3);
+}
+
+.home-demo-hint {
+  text-align: center;
+  color: var(--color-text-muted) !important;
+}
+
+.home-social-grid--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 .simulated-login-grid {
   display: flex;
 }
