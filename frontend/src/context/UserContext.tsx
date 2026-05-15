@@ -3,13 +3,13 @@
 import React, { createContext, useContext, useState } from 'react';
 
 /** Utente “loggato” per le pagine protette: serve almeno una email di sessione. */
-export function isUserValorizzato(user: unknown): boolean {
+export const isUserValorizzato = (user: unknown): boolean => {
   if (user == null || typeof user !== 'object') return false;
   const u = user as Record<string, unknown>;
   const email = typeof u.email === 'string' ? u.email.trim() : '';
   const emailUserCurrent = typeof u.emailUserCurrent === 'string' ? u.emailUserCurrent.trim() : '';
   return Boolean(email || emailUserCurrent);
-}
+};
 
 // Creazione del contesto per User
 const UserContext = createContext<any>(null);

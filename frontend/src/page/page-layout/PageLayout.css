@@ -28,6 +28,10 @@
     padding-right: 0;
 }
 
+.layout-section-annotation--with-email {
+    margin-top: var(--space-2);
+}
+
 .hidden-email {
     visibility: hidden;
 }

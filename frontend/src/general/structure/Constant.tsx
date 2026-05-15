@@ -75,7 +75,7 @@ const GITHUB_OAUTH_CALLBACK_PATH = "/home";
  * (stesso path del `useEffect` su Home che inoltra `code` al popup opener).
  * Su GitHub OAuth App vanno registrate tutte le URL che usi (es. …:3000/home e …:3001/home).
  */
-export function getGitHubOAuthRedirectUri(): string | undefined {
+export const getGitHubOAuthRedirectUri = (): string | undefined => {
   const fromEnv = process.env.NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI?.trim();
   if (fromEnv) {
     return fromEnv;
@@ -91,7 +91,7 @@ export function getGitHubOAuthRedirectUri(): string | undefined {
     return `${window.location.origin}${GITHUB_OAUTH_CALLBACK_PATH}`;
   }
   return undefined;
-}
+};
 
 /** Facebook Login: App ID pubblico (SDK + Graph). */
 export const CLIENT_FACEBOOK = {

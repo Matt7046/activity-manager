@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionName, SectionNameDesc } from '../../general/structure/Constant';
-import { getMenuLaterale, getSectionMenuIcon } from '../../general/structure/Utils';
+import { getMenuLaterale, getSectionAnnotazione, getSectionMenuIcon } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import GamificationContent from './GamificationContent';
 
@@ -52,6 +52,7 @@ const Gamification: React.FC<{}> = ({ }) => {
     testo: SectionNameDesc.GAMIFICATION,
     path: SectionName.GAMIFICATION,
     icon: getSectionMenuIcon(SectionName.GAMIFICATION),
+    annotazione: getSectionAnnotazione(SectionName.GAMIFICATION),
   };
   return (
     <>
@@ -61,6 +62,7 @@ const Gamification: React.FC<{}> = ({ }) => {
           menuLaterale={menuLaterale}
           alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
+          showEmail={true}
           handleClose={handleClose}
           navigate={router}
         >

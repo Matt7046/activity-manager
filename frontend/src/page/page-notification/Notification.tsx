@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionName, SectionNameDesc } from '../../general/structure/Constant';
-import { getMenuLaterale, getSectionMenuIcon } from '../../general/structure/Utils';
+import { getMenuLaterale, getSectionAnnotazione, getSectionMenuIcon } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import NotificationContent from './NotificationContent';
 
@@ -42,6 +42,7 @@ const Notification: React.FC<{}> = ({ }) => {
     testo: SectionNameDesc.NOTIFICATION,
     path: SectionName.NOTIFICATION,
     icon: getSectionMenuIcon(SectionName.NOTIFICATION),
+    annotazione: getSectionAnnotazione(SectionName.NOTIFICATION),
   };
   return (
     <>
@@ -51,6 +52,7 @@ const Notification: React.FC<{}> = ({ }) => {
           menuLaterale={menuLaterale}
           alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
+          showEmail={true}
           handleClose={handleClose}
           navigate={router}
         >

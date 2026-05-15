@@ -28,7 +28,8 @@ interface PageLayoutProps {
   menuLaterale?: MenuLaterale[][];
   alertConfig: AlertConfig
   isVertical: boolean;
-  hiddenEmail?: boolean;
+  /** `true` (default): campo email tutorato. `false`: annotazione sezione (`section.annotazione`). */
+  showEmail?: boolean;
   handleClose: () => void;
   navigate: AppRouterInstance; // Gestione padding dinamico
   children: React.ReactNode; // Contenuto specifico della maschera
@@ -46,7 +47,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   menuLaterale,
   alertConfig,
   isVertical,
-  hiddenEmail,
+  showEmail = true,
   handleClose,
   navigate,
 }) => {
@@ -240,26 +241,50 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           </Box>
         </Grid>
 
-        {/* AREA EMAIL/ANNOTAZIONE */}
-        {!hiddenEmail && (
-          <Box className={isVertical ? "box-layout-text-vertical" : "box-layout-text"}>
+        {/* showEmail: email tutorato | !showEmail: annotazione (chiave i18n su section) */}
+        <Box className={isVertical ? "box-layout-text-vertical" : "box-layout-text"}>
+          {showEmail ? (
+            user?.emailUserCurrent ? (
+              <TextField
+                id="emailFamily"
+                className="form-control-operative"
+                label={
+                  user.emailUserCurrent === user.emailChild
+                    ? i18n._('email_registrazione')
+                    : i18n._('email_tutorato')
+                }
+                variant="standard"
+                value={user.emailChild ?? ''}
+                fullWidth
+                disabled
+              />
+            ) : null
+          ) : sectionAttiva?.annotazione ? (
+            <TextField
+              id="sectionAnnotation"
+              className="form-control-operative"
+              label={i18n._('annotation_title')}
+              variant="standard"
+              value={i18n._(sectionAttiva.annotazione)}
+              fullWidth
+              disabled
+              multiline
+              maxRows={4}
+            />
+          ) : (
             <TextField
               id="emailFamily"
               className="form-control-operative"
-              label={
-                user?.emailUserCurrent && !hiddenEmail
-                  ? (user?.emailUserCurrent === user?.emailChild ? i18n._('email_registrazione') : i18n._('email_tutorato'))
-                  : i18n._('login_simulati_title')
-              }
+              label={i18n._('login_simulati_title')}
               variant="standard"
-              value={user?.emailChild || i18n._('login_simulati')}
+              value={i18n._('login_simulati')}
               fullWidth
               disabled
-              multiline // <--- Abilita il wrapping del testo
-              maxRows={4} // Opzionale: limita l'altezza massima
+              multiline
+              maxRows={4}
             />
-          </Box>
-        )}
+          )}
+        </Box>
       </Box>
 
       <Grid container justifyContent="flex-end" className="layout-alert">

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionName, SectionNameDesc } from "../../general/structure/Constant";
-import { getSectionMenuIcon, UserI } from "../../general/structure/Utils";
+import { getSectionAnnotazione, getSectionMenuIcon, UserI } from "../../general/structure/Utils";
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import HomeContent from './HomeContent';
 
@@ -46,7 +46,8 @@ const Home: React.FC<{}> = ({ }) => {
     testo: SectionNameDesc.ROOT,
     path: SectionName.HOME,
     icon: getSectionMenuIcon(SectionName.HOME),
-  }
+    annotazione: getSectionAnnotazione(SectionName.HOME, { demoPanelOpen }),
+  };
   return (
     <>
       <PageLayout
@@ -54,8 +55,9 @@ const Home: React.FC<{}> = ({ }) => {
         menuLaterale={menuLaterale}
         alertConfig={{ open, setOpen, message, setMessage }}
         isVertical={isVertical}
+        showEmail={false}
         handleClose={handleClose}
-        navigate={useRouter()}>
+        navigate={router}>
         <HomeContent
           homeConfig={{ user, setUser, demoPanelOpen, setDemoPanelOpen }}
         />

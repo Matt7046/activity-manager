@@ -48,7 +48,7 @@ export interface FamilyNotificationI extends NotificationI {
 export interface UserI {
   _id: string | undefined;
   email: string;
-  emailChild:string;
+  emailChild: string;
   type: TypeUser
   emailUserCurrent: string;
   page?: number;
@@ -84,7 +84,55 @@ export type FormErrorValues = {
 
 
 /** Icona titolo / drawer: allineata a {@link sezioniMenuIniziale}. */
-export const getSectionMenuIcon = (path: string | undefined): MenuLaterale['icon'] =>{
+export type SectionAnnotazioneOptions = {
+  /** Home: modalità demo vs accesso con account */
+  demoPanelOpen?: boolean;
+  /** About: presenza `_id` in query → modifica attività */
+  aboutId?: string | null;
+};
+
+/** Chiave i18n per il campo annotazione del layout (traduzione in {@link PageLayout}). */
+export const getSectionAnnotazione =(
+  path: string | undefined,
+  options: SectionAnnotazioneOptions = {}
+): string | undefined  => {
+  if (path == null || path === '') {
+    return undefined;
+  }
+  switch (path) {
+    case SectionName.HOME:
+    case SectionName.ROOT:
+      return options.demoPanelOpen ? 'annotation_home_demo' : 'annotation_home_account';
+    case SectionName.REGISTER:
+      return 'annotation_register';
+    case SectionName.PERSONALITY:
+      return 'annotation_personality';
+    case SectionName.POLICY:
+      return 'annotation_policy';
+    case SectionName.ACTIVITY:
+      return 'annotation_activity';
+    case SectionName.ABOUT:
+      return options.aboutId ? 'annotation_about_edit' : 'annotation_about_new';
+    case SectionName.GAMIFICATION:
+      return 'annotation_gamification';
+    case SectionName.POINTS:
+      return 'annotation_points';
+    case SectionName.LOG_USER_POINT:
+      return 'annotation_log_user_point';
+    case SectionName.OPERATIVE:
+      return 'annotation_operative';
+    case SectionName.FAMILY:
+      return 'annotation_family';
+    case SectionName.NOTIFICATION:
+      return 'annotation_notification';
+    case SectionName.SETTINGS:
+      return 'annotation_settings';
+    default:
+      return undefined;
+  }
+}
+
+export const getSectionMenuIcon = (path: string | undefined): MenuLaterale['icon'] => {
   if (path == null || path === '') {
     return undefined;
   }
