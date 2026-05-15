@@ -177,6 +177,7 @@
   "login_simulato_utente_parentale": "Simula login parentale",
   "home_demo_link": "Prova la demo",
   "home_demo_back": "Accesso con account",
+  "home_account_login_email_only_simulated": "Il login con email e password è consentito solo per user@simulated.com (utente parentale) e child@simulated.com (utente base) nella versione demo.",
   "email_tutorato": "Email tutorato",
   "email_registrazione": "Email di registrazione",
   "privacy_descrizione": "La presente Privacy Policy descrive come raccogliamo, utilizziamo e proteggiamo i tuoi dati personali quando utilizzi il nostro progetto open source. La tua privacy è importante per noi, e ci impegniamo a trattare i tuoi dati in conformità al Regolamento Generale sulla Protezione dei Dati (GDPR).",

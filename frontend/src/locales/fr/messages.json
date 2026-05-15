@@ -177,6 +177,7 @@
   "login_simulato_utente_parentale": "Simuler la connexion parentale",
   "home_demo_link": "Essayer la démo",
   "home_demo_back": "Connexion avec un compte",
+  "home_account_login_email_only_simulated": "La connexion par e-mail et mot de passe est autorisée uniquement pour user@simulated.com (utilisateur familial) et child@simulated.com (utilisateur de base) dans la version démo.",
   "email_tutorato": "Tutorat par e-mail",
   "email_registrazione": "Courriel d'inscription",
   "privacy_descrizione": "Cette politique de confidentialité décrit comment nous collectons, utilisons et protégeons vos données personnelles lorsque vous utilisez notre projet open source. Votre vie privée est importante pour nous et nous nous engageons à traiter vos données conformément au Règlement Général sur la Protection des Données (RGPD).",
