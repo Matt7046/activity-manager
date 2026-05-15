@@ -1,20 +1,32 @@
 "use client";
+import { useUser } from "@/context/UserContext";
 import { useLingui } from "@lingui/react";
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionName, SectionNameDesc } from "../../general/structure/Constant";
-import { getSectionMenuIcon } from "../../general/structure/Utils";
+import { getSectionMenuIcon, UserI } from "../../general/structure/Utils";
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import HomeContent from './HomeContent';
+
+
+
+export interface HomeConfig {
+  demoPanelOpen: boolean;
+  setDemoPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  user: UserI | null;
+  setUser: React.Dispatch<React.SetStateAction<UserI | null>>;
+}
 
 const Home: React.FC<{}> = ({ }) => {
   const { i18n } = useLingui();
   const router = useRouter(); // Ottieni la funzione di navigazione
   const menuLaterale: MenuLaterale[][] = [];
+  const { user, setUser } = useUser();
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
+  const [demoPanelOpen, setDemoPanelOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,7 +44,7 @@ const Home: React.FC<{}> = ({ }) => {
 
   const section: MenuLaterale = {
     testo: SectionNameDesc.ROOT,
-    path:SectionName.HOME,
+    path: SectionName.HOME,
     icon: getSectionMenuIcon(SectionName.HOME),
   }
   return (
@@ -45,6 +57,7 @@ const Home: React.FC<{}> = ({ }) => {
         handleClose={handleClose}
         navigate={useRouter()}>
         <HomeContent
+          homeConfig={{ user, setUser, demoPanelOpen, setDemoPanelOpen }}
         />
       </PageLayout>
     </>
