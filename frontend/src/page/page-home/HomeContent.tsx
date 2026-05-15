@@ -1,6 +1,5 @@
 "use client";
 
-import { useUser } from '@/context/UserContext';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Trans, useLingui } from "@lingui/react";
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -12,7 +11,7 @@ import Grid from '@mui/material/Grid2';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import LinkNext from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Alert from '../../components/ms-alert/Alert';
 import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
 import TechFooter from '../../components/ms-tech-footer/TechFooter';
@@ -27,32 +26,34 @@ import {
   TypeAlertColor,
   TypeUser,
 } from '../../general/structure/Constant';
-import { navigateRouting, ResponseI, showMessage } from '../../general/structure/Utils';
+import { navigateRouting, ResponseI, showMessage, UserI } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
 import { getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
+import { HomeConfig } from './Home';
 import "./HomeContent.css";
 import { resetPassword } from './service/HomeService';
 
-
-
-// Componente UserProvider che gestisce lo stato di `user`
-interface UserProviderProps {
-  children: ReactNode; // Aggiungi la prop `children` di tipo ReactNode
-}
+/** Login Facebook temporaneamente nascosto in home. */
+const FACEBOOK_LOGIN_VISIBLE = false;
 
 // Componente principale, avvolto da GoogleOAuthProvider
-const HomeContent = () => (
-  <GoogleOAuthProvider clientId={CLIENT_GOOGLE.SERVER!} >
-    <GoogleAuthComponent />
+interface HomeContentProps {
+  homeConfig: HomeConfig;
+}
+
+const HomeContent: React.FC<HomeContentProps> = ({ homeConfig }) => (
+  <GoogleOAuthProvider clientId={CLIENT_GOOGLE.SERVER!}>
+    <GoogleAuthComponent homeConfig={homeConfig} />
   </GoogleOAuthProvider>
 );
 
 // Componente di autenticazione
-const GoogleAuthComponent = () => {
+const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
+  const { user, setUser, demoPanelOpen, setDemoPanelOpen } = homeConfig;
+
   const router = useRouter();  // Qui chiami useNavigate correttamente all'interno di un componente
   // useLingui() farà scattare il re-render automatico al cambio lingua
   const { i18n } = useLingui();
-  const { user, setUser } = useUser();
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [loading, setLoading] = useState(false);
   const [simulated, setSimulated] = useState(0);
@@ -69,7 +70,6 @@ const GoogleAuthComponent = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [openResetDialog, setOpenResetDialog] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
-  const [demoPanelOpen, setDemoPanelOpen] = useState(false);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const accountPasswordLoginEmails = ['user@simulated.com', 'child@simulated.com'];
 
@@ -82,13 +82,26 @@ const GoogleAuthComponent = () => {
 
   let check = false;
 
-  const [currentUser, setCurrentUser] = useState({
+  type CurrentUserState = Partial<UserI> & { name?: string };
+
+  const emptyCurrentUser = (): CurrentUserState => ({
+    _id: undefined,
     name: "",
     emailChild: "",
     email: "",
-    type: -1,
-    emailUserCurrent: ""
+    type: TypeUser.STANDARD,
+    emailUserCurrent: "",
   });
+
+  const toUserI = (payload: CurrentUserState): UserI => ({
+    _id: payload._id,
+    email: payload.email ?? "",
+    emailChild: payload.emailChild ?? "",
+    type: (payload.type ?? TypeUser.STANDARD) as TypeUser,
+    emailUserCurrent: payload.emailUserCurrent ?? "",
+  });
+
+  const [currentUser, setCurrentUser] = useState<CurrentUserState>(emptyCurrentUser());
 
   //FAKE LOGIN
   const [userDataFake, setUserDataFake] = useState({
@@ -112,13 +125,7 @@ const GoogleAuthComponent = () => {
     if (location === '/home') {
 
       // Stato per userData
-      setCurrentUser({
-        name: "",
-        emailChild: "",
-        email: "",
-        type: -1,
-        emailUserCurrent: ""
-      });
+      setCurrentUser(emptyCurrentUser());
       setUser(null);
       setDemoPanelOpen(false);
       check = true;
@@ -126,7 +133,7 @@ const GoogleAuthComponent = () => {
     setHiddenLogin(location === '/privacy-policy')
     return () => {
     };
-  }, [location]);
+  }, [location, setUser, setDemoPanelOpen]);
   useEffect(() => {
     if (user) {
 
@@ -141,7 +148,7 @@ const GoogleAuthComponent = () => {
         check = false;
       }
     }
-  }, [user]);
+  }, [user, router]);
 
 
 
@@ -158,6 +165,9 @@ const GoogleAuthComponent = () => {
   }, []);
 
   useEffect(() => {
+    if (!FACEBOOK_LOGIN_VISIBLE) {
+      return;
+    }
     const appId = CLIENT_FACEBOOK.APP_ID;
     if (!appId || facebookSdkInitRef.current) {
       return;
@@ -194,7 +204,7 @@ const GoogleAuthComponent = () => {
     currentUser.emailChild = emailConfirmDialog;
     currentUser.type = typeSimulated;
     currentUser.emailUserCurrent = emailUserCurrent;
-    setUser(currentUser);
+    setUser(toUserI({ ...currentUser, type: typeSimulated as TypeUser }));
     handleCloseD();
 
   });
@@ -240,7 +250,7 @@ const GoogleAuthComponent = () => {
     getToken({ email: currentUser.emailUserCurrent, password: 'password', googleLogin: false }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
       baseStore.setToken(tokenData?.jsonText?.token);
 
-      setCurrentUser(user);
+      setCurrentUser({ _id: undefined, ...user });
       showDialog(type, false);
     })
   };
@@ -262,7 +272,7 @@ const GoogleAuthComponent = () => {
           case TypeUser.STANDARD: {
             setEmailLogin(currentUser.email ?? '');
             setSimulated(TypeUser.STANDARD);
-            setUser({ ...currentUser, type: x.jsonText.typeUser, emailChild: currentUser.emailUserCurrent, emailUserCurrent: x.jsonText.emailUserCurrent });
+            setUser(toUserI({ ...currentUser, type: x.jsonText.typeUser, emailChild: currentUser.emailUserCurrent, emailUserCurrent: x.jsonText.emailUserCurrent }));
             break;
           }
           case TypeUser.FAMILY: {
@@ -273,11 +283,11 @@ const GoogleAuthComponent = () => {
           }
           case TypeUser.NEW_USER: {
             if (googleAuth === true) {
-              setUser({ ...currentUser, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent });
+              setUser(toUserI({ ...currentUser, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent }));
 
             }
             else {
-              setUser({ ...currentUser, type: 2 });
+              setUser(toUserI({ ...currentUser, type: TypeUser.NEW_USER }));
             }
           }
             break;
@@ -349,7 +359,8 @@ const GoogleAuthComponent = () => {
         return;
       }
       baseStore.setToken(token);
-      const userDataGithub = {
+      const userDataGithub: CurrentUserState = {
+        _id: undefined,
         email,
         emailUserCurrent: email,
         emailChild: email,
@@ -424,7 +435,7 @@ const GoogleAuthComponent = () => {
     return () => window.removeEventListener("message", onMessage);
   }, []);
 
-  function startGithubLogin() {
+  const startGithubLogin = () => {
     const redirectUri = getGitHubOAuthRedirectUri();
     if (!CLIENT_GITHUB.SERVER || !redirectUri) {
       showMessage(setOpen, setMessage, {
@@ -619,165 +630,166 @@ const GoogleAuthComponent = () => {
       <Box className="home-page-shell">
         <Box className="home-page-main">
           {/* Main Login Box */}
-            <Box className="welcome-container1">
-              <Paper elevation={0} className="login-paper">
-                <Box mb={3} className="box-pulsanti-login">
-                  {!hiddenLogin && (
-                    <>
-                      {demoPanelOpen ? (
-                        <ButtonMui
-                          variant="outlined"
-                          color="primary"
-                          fullWidth
-                          className="home-demo-toggle-button home-demo-toggle-button--account"
-                          onClick={() => setDemoPanelOpen(false)}
-                        >
-                          <Trans id="home_demo_back" />
-                        </ButtonMui>
-                      ) : (
-                        <ButtonMui
-                          variant="contained"
-                          color="primary"
-                          fullWidth
-                          className="home-demo-toggle-button home-demo-toggle-button--demo"
-                          onClick={() => setDemoPanelOpen(true)}
-                        >
-                          <Trans id="home_demo_link" />
-                        </ButtonMui>
-                      )}
-                      {demoPanelOpen && (
-                        <Box className="home-demo-panel">
-                          
-                          <Grid container spacing={2} alignItems="stretch">
-                            <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
-                              <ButtonMui
-                                variant="contained"
-                                color="primary"
-                                onClick={() => simulateLogin(TypeUser.STANDARD)}
-                                fullWidth
-                                className="simulated-login-button simulated-login-button-full"
-                              >
-                                <Trans id="login_simulato_utente_base" />
-                              </ButtonMui>
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
-                              <ButtonMui
-                                variant="contained"
-                                color="primary"
-                                onClick={() => simulateLogin(TypeUser.FAMILY)}
-                                fullWidth
-                                className="simulated-login-button simulated-login-button-full"
-                              >
-                                <Trans id="login_simulato_utente_parentale" />
-                              </ButtonMui>
-                            </Grid>
-                          </Grid>
-                        </Box>
-                      )}
-                    </>
-                  )}
-                </Box>
-
-
-                <Box mb={2} className='box-login'>
-                  <TextField
-                    id="username"
-                    label={i18n._("indirizzo_email")}
-                    variant="outlined"
-                    value={emailLogin ?? ''}
-                    onChange={handleChangeUsername}
-                    fullWidth
-                  />
-                </Box>
-
-                <Box mb={2} >
-                  <TextField
-                    id="password"
-                    label={i18n._("password")}
-                    variant="outlined"
-                    type={showPassword ? 'text' : 'password'}
-                    value={passwordLogin}
-                    onChange={handleChangePassword}
-                    fullWidth
-                    InputProps={{
-                      endAdornment: (
-                        <IconButton onClick={togglePasswordVisibility}>
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                </Box>
-                <ButtonMui
-                  variant="contained"
-                  fullWidth
-                  onClick={handleLogin}
-                  className="login-button"
-                >
-                  <Trans id="accedi" />
-                </ButtonMui>
-
-               
-                  <Box className="register-annotation">
-                    { !demoPanelOpen && (
-                    <Typography variant="body2">
-                      <Trans id='nuovo_account' />{" "}
-                      <MuiLink
-                        component={LinkNext}
-                        href="/register"
-                        className="register-link"
+          <Box className="welcome-container1">
+            <Paper elevation={0} className="login-paper">
+              <Box mb={3} className="box-pulsanti-login">
+                {!hiddenLogin && (
+                  <>
+                    {demoPanelOpen ? (
+                      <ButtonMui
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        className="home-demo-toggle-button home-demo-toggle-button--account"
+                        onClick={() => setDemoPanelOpen(false)}
                       >
-                        <Trans id="registrati" />
-                      </MuiLink>
-                    </Typography>
+                        <Trans id="home_demo_back" />
+                      </ButtonMui>
+                    ) : (
+                      <ButtonMui
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        className="home-demo-toggle-button home-demo-toggle-button--demo"
+                        onClick={() => setDemoPanelOpen(true)}
+                      >
+                        <Trans id="home_demo_link" />
+                      </ButtonMui>
                     )}
-                    <Typography variant="body2" className="personality-annotation">
-                      <MuiLink component={LinkNext} href="/personality" className="register-link">
-                        {i18n._("personality_discover_link")}
-                      </MuiLink>
-                    </Typography>
-                       { !demoPanelOpen && (
-                    <Typography variant="body2" className="personality-annotation">
-                      <MuiLink
-                        component="button"
-                        type="button"
-                        className="register-link reset-password-link"
-                        onClick={handleOpenResetDialog}
-                      >
-                        {i18n._("password_reset_link")}
-                      </MuiLink>
-                    </Typography>
-                       )}
-                  </Box>
-                
+                    {demoPanelOpen && (
+                      <Box className="home-demo-panel">
 
-                {/* Divider */}
-                <Box className='box-accedi'>
-                  <Divider className="box-accedi-divider" />
-                  <Typography className="box-accedi-text" variant="body2" color="textSecondary">
-                    <Trans id="oppure_accedi_con" />
-                  </Typography>
-                  <Divider className="box-accedi-divider" />
-                </Box>
+                        <Grid container spacing={2} alignItems="stretch">
+                          <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
+                            <ButtonMui
+                              variant="contained"
+                              color="primary"
+                              onClick={() => simulateLogin(TypeUser.STANDARD)}
+                              fullWidth
+                              className="simulated-login-button simulated-login-button-full"
+                            >
+                              <Trans id="login_simulato_utente_base" />
+                            </ButtonMui>
+                          </Grid>
+                          <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
+                            <ButtonMui
+                              variant="contained"
+                              color="primary"
+                              onClick={() => simulateLogin(TypeUser.FAMILY)}
+                              fullWidth
+                              className="simulated-login-button simulated-login-button-full"
+                            >
+                              <Trans id="login_simulato_utente_parentale" />
+                            </ButtonMui>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    )}
+                  </>
+                )}
+              </Box>
 
-                {/* Login Social (disabilitati in modalità demo) */}
-                <Grid
-                  container
-                  spacing={2}
-                  justifyContent="center"
-                  className={demoPanelOpen ? 'home-social-grid home-social-grid--disabled' : 'home-social-grid'}
-                >
-                  <Grid>
-                    <IconButton
-                      type="button"
-                      onClick={startGithubLogin}
-                      className="social-button"
-                      disabled={demoPanelOpen || !CLIENT_GITHUB.SERVER || !getGitHubOAuthRedirectUri()}
-                      aria-label="GitHub"
+
+              <Box mb={2} className='box-login'>
+                <TextField
+                  id="username"
+                  label={i18n._("indirizzo_email")}
+                  variant="outlined"
+                  value={emailLogin ?? ''}
+                  onChange={handleChangeUsername}
+                  fullWidth
+                />
+              </Box>
+
+              <Box mb={2} >
+                <TextField
+                  id="password"
+                  label={i18n._("password")}
+                  variant="outlined"
+                  type={showPassword ? 'text' : 'password'}
+                  value={passwordLogin}
+                  onChange={handleChangePassword}
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton onClick={togglePasswordVisibility}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    ),
+                  }}
+                />
+              </Box>
+              <ButtonMui
+                variant="contained"
+                fullWidth
+                onClick={handleLogin}
+                className="login-button"
+              >
+                <Trans id="accedi" />
+              </ButtonMui>
+
+
+              <Box className="register-annotation">
+                {!demoPanelOpen && (
+                  <Typography variant="body2">
+                    <Trans id='nuovo_account' />{" "}
+                    <MuiLink
+                      component={LinkNext}
+                      href="/register"
+                      className="register-link"
                     >
-                      <GitHubIcon />
-                    </IconButton>
-                  </Grid>
+                      <Trans id="registrati" />
+                    </MuiLink>
+                  </Typography>
+                )}
+                <Typography variant="body2" className="personality-annotation">
+                  <MuiLink component={LinkNext} href="/personality" className="register-link">
+                    {i18n._("personality_discover_link")}
+                  </MuiLink>
+                </Typography>
+                {!demoPanelOpen && (
+                  <Typography variant="body2" className="personality-annotation">
+                    <MuiLink
+                      component="button"
+                      type="button"
+                      className="register-link reset-password-link"
+                      onClick={handleOpenResetDialog}
+                    >
+                      {i18n._("password_reset_link")}
+                    </MuiLink>
+                  </Typography>
+                )}
+              </Box>
+
+
+              {/* Divider */}
+              <Box className='box-accedi'>
+                <Divider className="box-accedi-divider" />
+                <Typography className="box-accedi-text" variant="body2" color="textSecondary">
+                  <Trans id="oppure_accedi_con" />
+                </Typography>
+                <Divider className="box-accedi-divider" />
+              </Box>
+
+              {/* Login Social (disabilitati in modalità demo) */}
+              <Grid
+                container
+                spacing={2}
+                justifyContent="center"
+                className={demoPanelOpen ? 'home-social-grid home-social-grid--disabled' : 'home-social-grid'}
+              >
+                <Grid>
+                  <IconButton
+                    type="button"
+                    onClick={startGithubLogin}
+                    className="social-button"
+                    disabled={demoPanelOpen || !CLIENT_GITHUB.SERVER || !getGitHubOAuthRedirectUri()}
+                    aria-label="GitHub"
+                  >
+                    <GitHubIcon />
+                  </IconButton>
+                </Grid>
+                {FACEBOOK_LOGIN_VISIBLE && (
                   <Grid>
                     <IconButton
                       type="button"
@@ -789,61 +801,62 @@ const GoogleAuthComponent = () => {
                       <FacebookIcon />
                     </IconButton>
                   </Grid>
-                  <Grid>
-                    <IconButton
-                      type="button"
-                      className="social-button google-button"
-                      onClick={() => login()}
-                      disabled={demoPanelOpen || !CLIENT_GOOGLE.SERVER}
-                      aria-label="Google"
-                    >
-                      <GoogleIcon />
-                    </IconButton>
-                  </Grid>
+                )}
+                <Grid>
+                  <IconButton
+                    type="button"
+                    className="social-button google-button"
+                    onClick={() => login()}
+                    disabled={demoPanelOpen || !CLIENT_GOOGLE.SERVER}
+                    aria-label="Google"
+                  >
+                    <GoogleIcon />
+                  </IconButton>
                 </Grid>
+              </Grid>
 
-                {/* Dialog */}
-                <DialogEmail
-                  openD={openD}
-                  handleCloseD={handleCloseD}
-                  emailOptions={emailOptions}
-                  handleEmailChange={handleEmailChange}
-                  handleConfirm={handleConfirm}
-                  email={emailConfirmDialog}
-                  simulated={simulated}
-                  emailUserCurrent={emailLogin}
-                />
+              {/* Dialog */}
+              <DialogEmail
+                openD={openD}
+                handleCloseD={handleCloseD}
+                emailOptions={emailOptions}
+                handleEmailChange={handleEmailChange}
+                handleConfirm={handleConfirm}
+                email={emailConfirmDialog}
+                simulated={simulated}
+                emailUserCurrent={emailLogin}
+              />
 
-                <Dialog
-                  open={openResetDialog}
-                  onClose={handleCloseResetDialog}
-                  fullWidth
-                  maxWidth="xs"
-                >
-                  <DialogTitle>{i18n._("password_reset_title")}</DialogTitle>
-                  <DialogContent>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="reset-password-email"
-                      label={i18n._("indirizzo_email")}
-                      type="email"
-                      fullWidth
-                      variant="outlined"
-                      value={resetEmail}
-                      onChange={(event) => setResetEmail(event.target.value)}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <ButtonMui onClick={handleCloseResetDialog}>{i18n._("annulla")}</ButtonMui>
-                    <ButtonMui onClick={handleConfirmResetPassword} variant="contained">
-                      {i18n._("password_reset_send")}
-                    </ButtonMui>
-                  </DialogActions>
-                </Dialog>
+              <Dialog
+                open={openResetDialog}
+                onClose={handleCloseResetDialog}
+                fullWidth
+                maxWidth="xs"
+              >
+                <DialogTitle>{i18n._("password_reset_title")}</DialogTitle>
+                <DialogContent>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="reset-password-email"
+                    label={i18n._("indirizzo_email")}
+                    type="email"
+                    fullWidth
+                    variant="outlined"
+                    value={resetEmail}
+                    onChange={(event) => setResetEmail(event.target.value)}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <ButtonMui onClick={handleCloseResetDialog}>{i18n._("annulla")}</ButtonMui>
+                  <ButtonMui onClick={handleConfirmResetPassword} variant="contained">
+                    {i18n._("password_reset_send")}
+                  </ButtonMui>
+                </DialogActions>
+              </Dialog>
 
-              </Paper>
-            </Box>
+            </Paper>
+          </Box>
 
           {/* Loader */}
           {loading && (
