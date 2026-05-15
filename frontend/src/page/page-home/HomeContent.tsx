@@ -69,6 +69,7 @@ const GoogleAuthComponent = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [openResetDialog, setOpenResetDialog] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
+  const [demoPanelOpen, setDemoPanelOpen] = useState(false);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const githubOAuthStateRef = useRef<string>("");
@@ -118,6 +119,7 @@ const GoogleAuthComponent = () => {
         emailUserCurrent: ""
       });
       setUser(null);
+      setDemoPanelOpen(false);
       check = true;
     }
     setHiddenLogin(location === '/privacy-policy')
@@ -607,36 +609,58 @@ const GoogleAuthComponent = () => {
             <Box className="welcome-container1">
               <Paper elevation={0} className="login-paper">
                 <Box mb={3} className="box-pulsanti-login">
-
                   {!hiddenLogin && (
-                    <Grid container spacing={2} alignItems="stretch"> {/* stretch forza i figli ad avere la stessa altezza */}
-                      <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
-                        <ButtonMui
-                          variant="contained"
-                          color="primary"
-                          onClick={() => simulateLogin(TypeUser.STANDARD)}
-                          fullWidth
-                          className="simulated-login-button simulated-login-button-full"
+                    <>
+                      {demoPanelOpen ? (
+                        <MuiLink
+                          component="button"
+                          type="button"
+                          className="home-demo-cta"
+                          onClick={() => setDemoPanelOpen(false)}
                         >
-                          <Trans id='login_simulato_utente_base' />
-                        </ButtonMui>
-                      </Grid>
-
-                      <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
-                        <ButtonMui
-                          variant="contained"
-                          color="primary"
-                          onClick={() => simulateLogin(TypeUser.FAMILY)}
-                          fullWidth
-                          className="simulated-login-button simulated-login-button-full"
+                          <Trans id="home_demo_back" />
+                        </MuiLink>
+                      ) : (
+                        <MuiLink
+                          component="button"
+                          type="button"
+                          className="home-demo-cta"
+                          onClick={() => setDemoPanelOpen(true)}
                         >
-                          <Trans id='login_simulato_utente_parentale' />
-                        </ButtonMui>
-                      </Grid>
-                    </Grid>
-
+                          <Trans id="home_demo_link" />
+                        </MuiLink>
+                      )}
+                      {demoPanelOpen && (
+                        <Box className="home-demo-panel">
+                          
+                          <Grid container spacing={2} alignItems="stretch">
+                            <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
+                              <ButtonMui
+                                variant="contained"
+                                color="primary"
+                                onClick={() => simulateLogin(TypeUser.STANDARD)}
+                                fullWidth
+                                className="simulated-login-button simulated-login-button-full"
+                              >
+                                <Trans id="login_simulato_utente_base" />
+                              </ButtonMui>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
+                              <ButtonMui
+                                variant="contained"
+                                color="primary"
+                                onClick={() => simulateLogin(TypeUser.FAMILY)}
+                                fullWidth
+                                className="simulated-login-button simulated-login-button-full"
+                              >
+                                <Trans id="login_simulato_utente_parentale" />
+                              </ButtonMui>
+                            </Grid>
+                          </Grid>
+                        </Box>
+                      )}
+                    </>
                   )}
-
                 </Box>
 
 
@@ -715,14 +739,19 @@ const GoogleAuthComponent = () => {
                   <Divider className="box-accedi-divider" />
                 </Box>
 
-                {/* Login Social */}
-                <Grid container spacing={2} justifyContent="center">
+                {/* Login Social (disabilitati in modalità demo) */}
+                <Grid
+                  container
+                  spacing={2}
+                  justifyContent="center"
+                  className={demoPanelOpen ? 'home-social-grid home-social-grid--disabled' : 'home-social-grid'}
+                >
                   <Grid>
                     <IconButton
                       type="button"
                       onClick={startGithubLogin}
                       className="social-button"
-                      disabled={!CLIENT_GITHUB.SERVER || !getGitHubOAuthRedirectUri()}
+                      disabled={demoPanelOpen || !CLIENT_GITHUB.SERVER || !getGitHubOAuthRedirectUri()}
                       aria-label="GitHub"
                     >
                       <GitHubIcon />
@@ -733,7 +762,7 @@ const GoogleAuthComponent = () => {
                       type="button"
                       onClick={handleFacebookLogin}
                       className="social-button"
-                      disabled={!CLIENT_FACEBOOK.APP_ID}
+                      disabled={demoPanelOpen || !CLIENT_FACEBOOK.APP_ID}
                       aria-label="Facebook"
                     >
                       <FacebookIcon />
@@ -744,7 +773,7 @@ const GoogleAuthComponent = () => {
                       type="button"
                       className="social-button google-button"
                       onClick={() => login()}
-                      disabled={!CLIENT_GOOGLE.SERVER}
+                      disabled={demoPanelOpen || !CLIENT_GOOGLE.SERVER}
                       aria-label="Google"
                     >
                       <GoogleIcon />
