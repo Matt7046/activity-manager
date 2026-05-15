@@ -159,7 +159,15 @@ const CardComponent = observer((props: CardProps) => {
             .map((item: CardTextAlign, index: number) => (
               <Grid container key={index} className="grid-row-item" alignItems="center">
                 <Grid size={{ xs: item.textRight ? 6 : 12 }}>
-                  <Typography className="card-list-item">{item.textLeft}</Typography>
+                  <Typography
+                    className={
+                      item.textLeft === '...'
+                        ? 'card-list-item card-list-item-ellipsis'
+                        : 'card-list-item'
+                    }
+                  >
+                    {item.textLeft}
+                  </Typography>
                 </Grid>
                 {item.textRight && (
                   <Grid size={{ xs: 6 }}>
