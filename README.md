@@ -16,10 +16,21 @@
 
 In `frontend/`:
 
-- **`.env`** — unico file necessario **in produzione** (o valori di default in repo / pipeline).
-- **`local.env`** — **solo in locale**, opzionale: se esiste, viene caricato dopo `.env` e **sovrascrive** le stesse chiavi (come sul backend). In produzione di solito non c’è: Next usa allora **solo** `.env`.
+- **`.env`** — valori **produzione** (branch `production`, build Docker prod, `REBUILD-FRONTEND` in `batavviodocker/prod`).
+- **`local.env`** — **solo sviluppo** su branch `main`: caricato dopo `.env` e **sovrascrive** le stesse chiavi. Su branch `production` (o con `FRONTEND_USE_LOCAL_ENV=0`) viene **ignorato**.
 
-Le chiavi sono quelle in `frontend/.env.EMPTY`.
+Regole automatiche (`frontend/scripts/load-frontend-env.cjs`):
+
+| Situazione | File usati |
+|------------|------------|
+| Branch `main` + `npm run dev` | `.env` → `local.env` |
+| Branch `production` o BAT `batavviodocker/prod` (Docker) | solo `.env` → URL prod |
+| BAT `batavviodocker/locale` + `REBUILD-FRONTEND` (Docker) | `.env` + `frontend/local.env` → tipicamente localhost |
+| Override | `FRONTEND_USE_LOCAL_ENV=1` forza `local.env`; `=0` lo esclude |
+
+Docker locale usa `frontend/.dockerignore.locale` (include `local.env` nel contesto di build); Docker prod usa `.dockerignore` standard (esclude `local.env`).
+
+Le chiavi sono quelle in `frontend/.env.EMPTY` / `local.env.EMPTY`.
 
 Per **build immagine Docker** del frontend: `frontend/.dockerignore` esclude **`local.env`** dal contesto di build, così anche se sul PC hai sia `.env` sia `local.env`, nell’immagine non entra `local.env` e non sovrascrive i valori di produzione (resta solo ciò che copi / inject come `.env` o variabili in pipeline).
 

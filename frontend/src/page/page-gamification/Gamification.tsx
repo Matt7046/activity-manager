@@ -1,11 +1,12 @@
 "use client";
+import { ProtectedContentLoader } from '@/components/ProtectedContentLoader';
 import { useUser } from '@/context/UserContext';
 import { useLingui } from "@lingui/react";
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
-import { SectionNameDesc } from '../../general/structure/Constant';
-import { getMenuLaterale } from '../../general/structure/Utils';
+import { SectionName, SectionNameDesc } from '../../general/structure/Constant';
+import { getMenuLaterale, getSectionMenuIcon } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import GamificationContent from './GamificationContent';
 
@@ -48,24 +49,28 @@ const Gamification: React.FC<{}> = ({ }) => {
   };
 
   const section: MenuLaterale = {
-    testo: SectionNameDesc.GAMIFICATION
-  }
+    testo: SectionNameDesc.GAMIFICATION,
+    path: SectionName.GAMIFICATION,
+    icon: getSectionMenuIcon(SectionName.GAMIFICATION),
+  };
   return (
     <>
-      <PageLayout
-        section={section}
-        menuLaterale={menuLaterale}
-        alertConfig={{ open, setOpen, message, setMessage }}
-        isVertical={isVertical}
-        handleClose={handleClose}
-        navigate={useRouter()}
-      >
-        <GamificationContent
-          user={user}
+      <ProtectedContentLoader navigate={router} section={section}>
+        <PageLayout
+          section={section}
+          menuLaterale={menuLaterale}
           alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
-        />
-      </PageLayout>
+          handleClose={handleClose}
+          navigate={router}
+        >
+          <GamificationContent
+            user={user}
+            alertConfig={{ open, setOpen, message, setMessage }}
+            isVertical={isVertical}
+          />
+        </PageLayout>
+      </ProtectedContentLoader>
       <div>
         {/* Contenuto aggiuntivo, se necessario */}
       </div>

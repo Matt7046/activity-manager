@@ -2,27 +2,25 @@
 import { useLingui } from "@lingui/react";
 import { Box } from "@mui/material";
 import { useRouter } from 'next/navigation';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import { Pulsante } from "../../components/ms-button/Button";
 import Schedule, { MsSchedule } from "../../components/ms-schedule/Schedule";
 import { ButtonName, HttpStatus, SectionName, TypeUser } from "../../general/structure/Constant";
-import { navigateRouting, showMessage, UserI } from "../../general/structure/Utils";
+import { navigateRouting, ResponseI, showMessage, UserI } from "../../general/structure/Utils";
 import "./ActivityContent.css";
-import { findByIdentificativo } from "./service/ActivityService";
+import { fetchDataActivities, findByIdentificativo } from "./service/ActivityService";
 import activityStore from "./store/ActivityStore";
 
 
 interface ActivityContentProps {
   user: UserI;
-  responseSchedule: any;
   alertConfig: AlertConfig
   isVertical: boolean;
 }
 
 const ActivityContent: React.FC<ActivityContentProps> = ({
   user,
-  responseSchedule,
   alertConfig,
   isVertical
 }) => {
@@ -31,6 +29,51 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
   const { i18n } = useLingui();
   const [loading, setLoading] = useState(false);
   const flex = isVertical ? 'flex-start' : 'flex-end';
+  const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
+  const [activitySchedule, setActivitySchedule] = useState<boolean>(true);
+
+
+
+
+  let hasFetchedData = false;
+
+
+  useEffect(() => {
+    getActivities();
+    return () => { };
+  }, [activitySchedule, user]);
+
+
+  const caricamentoIniziale = (response: ResponseI): void => {
+    return setAllTesto(response);
+  }
+
+  const setAllTesto = (response: ResponseI): void => {
+    activityStore.setAllActivity(response);
+  }
+
+
+
+  const getActivities = () => {
+    if (!hasFetchedData) {
+      hasFetchedData = true
+      // Effettua la chiamata GET quando il componente è montato 
+      // axios.
+      //  .get('https://api.example.com/data') // URL dell'API]
+      const emailFind = user.emailChild;
+      fetchDataActivities({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
+        .then((response) => {
+          if (response) {
+            setResponse(response.jsonText)
+            caricamentoIniziale(response);
+          }
+        })
+        .catch((error) => {
+          console.error('Errore durante il recupero dei dati:', error);
+        })
+    }
+  }
+
 
 
   const openDetail = (_id: string, findActivityByIdentificativo: (_id: string) => void): void => {
@@ -92,7 +135,7 @@ const ActivityContent: React.FC<ActivityContentProps> = ({
   const scheduler: MsSchedule = {
     justifyContent: flex,
     handleClose: handleClose,
-    schedule: responseSchedule,
+    schedule: response,
     isVertical: isVertical,
     pulsanti: pulsantiVisibili
   }

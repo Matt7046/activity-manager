@@ -1,11 +1,12 @@
 "use client";
+import { ProtectedContentLoader } from '@/components/ProtectedContentLoader';
 import { useUser } from '@/context/UserContext';
 import { useLingui } from "@lingui/react";
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
-import { SectionNameDesc } from '../../general/structure/Constant';
-import { getMenuLaterale } from '../../general/structure/Utils';
+import { SectionName, SectionNameDesc } from '../../general/structure/Constant';
+import { getMenuLaterale, getSectionMenuIcon } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import PointsContent from './UserPointContent';
 export interface UserPointsI {
@@ -70,25 +71,29 @@ const Points: React.FC<{}> = ({ }) => {
     setOpen(false);
   };
   const section: MenuLaterale = {
-    testo: SectionNameDesc.POINTS
-  }
+    testo: SectionNameDesc.POINTS,
+    path: SectionName.POINTS,
+    icon: getSectionMenuIcon(SectionName.POINTS),
+  };
   return (
     <>
-      <PageLayout
+      <ProtectedContentLoader navigate={router} section={section}>
+        <PageLayout
 
-        section={section}
-        menuLaterale={menuLaterale}
-        alertConfig={{ open, setOpen, message, setMessage }}
-        isVertical={isVertical}
-        handleClose={handleClose}
-        navigate={useRouter()}
-      >
-        <PointsContent
-          user={user}
+          section={section}
+          menuLaterale={menuLaterale}
           alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
-        />
-      </PageLayout>
+          handleClose={handleClose}
+          navigate={router}
+        >
+          <PointsContent
+            user={user}
+            alertConfig={{ open, setOpen, message, setMessage }}
+            isVertical={isVertical}
+          />
+        </PageLayout>
+      </ProtectedContentLoader>
       <div>
         {/* Contenuto aggiuntivo, se necessario */}
       </div>

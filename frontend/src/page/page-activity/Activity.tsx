@@ -1,15 +1,14 @@
 "use client";
+import { ProtectedContentLoader } from '@/components/ProtectedContentLoader';
 import { useUser } from '@/context/UserContext';
 import { useLingui } from "@lingui/react";
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
-import { SectionNameDesc } from "../../general/structure/Constant";
-import { getMenuLaterale, ResponseI, showMessage } from '../../general/structure/Utils';
+import { SectionName, SectionNameDesc } from "../../general/structure/Constant";
+import { getMenuLaterale, getSectionMenuIcon } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import ActivityContent from './ActivityContent';
-import { fetchDataActivities } from './service/ActivityService';
-import activityStore from './store/ActivityStore';
 export interface ActivityI {
   _id: string | undefined;
   nome: string;
@@ -32,89 +31,42 @@ const Activity: React.FC<{}> = ({ }) => {
   const { user, setUser } = useUser();
   const router = useRouter(); // Ottieni la funzione di navigazione
   const menuLaterale = getMenuLaterale(router, user)
-  const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
   const [message, setMessage] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
   const [open, setOpen] = useState(false); // Controlla la visibilità del messaggio
   const [isVertical, setIsVertical] = useState<boolean>(window.innerHeight > window.innerWidth);
-  const [paddingType, setPaddingType] = useState<number>(isVertical ? 0 : 5);
-  const [activitySchedule, setActivitySchedule] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   // default class Activity extends React.Component {
 
-  let hasFetchedData = false;
-
-
-  useEffect(() => {
-    getActivities();
-    return () => { };
-  }, [activitySchedule]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsVertical(window.innerHeight > window.innerWidth);
-      setPaddingType(window.innerHeight > window.innerWidth ? 0 : 5);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    };
-  }, []);
-
-
-
-  const getActivities = () => {
-    if (!hasFetchedData) {
-      hasFetchedData = true
-      // Effettua la chiamata GET quando il componente è montato 
-      // axios.
-      //  .get('https://api.example.com/data') // URL dell'API]
-      const emailFind = user.emailChild;
-      fetchDataActivities({ ...user, email: emailFind }, (message: any) => showMessage(setOpen, setMessage, message))
-        .then((response) => {
-          if (response) {
-            setResponse(response.jsonText)
-            caricamentoIniziale(response);
-          }
-        })
-        .catch((error) => {
-          console.error('Errore durante il recupero dei dati:', error);
-        });
-    }
-  }
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const caricamentoIniziale = (response: ResponseI): void => {
-    return setAllTesto(response);
-  }
-
-  const setAllTesto = (response: ResponseI): void => {
-    activityStore.setAllActivity(response);
-  }
 
   const section: MenuLaterale = {
-    testo: SectionNameDesc.ACTIVITY
-  }
+    testo: SectionNameDesc.ACTIVITY,
+    path: SectionName.ACTIVITY,
+    icon: getSectionMenuIcon(SectionName.ACTIVITY),
+  };
   return (
     <>
-      <PageLayout
-        section={section} menuLaterale={menuLaterale}
-        alertConfig={{ open, setOpen, message, setMessage }}
-        isVertical={isVertical}
-        handleClose={handleClose}
-        navigate={useRouter()}
-
-      >
-        <ActivityContent
-          responseSchedule={response}
-          user={user}
+      <ProtectedContentLoader isLoading={isLoading} navigate={router} section={section}>
+        <PageLayout
+          section={section} menuLaterale={menuLaterale}
           alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
-        />
-      </PageLayout>
+          handleClose={handleClose}
+          navigate={router}
+        >
+
+          <ActivityContent
+            user={user}
+            alertConfig={{ open, setOpen, message, setMessage }}
+            isVertical={isVertical}
+          />
+        </PageLayout>
+      </ProtectedContentLoader>
     </>
   );
 }

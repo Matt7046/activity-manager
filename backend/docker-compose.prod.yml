@@ -6,6 +6,8 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
+      args:
+        FRONTEND_USE_LOCAL_ENV: "0"
     # In produzione Next.js gira sulla 3000
     expose:
       - "3000"

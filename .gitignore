@@ -39,7 +39,6 @@ backend/.vscode/
 *.env
 
 
-
 ### Esclude tutti i file con queste estensioni, ovunque siano ###
 **/*.p12
 **/*.jks

@@ -10,8 +10,12 @@ COPY package.json package-lock.json ./
 # Installazione con --legacy-peer-deps per gestire i conflitti MUI v6/React 18
 RUN npm install --legacy-peer-deps
 
-# Copia tutto il codice sorgente
+# Copia tutto il codice sorgente (.env sempre; local.env solo se nel contesto + FRONTEND_USE_LOCAL_ENV=1)
 COPY . .
+
+# 0 = prod (solo .env) | 1 = stack locale ( .env + local.env in build)
+ARG FRONTEND_USE_LOCAL_ENV=0
+ENV FRONTEND_USE_LOCAL_ENV=${FRONTEND_USE_LOCAL_ENV}
 
 # Costruisci l'applicazione Next.js
 RUN npm run build

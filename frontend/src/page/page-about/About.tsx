@@ -1,12 +1,12 @@
 "use client";
+import { ProtectedContentLoader } from '@/components/ProtectedContentLoader';
 import { useUser } from '@/context/UserContext';
 import { useLingui } from "@lingui/react";
-import InfoIcon from '@mui/icons-material/Info'; // About
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
-import { SectionNameDesc } from "../../general/structure/Constant";
-import { getMenuLaterale } from '../../general/structure/Utils';
+import { SectionName, SectionNameDesc } from "../../general/structure/Constant";
+import { getMenuLaterale, getSectionMenuIcon } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import AboutContent from './AboutContent';
 
@@ -38,27 +38,30 @@ const About: React.FC<{}> = ({ }) => {
   };
   const section: MenuLaterale = {
     testo: SectionNameDesc.ABOUT(_id),
-    icon: InfoIcon
-  }
+    path: SectionName.ABOUT,
+    icon: getSectionMenuIcon(SectionName.ABOUT),
+  };
 
   return (
     <>
-      <PageLayout
-        section={section}
-        menuLaterale={menuLaterale}
-        alertConfig={{ open, setOpen, message, setMessage }}
-        isVertical={isVertical}
-        handleClose={handleClose}
-        navigate={useRouter()}
-      >
-        <AboutContent
-          identificativo = {_id!}
-          user={user}
-          setMessage={setMessage}
-          setOpen={setOpen}
+      <ProtectedContentLoader navigate={router} section={section}>
+        <PageLayout
+          section={section}
+          menuLaterale={menuLaterale}
+          alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
-        />
-      </PageLayout>
+          handleClose={handleClose}
+          navigate={router}
+        >
+          <AboutContent
+            identificativo = {_id!}
+            user={user}
+            setMessage={setMessage}
+            setOpen={setOpen}
+            isVertical={isVertical}
+          />
+        </PageLayout>
+      </ProtectedContentLoader>
     </>
   );
 };

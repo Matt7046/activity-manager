@@ -5,7 +5,7 @@ export interface SingleServiceConfig {
 
 // Configurazione completa per tutti i servizi
 const apiConfig: SingleServiceConfig = {
-  baseURL: process.env.NEXT_PUBLIC_SERVICE_URL || '/api' 
+  baseURL: process.env.NEXT_PUBLIC_SERVICE_URL!
 };
 
 export default apiConfig;

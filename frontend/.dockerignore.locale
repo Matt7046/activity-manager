@@ -1,0 +1,6 @@
+# Come .dockerignore ma include local.env per build Docker locale (BAT in batavviodocker/locale).
+node_modules
+.next
+.git
+*.md
+.env*.local
