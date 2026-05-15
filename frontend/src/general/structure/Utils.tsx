@@ -2,12 +2,15 @@
 import { I18n, i18n } from "@lingui/core";
 
 import { TypeMessage } from "@/page/page-layout/PageLayout";
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // Points
 import EngineeringIcon from '@mui/icons-material/Engineering';
-import GroupIcon from '@mui/icons-material/Group'; // 
+import GroupIcon from '@mui/icons-material/Group'; //
 import InfoIcon from '@mui/icons-material/Info'; // About
 import ListAltIcon from '@mui/icons-material/ListAlt'; // Activity
+import LoginIcon from '@mui/icons-material/Login';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import PsychologyIcon from '@mui/icons-material/Psychology';
 import SettingsIcon from '@mui/icons-material/Settings'; // Operative
 import StarIcon from '@mui/icons-material/Star';
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
@@ -79,6 +82,41 @@ export type FormErrorValues = {
   [key: string]: boolean | undefined;
 };
 
+
+/** Icona titolo / drawer: allineata a {@link sezioniMenuIniziale}. */
+export const getSectionMenuIcon = (path: string | undefined): MenuLaterale['icon'] =>{
+  if (path == null || path === '') {
+    return undefined;
+  }
+  switch (path) {
+    case SectionName.ACTIVITY:
+      return ListAltIcon;
+    case SectionName.ABOUT:
+      return InfoIcon;
+    case SectionName.POINTS:
+    case SectionName.LOG_USER_POINT:
+      return EmojiEventsIcon;
+    case SectionName.OPERATIVE:
+      return EngineeringIcon;
+    case SectionName.FAMILY:
+      return GroupIcon;
+    case SectionName.NOTIFICATION:
+      return NotificationsIcon;
+    case SectionName.SETTINGS:
+      return SettingsIcon;
+    case SectionName.GAMIFICATION:
+      return StarIcon;
+    case SectionName.HOME:
+      return LoginIcon;
+    case SectionName.REGISTER:
+      return AppRegistrationIcon;
+    case SectionName.PERSONALITY:
+    case SectionName.POLICY:
+      return PsychologyIcon;
+    default:
+      return undefined;
+  }
+}
 
 export const getMenuLaterale = (navigate: AppRouterInstance, user: UserI): MenuLaterale[][] => {
   const sezioniMenuI = sezioniMenuIniziale(user);

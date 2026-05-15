@@ -1,11 +1,11 @@
 "use client";
 
 import { useLingui } from "@lingui/react";
-import PsychologyIcon from "@mui/icons-material/Psychology";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionName } from "../../general/structure/Constant";
+import { getSectionMenuIcon } from "../../general/structure/Utils";
 import PageLayout, { TypeMessage } from "../page-layout/PageLayout";
 import PagePersonalityContent from "./PersonalityContent";
 
@@ -24,7 +24,7 @@ const PagePersonality: React.FC = () => {
   const section: MenuLaterale = {
     testo: i18n._("personality_page_title"),
     path: SectionName.PERSONALITY,
-    icon: PsychologyIcon,
+    icon: getSectionMenuIcon(SectionName.PERSONALITY),
   };
 
   return (

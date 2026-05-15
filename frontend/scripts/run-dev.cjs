@@ -1,20 +1,15 @@
 /**
- * Avvio locale `next dev`: carica `.env` poi `local.env` (stesso ordine del backend Docker “localhost”).
- * `local.env` sovrascrive le chiavi duplicate. Argomenti extra vanno a Next (es. `npm run dev -- -p 3001`).
+ * Avvio locale `next dev`: env via load-frontend-env (main → local.env, production → solo .env).
+ * Argomenti extra vanno a Next (es. `npm run dev -- -p 3001`).
  */
 const { existsSync } = require("fs");
 const { resolve } = require("path");
 const { spawn } = require("child_process");
-const dotenv = require("dotenv");
+const { loadFrontendEnv } = require("./load-frontend-env.cjs");
 
 const root = resolve(__dirname, "..");
 
-if (existsSync(resolve(root, ".env"))) {
-  dotenv.config({ path: resolve(root, ".env") });
-}
-if (existsSync(resolve(root, "local.env"))) {
-  dotenv.config({ path: resolve(root, "local.env"), override: true });
-}
+loadFrontendEnv(root);
 
 const nextCli = resolve(root, "node_modules", "next", "dist", "bin", "next");
 if (!existsSync(nextCli)) {

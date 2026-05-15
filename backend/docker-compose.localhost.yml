@@ -5,6 +5,9 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
+      ignore: .dockerignore.locale
+      args:
+        FRONTEND_USE_LOCAL_ENV: "1"
     image: docker.io/matt7046/frontend:1.0.1
     container_name: frontend
     # Aggiungi questo per evitare che il container si chiuda in certi ambienti

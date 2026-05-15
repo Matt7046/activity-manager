@@ -26,6 +26,8 @@ exit /b 1
 :run
 cd /d "%~dp0..\.."
 set "COMPOSE_FILE=docker-compose.prod.yml"
+rem Build frontend: solo .env in immagine (local.env escluso da .dockerignore)
+if /i "%LOG%"=="frontend" set FRONTEND_USE_LOCAL_ENV=0
 
 rem Build “vera”: niente solo cache Docker (Maven altrimenti sembra istantaneo).
 rem --no-cache = ricompila gli stage; --pull = aggiorna le immagini base; --progress=plain = log in console.

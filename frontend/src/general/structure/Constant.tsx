@@ -1,6 +1,8 @@
 "use client";
 import { i18n } from "@lingui/core";
 
+
+
 export enum SectionName {
   POLICY = `privacy-policy`,
   ACTIVITY = `activity`,
@@ -15,8 +17,18 @@ export enum SectionName {
   SETTINGS = `settings`,
   PERSONALITY = 'personality',
   PRIVACY = 'privacy',
+  LOG_USER_POINT = `log-user-point`,
   ROOT = ''
 }
+
+/** Pagine accessibili senza utente valorizzato (login / landing / policy). */
+export const PUBLIC_SECTION_PATHS = new Set<string>([
+  SectionName.ROOT,
+  SectionName.HOME,
+  SectionName.REGISTER,
+  SectionName.PERSONALITY,
+  SectionName.POLICY,
+]);
 
 export const SectionNameDesc = {
   get POLICY() { return i18n._('privacy_policy'); }, // Usa la chiave corretta del tuo JSON

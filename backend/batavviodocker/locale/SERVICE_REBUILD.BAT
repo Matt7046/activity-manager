@@ -13,6 +13,9 @@ set COMPOSE_OPTS=-f docker-compose.localhost.yml -f docker-compose.microservice-
 
 cd /d "%~dp0..\.."
 
+rem Build frontend: .env + frontend/local.env (localhost) — vedi docker-compose.localhost.yml
+if /i "%SERVICE_NAME%"=="frontend" set FRONTEND_USE_LOCAL_ENV=1
+
 echo.
 echo [1/3] Build immagine per %SERVICE_NAME%...
 call docker compose %COMPOSE_OPTS% build %SERVICE_NAME%

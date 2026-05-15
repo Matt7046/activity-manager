@@ -12,9 +12,9 @@ import Button, { Pulsante } from '../../components/ms-button/Button';
 import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
 import Label from '../../components/ms-label/Label';
 import Language from "../../components/ms-language/Language";
-import ThemeToggle from "../../components/ms-theme-toggle/ThemeToggle";
 import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
-import { ButtonName, HttpStatus, SectionName, StatusNotification, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
+import ThemeToggle from "../../components/ms-theme-toggle/ThemeToggle";
+import { ButtonName, HttpStatus, PUBLIC_SECTION_PATHS, SectionName, StatusNotification, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
 import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
 import { notificationWebSocketUrl } from '../../general/structure/SocketUrl';
 import { FamilyNotificationI, getDateStringRegularFormat, getTranslatedNotification, navigateRouting, NotificationI, ResponseI, showMessage } from '../../general/structure/Utils';
@@ -52,12 +52,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 }) => {
   const { user, setUser } = useUser();
   const { i18n } = useLingui();
-
-  useEffect(() => {
-    if (!user?.email && section.path !== SectionName.ROOT && section.path !== SectionName.HOME && section.path !== SectionName.REGISTER && section.path !== SectionName.PERSONALITY) {
-      navigateRouting(navigate, SectionName.ROOT, {});
-    }
-  }, [user, navigate, section.path]);
 
 
 
@@ -229,7 +223,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                 <Language placement="header" />
               </Box>
               {/* Mostra il bottone notifiche solo se NON siamo in home o in registrazione */}
-              {(sectionAttiva.path !== SectionName.HOME && sectionAttiva.path !== SectionName.REGISTER &&  sectionAttiva.path !== SectionName.PERSONALITY) && (
+              {(sectionAttiva?.path !== null && PUBLIC_SECTION_PATHS.has(sectionAttiva.path!)) && (
                 <>
                   <Button pulsanti={[pulsanteNotifiche]} />
                   <Popover

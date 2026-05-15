@@ -1,4 +1,4 @@
-# Non portare in immagine (build Next usa next.config + dotenv)
+# Build prod: esclude local.env (il compose locale usa .dockerignore.locale)
 local.env
 
 node_modules

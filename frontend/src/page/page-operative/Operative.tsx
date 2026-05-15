@@ -1,11 +1,12 @@
 "use client";
+import { ProtectedContentLoader } from '@/components/ProtectedContentLoader';
 import { useUser } from '@/context/UserContext';
 import { useLingui } from "@lingui/react";
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
-import { SectionNameDesc } from '../../general/structure/Constant';
-import { getMenuLaterale } from '../../general/structure/Utils';
+import { SectionName, SectionNameDesc } from '../../general/structure/Constant';
+import { getMenuLaterale, getSectionMenuIcon } from '../../general/structure/Utils';
 import PageLayout, { TypeMessage } from '../page-layout/PageLayout';
 import OperativeContent from './OperativeContent';
 
@@ -37,25 +38,29 @@ const Operative: React.FC<{}> = ({ }) => {
   const handleClose = () => {
     setOpen(false);
   };
-   const section: MenuLaterale = {
-    testo: SectionNameDesc.OPERATIVE
-  }
+  const section: MenuLaterale = {
+    testo: SectionNameDesc.OPERATIVE,
+    path: SectionName.OPERATIVE,
+    icon: getSectionMenuIcon(SectionName.OPERATIVE),
+  };
   return (
     <>
-      <PageLayout
-        section={section}
-        menuLaterale={menuLaterale}
-        alertConfig={{ open, setOpen, message, setMessage }}
-        isVertical={isVertical}
-        handleClose={handleClose}
-        navigate={useRouter()}
-      >
-        <OperativeContent
-          user={user}
+      <ProtectedContentLoader navigate={router} section={section}>
+        <PageLayout
+          section={section}
+          menuLaterale={menuLaterale}
           alertConfig={{ open, setOpen, message, setMessage }}
           isVertical={isVertical}
-        />
-      </PageLayout>
+          handleClose={handleClose}
+          navigate={router}
+        >
+          <OperativeContent
+            user={user}
+            alertConfig={{ open, setOpen, message, setMessage }}
+            isVertical={isVertical}
+          />
+        </PageLayout>
+      </ProtectedContentLoader>
       <div>
         {/* Contenuto aggiuntivo, se necessario */}
       </div>
