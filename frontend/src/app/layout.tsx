@@ -7,13 +7,15 @@ import type { Metadata } from 'next';
 import './globals.css';
 import MuiThemeProvider from './MuiThemeProvider';
 
-const metadataBaseRaw =
+const DEFAULT_SITE_URL = 'https://activity-manager.colorsdev.tech';
+
+const siteUrl =
   typeof process.env.NEXT_PUBLIC_SITE_URL === 'string' && process.env.NEXT_PUBLIC_SITE_URL.length > 0
     ? process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '')
-    : undefined;
+    : DEFAULT_SITE_URL;
 
-/** Base URL opzionale (es. https://colorsdev.tech) per icone/Open Graph assolute in produzione. */
-const metadataBase = metadataBaseRaw ? new URL(metadataBaseRaw) : undefined;
+/** Base URL per Open Graph / Twitter (evita fallback a http://localhost:3000 in build). */
+const metadataBase = new URL(siteUrl);
 
 export const metadata: Metadata = {
   metadataBase,
