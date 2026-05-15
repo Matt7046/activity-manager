@@ -71,6 +71,7 @@ const GoogleAuthComponent = () => {
   const [resetEmail, setResetEmail] = useState('');
   const [demoPanelOpen, setDemoPanelOpen] = useState(false);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const accountPasswordLoginEmails = ['user@simulated.com', 'child@simulated.com'];
 
   const githubOAuthStateRef = useRef<string>("");
   const githubHomePopupBridgeDoneRef = useRef(false);
@@ -537,6 +538,18 @@ const GoogleAuthComponent = () => {
   }
 
   const handleLogin = (event: any): void => {
+    const emailNormalized = emailLogin.trim().toLowerCase();
+    if (
+      demoPanelOpen &&
+      !accountPasswordLoginEmails.includes(emailNormalized)
+    ) {
+      showMessage(setOpen, setMessage, {
+        typeMessage: TypeAlertColor.WARNING,
+        titleMessage: i18n._('accedi'),
+        message: [i18n._('home_account_login_email_only_simulated')],
+      });
+      return;
+    }
     const user = { _id: undefined, email: emailLogin, password: passwordLogin }
     getToken({ email: user.email, password: user.password, googleLogin: false }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
       baseStore.setToken(tokenData?.jsonText?.token);
@@ -612,23 +625,25 @@ const GoogleAuthComponent = () => {
                   {!hiddenLogin && (
                     <>
                       {demoPanelOpen ? (
-                        <MuiLink
-                          component="button"
-                          type="button"
-                          className="home-demo-cta"
+                        <ButtonMui
+                          variant="outlined"
+                          color="primary"
+                          fullWidth
+                          className="home-demo-toggle-button home-demo-toggle-button--account"
                           onClick={() => setDemoPanelOpen(false)}
                         >
                           <Trans id="home_demo_back" />
-                        </MuiLink>
+                        </ButtonMui>
                       ) : (
-                        <MuiLink
-                          component="button"
-                          type="button"
-                          className="home-demo-cta"
+                        <ButtonMui
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          className="home-demo-toggle-button home-demo-toggle-button--demo"
                           onClick={() => setDemoPanelOpen(true)}
                         >
                           <Trans id="home_demo_link" />
-                        </MuiLink>
+                        </ButtonMui>
                       )}
                       {demoPanelOpen && (
                         <Box className="home-demo-panel">
@@ -702,33 +717,39 @@ const GoogleAuthComponent = () => {
                   <Trans id="accedi" />
                 </ButtonMui>
 
-                <Box className="register-annotation">
-                  <Typography variant="body2">
-                    <Trans id='nuovo_account' />{" "}
-                    <MuiLink
-                      component={LinkNext}
-                      href="/register"
-                      className="register-link"
-                    >
-                      <Trans id="registrati" />
-                    </MuiLink>
-                  </Typography>
-                  <Typography variant="body2" className="personality-annotation">
-                    <MuiLink component={LinkNext} href="/personality" className="register-link">
-                      {i18n._("personality_discover_link")}
-                    </MuiLink>
-                  </Typography>
-                  <Typography variant="body2" className="personality-annotation">
-                    <MuiLink
-                      component="button"
-                      type="button"
-                      className="register-link reset-password-link"
-                      onClick={handleOpenResetDialog}
-                    >
-                      {i18n._("password_reset_link")}
-                    </MuiLink>
-                  </Typography>
-                </Box>
+               
+                  <Box className="register-annotation">
+                    { !demoPanelOpen && (
+                    <Typography variant="body2">
+                      <Trans id='nuovo_account' />{" "}
+                      <MuiLink
+                        component={LinkNext}
+                        href="/register"
+                        className="register-link"
+                      >
+                        <Trans id="registrati" />
+                      </MuiLink>
+                    </Typography>
+                    )}
+                    <Typography variant="body2" className="personality-annotation">
+                      <MuiLink component={LinkNext} href="/personality" className="register-link">
+                        {i18n._("personality_discover_link")}
+                      </MuiLink>
+                    </Typography>
+                       { !demoPanelOpen && (
+                    <Typography variant="body2" className="personality-annotation">
+                      <MuiLink
+                        component="button"
+                        type="button"
+                        className="register-link reset-password-link"
+                        onClick={handleOpenResetDialog}
+                      >
+                        {i18n._("password_reset_link")}
+                      </MuiLink>
+                    </Typography>
+                       )}
+                  </Box>
+                
 
                 {/* Divider */}
                 <Box className='box-accedi'>

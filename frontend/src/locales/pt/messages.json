@@ -177,6 +177,7 @@
   "login_simulato_utente_parentale": "Simular login dos pais",
   "home_demo_link": "Experimentar a demo",
   "home_demo_back": "Acesso com conta",
+  "home_account_login_email_only_simulated": "O login com e-mail e palavra-passe só é permitido para user@simulated.com (utilizador parental) e child@simulated.com (utilizador base) na versão demo.",
   "email_tutorato": "Tutoria por e-mail",
   "email_registrazione": "E-mail de registro",
   "privacy_descrizione": "Esta Política de Privacidade descreve como coletamos, usamos e protegemos seus dados pessoais quando você usa nosso projeto de código aberto. A sua privacidade é importante para nós e estamos empenhados em processar os seus dados de acordo com o Regulamento Geral de Proteção de Dados (RGPD).",

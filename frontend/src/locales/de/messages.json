@@ -177,6 +177,7 @@
   "login_simulato_utente_parentale": "Simulieren Sie die Anmeldung der Eltern",
   "home_demo_link": "Demo ausprobieren",
   "home_demo_back": "Mit Konto anmelden",
+  "home_account_login_email_only_simulated": "Die Anmeldung mit E-Mail und Passwort ist nur für user@simulated.com (Familienbenutzer) und child@simulated.com (Standardbenutzer) in der Demo-Version erlaubt.",
   "email_tutorato": "E-Mail-Nachhilfe",
   "email_registrazione": "Registrierungs-E-Mail",
   "privacy_descrizione": "Diese Datenschutzrichtlinie beschreibt, wie wir Ihre personenbezogenen Daten erheben, verwenden und schützen, wenn Sie unser Open-Source-Projekt nutzen. Ihre Privatsphäre ist uns wichtig und wir verpflichten uns, Ihre Daten im Einklang mit der Datenschutz-Grundverordnung (DSGVO) zu verarbeiten.",

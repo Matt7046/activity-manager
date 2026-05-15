@@ -132,29 +132,27 @@ html[data-theme="light"] .login-paper {
   padding-top: var(--space-3);
 }
 
-.home-demo-cta {
-  display: block;
-  width: 100%;
-  margin: 0;
-  padding: var(--space-2) 0;
-  border: none;
-  background: transparent;
-  font: inherit;
-  font-size: clamp(1.35rem, 4.5vw, 1.75rem) !important;
+.home-demo-toggle-button {
+  text-transform: none !important;
+  font-size: clamp(1.05rem, 3.5vw, 1.35rem) !important;
   font-weight: 800 !important;
   letter-spacing: 0.02em;
-  line-height: 1.25;
-  text-align: center;
-  text-decoration: none;
-  color: var(--color-primary) !important;
-  cursor: pointer;
-  transition: color 0.15s ease, transform 0.15s ease;
+  min-height: 52px;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
-.home-demo-cta:hover {
-  color: var(--color-primary-hover) !important;
-  text-decoration: underline;
-  transform: scale(1.02);
+.home-demo-toggle-button--demo {
+  background-color: var(--color-primary) !important;
+}
+
+.home-demo-toggle-button--demo:hover {
+  background-color: var(--color-primary-hover) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.home-demo-toggle-button--account {
+  border-width: 2px !important;
 }
 
 .home-demo-panel {
