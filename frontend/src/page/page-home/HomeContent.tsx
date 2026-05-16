@@ -6,7 +6,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import GoogleIcon from '@mui/icons-material/Google';
-import { Box, Button as ButtonMui, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, IconButton, Link as MuiLink, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
+import { Alert as MuiInlineAlert, Box, Button as ButtonMui, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, IconButton, Link as MuiLink, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import LinkNext from 'next/link';
@@ -26,6 +26,7 @@ import {
   TypeAlertColor,
   TypeUser,
 } from '../../general/structure/Constant';
+import { isSimulatedDemoEmail } from '../../general/structure/simulatedAccounts';
 import { navigateRouting, ResponseI, showMessage, UserI } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
 import { confirmParentLinks, getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
@@ -75,8 +76,6 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
   const [pendingParentsSelected, setPendingParentsSelected] = useState<Record<string, boolean>>({});
   const [pendingDialogChildEmail, setPendingDialogChildEmail] = useState('');
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const accountPasswordLoginEmails = ['user@simulated.com', 'child@simulated.com'];
-
   const githubOAuthStateRef = useRef<string>("");
   const githubHomePopupBridgeDoneRef = useRef(false);
   const facebookSdkInitRef = useRef(false);
@@ -568,10 +567,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
 
   const handleLogin = (event: any): void => {
     const emailNormalized = emailLogin.trim().toLowerCase();
-    if (
-      demoPanelOpen &&
-      !accountPasswordLoginEmails.includes(emailNormalized)
-    ) {
+    if (demoPanelOpen && !isSimulatedDemoEmail(emailNormalized)) {
       showMessage(setOpen, setMessage, {
         typeMessage: TypeAlertColor.WARNING,
         titleMessage: i18n._('accedi'),
@@ -639,6 +635,15 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
         typeMessage: TypeAlertColor.ERROR,
         titleMessage: i18n._("password_reset_title"),
         message: [i18n._("password_reset_email_invalid")],
+      });
+      return;
+    }
+
+    if (isSimulatedDemoEmail(email)) {
+      showMessage(setOpen, setMessage, {
+        typeMessage: TypeAlertColor.WARNING,
+        titleMessage: i18n._("password_reset_title"),
+        message: [i18n._("home_password_reset_not_simulated")],
       });
       return;
     }
@@ -783,18 +788,18 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
                     {i18n._("personality_discover_link")}
                   </MuiLink>
                 </Typography>
-                {!demoPanelOpen && (
-                  <Typography variant="body2" className="personality-annotation">
-                    <MuiLink
-                      component="button"
-                      type="button"
-                      className="register-link reset-password-link"
-                      onClick={handleOpenResetDialog}
-                    >
-                      {i18n._("password_reset_link")}
-                    </MuiLink>
-                  </Typography>
-                )}
+                   {!demoPanelOpen && (
+                <Typography variant="body2" className="personality-annotation">
+                  <MuiLink
+                    component="button"
+                    type="button"
+                    className="register-link reset-password-link"
+                    onClick={handleOpenResetDialog}
+                  >
+                    {i18n._("password_reset_link")}
+                  </MuiLink>
+                </Typography>
+                   )}
               </Box>
 
 

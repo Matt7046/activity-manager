@@ -8,6 +8,7 @@ import HubIcon from "@mui/icons-material/Hub";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import SpringBootIcon from "@mui/icons-material/PlayCircleFilled";
 import PsychologyIcon from "@mui/icons-material/Psychology";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import SearchIcon from "@mui/icons-material/Search";
 import SecurityIcon from "@mui/icons-material/Security";
 import MongoDBIcon from "@mui/icons-material/Storage";
@@ -37,6 +38,7 @@ const technologies: { name: string; icon: ReactNode; brandLogo?: boolean }[] = [
   { name: "Java", icon: <JavaIcon fontSize="large" className="techf-icon" /> },
   { name: "Spring Boot", icon: <SpringBootIcon fontSize="large" className="techf-icon" /> },
   { name: "ElasticSearch", icon: <SearchIcon fontSize="large" className="techf-icon" /> },
+  { name: "Cloudinary", icon: <CloudUploadIcon fontSize="large" className="techf-icon" /> },
   { name: "RabbitMQ", icon: <HubIcon fontSize="large" className="techf-icon" /> },
   { name: "Docker", icon: <Inventory2Icon fontSize="large" className="techf-icon" /> },
   { name: "Nginx", icon: <WebIcon fontSize="large" className="techf-icon" /> },
