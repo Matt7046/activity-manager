@@ -214,7 +214,11 @@ const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user,
         const onDone = (response: ResponseI | undefined) => {
           if (response?.status !== HttpStatus.OK) {
             rollback();
+            return;
           }
+          setLastFetchKey("");
+          hasLoadedRef.current = false;
+          void fetchOptions(searchQuery, true);
         };
 
         if (wasFavorite) {

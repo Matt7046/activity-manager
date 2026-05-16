@@ -1,6 +1,7 @@
 package com.userPointService.processor;
 
 import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.security.EmailNormalization;
 import com.common.data.gamification.Favorite;
 import com.common.data.user.UserPoint;
 import com.common.dto.gamification.FavoriteDTO;
@@ -39,7 +40,7 @@ public class GamificationProcessor {
     @Transactional
     public Mono<ResponseDTO> fetchVideos(String topic, String email, String principalEmail) {
         userPointAccessService.requireCanAccess(principalEmail, email);
-        String emailStored = encryptDecryptConverter.storageForm(email);
+        String emailStored = encryptDecryptConverter.storageForm(EmailNormalization.normalize(email));
 
         return gamificationService.fetchVideos(topic)
                 .map(json -> json.get("items"))
@@ -141,7 +142,7 @@ public class GamificationProcessor {
 
     public Mono<ResponseDTO> fetchVideosFavorites(String topic, String email, String principalEmail) {
         userPointAccessService.requireCanAccess(principalEmail, email);
-        String emailStored = encryptDecryptConverter.storageForm(email);
+        String emailStored = encryptDecryptConverter.storageForm(EmailNormalization.normalize(email));
 
         return gamificationService.fetchVideosFavorites(emailStored)
                 .map(json -> json.get("items"))
