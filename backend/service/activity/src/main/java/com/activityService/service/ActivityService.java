@@ -45,6 +45,6 @@ public class ActivityService {
     }
     @Transactional
     public List<Activity> findAllByEmail(String email) {
-        return activityRepository.findAllByEmail(encryptDecryptConverter.convert(email));
+        return activityRepository.findAllByEmail(encryptDecryptConverter.storageForm(email));
     }
 }

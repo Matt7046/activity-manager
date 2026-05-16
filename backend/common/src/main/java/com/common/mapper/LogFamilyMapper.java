@@ -31,12 +31,12 @@ public abstract class LogFamilyMapper {
     }
 
     @AfterMapping
-    void decryptEmail(@MappingTarget LogFamily entity, LogFamilyDTO dto) {
-        if (entity.getPerformedByEmail() != null) {
-            entity.setPerformedByEmail(encryptDecryptConverter.convert(entity.getPerformedByEmail()));
+    void encryptEmail(@MappingTarget LogFamily entity, LogFamilyDTO dto) {
+        if (dto.getPerformedByEmail() != null && !dto.getPerformedByEmail().isBlank()) {
+            entity.setPerformedByEmail(encryptDecryptConverter.convert(dto.getPerformedByEmail()));
         }
-        if (entity.getReceivedByEmail() != null) {
-            entity.setReceivedByEmail(encryptDecryptConverter.convert(entity.getReceivedByEmail()));
+        if (dto.getReceivedByEmail() != null && !dto.getReceivedByEmail().isBlank()) {
+            entity.setReceivedByEmail(encryptDecryptConverter.convert(dto.getReceivedByEmail()));
         }
     }
 }

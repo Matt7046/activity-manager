@@ -8,13 +8,17 @@ import com.common.configurations.structure.PropertiesKey;
 import com.common.structure.messages.DecryptMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import com.common.structure.exception.DecryptException;
 
+/**
+ * Cifratura esplicita per entità/DTO (mapper, repository).
+ * Non implementa {@code Converter<String, String>}: Spring la registrerebbe globalmente
+ * e cifrerebbe anche {@code @PathVariable} / query param (es. topic=tutorial).
+ */
 @Component
-public class EncryptDecryptConverter implements Converter<String, String> {
+public class EncryptDecryptConverter {
 
     @Autowired
     PropertiesKey propertiesKey;
@@ -23,23 +27,46 @@ public class EncryptDecryptConverter implements Converter<String, String> {
     @Value("${app.algorithm1}")
     private String alghorithm;
 
-    @Override
+    /** Usato dai mapper per persistere email e campi sensibili (sempre da valore in chiaro). */
     public String convert(String source) {
-        try {
-            if (source != null) {
-                // Criptografa il dato
-                return encrypts(source);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (source == null) {
+            return null;
         }
-        return source;
+        return encrypts(source);
+    }
+
+    /**
+     * Path param / query in chiaro (es. email, ObjectId) oppure già cifrato (legacy).
+     * Se non è ciphertext valido, restituisce il valore originale.
+     */
+    public String safeDecrypt(String value) {
+        if (value == null || value.isBlank()) {
+            return value;
+        }
+        try {
+            return decrypts(value);
+        } catch (DecryptException e) {
+            return value;
+        }
+    }
+
+    /**
+     * Chiave per query Mongo su campi cifrati: accetta email in chiaro dall'API o ciphertext già persistito.
+     */
+    public String storageForm(String plainOrStored) {
+        if (plainOrStored == null || plainOrStored.isBlank()) {
+            return plainOrStored;
+        }
+        try {
+            decrypts(plainOrStored);
+            return plainOrStored;
+        } catch (DecryptException e) {
+            return encrypts(plainOrStored);
+        }
     }
 
     public String decrypt(String encryptedData) throws DecryptException {
-
         if (encryptedData != null) {
-            // Decripta il dato
             return decrypts(encryptedData);
         }
         return null;
@@ -57,7 +84,6 @@ public class EncryptDecryptConverter implements Converter<String, String> {
         }
     }
 
-    // Decripta una stringa
     private String decrypts(String encryptedData) throws DecryptException {
         try {
             Cipher cipher = Cipher.getInstance(alghorithm);

@@ -35,8 +35,8 @@ public abstract class LogActivityMapper {
 
     @AfterMapping
     void encryptEmail(@MappingTarget LogActivity entity, LogActivityDTO dto) {
-        if (entity.getEmail() != null) {
-            entity.setEmail(encryptDecryptConverter.convert(entity.getEmail()));
+        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
+            entity.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
         }
     }
 

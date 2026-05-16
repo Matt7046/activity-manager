@@ -25,7 +25,7 @@ public class ImageProcessor {
     public Mono<ResponseDTO> uploadImage(ImageDTO image ) {
         String nameImage = image.getNameImage();
         if (nameImage != null && !nameImage.isBlank()) {
-            image.setNameImage(encryptDecryptConverter.decrypt(nameImage));
+            image.setNameImage(encryptDecryptConverter.safeDecrypt(nameImage));
         } else {
             image.setNameImage("userpoint/" + UUID.randomUUID());
         }

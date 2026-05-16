@@ -35,6 +35,6 @@ public class LogActivityService {
     }
 
     public List<LogActivity> logAttivitaByEmail(UserPointDTO userPointDTO,  Pageable pageable) {
-        return logActivityRepository.findLogByEmail(encryptDecryptConverter.convert(userPointDTO.getEmail()), pageable);
+        return logActivityRepository.findLogByEmail(encryptDecryptConverter.storageForm(userPointDTO.getEmail()), pageable);
     }
 }

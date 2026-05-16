@@ -36,8 +36,7 @@ public class ActivityCommandProcessor {
     public Mono<ResponseDTO> saveActivity(ActivityDTO activityDTO) {
         return resourceAccessClient.assertCanAccess(activityDTO.getEmail())
                 .then(Mono.fromCallable(() -> {
-                    String emailCriypt = encryptDecryptConverter.convert(activityDTO.getEmail());
-                    activityDTO.setEmail(emailCriypt);
+                    activityDTO.setEmail(encryptDecryptConverter.storageForm(activityDTO.getEmail()));
                     Activity activity = activityService.saveActivity(activityDTO);
                     return new ResponseDTO(activity, ActivityHttpStatus.OK.value(), new ArrayList<>());
                 }))
@@ -51,7 +50,7 @@ public class ActivityCommandProcessor {
     }
 
     public Mono<ResponseDTO> deleteByIdentificativo(String identificativo) {
-        String _id = encryptDecryptConverter.decrypt(identificativo);
+        String _id = encryptDecryptConverter.safeDecrypt(identificativo);
         return Mono.fromCallable(() -> activityService.findByIdentificativo(_id))
                 .flatMap(existing -> {
                     if (existing != null) {

@@ -224,7 +224,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                 <Language placement="header" />
               </Box>
               {/* Mostra il bottone notifiche solo se NON siamo in home o in registrazione */}
-              {(sectionAttiva?.path !== null && PUBLIC_SECTION_PATHS.has(sectionAttiva.path!)) && (
+              {(sectionAttiva?.path !== null && !PUBLIC_SECTION_PATHS.has(sectionAttiva.path!)) && (
                 <>
                   <Button pulsanti={[pulsanteNotifiche]} />
                   <Popover
