@@ -1,4 +1,4 @@
-package com.common.dto.user;
+package com.userPointService.dto.user;
 
 import com.common.dto.structure.InterfaceDTO;
 

@@ -1,4 +1,4 @@
-package com.common.dto.family;
+package com.userPointService.dto.family;
 
 import com.common.data.family.OperationTypeLogFamily;
 import com.common.dto.structure.InterfaceDTO;
@@ -9,17 +9,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Data // Genera getter, setter, toString, equals e hashCode
-@NoArgsConstructor // Genera un costruttore senza argomenti
-@AllArgsConstructor // Genera un costruttore con tutti i campi
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LogFamilyDTO implements InterfaceDTO {
     private String _id;
     private String performedByEmail;
     private String receivedByEmail;
     private String log;
-    private Date  date;
+    private Date date;
     private OperationTypeLogFamily operations;
     private UserPointDTO point;
     private Integer usePoints;
-
 }

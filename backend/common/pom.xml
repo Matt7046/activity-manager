@@ -11,17 +11,12 @@
         <version>1.0</version>
     </parent>
 
-    <groupId>com.activityManager</groupId>
     <artifactId>common</artifactId>
-    <version>1.0</version>
+    <version>${common.module.version}</version>
     <packaging>jar</packaging>
 
     <name>Common Module</name>
     <description>Modulo contenente DTO, mapper, eccezioni e classi condivise</description>
-
-    <properties>
-        <java.version>17</java.version>
-    </properties>
 
     <repositories>
         <repository>
@@ -31,45 +26,43 @@
     </repositories>
 
     <dependencies>
-
-        <!-- Spring AMQP -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
-            <version>3.1.0</version>
         </dependency>
-
-
-        <!-- JavaMail API -->
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
-            <version>1.6.2</version>
         </dependency>
-
-        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Cloudinary per upload immagini -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.cloudinary</groupId>
             <artifactId>cloudinary-http44</artifactId>
-            <version>1.34.0</version>
         </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Disabilita il repackage per questo modulo -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.4.0</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>

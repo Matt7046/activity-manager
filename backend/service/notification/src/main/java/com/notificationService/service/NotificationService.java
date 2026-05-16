@@ -1,7 +1,7 @@
 package com.notificationService.service;
 
 import com.common.data.notification.Notification;
-import com.common.mapper.NotificationMapper;
+import com.notificationService.mapper.NotificationMapper;
 import com.notificationService.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;

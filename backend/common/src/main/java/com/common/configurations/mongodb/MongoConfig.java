@@ -114,7 +114,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
         );
     }
 
-    public static PrivateKey loadPrivateKey(String pathToKeyFile) throws Exception {
+    public PrivateKey loadPrivateKey(String pathToKeyFile) throws Exception {
         // Leggi il contenuto del file della chiave privata
         FileInputStream keyFile = new FileInputStream(pathToKeyFile);
         byte[] keyBytes = new byte[keyFile.available()];

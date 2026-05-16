@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.common.dto.family.LogFamilyDTO;
+import com.userPointService.dto.family.LogFamilyDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.dto.user.UserPointDTO;
 

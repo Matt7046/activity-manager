@@ -1,4 +1,6 @@
-package com.common.dto.structure;
+package com.activityService.dto;
+
+import com.common.dto.structure.Choice;
 
 import java.util.List;
 

@@ -7,7 +7,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import com.common.data.user.UserPoint;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,32 +15,30 @@ public abstract class UserPointMapper {
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
-    // Da Entity a DTO
+
     public abstract UserPointDTO toDTO(UserPoint points);
 
-    // Da DTO a Entity
     public abstract UserPoint fromDTO(UserPointDTO userPointDto);
 
     public abstract List<UserPointDTO> toDTO(List<UserPoint> points);
 
-    // Da DTO a Entity
     public abstract List<UserPoint> fromDTO(List<UserPointDTO> userPointDto);
 
     @AfterMapping
     protected void decryptField(UserPoint point, @MappingTarget UserPointDTO dto) {
-        if (dto.getEmail() != null) {
+        if (point.getEmail() != null && !point.getEmail().isBlank()) {
             dto.setEmail(encryptDecryptConverter.decrypt(point.getEmail()));
         }
-        if (dto.getEmailUserCurrent() != null) {
+        if (point.getEmailUserCurrent() != null && !point.getEmailUserCurrent().isBlank()) {
             dto.setEmailUserCurrent(encryptDecryptConverter.decrypt(point.getEmailUserCurrent()));
         }
-        if (dto.getEmailChild() != null) {
+        if (point.getEmailChild() != null && !point.getEmailChild().isBlank()) {
             dto.setEmailChild(encryptDecryptConverter.decrypt(point.getEmailChild()));
         }
-        if (dto.getPassword() != null) {
+        if (point.getPassword() != null && !point.getPassword().isBlank()) {
             dto.setPassword(encryptDecryptConverter.decrypt(point.getPassword()));
         }
-        if (dto.getEmailFigli() != null) {
+        if (point.getEmailFigli() != null) {
             dto.setEmailFigli(
                     point.getEmailFigli().stream().map(encryptDecryptConverter::decrypt).collect(Collectors.toList()));
         }
@@ -49,22 +46,21 @@ public abstract class UserPointMapper {
 
     @AfterMapping
     protected void encryptField(UserPointDTO dto, @MappingTarget UserPoint point) {
-        if (point.getEmail() != null) {
+        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
             point.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
         }
-        if (point.getEmailChild() != null) {
+        if (dto.getEmailChild() != null && !dto.getEmailChild().isBlank()) {
             point.setEmailChild(encryptDecryptConverter.convert(dto.getEmailChild()));
         }
-        if (point.getEmailUserCurrent() != null) {
+        if (dto.getEmailUserCurrent() != null && !dto.getEmailUserCurrent().isBlank()) {
             point.setEmailUserCurrent(encryptDecryptConverter.convert(dto.getEmailUserCurrent()));
         }
-        if (point.getPassword() != null) {
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             point.setPassword(encryptDecryptConverter.convert(dto.getPassword()));
         }
-        if (point.getEmailFigli() != null) {
+        if (dto.getEmailFigli() != null) {
             point.setEmailFigli(
-                    point.getEmailFigli().stream().map(encryptDecryptConverter::convert).collect(Collectors.toList()));
+                    dto.getEmailFigli().stream().map(encryptDecryptConverter::convert).collect(Collectors.toList()));
         }
-
     }
 }

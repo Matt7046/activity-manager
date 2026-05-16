@@ -11,10 +11,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.common.configurations.encrypt",   
         "com.common.configurations.rabbitmq",
         "com.common.configurations.structure",
-        "com.common.mapper",  
         "com.common.data",
+        "com.imageService.dto",
         "com.common.dto",
-        "com.common.structure"
+        "com.common.structure",
+        "com.common.user"
 })
 public class ImageApplication {
 

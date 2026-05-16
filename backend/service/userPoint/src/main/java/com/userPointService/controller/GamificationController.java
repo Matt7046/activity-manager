@@ -1,6 +1,6 @@
 package com.userPointService.controller;
 
-import com.common.dto.gamification.FavoriteDTO;
+import com.userPointService.dto.gamification.FavoriteDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.security.ReactiveJwt;
 import com.userPointService.processor.GamificationProcessor;

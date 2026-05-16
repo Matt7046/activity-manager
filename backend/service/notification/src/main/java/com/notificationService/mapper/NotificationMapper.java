@@ -1,4 +1,4 @@
-package com.common.mapper;
+package com.notificationService.mapper;
 
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.notification.Notification;
@@ -13,11 +13,10 @@ public abstract class NotificationMapper {
 
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
-    // Da Entity a DTO
+
     public abstract NotificationDTO toDTO(Notification notification);
 
-    // Da DTO a Entity
-    public abstract Notification fromDTO(NotificationDTO ActivityDto);
+    public abstract Notification fromDTO(NotificationDTO activityDto);
 
     @AfterMapping
     protected void decryptEmail(Notification notification, @MappingTarget NotificationDTO dto) {
@@ -39,6 +38,3 @@ public abstract class NotificationMapper {
         }
     }
 }
-
-
-

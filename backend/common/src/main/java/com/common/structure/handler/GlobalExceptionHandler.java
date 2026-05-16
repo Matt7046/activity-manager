@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.common.structure.status.ActivityHttpStatus;
 import com.common.structure.exception.ArithmeticCustomException;
+import com.common.structure.exception.BadRequestException;
 import com.common.structure.exception.DecryptException;
 import com.common.structure.exception.ForbiddenException;
 import com.common.structure.exception.NotFoundException;
@@ -54,6 +55,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ResponseDTO> handleBadRequestException(BadRequestException ex) {
+        List<String> error = new ArrayList<>();
+        error.add(ex.getMessage());
+        ResponseDTO errorResponse = new ResponseDTO(null, ActivityHttpStatus.BAD_REQUEST.value(), error);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ResponseDTO>  handleAllExceptions(Exception ex) {

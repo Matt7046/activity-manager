@@ -4,7 +4,7 @@ import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.notification.Notification;
 import com.common.dto.notification.NotificationDTO;
 import com.common.dto.structure.ResponseDTO;
-import com.common.mapper.NotificationMapper;
+import com.notificationService.mapper.NotificationMapper;
 import com.common.security.ResourceAccessClient;
 import com.common.structure.exception.ForbiddenException;
 import com.common.structure.messages.ForbiddenMessages;

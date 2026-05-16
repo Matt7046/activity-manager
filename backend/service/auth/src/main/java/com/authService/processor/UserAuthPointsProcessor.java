@@ -2,8 +2,8 @@ package com.authService.processor;
 
 import com.authService.service.AuthService;
 import com.common.configurations.structure.JwtUtil;
-import com.common.dto.auth.LoginRequest;
-import com.common.dto.auth.LoginResponse;
+import com.authService.dto.LoginRequest;
+import com.authService.dto.LoginResponse;
 import com.common.dto.structure.ResponseDTO;
 import com.common.structure.messages.UnauthorizedMessages;
 import com.common.structure.status.ActivityHttpStatus;

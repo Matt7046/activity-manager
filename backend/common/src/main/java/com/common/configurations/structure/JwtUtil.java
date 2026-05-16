@@ -20,19 +20,18 @@ public class JwtUtil {
             throw new IllegalArgumentException("Email utente obbligatoria per il token.");
         }
         return Jwts.builder()
-                .setSubject(subject)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 ora
+                .subject(subject)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(propertiesKey.getSecretKey())
                 .compact();
     }
 
-    // Metodo per validare il token
-    public  Claims validateToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey((propertiesKey.getSecretKey())) // Usa la stessa chiave per la validazione
+    public Claims validateToken(String token) {
+        return Jwts.parser()
+                .verifyWith(propertiesKey.getSecretKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody(); // Estrai il corpo del token
+                .parseSignedClaims(token)
+                .getPayload();
     }
 }

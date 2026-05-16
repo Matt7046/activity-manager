@@ -15,7 +15,7 @@ public enum OperationTypeLogFamily {
         return value;
     }
 
-    public static OperationTypeLogFamily fromValue(Integer code) {
+    public  OperationTypeLogFamily fromValue(Integer code) {
         for (OperationTypeLogFamily op : values()) {
             if (op.value() == code) {
                 return op;

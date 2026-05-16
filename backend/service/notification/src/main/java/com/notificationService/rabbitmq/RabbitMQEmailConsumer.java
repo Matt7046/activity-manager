@@ -37,7 +37,7 @@ public class RabbitMQEmailConsumer {
         }
     }
 
-    private static void nackSafely(Channel channel, long tag) {
+    private void nackSafely(Channel channel, long tag) {
         try {
             if (channel.isOpen()) {
                 channel.basicNack(tag, false, false);

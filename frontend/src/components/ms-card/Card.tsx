@@ -12,7 +12,7 @@ import {
 import Grid from '@mui/material/Grid2';
 import { observer } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { IMAGE } from '../../general/structure/Constant';
+import { cloudinaryImageDeliveryUrl } from '../../general/structure/userPointImageSlots';
 import { imageExtensionFromFile, prepareImageForUpload } from '../../general/structure/imageUpload';
 import './Card.css'; // <-- Import del CSS
 
@@ -60,7 +60,7 @@ const CardComponent = observer((props: CardProps) => {
   const propsCard = { ...props };
   useEffect(() => {
     if (propsCard.img) {
-      setImage(IMAGE.SERVER + propsCard.img);
+      setImage(cloudinaryImageDeliveryUrl(propsCard.img));
     }
   }, [propsCard.img]);
 
@@ -107,7 +107,7 @@ const CardComponent = observer((props: CardProps) => {
       formData.append("extension", extension);
       // Passa l'oggetto imageDTO alla funzione loadImage
       loadImage(formData).then(url => {
-        setImage(IMAGE.SERVER + url);
+        setImage(cloudinaryImageDeliveryUrl(url));
       })
     } else {
       alert("Seleziona un file prima di inviare.");

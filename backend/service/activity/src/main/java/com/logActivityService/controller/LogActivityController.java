@@ -1,7 +1,7 @@
 package com.logActivityService.controller;
 
 import com.common.dto.user.UserPointDTO;
-import com.common.dto.activity.LogActivityDTO;
+import com.activityService.dto.LogActivityDTO;
 import com.common.security.ReactiveJwt;
 import com.logActivityService.processor.LogActivityProcessor;
 import com.common.dto.structure.ResponseDTO;

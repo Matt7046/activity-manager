@@ -3,6 +3,7 @@ package com.userPointService.service;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.user.FiglioLink;
 import com.common.data.user.UserPoint;
+import com.common.user.UserPointImageSlots;
 import com.common.structure.exception.ArithmeticCustomException;
 import com.common.structure.exception.ForbiddenException;
 import com.common.structure.exception.NotFoundException;
@@ -34,6 +35,8 @@ public class UserPointService {
     private ArithmeticMessages arithmeticMessages;
     @Autowired
     private NotFoundMessages notFoundMessages;
+    @Autowired
+    private UserPointImageSlots userPointImageSlots;
 
     public List<UserPoint> findAll() {
         return userPointRepository.findAll();
@@ -257,29 +260,30 @@ public class UserPointService {
     }
 
     public UserPoint saveUserImage(UserPoint userPoint) {
-
-        UserPoint existingUserPoint = userPointRepository.findUserByEmail(userPoint.getEmailChild());
+        String childEmail = userPoint.getEmailChild() != null && !userPoint.getEmailChild().isBlank()
+                ? userPoint.getEmailChild()
+                : userPoint.getEmail();
+        UserPoint existingUserPoint = userPointRepository.findUserByEmail(childEmail);
+        if (existingUserPoint == null) {
+            return userPoint;
+        }
         UserPoint updatedPoints = ovverideNameImage(userPoint, existingUserPoint);
         return userPointRepository.save(updatedPoints);
     }
 
     public Map<String, String> resolveNameImagesBySlot(UserPoint point) {
-        return Map.copyOf(mutableImagesBySlot(point));
+        LinkedHashMap<String, String> normalized = new LinkedHashMap<>();
+        userPointImageSlots.trimToAllowedSlots(mutableImagesBySlot(point))
+                .forEach((slot, path) -> normalized.put(slot, userPointImageSlots.normalizeStoragePath(path)));
+        return Map.copyOf(normalized);
     }
 
-    private static String sanitizeImageCardId(String raw) {
-        if (raw == null || raw.isBlank()) {
-            return "";
-        }
-        return raw.trim().replace("$", "_").replace(".", "_");
-    }
-
-    private static LinkedHashMap<String, String> mutableImagesBySlot(UserPoint point) {
+    private LinkedHashMap<String, String> mutableImagesBySlot(UserPoint point) {
         LinkedHashMap<String, String> m = new LinkedHashMap<>();
         if (point.getImagesBySlot() != null) {
             point.getImagesBySlot().forEach((k, v) -> {
                 if (k != null && !k.isBlank() && v != null && !v.isBlank()) {
-                    m.put(k, v);
+                    m.put(userPointImageSlots.sanitizeSlotId(k), v);
                 }
             });
         }
@@ -287,21 +291,18 @@ public class UserPointService {
     }
 
     private UserPoint ovverideNameImage(UserPoint userPointSave, UserPoint point) {
-        if (!userPointSave.getEmail().equals(point.getEmail())) {
-            return point;
-        }
         String newPath = userPointSave.getNameImage();
         if (newPath == null || newPath.isBlank()) {
             return point;
         }
 
-        String cardId = sanitizeImageCardId(userPointSave.getImageCardId());
-        if (cardId.isEmpty()) {
+        String cardId = userPointImageSlots.sanitizeSlotId(userPointSave.getImageCardId());
+        if (!userPointImageSlots.isAllowedSlot(cardId)) {
             return point;
         }
         LinkedHashMap<String, String> map = mutableImagesBySlot(point);
-        map.put(cardId, newPath);
-        point.setImagesBySlot(map);
+        map.put(cardId, userPointImageSlots.normalizeStoragePath(newPath));
+        point.setImagesBySlot(userPointImageSlots.trimToAllowedSlots(map));
         return point;
     }
 

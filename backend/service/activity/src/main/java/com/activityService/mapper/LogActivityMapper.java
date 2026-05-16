@@ -1,9 +1,9 @@
-package com.common.mapper;
+package com.activityService.mapper;
 
+import com.activityService.dto.ActivityDTO;
+import com.activityService.dto.LogActivityDTO;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.activity.LogActivity;
-import com.common.dto.activity.ActivityDTO;
-import com.common.dto.activity.LogActivityDTO;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,19 +13,14 @@ public abstract class LogActivityMapper {
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
-    // Mappatura di base ignorando il campo _id
-    @Mapping(target = "_id", ignore = true) // Ignora il campo _id
-    @Mapping(target = "logAttivita", ignore = true) // Inizialmente ignoriamo attivitaSvolte
+    @Mapping(target = "_id", ignore = true)
+    @Mapping(target = "logAttivita", ignore = true)
     abstract ActivityDTO toCastDTO(LogActivity logAttivita);
 
-      // Da Entity a DTO
     public abstract LogActivityDTO toDTO(LogActivity logAttivita);
-    
 
-    // Da DTO a Entity
     public abstract LogActivity fromDTO(LogActivityDTO logAttivitaDto);
 
-    // Metodo per trasformare "attivitaSvolte" e popolare il DTO
     @AfterMapping
     void decryptEmail(@MappingTarget LogActivityDTO dto, LogActivity entity) {
         if (entity.getEmail() != null) {
@@ -39,5 +34,4 @@ public abstract class LogActivityMapper {
             entity.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
         }
     }
-
 }

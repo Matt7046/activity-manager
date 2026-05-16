@@ -17,10 +17,13 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
     "com.common.configurations.encrypt",   
     "com.common.configurations.rabbitmq",
     "com.common.configurations.structure",
-    "com.common.mapper",  
+    "com.common.mapper",
+    "com.userPointService.dto",
+    "com.userPointService.mapper",
     "com.common.data",
     "com.common.dto",
-    "com.common.structure"
+    "com.common.structure",
+    "com.common.user"
 })
 public class UserPointApplication {
 

@@ -1,7 +1,7 @@
 package com.activityService.service;
 
 import com.common.data.activity.event.ActivityCreateEvent;
-import com.common.dto.structure.GPTResponse;
+import com.activityService.dto.GPTResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +107,7 @@ public class ActivityWebAIService {
         log.error("[OpenAI] errore imprevisto ({}): {}", error.getClass().getSimpleName(), error.getMessage(), error);
     }
 
-    private static String safeResponseBody(WebClientResponseException w) {
+    private  String safeResponseBody(WebClientResponseException w) {
         try {
             return w.getResponseBodyAsString(StandardCharsets.UTF_8);
         } catch (Exception e) {
@@ -115,7 +115,7 @@ public class ActivityWebAIService {
         }
     }
 
-    private static String truncateForLog(String s, int max) {
+    private  String truncateForLog(String s, int max) {
         if (s == null || s.isEmpty()) {
             return "";
         }

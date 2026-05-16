@@ -16,7 +16,7 @@ RUN mvn -pl service/userPoint -am -DskipTests package
 # STAGE 2: Runtime
 FROM mcr.microsoft.com/openjdk/jdk:17-azurelinux
 WORKDIR /app
-# Copia il JAR generato (modifica il nome se necessario)
-COPY --from=build /app/service/userPoint/target/user-point-service-1.0.0.jar app.jar
+# JAR eseguibile (classifier exec da spring-boot-maven-plugin); il .jar senza -exec è thin per dipendenze Maven
+COPY --from=build /app/service/userPoint/target/user-point-service-1.0.0-exec.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
