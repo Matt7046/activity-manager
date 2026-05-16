@@ -21,7 +21,7 @@ const DEMO_ACCOUNTS_NO_PASSWORD_CHANGE = new Set(
   ["user@simulated.com", "child@simulated.com"].map((e) => e.toLowerCase())
 );
 
-function isDemoAccountBlockingPasswordChange(email: string | undefined): boolean {
+const isDemoAccountBlockingPasswordChange = (email: string | undefined): boolean => {
   if (!email) return false;
   return DEMO_ACCOUNTS_NO_PASSWORD_CHANGE.has(email.trim().toLowerCase());
 }
@@ -80,7 +80,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
       return;
     }
 
-    const payload =  {...user, password};
+    const payload = { ...user, password };
     savePassword(payload, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
       .then((response: ResponseI | undefined) => {
         if (response?.status === HttpStatus.OK) {
@@ -172,40 +172,40 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
                   <Trans id="cambio_password_account" />
                 </Typography>
                 <Box className="settings-password-wrap">
-                <TextField
-                  className="settings-textfield settings-password-textfield"
-                  id="settings-new-password"
-                  label={i18n._("nuova_password")}
-                  type={showPassword ? "text" : "password"}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  disabled={demoPasswordBlocked}
-                  autoComplete="new-password"
-                  helperText={
-                    demoPasswordBlocked
-                      ? i18n._("settings_password_demo_disabled")
-                      : i18n._("settings_password_min_hint")
-                  }
-                  InputLabelProps={{ shrink: true }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment className="settings-password-adornment" position="end">
-                        <IconButton
-                          aria-label={showPassword ? i18n._("nascondi_password") : i18n._("mostra_password")}
-                          onClick={() => setShowPassword((v) => !v)}
-                          edge="end"
-                          size="small"
-                          disabled={demoPasswordBlocked}
-                        >
-                          {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
+                  <TextField
+                    className="settings-textfield settings-password-textfield"
+                    id="settings-new-password"
+                    label={i18n._("nuova_password")}
+                    type={showPassword ? "text" : "password"}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    disabled={demoPasswordBlocked}
+                    autoComplete="new-password"
+                    helperText={
+                      demoPasswordBlocked
+                        ? i18n._("settings_password_demo_disabled")
+                        : i18n._("settings_password_min_hint")
+                    }
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment className="settings-password-adornment" position="end">
+                          <IconButton
+                            aria-label={showPassword ? i18n._("nascondi_password") : i18n._("mostra_password")}
+                            onClick={() => setShowPassword((v) => !v)}
+                            edge="end"
+                            size="small"
+                            disabled={demoPasswordBlocked}
+                          >
+                            {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
                 </Box>
               </Box>
             </Box>

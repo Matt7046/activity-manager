@@ -3,7 +3,7 @@ package com.authService.controller;
 import com.authService.processor.UserAuthPointsProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.common.dto.structure.ResponseDTO;
-import com.common.dto.auth.LoginRequest;
+import com.authService.dto.LoginRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

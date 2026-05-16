@@ -1,8 +1,8 @@
-package com.common.mapper;
+package com.userPointService.mapper;
 
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.family.LogFamily;
-import com.common.dto.family.LogFamilyDTO;
+import com.userPointService.dto.family.LogFamilyDTO;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -12,16 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class LogFamilyMapper {
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
-    // Da Entity a DTO
-    public abstract LogFamilyDTO toDTO(LogFamily logFamily);
-    
 
-    // Da DTO a Entity
+    public abstract LogFamilyDTO toDTO(LogFamily logFamily);
+
     public abstract LogFamily fromDTO(LogFamilyDTO logFamilyDTO);
 
     @AfterMapping
     void decryptEmail(@MappingTarget LogFamilyDTO dto, LogFamily entity) {
-
         if (entity.getReceivedByEmail() != null) {
             dto.setReceivedByEmail(encryptDecryptConverter.decrypt(entity.getReceivedByEmail()));
         }
@@ -40,6 +37,3 @@ public abstract class LogFamilyMapper {
         }
     }
 }
-
-
-

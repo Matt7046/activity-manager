@@ -14,7 +14,7 @@ public enum StatusUserPoint{
         return value;
     }
 
-    public static StatusUserPoint fromValue(Integer code) {
+    public  StatusUserPoint fromValue(Integer code) {
         for (StatusUserPoint op : values()) {
             if (op.value() == code) {
                 return op;

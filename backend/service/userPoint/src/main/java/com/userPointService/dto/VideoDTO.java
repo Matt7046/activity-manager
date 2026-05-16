@@ -1,4 +1,4 @@
-package com.common.dto.structure;
+package com.userPointService.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

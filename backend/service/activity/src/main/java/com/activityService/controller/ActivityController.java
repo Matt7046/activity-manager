@@ -2,7 +2,7 @@ package com.activityService.controller;
 
 import com.activityService.processor.ActivityCommandProcessor;
 import com.activityService.processor.ActivityQueryProcessor;
-import com.common.dto.activity.ActivityDTO;
+import com.activityService.dto.ActivityDTO;
 import com.common.dto.user.UserPointDTO;
 import com.common.dto.structure.ResponseDTO;
 import org.springframework.web.bind.annotation.RequestMapping;

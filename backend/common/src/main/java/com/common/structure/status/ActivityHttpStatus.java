@@ -8,6 +8,7 @@ public enum ActivityHttpStatus {
     DECRYPT(1),
     ARITHMETIC(2),
     OK(200),
+    BAD_REQUEST(400),
     INTERNAL_SERVER_ERROR(500),
     DATABASE_ERROR(401),
     FORBIDDEN(403);
@@ -18,7 +19,7 @@ public enum ActivityHttpStatus {
         return value;
     }
 
-    public static ActivityHttpStatus fromValue(Integer code) {
+    public  ActivityHttpStatus fromValue(Integer code) {
         for (ActivityHttpStatus op : values()) {
             if (op.value() == code) {
                 return op;

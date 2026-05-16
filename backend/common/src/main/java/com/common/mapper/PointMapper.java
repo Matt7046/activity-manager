@@ -5,6 +5,7 @@ import com.common.dto.auth.Point;
 import com.common.dto.user.PointDTO;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,36 +14,29 @@ public abstract class PointMapper {
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
-    // Da Entity a DTO
-    public abstract PointDTO toDTO(Point points);
+    @Mapping(target = "nameImage", ignore = true)
+    public abstract PointDTO toDTO(Point point);
 
-
-    // Da DTO a Entity
-    public abstract Point fromDTO(PointDTO userPointDto);
-
+    @Mapping(target = "nameImages", ignore = true)
+    public abstract Point fromDTO(PointDTO dto);
 
     @AfterMapping
     protected void decryptField(Point point, @MappingTarget PointDTO dto) {
-        if (dto.getEmail() != null) {
+        if (point.getEmail() != null && !point.getEmail().isBlank()) {
             dto.setEmail(encryptDecryptConverter.decrypt(point.getEmail()));
         }
-        if (dto.getPassword() != null) {
+        if (point.getPassword() != null && !point.getPassword().isBlank()) {
             dto.setPassword(encryptDecryptConverter.decrypt(point.getPassword()));
         }
     }
 
     @AfterMapping
-    protected void decryptField(PointDTO dto, @MappingTarget Point point) {
-        if (point.getEmail() != null) {
+    protected void encryptField(PointDTO dto, @MappingTarget Point point) {
+        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
             point.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
         }
-        if (point.getPassword() != null) {
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             point.setPassword(encryptDecryptConverter.convert(dto.getPassword()));
         }
     }
 }
-
-
-
-
-

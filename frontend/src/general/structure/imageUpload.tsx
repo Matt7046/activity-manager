@@ -3,7 +3,7 @@ const MAX_DIMENSION = 1200;
 const JPEG_QUALITY = 0.85;
 const SKIP_RESIZE_BELOW_BYTES = 600_000;
 
-export async function prepareImageForUpload(file: File): Promise<File> {
+export const prepareImageForUpload = async (file: File): Promise<File> => {
   if (!file.type.startsWith("image/") || file.size < SKIP_RESIZE_BELOW_BYTES) {
     return file;
   }
@@ -56,7 +56,7 @@ export async function prepareImageForUpload(file: File): Promise<File> {
   });
 }
 
-export function imageExtensionFromFile(file: File): string {
+export const imageExtensionFromFile = (file: File): string => {
   const dot = file.name.lastIndexOf(".");
   if (dot > 0 && dot < file.name.length - 1) {
     const ext = file.name.substring(dot).toLowerCase();

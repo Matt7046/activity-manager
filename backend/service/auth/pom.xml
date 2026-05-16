@@ -1,37 +1,29 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
+
     <modelVersion>4.0.0</modelVersion>
 
-   <groupId>com.activityManager</groupId>
+    <parent>
+        <groupId>com.activityManager</groupId>
+        <artifactId>activityManager</artifactId>
+        <version>1.0</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
     <artifactId>auth-service</artifactId>
-    <version>1.0.0</version>
+    <version>${service.module.version}</version>
     <packaging>jar</packaging>
 
     <name>Auth Service</name>
     <description>Microservizio di autenticazione</description>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-
-    <properties>
-        <java.version>17</java.version>
-    </properties>
-
     <dependencies>
-      <dependency>
-        <groupId>com.activityManager</groupId>
-        <artifactId>common</artifactId>
-        <version>1.0</version>
-      </dependency>
-
-        <!-- Dipendenze di base -->
+        <dependency>
+            <groupId>com.activityManager</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
@@ -39,42 +31,40 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
-            <version>3.1.0</version>
         </dependency>
-
-         <!-- Per serializzazione/deserializzazione JSON -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-
-        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-            <version>3.1.0</version>
-            <configuration>
-                <mainClass>com.AuthApplication</mainClass>
-            </configuration>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>repackage</goal> <!-- Questo è fondamentale -->
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-    </plugins>
-</build>
 
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.AuthApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

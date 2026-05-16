@@ -2,13 +2,18 @@
 import { useLingui } from "@lingui/react";
 import { Box } from "@mui/material";
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps, CardText } from "../../components/ms-card/Card";
 import { POINTS_UPDATED_EVENT } from "../../components/ms-video-grid/MsVideoGrid";
 import { upload } from '../../general/service/ImageService';
 import { ButtonName, HttpStatus } from "../../general/structure/Constant";
+import {
+  cloudinaryImageDeliveryUrl,
+  cloudinaryPathFromUploadUrl,
+  userPointImagePublicId,
+} from "../../general/structure/userPointImageSlots";
 import { getDateStringRegularFormat, navigateRouting, ResponseI, showMessage, UserI } from "../../general/structure/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { getLogActivityByEmail } from "../page-activity/service/LogActivityService";
@@ -44,7 +49,12 @@ const UserPointContent: React.FC<PointsContentProps> = ({
   const [cardData, setCardData] = useState<CardProps[]>([]);
   const [changePoint, setChangePoint] = useState<boolean>(false);
   const [nameImage, setNameImage] = useState<NameImageI[]>([]);
+  const nameImageRef = useRef<NameImageI[]>([]);
   const cardsDataId: string[] = ["0", "1", "2"];
+
+  useEffect(() => {
+    nameImageRef.current = nameImage;
+  }, [nameImage]);
 
   useEffect(() => {
     getLogAttivita(user, false).then((response: void) => {
@@ -96,19 +106,44 @@ const UserPointContent: React.FC<PointsContentProps> = ({
   };
 
   const saveImage = (imageCardId: string, image: FormData): Promise<string> => {
+    const childEmail = user.emailChild || user.email;
+    const publicId = userPointImagePublicId(childEmail, imageCardId);
+    image.append("nameImage", publicId);
+    image.append("imageCardId", imageCardId);
+    image.append("email", childEmail);
+
     return upload(image, () => showMessage(alertConfig.setOpen, alertConfig.setMessage)).then((response) => {
-      const url = response?.jsonText.url;
-      const fileName = url.substring(url.lastIndexOf('upload/'));
+      const url = response?.jsonText?.url as string | undefined;
+      if (!url) {
+        throw new Error("Risposta upload senza URL");
+      }
+      const storagePath = cloudinaryPathFromUploadUrl(url);
+      const deliveryUrl = cloudinaryImageDeliveryUrl(storagePath);
       const payload: UserPointsI = {
-        email: user.emailChild,
-        emailChild: user.emailChild,
+        email: childEmail,
+        emailChild: childEmail,
         emailUserCurrent: user.emailUserCurrent,
-        nameImage: fileName,
+        nameImage: storagePath,
         imageCardId,
       };
       return saveUserImage(payload, () => showMessage(alertConfig.setOpen, alertConfig.setMessage)).then(() => {
-        setChangePoint(!changePoint);
-        return fileName;
+        const slotIndex = cardsDataId.indexOf(imageCardId);
+        if (slotIndex >= 0) {
+          const next = [...nameImageRef.current];
+          while (next.length < cardsDataId.length) {
+            next.push({ name: "" });
+          }
+          next[slotIndex] = { name: storagePath };
+          nameImageRef.current = next;
+          setNameImage(next);
+          setCardData((prev) =>
+            prev.map((card) =>
+              card._id === imageCardId ? { ...card, img: storagePath } : card
+            )
+          );
+        }
+        setLogCard((prev) => !prev);
+        return deliveryUrl;
       });
     });
   };
@@ -134,8 +169,6 @@ const UserPointContent: React.FC<PointsContentProps> = ({
       }
     })
   }
-
-
 
   const getLogFamily = (userI: UserI, openDialog: boolean): Promise<void> => {
     const emailFind = user.emailChild;
@@ -186,13 +219,16 @@ const UserPointContent: React.FC<PointsContentProps> = ({
       if (response) {
         if (response.status === HttpStatus.OK) {
           const bySlot: Record<string, string> = response.jsonText.nameImagesBySlot ?? {};
-          const urlForCard = (id: string) => bySlot[id]?.trim() ?? '';
+          const pathForSlot = (id: string) => (bySlot[id] ?? "").trim();
 
-          let nameImage: NameImageI[] = cardsDataId.map((id) => ({ name: urlForCard(id) }));
-          setNameImage(nameImage);
-          while (nameImage.length < 3) {
-            nameImage.push({ name: '' });
-          }
+          const mergedForCards: NameImageI[] = cardsDataId.map((id, index) => {
+            const fromServer = pathForSlot(id);
+            const previous = nameImageRef.current[index]?.name?.trim() ?? "";
+            return { name: fromServer || previous };
+          });
+          setNameImage(mergedForCards);
+
+          const imgForSlot = (index: number) => mergedForCards[index]?.name ?? "";
 
           const CardTextAlign: any = {
             textLeft: i18n._("numero_punti") + response.jsonText.points
@@ -237,7 +273,7 @@ const UserPointContent: React.FC<PointsContentProps> = ({
             {
               _id: cardsDataId[0],
               text: cardText1,
-              img: nameImage[0].name,
+              img: imgForSlot(0),
               title: i18n._("punti_caps_lock"),
               loadImage: (image: FormData) => saveImage(cardsDataId[0], image),
               children: renderChildren1(),
@@ -246,7 +282,7 @@ const UserPointContent: React.FC<PointsContentProps> = ({
 
               _id: cardsDataId[1],
               text: cardText2,
-              img: nameImage[1].name,
+              img: imgForSlot(1),
               title: i18n._("log_attivita"),
               loadImage: (image: FormData) => saveImage(cardsDataId[1], image),
               children: renderChildren2(),
@@ -255,7 +291,7 @@ const UserPointContent: React.FC<PointsContentProps> = ({
 
               _id: cardsDataId[2],
               text: cardText3,
-              img: nameImage[2].name,
+              img: imgForSlot(2),
               title: i18n._("log_famiglia"),
               loadImage: (image: FormData) => saveImage(cardsDataId[2], image),
               children: renderChildren3(),

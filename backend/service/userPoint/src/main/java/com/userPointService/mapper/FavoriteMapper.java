@@ -1,23 +1,21 @@
-package com.common.mapper;
+package com.userPointService.mapper;
 
+import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.data.gamification.Favorite;
+import com.common.security.EmailNormalization;
+import com.userPointService.dto.gamification.FavoriteDTO;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.common.configurations.encrypt.EncryptDecryptConverter;
-import com.common.data.gamification.Favorite;
-import com.common.dto.gamification.FavoriteDTO;
-import com.common.security.EmailNormalization;
 
 @Mapper(componentModel = "spring")
 public abstract class FavoriteMapper {
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
-    // Da Entity a DTO
     public abstract FavoriteDTO toDTO(Favorite favorite);
 
-    // Da DTO a Entity
     public abstract Favorite fromDTO(FavoriteDTO favoriteDTO);
 
     @AfterMapping

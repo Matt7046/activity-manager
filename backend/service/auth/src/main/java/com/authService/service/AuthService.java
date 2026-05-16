@@ -1,6 +1,6 @@
 package com.authService.service;
 
-import com.common.dto.auth.LoginRequest;
+import com.authService.dto.LoginRequest;
 import com.common.dto.structure.ResponseDTO;
 import com.common.dto.user.UserPointDTO;
 import com.fasterxml.jackson.databind.JsonNode;

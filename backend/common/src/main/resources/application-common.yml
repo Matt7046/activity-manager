@@ -148,6 +148,10 @@ message:
       negative-points: "?lang?arithmetic_negative_points?lang?"
     decrypt:
       operation-failed: "?lang?decrypt_operation_failed?lang?"
+    image:
+      upload-slot-required: "?lang?image_upload_slot_required?lang?"
+      upload-slot-invalid: "?lang?image_upload_slot_invalid?lang?"
+      upload-email-missing: "?lang?image_upload_email_missing?lang?"
     http:
       generic: "?lang?errore_http?lang?"
     unauthorized:

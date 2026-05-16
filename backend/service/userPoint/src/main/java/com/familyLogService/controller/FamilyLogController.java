@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.common.dto.family.LogFamilyDTO;
+import com.userPointService.dto.family.LogFamilyDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.dto.user.UserPointDTO;
 import com.common.security.ReactiveJwt;

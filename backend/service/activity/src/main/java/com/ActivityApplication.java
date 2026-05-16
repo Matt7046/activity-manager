@@ -15,7 +15,9 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
         "com.common.configurations.encrypt",   
         "com.common.configurations.rabbitmq",
         "com.common.configurations.structure",
-        "com.common.mapper",  
+        "com.common.mapper",
+        "com.activityService.dto",
+        "com.activityService.mapper",
         "com.common.data",
         "com.common.dto",
         "com.common.structure"

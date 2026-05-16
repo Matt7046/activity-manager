@@ -5,7 +5,7 @@ import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.configurations.rabbitmq.RabbitMQSearchPublisher;
 import com.common.data.activity.Activity;
 import com.common.data.activity.event.ActivityCreateEvent;
-import com.common.dto.activity.ActivityDTO;
+import com.activityService.dto.ActivityDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.security.ResourceAccessClient;
 import com.common.structure.status.ActivityHttpStatus;
