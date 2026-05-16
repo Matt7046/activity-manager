@@ -31,9 +31,11 @@ public class EmailProcessor {
     public Mono<ResponseDTO> sendPasswordEmailChild(UserPointWithChildDTO userPointDTO) {
         return Mono.fromCallable(() -> {
             UserPoint userPoint = userPointMapper.fromDTO(userPointDTO.getUserPoint());
-            List<UserPoint> userChild = userPointDTO.getUserPointChild().stream()
-                    .map(userPointMapper::fromDTO).collect(Collectors.toList());
-            userPoint = emailService.sendPasswordEmailChild(userPoint, userChild);
+            List<UserPointDTO> childDtos = userPointDTO.getUserPointChild();
+            List<UserPoint> userChild = childDtos == null ? List.of()
+                    : childDtos.stream().map(userPointMapper::fromDTO).collect(Collectors.toList());
+            userPoint = emailService.sendPasswordEmailChild(userPoint, userChild,
+                    userPointDTO.getAddedChildEmailsPlain());
             UserPointDTO response = userPointMapper.toDTO(userPoint);
             return new ResponseDTO(response, ActivityHttpStatus.OK.value(), new ArrayList<>());
         });

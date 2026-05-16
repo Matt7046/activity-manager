@@ -29,6 +29,7 @@
   "ricerca_video": "Video search",
   "confermi_di_voler_ricercare_i_video": "Are you sure you want to search for videos?",
   "completa_e_guadagna_punti": "Complete and earn points",
+  "gamification_no_watch_minutes": "Watch the video for at least one minute before redeeming points.",
   "aggiungi_ai_preferiti": "Add to favourites",
   "vuoi_aggiungere_questo_video_ai_preferiti": "Do you want to add this video to your favorites?",
   "guarda_video": "Watch videos",
@@ -157,6 +158,7 @@
   "settings_password_min_hint": "At least 8 characters.",
   "settings_password_min_title": "Password too short",
   "settings_password_min_length": "The password must be at least 8 characters long.",
+  "settings_password_demo_disabled": "Password change is not available for demo accounts.",
   "impostazione_profilo": "Profile Settings",
   "sicurezza_privacy": "Security and Privacy",
   "preferenze_account": "Manage your account preferences:",
@@ -263,6 +265,8 @@
   "email_duplicate_figli": "Duplicate child emails are not allowed.",
   "server_unavailable": "The server is not responding.",
   "error_generic": "An error occurred.",
+  "error_request_title": "Request error",
+  "error_request_timeout": "Request timed out. Try again with a smaller image or a better connection.",
   "forbidden_resource_missing": "Resource not found or invalid.",
   "forbidden_access_denied_resource": "You do not have permission to access this resource.",
   "forbidden_identity_missing": "User identity is missing.",
@@ -281,5 +285,8 @@
   "decrypt_operation_failed": "Could not decrypt the data.",
   "errore_http": "Communication error with the server.",
   "point_disposizione": "Available points:",
+  "parent_link_confirm_title": "Confirm parent accounts",
+  "parent_link_confirm_description": "These accounts linked you as a child. Select the ones you want to activate and confirm.",
+  "parent_link_confirm_save": "Save",
   "invalid_credentials": "Invalid credentials."
 }

@@ -157,6 +157,7 @@
   "settings_password_min_hint": "Al menos 8 caracteres.",
   "settings_password_min_title": "Contraseña demasiado corta",
   "settings_password_min_length": "La contraseña debe tener al menos 8 caracteres.",
+  "settings_password_demo_disabled": "El cambio de contraseña no está disponible para cuentas de demostración.",
   "impostazione_profilo": "Configuración de perfil",
   "sicurezza_privacy": "Seguridad y privacidad",
   "preferenze_account": "Administre las preferencias de su cuenta:",
@@ -263,6 +264,8 @@
   "email_duplicate_figli": "No se permiten correos duplicados entre los hijos.",
   "server_unavailable": "El servidor no responde.",
   "error_generic": "Se ha producido un error.",
+  "error_request_title": "Error en la solicitud",
+  "error_request_timeout": "Tiempo de espera agotado. Vuelve a intentarlo con una imagen más pequeña o mejor conexión.",
   "forbidden_resource_missing": "Recurso no encontrado o no válido.",
   "forbidden_access_denied_resource": "No tienes permiso para acceder a este recurso.",
   "forbidden_identity_missing": "Falta la identidad del usuario.",
@@ -281,5 +284,8 @@
   "decrypt_operation_failed": "Error al descifrar los datos.",
   "errore_http": "Error de comunicación con el servidor.",
   "point_disposizione": "Puntos disponibles:",
+  "parent_link_confirm_title": "Confirmar cuentas de tutor",
+  "parent_link_confirm_description": "Estas cuentas te han vinculado como hijo. Selecciona las que quieres activar y confirma.",
+  "parent_link_confirm_save": "Guardar",
   "invalid_credentials": "Credenciales no válidas."
 }

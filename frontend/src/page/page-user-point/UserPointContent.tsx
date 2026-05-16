@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { AlertConfig } from '../../components/ms-alert/Alert';
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import CardGrid, { CardProps, CardText } from "../../components/ms-card/Card";
+import { POINTS_UPDATED_EVENT } from "../../components/ms-video-grid/MsVideoGrid";
 import { upload } from '../../general/service/ImageService';
 import { ButtonName, HttpStatus } from "../../general/structure/Constant";
 import { getDateStringRegularFormat, navigateRouting, ResponseI, showMessage, UserI } from "../../general/structure/Utils";
@@ -52,6 +53,15 @@ const UserPointContent: React.FC<PointsContentProps> = ({
 
     return () => { };
   }, [inizialLoad]);
+
+  useEffect(() => {
+    const onPointsUpdated = () => {
+      setLogCard((prev) => !prev);
+      void getLogAttivita(user, false).then(() => getLogFamily(user, false));
+    };
+    window.addEventListener(POINTS_UPDATED_EVENT, onPointsUpdated);
+    return () => window.removeEventListener(POINTS_UPDATED_EVENT, onPointsUpdated);
+  }, [user]);
 
   useEffect(() => {
     if (logCard === true) {

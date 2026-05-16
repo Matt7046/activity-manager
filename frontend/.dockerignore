@@ -1,6 +1,5 @@
-# Build prod: esclude local.env (il compose locale usa .dockerignore.locale)
-local.env
-
+# Build Docker: non ignorare local.env così docker-compose.localhost (FRONTEND_USE_LOCAL_ENV=1) può copiarlo.
+# Per immagini “pulite” in CI, assicurati che local.env non sia nel contesto o non sia committato.
 node_modules
 .next
 .git

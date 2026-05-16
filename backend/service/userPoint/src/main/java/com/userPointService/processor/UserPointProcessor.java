@@ -1,8 +1,10 @@
 package com.userPointService.processor;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -64,9 +66,8 @@ public class UserPointProcessor {
             UserPoint item = userPointService.findByEmailAndType(sub.getEmailChild(), 0L);
             if (item != null) {
                 Map<String, String> bySlot = userPointService.resolveNameImagesBySlot(item);
-                List<String> orderedPaths = new ArrayList<>(bySlot.values());
                 PointRDTO record = new PointRDTO(item.getPoints(), message.concat(item.getPoints().toString()),
-                        orderedPaths, bySlot);
+                        bySlot);
                 return new ResponseDTO(record, ActivityHttpStatus.OK.value(), new ArrayList<>());
             }
             throw new NotFoundException(notFoundMessages.userByEmail());
@@ -79,8 +80,11 @@ public class UserPointProcessor {
             userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailUserCurrent());
             UserPoint sub = userPointMapper.fromDTO(userPointDTO);
             UserPoint userList = userPointService.getEmailChild(sub);
-            sub.setEmailFigli(userList.getEmailFigli());
-            UserPointDTO subDTO = userPointMapper.toDTO(sub);
+            Boolean onlyChecked = userPointDTO.getOnlyCheckedChildren();
+            List<String> plainChildren = userPointService.getChildEmailsPlainForParentDisplay(userList, onlyChecked);
+            UserPointDTO subDTO = userPointMapper.toDTO(userList);
+            subDTO.setEmailFigli(plainChildren);
+            subDTO.setOnlyCheckedChildren(onlyChecked == null || Boolean.TRUE.equals(onlyChecked));
             return new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
         });
     }
@@ -90,10 +94,18 @@ public class UserPointProcessor {
         return Mono.fromCallable(() -> {
             userPointAccessService.requireCanAccess(principalEmail, userPointDTO.getEmailUserCurrent());
             UserPoint sub = userPointMapper.fromDTO(userPointDTO);
-            Integer itemId = userPointService.getTypeUser(sub);
+            UserPoint self = userPointService.findSelfByEmailUserCurrent(sub);
+            Integer itemId = self != null ? self.getType() : 2;
             String emailUserCurrent = userPointDTO.getEmailUserCurrent();
-            return new ResponseDTO(new UserDTO(itemId, itemId == 2, emailUserCurrent), ActivityHttpStatus.OK.value(),
-                    new ArrayList<>());
+            List<String> pending = null;
+            if (Integer.valueOf(0).equals(itemId) && self != null && self.getEmail() != null) {
+                List<String> found = userPointService.findPendingParentEmailsPlain(self.getEmail());
+                if (!found.isEmpty()) {
+                    pending = found;
+                }
+            }
+            return new ResponseDTO(new UserDTO(itemId, itemId == 2, emailUserCurrent, pending),
+                    ActivityHttpStatus.OK.value(), new ArrayList<>());
         });
     }
 
@@ -128,9 +140,11 @@ public class UserPointProcessor {
         if (userPointSave.getEmail() != null && !userChild.isEmpty()) {
             userPointSave = userPointService.saveUser(userPointSave, userChild);
             UserPointDTO dto = userPointMapper.toDTO(userPointSave);
-            inviaNotifica(dto, userChild);
+            List<String> plainAdds = userChild.stream().map(c -> encryptDecryptConverter.decrypt(c.getEmail()))
+                    .collect(Collectors.toList());
+            inviaNotifica(dto, userChild, plainAdds);
         }
-        return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent()),
+        return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent(), null),
                 ActivityHttpStatus.OK.value(), new ArrayList<>());
     }
 
@@ -149,10 +163,10 @@ public class UserPointProcessor {
                 dto.setPassword(tempPassword);
                 dto.setEmailUserCurrent(userPointDTO.getEmailUserCurrent());
                 saveUserPassword(dto);
-                inviaNotifica(dto, null);
+                inviaNotifica(dto, null, null);
             }
         }
-        return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent()),
+        return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent(), null),
                 ActivityHttpStatus.OK.value(), new ArrayList<>());
     }
 
@@ -197,10 +211,13 @@ public class UserPointProcessor {
         });
     }
 
-    private void inviaNotifica(UserPointDTO userPointDTO, List<UserPoint> userChild) {
+    private void inviaNotifica(UserPointDTO userPointDTO, List<UserPoint> userChild, List<String> addedChildEmailsPlain) {
         List<UserPointDTO> userChildDTO = userChild == null ? null
                 : userChild.stream().map(userPointMapper::toDTO).collect(Collectors.toList());
-        UserPointWithChildDTO dto = new UserPointWithChildDTO(userPointDTO, userChildDTO);
+        UserPointWithChildDTO dto = new UserPointWithChildDTO();
+        dto.setUserPoint(userPointDTO);
+        dto.setUserPointChild(userChildDTO);
+        dto.setAddedChildEmailsPlain(addedChildEmailsPlain);
         notificationComponent.inviaNotifica(dto, notificationExchange, routingKeyEmail);
     }
 
@@ -227,7 +244,7 @@ public class UserPointProcessor {
         if (userPointSave.getEmailUserCurrent() != null) {
             userPointService.saveUserPassword(userPointSave);
         }
-        return new ResponseDTO(new UserDTO(userPointSave.getType(), false, userPointDTO.getEmailUserCurrent()),
+        return new ResponseDTO(new UserDTO(userPointSave.getType(), false, userPointDTO.getEmailUserCurrent(), null),
                 ActivityHttpStatus.OK.value(), new ArrayList<>());
     }
 
@@ -247,16 +264,30 @@ public class UserPointProcessor {
             UserPoint parentKey = userPointMapper.fromDTO(body.getUserPoint());
             List<UserPoint> ops = body.getUserPointChild() != null ? userPointMapper.fromDTO( body.getUserPointChild()) : new ArrayList<>();
             List<UserPoint> newChildren = new ArrayList<>();
-            UserPoint updated = userPointService.updateChildByEmail(parentKey, ops, newChildren);
-            if (!newChildren.isEmpty()) {
+            Set<String> newlyAddedEnc = new LinkedHashSet<>();
+            UserPoint updated = userPointService.updateChildByEmail(parentKey, ops, newChildren, newlyAddedEnc);
+            List<String> newlyAddedPlain = newlyAddedEnc.stream().map(encryptDecryptConverter::decrypt)
+                    .collect(Collectors.toList());
+            if (!newChildren.isEmpty() || !newlyAddedPlain.isEmpty()) {
                 UserPointDTO parentDto = userPointMapper.toDTO(updated);
                 if (body.getUserPoint().getEmailUserCurrent() != null) {
                     parentDto.setEmailUserCurrent(body.getUserPoint().getEmailUserCurrent());
                 }
-                inviaNotifica(parentDto, newChildren);
+                inviaNotifica(parentDto, newChildren, newlyAddedPlain);
             }
             UserPointDTO subDTO = userPointMapper.toDTO(updated);
             return new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
+        });
+    }
+
+    @Transactional
+    public Mono<ResponseDTO> confirmParentLinks(UserPointDTO userPointDTO, String principalEmail) {
+        return Mono.fromCallable(() -> {
+            userPointAccessService.requireSelf(principalEmail, userPointDTO.getEmailUserCurrent());
+            UserPoint sub = userPointMapper.fromDTO(userPointDTO);
+            userPointService.confirmChildParentLinks(sub.getEmailUserCurrent(), userPointDTO.getConfirmParentEmails());
+            return new ResponseDTO(new UserDTO(null, true, userPointDTO.getEmailUserCurrent(), null),
+                    ActivityHttpStatus.OK.value(), new ArrayList<>());
         });
     }
 }

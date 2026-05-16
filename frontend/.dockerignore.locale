@@ -1,4 +1,5 @@
-# Come .dockerignore ma include local.env per build Docker locale (BAT in batavviodocker/locale).
+# Allineato a .dockerignore: local.env non è più escluso (serve al build compose localhost).
+# Preferisci modificare solo .dockerignore.
 node_modules
 .next
 .git

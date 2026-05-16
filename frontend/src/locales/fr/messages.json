@@ -157,6 +157,7 @@
   "settings_password_min_hint": "Au moins 8 caractères.",
   "settings_password_min_title": "Mot de passe trop court",
   "settings_password_min_length": "Le mot de passe doit contenir au moins 8 caractères.",
+  "settings_password_demo_disabled": "Le changement de mot de passe n'est pas disponible pour les comptes de démonstration.",
   "impostazione_profilo": "Paramètres du profil",
   "sicurezza_privacy": "Sécurité et confidentialité",
   "preferenze_account": "Gérez les préférences de votre compte :",
@@ -263,6 +264,8 @@
   "email_duplicate_figli": "Les e-mails des enfants ne doivent pas être en double.",
   "server_unavailable": "Le serveur ne répond pas.",
   "error_generic": "Une erreur s'est produite.",
+  "error_request_title": "Erreur de requête",
+  "error_request_timeout": "Délai de requête dépassé. Réessayez avec une image plus petite ou une meilleure connexion.",
   "forbidden_resource_missing": "Ressource introuvable ou invalide.",
   "forbidden_access_denied_resource": "Vous n'avez pas la permission d'accéder à cette ressource.",
   "forbidden_identity_missing": "Identité utilisateur manquante.",
@@ -281,5 +284,8 @@
   "decrypt_operation_failed": "Erreur lors du déchiffrement des données.",
   "errore_http": "Erreur de communication avec le serveur.",
   "point_disposizione": "Points disponibles :",
+  "parent_link_confirm_title": "Confirmer les comptes parents",
+  "parent_link_confirm_description": "Ces comptes vous ont lié comme enfant. Sélectionnez ceux que vous souhaitez activer et confirmez.",
+  "parent_link_confirm_save": "Enregistrer",
   "invalid_credentials": "Identifiants invalides."
 }

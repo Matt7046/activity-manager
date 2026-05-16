@@ -157,6 +157,7 @@
   "settings_password_min_hint": "Pelo menos 8 caracteres.",
   "settings_password_min_title": "Senha muito curta",
   "settings_password_min_length": "A senha deve ter pelo menos 8 caracteres.",
+  "settings_password_demo_disabled": "A alteração da senha não está disponível para contas de demonstração.",
   "impostazione_profilo": "Configurações de perfil",
   "sicurezza_privacy": "Segurança e privacidade",
   "preferenze_account": "Gerencie as preferências da sua conta:",
@@ -263,6 +264,8 @@
   "email_duplicate_figli": "Não são permitidos e-mails duplicados entre os filhos.",
   "server_unavailable": "O servidor não está a responder.",
   "error_generic": "Ocorreu um erro.",
+  "error_request_title": "Erro no pedido",
+  "error_request_timeout": "Tempo limite do pedido esgotado. Tente novamente com uma imagem mais pequena ou melhor ligação.",
   "forbidden_resource_missing": "Recurso não encontrado ou inválido.",
   "forbidden_access_denied_resource": "Não tem permissão para aceder a este recurso.",
   "forbidden_identity_missing": "Identidade de utilizador em falta.",
@@ -281,5 +284,8 @@
   "decrypt_operation_failed": "Erro ao desencriptar os dados.",
   "errore_http": "Erro de comunicação com o servidor.",
   "point_disposizione": "Pontos disponíveis:",
+  "parent_link_confirm_title": "Confirmar contas de tutores",
+  "parent_link_confirm_description": "Estas contas associaram-no como filho. Selecione as que pretende ativar e confirme.",
+  "parent_link_confirm_save": "Guardar",
   "invalid_credentials": "Credenciais inválidas."
 }

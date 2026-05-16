@@ -1,8 +1,9 @@
 "use client";
-import { ButtonName } from "@/general/structure/Constant";
+import { ButtonName, HttpStatus, TypeAlertColor } from "@/general/structure/Constant";
 import { i18n } from "@lingui/core";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from 'react';
+import { observer } from "mobx-react";
+import { useCallback, useEffect, useState } from 'react';
 import { ResponseI, showMessage, UserI } from '../../general/structure/Utils';
 import { ActivityLogI } from '../../page/page-activity/Activity';
 import { savePointsAndLog } from '../../page/page-activity/service/ActivityService';
@@ -27,66 +28,112 @@ type Props = {
   handlePlayVideo: (videoId: string | null) => void;
   user: UserI;
   alertConfig: AlertConfig;
+  getWatchMinutes: () => number;
+  resetWatchTimer: () => void;
 };
 
+export const POINTS_UPDATED_EVENT = "activity-manager:points-updated";
 
-
-
-const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props) => {
+const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user, getWatchMinutes, resetWatchTimer }: Props) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [videos, setVideos] = useState<VideoI[]>([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [lastFetchKey, setLastFetchKey] = useState<string>("");
 
-  const fetchOptions = async (testo: string) => {
-    try {
-      if (showFavoritesOnly) {
-        // Caso: Solo Favoriti
-        return fetchVideosFavorites(testo, user.emailChild)
-          .then((response: ResponseI | undefined) => {
-            gamificationStore.setVideo(response?.jsonText ?? []);
-            return response;
-          })
-          .catch((error) => {
-            console.error('Error fetching favorites:', error);
-          });
-      } else {
-        // Caso: Ricerca normale
-        return fetchVideo(testo, user.emailChild)
-          .then((response: ResponseI | undefined) => {
-            gamificationStore.setVideo(response?.jsonText ?? []);
-            return response;
-          })
-          .catch((error) => {
-            console.error('Error fetching data video:', error);
-          });
+  const applyVideos = useCallback((list: VideoI[] | undefined) => {
+    const next = Array.isArray(list) ? list : [];
+    gamificationStore.setVideo(next);
+    setVideos(next);
+  }, []);
+
+  const updateVideoFavorite = useCallback((videoId: string, favorite: boolean) => {
+    setVideos((prev) => {
+      let next = prev.map((v) => (v.videoId === videoId ? { ...v, favorite } : v));
+      if (showFavoritesOnly && !favorite) {
+        next = next.filter((v) => v.videoId !== videoId);
       }
-    } catch (error) {
-      console.error('General error in fetchOptions:', error);
-    }
-  };
+      gamificationStore.setVideo(next);
+      return next;
+    });
+  }, [showFavoritesOnly]);
 
-  const savePoints = () => {
+  const fetchOptions = useCallback(async (testo: string, force = false) => {
+    const fetchKey = `${showFavoritesOnly ? "fav" : "all"}:${testo}:${user.emailChild}`;
+    if (!force && fetchKey === lastFetchKey && videos.length > 0) {
+      return { jsonText: videos, status: HttpStatus.OK } as ResponseI;
+    }
+
+    try {
+      const response = showFavoritesOnly
+        ? await fetchVideosFavorites(testo, user.emailChild)
+        : await fetchVideo(testo, user.emailChild);
+
+      if (response?.status === HttpStatus.OK && Array.isArray(response.jsonText)) {
+        applyVideos(response.jsonText as VideoI[]);
+        setLastFetchKey(fetchKey);
+      }
+      return response;
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+      return undefined;
+    }
+  }, [showFavoritesOnly, user.emailChild, lastFetchKey, videos, applyVideos]);
+
+  useEffect(() => {
+    setVideos([]);
+    setSearchQuery("");
+    setShowFavoritesOnly(false);
+    setLastFetchKey("");
+    gamificationStore.setVideo([]);
+    handlePlayVideo(null);
+  }, [user.emailChild, user.emailUserCurrent]);
+
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === "visible" && lastFetchKey) {
+        void fetchOptions(searchQuery, true);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [lastFetchKey, searchQuery, fetchOptions]);
+
+  const savePoints = (pointsToAdd: number) => {
+    if (pointsToAdd <= 0) {
+      showMessage(alertConfig.setOpen, alertConfig.setMessage, {
+        titleMessage: i18n._("error_request_title"),
+        typeMessage: TypeAlertColor.ERROR,
+        message: [i18n._("gamification_no_watch_minutes")],
+      });
+      return;
+    }
+
     const emailFind = user.emailChild ? user.emailChild : user.email;
 
-    // Crea il log dell'attività
     const activityLog: ActivityLogI = {
       ...user,
-      log: "Visione Corso", // Non è necessario usare '!' se hai fatto il check
+      log: "Visione Corso",
       date: new Date(),
-      usePoints: -gamificationStore.getPoints(),
-      email: emailFind
+      usePoints: -pointsToAdd,
+      email: emailFind,
     };
 
-    // Salva il log dell'attività
-    savePointsAndLog(activityLog, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
-      .then((response: ResponseI | undefined) => {
-        //fetchPoints();
-      })
+    savePointsAndLog(activityLog, (message?: TypeMessage) =>
+      showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
+    ).then((response: ResponseI | undefined) => {
+      if (response?.status === HttpStatus.OK) {
+        resetWatchTimer();
+        handlePlayVideo(null);
+        window.dispatchEvent(new CustomEvent(POINTS_UPDATED_EVENT));
+        if (lastFetchKey) {
+          void fetchOptions(searchQuery, true);
+        }
+      }
+    });
   };
 
-  // 2. Modifica la funzione interna per chiamare quella del padre
   const onPlayClick = (videoId: string | null) => {
-    handlePlayVideo(videoId); // Questo aggiornerà lo stato nel genitore
+    handlePlayVideo(videoId);
   };
 
   const searchButton = (testo: string): Pulsante => {
@@ -95,113 +142,103 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
       nome: ButtonName.BLUE,
       title: i18n._("ricerca_video"),
       funzione: () => {
-        console.log("Ricerca video:", testo)
-        fetchOptions(testo).then((response: ResponseI | void) => {
-          if (response) {
-            setVideos(response.jsonText);
-          }
-        })
-        onPlayClick(null);
+        void fetchOptions(testo, true).then(() => onPlayClick(null));
       },
       configDialogPulsante: {
         showDialog: false,
-        message: i18n._("confermi_di_voler_ricercare_i_video")
-      }
-    }
-  }
+        message: i18n._("confermi_di_voler_ricercare_i_video"),
+      },
+    };
+  };
 
-  const createButtonTrophy = (videoId: VideoI): Pulsante[] => [
+  const createButtonTrophy = (): Pulsante[] => [
     {
       icona: "fas fa-trophy",
       nome: "red",
       title: i18n._("completa_e_guadagna_punti"),
       funzione: () => {
-        const points = gamificationStore.getMinutes();
-        gamificationStore.addPoints(points);
-        savePoints();
-        gamificationStore.ResetPointsMinutes();
+        savePoints(getWatchMinutes());
       },
       configDialogPulsante: {
         showDialog: true,
-        // Passiamo una funzione () => ... invece di una stringa
-        // Verrà eseguita solo quando l'utente preme il trofeo
         message: () => {
-          const currentPoints = gamificationStore.getMinutes();
+          const currentPoints = getWatchMinutes();
           return `Vuoi aggiungere i ${currentPoints} punti premio del video?`;
-        }
-      }
-    }
+        },
+      },
+    },
   ];
-
 
   const createButtonPreferiti = (video: VideoI): Pulsante[] => [
     {
       icona: "fas fa-star",
       nome: video.favorite ? 'red' : "blue",
-      // 1. Aggiunta virgola qui sotto
       title: video.favorite ? i18n._("elimina_dai_preferiti") : i18n._("aggiungi_ai_preferiti"),
       funzione: () => {
-        console.log("Azione su preferito:", video.videoId);
         const favorite: FavoriteI = {
           email: user.emailChild,
-          videoId: video.videoId
+          videoId: video.videoId,
         };
-        if (video.favorite) {
-          deleteFavorite(favorite, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
-            .then((response: ResponseI | undefined) => {
-              // Opzionale: ricarica i preferiti dopo l'eliminazione per aggiornare la griglia
-              fetchOptions(searchQuery).then((res) => {
-                if (res) setVideos(res.jsonText);
-              });
-            });
+        const wasFavorite = video.favorite;
+        const nextFavorite = !wasFavorite;
+        updateVideoFavorite(video.videoId, nextFavorite);
+
+        const rollback = () => updateVideoFavorite(video.videoId, wasFavorite);
+
+        const onDone = (response: ResponseI | undefined) => {
+          if (response?.status !== HttpStatus.OK) {
+            rollback();
+          }
+        };
+
+        if (wasFavorite) {
+          deleteFavorite(favorite, (message?: TypeMessage) =>
+            showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
+          ).then(onDone);
         } else {
-          saveFavorite(favorite, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
-            .then((response: ResponseI | undefined) => {
-              fetchOptions(searchQuery).then((res) => {
-                if (res) setVideos(res.jsonText);
-              });
-            });
+          saveFavorite(favorite, (message?: TypeMessage) =>
+            showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
+          ).then(onDone);
         }
       },
       configDialogPulsante: {
         showDialog: true,
-        // 2. Messaggio dinamico basato sull'azione
         message: video.favorite
           ? i18n._("vuoi_eliminare_questo_video_dai_preferiti")
-          : i18n._("vuoi_aggiungere_questo_video_ai_preferiti")
-      }
+          : i18n._("vuoi_aggiungere_questo_video_ai_preferiti"),
+      },
     },
   ];
 
-  const createButtonWatch = (videoId: VideoI): Pulsante[] => [
+  const createButtonWatch = (video: VideoI): Pulsante[] => [
     {
       icona: "fas fa-play",
       nome: ButtonName.RED,
       title: i18n._("guarda_video"),
-      // Attiva la visualizzazione del player e nasconde la griglia
-      funzione: () => onPlayClick(videoId.videoId),
+      funzione: () => onPlayClick(video.videoId),
       configDialogPulsante: {
         showDialog: false,
-        message: ""
-      }
-    }
+        message: "",
+      },
+    },
   ];
 
-
-  const createButtons = (videoId: VideoI): Pulsante[] => {
-    return createButtonPreferiti(videoId).concat(createButtonWatch(videoId))
-  }
+  const createButtons = (video: VideoI): Pulsante[] => {
+    return createButtonPreferiti(video).concat(createButtonWatch(video));
+  };
 
   const createButtonsSelectedVideo = (videoId: string): Pulsante[] => {
-    const videoI: VideoI[] = gamificationStore.getVideo();
-    const video = videoI.find((v) => v.videoId === videoId);
-    return createButtonPreferiti(video!).concat(createButtonTrophy(video!))
-  }
+    const video = videos.find((v) => v.videoId === videoId);
+    if (!video) {
+      return createButtonTrophy();
+    }
+    return createButtonPreferiti(video).concat(createButtonTrophy());
+  };
+
+  const displayVideos = videos;
 
   return (
-    <> {/* <--- AGGIUNTO FRAGMENT OBBLIGATORIO */}
-
-      {/* 🔍 Ricerca video: label + campo con icona per chiarezza */}
+    <>
       <div className="search-stack">
         <label className="search-label" htmlFor="gamification-video-search">
           {i18n._("ricerca_video")}
@@ -224,19 +261,20 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
         </div>
       </div>
 
-      {/* --- NUOVO FILTRO FAVORITI --- */}
       <div className="filter-container">
         <label className="favorite-filter">
           <input
             type="checkbox"
             checked={showFavoritesOnly}
-            onChange={(e) => setShowFavoritesOnly(e.target.checked)}
+            onChange={(e) => {
+              setShowFavoritesOnly(e.target.checked);
+              setLastFetchKey("");
+            }}
           />
           <span>{i18n._("mostra_preferiti")}</span>
         </label>
       </div>
 
-      {/* 🎬 PLAYER SE VIDEO SELEZIONATO */}
       {selectedVideo ? (
         <div className="video-player-container">
           <iframe
@@ -253,33 +291,29 @@ const VideoGrid = ({ selectedVideo, handlePlayVideo, alertConfig, user }: Props)
           </div>
         </div>
       ) : (
-        /* 🎥 GRID SE NESSUN VIDEO SELEZIONATO */
         <div className="video-grid">
-          {
-            videos.map((video: VideoI) => (
-              <div key={video.videoId} className="video-card">
-                <div className="video-thumbnail-container">
-                  <img
-                    src={video.thumbnail}
-                    alt={video.title}
-                    className="video-thumbnail"
-                  />
-                  <div className="video-overlay">
-                    <Button pulsanti={createButtons(video)} />
-                  </div>
-                </div>
-                <div className="video-info">
-                  <h4>{video.title}</h4>
-                  <p>{video.channelTitle}</p>
+          {displayVideos.map((video: VideoI) => (
+            <div key={video.videoId} className="video-card">
+              <div className="video-thumbnail-container">
+                <img
+                  src={video.thumbnail}
+                  alt={video.title}
+                  className="video-thumbnail"
+                />
+                <div className="video-overlay">
+                  <Button pulsanti={createButtons(video)} />
                 </div>
               </div>
-            ))          
-          }
+              <div className="video-info">
+                <h4>{video.title}</h4>
+                <p>{video.channelTitle}</p>
+              </div>
+            </div>
+          ))}
         </div>
       )}
-
-    </> // <--- CHIUSURA FRAGMENT
+    </>
   );
-}
+});
 
-  export default VideoGrid;
+export default VideoGrid;

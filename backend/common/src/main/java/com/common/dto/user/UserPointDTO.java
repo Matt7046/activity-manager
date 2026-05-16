@@ -19,6 +19,13 @@ public class UserPointDTO implements InterfaceDTO {
     private Integer points;
     private List<PointDTO> pointFigli;
     private List<String> emailFigli;
+    /**
+     * Se true (default in API), l'elenco {@code emailFigli} restituito contiene solo figli con conferma.
+     * Se false, tutti i figli collegati.
+     */
+    private Boolean onlyCheckedChildren;
+    /** Richiesta: genitori (email in chiaro) da confermare per il figlio loggato. */
+    private List<String> confirmParentEmails;
     private Integer type;
     private String numeroPunti;
     private Integer usePoints;
