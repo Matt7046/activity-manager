@@ -28,9 +28,8 @@ public abstract class FavoriteMapper {
 
     @AfterMapping
     protected void encryptField(FavoriteDTO dto, @MappingTarget Favorite favorite) {
-        if (favorite.getEmail() != null) {
+        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
             favorite.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
         }
-
     }
 }

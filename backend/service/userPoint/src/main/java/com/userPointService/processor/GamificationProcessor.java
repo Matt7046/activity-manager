@@ -37,9 +37,9 @@ public class GamificationProcessor {
     private UserPointAccessService userPointAccessService;
 
     @Transactional
-    public Mono<ResponseDTO> fetchVideos(String topicCrypt, String email, String principalEmail) {
+    public Mono<ResponseDTO> fetchVideos(String topic, String email, String principalEmail) {
         userPointAccessService.requireCanAccess(principalEmail, email);
-        String topic = encryptDecryptConverter.decrypt(topicCrypt);
+        String emailStored = encryptDecryptConverter.storageForm(email);
 
         return gamificationService.fetchVideos(topic)
                 .map(json -> json.get("items"))
@@ -55,7 +55,7 @@ public class GamificationProcessor {
                             .toList();
                     Favorite favorite = new Favorite();
                     favorite.setVideoIds(videoIds);
-                    favorite.setEmail(email);
+                    favorite.setEmail(emailStored);
                     List<Favorite> favorites = gamificationService.findByEmailAndVideoIdIn(favorite);
 
                     List<String> favoriteVideoIds = favorites.stream()
@@ -139,12 +139,11 @@ public class GamificationProcessor {
         });
     }
 
-    public Mono<ResponseDTO> fetchVideosFavorites(String topicCrypt, String emailCrypt, String principalEmail) {
-        String email = encryptDecryptConverter.decrypt(emailCrypt);
+    public Mono<ResponseDTO> fetchVideosFavorites(String topic, String email, String principalEmail) {
         userPointAccessService.requireCanAccess(principalEmail, email);
-        String topic = encryptDecryptConverter.decrypt(topicCrypt);
+        String emailStored = encryptDecryptConverter.storageForm(email);
 
-        return gamificationService.fetchVideosFavorites(emailCrypt)
+        return gamificationService.fetchVideosFavorites(emailStored)
                 .map(json -> json.get("items"))
                 .flatMapMany(Flux::fromIterable)
                 .map(this::mapVideosToDTO)

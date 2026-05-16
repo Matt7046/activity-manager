@@ -3,7 +3,7 @@ import { ButtonName, HttpStatus, TypeAlertColor } from "@/general/structure/Cons
 import { i18n } from "@lingui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import { observer } from "mobx-react";
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ResponseI, showMessage, UserI } from '../../general/structure/Utils';
 import { ActivityLogI } from '../../page/page-activity/Activity';
 import { savePointsAndLog } from '../../page/page-activity/service/ActivityService';
@@ -34,16 +34,23 @@ type Props = {
 
 export const POINTS_UPDATED_EVENT = "activity-manager:points-updated";
 
+const gamificationEmail = (user: UserI): string => {
+  return (user.emailChild || user.email || "").trim();
+}
+
 const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user, getWatchMinutes, resetWatchTimer }: Props) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [videos, setVideos] = useState<VideoI[]>([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [lastFetchKey, setLastFetchKey] = useState<string>("");
+  const hasLoadedRef = useRef(false);
+  const email = gamificationEmail(user);
 
   const applyVideos = useCallback((list: VideoI[] | undefined) => {
     const next = Array.isArray(list) ? list : [];
     gamificationStore.setVideo(next);
     setVideos(next);
+    hasLoadedRef.current = next.length > 0;
   }, []);
 
   const updateVideoFavorite = useCallback((videoId: string, favorite: boolean) => {
@@ -58,15 +65,19 @@ const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user,
   }, [showFavoritesOnly]);
 
   const fetchOptions = useCallback(async (testo: string, force = false) => {
-    const fetchKey = `${showFavoritesOnly ? "fav" : "all"}:${testo}:${user.emailChild}`;
-    if (!force && fetchKey === lastFetchKey && videos.length > 0) {
-      return { jsonText: videos, status: HttpStatus.OK } as ResponseI;
+    if (!email) {
+      return undefined;
+    }
+    const query = testo?.trim() || "tutorial";
+    const fetchKey = `${showFavoritesOnly ? "fav" : "all"}:${query}:${email}`;
+    if (!force && fetchKey === lastFetchKey && hasLoadedRef.current) {
+      return { jsonText: gamificationStore.getVideo(), status: HttpStatus.OK } as ResponseI;
     }
 
     try {
       const response = showFavoritesOnly
-        ? await fetchVideosFavorites(testo, user.emailChild)
-        : await fetchVideo(testo, user.emailChild);
+        ? await fetchVideosFavorites(query, email)
+        : await fetchVideo(query, email);
 
       if (response?.status === HttpStatus.OK && Array.isArray(response.jsonText)) {
         applyVideos(response.jsonText as VideoI[]);
@@ -77,16 +88,31 @@ const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user,
       console.error("Error fetching videos:", error);
       return undefined;
     }
-  }, [showFavoritesOnly, user.emailChild, lastFetchKey, videos, applyVideos]);
+  }, [showFavoritesOnly, email, lastFetchKey, applyVideos]);
 
   useEffect(() => {
-    setVideos([]);
     setSearchQuery("");
     setShowFavoritesOnly(false);
     setLastFetchKey("");
+    hasLoadedRef.current = false;
     gamificationStore.setVideo([]);
+    setVideos([]);
     handlePlayVideo(null);
-  }, [user.emailChild, user.emailUserCurrent]);
+  }, [email, user.emailUserCurrent, handlePlayVideo]);
+
+  useEffect(() => {
+    if (!email) {
+      return;
+    }
+    void fetchOptions("tutorial", true);
+  }, [email]);
+
+  useEffect(() => {
+    if (!email) {
+      return;
+    }
+    void fetchOptions(searchQuery || "tutorial", true);
+  }, [showFavoritesOnly]);
 
   useEffect(() => {
     const onVisible = () => {
@@ -108,7 +134,7 @@ const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user,
       return;
     }
 
-    const emailFind = user.emailChild ? user.emailChild : user.email;
+    const emailFind = email || user.email;
 
     const activityLog: ActivityLogI = {
       ...user,
@@ -176,7 +202,7 @@ const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user,
       title: video.favorite ? i18n._("elimina_dai_preferiti") : i18n._("aggiungi_ai_preferiti"),
       funzione: () => {
         const favorite: FavoriteI = {
-          email: user.emailChild,
+          email,
           videoId: video.videoId,
         };
         const wasFavorite = video.favorite;
@@ -269,6 +295,7 @@ const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user,
             onChange={(e) => {
               setShowFavoritesOnly(e.target.checked);
               setLastFetchKey("");
+              hasLoadedRef.current = false;
             }}
           />
           <span>{i18n._("mostra_preferiti")}</span>

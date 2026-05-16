@@ -4,6 +4,8 @@ import com.common.data.gamification.Favorite;
 import com.common.data.user.UserPoint;
 import com.common.dto.structure.ResponseDTO;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.userPointService.repository.FavoriteRepository;
 import com.userPointService.repository.UserPointRepository;
 
@@ -82,10 +84,19 @@ public class GamificationService {
 
     public Mono<JsonNode> fetchVideosFavorites(String email) {
         List<Favorite> favorites = favoriteRepository.findByEmail(email);
-        // 1. Estraiamo gli ID dalla lista di oggetti Favorite
+        if (favorites.isEmpty()) {
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayNode items = mapper.createArrayNode();
+            return Mono.just(mapper.createObjectNode().set("items", items));
+        }
         List<String> videoids = favorites.stream()
-                .map(Favorite::getVideoId) // Assumendo che il getter sia getVideoId()
+                .map(Favorite::getVideoId)
+                .filter(id -> id != null && !id.isBlank())
                 .toList();
+        if (videoids.isEmpty()) {
+            ObjectMapper mapper = new ObjectMapper();
+            return Mono.just(mapper.createObjectNode().set("items", mapper.createArrayNode()));
+        }
         String idsFormatted = String.join(",", videoids);
         return webClientYoutube.get()
                 .uri(uriBuilder -> uriBuilder

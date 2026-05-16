@@ -28,7 +28,7 @@ public class UserPointAccessService {
 
     public boolean canAccess(String principalEmail, String targetEmail) {
         String p = EmailNormalization.normalize(principalEmail);
-        String r = EmailNormalization.normalize(safeDecrypt(targetEmail));
+        String r = EmailNormalization.normalize(encryptDecryptConverter.safeDecrypt(targetEmail));
         if (p == null || r == null || r.isEmpty()) {
             return false;
         }
@@ -43,21 +43,13 @@ public class UserPointAccessService {
         }
         for (UserPoint tutor : tutors) {
             if (tutor != null && tutor.getEmail() != null) {
-                String emailTutor = safeDecrypt(tutor.getEmail());
+                String emailTutor = encryptDecryptConverter.safeDecrypt(tutor.getEmail());
                 if (p.equals(EmailNormalization.normalize(emailTutor))) {
                     return true;
                 }
             }
         }
         return false;
-    }
-
-    private String safeDecrypt(String value) {
-        try {
-            return encryptDecryptConverter.decrypt(value);
-        } catch (Exception ignored) {
-            return value;
-        }
     }
 
     public void requireCanAccess(String principalEmail, String resourceEmail) {

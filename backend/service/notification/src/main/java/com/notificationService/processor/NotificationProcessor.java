@@ -6,7 +6,6 @@ import com.common.dto.notification.NotificationDTO;
 import com.common.dto.structure.ResponseDTO;
 import com.common.mapper.NotificationMapper;
 import com.common.security.ResourceAccessClient;
-import com.common.structure.exception.DecryptException;
 import com.common.structure.exception.ForbiddenException;
 import com.common.structure.messages.ForbiddenMessages;
 import com.common.structure.status.ActivityHttpStatus;
@@ -35,33 +34,17 @@ public class NotificationProcessor {
     private ForbiddenMessages forbiddenMessages;
 
     public Mono<ResponseDTO> getLatestNotifications(String identificativo, Integer page, Integer size, String status) {
-        String identificativoForAccess = identificativoForAccessCheck(identificativo);
-        return resourceAccessClient.assertCanAccess(identificativoForAccess)
+        String identificativoPlain = encryptDecryptConverter.safeDecrypt(identificativo);
+        String identificativoStored = encryptDecryptConverter.storageForm(identificativo);
+        return resourceAccessClient.assertCanAccess(identificativoPlain)
                 .then(Mono.fromCallable(() -> {
-                    String statusDecrypt = encryptDecryptConverter.decrypt(status);
-                    List<Notification> notificationList = notificationService.getLatestNotifications(identificativo, page,
+                    List<Notification> notificationList = notificationService.getLatestNotifications(identificativoStored, page,
                             size,
-                            statusDecrypt);
+                            status);
                     List<NotificationDTO> notificationDTO = notificationList.stream().map(
                             notificationMapper::toDTO).toList();
                     return new ResponseDTO(notificationDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
                 }));
-    }
-
-    /**
-     * {@code assertCanAccess} confronta il JWT con l'email risorsa in chiaro. L'{@code identificativo} in path
-     * coincide di solito con {@code userReceiver} in Mongo (cifrato); per il controllo si tenta la decifratura.
-     * La query alle notifiche usa sempre il valore path/originale così com'è persistito.
-     */
-    private String identificativoForAccessCheck(String identificativo) {
-        if (identificativo == null || identificativo.isBlank()) {
-            return identificativo;
-        }
-        try {
-            return encryptDecryptConverter.decrypt(identificativo);
-        } catch (DecryptException e) {
-            return identificativo;
-        }
     }
 
     public Mono<ResponseDTO> saveNotificationList(List<NotificationDTO> notificationDTO) {
@@ -74,7 +57,7 @@ public class NotificationProcessor {
                     if (receiver == null || receiver.isBlank()) {
                         return Mono.error(new ForbiddenException(forbiddenMessages.notificationNoReceiver()));
                     }
-                    return resourceAccessClient.assertCanAccess(identificativoForAccessCheck(receiver)).thenReturn(dto);
+                    return resourceAccessClient.assertCanAccess(encryptDecryptConverter.safeDecrypt(receiver)).thenReturn(dto);
                 })
                 .collectList()
                 .flatMap(authorized -> Mono.fromCallable(() -> {
