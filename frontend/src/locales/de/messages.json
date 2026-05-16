@@ -181,6 +181,7 @@
   "home_demo_disclaimer": "Die Demo erfordert keine Registrierung und speichert keine persönlichen Daten. Nutzen Sie die Schaltflächen unten oder melden Sie sich mit user@simulated.com und child@simulated.com an (E-Mail und Passwort).",
   "home_account_try_demo_hint": "Nur erkunden? Tippen Sie oben auf «Demo ausprobieren»: keine persönlichen Daten werden erfasst. Im Demo-Modus: Schnellanmeldung oder user@simulated.com (Familie) und child@simulated.com (Standard).",
   "home_account_login_email_only_simulated": "Im Demo-Modus ist die Anmeldung per E-Mail und Passwort nur für user@simulated.com (Familie) und child@simulated.com (Standard) erlaubt. Aktivieren Sie «Demo ausprobieren».",
+  "home_password_reset_not_simulated": "Passwort zurücksetzen ist für die Demo-Konten user@simulated.com und child@simulated.com nicht verfügbar.",
   "email_tutorato": "E-Mail-Nachhilfe",
   "email_registrazione": "Registrierungs-E-Mail",
   "privacy_descrizione": "Diese Datenschutzrichtlinie beschreibt, wie wir Ihre personenbezogenen Daten erheben, verwenden und schützen, wenn Sie unser Open-Source-Projekt nutzen. Ihre Privatsphäre ist uns wichtig und wir verpflichten uns, Ihre Daten im Einklang mit der Datenschutz-Grundverordnung (DSGVO) zu verarbeiten.",

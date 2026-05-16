@@ -168,6 +168,17 @@ html[data-theme="light"] .login-paper {
   color: var(--color-text-muted) !important;
 }
 
+.home-demo-alert {
+  width: 100%;
+  border-radius: var(--radius-md) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.45 !important;
+}
+
+.home-demo-alert + .home-demo-alert {
+  margin-top: 0 !important;
+}
+
 .home-social-grid--disabled {
   opacity: 0.45;
   pointer-events: none;
