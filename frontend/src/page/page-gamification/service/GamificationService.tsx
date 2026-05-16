@@ -14,11 +14,12 @@ export const fetchVideo = async (
 ): Promise<ResponseI | undefined> => {
   topic = topic || "tutorial";
   try {
-      const path = `${PATH_GAMIFICATION}/videos/${encodeURIComponent(topic)}/${encodeURIComponent(email)}`;
-    const data = await getData(path, setLoading); // Endpoint dell'API
+    const path = `${PATH_GAMIFICATION}/videos/${encodeURIComponent(topic)}/${encodeURIComponent(email)}`;
+    const data = await getData(path, setLoading);
     return data;
   } catch (error) {
     console.error("Error fetching video data:", error);
+    throw error;
   }
 };
 
@@ -29,6 +30,7 @@ export const saveFavorite = async (favorite: FavoriteI, funzioneMessage?: (messa
     const data = await postData(path, favorite, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
     return data;
   } catch (error) {
+    throw error;
   }
 }
 
@@ -37,9 +39,10 @@ export const deleteFavorite = async (favorite: FavoriteI, funzioneMessage?: (mes
   try {
     const path = PATH_GAMIFICATION + `/videos/favorite`;
     const showSuccess = true;
-    const data = await deleteData(path, favorite, setLoading, funzioneMessage, showSuccess); // Endpoint dell'API
+    const data = await deleteData(path, favorite, setLoading, funzioneMessage, showSuccess);
     return data;
   } catch (error) {
+    throw error;
   }
 }
 
@@ -47,8 +50,9 @@ export const fetchVideosFavorites = async (topic: string, email: string, funzion
   try {
     topic = topic || "tutorial"; 
     const path = `${PATH_GAMIFICATION}/videos/favorite/${encodeURIComponent(topic)}/${encodeURIComponent(email)}`;
-    const data = await getData(path, setLoading); // Endpoint dell'API
+    const data = await getData(path, setLoading);
     return data;
   } catch (error) {
+    throw error;
   }
 }

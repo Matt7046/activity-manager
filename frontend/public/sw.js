@@ -1,5 +1,5 @@
 /* Activity Manager SW: cache base + network first per navigazione */
-const CACHE_NAME = "activity-manager-v4";
+const CACHE_NAME = "activity-manager-v5";
 const PRECACHE_URLS = [
   "/",
   "/manifest.webmanifest",
@@ -31,6 +31,14 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
+  const url = new URL(event.request.url);
+
+  // API: sempre rete (no cache) — altrimenti preferiti/gamification restano obsoleti.
+  if (url.pathname.startsWith("/api/")) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   // Navigazione: rete prima, fallback cache se offline.
   if (event.request.mode === "navigate") {
     event.respondWith(
@@ -43,7 +51,6 @@ self.addEventListener("fetch", (event) => {
   }
 
   // Asset statici: cache first.
-  const url = new URL(event.request.url);
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.match(event.request).then((cached) => {

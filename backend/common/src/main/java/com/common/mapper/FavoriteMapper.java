@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.gamification.Favorite;
 import com.common.dto.gamification.FavoriteDTO;
+import com.common.security.EmailNormalization;
 
 @Mapper(componentModel = "spring")
 public abstract class FavoriteMapper {
@@ -21,7 +22,7 @@ public abstract class FavoriteMapper {
 
     @AfterMapping
     protected void decryptField(Favorite favorite, @MappingTarget FavoriteDTO dto) {
-        if (dto.getEmail() != null) {
+        if (favorite.getEmail() != null && !favorite.getEmail().isBlank()) {
             dto.setEmail(encryptDecryptConverter.decrypt(favorite.getEmail()));
         }
     }
@@ -29,7 +30,7 @@ public abstract class FavoriteMapper {
     @AfterMapping
     protected void encryptField(FavoriteDTO dto, @MappingTarget Favorite favorite) {
         if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
-            favorite.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
+            favorite.setEmail(encryptDecryptConverter.convert(EmailNormalization.normalize(dto.getEmail())));
         }
     }
 }
