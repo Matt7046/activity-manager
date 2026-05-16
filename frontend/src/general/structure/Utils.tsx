@@ -231,6 +231,72 @@ export const translateApiMessages = (errors: string[] | undefined | null, i18nIn
   return errors.map((e) => getTranslatedNotification(String(e), i18nInstance));
 };
 
+type AxiosLikeError = {
+  response?: { status?: number; statusText?: string; data?: unknown };
+  message?: string;
+  code?: string;
+};
+
+/** Estrae messaggi utili da errori Axios / body Spring (ResponseDTO o testo). */
+export const extractRequestErrorMessages = (error: unknown): string[] => {
+  const err = error as AxiosLikeError | undefined;
+  const data = err?.response?.data;
+
+  if (data != null) {
+    if (typeof data === 'string' && data.trim()) {
+      return [data.trim()];
+    }
+    if (typeof data === 'object') {
+      const body = data as Record<string, unknown>;
+      if (Array.isArray(body.errors) && body.errors.length > 0) {
+        return body.errors.map((e) => String(e));
+      }
+      if (typeof body.errors === 'string' && body.errors.trim()) {
+        return [body.errors.trim()];
+      }
+      if (body.message != null && String(body.message).trim()) {
+        return [String(body.message).trim()];
+      }
+      if (body.error != null && String(body.error).trim()) {
+        return [String(body.error).trim()];
+      }
+      if (body.detail != null && String(body.detail).trim()) {
+        return [String(body.detail).trim()];
+      }
+      if (body.title != null && String(body.title).trim()) {
+        return [String(body.title).trim()];
+      }
+    }
+  }
+
+  const status = err?.response?.status;
+  if (status) {
+    const statusText = err.response?.statusText?.trim();
+    return statusText ? [`HTTP ${status} — ${statusText}`] : [`HTTP ${status}`];
+  }
+
+  const msg = err?.message?.trim();
+  if (err?.code === 'ECONNABORTED' || msg?.toLowerCase().includes('timeout')) {
+    return [msg || i18n._('error_request_timeout')];
+  }
+  if (msg && msg !== 'Network Error') {
+    return [msg];
+  }
+
+  return [getServerUnavailableMessage()];
+};
+
+/** Alert da mostrare nel dialog dopo un catch su richiesta HTTP. */
+export const buildRequestErrorAlert = (error: unknown): TypeMessage => {
+  const raw = extractRequestErrorMessages(error);
+  const translated = translateApiMessages(raw, i18n);
+  return {
+    titleMessage: i18n._('error_request_title'),
+    typeMessage: TypeAlertColor.ERROR,
+    message: translated.length > 0 ? translated : raw,
+  };
+};
+
 export const navigateRouting = (router: AppRouterInstance, path: string, params?: any) => {
   const hasParams = params && typeof params === 'object' && Object.keys(params).length > 0;
   const slug = (path ?? '').toString().replace(/^\/+/, '');

@@ -1,6 +1,7 @@
 package com.userPointService.service;
 
 import com.common.configurations.encrypt.EncryptDecryptConverter;
+import com.common.data.user.FiglioLink;
 import com.common.data.user.UserPoint;
 import com.common.structure.exception.ArithmeticCustomException;
 import com.common.structure.exception.ForbiddenException;
@@ -13,9 +14,11 @@ import org.springframework.stereotype.Service;
 import com.userPointService.repository.UserPointRepository;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -47,6 +50,116 @@ public class UserPointService {
             return new UserPoint();
         }
         return existingUserPoint;
+    }
+
+    public UserPoint findSelfByEmailUserCurrent(UserPoint sub) {
+        return userPointRepository.findUserByEmail(sub.getEmailUserCurrent());
+    }
+
+    private Map<String, Boolean> figlioLinksByChildEnc(UserPoint parent) {
+        Map<String, Boolean> m = new LinkedHashMap<>();
+        for (FiglioLink fl : Optional.ofNullable(parent.getFigliLinks()).orElse(List.of())) {
+            if (fl != null && fl.getEmail() != null) {
+                m.put(fl.getEmail(), fl.getCheck());
+            }
+        }
+        return m;
+    }
+
+    /**
+     * Confermato solo se esiste {@link FiglioLink} con {@code check == true} per questa email figlio cifrata.
+     */
+    private boolean isChildLinkConfirmedForParent(UserPoint parent, String childEncEmail) {
+        return Boolean.TRUE.equals(figlioLinksByChildEnc(parent).get(childEncEmail));
+    }
+
+    /**
+     * Email figli in chiaro; con {@code onlyChecked} solo voci con {@link FiglioLink#getCheck()} {@code true} per quel genitore.
+     */
+    public List<String> getChildEmailsPlainForParentDisplay(UserPoint parent, Boolean onlyChecked) {
+        boolean filter = onlyChecked == null || onlyChecked;
+        List<String> allEnc = Optional.ofNullable(parent.getEmailFigli()).orElse(List.of());
+        if (!filter) {
+            return allEnc.stream().map(encryptDecryptConverter::decrypt).collect(Collectors.toList());
+        }
+        return allEnc.stream()
+                .filter(enc -> isChildLinkConfirmedForParent(parent, enc))
+                .map(encryptDecryptConverter::decrypt)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> findPendingParentEmailsPlain(String childEncEmail) {
+        List<UserPoint> parents = userPointRepository.findAllParentsHavingChildInEmailFigli(childEncEmail);
+        List<String> out = new ArrayList<>();
+        for (UserPoint p : parents) {
+            if (!isChildLinkConfirmedForParent(p, childEncEmail)) {
+                out.add(encryptDecryptConverter.decrypt(p.getEmail()));
+            }
+        }
+        return out;
+    }
+
+    /**
+     * Per ogni genitore con legame ancora in attesa: se è in {@code parentPlainEmails} si conferma il link,
+     * altrimenti il figlio viene rimosso da {@code emailFigli} e da {@code figliLinks}.
+     * Lista vuota o null = nessun genitore selezionato → tutti i pending vengono rimossi.
+     */
+    public void confirmChildParentLinks(String childEncEmail, List<String> parentPlainEmails) {
+        Set<String> selectedParentsEnc = new LinkedHashSet<>();
+        if (parentPlainEmails != null) {
+            parentPlainEmails.stream()
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .map(encryptDecryptConverter::convert)
+                    .forEach(selectedParentsEnc::add);
+        }
+
+        List<UserPoint> candidates = userPointRepository.findAllParentsHavingChildInEmailFigli(childEncEmail);
+        for (UserPoint parent : candidates) {
+            List<String> figli = parent.getEmailFigli();
+            if (figli == null || !figli.contains(childEncEmail)) {
+                continue;
+            }
+            if (isChildLinkConfirmedForParent(parent, childEncEmail)) {
+                continue;
+            }
+            if (selectedParentsEnc.contains(parent.getEmail())) {
+                approveChildLinkForParent(parent, childEncEmail);
+            } else {
+                removeChildFromParent(parent, childEncEmail);
+            }
+        }
+    }
+
+    private void approveChildLinkForParent(UserPoint parent, String childEncEmail) {
+        List<FiglioLink> links = new ArrayList<>(Optional.ofNullable(parent.getFigliLinks()).orElseGet(ArrayList::new));
+        boolean updated = false;
+        for (FiglioLink fl : links) {
+            if (childEncEmail.equals(fl.getEmail())) {
+                fl.setCheck(Boolean.TRUE);
+                updated = true;
+                break;
+            }
+        }
+        if (!updated) {
+            links.add(new FiglioLink(childEncEmail, Boolean.TRUE));
+        }
+        parent.setFigliLinks(links);
+        userPointRepository.save(parent);
+    }
+
+    private void removeChildFromParent(UserPoint parent, String childEncEmail) {
+        List<String> emails = new ArrayList<>(Optional.ofNullable(parent.getEmailFigli()).orElse(List.of()));
+        if (!emails.remove(childEncEmail)) {
+            return;
+        }
+        parent.setEmailFigli(emails);
+        List<FiglioLink> links = Optional.ofNullable(parent.getFigliLinks()).orElseGet(ArrayList::new);
+        List<FiglioLink> next = links.stream()
+                .filter(fl -> fl == null || !childEncEmail.equals(fl.getEmail()))
+                .collect(Collectors.toList());
+        parent.setFigliLinks(next);
+        userPointRepository.save(parent);
     }
 
     public UserPoint getUserByEmail(UserPoint userPoint) {
@@ -84,6 +197,26 @@ public class UserPointService {
         return savePoint(userPoint);
     }
 
+    private void applyFigliLinksForNewParent(UserPoint parent, List<String> childEnc) {
+        List<FiglioLink> links = new ArrayList<>();
+        for (String enc : childEnc) {
+            links.add(new FiglioLink(enc, Boolean.FALSE));
+        }
+        parent.setFigliLinks(links);
+    }
+
+    private void mergeFigliLinksAfterMutation(UserPoint existing, List<String> newEmailList, Set<String> newlyAddedEnc) {
+        Map<String, Boolean> old = figlioLinksByChildEnc(existing);
+        List<FiglioLink> next = new ArrayList<>();
+        Set<String> added = newlyAddedEnc == null ? Set.of() : newlyAddedEnc;
+        for (String enc : newEmailList) {
+            boolean isNew = added.contains(enc);
+            boolean check = isNew ? false : Boolean.TRUE.equals(old.get(enc));
+            next.add(new FiglioLink(enc, check));
+        }
+        existing.setFigliLinks(next);
+    }
+
     public UserPoint saveUser(UserPoint userPoint, List<UserPoint> userChild) {
         UserPoint existsUser = userPointRepository.findUserByEmailAll(userPoint.getEmailUserCurrent());
         if (existsUser != null) {
@@ -93,18 +226,17 @@ public class UserPointService {
                 .map(UserPoint::getEmail)
                 .collect(Collectors.toList());
 
-        // 3. UNA SOLA QUERY per trovare tutti i figli esistenti
         List<UserPoint> existingChildren = userPointRepository.findAllByEmailIn(childEmails);
-        // 4. Trasformiamo la lista in una Map di OGGETTI completi (non solo ID)
         Map<String, UserPoint> existingUsersMap = existingChildren.stream()
                 .collect(Collectors.toMap(UserPoint::getEmail, x -> x));
 
-        // 5. Associamo i dati corretti
         List<UserPoint> updatedUserChild = userChild.stream().map(child -> {
             UserPoint dbUser = existingUsersMap.get(child.getEmail());
-            // Se esiste a DB restituisco quello del DB, altrimenti quello nuovo
             return (dbUser != null) ? dbUser : child;
         }).collect(Collectors.toList());
+
+        userPoint.setEmailFigli(new ArrayList<>(childEmails));
+        applyFigliLinksForNewParent(userPoint, childEmails);
         userPoint = userPointRepository.save(userPoint);
         userPointRepository.saveAll(updatedUserChild);
         return userPoint;
@@ -131,7 +263,6 @@ public class UserPointService {
         return userPointRepository.save(updatedPoints);
     }
 
-    /** Lettura API: mappa id card (frontend) → path. */
     public Map<String, String> resolveNameImagesBySlot(UserPoint point) {
         return Map.copyOf(mutableImagesBySlot(point));
     }
@@ -171,7 +302,6 @@ public class UserPointService {
         LinkedHashMap<String, String> map = mutableImagesBySlot(point);
         map.put(cardId, newPath);
         point.setImagesBySlot(map);
-        point.setNameImages(new ArrayList<>(map.values()));
         return point;
     }
 
@@ -192,21 +322,21 @@ public class UserPointService {
 
 
     public UserPoint updateChildByEmail(UserPoint parentKey, List<UserPoint> childOps) {
-        return updateChildByEmail(parentKey, childOps, null);
+        return updateChildByEmail(parentKey, childOps, null, null);
     }
 
-    /**
-     * Aggiorna {@code emailFigli} del genitore. Per ogni aggiunta ({@code operation} true), crea il documento
-     * figlio se non esiste (come in registrazione: 100 punti, type 0, password casuale).
-     *
-     * @param newChildrenOut se non null, vi si aggiungono i figli appena creati (per notifiche).
-     */
     public UserPoint updateChildByEmail(UserPoint parentKey, List<UserPoint> childOps, List<UserPoint> newChildrenOut) {
+        return updateChildByEmail(parentKey, childOps, newChildrenOut, null);
+    }
+
+    public UserPoint updateChildByEmail(UserPoint parentKey, List<UserPoint> childOps, List<UserPoint> newChildrenOut,
+            Set<String> newlyAddedEncOut) {
         UserPoint existing = userPointRepository.findUserByEmail(parentKey.getEmailUserCurrent());
         if (existing == null) {
             throw new NotFoundException(notFoundMessages.parentUpdate());
         }
         List<String> emails = new ArrayList<>(Optional.ofNullable(existing.getEmailFigli()).orElseGet(ArrayList::new));
+        Set<String> newlyAdded = new LinkedHashSet<>();
         for (UserPoint op : Optional.ofNullable(childOps).orElseGet(List::of)) {
             if (op != null && op.getEmail() != null && !op.getEmail().isBlank()) {
                 String enc = op.getEmail().trim();
@@ -215,6 +345,7 @@ public class UserPointService {
                     ensureChildUserPointCreated(enc, newChildrenOut);
                     if (!emails.contains(enc)) {
                         emails.add(enc);
+                        newlyAdded.add(enc);
                     }
                 } else {
                     emails.remove(enc);
@@ -222,12 +353,13 @@ public class UserPointService {
             }
         }
         existing.setEmailFigli(emails);
+        mergeFigliLinksAfterMutation(existing, emails, newlyAdded);
+        if (newlyAddedEncOut != null) {
+            newlyAddedEncOut.addAll(newlyAdded);
+        }
         return userPointRepository.save(existing);
     }
 
-    /**
-     * Un utente già genitore (tipo famiglia o con figli in {@code emailFigli}) non può essere aggiunto come figlio.
-     */
     private void assertCandidateNotAlreadyParent(String emailEncrypted) {
         UserPoint existing = userPointRepository.findUserByEmailAll(emailEncrypted);
         if (existing == null) {

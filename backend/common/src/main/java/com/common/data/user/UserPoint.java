@@ -4,10 +4,8 @@ import com.common.dto.auth.Point;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,14 +19,17 @@ public class UserPoint {
     private String _id;
     private String email;
     private String password;
-    private List<Point> pointFigli;
     private Integer type;
     private List<String> emailFigli;
+    /** Stato conferma per ogni figlio (email cifrata); un figlio può avere più genitori con {@code check} distinti. */
+    private List<FiglioLink> figliLinks;
     private Integer points;
-    private List<String> nameImages;
-    /** Path immagine per chiave slot (nome passato dal frontend). */
+    /** Path immagine per id card (chiave = card id dal frontend). */
     private Map<String, String> imagesBySlot;
     private Integer status;
+    /** Solo input in registrazione: non persistito su Mongo. */
+    @Transient
+    private List<Point> pointFigli;
     @Transient
     private String emailChild;
     @Transient

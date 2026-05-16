@@ -32,6 +32,12 @@ public class UserPointController {
                 .flatMap(principal -> processor.getEmailChild(userPointDTO, principal));
     }
 
+    @PostMapping("child/confirm-parents")
+    public Mono<ResponseDTO> confirmParentLinks(@RequestBody UserPointDTO userPointDTO) {
+        return reactiveJwt.currentSubject()
+                .flatMap(principal -> processor.confirmParentLinks(userPointDTO, principal));
+    }
+
     @PostMapping("/dati")
     public Mono<ResponseDTO> getTypeUser(@RequestBody UserPointDTO userPointDTO) {
         return reactiveJwt.currentSubject()

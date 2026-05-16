@@ -17,6 +17,15 @@ import { savePassword, updateStatus } from "./service/SettingsService";
 
 const MIN_PASSWORD_LENGTH = 8;
 
+const DEMO_ACCOUNTS_NO_PASSWORD_CHANGE = new Set(
+  ["user@simulated.com", "child@simulated.com"].map((e) => e.toLowerCase())
+);
+
+function isDemoAccountBlockingPasswordChange(email: string | undefined): boolean {
+  if (!email) return false;
+  return DEMO_ACCOUNTS_NO_PASSWORD_CHANGE.has(email.trim().toLowerCase());
+}
+
 interface SettingsContentProps {
   user: UserI;
   alertConfig: AlertConfig;
@@ -28,6 +37,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
   const { i18n } = useLingui();
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const demoPasswordBlocked = isDemoAccountBlockingPasswordChange(user.emailUserCurrent);
   // Funzione per l'eliminazione account
   const handleDeleteAccount = () => {
     updateStatus({ ...user, status: StatusUserPoint.DISACTIVE }, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
@@ -42,6 +52,15 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
   };
 
   const handlePasswordAccount = () => {
+    if (demoPasswordBlocked) {
+      showMessage(alertConfig.setOpen, alertConfig.setMessage, {
+        titleMessage: i18n._("password_account"),
+        typeMessage: TypeAlertColor.ERROR,
+        message: [i18n._("settings_password_demo_disabled")],
+      });
+      return;
+    }
+
     const password = newPassword.trim();
     if (!password) {
       showMessage(alertConfig.setOpen, alertConfig.setMessage, {
@@ -91,7 +110,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
     funzione: handlePasswordAccount,
     nome: ButtonName.BLUE,
     title: i18n._("password_account"),
-    disableButton: newPassword.trim().length < MIN_PASSWORD_LENGTH,
+    disableButton: demoPasswordBlocked || newPassword.trim().length < MIN_PASSWORD_LENGTH,
     configDialogPulsante: {
       message: i18n._("cambio_password_account_message"),
       showDialog: true
@@ -163,8 +182,13 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
                   variant="outlined"
                   size="small"
                   fullWidth
+                  disabled={demoPasswordBlocked}
                   autoComplete="new-password"
-                  helperText={i18n._("settings_password_min_hint")}
+                  helperText={
+                    demoPasswordBlocked
+                      ? i18n._("settings_password_demo_disabled")
+                      : i18n._("settings_password_min_hint")
+                  }
                   InputLabelProps={{ shrink: true }}
                   InputProps={{
                     endAdornment: (
@@ -174,6 +198,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
                           onClick={() => setShowPassword((v) => !v)}
                           edge="end"
                           size="small"
+                          disabled={demoPasswordBlocked}
                         >
                           {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
                         </IconButton>

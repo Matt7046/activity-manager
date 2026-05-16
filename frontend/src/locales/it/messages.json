@@ -29,6 +29,7 @@
   "ricerca_video": "Ricerca video",
   "confermi_di_voler_ricercare_i_video": "Confermi di voler ricercare i video?",
   "completa_e_guadagna_punti": "Completa e guadagna punti",
+  "gamification_no_watch_minutes": "Guarda il video per almeno un minuto prima di riscattare i punti.",
   "aggiungi_ai_preferiti": "Aggiungi ai preferiti",
   "vuoi_aggiungere_questo_video_ai_preferiti": "Vuoi aggiungere questo video ai preferiti?",
   "guarda_video": "Guarda video",
@@ -157,6 +158,7 @@
   "settings_password_min_hint": "Almeno 8 caratteri.",
   "settings_password_min_title": "Password troppo breve",
   "settings_password_min_length": "La password deve contenere almeno 8 caratteri.",
+  "settings_password_demo_disabled": "Il cambio password non è disponibile per gli account dimostrativi.",
   "impostazione_profilo": "Impostazioni Profilo",
   "sicurezza_privacy": "Sicurezza e Privacy",
   "preferenze_account": "Gestisci le preferenze del tuo account: ",
@@ -263,6 +265,8 @@
   "email_duplicate_figli": "Sono presenti email duplicate tra i figli.",
   "server_unavailable": "Il server non risponde.",
   "error_generic": "Si è verificato un errore.",
+  "error_request_title": "Errore nella richiesta",
+  "error_request_timeout": "Timeout della richiesta. Riprova con un'immagine più piccola o una connessione migliore.",
   "forbidden_resource_missing": "Risorsa non trovata o non valida.",
   "forbidden_access_denied_resource": "Non hai i permessi per accedere a questa risorsa.",
   "forbidden_identity_missing": "Identità utente mancante.",
@@ -281,5 +285,8 @@
   "decrypt_operation_failed": "Errore nella decifratura dei dati.",
   "errore_http": "Errore di comunicazione con il server.",
   "point_disposizione": "Punti disponibili:",
+  "parent_link_confirm_title": "Conferma account genitore",
+  "parent_link_confirm_description": "Questi account ti hanno collegato come figlio. Seleziona quelli che vuoi attivare e conferma.",
+  "parent_link_confirm_save": "Salva",
   "invalid_credentials": "Credenziali non valide."
 }

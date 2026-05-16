@@ -6,7 +6,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import GoogleIcon from '@mui/icons-material/Google';
-import { Box, Button as ButtonMui, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Link as MuiLink, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
+import { Box, Button as ButtonMui, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, IconButton, Link as MuiLink, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import LinkNext from 'next/link';
@@ -28,7 +28,7 @@ import {
 } from '../../general/structure/Constant';
 import { navigateRouting, ResponseI, showMessage, UserI } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
-import { getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
+import { confirmParentLinks, getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
 import { HomeConfig } from './Home';
 import "./HomeContent.css";
 import { resetPassword } from './service/HomeService';
@@ -70,6 +70,10 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [openResetDialog, setOpenResetDialog] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
+  const [openPendingParentsDialog, setOpenPendingParentsDialog] = useState(false);
+  const [pendingParentsEmails, setPendingParentsEmails] = useState<string[]>([]);
+  const [pendingParentsSelected, setPendingParentsSelected] = useState<Record<string, boolean>>({});
+  const [pendingDialogChildEmail, setPendingDialogChildEmail] = useState('');
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const accountPasswordLoginEmails = ['user@simulated.com', 'child@simulated.com'];
 
@@ -138,17 +142,17 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
     if (user) {
 
       // Naviga solo quando `user` è stato aggiornato
-      if (user.type === 2 && !check) {
+      if (user.type === 2 && !check && openPendingParentsDialog === false) {
 
         navigateRouting(router, SectionName.REGISTER, {});
         check = true;
       }
-      else if ((user.type === 0 || user.type === 1) && !check) {
+      else if ((user.type === 0 || user.type === 1) && !check && openPendingParentsDialog === false) {
         navigateRouting(router, SectionName.ACTIVITY, {});
         check = false;
       }
     }
-  }, [user, router]);
+  }, [user, router, openPendingParentsDialog]);
 
 
 
@@ -261,10 +265,13 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
   }
 
   const openHome = (currentUser: any, googleAuth: boolean, setLoading: any): Promise<any> => {
+    const loginTypeBefore = currentUser.type;
     return getEmailChild({ ...currentUser, email: currentUser.emailChild }).then((x: ResponseI | undefined) => {
       const emailChild = x?.jsonText?.emailFigli ?? [];
       setEmailOptions(emailChild);
-      currentUser.type = emailChild?.length > 0 ? currentUser.type : 2;
+      if (loginTypeBefore === TypeUser.FAMILY) {
+        currentUser.type = emailChild?.length > 0 ? currentUser.type : 2;
+      }
     }).then(x => {
       getTypeUser(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
         setEmailLogin(x?.jsonText?.emailUserCurrent ?? '');
@@ -273,6 +280,17 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
             setEmailLogin(currentUser.email ?? '');
             setSimulated(TypeUser.STANDARD);
             setUser(toUserI({ ...currentUser, type: x.jsonText.typeUser, emailChild: currentUser.emailUserCurrent, emailUserCurrent: x.jsonText.emailUserCurrent }));
+            const pending = x?.jsonText?.pendingParentEmails as string[] | undefined;
+            if (pending && pending.length > 0) {
+              const sel: Record<string, boolean> = {};
+              pending.forEach((p) => {
+                sel[p] = true;
+              });
+              setPendingParentsSelected(sel);
+              setPendingParentsEmails(pending);
+              setPendingDialogChildEmail(x.jsonText.emailUserCurrent ?? currentUser.emailUserCurrent ?? '');
+              setOpenPendingParentsDialog(true);
+            }
             break;
           }
           case TypeUser.FAMILY: {
@@ -586,6 +604,25 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
     setOpenResetDialog(false);
   };
 
+  const handleClosePendingParentsDialog = (): void => {
+    setOpenPendingParentsDialog(false);
+  };
+
+  const handlePendingParentToggle = (parentEmail: string): void => {
+    setPendingParentsSelected((prev) => ({ ...prev, [parentEmail]: !prev[parentEmail] }));
+  };
+
+  const handleSavePendingParents = (): void => {
+    const selected = pendingParentsEmails.filter((e) => pendingParentsSelected[e]);
+    void confirmParentLinks(
+      { emailUserCurrent: pendingDialogChildEmail, confirmParentEmails: selected },
+      (dialogMessage?: TypeMessage) => showMessage(setOpen, setMessage, dialogMessage, true),
+      setLoading,
+    ).then(() => {
+      setOpenPendingParentsDialog(false);
+    });
+  };
+
   const handleConfirmResetPassword = (): void => {
     const email = resetEmail.trim();
     if (!email) {
@@ -850,6 +887,38 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
                   <ButtonMui onClick={handleCloseResetDialog}>{i18n._("annulla")}</ButtonMui>
                   <ButtonMui onClick={handleConfirmResetPassword} variant="contained">
                     {i18n._("password_reset_send")}
+                  </ButtonMui>
+                </DialogActions>
+              </Dialog>
+
+              <Dialog
+                open={openPendingParentsDialog}
+                onClose={handleClosePendingParentsDialog}
+                fullWidth
+                maxWidth="sm"
+              >
+                <DialogTitle>{i18n._("parent_link_confirm_title")}</DialogTitle>
+                <DialogContent>
+                  <Typography variant="body2" sx={{ mb: 2 }}>
+                    {i18n._("parent_link_confirm_description")}
+                  </Typography>
+                  {pendingParentsEmails.map((pe) => (
+                    <FormControlLabel
+                      key={pe}
+                      control={
+                        <Checkbox
+                          checked={Boolean(pendingParentsSelected[pe])}
+                          onChange={() => handlePendingParentToggle(pe)}
+                        />
+                      }
+                      label={pe}
+                    />
+                  ))}
+                </DialogContent>
+                <DialogActions>
+                  <ButtonMui onClick={handleClosePendingParentsDialog}>{i18n._("annulla")}</ButtonMui>
+                  <ButtonMui onClick={handleSavePendingParents} variant="contained">
+                    {i18n._("parent_link_confirm_save")}
                   </ButtonMui>
                 </DialogActions>
               </Dialog>

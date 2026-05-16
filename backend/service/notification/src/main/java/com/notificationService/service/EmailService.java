@@ -19,14 +19,31 @@ public class EmailService {
     private EncryptDecryptConverter encryptDecryptConverter;
 
     @Transactional
-    public UserPoint sendPasswordEmailChild(UserPoint userPoint, List<UserPoint> userChild)  {
-        userChild.stream().forEach(x -> {
+    public UserPoint sendPasswordEmailChild(UserPoint userPoint, List<UserPoint> userChild,
+            List<String> addedChildEmailsPlain) {
+        if (userChild != null && !userChild.isEmpty()) {
+            userChild.forEach(x -> {
+                try {
+                    mailSenderService.sendEmail(encryptDecryptConverter.decrypt(x.getEmail()), "Nuovo utente",
+                            encryptDecryptConverter.decrypt(x.getPassword()));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+        List<String> parentSummary = addedChildEmailsPlain;
+        if ((parentSummary == null || parentSummary.isEmpty()) && userChild != null && !userChild.isEmpty()) {
+            parentSummary = userChild.stream().map(c -> encryptDecryptConverter.decrypt(c.getEmail())).toList();
+        }
+        if (parentSummary != null && !parentSummary.isEmpty()) {
             try {
-                mailSenderService.sendEmail(encryptDecryptConverter.decrypt(x.getEmail()), "Nuovo utente",encryptDecryptConverter.decrypt(x.getPassword()));
+                String parentEmail = encryptDecryptConverter.decrypt(userPoint.getEmail());
+                String body = "Hai aggiunto i seguenti figli al tuo account: " + String.join(", ", parentSummary);
+                mailSenderService.sendEmail(parentEmail, "Conferma aggiunta figli", body);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        });
+        }
         return userPoint;
     }
 

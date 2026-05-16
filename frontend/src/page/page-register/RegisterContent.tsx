@@ -147,7 +147,7 @@ const RegisterContent: React.FC<RegisterContentProps> = ({
               label={i18n._("email")}
               variant="outlined"
               fullWidth
-              value={email}
+              value={email ?? ""}
               onChange={handleChangeEmail}
               disabled={user?.email !== undefined}
             />

@@ -4,7 +4,17 @@ import { i18n } from "@lingui/core";
 import { TypeMessage } from '../../page/page-layout/PageLayout';
 import apiConfig from '../structure/ApiConfig';
 import { HttpStatus, TypeAlertColor } from '../structure/Constant';
-import { getServerUnavailableMessage, translateApiMessages } from '../structure/Utils';
+import { buildRequestErrorAlert, getServerUnavailableMessage, translateApiMessages } from '../structure/Utils';
+
+const alertRequestError = (
+  funzioneMessage: ((message?: TypeMessage) => void) | undefined,
+  error: unknown,
+  showSuccess: boolean
+) => {
+  if (funzioneMessage) {
+    eseguiAlert(funzioneMessage, buildRequestErrorAlert(error), showSuccess);
+  }
+};
 
 const apiClient = () => {
   const token = localStorage.getItem('token');
@@ -48,7 +58,7 @@ export const getData = async (endpoint: string, data: any, setLoading?: (loading
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [getServerUnavailableMessage()] }, showSuccess);
+    alertRequestError(funzioneMessage, error, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -73,7 +83,7 @@ export const postData = async (endpoint: string, data: any, setLoading?: (loadin
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [getServerUnavailableMessage()] }, showSuccess);
+    alertRequestError(funzioneMessage, error, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -99,10 +109,35 @@ export const postDataPublic = async (endpoint: string, data: any, setLoading?: (
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [getServerUnavailableMessage()] }, showSuccess);
+    alertRequestError(funzioneMessage, error, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
+  }
+};
+
+/** Upload multipart: non impostare Content-Type (boundary automatico), timeout lungo per foto mobile. */
+export const postDataMultipart = async (endpoint: string, data: FormData, setLoading?: (loading: boolean) => void,
+  funzioneMessage?: (message?: TypeMessage) => void, showSuccess?: boolean
+) => {
+  showSuccess = showSuccess ?? false;
+  setLoading = setLoading ?? (() => { });
+  setLoading(true);
+  try {
+    const response = await apiClient().post(endpoint, data, { timeout: 120_000 });
+    response.data.status = response.data.status === undefined ? HttpStatus.OK : response.data.status;
+    const message: TypeMessage = {
+      titleMessage: response.data.status === HttpStatus.OK ? "Successo nella richiesta" : "Errore nella richiesta",
+      typeMessage: response.data.status === HttpStatus.OK ? TypeAlertColor.SUCCESS : TypeAlertColor.ERROR,
+      message: response.data.status === HttpStatus.OK ? null : response.data.errors,
+    }
+    eseguiAlert(funzioneMessage!, message, showSuccess, response);
+    return response.data;
+  } catch (error: any) {
+    alertRequestError(funzioneMessage, error, showSuccess);
+    throw error;
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -129,7 +164,7 @@ export const postDataFormData = async (endpoint: string, data: any, setLoading?:
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [getServerUnavailableMessage()] }, showSuccess);
+    alertRequestError(funzioneMessage, error, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -157,7 +192,7 @@ export const putData = async (endpoint: string, data: any, setLoading?: (loading
     eseguiAlert(funzioneMessage!, message, showSuccess, response);
     return response.data; // Restituisce i dati della risposta
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, { titleMessage: "Errore nella richiesta", typeMessage: TypeAlertColor.ERROR, message: [getServerUnavailableMessage()] }, showSuccess);
+    alertRequestError(funzioneMessage, error, showSuccess);
     throw error;
   } finally {
     setLoading(false);  // Nascondi lo spinner dopo che la risposta è arrivata
@@ -189,11 +224,7 @@ export const deleteData = async (
 
     return response.data;
   } catch (error: any) {
-    eseguiAlert(funzioneMessage!, {
-      titleMessage: "Errore nella richiesta",
-      typeMessage: TypeAlertColor.ERROR,
-      message: [getServerUnavailableMessage()]
-    }, showSuccess);
+    alertRequestError(funzioneMessage, error, showSuccess);
     throw error;
   } finally {
     setLoading(false);
@@ -225,10 +256,14 @@ export const eseguiAlert = (funzioneMessage: (message?: TypeMessage) => void, me
   if (funzioneMessage) {
     const errs = response.data.errors;
     if (response.data.status !== HttpStatus.OK) {
-      message.titleMessage = "Errore nella richiesta"
+      message.titleMessage = i18n._('error_request_title');
       message.typeMessage = TypeAlertColor.ERROR
       const rawList = Array.isArray(errs) ? errs : errs != null ? [String(errs)] : [];
-      message.message = translateApiMessages(rawList, i18n);
+      let translated = translateApiMessages(rawList, i18n);
+      if (translated.length === 0 && Array.isArray(messaggiAlert) && messaggiAlert.length > 0) {
+        translated = translateApiMessages(messaggiAlert.map(String), i18n);
+      }
+      message.message = translated.length > 0 ? translated : [getServerUnavailableMessage()];
     } else {
       message.titleMessage = "Successo nella richiesta"
       message.message = ['Operazione eseguita con successo']

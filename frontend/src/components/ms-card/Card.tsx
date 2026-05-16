@@ -13,6 +13,7 @@ import Grid from '@mui/material/Grid2';
 import { observer } from 'mobx-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { IMAGE } from '../../general/structure/Constant';
+import { imageExtensionFromFile, prepareImageForUpload } from '../../general/structure/imageUpload';
 import './Card.css'; // <-- Import del CSS
 
 export interface CardText {
@@ -82,18 +83,22 @@ const CardComponent = observer((props: CardProps) => {
   };
 
 
-  // Gestisce la selezione del file
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    selectedFile = file;
-    handleClickOpen(props);
+  // Gestisce la selezione del file (da mobile le foto sono spesso molto grandi)
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = event.target.files?.[0];
+    if (!raw) return;
+    try {
+      selectedFile = await prepareImageForUpload(raw);
+      handleClickOpen(props);
+    } finally {
+      event.target.value = "";
+    }
   };
 
   // Funzione che sostituisce il primo parametro di loadImage con imageDTO
   const creaFormData = (loadImage: (imageDTO: FormData) => Promise<string>, selectedFile: File | undefined) => {
     if (selectedFile) {
-      const fileName = selectedFile?.name;
-      const extension = fileName?.substring(fileName.lastIndexOf('.'));
+      const extension = imageExtensionFromFile(selectedFile);
       // Crea l'oggetto imageDTO
       const formData = new FormData();
       formData.append('file', selectedFile);
@@ -128,9 +133,10 @@ const CardComponent = observer((props: CardProps) => {
       <input
         id="file-upload"
         type="file"
+        accept="image/jpeg,image/png,image/webp"
         hidden
         ref={fileInputRef}
-        onChange={(e) => handleFileChange(e)}
+        onChange={(e) => void handleFileChange(e)}
       />
 
       <CardContent className='card-content'>

@@ -28,7 +28,7 @@ Regole automatiche (`frontend/scripts/load-frontend-env.cjs`):
 | BAT `batavviodocker/locale` + `REBUILD-FRONTEND` (Docker) | `.env` + `frontend/local.env` → tipicamente localhost |
 | Override | `FRONTEND_USE_LOCAL_ENV=1` forza `local.env`; `=0` lo esclude |
 
-Docker locale usa `frontend/.dockerignore.locale` (include `local.env` nel contesto di build); Docker prod usa `.dockerignore` standard (esclude `local.env`).
+Docker build frontend: `frontend/.dockerignore` non esclude più `local.env` (necessario per `docker-compose.localhost.yml` + `FRONTEND_USE_LOCAL_ENV=1`). In CI produzione non lasciare `local.env` nel contesto se non serve.
 
 Le chiavi sono quelle in `frontend/.env.EMPTY` / `local.env.EMPTY`.
 

@@ -17,12 +17,30 @@ export const findByEmail = async (user: UserI, funzioneMessage?: (message?: Type
 
 
 
-export const getEmailChild = async (userDTO: any,funzioneMessage?: (message?: TypeMessage)  => void, setLoading?: (loading: boolean) => void): Promise<ResponseI | undefined> => {
+export const getEmailChild = async (
+  userDTO: any,
+  funzioneMessage?: (message?: TypeMessage) => void,
+  setLoading?: (loading: boolean) => void,
+): Promise<ResponseI | undefined> => {
   try {
     const path = PATH_USER_POINT + `/child`;
-    const data = await postData(path, userDTO, setLoading, funzioneMessage); // Usa l'URL dinamico
+    const payload = { ...userDTO, onlyCheckedChildren: userDTO.onlyCheckedChildren ?? true };
+    const data = await postData(path, payload, setLoading, funzioneMessage); // Usa l'URL dinamico
     return data;
-  } catch (error) {   
+  } catch (error) {
+  }
+};
+
+export const confirmParentLinks = async (
+  body: { emailUserCurrent: string; confirmParentEmails: string[] },
+  funzioneMessage?: (message?: TypeMessage) => void,
+  setLoading?: (loading: boolean) => void,
+): Promise<ResponseI | undefined> => {
+  try {
+    const path = PATH_USER_POINT + `/child/confirm-parents`;
+    const data = await postData(path, body, setLoading, funzioneMessage, false);
+    return data;
+  } catch (error) {
   }
 };
 

@@ -157,6 +157,7 @@
   "settings_password_min_hint": "Mindestens 8 Zeichen.",
   "settings_password_min_title": "Passwort zu kurz",
   "settings_password_min_length": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+  "settings_password_demo_disabled": "Die Passwortänderung ist für Demo-Konten nicht verfügbar.",
   "impostazione_profilo": "Profileinstellungen",
   "sicurezza_privacy": "Sicherheit und Datenschutz",
   "preferenze_account": "Verwalten Sie Ihre Kontoeinstellungen:",
@@ -263,6 +264,8 @@
   "email_duplicate_figli": "Doppelte E-Mail-Adressen bei den Kindern sind nicht erlaubt.",
   "server_unavailable": "Der Server antwortet nicht.",
   "error_generic": "Es ist ein Fehler aufgetreten.",
+  "error_request_title": "Fehler bei der Anfrage",
+  "error_request_timeout": "Zeitüberschreitung der Anfrage. Versuchen Sie es mit einem kleineren Bild oder einer besseren Verbindung erneut.",
   "forbidden_resource_missing": "Ressource nicht gefunden oder ungültig.",
   "forbidden_access_denied_resource": "Sie haben keine Berechtigung für diese Ressource.",
   "forbidden_identity_missing": "Benutzeridentität fehlt.",
@@ -281,5 +284,8 @@
   "decrypt_operation_failed": "Fehler beim Entschlüsseln der Daten.",
   "errore_http": "Kommunikationsfehler mit dem Server.",
   "point_disposizione": "Verfügbare Punkte:",
+  "parent_link_confirm_title": "Elternkonten bestätigen",
+  "parent_link_confirm_description": "Diese Konten haben Sie als Kind verknüpft. Wählen Sie die aus, die Sie aktivieren möchten, und bestätigen Sie.",
+  "parent_link_confirm_save": "Speichern",
   "invalid_credentials": "Ungültige Anmeldedaten."
 }

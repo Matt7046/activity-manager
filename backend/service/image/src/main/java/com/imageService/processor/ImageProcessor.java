@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 @Component
 public class ImageProcessor {
@@ -22,7 +23,12 @@ public class ImageProcessor {
     EncryptDecryptConverter encryptDecryptConverter;
 
     public Mono<ResponseDTO> uploadImage(ImageDTO image ) {
-        image.setNameImage(encryptDecryptConverter.decrypt(image.getNameImage()));
+        String nameImage = image.getNameImage();
+        if (nameImage != null && !nameImage.isBlank()) {
+            image.setNameImage(encryptDecryptConverter.decrypt(nameImage));
+        } else {
+            image.setNameImage("userpoint/" + UUID.randomUUID());
+        }
             return DataBufferUtils.join(image.getFile().content())
                     .flatMap(dataBuffer -> {
                         byte[] bytes = new byte[dataBuffer.readableByteCount()];
