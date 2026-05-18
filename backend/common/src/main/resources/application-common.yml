@@ -169,5 +169,10 @@ cloudinary:
   api_secret: ${CLOUDINARY_API_SECRET}
 
 email:
-  username: ${EMAIL_USER}
-  password: ${EMAIL_PASSWORD}
+  enabled: ${EMAIL_ENABLED:true}
+  provider: ${EMAIL_PROVIDER:gmail-oauth}
+  from: ${EMAIL_FROM:}
+  gmail-oauth:
+    client-id: ${GMAIL_OAUTH_CLIENT_ID:}
+    client-secret: ${GMAIL_OAUTH_CLIENT_SECRET:}
+    refresh-token: ${GMAIL_OAUTH_REFRESH_TOKEN:}
