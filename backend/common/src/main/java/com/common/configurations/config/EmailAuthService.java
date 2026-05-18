@@ -12,8 +12,6 @@ import java.util.Properties;
 @Service
 public class EmailAuthService {
 
-    @Value("${spring.mail.from}")
-    private String emailFrom;
     @Value("${email.username}")
     private String username;
     @Value("${email.password}")

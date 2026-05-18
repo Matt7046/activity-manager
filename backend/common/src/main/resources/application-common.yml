@@ -12,8 +12,6 @@ spring:
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USER}
     password: ${RABBITMQ_PASSWORD}
-  mail:
-    from: ${EMAIL_FROM}
   data:
     mongo:
       uri: ${MONGO_URI}
