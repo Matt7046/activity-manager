@@ -34,44 +34,80 @@ Le chiavi sono quelle in `frontend/.env.EMPTY` / `local.env.EMPTY`.
 
 Per **build immagine Docker** del frontend: `frontend/.dockerignore` esclude **`local.env`** dal contesto di build, così anche se sul PC hai sia `.env` sia `local.env`, nell’immagine non entra `local.env` e non sovrascrive i valori di produzione (resta solo ciò che copi / inject come `.env` o variabili in pipeline).
 
-## Backend env (`backend/local.env`)
+## Backend env (`backend/local.env` `backend/.env`)
 
     # Database MongoDB
     MONGO_URI=
     MONGO_DB=
-    
+
     # RabbitMQ
     RABBITMQ_HOST=
     RABBITMQ_PORT=
     RABBITMQ_USER=
     RABBITMQ_PASSWORD=
-    
+    RABBITMQ_DEFAULT_USER=
+    RABBITMQ_DEFAULT_PASS=
+
     # Elasticsearch
     ELASTIC_URIS=
     ELASTIC_USER=
     ELASTIC_PASSWORD=
     ELASTIC_BUNDLE_PASSWORD=
-    
+
     # Servizi Esterni (API Keys)
     GPT_TOKEN=
     YOUTUBE_API_KEY=
     CLOUDINARY_NAME=
     CLOUDINARY_API_KEY=
     CLOUDINARY_API_SECRET=
-    
-    # Email
-    EMAIL_USER=
-    EMAIL_PASSWORD=
+    GOOGLE_CLIENT_ID=
+
+    # OAuth social login (auth-service: GitHub code exchange, Facebook token)
+    GITHUB_CLIENT_ID=
+    GITHUB_CLIENT_SECRET=
+    FACEBOOK_APP_ID=
+    FACEBOOK_APP_SECRET=
+
+    # Email Gmail API + OAuth (solo notification-service)
+    EMAIL_ENABLED=
+    EMAIL_PROVIDER=
     EMAIL_FROM=
-    
+    GMAIL_OAUTH_CLIENT_ID=
+    GMAIL_OAUTH_CLIENT_SECRET=
+    GMAIL_OAUTH_REFRESH_TOKEN=
+
     # Sicurezza e Cifratura
     APP_SECRET_KEY=
     APP_CRYPT_KEY=
     APP_USER_NAME=
     APP_USER_KEY=
-    
+
     # Indirizzi
     ADDRESS_1=
     ADDRESS_2=
     ADDRESS_3=
+
+## Frontend env (`frontend/local.env` `frontend/.env`)    
+   
+
+    # URL pubblico del frontend (senza slash finale). Usato per Open Graph, manifest PWA e link assoluti.
+    NEXT_PUBLIC_SITE_URL=
+
+    # Base delivery immagini Cloudinary, con segmento /image/upload/ (non /image/v).
+    NEXT_PUBLIC_IMAGE_SERVER=
+
+    # ID client OAuth Google (tipo Web) per il pulsante "Accedi con Google" sul frontend.
+    NEXT_PUBLIC_CLIENT_GOOGLE_ID=
+
+    # Client ID dell'OAuth App GitHub (Settings → Developer settings → OAuth Apps).
+    NEXT_PUBLIC_CLIENT_GITHUB_ID=
+
+    # Redirect URI registrata su GitHub (Authorization callback URL). Deve coincidere con il path /home del callback.
+    NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI=
+
+    # App ID Facebook (pubblico) per il login con Facebook. Lasciare vuoto per disabilitare.
+    NEXT_PUBLIC_CLIENT_FACEBOOK_APP_ID=
+
+    # Base URL delle API backend (prefisso comune nginx, di solito /api). Senza slash finale.
+    NEXT_PUBLIC_SERVICE_URL=
 
