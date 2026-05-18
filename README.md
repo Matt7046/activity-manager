@@ -102,7 +102,7 @@ Per **build immagine Docker** del frontend: `frontend/.dockerignore` esclude **`
     # Client ID dell'OAuth App GitHub (Settings → Developer settings → OAuth Apps).
     NEXT_PUBLIC_CLIENT_GITHUB_ID=
 
-    # Redirect URI registrata su GitHub (Authorization callback URL). Deve coincidere con il path /home del callback.
+    # Redirect URI registrata su GitHub. Deve coincidere con il path /home del callback.
     NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI=
 
     # App ID Facebook (pubblico) per il login con Facebook. Lasciare vuoto per disabilitare.
