@@ -3,7 +3,7 @@
 ## Frontend in sviluppo
 
 - **`npm run dev`** (in `frontend/`): esegue `scripts/run-dev.cjs` — carica **`frontend/.env`** poi **`frontend/local.env`** con priorità a **`local.env`** (stesso criterio di `backend/docker-compose.localhost.yml` con `env_file: local.env`).
-- **`dev-frontend-local.bat`** (nella root del repo): entra in `frontend` e lancia `npm run dev` (utile su Windows come scorciatoia).
+- **`backend/batavviodocker/dev-frontend-local.bat`**: entra in `frontend/` e lancia `npm run dev` (`.env` + `local.env`).
 
 ## Stack Docker locale (backend + nginx + frontend containerizzato)
     docker compose -f backend/docker-compose.localhost.yml down
