@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
         "com.common.security",
         "com.common.configurations.mongodb",
         "com.common.configurations.config",
+        "com.common.mail",
         "com.common.configurations.encrypt",   
         "com.common.configurations.rabbitmq",
         "com.common.configurations.structure",
