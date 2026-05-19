@@ -106,6 +106,7 @@ rabbitmq:
   exchange:
     name:
       notification: notification-exchange
+      notification-ws: notification-ws-fanout
       point: point-exchange
       activity:
         search:

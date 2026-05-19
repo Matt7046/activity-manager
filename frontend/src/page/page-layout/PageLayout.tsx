@@ -104,42 +104,58 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (user) {
-      const socketFamilyPoint = SocketFamilyPoint.getInstance(user, notificationWebSocketUrl(user?.emailUserCurrent));
-      socketRef.current = socketFamilyPoint.getSocket();
-      // Ping ogni 30 secondi
-      pingIntervalRef.current = setInterval(() => {
-        if (socketFamilyPoint.getSocket().readyState === WebSocket.OPEN) {
-          socketFamilyPoint.getSocket().send("ping");
-        }
-        else {
-          SocketFamilyPoint.reconnect(user, notificationWebSocketUrl(user?.emailUserCurrent));
-        }
-      }, 30000);
-      socketFamilyPoint.getSocket().onmessage = (event) => {
+    const email = user?.emailUserCurrent?.trim();
+    if (!email) {
+      return;
+    }
+
+    let disposed = false;
+    const wsUrl = notificationWebSocketUrl(email);
+
+    const attachHandlers = (socket: WebSocket) => {
+      socket.onmessage = (event) => {
         console.log("Messaggio ricevuto:", event.data);
         const familyNotification: FamilyNotificationI = JSON.parse(event.data);
-        const testoKey = getTranslatedNotification(familyNotification.message, i18n)
-        const message = testoKey
+        const testoKey = getTranslatedNotification(familyNotification.message, i18n);
         const typeMessage: TypeMessage = {
-          message: [message],
-          typeMessage: TypeAlertColor.INFO
-        }
-
+          message: [testoKey],
+          typeMessage: TypeAlertColor.INFO,
+        };
         showMessage(alertConfig.setOpen, alertConfig.setMessage, typeMessage);
       };
-      socketFamilyPoint.getSocket().onclose = () => {
+      socket.onclose = () => {
         console.warn("WebSocket chiuso");
       };
+    };
 
+    void SocketFamilyPoint.reconnect(user, wsUrl).then((socketFamilyPoint) => {
+      if (disposed) {
+        return;
+      }
+      const socket = socketFamilyPoint.getSocket();
+      socketRef.current = socket;
+      attachHandlers(socket);
 
-      return () => {
-        if (pingIntervalRef.current) {
-          clearInterval(pingIntervalRef.current);
+      pingIntervalRef.current = setInterval(() => {
+        if (disposed) {
+          return;
         }
-      };
-    }
-  }, [user]);
+        if (socket.readyState === WebSocket.OPEN) {
+          socket.send("ping");
+        } else {
+          void SocketFamilyPoint.reconnect(user, wsUrl);
+        }
+      }, 30000);
+    });
+
+    return () => {
+      disposed = true;
+      if (pingIntervalRef.current) {
+        clearInterval(pingIntervalRef.current);
+        pingIntervalRef.current = null;
+      }
+    };
+  }, [user?.emailUserCurrent]);
 
 
 

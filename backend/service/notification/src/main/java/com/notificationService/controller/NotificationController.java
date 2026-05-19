@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://webapp-tn6q.onrender.com")
 @RequestMapping("api/notification")
 public class NotificationController {
 
