@@ -7,8 +7,6 @@ import com.common.structure.messages.ImageMessages;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,8 +20,7 @@ public class UserPointImageSlots {
 
     public static final List<String> SLOT_IDS = List.of("0", "1", "2");
 
-    private static final Pattern IMAGE_VERSION_PATH =
-            Pattern.compile("/image/v(\\d+)/(.+)$");
+    private static final String IMAGE_VERSION_PREFIX = "/image/v";
 
     @Autowired
     private EncryptDecryptConverter encryptDecryptConverter;
@@ -191,10 +188,36 @@ public class UserPointImageSlots {
             int q = rest.indexOf('?');
             return q >= 0 ? rest.substring(0, q) : rest;
         }
-        Matcher m = IMAGE_VERSION_PATH.matcher(url);
-        if (m.find()) {
-            return "v" + m.group(1) + "/" + m.group(2);
+        String fromImageVersion = extractVersionedImagePath(url);
+        if (fromImageVersion != null) {
+            return fromImageVersion;
         }
         return url;
+    }
+
+    /** Parsing lineare di {@code /image/v{version}/{path}} (evita regex su input non fidato). */
+    private static String extractVersionedImagePath(String url) {
+        int imageV = url.lastIndexOf(IMAGE_VERSION_PREFIX);
+        if (imageV < 0) {
+            return null;
+        }
+        int versionStart = imageV + IMAGE_VERSION_PREFIX.length();
+        int slashAfterVersion = url.indexOf('/', versionStart);
+        if (slashAfterVersion <= versionStart) {
+            return null;
+        }
+        String versionDigits = url.substring(versionStart, slashAfterVersion);
+        if (versionDigits.isEmpty() || !versionDigits.chars().allMatch(Character::isDigit)) {
+            return null;
+        }
+        String pathPart = url.substring(slashAfterVersion + 1);
+        int q = pathPart.indexOf('?');
+        if (q >= 0) {
+            pathPart = pathPart.substring(0, q);
+        }
+        if (pathPart.isEmpty()) {
+            return null;
+        }
+        return "v" + versionDigits + "/" + pathPart;
     }
 }

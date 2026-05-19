@@ -90,6 +90,8 @@ public class SecurityConfig implements WebFluxConfigurer {
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults()))
                 .cors(Customizer.withDefaults())
+                // API stateless: JWT Bearer, nessun cookie di sessione → CSRF non applicabile (Spring WebFlux).
+                // lgtm[java/spring-disabled-csrf-protection]
                 .csrf(ServerHttpSecurity.CsrfSpec::disable);
 
         return http.build();
