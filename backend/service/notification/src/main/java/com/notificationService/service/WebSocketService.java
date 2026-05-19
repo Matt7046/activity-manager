@@ -6,6 +6,8 @@ import com.common.data.notification.StatusNotification;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.notificationService.rabbitmq.NotificationWsBroadcast;
+import com.notificationService.rabbitmq.NotificationWsBroadcaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.socket.WebSocketHandler;
@@ -14,6 +16,8 @@ import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -34,6 +38,12 @@ public class WebSocketService implements WebSocketHandler {
     @Autowired
     EncryptDecryptConverter encryptDecryptConverter;
 
+    @Autowired
+    private NotificationWsBroadcaster notificationWsBroadcaster;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
     public Mono<Void> handle(WebSocketSession session) {
         // Aggiunge la sessione quando si connette un client
@@ -50,44 +60,73 @@ public class WebSocketService implements WebSocketHandler {
 
 
     private String extractEmailFromSession(WebSocketSession session) {
-        // Ottieni l'URL completo della sessione
-
-        // Esegui il parsing per estrarre il parametro emailUserCurrent
         URI uri = session.getHandshakeInfo().getUri();
         String query = uri.getQuery();
-        return query.split("=")[1];
+        if (query == null || query.isBlank()) {
+            return "";
+        }
+        for (String param : query.split("&")) {
+            String[] pair = param.split("=", 2);
+            if (pair.length == 2 && "emailUserCurrent".equals(pair[0])) {
+                return URLDecoder.decode(pair[1], StandardCharsets.UTF_8);
+            }
+        }
+        return "";
     }
 
 
-    public void sendNotification(String jsonMessage) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
+    /**
+     * Consumato da una sola replica (coda {@code notifications.queue}): persiste su Mongo
+     * e pubblica sul fanout per il push WebSocket su tutte le istanze.
+     */
+    public void persistAndBroadcastWs(String jsonMessage) throws JsonProcessingException {
+        Notification saved = persistNotification(jsonMessage);
+        notificationWsBroadcaster.broadcast(jsonMessage, saved.get_id());
+    }
+
+    /**
+     * Consumato da ogni replica (coda anonima sul fanout): inoltra solo alle sessioni WS locali.
+     */
+    public void pushToLocalWebSockets(String broadcastJson) throws JsonProcessingException {
+        NotificationWsBroadcast broadcast = objectMapper.readValue(broadcastJson, NotificationWsBroadcast.class);
+        String jsonMessage = broadcast.getPayload();
+        String notificationId = broadcast.getNotificationId();
+
         JsonNode rootNode = objectMapper.readTree(jsonMessage);
-        // Estrai il campo come un JsonNode e convertilo direttamente in String
+        String userReceiver = rootNode.path("userReceiver").asText();
+
+        Flux.fromIterable(sessions)
+                .filter(session -> session.isOpen()
+                        && userReceiver.equals(session.getAttributes().get(identification)))
+                .flatMap(session -> {
+                    markNotificationReceived(notificationId);
+                    return session.send(Mono.just(session.textMessage(jsonMessage)));
+                })
+                .subscribe();
+    }
+
+    private Notification persistNotification(String jsonMessage) throws JsonProcessingException {
+        JsonNode rootNode = objectMapper.readTree(jsonMessage);
         String userReceiver = rootNode.path("userReceiver").asText();
         String userSender = rootNode.path("userSender").asText();
         String message = rootNode.path("message").asText();
-        // Ottenere la data come stringa
         long dateSenderLong = rootNode.path("dateSender").longValue();
         Date dateSender = new Date(dateSenderLong);
+
         Notification notification = new Notification();
         notification.setMessage(message);
         notification.setUserReceiver(encryptDecryptConverter.convert(userReceiver));
         notification.setUserSender(encryptDecryptConverter.convert(userSender));
         notification.setDateSender(dateSender);
         notification.setStatus(StatusNotification.NOT_READ);
-        Notification response = notificationService.saveNotification(notification);
-        Flux.fromIterable(sessions).filter(
-                        session -> session.isOpen() && userReceiver.equals(session.getAttributes().get(identification)))
-                .flatMap(session -> {
-                    saveNotificationStatusNotRead(session, response, objectMapper);
-                    return session.send(Mono.just(session.textMessage(jsonMessage)));
-                }).subscribe();
+        return notificationService.saveNotification(notification);
     }
 
-    private Mono<WebSocketSession> saveNotificationStatusNotRead(WebSocketSession session, Notification notification, ObjectMapper objectMapper) {
-        notification.setStatus(StatusNotification.RECEIVE);
-        notificationService.saveNotification(notification);
-        return Mono.just(session);
+    private void markNotificationReceived(String notificationId) {
+        notificationService.findById(notificationId).ifPresent(notification -> {
+            notification.setStatus(StatusNotification.RECEIVE);
+            notificationService.saveNotification(notification);
+        });
     }
 }
 

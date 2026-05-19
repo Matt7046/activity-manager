@@ -20,7 +20,7 @@ public class RabbitMQNotificationConsumer {
     @RabbitListener(queues = "notifications.queue", ackMode = "MANUAL")
     public void receiveNotification(String jsonMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
         try {
-            webSocketService.sendNotification(jsonMessage);
+            webSocketService.persistAndBroadcastWs(jsonMessage);
             channel.basicAck(tag, false);
         } catch (IOException e) {
             throw new RuntimeException(e);

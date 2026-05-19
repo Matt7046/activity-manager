@@ -13,9 +13,6 @@ export const notificationWebSocketUrl = (emailUserCurrent: string | undefined): 
   if (custom) {
     return `${custom}/ws/notifications?emailUserCurrent=${q}`;
   }
-  if (typeof window !== "undefined") {
     const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
-    return `${proto}//${window.location.host}/ws/notifications?emailUserCurrent=${q}`;
-  }
-  return `ws://127.0.0.1/ws/notifications?emailUserCurrent=${q}`;
+    return `${proto}//${window.location.host}/ws/notifications?emailUserCurrent=${q}`;  
 };
