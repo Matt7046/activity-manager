@@ -8,7 +8,6 @@ import com.google.api.client.util.Base64;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
 import com.google.auth.http.HttpCredentialsAdapter;
-import com.google.auth.oauth2.GoogleAuthException;
 import com.google.auth.oauth2.UserCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,8 +80,8 @@ public class GmailOAuthEmailSender implements EmailSender {
         while (root.getCause() != null) {
             root = root.getCause();
         }
-        if (root instanceof GoogleAuthException gae && gae.getMessage() != null) {
-            return gae.getMessage();
+        if ("GoogleAuthException".equals(root.getClass().getSimpleName()) && root.getMessage() != null) {
+            return root.getMessage();
         }
         String msg = root.getMessage();
         if (msg != null && msg.contains("oauth2.googleapis.com/token")) {
