@@ -3,11 +3,7 @@ package com.common.configurations.config;
 import com.common.mail.EmailHtmlTemplates;
 import com.common.mail.EmailProperties;
 import com.common.mail.EmailSender;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.stereotype.Service;
 
-@Service
-@ConditionalOnBean(EmailSender.class)
 public class EmailAuthService {
 
     private final EmailSender emailSender;

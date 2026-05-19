@@ -21,5 +21,5 @@ RUN --mount=type=cache,target=/root/.m2,id=activity-manager-maven \
 FROM mcr.microsoft.com/openjdk/jdk:17-azurelinux
 WORKDIR /app
 COPY --from=build /app/service/notification/target/notification-service-1.0.0.jar app.jar
-EXPOSE 8089
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
