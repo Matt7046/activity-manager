@@ -1,5 +1,7 @@
 @echo off
 setlocal
+set DOCKER_BUILDKIT=1
+set COMPOSE_DOCKER_CLI_BUILD=1
 
 rem Radice repo (…\activity-manager): da locale\ sali di 3 livelli
 cd /d "%~dp0..\..\.."

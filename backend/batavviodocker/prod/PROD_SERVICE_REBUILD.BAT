@@ -1,11 +1,13 @@
 @echo off
 setlocal
+set DOCKER_BUILDKIT=1
+set COMPOSE_DOCKER_CLI_BUILD=1
 
 if "%~1"=="" (
   echo Uso: PROD_SERVICE_REBUILD.BAT nome-logico
   echo Esempi: user-point-service   activity-service   frontend
   echo Ricrea entrambe le repliche *-1 e *-2 dopo build su *-1.
-  echo Opzionale: set PROD_REBUILD_USE_CACHE=1 per build piu^ veloce ^(usa cache Docker^).
+  echo Opzionale: set PROD_REBUILD_USE_CACHE=1 per build piu^ veloce ^(layer Docker + cache Maven .m2^).
   exit /b 1
 )
 

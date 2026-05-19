@@ -1,10 +1,14 @@
-FROM maven:3.8.5-openjdk-17-slim AS builder
+# syntax=docker/dockerfile:1.4
+FROM maven:3.9-amazoncorretto-17 AS builder
 
 WORKDIR /app
 
-# Copia tutto il progetto nella directory di lavoro
+COPY pom.xml ./pom.xml
+COPY common/pom.xml ./common/pom.xml
+RUN --mount=type=cache,target=/root/.m2,id=activity-manager-maven \
+    mvn -pl common -am -DskipTests dependency:go-offline dependency:resolve-plugins
+
 COPY . .
 
-# Costruisci solo il modulo `common`
-RUN mvn clean install -pl common -am -DskipTests
-
+RUN --mount=type=cache,target=/root/.m2,id=activity-manager-maven \
+    mvn -pl common -am -DskipTests install

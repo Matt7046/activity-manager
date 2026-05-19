@@ -9,6 +9,8 @@
     docker compose -f backend/docker-compose.localhost.yml down
     docker compose -f backend/docker-compose.localhost.yml up --build
 
+I Dockerfile dei microservizi usano **BuildKit** con cache Maven condivisa (`/root/.m2`, id `activity-manager-maven`). I BAT in `backend/batavviodocker` impostano `DOCKER_BUILDKIT=1`. In produzione, per rebuild più rapidi: `set PROD_REBUILD_USE_CACHE=1` prima di `PROD_SERVICE_REBUILD.BAT`.
+
 > Nota: in locale non usiamo piu lo scaling con `--scale`.
 > Il file `docker-compose.localhost.yml` avvia una sola istanza per ogni microservizio.
 
