@@ -2,20 +2,11 @@
 import { I18n, i18n } from "@lingui/core";
 
 import { TypeMessage } from "@/page/page-layout/PageLayout";
-import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // Points
-import EngineeringIcon from '@mui/icons-material/Engineering';
-import GroupIcon from '@mui/icons-material/Group'; //
-import InfoIcon from '@mui/icons-material/Info'; // About
-import ListAltIcon from '@mui/icons-material/ListAlt'; // Activity
-import LoginIcon from '@mui/icons-material/Login';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import SettingsIcon from '@mui/icons-material/Settings'; // Operative
-import StarIcon from '@mui/icons-material/Star';
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { MenuLaterale } from "../../components/ms-drawer/Drawer";
 import { SectionName, SectionNameDesc, TypeAlertColor, TypeUser } from "./Constant";
+import { getSectionMenuIcon } from "./menuIcons";
+export { getSectionMenuIcon } from "./menuIcons";
 
 export const myDisplayer = ((some: string, value: string) => {
   if (document.getElementById(some)) {
@@ -127,40 +118,6 @@ export const getSectionAnnotazione =(
       return 'annotation_notification';
     case SectionName.SETTINGS:
       return 'annotation_settings';
-    default:
-      return undefined;
-  }
-}
-
-export const getSectionMenuIcon = (path: string | undefined): MenuLaterale['icon'] => {
-  if (path == null || path === '') {
-    return undefined;
-  }
-  switch (path) {
-    case SectionName.ACTIVITY:
-      return ListAltIcon;
-    case SectionName.ABOUT:
-      return InfoIcon;
-    case SectionName.POINTS:
-    case SectionName.LOG_USER_POINT:
-      return EmojiEventsIcon;
-    case SectionName.OPERATIVE:
-      return EngineeringIcon;
-    case SectionName.FAMILY:
-      return GroupIcon;
-    case SectionName.NOTIFICATION:
-      return NotificationsIcon;
-    case SectionName.SETTINGS:
-      return SettingsIcon;
-    case SectionName.GAMIFICATION:
-      return StarIcon;
-    case SectionName.HOME:
-      return LoginIcon;
-    case SectionName.REGISTER:
-      return AppRegistrationIcon;
-    case SectionName.PERSONALITY:
-    case SectionName.POLICY:
-      return PsychologyIcon;
     default:
       return undefined;
   }
@@ -330,26 +287,26 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
           funzione: null,
           testo: SectionNameDesc.ACTIVITY,
           path: SectionName.ACTIVITY,
-          icon: ListAltIcon
+          icon: getSectionMenuIcon(SectionName.ACTIVITY)
         },
         {
           funzione: null,
           testo: SectionNameDesc.ABOUT(null),
           path: SectionName.ABOUT,
 
-          icon: InfoIcon
+          icon: getSectionMenuIcon(SectionName.ABOUT)
         },
         {
           funzione: null,
           testo: SectionNameDesc.POINTS,
           path: SectionName.POINTS,
-          icon: EmojiEventsIcon
+          icon: getSectionMenuIcon(SectionName.POINTS)
         },
         {
           funzione: null,
           testo: SectionNameDesc.OPERATIVE,
           path: SectionName.OPERATIVE,
-          icon: EngineeringIcon
+          icon: getSectionMenuIcon(SectionName.OPERATIVE)
         },
       ],
       [
@@ -357,19 +314,19 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
           funzione: null,
           testo: SectionNameDesc.FAMILY,
           path: SectionName.FAMILY,
-          icon: GroupIcon
+          icon: getSectionMenuIcon(SectionName.FAMILY)
         },
         {
           funzione: null,
           testo: SectionNameDesc.NOTIFICATION,
           path: SectionName.NOTIFICATION,
-          icon: NotificationsIcon
+          icon: getSectionMenuIcon(SectionName.NOTIFICATION)
         },
         {
           funzione: null,
           testo: SectionNameDesc.SETTINGS,
           path: SectionName.SETTINGS,
-          icon: SettingsIcon
+          icon: getSectionMenuIcon(SectionName.SETTINGS)
         },
       ]
     ];
@@ -380,25 +337,25 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
           funzione: null,
           testo: SectionNameDesc.ACTIVITY,
           path: SectionName.ACTIVITY,
-          icon: ListAltIcon
+          icon: getSectionMenuIcon(SectionName.ACTIVITY)
         },
         {
           funzione: null,
           testo: SectionNameDesc.GAMIFICATION,
           path: SectionName.GAMIFICATION,
-          icon: StarIcon
+          icon: getSectionMenuIcon(SectionName.GAMIFICATION)
         },
         {
           funzione: null,
           testo: SectionNameDesc.POINTS,
           path: SectionName.POINTS,
-          icon: EmojiEventsIcon
+          icon: getSectionMenuIcon(SectionName.POINTS)
         },
         {
           funzione: null,
           testo: SectionNameDesc.OPERATIVE,
           path: SectionName.OPERATIVE,
-          icon: EngineeringIcon
+          icon: getSectionMenuIcon(SectionName.OPERATIVE)
         },
 
       ],
@@ -407,13 +364,13 @@ export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
           funzione: null,
           testo: SectionNameDesc.NOTIFICATION,
           path: SectionName.NOTIFICATION,
-          icon: NotificationsIcon
+          icon: getSectionMenuIcon(SectionName.NOTIFICATION)
         },
         {
           funzione: null,
           testo: SectionNameDesc.SETTINGS,
           path: SectionName.SETTINGS,
-          icon: SettingsIcon
+          icon: getSectionMenuIcon(SectionName.SETTINGS)
         }
       ]
     ];

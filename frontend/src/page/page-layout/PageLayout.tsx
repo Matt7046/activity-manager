@@ -1,39 +1,52 @@
 "use client";
 import { useLingui } from "@lingui/react";
-import { Box, TextField, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import { googleLogout } from '@react-oauth/google';
-import React, { useEffect, useRef, useState } from 'react';
+import { googleLogout } from "@react-oauth/google";
+import React, { useEffect, useRef, useState } from "react";
 
-import { useUser } from '@/context/UserContext';
+import { useUser } from "@/context/UserContext";
+import { FormField } from "@/components/ui/form-field";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import Alert, { AlertConfig } from '../../components/ms-alert/Alert';
-import Button, { Pulsante } from '../../components/ms-button/Button';
-import Drawer, { MenuLaterale } from '../../components/ms-drawer/Drawer';
-import Label from '../../components/ms-label/Label';
+import Alert, { AlertConfig } from "../../components/ms-alert/Alert";
+import Button, { Pulsante } from "../../components/ms-button/Button";
+import Drawer, { MenuLaterale } from "../../components/ms-drawer/Drawer";
+import Label from "../../components/ms-label/Label";
 import Language from "../../components/ms-language/Language";
-import Popover, { PopoverNotification } from '../../components/ms-popover/Popover';
+import Popover, { PopoverNotification } from "../../components/ms-popover/Popover";
 import ThemeToggle from "../../components/ms-theme-toggle/ThemeToggle";
-import { ButtonName, HttpStatus, PUBLIC_SECTION_PATHS, SectionName, StatusNotification, TypeAlertColor, TypeUser } from '../../general/structure/Constant';
-import SocketFamilyPoint from '../../general/structure/SocketFamilyPoint';
-import { notificationWebSocketUrl } from '../../general/structure/SocketUrl';
-import { FamilyNotificationI, getDateStringRegularFormat, getTranslatedNotification, navigateRouting, NotificationI, ResponseI, showMessage } from '../../general/structure/Utils';
-import { getNotificationsByIdentificativo, saveNotification } from '../page-notification/service/NotificationService';
+import {
+  ButtonName,
+  HttpStatus,
+  PUBLIC_SECTION_PATHS,
+  SectionName,
+  StatusNotification,
+  TypeAlertColor,
+  TypeUser,
+} from "../../general/structure/Constant";
+import SocketFamilyPoint from "../../general/structure/SocketFamilyPoint";
+import { notificationWebSocketUrl } from "../../general/structure/SocketUrl";
+import {
+  FamilyNotificationI,
+  getDateStringRegularFormat,
+  getTranslatedNotification,
+  navigateRouting,
+  NotificationI,
+  ResponseI,
+  showMessage,
+} from "../../general/structure/Utils";
+import { getNotificationsByIdentificativo, saveNotification } from "../page-notification/service/NotificationService";
 import "./PageLayout.css";
 
-
-
 interface PageLayoutProps {
-  section: MenuLaterale
+  section: MenuLaterale;
   menuLaterale?: MenuLaterale[][];
-  alertConfig: AlertConfig
+  alertConfig: AlertConfig;
   isVertical: boolean;
-  /** `true` (default): campo email tutorato. `false`: annotazione sezione (`section.annotazione`). */
   showEmail?: boolean;
   handleClose: () => void;
-  navigate: AppRouterInstance; // Gestione padding dinamico
-  children: React.ReactNode; // Contenuto specifico della maschera
+  navigate: AppRouterInstance;
+  children: React.ReactNode;
 }
+
 export interface TypeMessage {
   titleMessage?: string;
   message?: string[];
@@ -41,7 +54,6 @@ export interface TypeMessage {
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({
-
   section,
   children,
   menuLaterale,
@@ -54,52 +66,51 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const { user, setUser } = useUser();
   const { i18n } = useLingui();
 
-
-
   const logout = (): void => {
     googleLogout();
     setUser(null);
     SocketFamilyPoint.resetInstance();
     navigateRouting(navigate, SectionName.ROOT, {});
-  }
-
+  };
 
   const [openAnchor, setOpenAnchor] = useState(false);
   const notify: NotificationI[] = [];
   const [notifications, setNotifications] = useState(notify);
   const [popoverNotifications, setPopoverNotifications] = useState<PopoverNotification[]>([]);
-  const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
-  const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio  
+  const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({});
+  const [openLayout, setOpenLayout] = useState(false);
+  void messageLayout;
+  void openLayout;
+  void setMessageLayout;
+  void setOpenLayout;
 
-  // Cerca nel menu, se non lo trova usa l'oggetto section passato come fallback
-  // Se menuLaterale è null, usiamo un array vuoto per evitare errori su .flat()
-  const sectionAttiva = (menuLaterale ?? [])
-    .flat()
-    .find(item => item?.testo === section?.testo) ?? section;
+  const sectionAttiva =
+    (menuLaterale ?? []).flat().find((item) => item?.testo === section?.testo) ?? section;
   const IconaTitolo = sectionAttiva?.icon;
+
   const handleClickAnchor = () => {
-    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3, StatusNotification.NOT_READ).then((response: ResponseI) => {
-      setNotifications(response.jsonText);
-      const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
-        const testoKey = getTranslatedNotification(x.message, i18n)
-        const popoverNotification = {
-          message: testoKey,
-          subText: [i18n._("inviato_da") + x.userSender, i18n._("data_invio") + getDateStringRegularFormat(x.dateSender)]
-        }
-        return popoverNotification;
-
-      });
-      setPopoverNotifications(popover);
-      setOpenAnchor(true); // Mostra il popover
-    })
-
+    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3, StatusNotification.NOT_READ).then(
+      (response: ResponseI) => {
+        setNotifications(response.jsonText);
+        const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
+          const testoKey = getTranslatedNotification(x.message, i18n);
+          return {
+            message: testoKey,
+            subText: [
+              i18n._("inviato_da") + x.userSender,
+              i18n._("data_invio") + getDateStringRegularFormat(x.dateSender),
+            ],
+          };
+        });
+        setPopoverNotifications(popover);
+        setOpenAnchor(true);
+      }
+    );
   };
 
-  // Funzione per chiudere il popover
   const handleCloseAnchor = () => {
-    setOpenAnchor(false); // Nasconde il popover
+    setOpenAnchor(false);
   };
-  const socketRef = useRef<WebSocket | null>(null);
 
   const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -133,7 +144,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         return;
       }
       const socket = socketFamilyPoint.getSocket();
-      socketRef.current = socket;
       attachHandlers(socket);
 
       pingIntervalRef.current = setInterval(() => {
@@ -157,90 +167,88 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     };
   }, [user?.emailUserCurrent]);
 
-
-
-
   const pulsanteNotification: Pulsante = {
-    icona: 'fas fa-check-circle',
-    funzione: () => saveReadNotification(), // Passi la funzione direttamente
-    //disableButton: disableButtonSave,
+    icona: "fas fa-check-circle",
+    funzione: () => saveReadNotification(),
     nome: ButtonName.BLUE,
     title: i18n._("visualizzate"),
-    configDialogPulsante: { message: i18n._("vuoi_impostate_le_notifiche_come_lette"), showDialog: true }
-
+    configDialogPulsante: {
+      message: i18n._("vuoi_impostate_le_notifiche_come_lette"),
+      showDialog: true,
+    },
   };
 
   const saveReadNotification = () => {
-    const notificationsStatusRead = notifications.map(x => {
+    const notificationsStatusRead = notifications.map((x) => {
       x.status = "READ";
       return x;
     });
-    saveNotification(notificationsStatusRead, (messageLayout?: TypeMessage) => showMessage(setOpenLayout, setMessageLayout, messageLayout)).then((response) => {
-      if (response) {
-        if (response.status === HttpStatus.OK) {
-        }
+    saveNotification(notificationsStatusRead, (messageLayout?: TypeMessage) =>
+      showMessage(setOpenLayout, setMessageLayout, messageLayout)
+    ).then((response) => {
+      if (response?.status === HttpStatus.OK) {
+        void response;
       }
-    })
-  }
+    });
+  };
 
   const pulsanteNotifiche: Pulsante = {
-    icona: 'fas fa-clipboard',
-    funzione: (event) => handleClickAnchor(), // Passi la funzione direttamente
+    icona: "fas fa-clipboard",
+    funzione: () => handleClickAnchor(),
     nome: ButtonName.BLUE,
     title: i18n._("notifiche"),
-    visibility: user ? true : false,
-    configDialogPulsante: { message: '', showDialog: false }
+    visibility: !!user,
+    configDialogPulsante: { message: "", showDialog: false },
   };
 
   const pulsanteLogout: Pulsante = {
-    icona: 'fas fa-sign-out-alt',
-    funzione: () => logout(), // Passi la funzione direttamente
+    icona: "fas fa-sign-out-alt",
+    funzione: () => logout(),
     nome: ButtonName.RED,
     title: i18n._("logout"),
-    visibility: user ? true : false,
-    configDialogPulsante: { message: '', showDialog: false }
+    visibility: !!user,
+    configDialogPulsante: { message: "", showDialog: false },
   };
+
+  const emailLabel =
+    user?.emailUserCurrent === user?.emailChild
+      ? i18n._("email_registrazione")
+      : i18n._("email_tutorato");
 
   return (
     <>
-      <Box className="box-layout">
-        {/* INTESTAZIONE: Titolo e Icona (Sempre centrati) */}
-
-
-        {/* RIGA COMANDI: Menu Drawer + Bottoni */}
-        <Grid
-          container
-          className={`grid-menu ${isVertical ? 'vertical-layout' : 'horizontal-layout'}`}
-          alignItems="center"
+      <div className="box-layout px-4 max-sm:px-2">
+        <div
+          className={`grid-menu flex w-full pb-4 pt-px ${isVertical ? "vertical-layout flex-row justify-between" : "horizontal-layout justify-between"}`}
         >
-          <Box className="title-container">
-            <Box className="header-title-badge">
-              {IconaTitolo && <IconaTitolo className="header-icon" />}
-              <Typography variant="h6" className="header-title">
+          <div className="title-container flex w-full items-center justify-center gap-2 py-2">
+            <div className="header-title-badge inline-flex items-center justify-center rounded-[var(--radius-lg)] border border-[var(--color-border-strong)] bg-[color-mix(in_srgb,var(--color-primary)_16%,var(--color-surface))] px-4 py-2.5 shadow-[var(--shadow-sm),inset_0_1px_0_var(--color-primary-soft)] max-sm:px-3 max-sm:py-2">
+              {IconaTitolo && <IconaTitolo className="header-icon size-[1.35rem] pr-2 text-[var(--color-primary)]" />}
+              <h6 className="header-title m-0 text-base leading-tight font-extrabold tracking-wide text-[var(--color-primary)] max-sm:text-[0.88rem]">
                 <Label
-                  _id={'title'}
-                  text={sectionAttiva?.testo?.toUpperCase() + (TypeUser.FAMILY === user?.type ? i18n._('tutorato')?.toUpperCase() : '')}
+                  _id={"title"}
+                  text={
+                    sectionAttiva?.testo?.toUpperCase() +
+                    (TypeUser.FAMILY === user?.type ? i18n._("tutorato")?.toUpperCase() : "")
+                  }
                 />
-              </Typography>
-            </Box>
-          </Box>
-          {/* Se il menu esiste, viene renderizzato a sinistra */}
-            <Box  className ="box-menu-laterale">
+              </h6>
+            </div>
+          </div>
+
+          <div className="box-menu-laterale flex w-full items-center justify-between">
             {menuLaterale && menuLaterale.length > 0 && (
               <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
             )}
 
-            {/* SPACER: Questo Box con flex-grow spinge tutto ciò che segue a destra */}
-            <Box className="box-layout-spacer" />
+            <div className="box-layout-spacer flex-grow" />
 
-            {/* Contenitore pulsanti: ora sarà SEMPRE allineato a destra */}
-            <Box className='box-layout-right-button'>
-              <Box className="box-layout-theme-lang-group">
+            <div className="box-layout-right-button flex items-center gap-2 pr-3">
+              <div className="box-layout-theme-lang-group -mr-1 inline-flex items-center gap-0">
                 <ThemeToggle placement="header" />
                 <Language placement="header" />
-              </Box>
-              {/* Mostra il bottone notifiche solo se NON siamo in home o in registrazione */}
-              {(sectionAttiva?.path !== null && !PUBLIC_SECTION_PATHS.has(sectionAttiva.path!)) && (
+              </div>
+              {sectionAttiva?.path !== null && !PUBLIC_SECTION_PATHS.has(sectionAttiva.path!) && (
                 <>
                   <Button pulsanti={[pulsanteNotifiche]} />
                   <Popover
@@ -251,67 +259,53 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                   />
                 </>
               )}
-
               <Button pulsanti={[pulsanteLogout]} />
-            </Box>
-          </Box>
-        </Grid>
+            </div>
+          </div>
+        </div>
 
-        {/* showEmail: email tutorato | !showEmail: annotazione (chiave i18n su section) */}
-        <Box className={isVertical ? "box-layout-text-vertical" : "box-layout-text"}>
+        <div className={isVertical ? "box-layout-text-vertical w-full" : "box-layout-text w-full"}>
           {showEmail ? (
             user?.emailUserCurrent ? (
-              <TextField
+              <FormField
                 id="emailFamily"
-                className="form-control-operative"
-                label={
-                  user.emailUserCurrent === user.emailChild
-                    ? i18n._('email_registrazione')
-                    : i18n._('email_tutorato')
-                }
-                variant="standard"
-                value={user.emailChild ?? ''}
-                fullWidth
+                label={emailLabel}
+                value={user.emailChild ?? ""}
                 disabled
+                readOnly
               />
             ) : null
           ) : sectionAttiva?.annotazione ? (
-            <TextField
+            <FormField
               id="sectionAnnotation"
-              className="form-control-operative"
-              label={i18n._('annotation_title')}
-              variant="standard"
+              label={i18n._("annotation_title")}
               value={i18n._(sectionAttiva.annotazione)}
-              fullWidth
               disabled
+              readOnly
               multiline
-              maxRows={4}
+              rows={4}
             />
           ) : (
-            <TextField
+            <FormField
               id="emailFamily"
-              className="form-control-operative"
-              label={i18n._('login_simulati_title')}
-              variant="standard"
-              value={i18n._('login_simulati')}
-              fullWidth
+              label={i18n._("login_simulati_title")}
+              value={i18n._("login_simulati")}
               disabled
+              readOnly
               multiline
-              maxRows={4}
+              rows={4}
             />
           )}
-        </Box>
-      </Box>
+        </div>
+      </div>
 
-      <Grid container justifyContent="flex-end" className="layout-alert">
+      <div className="layout-alert flex justify-end">
         {alertConfig.open && <Alert onClose={handleClose} message={alertConfig.message} />}
-      </Grid>
+      </div>
 
       {children}
     </>
   );
-}
+};
 
 export default PageLayout;
-
-

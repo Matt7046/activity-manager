@@ -37,7 +37,12 @@
 }
 
 .grid-menu {
+    display: flex;
+    width: 100%;
     padding-top: 1px;
+    padding-bottom: var(--space-4);
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 .box-layout-right-button {
@@ -55,7 +60,7 @@
     margin-inline-end: calc(-1 * var(--space-1));
 }
 
-.box-layout-theme-lang-group .MuiIconButton-root {
+.box-layout-theme-lang-group button {
     padding: 8px;
 }
 
@@ -95,12 +100,6 @@
     width: 100%;
 }
 
-.grid-menu {
-    display: flex;
-    width: 100%;
-    padding-bottom: var(--space-4);
-}
-
 /* Quando è verticale, i bottoni vanno a destra e il menu a sinistra se presenti */
 .vertical-layout {
     flex-direction: row;
@@ -116,30 +115,17 @@
     font-weight: 800;
 }
 
-/* Selettore mirato per la label del TextField */
-.box-layout-text .form-control-operative .MuiInputLabel-root,
-.box-layout-text-vertical .form-control-operative .MuiInputLabel-root {
+/* Label dei campi form nel layout */
+.box-layout-text .form-control-operative label,
+.box-layout-text-vertical .form-control-operative label {
     font-weight: bold !important;
     color: var(--color-text) !important;
-    /* Colore scuro per evidenziare il bold */
-}
-
-/* Stile per quando la label si rimpicciolisce (shrink) */
-.box-layout-text .form-control-operative .MuiInputLabel-shrink,
-.box-layout-text-vertical .form-control-operative .MuiInputLabel-shrink {
-    font-weight: bold !important;
 }
 
 /* Fix per assicurarci che il TextField non esca a destra */
 .form-control-operative {
     width: 100% !important;
     box-sizing: border-box !important;
-}
-
-/* Rimuoviamo eventuali margini negativi della Grid se il TextField è dentro una Grid */
-.MuiGrid2-container {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
 }
 
 @media (max-width: 600px) {

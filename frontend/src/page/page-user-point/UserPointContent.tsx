@@ -1,6 +1,5 @@
 "use client";
 import { useLingui } from "@lingui/react";
-import { Box } from "@mui/material";
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from "react";
 import { AlertConfig } from '../../components/ms-alert/Alert';
@@ -306,9 +305,9 @@ const UserPointContent: React.FC<PointsContentProps> = ({
 
   return (
     <div className="row custom-padding">
-      <Box id="cardData">
+      <div id="cardData">
         <CardGrid cardsData={cardData} />
-      </Box>
+      </div>
     </div>
   );
 };

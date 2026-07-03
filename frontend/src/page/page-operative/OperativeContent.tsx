@@ -1,10 +1,15 @@
 "use client";
 import { Trans, useLingui } from "@lingui/react";
-import { Box, FormControl, Input, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import Grid from '@mui/material/Grid2';
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
+import { FormField } from "@/components/ui/form-field";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus, TypeUser } from "../../general/structure/Constant";
@@ -19,54 +24,44 @@ import operativeStore from "./store/OperativeStore";
 
 interface OperativeContentProps {
   user: UserI;
-  alertConfig: AlertConfig,
+  alertConfig: AlertConfig;
   isVertical: boolean;
 }
 
-const OperativeContent: React.FC<OperativeContentProps> = ({
-  user,
-  alertConfig,
-  isVertical
-}) => {
-
+const OperativeContent: React.FC<OperativeContentProps> = ({ user, alertConfig, isVertical }) => {
+  void isVertical;
   const pathname = usePathname();
+  void pathname;
   const { i18n } = useLingui();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingO, setIsLoadingO] = useState(true);
   const [disableButtonSave, setDisableButtonSave] = useState(true);
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
+  void setInitialLoad;
 
   type FormValues = {
     [key: string]: string | undefined;
   };
 
-  const [formValues, setFormValues] = useState<FormValues>({
-    activity: '',
-  });
-
-  const [formErrors, setFormErrors] = useState<FormErrorValues>({
-    activity: true,
-    points: true,
-  });
+  const [formValues, setFormValues] = useState<FormValues>({ activity: "" });
+  const [formErrors, setFormErrors] = useState<FormErrorValues>({ activity: true, points: true });
+  void formErrors;
 
   useEffect(() => {
     fetchOptions();
     fetchPoints();
-    return () => { };
+    return () => {};
   }, [inizialLoad]);
 
   useEffect(() => {
     const errors: FormErrorValues = verifyForm(formValues);
-    setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0)
+    setDisableButtonSave(Object.keys(errors).filter((key) => errors[key] === true).length > 0);
     if (user?.type === 1) {
       operativeStore.setEmailField(user?.email);
-    }
-    else {
+    } else {
       operativeStore.setEmailField(user?.emailChild);
     }
   }, [formValues]);
-
-
 
   const handleButtonClick = () => {
     const errors: FormErrorValues = verifyForm(formValues);
@@ -79,9 +74,10 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
       let errorFields: string[] = [];
       if (erroriCampi.length > 0) {
         errorFields = ["I valori invalidi sono:"].concat(erroriCampi);
-
       }
-      showMessageOperativeForm((message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, { ...message, message: errorFields }));
+      showMessageOperativeForm((message?: TypeMessage) =>
+        showMessage(alertConfig.setOpen, alertConfig.setMessage, { ...message, message: errorFields })
+      );
     }
   };
 
@@ -92,181 +88,146 @@ const OperativeContent: React.FC<OperativeContentProps> = ({
   const fetchOptions = () => {
     try {
       const emailFind = user?.emailChild ? user?.emailChild : user?.email;
-
       return fetchDataActivities({ ...user, email: emailFind }).then((response: ResponseI | undefined) => {
         setIsLoadingO(false);
         operativeStore.setActivity(response?.jsonText ?? []);
-      })
+      });
     } catch (error) {
-      console.error('Error fetching options:', error);
+      console.error("Error fetching options:", error);
     }
   };
 
   const fetchPoints = () => {
     try {
       const emailFind = user?.emailChild ? user?.emailChild : user?.email;
-
-      findByEmail({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)).then((response: ResponseI | undefined) => {
-        if (response) {
-          if (response.status === HttpStatus.OK) {
-            setIsLoading(false);
-            operativeStore.setPoints(response.jsonText.points);
-          }
+      findByEmail(
+        { ...user, email: emailFind },
+        (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
+      ).then((response: ResponseI | undefined) => {
+        if (response?.status === HttpStatus.OK) {
+          setIsLoading(false);
+          operativeStore.setPoints(response.jsonText.points);
         }
-      })
+      });
     } catch (error) {
-      console.error('Error fetching options:', error);
+      console.error("Error fetching options:", error);
     }
   };
 
   const pulsanteSave: Pulsante = {
-    icona: 'fas fa-circle-check',
+    icona: "fas fa-circle-check",
     funzione: () => handleButtonClick(),
     nome: ButtonName.RED,
     disableButton: disableButtonSave,
     title: i18n._("salva"),
-    configDialogPulsante: { message: i18n._("vuoi_salvare"), showDialog: true }
-
-  }
-
+    configDialogPulsante: { message: i18n._("vuoi_salvare"), showDialog: true },
+  };
 
   const clickCombobox = (selectedValue: string) => {
-
-    // Imposta il valore selezionato nel combobox
-    setFormValues({ ...formValues, activity: selectedValue })
-    // Trova l'attività selezionata tramite l'ID
-    const selectedActivity = operativeStore.activity.find(item => item._id === selectedValue);
-    // Se l'attività non è trovata, mostra un errore
+    setFormValues({ ...formValues, activity: selectedValue });
+    const selectedActivity = operativeStore.activity.find((item) => item._id === selectedValue);
     if (!selectedActivity) {
-      console.error('Activity not found');
-      return; // Esci dalla funzione se non trovi l'attività
+      console.error("Activity not found");
+      return;
     }
-
-    // Imposta il valore dei punti in base all'attività selezionata
     operativeStore.setPointsField(selectedActivity.points!);
   };
 
-
   const saveActivity = (user: UserI) => {
-    // Trova l'attività selezionata nell'array
-    const selectedActivity = operativeStore.activity.find(item => item._id === formValues.activity);
-
-    // Se l'attività selezionata non esiste, gestisci l'errore
+    const selectedActivity = operativeStore.activity.find((item) => item._id === formValues.activity);
     if (!selectedActivity) {
-      console.error('Activity not found');
-      return; // Esci dalla funzione se non trovi l'attività
+      console.error("Activity not found");
+      return;
     }
     const emailFind = user.emailChild ? user.emailChild : user.email;
-
-    // Crea il log dell'attività
     const activityLog: ActivityLogI = {
       ...user,
-      log: selectedActivity.nome, // Non è necessario usare '!' se hai fatto il check
+      log: selectedActivity.nome,
       date: new Date(),
       usePoints: operativeStore.pointsField,
-      email: emailFind
+      email: emailFind,
     };
 
-    // Salva il log dell'attività
-    savePointsAndLog(activityLog, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
-      .then((response: ResponseI | undefined) => {
-        fetchPoints();
-      })
+    savePointsAndLog(activityLog, (message?: TypeMessage) =>
+      showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
+    ).then(() => {
+      fetchPoints();
+    });
   };
+
   if (isLoading || isLoadingO) {
-    return <p><Trans id="caricamento" /></p>; // Mostra un loader mentre i dati vengono caricati
+    return (
+      <p>
+        <Trans id="caricamento" />
+      </p>
+    );
   }
 
-
   return (
-    <>
-      <Box className='box-operative-content'>
-        <Grid container spacing={2}>
-          {/* Titolo con email */}
-          <Grid size={{ xs: 12, sm: 12 }}>
-            <Typography variant="body2" color="text.secondary">
-              {user?.type === TypeUser.FAMILY ? (
-                <Trans id="operazioni_attivita" />
-              ) : (
-                <Trans id="operazioni_attivita_child" />
-              )}{" "}
-              <strong>{user?.emailUserCurrent}</strong>
-            </Typography>
-          </Grid>
-        </Grid>
+    <div className="box-operative-content">
+      <p className="text-sm text-[var(--color-text-muted)]">
+        {user?.type === TypeUser.FAMILY ? (
+          <Trans id="operazioni_attivita" />
+        ) : (
+          <Trans id="operazioni_attivita_child" />
+        )}{" "}
+        <strong>{user?.emailUserCurrent}</strong>
+      </p>
 
-        <Box className="operative-section-card">
-          <Grid container spacing={2}>
-            {/* Prima riga */}
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <FormControl fullWidth>
-                <TextField
-                  label={i18n._("email")}
-                  value={user?.emailChild ?? ""}
-                  onChange={(e) => operativeStore.setEmailField(e.target.value)}
-                  fullWidth
-                  margin="normal"
-                  disabled={true}
-                />
-              </FormControl>
-            </Grid>
+      <div className="operative-section-card">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <FormField
+            id="operative-email"
+            label={i18n._("email")}
+            value={user?.emailChild ?? ""}
+            disabled
+            readOnly
+          />
 
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <FormControl className="form-control-operative" variant="standard" fullWidth>
-                <InputLabel htmlFor="filled-points">{i18n._("punti")}</InputLabel>
-                <Input
-                  id="filled-adornment-points"
-                  value={operativeStore.points}
-                  onChange={handleChangePoints}
-                  disabled={true}
-                />
-              </FormControl>
-            </Grid>
+          <FormField
+            id="filled-adornment-points"
+            label={i18n._("punti")}
+            value={String(operativeStore.points)}
+            onChange={handleChangePoints}
+            disabled
+            readOnly
+          />
 
-            {/* Seconda riga */}
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <FormControl fullWidth margin="normal">
-                <InputLabel id="select-label">{i18n._("punti_attivitaobb")}</InputLabel>
-                <Select
-                  labelId="select-label"
-                  value={formValues?.activity ?? ""}
-                  onChange={(e) => clickCombobox(e.target.value)}
-                  label={i18n._("attivita")}
-                  required={true}
-                >
-                  {operativeStore.activity.map((option) => (
-                    <MenuItem key={option._id} value={option._id}>
-                      {option.nome}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+          <div className="form-control-operative space-y-1">
+            <label htmlFor="select-label" className="text-sm font-bold text-[var(--color-text)]">
+              {i18n._("punti_attivitaobb")}
+            </label>
+            <Select value={formValues?.activity ?? ""} onValueChange={(value) => value && clickCombobox(value)}>
+              <SelectTrigger id="select-label" className="w-full">
+                <SelectValue placeholder={i18n._("attivita")} />
+              </SelectTrigger>
+              <SelectContent>
+                {operativeStore.activity.map((option) => (
+                  <SelectItem key={option._id} value={option._id!}>
+                    {option.nome}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-            {/* Campo con punti */}
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <FormControl fullWidth>
-                <TextField
-                  label={i18n._("punti_attivita")}
-                  type="number"
-                  value={operativeStore?.pointsField ?? 0}
-                  onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
-                  margin="normal"
-                  disabled={true}
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
+          <FormField
+            id="points-field"
+            label={i18n._("punti_attivita")}
+            type="number"
+            value={String(operativeStore?.pointsField ?? 0)}
+            onChange={(e) => operativeStore.setPointsField(parseInt(e.target.value, 10))}
+            disabled
+            readOnly
+          />
+        </div>
 
-          {/* Pulsante Salva - Allineato a destra */}
-          <Box display="flex" justifyContent="flex-end" mt={3}>
-            <Button pulsanti={[pulsanteSave]} />
-          </Box>
-        </Box>
-      </Box>
-    </>
+        <div className="mt-6 flex justify-end">
+          <Button pulsanti={[pulsanteSave]} />
+        </div>
+      </div>
+    </div>
   );
 };
-
 
 export default OperativeContent;

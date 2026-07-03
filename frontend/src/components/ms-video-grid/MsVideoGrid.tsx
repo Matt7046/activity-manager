@@ -1,7 +1,7 @@
 "use client";
 import { ButtonName, HttpStatus, TypeAlertColor } from "@/general/structure/Constant";
 import { i18n } from "@lingui/core";
-import SearchIcon from "@mui/icons-material/Search";
+import { Search } from "lucide-react";
 import { observer } from "mobx-react";
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ResponseI, showMessage, UserI } from '../../general/structure/Utils';
@@ -13,7 +13,6 @@ import gamificationStore from '../../page/page-gamification/store/GamificationSt
 import { TypeMessage } from '../../page/page-layout/PageLayout';
 import { AlertConfig } from '../ms-alert/Alert';
 import Button, { Pulsante } from '../ms-button/Button';
-import './MsVideoGrid.css';
 
 export interface VideoI {
   videoId: string;
@@ -269,20 +268,20 @@ const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user,
 
   return (
     <>
-      <div className="search-stack">
-        <label className="search-label" htmlFor="gamification-video-search">
+      <div className="box-border flex w-full flex-col gap-2 px-0 pt-5 pb-3">
+        <label className="text-sm leading-snug font-semibold text-[var(--color-text)]" htmlFor="gamification-video-search">
           {i18n._("ricerca_video")}
         </label>
-        <div className="search-container">
-          <div className="search-field-shell">
-            <SearchIcon className="search-field-icon" aria-hidden focusable={false} />
+        <div className="flex w-full items-center justify-start gap-4">
+          <div className="flex min-h-12 min-w-0 flex-1 items-center gap-3 rounded-[var(--radius-round)] border-2 border-[var(--color-muted-300)] bg-[var(--color-surface)] px-4 shadow-[var(--shadow-sm)] transition-[border-color,box-shadow] focus-within:border-[var(--color-primary)] focus-within:shadow-[0_0_0_3px_var(--color-primary-soft)]">
+            <Search className="size-[22px] shrink-0 text-[var(--color-primary)] opacity-90" aria-hidden />
             <input
               id="gamification-video-search"
               type="search"
               placeholder={i18n._("cerca_video")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
+              className="m-0 min-w-0 flex-1 border-0 bg-transparent py-3 pr-2 pl-0 text-base text-[var(--color-text)] outline-none placeholder:text-[var(--color-muted-500)]"
               autoComplete="off"
               enterKeyHint="search"
             />
@@ -291,10 +290,11 @@ const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user,
         </div>
       </div>
 
-      <div className="filter-container">
-        <label className="favorite-filter">
+      <div className="flex w-full items-center justify-start pb-5">
+        <label className="inline-flex cursor-pointer items-center gap-2.5 rounded-[var(--radius-round)] border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-2.5 shadow-[var(--shadow-sm)] transition-all hover:border-[var(--color-primary)] hover:bg-[var(--color-info-soft)]">
           <input
             type="checkbox"
+            className="size-[18px] accent-[var(--color-primary)]"
             checked={showFavoritesOnly}
             onChange={(e) => {
               setShowFavoritesOnly(e.target.checked);
@@ -307,7 +307,7 @@ const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user,
       </div>
 
       {selectedVideo ? (
-        <div className="video-player-container">
+        <div className="relative">
           <iframe
             width="100%"
             height="500"
@@ -317,27 +317,26 @@ const VideoGrid = observer(({ selectedVideo, handlePlayVideo, alertConfig, user,
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
-          <div className="video-overlay">
+          <div className="absolute right-4 bottom-4">
             <Button pulsanti={createButtonsSelectedVideo(selectedVideo)} />
           </div>
         </div>
       ) : (
-        <div className="video-grid">
+        <div className="flex flex-wrap justify-center gap-6 py-5">
           {displayVideos.map((video: VideoI) => (
-            <div key={video.videoId} className="video-card">
-              <div className="video-thumbnail-container">
-                <img
-                  src={video.thumbnail}
-                  alt={video.title}
-                  className="video-thumbnail"
-                />
-                <div className="video-overlay">
+            <div
+              key={video.videoId}
+              className="flex w-[300px] flex-col rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-sm)] transition-[transform,box-shadow] hover:-translate-y-1 hover:shadow-[var(--shadow-md)]"
+            >
+              <div className="relative">
+                <img src={video.thumbnail} alt={video.title} className="w-full rounded-t-[var(--radius-lg)]" />
+                <div className="absolute right-4 bottom-4">
                   <Button pulsanti={createButtons(video)} />
                 </div>
               </div>
-              <div className="video-info">
-                <h4>{video.title}</h4>
-                <p>{video.channelTitle}</p>
+              <div className="p-3">
+                <h4 className="mb-1 font-semibold text-[var(--color-text)]">{video.title}</h4>
+                <p className="text-sm text-[var(--color-text-muted)]">{video.channelTitle}</p>
               </div>
             </div>
           ))}

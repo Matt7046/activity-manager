@@ -1,17 +1,33 @@
 "use client";
 import { Trans, useLingui } from "@lingui/react";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Collapse, Divider, Typography } from "@mui/material";
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { ChevronDown, Filter, Info } from "lucide-react";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import { Pulsante } from "../../components/ms-button/Button";
-import DataGridComponent from '../../components/ms-data-grid/DataGrid';
+import DataGridComponent from "../../components/ms-data-grid/DataGrid";
 import { ButtonName, HttpStatus, StatusNotification } from "../../general/structure/Constant";
-import { getDateStringRegularFormat, getTranslatedNotification, NotificationI, ResponseI, showMessage, UserI } from "../../general/structure/Utils";
+import {
+  getDateStringRegularFormat,
+  getTranslatedNotification,
+  NotificationI,
+  ResponseI,
+  showMessage,
+  UserI,
+} from "../../general/structure/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
 import "./NotificationContent.css";
 import { getNotificationsByIdentificativo, saveNotification } from "./service/NotificationService";
@@ -26,24 +42,23 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
   const [notifications, setNotifications] = useState<NotificationI[]>([]);
   const { i18n } = useLingui();
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
+  void setInitialLoad;
   const [loading, setLoading] = useState<boolean>(false);
   const [rowCount, setRowCount] = useState(0);
-  const [paginationModel, setPaginationModel] = useState({
-    page: 0,
-    pageSize: 5,
-  });
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 });
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [expandedRowId, setExpandedRowId] = useState<number | string | null>(null);
-  const [openLayout, setOpenLayout] = useState(false); // Controlla la visibilità del messaggio  
-  const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({}); // Lo stato è un array di stringhe
+  const [openLayout, setOpenLayout] = useState(false);
+  const [messageLayout, setMessageLayout] = React.useState<TypeMessage>({});
+  void openLayout;
+  void messageLayout;
 
   useEffect(() => {
     fetchNotifications();
-    return () => { };
-  }, [inizialLoad])
+    return () => {};
+  }, [inizialLoad]);
 
-  // Chiamata REST con paginazione
   const fetchNotifications = React.useCallback(() => {
     setLoading(true);
     getNotificationsByIdentificativo(
@@ -54,7 +69,6 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
       () => showMessage(alertConfig.setOpen, alertConfig.setMessage)
     ).then((response: ResponseI | undefined) => {
       if (response?.status === HttpStatus.OK) {
-        // Assumendo che il server restituisca anche il totale record per la paginazione virtuale
         setNotifications(response.jsonText);
         setRowCount(response.jsonText.length);
       }
@@ -63,137 +77,151 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
   }, [user?.emailUserCurrent, paginationModel, startDate, endDate]);
 
   const pulsanteNotification: Pulsante = {
-    icona: 'fas fa-check-circle',
-    funzione: () => saveReadNotification(), // Passi la funzione direttamente
-    //disableButton: disableButtonSave,
+    icona: "fas fa-check-circle",
+    funzione: () => saveReadNotification(),
     nome: ButtonName.BLUE,
     title: i18n._("visualizzate"),
-    configDialogPulsante: { message: i18n._("vuoi_impostate_le_notifiche_come_lette"), showDialog: true }
-
+    configDialogPulsante: { message: i18n._("vuoi_impostate_le_notifiche_come_lette"), showDialog: true },
   };
 
   const saveReadNotification = () => {
-    const notificationsStatusRead = notifications.map(x => {
+    const notificationsStatusRead = notifications.map((x) => {
       x.status = StatusNotification.READ;
       return x;
     });
-    saveNotification(notificationsStatusRead, (messageLayout?: TypeMessage) => showMessage(setOpenLayout, setMessageLayout, messageLayout)).then((response) => {
-      if (response) {
-        if (response.status === HttpStatus.OK) {
-          // REFRESH DELLA GRIGLIA
-          fetchNotifications();
-        }
+    saveNotification(notificationsStatusRead, (messageLayout?: TypeMessage) =>
+      showMessage(setOpenLayout, setMessageLayout, messageLayout)
+    ).then((response) => {
+      if (response?.status === HttpStatus.OK) {
+        fetchNotifications();
       }
-    })
-  }
-  // Logica di filtraggio corretta
-  const filteredNotifications = notifications.filter(notif => {
+    });
+  };
+
+  const filteredNotifications = notifications.filter((notif) => {
     if (!notif.dateSender) return true;
-
-    // Trasformiamo la data della notifica in timestamp
     const notifDate = new Date(notif.dateSender).getTime();
-
-    // Data inizio: impostiamo alle 00:00:00
     const start = startDate ? new Date(startDate).setHours(0, 0, 0, 0) : -Infinity;
-
-    // Data fine: impostiamo alle 23:59:59 per includere l'intera giornata
     let end = Infinity;
     if (endDate) {
       const d = new Date(endDate);
       d.setHours(23, 59, 59, 999);
       end = d.getTime();
     }
-
     return notifDate >= start && notifDate <= end;
   });
-  // Definizione colonne UNICA (fuori dal render per performance)
 
   const columns: GridColDef[] = [
     {
-      field: 'message',
+      field: "message",
       headerName: i18n._("notifiche"),
       flex: 1,
       renderCell: (params: GridRenderCellParams) => {
         const isExpanded = expandedRowId === params.id;
         const x = params.row as NotificationI;
-        const testoKey = getTranslatedNotification(x.message, i18n)
+        const testoKey = getTranslatedNotification(x.message, i18n);
 
         return (
-          <Box className="notification-row-cell">
-            <Box
-              className={`notification-row-header ${isExpanded ? 'is-expanded' : ''}`}
-              onClick={() => setExpandedRowId(isExpanded ? null : params.id)}
+          <Collapsible
+            open={isExpanded}
+            onOpenChange={(open) => setExpandedRowId(open ? params.id : null)}
+            className="notification-row-cell w-full"
+          >
+            <CollapsibleTrigger
+              className={cn(
+                "notification-row-header flex w-full cursor-pointer items-center py-2",
+                isExpanded && "is-expanded"
+              )}
             >
-              <InfoOutlinedIcon className={`notification-row-info ${isExpanded ? 'is-expanded' : ''}`} />
-              <Box className="notification-row-main">
-                {x.dateSender && (
-                  <Typography className="notification-date-badge">
-                    {getDateStringRegularFormat(x.dateSender)}
-                  </Typography>
+              <Info
+                className={cn(
+                  "notification-row-info mr-2 size-4 shrink-0",
+                  isExpanded && "is-expanded text-[var(--color-primary-hover)]"
                 )}
-                <Typography className="notification-title">
-                  {testoKey}
-                </Typography>
-              </Box>
-              <KeyboardArrowDownIcon
-                className={`notification-row-arrow ${isExpanded ? 'is-expanded' : ''}`}
               />
-            </Box>
+              <div className="notification-row-main min-w-0 flex-1">
+                {x.dateSender && (
+                  <span className="notification-date-badge block text-xs">
+                    {getDateStringRegularFormat(x.dateSender)}
+                  </span>
+                )}
+                <span className="notification-title block font-medium">{testoKey}</span>
+              </div>
+              <ChevronDown
+                className={cn(
+                  "notification-row-arrow ml-2 size-4 shrink-0 transition-transform",
+                  isExpanded && "is-expanded rotate-180"
+                )}
+              />
+            </CollapsibleTrigger>
 
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              <Box className="notification-row-details">
-                <Typography variant="body2" color="text.secondary"><strong><Trans id="inviato_da" /></strong> {x.userSender}</Typography>
-                <Divider className="notification-row-divider" />
-                <Typography variant="body2" color="text.secondary"><strong><Trans id="stato" /></strong> {i18n._(x.status.toLowerCase())}</Typography>
-              </Box>
-            </Collapse>
-          </Box>
+            <CollapsibleContent>
+              <div className="notification-row-details pb-3 pl-8">
+                <p className="text-sm text-[var(--color-text-muted)]">
+                  <strong>
+                    <Trans id="inviato_da" />
+                  </strong>{" "}
+                  {x.userSender}
+                </p>
+                <Separator className="notification-row-divider my-2" />
+                <p className="text-sm text-[var(--color-text-muted)]">
+                  <strong>
+                    <Trans id="stato" />
+                  </strong>{" "}
+                  {i18n._(x.status.toLowerCase())}
+                </p>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         );
-      }
-    }
+      },
+    },
   ];
 
   return (
-    <Box className="notification-container">
-      {/* SEZIONE FILTRI */}
-      <Accordion className="notification-filter-accordion" disableGutters>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon className="notification-filter-expand-icon" />}
-          className="notification-filter-summary"
-        >
-          <Box className="notification-filter-header">
-            <FilterListIcon className="notification-filter-icon" />
-            <Typography variant="subtitle2" className="notification-filter-title"><Trans id="filtra_periodo" /></Typography>
-          </Box>
-        </AccordionSummary>
-        <AccordionDetails className="notification-filter-details">
-          <Box className="notification-filter-container">
-            <Box className="notification-filter-group">
-              <label className="notification-filter-label"><Trans id="data_inizio" /></label>
-              <input
-                type="date"
-                className="notification-date-input"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </Box>
-
-            <Box className="notification-filter-group">
-              <label className="notification-filter-label"><Trans id="data_fine" /></label>
-              <input
-                type="date"
-                className="notification-date-input"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </Box>
-          </Box>
-        </AccordionDetails>
+    <div className="notification-container">
+      <Accordion className="notification-filter-accordion">
+        <AccordionItem value="filters">
+          <AccordionTrigger className="notification-filter-summary px-4">
+            <div className="notification-filter-header flex items-center gap-2">
+              <Filter className="notification-filter-icon size-4" />
+              <span className="notification-filter-title text-sm font-semibold">
+                <Trans id="filtra_periodo" />
+              </span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="notification-filter-details px-4">
+            <div className="notification-filter-container flex flex-wrap gap-4">
+              <div className="notification-filter-group space-y-1">
+                <label className="notification-filter-label text-sm font-medium">
+                  <Trans id="data_inizio" />
+                </label>
+                <input
+                  type="date"
+                  className="notification-date-input rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+              </div>
+              <div className="notification-filter-group space-y-1">
+                <label className="notification-filter-label text-sm font-medium">
+                  <Trans id="data_fine" />
+                </label>
+                <input
+                  type="date"
+                  className="notification-date-input rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
 
-      <Box className="notification-grid-container">
+      <div className="notification-grid-container">
         <DataGridComponent
-          pulsanti={[pulsanteNotification]} // Se vuoi aggiungere pulsanti specifici per la toolbar, passali qui
+          pulsanti={[pulsanteNotification]}
           rows={filteredNotifications}
           columns={columns}
           rowCount={rowCount}
@@ -201,9 +229,9 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}
         />
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
+};
 
-}
 export default NotificationContent;

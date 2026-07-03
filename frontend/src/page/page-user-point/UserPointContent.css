@@ -1,10 +1,8 @@
 /* --- Dialog Generale dei Log --- */
-.dialog-log-custom .MuiPaper-root {
+.dialog-log-custom [data-slot="dialog-content"] {
   border-radius: var(--radius-lg) !important;
-  /* Molto stondato e moderno */
   padding: 10px;
   background-color: var(--color-surface);
-  /* Sfondo appena percepibile */
   box-shadow: var(--shadow-md) !important;
   border: 1px solid var(--color-border);
 }
@@ -186,9 +184,9 @@
 }
 
 /* Opzionale: Rendi le card leggermente più compatte internamente */
-.log-card-item .MuiCardContent-root {
+.log-card-item [data-slot="card-content"],
+.log-card-item .log-card-content {
   padding: var(--space-5) !important;
-  /* Ridotto il padding interno */
 }
 
 /* --- FIX SPAZIATURA LATERALE (MOBILE & DESKTOP) --- */
@@ -200,14 +198,10 @@
   overflow-x: hidden;
 }
 
-/* Rimuove i margini negativi delle Grid che causano l'effetto "attaccato" o lo scroll orizzontale */
-.points-content-container .MuiGrid2-container,
-.points-content-container .MuiGrid-container,
-#cardData .MuiGrid2-container,
-#cardData .MuiGrid-container {
+#cardData {
   margin: 0 !important;
   width: 100% !important;
-  padding: 0 !important;
+  box-sizing: border-box;
 }
 
 @media (max-width: 600px) {

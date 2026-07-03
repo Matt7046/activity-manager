@@ -1,11 +1,11 @@
 "use client";
 
 import Language from "@/components/ms-language/Language";
-import "@/components/ms-presentation/Presentation.css";
 import ThemeToggle from "@/components/ms-theme-toggle/ThemeToggle";
-import { IconButton, Typography } from "@mui/material";
+import { Button } from "@/components/ui/button";
 import React, { ReactNode } from "react";
 import PresentationContent from "./PresentationContent";
+import "@/components/ms-presentation/Presentation.css";
 import "./PresentationContent.css";
 
 const cdLogo = (
@@ -33,12 +33,12 @@ const PagePresentation: React.FC = () => {
         <div className="techf-container">
           {aziende.map((tech) => (
             <div key={tech.name} className="techf-item">
-              <IconButton color="inherit" disabled className="presentation-header-brand-btn">
+              <Button variant="ghost" disabled className="presentation-header-brand-btn">
                 <span className={`techf-icon-wrap${tech.brandLogo ? " techf-icon-wrap-brand" : ""}`}>
                   {tech.icon}
                 </span>
-              </IconButton>
-              <Typography variant="caption" display="block" component="div" className="techf-name">
+              </Button>
+              <div className="techf-name block text-xs">
                 {tech.name.includes(".") ? (
                   <>
                     <span className="techf-name-prefix">{tech.name.slice(0, tech.name.indexOf("."))}</span>
@@ -47,7 +47,7 @@ const PagePresentation: React.FC = () => {
                 ) : (
                   tech.name
                 )}
-              </Typography>
+              </div>
             </div>
           ))}
         </div>
@@ -62,4 +62,5 @@ const PagePresentation: React.FC = () => {
     </div>
   );
 };
+
 export default PagePresentation;

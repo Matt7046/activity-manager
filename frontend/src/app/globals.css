@@ -1,5 +1,29 @@
 @import "tailwindcss";
 
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-text);
+  --color-popover: var(--color-surface);
+  --color-popover-foreground: var(--color-text);
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-on-primary);
+  --color-secondary: var(--color-surface-soft);
+  --color-secondary-foreground: var(--color-text);
+  --color-muted: var(--color-surface-soft);
+  --color-muted-foreground: var(--color-text-muted);
+  --color-accent: var(--color-info-soft);
+  --color-accent-foreground: var(--color-text);
+  --color-destructive: var(--color-danger);
+  --color-border: var(--color-border);
+  --color-input: var(--color-border);
+  --color-ring: var(--color-primary);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+}
+
 :root {
   /* Base dark (Invariata) */
   --color-bg-solid: #08080a;
@@ -122,4 +146,49 @@ html[data-theme="light"] {
     radial-gradient(at 50% 0%, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
     linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
   --page-bg-fallback: #f8fafc;
+}
+
+html {
+  color-scheme: dark;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-sans-modern);
+  color: var(--color-text);
+  background: var(--page-bg-layers);
+  background-color: var(--page-bg-fallback);
+  background-attachment: fixed;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* FAB blu in tema chiaro: grigio antracite */
+html[data-theme="light"] .fab-blue-light {
+  background: linear-gradient(180deg, #5c5c5c 0%, #454545 40%, #383838 72%, #2d2d2d 100%) !important;
+  color: #fafafa !important;
+  border-color: rgba(0, 0, 0, 0.35) !important;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.12),
+    0 3px 10px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="light"] .fab-blue-light:hover {
+  background: linear-gradient(180deg, #6b6b6b 0%, #525252 38%, #404040 72%, #333 100%) !important;
 }

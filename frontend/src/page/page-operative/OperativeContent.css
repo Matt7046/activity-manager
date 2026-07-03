@@ -49,10 +49,11 @@
   box-sizing: border-box;
 }
 
-.popover-box .MuiTypography-root {
-  text-align: left !important; /* Sovrascrive eventuali stili di Material UI */
-  width: 100%;                 /* Assicura che la Typography occupi tutto lo spazio */
-  display: block;              /* Evita comportamenti inline che centrano il testo */
+.popover-box p,
+.popover-box span {
+  text-align: left !important;
+  width: 100%;
+  display: block;
   white-space: normal;
   overflow-wrap: break-word;
 }
