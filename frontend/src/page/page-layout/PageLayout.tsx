@@ -108,10 +108,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     );
   };
 
-  const handleCloseAnchor = () => {
-    setOpenAnchor(false);
-  };
-
   const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -215,16 +211,23 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       ? i18n._("email_registrazione")
       : i18n._("email_tutorato");
 
+  const annotationRows = sectionAttiva?.path === SectionName.HOME ? 2 : 4;
+
   return (
     <>
-      <div className="box-layout px-4 max-sm:px-2">
-        <div
-          className={`grid-menu flex w-full pb-4 pt-px ${isVertical ? "vertical-layout flex-row justify-between" : "horizontal-layout justify-between"}`}
-        >
-          <div className="title-container flex w-full items-center justify-center gap-2 py-2">
-            <div className="header-title-badge inline-flex items-center justify-center rounded-[var(--radius-lg)] border border-[var(--color-border-strong)] bg-[color-mix(in_srgb,var(--color-primary)_16%,var(--color-surface))] px-4 py-2.5 shadow-[var(--shadow-sm),inset_0_1px_0_var(--color-primary-soft)] max-sm:px-3 max-sm:py-2">
-              {IconaTitolo && <IconaTitolo className="header-icon size-[1.35rem] pr-2 text-[var(--color-primary)]" />}
-              <h6 className="header-title m-0 text-base leading-tight font-extrabold tracking-wide text-[var(--color-primary)] max-sm:text-[0.88rem]">
+      <div className="page-layout-root">
+        <div className="box-layout px-4 max-sm:px-2">
+        <header className="page-layout-header">
+          <div className="page-layout-header__start">
+            {menuLaterale && menuLaterale.length > 0 && (
+              <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
+            )}
+          </div>
+
+          <div className="page-layout-header__center">
+            <div className="header-title-badge">
+              {IconaTitolo && <IconaTitolo className="header-icon" aria-hidden />}
+              <h6 className="header-title">
                 <Label
                   _id={"title"}
                   text={
@@ -236,33 +239,23 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             </div>
           </div>
 
-          <div className="box-menu-laterale flex w-full items-center justify-between">
-            {menuLaterale && menuLaterale.length > 0 && (
-              <Drawer sezioni={menuLaterale} nameMenu="Menu" anchor="left" />
-            )}
-
-            <div className="box-layout-spacer flex-grow" />
-
-            <div className="box-layout-right-button flex items-center gap-2 pr-3">
-              <div className="box-layout-theme-lang-group -mr-1 inline-flex items-center gap-0">
-                <ThemeToggle placement="header" />
-                <Language placement="header" />
-              </div>
-              {sectionAttiva?.path !== null && !PUBLIC_SECTION_PATHS.has(sectionAttiva.path!) && (
-                <>
-                  <Button pulsanti={[pulsanteNotifiche]} />
-                  <Popover
-                    notifications={popoverNotifications}
-                    openAnchor={openAnchor}
-                    handleCloseAnchor={handleCloseAnchor}
-                    pulsanteNotification={pulsanteNotification}
-                  />
-                </>
-              )}
-              <Button pulsanti={[pulsanteLogout]} />
+          <div className="page-layout-header__end">
+            <div className="language-container">
+              <ThemeToggle placement="header" />
+              <Language placement="header" />
             </div>
+            {sectionAttiva?.path !== null && !PUBLIC_SECTION_PATHS.has(sectionAttiva.path!) && (
+              <Popover
+                open={openAnchor}
+                onOpenChange={setOpenAnchor}
+                trigger={<Button pulsanti={[pulsanteNotifiche]} />}
+                notifications={popoverNotifications}
+                pulsanteNotification={pulsanteNotification}
+              />
+            )}
+            <Button pulsanti={[pulsanteLogout]} />
           </div>
-        </div>
+        </header>
 
         <div className={isVertical ? "box-layout-text-vertical w-full" : "box-layout-text w-full"}>
           {showEmail ? (
@@ -283,7 +276,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
               disabled
               readOnly
               multiline
-              rows={4}
+              rows={annotationRows}
             />
           ) : (
             <FormField
@@ -293,7 +286,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
               disabled
               readOnly
               multiline
-              rows={4}
+              rows={annotationRows}
             />
           )}
         </div>
@@ -303,7 +296,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         {alertConfig.open && <Alert onClose={handleClose} message={alertConfig.message} />}
       </div>
 
-      {children}
+      <div className="page-layout-body">{children}</div>
+      </div>
     </>
   );
 };

@@ -1,7 +1,7 @@
 "use client";
 import { Trans, useLingui } from "@lingui/react";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FormField } from "@/components/ui/form-field";
 import {
   Select,
@@ -9,6 +9,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  type SelectOption,
 } from "@/components/ui/select";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import Button, { Pulsante } from "../../components/ms-button/Button";
@@ -133,6 +134,15 @@ const OperativeContent: React.FC<OperativeContentProps> = ({ user, alertConfig, 
     operativeStore.setPointsField(selectedActivity.points!);
   };
 
+  const activitySelectOptions = useMemo<SelectOption[]>(
+    () =>
+      operativeStore.activity.map((option) => ({
+        value: option._id!,
+        label: option.nome ?? option._id!,
+      })),
+    [operativeStore.activity]
+  );
+
   const saveActivity = (user: UserI) => {
     const selectedActivity = operativeStore.activity.find((item) => item._id === formValues.activity);
     if (!selectedActivity) {
@@ -197,7 +207,11 @@ const OperativeContent: React.FC<OperativeContentProps> = ({ user, alertConfig, 
             <label htmlFor="select-label" className="text-sm font-bold text-[var(--color-text)]">
               {i18n._("punti_attivitaobb")}
             </label>
-            <Select value={formValues?.activity ?? ""} onValueChange={(value) => value && clickCombobox(value)}>
+            <Select
+              options={activitySelectOptions}
+              value={formValues?.activity ?? ""}
+              onValueChange={(value) => value && clickCombobox(value)}
+            >
               <SelectTrigger id="select-label" className="w-full">
                 <SelectValue placeholder={i18n._("attivita")} />
               </SelectTrigger>

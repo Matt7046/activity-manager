@@ -10,11 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import "./Language.css";
 
 export type LanguagePlacement = "default" | "header";
 
 interface LanguageProps {
-  /** `header`: stessa riga toolbar (presentation), senza margin-top extra sul contenitore. */
+  /** `header`: stessa riga toolbar (presentation / layout app). */
   placement?: LanguagePlacement;
 }
 
@@ -44,7 +45,7 @@ const Language: React.FC<LanguageProps> = ({ placement = "default" }) => {
       className={cn(
         "flex justify-end",
         placement === "header"
-          ? "language-toolbar-header inline-flex items-center justify-center px-0"
+          ? "language-toolbar-header px-0"
           : "mt-1 px-2"
       )}
     >
@@ -53,25 +54,22 @@ const Language: React.FC<LanguageProps> = ({ placement = "default" }) => {
           render={
             <Button
               variant="ghost"
-              size="icon"
-              className="text-[var(--color-primary)]"
+              className={cn(
+                "text-[var(--color-primary)]",
+                placement === "header" ? "language-flag-trigger" : "size-8"
+              )}
             />
           }
         >
           <img
             src={currentLanguage.flagUrl}
             alt={`Lingua ${normalizedLocale}`}
-            className="block size-6 rounded-full object-cover"
           />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           {Object.entries(languages).map(([lang, { label, flagUrl }]) => (
             <DropdownMenuItem key={lang} onClick={() => handleSelectLang(lang)}>
-              <img
-                src={flagUrl}
-                alt={label}
-                className="mr-2 inline-block size-[18px] rounded-full object-cover align-middle"
-              />
+              <img src={flagUrl} alt={label} className="language-flag-menu" />
               {label}
             </DropdownMenuItem>
           ))}

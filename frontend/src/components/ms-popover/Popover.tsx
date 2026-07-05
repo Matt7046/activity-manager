@@ -1,6 +1,7 @@
 "use client";
 import { Trans } from "@lingui/react";
 import React from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import Button, { Pulsante } from "../ms-button/Button";
 
@@ -11,37 +12,28 @@ export interface PopoverNotification {
 
 interface PopoverComponentProps {
   notifications: PopoverNotification[];
-  openAnchor: boolean;
-  anchorEl?: HTMLElement | null;
-  handleCloseAnchor: () => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  trigger: React.ReactNode;
   pulsanteNotification: Pulsante;
-  children?: React.ReactNode;
 }
 
 const PopoverComponent: React.FC<PopoverComponentProps> = ({
   notifications,
-  openAnchor,
-  anchorEl,
-  handleCloseAnchor,
+  open,
+  onOpenChange,
+  trigger,
   pulsanteNotification,
 }) => {
-  void anchorEl;
-
-  if (!openAnchor) {
-    return null;
-  }
-
   return (
-    <>
-      <button
-        type="button"
-        aria-label="Close notifications"
-        className="fixed inset-0 z-40 bg-transparent"
-        onClick={handleCloseAnchor}
-      />
-      <div
+    <Popover open={open} onOpenChange={onOpenChange}>
+      <PopoverTrigger render={<span className="inline-flex">{trigger}</span>} />
+      <PopoverContent
         id="popover-notifications"
-        className="fixed right-6 bottom-6 z-50 min-w-[min(300px,92vw)] max-w-[min(380px,92vw)] overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-md)] max-sm:left-6 max-sm:right-6 max-sm:bottom-4 max-sm:min-w-0 max-sm:max-w-none"
+        side="bottom"
+        align="end"
+        sideOffset={8}
+        className="w-[min(380px,92vw)] max-w-[380px] overflow-hidden p-0"
       >
         <div className="bg-[var(--color-surface)]">
           {notifications.length > 0 ? (
@@ -75,8 +67,8 @@ const PopoverComponent: React.FC<PopoverComponentProps> = ({
             <Button pulsanti={[pulsanteNotification]} />
           </div>
         </div>
-      </div>
-    </>
+      </PopoverContent>
+    </Popover>
   );
 };
 

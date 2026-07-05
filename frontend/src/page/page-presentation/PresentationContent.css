@@ -27,13 +27,6 @@
   min-width: 60px;
 }
 
-.language-container {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
 .techf-name {
   margin-top: 4px;
 }

@@ -6,7 +6,19 @@ import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { cn } from "@/lib/utils"
 import { ChevronDownIcon, CheckIcon, ChevronUpIcon } from "lucide-react"
 
-const Select = SelectPrimitive.Root
+export type SelectOption = {
+  value: string
+  label: React.ReactNode
+}
+
+type SelectRootProps = SelectPrimitive.Root.Props<string> & {
+  /** Mappa value → label: SelectValue mostra il testo descrittivo invece dell'id. */
+  options?: SelectOption[]
+}
+
+function Select({ options, items, ...props }: SelectRootProps) {
+  return <SelectPrimitive.Root items={options ?? items} {...props} />
+}
 
 function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
   return (

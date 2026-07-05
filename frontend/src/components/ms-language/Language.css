@@ -1,0 +1,52 @@
+.language-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  min-height: 2rem;
+}
+
+.language-toolbar-header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.language-flag-trigger {
+  height: 2rem;
+  width: auto;
+  min-width: 2rem;
+  padding: 0.25rem 0.375rem;
+}
+
+.language-flag-trigger img {
+  display: block;
+  height: 1rem;
+  width: 1.5rem;
+  border-radius: 3px;
+  border: 1px solid rgb(0 0 0 / 0.2);
+  object-fit: cover;
+  object-position: center;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+html[data-theme="dark"] .language-flag-trigger img {
+  border-color: rgb(255 255 255 / 0.25);
+}
+
+.language-flag-menu {
+  margin-right: 0.5rem;
+  display: inline-block;
+  height: 14px;
+  width: 21px;
+  border-radius: 2px;
+  border: 1px solid rgb(0 0 0 / 0.2);
+  object-fit: cover;
+  object-position: center;
+  vertical-align: middle;
+}
+
+html[data-theme="dark"] .language-flag-menu {
+  border-color: rgb(255 255 255 / 0.25);
+}

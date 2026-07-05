@@ -1,8 +1,8 @@
 "use client";
 import { Trans, useLingui } from "@lingui/react";
+import { ColumnDef } from "@tanstack/react-table";
 import { ChevronDown, Filter, Info } from "lucide-react";
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -44,7 +44,6 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
   const [inizialLoad, setInitialLoad] = useState<boolean>(true);
   void setInitialLoad;
   const [loading, setLoading] = useState<boolean>(false);
-  const [rowCount, setRowCount] = useState(0);
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 });
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -70,7 +69,6 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
     ).then((response: ResponseI | undefined) => {
       if (response?.status === HttpStatus.OK) {
         setNotifications(response.jsonText);
-        setRowCount(response.jsonText.length);
       }
       setLoading(false);
     });
@@ -111,72 +109,74 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
     return notifDate >= start && notifDate <= end;
   });
 
-  const columns: GridColDef[] = [
-    {
-      field: "message",
-      headerName: i18n._("notifiche"),
-      flex: 1,
-      renderCell: (params: GridRenderCellParams) => {
-        const isExpanded = expandedRowId === params.id;
-        const x = params.row as NotificationI;
-        const testoKey = getTranslatedNotification(x.message, i18n);
+  const columns: ColumnDef<NotificationI>[] = useMemo(
+    () => [
+      {
+        id: "message",
+        header: i18n._("notifiche"),
+        cell: ({ row }) => {
+          const isExpanded = expandedRowId === row.id;
+          const x = row.original;
+          const testoKey = getTranslatedNotification(x.message, i18n);
 
-        return (
-          <Collapsible
-            open={isExpanded}
-            onOpenChange={(open) => setExpandedRowId(open ? params.id : null)}
-            className="notification-row-cell w-full"
-          >
-            <CollapsibleTrigger
-              className={cn(
-                "notification-row-header flex w-full cursor-pointer items-center py-2",
-                isExpanded && "is-expanded"
-              )}
+          return (
+            <Collapsible
+              open={isExpanded}
+              onOpenChange={(open) => setExpandedRowId(open ? row.id : null)}
+              className="notification-row-cell w-full"
             >
-              <Info
+              <CollapsibleTrigger
                 className={cn(
-                  "notification-row-info mr-2 size-4 shrink-0",
-                  isExpanded && "is-expanded text-[var(--color-primary-hover)]"
+                  "notification-row-header flex w-full cursor-pointer items-center py-2",
+                  isExpanded && "is-expanded"
                 )}
-              />
-              <div className="notification-row-main min-w-0 flex-1">
-                {x.dateSender && (
-                  <span className="notification-date-badge block text-xs">
-                    {getDateStringRegularFormat(x.dateSender)}
-                  </span>
-                )}
-                <span className="notification-title block font-medium">{testoKey}</span>
-              </div>
-              <ChevronDown
-                className={cn(
-                  "notification-row-arrow ml-2 size-4 shrink-0 transition-transform",
-                  isExpanded && "is-expanded rotate-180"
-                )}
-              />
-            </CollapsibleTrigger>
+              >
+                <Info
+                  className={cn(
+                    "notification-row-info mr-2 size-4 shrink-0",
+                    isExpanded && "is-expanded text-[var(--color-primary-hover)]"
+                  )}
+                />
+                <div className="notification-row-main min-w-0 flex-1">
+                  {x.dateSender && (
+                    <span className="notification-date-badge block text-xs">
+                      {getDateStringRegularFormat(x.dateSender)}
+                    </span>
+                  )}
+                  <span className="notification-title block font-medium">{testoKey}</span>
+                </div>
+                <ChevronDown
+                  className={cn(
+                    "notification-row-arrow ml-2 size-4 shrink-0 transition-transform",
+                    isExpanded && "is-expanded rotate-180"
+                  )}
+                />
+              </CollapsibleTrigger>
 
-            <CollapsibleContent>
-              <div className="notification-row-details pb-3 pl-8">
-                <p className="text-sm text-[var(--color-text-muted)]">
-                  <strong>
-                    <Trans id="inviato_da" />
-                  </strong>{" "}
-                  {x.userSender}
-                </p>
-                <Separator className="notification-row-divider my-2" />
-                <p className="text-sm text-[var(--color-text-muted)]">
-                  <strong>
-                    <Trans id="stato" />
-                  </strong>{" "}
-                  {i18n._(x.status.toLowerCase())}
-                </p>
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
-        );
+              <CollapsibleContent>
+                <div className="notification-row-details pb-3 pl-8">
+                  <p className="text-sm text-[var(--color-text-muted)]">
+                    <strong>
+                      <Trans id="inviato_da" />
+                    </strong>{" "}
+                    {x.userSender}
+                  </p>
+                  <Separator className="notification-row-divider my-2" />
+                  <p className="text-sm text-[var(--color-text-muted)]">
+                    <strong>
+                      <Trans id="stato" />
+                    </strong>{" "}
+                    {i18n._(x.status.toLowerCase())}
+                  </p>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          );
+        },
       },
-    },
-  ];
+    ],
+    [expandedRowId, i18n]
+  );
 
   return (
     <div className="notification-container">
@@ -224,10 +224,10 @@ const NotificationContent: React.FC<NotificationContentProps> = ({ user, alertCo
           pulsanti={[pulsanteNotification]}
           rows={filteredNotifications}
           columns={columns}
-          rowCount={rowCount}
           loading={loading}
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}
+          exportFileName="notifiche"
         />
       </div>
     </div>

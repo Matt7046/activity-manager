@@ -162,8 +162,7 @@
   height: 550px;
 }
 
-/* Se vuoi che le righe espanse non rompano il layout ma siano scrollabili internamente */
-.notification-grid-container .MuiDataGrid-main {
+.notification-grid-container .datagrid-table-wrap {
   min-height: 300px;
 }
 

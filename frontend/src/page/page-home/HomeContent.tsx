@@ -10,6 +10,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import Alert from '../../components/ms-alert/Alert';
 import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
+import { GitHubBrandIcon, GoogleBrandIcon } from '../../components/ms-social/SocialBrandIcons';
 import TechFooter from '../../components/ms-tech-footer/TechFooter';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -697,16 +698,16 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
                     )}
                     {demoPanelOpen && (
                       <div className="home-demo-panel mt-4">
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-3">
                           <Button
                             onClick={() => simulateLogin(TypeUser.STANDARD)}
-                            className="simulated-login-button simulated-login-button-full w-full"
+                            className="simulated-login-button w-full"
                           >
                             <Trans id="login_simulato_utente_base" />
                           </Button>
                           <Button
                             onClick={() => simulateLogin(TypeUser.FAMILY)}
-                            className="simulated-login-button simulated-login-button-full w-full"
+                            className="simulated-login-button w-full"
                           >
                             <Trans id="login_simulato_utente_parentale" />
                           </Button>
@@ -789,11 +790,11 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
                   variant="outline"
                   size="icon"
                   onClick={startGithubLogin}
-                  className="social-button"
+                  className="social-button github-button"
                   disabled={demoPanelOpen || !CLIENT_GITHUB.SERVER || !getGitHubOAuthRedirectUri()}
                   aria-label="GitHub"
                 >
-                  <span className="text-sm font-bold">GH</span>
+                  <GitHubBrandIcon />
                 </Button>
                 {FACEBOOK_LOGIN_VISIBLE && (
                   <Button
@@ -817,7 +818,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
                   disabled={demoPanelOpen || !CLIENT_GOOGLE.SERVER}
                   aria-label="Google"
                 >
-                  <span className="text-sm font-bold">G</span>
+                  <GoogleBrandIcon />
                 </Button>
               </div>
 
@@ -892,7 +893,11 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
           )}
         </div>
 
-        {!hiddenLogin && <TechFooter />}
+        {!hiddenLogin && (
+          <div className="tech-wrapper">
+            <TechFooter />
+          </div>
+        )}
       </div>
     </>
   );
