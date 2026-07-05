@@ -1,29 +1,50 @@
 .home-page-shell {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  padding-top: var(--space-0);
-  min-height: 100dvh;
+  min-height: 0;
   color: var(--color-text);
-  /* Stesso trattamento della presentation: gradiente fisso sulla colonna contenuti */
-  background: var(--page-bg-layers);
-  background-color: var(--page-bg-fallback);
-  background-attachment: fixed;
 }
 
 .home-page-main {
-  flex: 1 1 auto;
-  min-height:57dvh;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.home-page-shell .tech-wrapper {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.home-page-shell .tech-wrapper .techf-footer {
+  margin-top: 0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.home-page-shell .techf-title {
+  margin-bottom: 0.5rem !important;
+}
+
+.home-page-shell .techf-item {
+  padding-bottom: 0.25rem !important;
 }
 
 .welcome-container1 {
-  margin-top: var(--space-6);
-  padding-inline: var(--space-2);
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: var(--space-3) var(--space-2);
   color: var(--color-text-muted);
   max-width: 5000px;
   margin-left: auto;
   margin-right: auto;
-  display: flex;
-  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .login-paper {
@@ -33,7 +54,6 @@
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-strong);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-  /* Piastra come hero Presentation; MUI Paper non deve sovrascrivere */
   background-color: var(--color-surface-elevated) !important;
   background-image: none !important;
   margin-top: 0;
@@ -43,10 +63,8 @@ html[data-theme="light"] .login-paper {
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.26);
 }
 
-/* Rimuoviamo eventuali margini interni del Box di login che spingono in basso */
 .box-login {
   padding-top: 1px !important;
-  /* Ridotto da 10px */
 }
 
 .login-button {
@@ -65,11 +83,16 @@ html[data-theme="light"] .login-paper {
 }
 
 .simulated-login-button {
-  text-transform: uppercase !important;
+  height: auto !important;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.875rem !important;
+  white-space: normal !important;
+  text-align: center;
+  line-height: 1.3;
+  text-transform: none !important;
   font-weight: 700 !important;
   font-size: 0.82rem !important;
   border-radius: var(--radius-md) !important;
-  min-height: 44px;
   box-shadow: var(--shadow-sm) !important;
 }
 
@@ -83,13 +106,28 @@ html[data-theme="light"] .login-paper {
   justify-content: center;
 }
 
+.social-button .social-brand-icon {
+  width: 28px;
+  height: 28px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.github-button {
+  color: var(--color-text-bright);
+}
+
+html[data-theme="light"] .github-button {
+  color: #24292f;
+}
+
 .social-button svg {
   font-size: 32px;
 }
 
 .google-button {
-  border: none;
-  padding: 0;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
 }
 
 .box-accedi {
@@ -188,10 +226,6 @@ html[data-theme="light"] .login-paper {
   display: flex;
 }
 
-.simulated-login-button-full {
-  height: 100%;
-}
-
 .box-accedi-divider {
   flex-grow: 1;
 }
@@ -211,6 +245,7 @@ html[data-theme="light"] .login-paper {
   }
 
   .simulated-login-button {
-    font-size: 0.8rem !important;
+    font-size: 0.78rem !important;
+    padding-inline: 0.65rem !important;
   }
 }

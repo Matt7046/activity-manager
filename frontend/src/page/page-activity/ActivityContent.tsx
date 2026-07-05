@@ -1,7 +1,6 @@
 "use client";
 import { useLingui } from "@lingui/react";
-import { Box } from "@mui/material";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import { Pulsante } from "../../components/ms-button/Button";
@@ -12,143 +11,125 @@ import "./ActivityContent.css";
 import { fetchDataActivities, findByIdentificativo } from "./service/ActivityService";
 import activityStore from "./store/ActivityStore";
 
-
 interface ActivityContentProps {
   user: UserI;
-  alertConfig: AlertConfig
+  alertConfig: AlertConfig;
   isVertical: boolean;
 }
 
-const ActivityContent: React.FC<ActivityContentProps> = ({
-  user,
-  alertConfig,
-  isVertical
-}) => {
-
-  const router = useRouter(); // Ottieni la funzione di navigazione
+const ActivityContent: React.FC<ActivityContentProps> = ({ user, alertConfig, isVertical }) => {
+  const router = useRouter();
   const { i18n } = useLingui();
   const [loading, setLoading] = useState(false);
-  const flex = isVertical ? 'flex-start' : 'flex-end';
-  const [response, setResponse] = useState<any>([]); // Stato iniziale vuoto
+  void loading;
+  const flex = isVertical ? "flex-start" : "flex-end";
+  const [response, setResponse] = useState<any>([]);
   const [activitySchedule, setActivitySchedule] = useState<boolean>(true);
-
-
-
+  void activitySchedule;
+  void setActivitySchedule;
 
   let hasFetchedData = false;
 
-
   useEffect(() => {
     getActivities();
-    return () => { };
+    return () => {};
   }, [activitySchedule, user]);
-
 
   const caricamentoIniziale = (response: ResponseI): void => {
     return setAllTesto(response);
-  }
+  };
 
   const setAllTesto = (response: ResponseI): void => {
     activityStore.setAllActivity(response);
-  }
-
-
+  };
 
   const getActivities = () => {
     if (!hasFetchedData) {
-      hasFetchedData = true
-      // Effettua la chiamata GET quando il componente è montato 
-      // axios.
-      //  .get('https://api.example.com/data') // URL dell'API]
+      hasFetchedData = true;
       const emailFind = user.emailChild;
-      fetchDataActivities({ ...user, email: emailFind }, (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
+      fetchDataActivities(
+        { ...user, email: emailFind },
+        (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
+      )
         .then((response) => {
           if (response) {
-            setResponse(response.jsonText)
+            setResponse(response.jsonText);
             caricamentoIniziale(response);
           }
         })
         .catch((error) => {
-          console.error('Errore durante il recupero dei dati:', error);
-        })
+          console.error("Errore durante il recupero dei dati:", error);
+        });
     }
-  }
-
-
+  };
 
   const openDetail = (_id: string, findActivityByIdentificativo: (_id: string) => void): void => {
-    findActivityByIdentificativo(_id)
-  }
+    findActivityByIdentificativo(_id);
+  };
 
   const pulsanteNew: Pulsante = {
-    icona: 'fas fa-plus',
+    icona: "fas fa-plus",
     funzione: () => navigateRouting(router, SectionName.ABOUT, {}),
     nome: ButtonName.NEW,
     title: i18n._("nuovo_documento"),
-    configDialogPulsante: { message: '', showDialog: false },
-    disableButton: user?.type === TypeUser.STANDARD
-  };;
+    configDialogPulsante: { message: "", showDialog: false },
+    disableButton: user?.type === TypeUser.STANDARD,
+  };
 
   const pulsanteRed: Pulsante = {
-    icona: 'fas fa-download',
-    funzione: (_id: string) => findByIdentificativo({
-      _id: _id
-    }, (message) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)),
+    icona: "fas fa-download",
+    funzione: (_id: string) =>
+      findByIdentificativo({ _id: _id }, (message) =>
+        showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
+      ),
     nome: ButtonName.RED,
     title: i18n._("carica_sottotesto"),
-    configDialogPulsante: { message: '', showDialog: false }
-  }
+    configDialogPulsante: { message: "", showDialog: false },
+  };
 
   const pulsanteBlue: Pulsante = {
-    icona: 'fas fa-eye',
-    funzione: (_id: string) => openDetail(_id, () => findActivityByIdentificativo(_id)), // Passi la funzione direttamente
+    icona: "fas fa-eye",
+    funzione: (_id: string) => openDetail(_id, () => findActivityByIdentificativo(_id)),
     nome: ButtonName.BLUE,
     title: i18n._("apri_dettaglio"),
-    configDialogPulsante: { message: '', showDialog: false }
-  }
+    configDialogPulsante: { message: "", showDialog: false },
+  };
 
-  // const pulsantiVisibili = isVertical ? [pulsanteNew, pulsanteBlue] : [pulsanteNew, pulsanteRed, pulsanteBlue]
-  const pulsantiVisibili = [pulsanteNew, pulsanteRed, pulsanteBlue]
-
+  const pulsantiVisibili = [pulsanteNew, pulsanteRed, pulsanteBlue];
 
   const findActivityByIdentificativo = (_id: string) => {
-    // Effettua la chiamata GET quando il componente è montato
-    findByIdentificativo({
-      _id: _id
-    }, (message) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message), setLoading)
+    findByIdentificativo(
+      { _id: _id },
+      (message) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message),
+      setLoading
+    )
       .then((response) => {
         if (response?.status === HttpStatus.OK) {
           activityStore.setActivityById(_id, response.jsonText);
-          navigateRouting(router, SectionName.ABOUT, { _id })
+          navigateRouting(router, SectionName.ABOUT, { _id });
         }
       })
       .catch((error) => {
-        console.error('Errore durante il recupero dei dati:', error);
+        console.error("Errore durante il recupero dei dati:", error);
       });
-  }
+  };
+
   const handleClose = () => {
     alertConfig.setOpen(false);
   };
-
-
 
   const scheduler: MsSchedule = {
     justifyContent: flex,
     handleClose: handleClose,
     schedule: response,
     isVertical: isVertical,
-    pulsanti: pulsantiVisibili
-  }
-
-  // Crea l'array dei pulsanti in base all'orientamento
+    pulsanti: pulsantiVisibili,
+  };
 
   return (
-    <>
-      <Box className='box-activity'>
-        <Schedule
-          schedule={scheduler} />
-      </Box>
-    </>
+    <div className="box-activity">
+      <Schedule schedule={scheduler} />
+    </div>
   );
 };
 

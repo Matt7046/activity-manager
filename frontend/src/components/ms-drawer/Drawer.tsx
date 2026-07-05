@@ -1,143 +1,142 @@
 "use client";
 import { Trans } from "@lingui/react";
-import MenuIcon from '@mui/icons-material/Menu';
-import { Typography } from '@mui/material';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { OverridableComponent } from '@mui/material/OverridableComponent';
-import { SvgIconTypeMap } from '@mui/material/SvgIcon';
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import { observer } from 'mobx-react';
-import * as React from 'react';
-import './Drawer.css';
+import { Menu } from "lucide-react";
+import { observer } from "mobx-react";
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import type { MenuIconComponent } from "@/general/structure/menuIcons";
+import { cn } from "@/lib/utils";
 
-
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
+type Anchor = "top" | "left" | "bottom" | "right";
 
 export interface MenuLaterale {
-  funzione?: ((...args: unknown[]) => unknown) | null; // Può essere una funzione o `null`
-  testo: string
-  path?: string
-  annotazione?:string
-  icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>
+  funzione?: ((...args: unknown[]) => unknown) | null;
+  testo: string;
+  path?: string;
+  annotazione?: string;
+  icon?: MenuIconComponent;
 }
 
 export interface TypeAnchor {
-  top: boolean,
-  left: boolean,
-  bottom: boolean,
-  right: boolean
+  top: boolean;
+  left: boolean;
+  bottom: boolean;
+  right: boolean;
 }
 
-const Drawer = observer((props: {
-  sezioni: MenuLaterale[][];
-  nameMenu: string;
-  route?: string;
-  anchor: Anchor;
-}) => {
-  const [statoComponente, setStatoComponente] = React.useState<TypeAnchor>({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+const Drawer = observer(
+  (props: {
+    sezioni: MenuLaterale[][];
+    nameMenu: string;
+    route?: string;
+    anchor: Anchor;
+  }) => {
+    const [statoComponente, setStatoComponente] = React.useState<TypeAnchor>({
+      top: false,
+      left: false,
+      bottom: false,
+      right: false,
+    });
 
-  return (
-    <div>
-      <Button
-        className="drawer-toggle-button"
-        onClick={toggleDrawer(props.anchor, true, setStatoComponente, statoComponente)}
-      >
-        <MenuIcon /> {/* Sostituito il testo con l'icona per coerenza grafica */}
-      </Button>
+    const isOpen = statoComponente[props.anchor];
+    const setOpen = (open: boolean) => {
+      setStatoComponente({ ...statoComponente, [props.anchor]: open });
+    };
 
-      <SwipeableDrawer
-        anchor={props.anchor}
-        open={statoComponente[props.anchor]}
-        onClose={toggleDrawer(props.anchor, false, setStatoComponente, statoComponente)}
-        onOpen={toggleDrawer(props.anchor, true, setStatoComponente, statoComponente)}
-      >
-        {listaItem(props.anchor, props.sezioni, setStatoComponente, statoComponente)}
-      </SwipeableDrawer>
-    </div>
-  );
-});
+    const sheetSide =
+      props.anchor === "top"
+        ? "top"
+        : props.anchor === "bottom"
+          ? "bottom"
+          : props.anchor === "right"
+            ? "right"
+            : "left";
 
-const toggleDrawer = (
-  anchor: keyof TypeAnchor, // Specifica che "anchor" deve essere una delle chiavi di TypeAnchor
-  open: boolean,
-  setStatoComponente: React.Dispatch<React.SetStateAction<TypeAnchor>>, // Tipo corretto per il setter dello stato
-  statoComponente: TypeAnchor
-) =>
-  (event: React.KeyboardEvent | React.MouseEvent) => {
-    if (
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return; // Se è un evento di tastiera con i tasti "Tab" o "Shift", esci senza fare nulla
-    }
+    return (
+      <div>
+        <Button
+          variant="outline"
+          onClick={() => setOpen(true)}
+          className="rounded-[var(--radius-sm)] border border-[var(--color-border)] px-4 py-1.5 font-semibold text-[var(--color-primary)] normal-case transition-all hover:border-[var(--color-primary)] hover:bg-[var(--color-surface-soft)]"
+        >
+          <Menu className="size-5" />
+        </Button>
 
-    setStatoComponente({ ...statoComponente, [anchor]: open }); // Aggiorna lo stato con il nuovo valore
-  };
-
-
-
-
+        <Sheet open={isOpen} onOpenChange={setOpen}>
+          <SheetContent
+            side={sheetSide}
+            className={cn(
+              "flex flex-col overflow-y-auto border-[var(--color-border)] bg-[var(--color-surface)] p-0",
+              props.anchor === "left" || props.anchor === "right" ? "w-[280px] sm:max-w-[280px]" : "w-auto"
+            )}
+          >
+            {listaItem(props.anchor, props.sezioni, () => setOpen(false))}
+          </SheetContent>
+        </Sheet>
+      </div>
+    );
+  }
+);
 
 const listaItem = (
   anchor: Anchor,
   sezioni: MenuLaterale[][],
-  setStatoComponente: React.Dispatch<React.SetStateAction<TypeAnchor>>,
-  statoComponente: TypeAnchor
+  closeDrawer: () => void
 ) => (
-  <Box
-    className={`drawer-box ${anchor === 'top' || anchor === 'bottom' ? 'drawer-horizontal' : 'drawer-vertical'}`}
+  <div
+    className={cn(
+      "flex h-full flex-col",
+      anchor === "top" || anchor === "bottom" ? "w-auto" : "w-full"
+    )}
     role="presentation"
-    onClick={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
-    onKeyDown={toggleDrawer(anchor, false, setStatoComponente, statoComponente)}
+    onClick={closeDrawer}
+    onKeyDown={(event) => {
+      if (event.key === "Escape") closeDrawer();
+    }}
   >
-    {/* Header opzionale del menu */}
-    <Box className="drawer-header">
-      <Typography variant="h6" className="drawer-header-title">
+    <SheetHeader className="border-b border-[var(--color-border)] px-4 py-3 text-left">
+      <SheetTitle className="text-left text-lg font-bold">
         <Trans id="menu_navigazione" />
-      </Typography>
-    </Box>
+      </SheetTitle>
+    </SheetHeader>
 
     {sezioni.map((section, sectionIndex) => (
       <React.Fragment key={sectionIndex}>
-        <List className="drawer-list">
+        <ul className="py-1">
           {section.map((menulaterale) => (
-            <ListItem key={menulaterale.testo} disablePadding>
-              <ListItemButton
-                className="drawer-list-item"
-                onClick={() => {
+            <li key={menulaterale.testo}>
+              <button
+                type="button"
+                className="mx-2 my-1 flex w-[calc(100%-16px)] items-center rounded-[var(--radius-sm)] px-3 py-2 text-left text-[0.9rem] font-medium transition-all hover:bg-[var(--color-info-soft)] hover:text-[var(--color-primary)]"
+                onClick={(event) => {
+                  event.stopPropagation();
                   if (menulaterale.funzione) {
                     menulaterale.funzione();
                   }
+                  closeDrawer();
                 }}
               >
-                <ListItemIcon className="drawer-list-icon">
-                  {menulaterale.icon && <menulaterale.icon fontSize="small" />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={menulaterale.testo}
-                  primaryTypographyProps={{ fontSize: '0.9rem', fontWeight: 500 }}
-                />
-              </ListItemButton>
-            </ListItem>
+                <span className="mr-2 flex min-w-10 items-center justify-center text-[var(--color-primary)]">
+                  {menulaterale.icon && <menulaterale.icon className="size-4" />}
+                </span>
+                {menulaterale.testo}
+              </button>
+            </li>
           ))}
-        </List>
-        {sectionIndex !== sezioni.length - 1 && <Divider className="drawer-divider" />}
+        </ul>
+        {sectionIndex !== sezioni.length - 1 && (
+          <Separator className="mx-4 my-2 bg-[var(--color-border)]" />
+        )}
       </React.Fragment>
     ))}
-  </Box>
+  </div>
 );
 
 export default Drawer;

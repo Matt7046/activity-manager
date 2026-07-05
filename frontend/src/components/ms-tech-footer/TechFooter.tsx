@@ -1,23 +1,23 @@
 "use client";
 
 import { Trans } from "@lingui/react";
-import NextjsIcon from "@mui/icons-material/ChangeHistory";
-import ReactIcon from "@mui/icons-material/Code";
-import JavaIcon from "@mui/icons-material/Coffee";
-import HubIcon from "@mui/icons-material/Hub";
-import Inventory2Icon from "@mui/icons-material/Inventory2";
-import SpringBootIcon from "@mui/icons-material/PlayCircleFilled";
-import PsychologyIcon from "@mui/icons-material/Psychology";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import SearchIcon from "@mui/icons-material/Search";
-import SecurityIcon from "@mui/icons-material/Security";
-import MongoDBIcon from "@mui/icons-material/Storage";
-import TranslateIcon from "@mui/icons-material/Translate";
-import WebIcon from "@mui/icons-material/Web";
-import { Box, IconButton, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import {
+  Brain,
+  CloudUpload,
+  Code2,
+  Coffee,
+  Database,
+  Globe,
+  Languages,
+  Network,
+  Package,
+  PlayCircle,
+  Search,
+  Shield,
+  Triangle,
+} from "lucide-react";
 import type { ReactNode } from "react";
-import "./TechFooter.css";
+import { Button } from "@/components/ui/button";
 
 const cdLogo = (
   <img
@@ -25,49 +25,62 @@ const cdLogo = (
     alt=""
     width={36}
     height={36}
-    className="techf-logo-brand"
+    className="block object-contain"
     loading="lazy"
     decoding="async"
   />
 );
 
 const technologies: { name: string; icon: ReactNode; brandLogo?: boolean }[] = [
-  { name: "MongoDB Cloud", icon: <MongoDBIcon fontSize="large" className="techf-icon" /> },
-  { name: "React", icon: <ReactIcon fontSize="large" className="techf-icon" /> },
-  { name: "Next.js", icon: <NextjsIcon fontSize="large" className="techf-icon" /> },
-  { name: "Java", icon: <JavaIcon fontSize="large" className="techf-icon" /> },
-  { name: "Spring Boot", icon: <SpringBootIcon fontSize="large" className="techf-icon" /> },
-  { name: "ElasticSearch", icon: <SearchIcon fontSize="large" className="techf-icon" /> },
-  { name: "Cloudinary", icon: <CloudUploadIcon fontSize="large" className="techf-icon" /> },
-  { name: "RabbitMQ", icon: <HubIcon fontSize="large" className="techf-icon" /> },
-  { name: "Docker", icon: <Inventory2Icon fontSize="large" className="techf-icon" /> },
-  { name: "Nginx", icon: <WebIcon fontSize="large" className="techf-icon" /> },
-  { name: "JWT Token", icon: <SecurityIcon fontSize="large" className="techf-icon" /> },
-  { name: "GPT (AI)", icon: <PsychologyIcon fontSize="large" className="techf-icon" /> },
-  { name: "Lingui", icon: <TranslateIcon fontSize="large" className="techf-icon" /> },
+  { name: "MongoDB Cloud", icon: <Database className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "React", icon: <Code2 className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "Next.js", icon: <Triangle className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "Java", icon: <Coffee className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "Spring Boot", icon: <PlayCircle className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "ElasticSearch", icon: <Search className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "Cloudinary", icon: <CloudUpload className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "RabbitMQ", icon: <Network className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "Docker", icon: <Package className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "Nginx", icon: <Globe className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "JWT Token", icon: <Shield className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "GPT (AI)", icon: <Brain className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
+  { name: "Lingui", icon: <Languages className="techf-icon size-8 text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]" /> },
 ];
+
+void cdLogo;
 
 const TechFooter = () => {
   return (
-    <Box className="techf-footer">
-      <Typography variant="h6" gutterBottom className="techf-title">
+    <footer className="techf-footer mt-auto w-full border-t border-[var(--color-border-strong)] bg-[var(--color-footer-bg)] px-3 py-4 text-center text-[var(--color-footer-text)] shadow-[0_-8px_24px_rgba(0,0,0,0.1)] html[data-theme=light]:shadow-[0_-14px_40px_rgba(0,0,0,0.22)] max-[700px]:px-2 max-[700px]:py-3">
+      <h2 className="techf-title mb-3 text-lg font-bold text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]">
         <Trans id="tecnologie_che_utilizzo" />
-      </Typography>
-      <Grid container spacing={1} columns={{ xs: 10, sm: 10, md: 10 }} className="techf-grid">
+      </h2>
+      <div className="techf-grid grid w-full grid-cols-2 gap-1 sm:grid-cols-5">
         {technologies.map((tech) => (
-          <Grid key={tech.name} size={{ xs: 5, sm: 2, md: 2 }} className="techf-item">
-            <IconButton color="inherit" disabled>
-              <span className={`techf-icon-wrap${tech.brandLogo ? " techf-icon-wrap-brand" : ""}`}>{tech.icon}</span>
-            </IconButton>
-            <Typography variant="caption" display="block" className="techf-name">
+          <div
+            key={tech.name}
+            className="techf-item flex flex-col items-center pb-3 text-center max-[700px]:pb-2"
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              disabled
+              className="text-[var(--color-link-ui)] opacity-100 disabled:opacity-100 html[data-theme=light]:text-[#0a0a0a]"
+            >
+              <span
+                className={`inline-flex items-center justify-center${tech.brandLogo ? " techf-icon-wrap-brand" : ""}`}
+              >
+                {tech.icon}
+              </span>
+            </Button>
+            <span className="techf-name block text-xs text-[var(--color-link-ui)] opacity-90 html[data-theme=light]:text-[#0a0a0a] html[data-theme=light]:opacity-100">
               {tech.name}
-            </Typography>
-          </Grid>
+            </span>
+          </div>
         ))}
-      </Grid>
-    </Box>
+      </div>
+    </footer>
   );
 };
 
 export default TechFooter;
-

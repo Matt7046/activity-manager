@@ -1,8 +1,8 @@
 "use client";
-import { observer } from 'mobx-react';
-import './Label.css';
+import { observer } from "mobx-react";
+import { cn } from "@/lib/utils";
 
-type Visibility = 'visible' | 'hidden' | 'collapse' | undefined;
+type Visibility = "visible" | "hidden" | "collapse" | undefined;
 
 interface LabelProps {
   _id: string;
@@ -15,19 +15,21 @@ interface LabelProps {
 }
 
 const Label = observer((props: LabelProps) => {
-  const style = {
-    textDecoration: props.isUnderlined ? "underline" : "none",
-    visibility: props.visibility,
-  };
-
   return (
-    <div className="label-container" key={props._id}>
+    <div className="max-w-full overflow-hidden" key={props._id}>
       <label
         id={`label-${props._id}`}
-        htmlFor={ props.htmlFor}
-        className={ props.htmlFor}
+        htmlFor={props.htmlFor}
+        className={cn(
+          "label-text inline-block max-w-full overflow-hidden align-middle text-ellipsis whitespace-nowrap",
+          props.htmlFor,
+          props.className
+        )}
         onClick={props.onClick}
-        style={style}
+        style={{
+          textDecoration: props.isUnderlined ? "underline" : "none",
+          visibility: props.visibility,
+        }}
       >
         {props.text}
       </label>
@@ -36,4 +38,3 @@ const Label = observer((props: LabelProps) => {
 });
 
 export default Label;
-

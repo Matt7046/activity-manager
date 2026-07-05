@@ -1,28 +1,19 @@
 "use client";
 import { Trans } from "@lingui/react";
-import { Box, Typography } from "@mui/material";
-import Grid from '@mui/material/Grid2';
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import VideoGrid from "../../components/ms-video-grid/MsVideoGrid";
 import { UserI } from "../../general/structure/Utils";
 import gamificationStore from "./store/GamificationStore";
-
 import "./GamificationContent.css";
-
 
 interface GamificationContentProps {
   user: UserI;
-  alertConfig: AlertConfig,
+  alertConfig: AlertConfig;
   isVertical: boolean;
 }
 
-
-const GamificationContent: React.FC<GamificationContentProps> = ({
-  user,
-  alertConfig,
-}) => {
-
+const GamificationContent: React.FC<GamificationContentProps> = ({ user, alertConfig }) => {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const watchSecondsRef = useRef(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -69,29 +60,25 @@ const GamificationContent: React.FC<GamificationContentProps> = ({
   }, [selectedVideo, clearWatchInterval]);
 
   return (
-    <Box className="box-gamification-content">
-      <Typography variant="body2" color="text.secondary" className="popover-header-text">
+    <div className="box-gamification-content">
+      <p className="popover-header-text text-sm text-[var(--color-text-muted)]">
         <Trans id="info_guadagno_punti_video" /> <strong>{user?.emailUserCurrent}</strong>
-      </Typography>
+      </p>
 
-      <Box className="gamification-section-card">
-        <Grid size={{ xs: 12 }}>
-          <Box className="video-grid-wrapper">
-            <VideoGrid
-              selectedVideo={selectedVideo}
-              handlePlayVideo={handlePlayVideo}
-              alertConfig={alertConfig}
-              user={user}
-              getWatchMinutes={getWatchMinutes}
-              resetWatchTimer={resetWatchTimer}
-            />
-          </Box>
-        </Grid>
-      </Box>
-    </Box>
+      <div className="gamification-section-card">
+        <div className="video-grid-wrapper">
+          <VideoGrid
+            selectedVideo={selectedVideo}
+            handlePlayVideo={handlePlayVideo}
+            alertConfig={alertConfig}
+            user={user}
+            getWatchMinutes={getWatchMinutes}
+            resetWatchTimer={resetWatchTimer}
+          />
+        </div>
+      </div>
+    </div>
   );
-
 };
-
 
 export default GamificationContent;

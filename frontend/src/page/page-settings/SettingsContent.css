@@ -38,7 +38,7 @@
   box-shadow: var(--shadow-sm);
 }
 
-.settings-section-card > .MuiDivider-root {
+.settings-section-card > [data-slot="separator"] {
   margin: 0 var(--space-4);
   border-color: var(--color-border);
 }
@@ -111,7 +111,7 @@
   margin-bottom: 0;
 }
 
-.settings-action-text-block .MuiTypography-body2 {
+.settings-action-text-block .text-sm {
   margin-bottom: 0;
 }
 
@@ -149,11 +149,7 @@
 }
 
 /* L’icona occhio non deve stringere il testo del label/input (soprattutto su mobile) */
-.settings-password-textfield .MuiOutlinedInput-root {
-  padding-right: var(--space-2);
-}
-
-.settings-password-textfield .MuiOutlinedInput-input {
+.settings-password-wrap input {
   padding-right: var(--space-3) !important;
 }
 
@@ -161,7 +157,7 @@
   margin-left: var(--space-2);
 }
 
-.settings-password-textfield .MuiFormHelperText-root {
+.settings-password-wrap .text-xs {
   margin-top: var(--space-2);
 }
 

@@ -1,13 +1,13 @@
 "use client";
 import { navigateRouting } from "@/general/structure/Utils";
 import { Trans, useLingui } from "@lingui/react";
-import { Box, Button, Link as MuiLink, Typography } from "@mui/material";
 import LinkNext from "next/link";
 import { useRouter } from "next/navigation";
 import BannerOpenSource from "../../components/ms-banner/Banner";
-import "../../components/ms-presentation/Presentation.css";
 import TechFooter from "../../components/ms-tech-footer/TechFooter";
+import { Button } from "@/components/ui/button";
 import { SectionName } from "../../general/structure/Constant";
+import "../../components/ms-presentation/Presentation.css";
 import "./PresentationContent.css";
 
 const PresentationContent: React.FC = () => {
@@ -16,49 +16,43 @@ const PresentationContent: React.FC = () => {
 
   return (
     <>
-      <Box className="page-wrapper">
+      <div className="page-wrapper">
         <BannerOpenSource />
-        <Box className="welcome-container">
-          <Box className="hero-frame">
-            <Box className="hero-content">
-              <Typography
-                variant="h4"
-                component="label"
+        <div className="welcome-container">
+          <div className="hero-frame">
+            <div className="hero-content">
+              <label
                 htmlFor="enter-button"
-                gutterBottom
-                fontWeight="bold"
-                className="welcome-description-title"
+                className="welcome-description-title block text-2xl font-bold"
               >
                 <Trans id="testo_entry" />
-              </Typography>
+              </label>
 
-              <Typography variant="body1" gutterBottom className="welcome-description">
+              <p className="welcome-description mb-4 text-base">
                 <Trans id="testo_desc" />
-              </Typography>
+              </p>
 
               <Button
                 id="enter-button"
-                className="enter-button"
-                variant="contained"
-                color="primary"
-                size="large"
+                className="enter-button h-11 w-full text-base"
+                size="lg"
                 onClick={() => navigateRouting(router, SectionName.HOME, {})}
               >
                 <Trans id="testo_button" />
               </Button>
 
-              <Typography variant="body2" className="personality-link-row">
-                <MuiLink component={LinkNext} href="/personality" className="personality-link">
+              <p className="personality-link-row mt-4 text-sm">
+                <LinkNext href="/personality" className="personality-link underline">
                   {i18n._("personality_discover_link")}
-                </MuiLink>
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-      <Box className="tech-wrapper">
+                </LinkNext>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="tech-wrapper">
         <TechFooter />
-      </Box>
+      </div>
     </>
   );
 };

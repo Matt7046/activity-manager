@@ -2,19 +2,29 @@
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Trans, useLingui } from "@lingui/react";
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import GoogleIcon from '@mui/icons-material/Google';
-import { Alert as MuiInlineAlert, Box, Button as ButtonMui, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, IconButton, Link as MuiLink, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import { Loader2 } from "lucide-react";
+import type { SelectChangeEvent } from "@/types/form-events";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import LinkNext from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import Alert from '../../components/ms-alert/Alert';
 import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
+import { GitHubBrandIcon, GoogleBrandIcon } from '../../components/ms-social/SocialBrandIcons';
 import TechFooter from '../../components/ms-tech-footer/TechFooter';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { FormField, PasswordField } from '@/components/ui/form-field';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import { getToken } from '../../general/service/AuthService';
 import { baseStore } from '../../general/structure/BaseStore';
 import {
@@ -659,204 +669,159 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
 
   return (
     <>
+      <div className="layout-alert layout-alert-spaced flex justify-end">
+        {open && <Alert onClose={handleClose} message={message} />}
+      </div>
 
-      {/* Alert */}
-      <Grid container justifyContent="flex-end" className="layout-alert layout-alert-spaced">
-        {open && (
-          <Alert onClose={handleClose} message={message} />
-        )}
-      </Grid>
-
-      {/* Route Privacy Policy */}
-
-      <Box className="home-page-shell">
-        <Box className="home-page-main">
-          {/* Main Login Box */}
-          <Box className="welcome-container1">
-            <Paper elevation={0} className="login-paper">
-              <Box mb={3} className="box-pulsanti-login">
+      <div className="home-page-shell">
+        <div className="home-page-main">
+          <div className="welcome-container1">
+            <div className="login-paper rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-sm)]">
+              <div className="box-pulsanti-login mb-6">
                 {!hiddenLogin && (
                   <>
                     {demoPanelOpen ? (
-                      <ButtonMui
-                        variant="outlined"
-                        color="primary"
-                        fullWidth
-                        className="home-demo-toggle-button home-demo-toggle-button--account"
+                      <Button
+                        variant="outline"
+                        className="home-demo-toggle-button home-demo-toggle-button--account w-full"
                         onClick={() => setDemoPanelOpen(false)}
                       >
                         <Trans id="home_demo_back" />
-                      </ButtonMui>
+                      </Button>
                     ) : (
-                      <ButtonMui
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                        className="home-demo-toggle-button home-demo-toggle-button--demo"
+                      <Button
+                        className="home-demo-toggle-button home-demo-toggle-button--demo w-full"
                         onClick={() => setDemoPanelOpen(true)}
                       >
                         <Trans id="home_demo_link" />
-                      </ButtonMui>
+                      </Button>
                     )}
                     {demoPanelOpen && (
-                      <Box className="home-demo-panel">
-                        <Grid container spacing={2} alignItems="stretch">
-                          <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
-                            <ButtonMui
-                              variant="contained"
-                              color="primary"
-                              onClick={() => simulateLogin(TypeUser.STANDARD)}
-                              fullWidth
-                              className="simulated-login-button simulated-login-button-full"
-                            >
-                              <Trans id="login_simulato_utente_base" />
-                            </ButtonMui>
-                          </Grid>
-                          <Grid size={{ xs: 12, sm: 6 }} className="simulated-login-grid">
-                            <ButtonMui
-                              variant="contained"
-                              color="primary"
-                              onClick={() => simulateLogin(TypeUser.FAMILY)}
-                              fullWidth
-                              className="simulated-login-button simulated-login-button-full"
-                            >
-                              <Trans id="login_simulato_utente_parentale" />
-                            </ButtonMui>
-                          </Grid>
-                        </Grid>
-                      </Box>
+                      <div className="home-demo-panel mt-4">
+                        <div className="grid grid-cols-1 gap-3">
+                          <Button
+                            onClick={() => simulateLogin(TypeUser.STANDARD)}
+                            className="simulated-login-button w-full"
+                          >
+                            <Trans id="login_simulato_utente_base" />
+                          </Button>
+                          <Button
+                            onClick={() => simulateLogin(TypeUser.FAMILY)}
+                            className="simulated-login-button w-full"
+                          >
+                            <Trans id="login_simulato_utente_parentale" />
+                          </Button>
+                        </div>
+                      </div>
                     )}
                   </>
                 )}
-              </Box>
+              </div>
 
-
-              <Box mb={2} className='box-login'>
-                <TextField
+              <div className="box-login mb-4">
+                <FormField
                   id="username"
                   label={i18n._("indirizzo_email")}
-                  variant="outlined"
-                  value={emailLogin ?? ''}
+                  value={emailLogin ?? ""}
                   onChange={handleChangeUsername}
-                  fullWidth
                 />
-              </Box>
+              </div>
 
-              <Box mb={2} >
-                <TextField
+              <div className="mb-4">
+                <PasswordField
                   id="password"
                   label={i18n._("password")}
-                  variant="outlined"
-                  type={showPassword ? 'text' : 'password'}
                   value={passwordLogin}
                   onChange={handleChangePassword}
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton onClick={togglePasswordVisibility}>
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    ),
-                  }}
+                  showPassword={showPassword}
+                  onToggleVisibility={() => setShowPassword((prev) => !prev)}
+                  toggleLabel={showPassword ? i18n._("nascondi_password") : i18n._("mostra_password")}
                 />
-              </Box>
-              <ButtonMui
-                variant="contained"
-                fullWidth
-                onClick={handleLogin}
-                className="login-button"
-              >
+              </div>
+
+              <Button className="login-button w-full" onClick={handleLogin}>
                 <Trans id="accedi" />
-              </ButtonMui>
+              </Button>
 
-
-              <Box className="register-annotation">
+              <div className="register-annotation mt-4 space-y-2">
                 {!demoPanelOpen && (
-                  <Typography variant="body2">
-                    <Trans id='nuovo_account' />{" "}
-                    <MuiLink
-                      component={LinkNext}
-                      href="/register"
-                      className="register-link"
-                    >
+                  <p className="text-sm">
+                    <Trans id="nuovo_account" />{" "}
+                    <LinkNext href="/register" className="register-link underline">
                       <Trans id="registrati" />
-                    </MuiLink>
-                  </Typography>
+                    </LinkNext>
+                  </p>
                 )}
-                <Typography variant="body2" className="personality-annotation">
-                  <MuiLink component={LinkNext} href="/personality" className="register-link">
+                <p className="personality-annotation text-sm">
+                  <LinkNext href="/personality" className="register-link underline">
                     {i18n._("personality_discover_link")}
-                  </MuiLink>
-                </Typography>
-                   {!demoPanelOpen && (
-                <Typography variant="body2" className="personality-annotation">
-                  <MuiLink
-                    component="button"
-                    type="button"
-                    className="register-link reset-password-link"
-                    onClick={handleOpenResetDialog}
-                  >
-                    {i18n._("password_reset_link")}
-                  </MuiLink>
-                </Typography>
-                   )}
-              </Box>
-
-
-              {/* Divider */}
-              <Box className='box-accedi'>
-                <Divider className="box-accedi-divider" />
-                <Typography className="box-accedi-text" variant="body2" color="textSecondary">
-                  <Trans id="oppure_accedi_con" />
-                </Typography>
-                <Divider className="box-accedi-divider" />
-              </Box>
-
-              {/* Login Social (disabilitati in modalità demo) */}
-              <Grid
-                container
-                spacing={2}
-                justifyContent="center"
-                className={demoPanelOpen ? 'home-social-grid home-social-grid--disabled' : 'home-social-grid'}
-              >
-                <Grid>
-                  <IconButton
-                    type="button"
-                    onClick={startGithubLogin}
-                    className="social-button"
-                    disabled={demoPanelOpen || !CLIENT_GITHUB.SERVER || !getGitHubOAuthRedirectUri()}
-                    aria-label="GitHub"
-                  >
-                    <GitHubIcon />
-                  </IconButton>
-                </Grid>
-                {FACEBOOK_LOGIN_VISIBLE && (
-                  <Grid>
-                    <IconButton
+                  </LinkNext>
+                </p>
+                {!demoPanelOpen && (
+                  <p className="personality-annotation text-sm">
+                    <button
                       type="button"
-                      onClick={handleFacebookLogin}
-                      className="social-button"
-                      disabled={demoPanelOpen || !CLIENT_FACEBOOK.APP_ID}
-                      aria-label="Facebook"
+                      className="register-link reset-password-link underline"
+                      onClick={handleOpenResetDialog}
                     >
-                      <FacebookIcon />
-                    </IconButton>
-                  </Grid>
+                      {i18n._("password_reset_link")}
+                    </button>
+                  </p>
                 )}
-                <Grid>
-                  <IconButton
-                    type="button"
-                    className="social-button google-button"
-                    onClick={() => login()}
-                    disabled={demoPanelOpen || !CLIENT_GOOGLE.SERVER}
-                    aria-label="Google"
-                  >
-                    <GoogleIcon />
-                  </IconButton>
-                </Grid>
-              </Grid>
+              </div>
 
-              {/* Dialog */}
+              <div className="box-accedi my-4 flex items-center gap-3">
+                <Separator className="box-accedi-divider flex-1" />
+                <span className="box-accedi-text text-sm text-[var(--color-text-muted)]">
+                  <Trans id="oppure_accedi_con" />
+                </span>
+                <Separator className="box-accedi-divider flex-1" />
+              </div>
+
+              <div
+                className={
+                  demoPanelOpen
+                    ? "home-social-grid home-social-grid--disabled flex justify-center gap-4"
+                    : "home-social-grid flex justify-center gap-4"
+                }
+              >
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={startGithubLogin}
+                  className="social-button github-button"
+                  disabled={demoPanelOpen || !CLIENT_GITHUB.SERVER || !getGitHubOAuthRedirectUri()}
+                  aria-label="GitHub"
+                >
+                  <GitHubBrandIcon />
+                </Button>
+                {FACEBOOK_LOGIN_VISIBLE && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={handleFacebookLogin}
+                    className="social-button"
+                    disabled={demoPanelOpen || !CLIENT_FACEBOOK.APP_ID}
+                    aria-label="Facebook"
+                  >
+                    <span className="text-sm font-bold">f</span>
+                  </Button>
+                )}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  className="social-button google-button"
+                  onClick={() => login()}
+                  disabled={demoPanelOpen || !CLIENT_GOOGLE.SERVER}
+                  aria-label="Google"
+                >
+                  <GoogleBrandIcon />
+                </Button>
+              </div>
+
               <DialogEmail
                 openD={openD}
                 handleCloseD={handleCloseD}
@@ -868,80 +833,72 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
                 emailUserCurrent={emailLogin}
               />
 
-              <Dialog
-                open={openResetDialog}
-                onClose={handleCloseResetDialog}
-                fullWidth
-                maxWidth="xs"
-              >
-                <DialogTitle>{i18n._("password_reset_title")}</DialogTitle>
-                <DialogContent>
-                  <TextField
-                    autoFocus
-                    margin="dense"
+              <Dialog open={openResetDialog} onOpenChange={(next) => !next && handleCloseResetDialog()}>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>{i18n._("password_reset_title")}</DialogTitle>
+                  </DialogHeader>
+                  <FormField
                     id="reset-password-email"
                     label={i18n._("indirizzo_email")}
                     type="email"
-                    fullWidth
-                    variant="outlined"
                     value={resetEmail}
                     onChange={(event) => setResetEmail(event.target.value)}
+                    autoFocus
                   />
+                  <DialogFooter>
+                    <Button variant="ghost" onClick={handleCloseResetDialog}>
+                      {i18n._("annulla")}
+                    </Button>
+                    <Button onClick={handleConfirmResetPassword}>{i18n._("password_reset_send")}</Button>
+                  </DialogFooter>
                 </DialogContent>
-                <DialogActions>
-                  <ButtonMui onClick={handleCloseResetDialog}>{i18n._("annulla")}</ButtonMui>
-                  <ButtonMui onClick={handleConfirmResetPassword} variant="contained">
-                    {i18n._("password_reset_send")}
-                  </ButtonMui>
-                </DialogActions>
               </Dialog>
 
               <Dialog
                 open={openPendingParentsDialog}
-                onClose={handleClosePendingParentsDialog}
-                fullWidth
-                maxWidth="sm"
+                onOpenChange={(next) => !next && handleClosePendingParentsDialog()}
               >
-                <DialogTitle>{i18n._("parent_link_confirm_title")}</DialogTitle>
-                <DialogContent>
-                  <Typography variant="body2" sx={{ mb: 2 }}>
-                    {i18n._("parent_link_confirm_description")}
-                  </Typography>
-                  {pendingParentsEmails.map((pe) => (
-                    <FormControlLabel
-                      key={pe}
-                      control={
+                <DialogContent className="sm:max-w-lg">
+                  <DialogHeader>
+                    <DialogTitle>{i18n._("parent_link_confirm_title")}</DialogTitle>
+                    <DialogDescription>{i18n._("parent_link_confirm_description")}</DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-3 py-2">
+                    {pendingParentsEmails.map((pe) => (
+                      <div key={pe} className="flex items-center gap-3">
                         <Checkbox
                           checked={Boolean(pendingParentsSelected[pe])}
-                          onChange={() => handlePendingParentToggle(pe)}
+                          onCheckedChange={() => handlePendingParentToggle(pe)}
                         />
-                      }
-                      label={pe}
-                    />
-                  ))}
+                        <Label>{pe}</Label>
+                      </div>
+                    ))}
+                  </div>
+                  <DialogFooter>
+                    <Button variant="ghost" onClick={handleClosePendingParentsDialog}>
+                      {i18n._("annulla")}
+                    </Button>
+                    <Button onClick={handleSavePendingParents}>{i18n._("parent_link_confirm_save")}</Button>
+                  </DialogFooter>
                 </DialogContent>
-                <DialogActions>
-                  <ButtonMui onClick={handleClosePendingParentsDialog}>{i18n._("annulla")}</ButtonMui>
-                  <ButtonMui onClick={handleSavePendingParents} variant="contained">
-                    {i18n._("parent_link_confirm_save")}
-                  </ButtonMui>
-                </DialogActions>
               </Dialog>
+            </div>
+          </div>
 
-            </Paper>
-          </Box>
-
-          {/* Loader */}
           {loading && (
-            <Box display="flex" justifyContent="center" mt={4}>
-              <CircularProgress />
-            </Box>
+            <div className="mt-8 flex justify-center">
+              <Loader2 className="size-8 animate-spin text-[var(--color-primary)]" />
+            </div>
           )}
-        </Box>
+        </div>
 
-        {!hiddenLogin && <TechFooter />}
-      </Box>
-
+        {!hiddenLogin && (
+          <div className="tech-wrapper">
+            <TechFooter />
+          </div>
+        )}
+      </div>
     </>
   );
 

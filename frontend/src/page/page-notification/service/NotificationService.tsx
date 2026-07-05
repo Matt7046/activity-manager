@@ -6,7 +6,16 @@ import { TypeMessage } from "../../page-layout/PageLayout";
 
 export const getNotificationsByIdentificativo = async (identificativo: string, page: number, size: number, status: string, funzioneMessage?: (message?: TypeMessage) => void, setLoading?: (loading: boolean) => void) => {
   try {
-    const path = PATH_NOTIFICATION + `/all/` + identificativo + "/" + page + "/" + size + "/" + status;
+    const path =
+      PATH_NOTIFICATION +
+      `/all/` +
+      encodeURIComponent(identificativo) +
+      "/" +
+      page +
+      "/" +
+      size +
+      "/" +
+      status;
     const showSuccess = true;
     const data = await getData(path, setLoading); // Endpoint dell'API
     return data;

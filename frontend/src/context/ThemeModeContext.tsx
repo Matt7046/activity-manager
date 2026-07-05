@@ -1,7 +1,7 @@
 'use client';
 
 import { STORAGE_KEY } from '@/general/structure/Constant';
-import type { AppColorMode } from '@/theme/createAppTheme';
+import type { AppColorMode } from '@/theme/appColorMode';
 import React, {
   createContext,
   useCallback,

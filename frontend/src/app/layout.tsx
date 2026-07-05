@@ -5,7 +5,7 @@ import { LinguiClientProvider } from '@/lingui/I18nProvider';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import type { Metadata } from 'next';
 import './globals.css';
-import MuiThemeProvider from './MuiThemeProvider';
+import AppThemeProvider from './AppThemeProvider';
 
 const DEFAULT_SITE_URL = 'https://activity-manager.colorsdev.tech';
 
@@ -47,13 +47,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang="it" suppressHydrationWarning data-theme="dark">
       <body>
         <ServiceWorkerRegistration />
-        <MuiThemeProvider>
+        <AppThemeProvider>
           <LinguiClientProvider>
             <UserProvider>
               {children}
             </UserProvider>
           </LinguiClientProvider>
-        </MuiThemeProvider>
+        </AppThemeProvider>
       </body>
     </html>
   );

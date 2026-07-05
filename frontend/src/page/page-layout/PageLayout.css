@@ -4,22 +4,42 @@
     padding-right: 0;
 }
 
+.page-layout-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+}
+
+/* Home: footer in basso senza scrollbar pagina a destra */
+.page-layout-root:has(.home-page-shell) {
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+}
+
+.page-layout-root:has(.home-page-shell) .page-layout-body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.page-layout-root:has(.home-page-shell) .page-layout-body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.page-layout-body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+}
+
 .box-layout {
     padding-left: var(--space-4);
     padding-right: var(--space-4);
-}
-
-.box-menu-laterale {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* Spinge gli elementi ai lati opposti */
-    width: 100%;
-    /* Opzionale, per dare un po' di respiro ai lati */
-}
-
-.box-layout-spacer {
-    flex-grow: 1;
 }
 
 .box-layout-text-vertical {
@@ -36,27 +56,48 @@
     visibility: hidden;
 }
 
-.grid-menu {
+/* Header: menu sinistra | titolo centrato | pulsanti destra */
+.page-layout-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    width: 100%;
+    gap: var(--space-2);
     padding-top: 1px;
+    padding-bottom: var(--space-4);
+    margin-left: 0;
+    margin-right: 0;
 }
 
-.box-layout-right-button {
-    padding-right: var(--space-3);
+.page-layout-header__start {
+    justify-self: start;
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    min-width: 0;
 }
 
-/* Tema + lingua affiancati e allineati; gruppo più a sinistra (più vicino al titolo/menu) */
-.box-layout-theme-lang-group {
-    display: inline-flex;
+.page-layout-header__center {
+    justify-self: center;
+    display: flex;
     align-items: center;
-    gap: 0;
-    margin-inline-end: calc(-1 * var(--space-1));
+    justify-content: center;
+    min-width: 0;
+    max-width: 100%;
 }
 
-.box-layout-theme-lang-group .MuiIconButton-root {
-    padding: 8px;
+.page-layout-header__end {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: var(--space-2);
+    min-width: 0;
+}
+
+.page-layout-header__end > .flex.gap-3 {
+    gap: var(--space-2);
+    padding: 0;
 }
 
 .header-title {
@@ -66,12 +107,16 @@
     letter-spacing: 0.04em;
     color: var(--color-primary);
     line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .header-title-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    max-width: 100%;
     padding: 10px 16px;
     border-radius: var(--radius-lg);
     background: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
@@ -80,75 +125,45 @@
 }
 
 .header-icon {
+    flex-shrink: 0;
+    width: 1.35rem;
+    height: 1.35rem;
     font-size: 1.35rem;
     color: var(--color-primary);
     padding-right: var(--space-2);
-}
-
-.title-container {
-    padding-top: var(--space-2);
-    padding-bottom: var(--space-2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-2);
-    width: 100%;
-}
-
-.grid-menu {
-    display: flex;
-    width: 100%;
-    padding-bottom: var(--space-4);
-}
-
-/* Quando è verticale, i bottoni vanno a destra e il menu a sinistra se presenti */
-.vertical-layout {
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-/* Quando è orizzontale, mantiene la distribuzione spaziale */
-.horizontal-layout {
-    justify-content: space-between;
 }
 
 .header-title strong {
     font-weight: 800;
 }
 
-/* Selettore mirato per la label del TextField */
-.box-layout-text .form-control-operative .MuiInputLabel-root,
-.box-layout-text-vertical .form-control-operative .MuiInputLabel-root {
+/* Label dei campi form nel layout */
+.box-layout-text .form-control-operative label,
+.box-layout-text-vertical .form-control-operative label {
     font-weight: bold !important;
     color: var(--color-text) !important;
-    /* Colore scuro per evidenziare il bold */
 }
 
-/* Stile per quando la label si rimpicciolisce (shrink) */
-.box-layout-text .form-control-operative .MuiInputLabel-shrink,
-.box-layout-text-vertical .form-control-operative .MuiInputLabel-shrink {
-    font-weight: bold !important;
-}
-
-/* Fix per assicurarci che il TextField non esca a destra */
 .form-control-operative {
     width: 100% !important;
     box-sizing: border-box !important;
 }
 
-/* Rimuoviamo eventuali margini negativi della Grid se il TextField è dentro una Grid */
-.MuiGrid2-container {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-}
-
 @media (max-width: 600px) {
+    .page-layout-header {
+        gap: var(--space-1);
+    }
+
     .header-title-badge {
         padding: 8px 12px;
     }
 
     .header-title {
         font-size: 0.88rem !important;
+    }
+
+    .page-layout-header__end {
+        gap: var(--space-1);
     }
 
     .box-layout-text,

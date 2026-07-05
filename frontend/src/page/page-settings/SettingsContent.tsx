@@ -1,18 +1,15 @@
 "use client";
 import { Trans, useLingui } from "@lingui/react";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import LockResetOutlinedIcon from '@mui/icons-material/LockResetOutlined';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Box, Divider, IconButton, InputAdornment, Paper, TextField, Typography } from "@mui/material";
+import { Mail, Trash2, KeyRound } from "lucide-react";
 import React, { useState } from "react";
+import { FormField, PasswordField } from "@/components/ui/form-field";
+import { Separator } from "@/components/ui/separator";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus, StatusUserPoint, TypeAlertColor } from "../../general/structure/Constant";
 import { ResponseI, showMessage, UserI } from "../../general/structure/Utils";
 import { TypeMessage } from "../page-layout/PageLayout";
-import "./SettingsContent.css"; // Riutilizziamo il CSS esistente
+import "./SettingsContent.css";
 import { savePassword, updateStatus } from "./service/SettingsService";
 
 const MIN_PASSWORD_LENGTH = 8;
@@ -24,7 +21,7 @@ const DEMO_ACCOUNTS_NO_PASSWORD_CHANGE = new Set(
 const isDemoAccountBlockingPasswordChange = (email: string | undefined): boolean => {
   if (!email) return false;
   return DEMO_ACCOUNTS_NO_PASSWORD_CHANGE.has(email.trim().toLowerCase());
-}
+};
 
 interface SettingsContentProps {
   user: UserI;
@@ -33,14 +30,16 @@ interface SettingsContentProps {
 }
 
 const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) => {
-
   const { i18n } = useLingui();
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const demoPasswordBlocked = isDemoAccountBlockingPasswordChange(user.emailUserCurrent);
-  // Funzione per l'eliminazione account
+
   const handleDeleteAccount = () => {
-    updateStatus({ ...user, status: StatusUserPoint.DISACTIVE }, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
+    updateStatus(
+      { ...user, status: StatusUserPoint.DISACTIVE },
+      (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
+    )
       .then((response: ResponseI | undefined) => {
         if (response?.status === HttpStatus.OK) {
           console.log("Eliminazione account per:", user.emailUserCurrent);
@@ -80,8 +79,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
       return;
     }
 
-    const payload = { ...user, password };
-    savePassword(payload, (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message))
+    savePassword(
+      { ...user, password },
+      (message?: TypeMessage) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
+    )
       .then((response: ResponseI | undefined) => {
         if (response?.status === HttpStatus.OK) {
           setNewPassword("");
@@ -93,152 +94,114 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ user, alertConfig }) 
       });
   };
 
-
   const pulsanteElimina: Pulsante = {
-    icona: 'fas fa-trash-alt',
+    icona: "fas fa-trash-alt",
     funzione: handleDeleteAccount,
-    nome: ButtonName.RED, // Assumendo che RED sia definito per azioni distruttive
+    nome: ButtonName.RED,
     title: i18n._("elimina_account"),
-    configDialogPulsante: {
-      message: i18n._("elimina_account_message"),
-      showDialog: true
-    }
+    configDialogPulsante: { message: i18n._("elimina_account_message"), showDialog: true },
   };
 
   const pulsanteCambioPassword: Pulsante = {
-    icona: 'fas fa-key',
+    icona: "fas fa-key",
     funzione: handlePasswordAccount,
     nome: ButtonName.BLUE,
     title: i18n._("password_account"),
     disableButton: demoPasswordBlocked || newPassword.trim().length < MIN_PASSWORD_LENGTH,
-    configDialogPulsante: {
-      message: i18n._("cambio_password_account_message"),
-      showDialog: true
-    }
+    configDialogPulsante: { message: i18n._("cambio_password_account_message"), showDialog: true },
   };
 
   return (
-    <Box className="settings-box">
-      {/* INTESTAZIONE PAGINA */}
+    <div className="settings-box">
+      <p className="settings-header-text text-sm text-[var(--color-text-muted)]">
+        <Trans id="preferenze_account" /> <strong>{user?.emailUserCurrent}</strong>
+      </p>
 
-      <Box className="settings-box">
-        {/* INTESTAZIONE PAGINA */}
-        <Typography variant="body2" color="text.secondary" className="settings-header-text">
-          <Trans id="preferenze_account" /> <strong>{user?.emailUserCurrent}</strong>
-        </Typography>
-      </Box>
-
-      <Box className="settings-content">
-        {/* SEZIONE: SICUREZZA E ACCOUNT */}
-        <Paper elevation={0} className="settings-section-card">
-          <Box className="section-header">
-            <Typography variant="subtitle2" className="section-title">
+      <div className="settings-content">
+        <div className="settings-section-card rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-sm)]">
+          <div className="section-header px-4 pt-4">
+            <p className="section-title text-sm font-semibold">
               <Trans id="sicurezza_privacy" />
-            </Typography>
-          </Box>
+            </p>
+          </div>
 
-          <Divider />
+          <Separator />
 
-          {/* AZIONE: ELIMINAZIONE ACCOUNT */}
-          <Box className="action-row settings-action-card">
-            <Box className="action-info">
-              <DeleteForeverIcon className="delete-icon" />
-              <Box className="settings-action-text-block">
-                <Typography variant="subtitle1" className="action-title">
+          <div className="action-row settings-action-card flex flex-wrap items-center justify-between gap-4 p-4">
+            <div className="action-info flex items-start gap-3">
+              <Trash2 className="delete-icon size-6 shrink-0 text-[var(--color-danger)]" />
+              <div className="settings-action-text-block">
+                <p className="action-title font-medium">
                   <Trans id="elimina_account" />
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
+                </p>
+                <p className="text-sm text-[var(--color-text-muted)]">
                   <Trans id="cancellazione_account" />
-                </Typography>
-              </Box>
-            </Box>
-
-            <Box className="action-button-container">
+                </p>
+              </div>
+            </div>
+            <div className="action-button-container">
               <Button pulsanti={[pulsanteElimina]} />
-            </Box>
-          </Box>
+            </div>
+          </div>
 
-          <Divider />
+          <Separator />
 
-          {/* AZIONE: CAMBIO PASSWORD ACCOUNT */}
-          <Box className="action-row settings-action-card">
-            <Box className="action-info">
-              <LockResetOutlinedIcon className="delete-icon" />
-              <Box className="settings-action-text-block">
-                <Typography variant="subtitle1" className="action-title">
+          <div className="action-row settings-action-card flex flex-wrap items-center justify-between gap-4 p-4">
+            <div className="action-info flex flex-1 items-start gap-3">
+              <KeyRound className="delete-icon size-6 shrink-0 text-[var(--color-primary)]" />
+              <div className="settings-action-text-block w-full max-w-md">
+                <p className="action-title font-medium">
                   <Trans id="password_account" />
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
+                </p>
+                <p className="text-sm text-[var(--color-text-muted)]">
                   <Trans id="cambio_password_account" />
-                </Typography>
-                <Box className="settings-password-wrap">
-                  <TextField
-                    className="settings-textfield settings-password-textfield"
+                </p>
+                <div className="settings-password-wrap mt-3">
+                  <PasswordField
                     id="settings-new-password"
                     label={i18n._("nuova_password")}
-                    type={showPassword ? "text" : "password"}
                     value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
                     disabled={demoPasswordBlocked}
                     autoComplete="new-password"
-                    helperText={
-                      demoPasswordBlocked
-                        ? i18n._("settings_password_demo_disabled")
-                        : i18n._("settings_password_min_hint")
-                    }
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment className="settings-password-adornment" position="end">
-                          <IconButton
-                            aria-label={showPassword ? i18n._("nascondi_password") : i18n._("mostra_password")}
-                            onClick={() => setShowPassword((v) => !v)}
-                            edge="end"
-                            size="small"
-                            disabled={demoPasswordBlocked}
-                          >
-                            {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
+                    showPassword={showPassword}
+                    onToggleVisibility={() => setShowPassword((v) => !v)}
+                    toggleLabel={showPassword ? i18n._("nascondi_password") : i18n._("mostra_password")}
                   />
-                </Box>
-              </Box>
-            </Box>
-
-            <Box className="action-button-container">
+                  <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+                    {demoPasswordBlocked
+                      ? i18n._("settings_password_demo_disabled")
+                      : i18n._("settings_password_min_hint")}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="action-button-container">
               <Button pulsanti={[pulsanteCambioPassword]} />
-            </Box>
-          </Box>
+            </div>
+          </div>
 
-          <Divider />
+          <Separator />
 
-          {/* ESEMPIO PROSSIMA AZIONE (Placeholder) */}
-
-          <Box className="action-row settings-action-card">
-            <Box className="action-info">
-              <EmailOutlinedIcon className="delete-icon" />
-              <Box className="settings-action-text-block">
-                <Typography variant="subtitle1" className="action-title">
+          <div className="action-row settings-action-card flex flex-wrap items-center justify-between gap-4 p-4">
+            <div className="action-info flex items-start gap-3">
+              <Mail className="delete-icon size-6 shrink-0 text-[var(--color-primary)]" />
+              <div className="settings-action-text-block">
+                <p className="action-title font-medium">
                   <Trans id="notifiche_email" />
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
+                </p>
+                <p className="text-sm text-[var(--color-text-muted)]">
                   <Trans id="frequenza_avvisi" />
-                </Typography>
-              </Box>
-            </Box>
-
-            <Box className="action-button-container">
+                </p>
+              </div>
+            </div>
+            <div className="action-button-container">
               <Button pulsanti={[]} />
-            </Box>
-          </Box>
-        </Paper>
-      </Box>
-    </Box>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

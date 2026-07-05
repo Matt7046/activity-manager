@@ -1,90 +1,78 @@
 "use client";
-import { Box, Alert as MuiAlert, Snackbar, Typography } from '@mui/material';
-import { useEffect } from 'react';
-import { TypeAlertColor } from '../../general/structure/Constant';
-import { TypeMessage } from '../../page/page-layout/PageLayout';
-import "./Alert.css";
+import { useEffect } from "react";
+import { X } from "lucide-react";
+import { TypeAlertColor } from "../../general/structure/Constant";
+import { TypeMessage } from "../../page/page-layout/PageLayout";
+import { Alert as ShadcnAlert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export interface AlertConfig {
   open: boolean;
   message: TypeMessage;
   setOpen: (open: boolean) => void;
-  setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>
+  setMessage: React.Dispatch<React.SetStateAction<TypeMessage>>;
 }
 
 interface CustomAlertProps {
   message: TypeMessage;
   onClose: () => void;
 }
-const classNameByTypeMessage = (typeMessage: TypeAlertColor | undefined) => {
-  switch (typeMessage) {
-    case TypeAlertColor.SUCCESS:
-      return 'text-up-message-success';
-    case TypeAlertColor.ERROR:
-      return 'text-up-message-error';
-    case TypeAlertColor.INFO:
-      return 'text-up-message-info';
-    case TypeAlertColor.WARNING:
-      return 'text-up-message-warning';
-    default:
-      return '';
-  }
+
+const severityStyles: Record<string, string> = {
+  success:
+    "border-emerald-500/40 bg-emerald-500/15 text-emerald-100 shadow-[0_8px_24px_rgba(52,211,153,0.2)]",
+  error:
+    "border-red-500/40 bg-red-500/15 text-red-100 shadow-[0_8px_24px_rgba(248,113,113,0.2)]",
+  warning:
+    "border-amber-500/40 bg-amber-500/15 text-amber-100 shadow-[0_8px_24px_rgba(251,191,36,0.2)]",
+  info: "border-blue-500/40 bg-blue-500/15 text-blue-100 shadow-[0_8px_24px_rgba(96,165,250,0.2)]",
 };
 
-
-
-
-
-
-
-
 const Alert: React.FC<CustomAlertProps> = ({ message, onClose }) => {
-
   useEffect(() => {
-    // Automatic close after 5 seconds
     const timer = setTimeout(() => {
       onClose();
     }, 3000);
 
-    // Clean up the timer when the component unmounts
     return () => clearTimeout(timer);
   }, [onClose]);
 
-  // message.typeMessage conterrà SUCCESS, ERROR, etc.
-  // Lo convertiamo in minuscolo per la prop 'severity' di MUI
-  const severity = (message.typeMessage?.toLowerCase() || 'info') as any;
+  const severity = (message.typeMessage?.toLowerCase() || "info") as keyof typeof severityStyles;
 
   return (
-    <Snackbar
-      open={true} // L'apertura è gestita dal padre
-      autoHideDuration={4000} // Sparisce dopo 4 secondi
-      onClose={onClose}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Posizione in alto a destra
-      className="alert-snackbar-custom"
+    <div
+      className="alert-snackbar-custom fixed top-5 right-5 z-[9999] min-w-[320px] max-w-[450px] animate-[slideInRight_0.4s_ease-out]"
+      role="status"
     >
-      <MuiAlert
-        onClose={onClose}
-        severity={severity}
-        variant="filled"
-        className={`alert-mui-custom alert-shadow-${severity}`}
-        iconMapping={{
-          // Puoi personalizzare le icone qui se vuoi
-        }}
+      <ShadcnAlert
+        className={cn(
+          "relative w-full rounded-2xl border px-4 py-3",
+          severityStyles[severity] ?? severityStyles.info
+        )}
       >
-        <Box className="alert-content">
-          <Typography className="alert-title-text">
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={onClose}
+          className="absolute top-2 right-2 text-inherit hover:bg-white/10"
+          aria-label="Close"
+        >
+          <X className="size-4" />
+        </Button>
+        <div className="flex flex-col pr-8">
+          <AlertTitle className="mb-1 text-sm font-extrabold uppercase">
             {message.titleMessage}
-              </Typography>
+          </AlertTitle>
           {message?.message?.map((msg, index) => (
-            <Typography key={index} className="alert-body-text">
+            <AlertDescription key={index} className="text-sm opacity-90">
               {msg}
-            </Typography>
+            </AlertDescription>
           ))}
-        </Box>
-      </MuiAlert>
-    </Snackbar>
+        </div>
+      </ShadcnAlert>
+    </div>
   );
 };
 
 export default Alert;
-

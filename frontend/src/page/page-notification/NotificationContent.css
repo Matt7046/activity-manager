@@ -23,11 +23,8 @@
 
 .notification-filter-summary {
   min-height: 48px !important;
-  padding: 0 var(--space-4) !important;
-}
-
-.notification-filter-summary .MuiAccordionSummary-content {
-  margin: var(--space-2) 0 !important;
+  padding: var(--space-2) var(--space-4) !important;
+  margin: 0 !important;
 }
 
 .notification-filter-expand-icon {
@@ -165,8 +162,7 @@
   height: 550px;
 }
 
-/* Se vuoi che le righe espanse non rompano il layout ma siano scrollabili internamente */
-.notification-grid-container .MuiDataGrid-main {
+.notification-grid-container .datagrid-table-wrap {
   min-height: 300px;
 }
 
