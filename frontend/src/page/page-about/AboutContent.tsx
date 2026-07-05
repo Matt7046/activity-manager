@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { FormField } from "@/components/ui/form-field";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus, SectionName, TypeUser } from "../../general/structure/Constant";
-import { FormErrorValues, navigateRouting, showMessage, UserI, verifyForm } from "../../general/structure/Utils";
+import { FormErrorValues, navigateRouting, showMessage, UserI, verifyForm, getUserChildDisplay } from "../../general/structure/Utils";
 import { deleteAboutById, saveActivity, showMessageAboutForm } from "../page-activity/service/ActivityService";
 import activityStore from "../page-activity/store/ActivityStore";
 import { TypeMessage } from "../page-layout/PageLayout";
@@ -167,12 +167,12 @@ const AboutContent: React.FC<AboutContentProps> = ({
         {user?.type === TypeUser.FAMILY && !identificativo ? (
           <>
             <Trans id="dettaglio_attivita" />
-            <strong>{user?.emailUserCurrent}</strong>
+            <strong>{getUserChildDisplay(user)}</strong>
           </>
         ) : (
           <>
             <Trans id="dettaglio_attivita_child" />
-            <strong>{user?.emailChild}</strong>
+            <strong>{getUserChildDisplay(user)}</strong>
           </>
         )}
       </p>
@@ -183,7 +183,7 @@ const AboutContent: React.FC<AboutContentProps> = ({
             <FormField
               id="about-email"
               label={i18n._("email")}
-              value={user?.emailChild ?? ""}
+              value={getUserChildDisplay(user)}
               disabled
               readOnly
             />

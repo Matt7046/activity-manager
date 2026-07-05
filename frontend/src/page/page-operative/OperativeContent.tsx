@@ -14,7 +14,7 @@ import {
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus, TypeUser } from "../../general/structure/Constant";
-import { FormErrorValues, ResponseI, showMessage, UserI, verifyForm } from "../../general/structure/Utils";
+import { FormErrorValues, ResponseI, showMessage, UserI, verifyForm, getUserChildDisplay } from "../../general/structure/Utils";
 import { ActivityLogI } from "../page-activity/Activity";
 import { fetchDataActivities, savePointsAndLog } from "../page-activity/service/ActivityService";
 import { TypeMessage } from "../page-layout/PageLayout";
@@ -181,7 +181,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({ user, alertConfig, 
         ) : (
           <Trans id="operazioni_attivita_child" />
         )}{" "}
-        <strong>{user?.emailUserCurrent}</strong>
+        <strong>{getUserChildDisplay(user)}</strong>
       </p>
 
       <div className="operative-section-card">
@@ -189,7 +189,7 @@ const OperativeContent: React.FC<OperativeContentProps> = ({ user, alertConfig, 
           <FormField
             id="operative-email"
             label={i18n._("email")}
-            value={user?.emailChild ?? ""}
+            value={getUserChildDisplay(user)}
             disabled
             readOnly
           />

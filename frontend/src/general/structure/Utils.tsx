@@ -24,6 +24,7 @@ export interface ResponseI {
 
 export interface NotificationI {
 
+  _id?: string;
   serviceName: string;
   message: string;
   userSender: string;
@@ -42,10 +43,25 @@ export interface UserI {
   emailChild: string;
   type: TypeUser
   emailUserCurrent: string;
+  name?: string;
   page?: number;
   size?: number;
   field?: string
 }
+
+/** Etichetta utente tutorato / child (nome demo o email). */
+export const getUserChildDisplay = (user: UserI | null | undefined): string => {
+  if (!user) {
+    return "";
+  }
+  return (
+    user.name?.trim() ||
+    user.emailChild?.trim() ||
+    user.emailUserCurrent?.trim() ||
+    user.email?.trim() ||
+    ""
+  );
+};
 
 export const verifyForm = (formValues: any) => {
 
@@ -165,16 +181,43 @@ export const getDateStringRegularFormat = (data: Date): string => {
   return new Date(data).toLocaleDateString();
 }
 
-export const getTranslatedNotification = (message: string, i18nInstance: I18n): string => {
-  if (!message) return "";
+export const getNotificationParts = (
+  message: string,
+  i18nInstance: I18n
+): { title: string; subText: string } => {
+  if (!message) {
+    return { title: "", subText: "" };
+  }
 
-  const parti = message.split('?lang?');
-  const valore = parti[0] ? parti[0].trim() : "";
-  const key = parti[1] ? parti[1].trim() : "";
-  const resto = parti.slice(2).join(' ').trim();
+  let valore = "";
+  let key = "";
+  let resto = "";
+
+  if (message.includes("?lang?")) {
+    const parti = message.split("?lang?");
+    valore = parti[0]?.trim() ?? "";
+    key = parti[1]?.trim() ?? "";
+    resto = parti.slice(2).join("?lang?").trim();
+  } else if (message.includes("?")) {
+    const parti = message.split("?");
+    valore = parti[0]?.trim() ?? "";
+    key = parti[1]?.trim() ?? "";
+    resto = parti.slice(2).join("?").trim();
+  } else {
+    return { title: message.trim(), subText: "" };
+  }
 
   const traduzione = key ? i18nInstance._(key) : "";
-  return [valore, traduzione, resto].filter(Boolean).join(' ').trim();
+  const restoInTitle = Boolean(resto && /:\s*$/.test(traduzione));
+  const title = [valore, traduzione, restoInTitle ? resto : null].filter(Boolean).join(" ").trim();
+  const subText = restoInTitle ? "" : resto;
+
+  return { title, subText };
+};
+
+export const getTranslatedNotification = (message: string, i18nInstance: I18n): string => {
+  const { title, subText } = getNotificationParts(message, i18nInstance);
+  return [title, subText].filter(Boolean).join(" ").trim();
 };
 
 /** Messaggio server non raggiungibile (usa catalogo Lingui, stesso {@code i18n} del provider). */

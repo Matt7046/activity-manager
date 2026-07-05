@@ -20,7 +20,13 @@
   width: 100%;
 }
 
+.datagrid-table tr {
+  height: auto;
+}
+
 .datagrid-table td {
-  vertical-align: middle;
+  vertical-align: top;
   line-height: 1.4;
+  overflow: visible;
+  height: auto;
 }

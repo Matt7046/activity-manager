@@ -26,6 +26,8 @@ import SocketFamilyPoint from "../../general/structure/SocketFamilyPoint";
 import { notificationWebSocketUrl } from "../../general/structure/SocketUrl";
 import {
   FamilyNotificationI,
+  getUserChildDisplay,
+  getNotificationParts,
   getDateStringRegularFormat,
   getTranslatedNotification,
   navigateRouting,
@@ -89,23 +91,38 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const IconaTitolo = sectionAttiva?.icon;
 
   const handleClickAnchor = () => {
-    getNotificationsByIdentificativo(user.emailUserCurrent, 0, 3, StatusNotification.NOT_READ).then(
-      (response: ResponseI) => {
-        setNotifications(response.jsonText);
-        const popover: PopoverNotification[] = response.jsonText.map((x: NotificationI) => {
-          const testoKey = getTranslatedNotification(x.message, i18n);
-          return {
-            message: testoKey,
-            subText: [
-              i18n._("inviato_da") + x.userSender,
-              i18n._("data_invio") + getDateStringRegularFormat(x.dateSender),
-            ],
-          };
-        });
-        setPopoverNotifications(popover);
-        setOpenAnchor(true);
-      }
-    );
+    setOpenAnchor(true);
+
+    const email = user?.emailUserCurrent?.trim();
+    if (!email) {
+      setPopoverNotifications([]);
+      return;
+    }
+
+    getNotificationsByIdentificativo(email, 0, 3, StatusNotification.NOT_READ)
+      .then((response: ResponseI | undefined) => {
+        try {
+          const items = Array.isArray(response?.jsonText) ? response.jsonText : [];
+          setNotifications(items);
+          const popover: PopoverNotification[] = items.map((x: NotificationI) => {
+            const { title, subText: messageSubText } = getNotificationParts(x.message ?? "", i18n);
+            return {
+              message: title,
+              subText: [
+                ...(messageSubText ? [messageSubText] : []),
+                i18n._("inviato_da") + (x.userSender ?? ""),
+                i18n._("data_invio") + getDateStringRegularFormat(x.dateSender),
+              ],
+            };
+          });
+          setPopoverNotifications(popover);
+        } catch {
+          setPopoverNotifications([]);
+        }
+      })
+      .catch(() => {
+        setPopoverNotifications([]);
+      });
   };
 
   const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -206,6 +223,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     configDialogPulsante: { message: "", showDialog: false },
   };
 
+  const tutoredUserDisplay = getUserChildDisplay(user);
+  const showUserEmailField = Boolean(
+    user?.emailUserCurrent?.trim() || user?.emailChild?.trim() || user?.email?.trim()
+  );
+
   const emailLabel =
     user?.emailUserCurrent === user?.emailChild
       ? i18n._("email_registrazione")
@@ -259,11 +281,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
         <div className={isVertical ? "box-layout-text-vertical w-full" : "box-layout-text w-full"}>
           {showEmail ? (
-            user?.emailUserCurrent ? (
+            showUserEmailField ? (
               <FormField
                 id="emailFamily"
                 label={emailLabel}
-                value={user.emailChild ?? ""}
+                value={tutoredUserDisplay}
                 disabled
                 readOnly
               />
