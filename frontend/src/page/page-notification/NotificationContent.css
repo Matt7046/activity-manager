@@ -148,7 +148,6 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
-  overflow: hidden;
 }
 
 .notification-grid-container {
@@ -159,7 +158,6 @@
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
   padding: var(--space-3);
-  height: 550px;
 }
 
 .notification-grid-container .datagrid-table-wrap {

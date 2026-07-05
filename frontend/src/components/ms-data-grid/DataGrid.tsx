@@ -3,8 +3,11 @@
 import { useLingui } from "@lingui/react";
 import {
   ColumnDef,
+  ExpandedState,
+  OnChangeFn,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -66,6 +69,10 @@ interface DataGridComponentProps<TData extends object> {
   pulsanti?: Pulsante[];
   toolbarColumnSplit?: ToolbarColumnSplit;
   exportFileName?: string;
+  meta?: Record<string, unknown>;
+  expanded?: ExpandedState;
+  onExpandedChange?: OnChangeFn<ExpandedState>;
+  enableExpanding?: boolean;
 }
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20] as const;
@@ -127,15 +134,22 @@ function DataGridComponent<TData extends object>({
   pulsanti,
   toolbarColumnSplit,
   exportFileName = "export",
+  meta,
+  expanded,
+  onExpandedChange,
+  enableExpanding = false,
 }: DataGridComponentProps<TData>) {
   const { i18n } = useLingui();
 
   const tableRows = useMemo(
     () =>
-      rows.map((row, index) => ({
-        ...row,
-        id: resolveRowId(row, index),
-      })) as Array<TData & { id: string }>,
+      rows.map((row, index) => {
+        const record = row as TData & { id?: string };
+        return {
+          ...row,
+          id: record.id ?? resolveRowId(row, index),
+        };
+      }) as Array<TData & { id: string }>,
     [rows]
   );
 
@@ -147,7 +161,9 @@ function DataGridComponent<TData extends object>({
         pageIndex: paginationModel.page,
         pageSize: paginationModel.pageSize,
       },
+      ...(enableExpanding ? { expanded: expanded ?? {} } : {}),
     },
+    onExpandedChange: enableExpanding ? onExpandedChange : undefined,
     onPaginationChange: (updater) => {
       if (!setPaginationModel) {
         return;
@@ -162,9 +178,13 @@ function DataGridComponent<TData extends object>({
       setPaginationModel({ page: next.pageIndex, pageSize: next.pageSize });
     },
     getCoreRowModel: getCoreRowModel(),
+    ...(enableExpanding ? { getExpandedRowModel: getExpandedRowModel() } : {}),
     getPaginationRowModel: getPaginationRowModel(),
     getRowId: (row) => String((row as TData & { id: string }).id),
+    ...(enableExpanding ? { getRowCanExpand: () => true } : {}),
     manualPagination: false,
+    autoResetPageIndex: false,
+    meta,
   });
 
   const pageCount = table.getPageCount();
@@ -287,7 +307,10 @@ function DataGridComponent<TData extends object>({
                   {row.getVisibleCells().map((cell, columnIndex) => (
                     <TableCell
                       key={cell.id}
-                      className={cn(cell.column.id === "actions" && "text-right")}
+                      className={cn(
+                        "align-top",
+                        cell.column.id === "actions" && "text-right"
+                      )}
                       style={getColumnStyle(columnIndex)}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

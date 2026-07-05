@@ -109,9 +109,10 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
   const toUserI = (payload: CurrentUserState): UserI => ({
     _id: payload._id,
     email: payload.email ?? "",
-    emailChild: payload.emailChild ?? "",
+    emailChild: payload.emailChild ?? payload.emailUserCurrent ?? payload.email ?? "",
     type: (payload.type ?? TypeUser.STANDARD) as TypeUser,
-    emailUserCurrent: payload.emailUserCurrent ?? "",
+    emailUserCurrent: payload.emailUserCurrent ?? payload.email ?? "",
+    name: payload.name,
   });
 
   const [currentUser, setCurrentUser] = useState<CurrentUserState>(emptyCurrentUser());
@@ -129,7 +130,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
     name: "Simulated child User",
     emailChild: "child@simulated.com",
     email: "user@simulated.com",
-    type: TypeUser.FAMILY,
+    type: TypeUser.STANDARD,
     emailUserCurrent: "child@simulated.com"
   }); // Stato per userData
 
@@ -253,25 +254,29 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
 
 
 
-  const handleLoginSuccessFake = (type: number) => {
-    const currentUser = type === 0 ? { ...userDataChildFake } : { ...userDataFake }
-    const user = {
-      ...currentUser,
-      //   token: fakeResponse.credential,
-      type: type
-    };
-    getToken({ email: currentUser.emailUserCurrent, password: 'password', googleLogin: false }, (message: any) => showMessage(setOpen, setMessage, message, true)).then(tokenData => {
+  const handleLoginSuccessFake = (loginType: TypeUser) => {
+    const currentUser =
+      loginType === TypeUser.STANDARD
+        ? { ...userDataChildFake, type: TypeUser.STANDARD }
+        : { ...userDataFake, type: TypeUser.FAMILY };
+    getToken(
+      { email: currentUser.emailUserCurrent, password: "password", googleLogin: false },
+      (message: any) => showMessage(setOpen, setMessage, message, true)
+    ).then((tokenData) => {
       baseStore.setToken(tokenData?.jsonText?.token);
-
-      setCurrentUser({ _id: undefined, ...user });
-      showDialog(type, false);
-    })
+      setCurrentUser({ _id: undefined, ...currentUser });
+      showDialog(loginType, false);
+    });
   };
 
-  const showDialog = (type: number, googleAuth: boolean, userDataGoogle?: any): void => {
-    const currentUser = googleAuth ? { ...userDataGoogle, emailChild: userDataGoogle.email } : type === 0 ? { ...userDataChildFake } : { ...userDataFake }
-    openHome({ ...currentUser, type: type }, googleAuth, setLoading)
-  }
+  const showDialog = (loginType: TypeUser, googleAuth: boolean, userDataGoogle?: any): void => {
+    const currentUser = googleAuth
+      ? { ...userDataGoogle, emailChild: userDataGoogle.email }
+      : loginType === TypeUser.STANDARD
+        ? { ...userDataChildFake, type: TypeUser.STANDARD }
+        : { ...userDataFake, type: TypeUser.FAMILY };
+    openHome(currentUser, googleAuth, setLoading);
+  };
 
   const openHome = (currentUser: any, googleAuth: boolean, setLoading: any): Promise<any> => {
     const loginTypeBefore = currentUser.type;
@@ -286,9 +291,17 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
         setEmailLogin(x?.jsonText?.emailUserCurrent ?? '');
         switch (x?.jsonText?.typeUser) {
           case TypeUser.STANDARD: {
-            setEmailLogin(currentUser.email ?? '');
+            setEmailLogin(currentUser.email ?? "");
             setSimulated(TypeUser.STANDARD);
-            setUser(toUserI({ ...currentUser, type: x.jsonText.typeUser, emailChild: currentUser.emailUserCurrent, emailUserCurrent: x.jsonText.emailUserCurrent }));
+            setUser(
+              toUserI({
+                ...currentUser,
+                type: x.jsonText.typeUser,
+                name: currentUser.name,
+                emailChild: currentUser.emailChild || currentUser.emailUserCurrent,
+                emailUserCurrent: x.jsonText.emailUserCurrent ?? currentUser.emailUserCurrent,
+              })
+            );
             const pending = x?.jsonText?.pendingParentEmails as string[] | undefined;
             if (pending && pending.length > 0) {
               const sel: Record<string, boolean> = {};
