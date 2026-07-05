@@ -23,7 +23,7 @@ export interface MsSchedule {
   pulsanti: Pulsante[];
 }
 
-type ScheduleRow = { _id: string; nome: string; subtesto: string; id: string };
+type ScheduleRow = { _id: string; nome: string; subTesto: string; id: string };
 
 const Schedule = observer((props: { schedule: MsSchedule }) => {
   const [expandedRowId, setExpandedRowId] = useState<number | string | null>(null);
