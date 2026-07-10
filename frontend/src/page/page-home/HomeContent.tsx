@@ -7,7 +7,7 @@ import type { SelectChangeEvent } from "@/types/form-events";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import LinkNext from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Alert from '../../components/ms-alert/Alert';
 import DialogEmail from '../../components/ms-dialog-email/DialogEmail';
 import { GitHubBrandIcon, GoogleBrandIcon } from '../../components/ms-social/SocialBrandIcons';
@@ -26,18 +26,18 @@ import { FormField, PasswordField } from '@/components/ui/form-field';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { getToken } from '../../general/service/AuthService';
+import { isUserValorizzato } from '@/context/UserContext';
 import { baseStore } from '../../general/structure/BaseStore';
 import {
   CLIENT_FACEBOOK,
   CLIENT_GITHUB,
   CLIENT_GOOGLE,
   getGitHubOAuthRedirectUri,
-  SectionName,
   TypeAlertColor,
   TypeUser,
 } from '../../general/structure/Constant';
 import { isSimulatedDemoEmail } from '../../general/structure/simulatedAccounts';
-import { navigateRouting, ResponseI, showMessage, UserI } from '../../general/structure/Utils';
+import { redirectAfterLogin, ResponseI, showMessage, UserI } from '../../general/structure/Utils';
 import { TypeMessage } from '../page-layout/PageLayout';
 import { confirmParentLinks, getEmailChild, getTypeUser, oldLogin } from '../page-user-point/service/UserPointService';
 import { HomeConfig } from './Home';
@@ -90,11 +90,6 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
   const githubHomePopupBridgeDoneRef = useRef(false);
   const facebookSdkInitRef = useRef(false);
 
-
-
-
-  let check = false;
-
   type CurrentUserState = Partial<UserI> & { name?: string };
 
   const emptyCurrentUser = (): CurrentUserState => ({
@@ -114,6 +109,16 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
     emailUserCurrent: payload.emailUserCurrent ?? payload.email ?? "",
     name: payload.name,
   });
+
+  const completeLogin = useCallback(
+    (nextUser: UserI, options?: { deferRedirect?: boolean }) => {
+      setUser(nextUser);
+      if (!options?.deferRedirect) {
+        redirectAfterLogin(router, nextUser);
+      }
+    },
+    [router, setUser]
+  );
 
   const [currentUser, setCurrentUser] = useState<CurrentUserState>(emptyCurrentUser());
 
@@ -135,36 +140,19 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
   }); // Stato per userData
 
   useEffect(() => {
-
     if (location === '/home') {
-
-      // Stato per userData
       setCurrentUser(emptyCurrentUser());
-      setUser(null);
       setDemoPanelOpen(false);
-      check = true;
     }
-    setHiddenLogin(location === '/privacy-policy')
-    return () => {
-    };
-  }, [location, setUser, setDemoPanelOpen]);
+    setHiddenLogin(location === '/privacy-policy');
+    return () => {};
+  }, [location, setDemoPanelOpen]);
+
   useEffect(() => {
-    if (user) {
-
-      // Naviga solo quando `user` è stato aggiornato
-      if (user.type === 2 && !check && openPendingParentsDialog === false) {
-
-        navigateRouting(router, SectionName.REGISTER, {});
-        check = true;
-      }
-      else if ((user.type === 0 || user.type === 1) && !check && openPendingParentsDialog === false) {
-        navigateRouting(router, SectionName.ACTIVITY, {});
-        check = false;
-      }
+    if (location === '/home' && isUserValorizzato(user)) {
+      redirectAfterLogin(router, user as UserI);
     }
-  }, [user, router, openPendingParentsDialog]);
-
-
+  }, [location, user, router]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -218,7 +206,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
     currentUser.emailChild = emailConfirmDialog;
     currentUser.type = typeSimulated;
     currentUser.emailUserCurrent = emailUserCurrent;
-    setUser(toUserI({ ...currentUser, type: typeSimulated as TypeUser }));
+    completeLogin(toUserI({ ...currentUser, type: typeSimulated as TypeUser }));
     handleCloseD();
 
   });
@@ -293,15 +281,13 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
           case TypeUser.STANDARD: {
             setEmailLogin(currentUser.email ?? "");
             setSimulated(TypeUser.STANDARD);
-            setUser(
-              toUserI({
-                ...currentUser,
-                type: x.jsonText.typeUser,
-                name: currentUser.name,
-                emailChild: currentUser.emailChild || currentUser.emailUserCurrent,
-                emailUserCurrent: x.jsonText.emailUserCurrent ?? currentUser.emailUserCurrent,
-              })
-            );
+            const loggedUser = toUserI({
+              ...currentUser,
+              type: x.jsonText.typeUser,
+              name: currentUser.name,
+              emailChild: currentUser.emailChild || currentUser.emailUserCurrent,
+              emailUserCurrent: x.jsonText.emailUserCurrent ?? currentUser.emailUserCurrent,
+            });
             const pending = x?.jsonText?.pendingParentEmails as string[] | undefined;
             if (pending && pending.length > 0) {
               const sel: Record<string, boolean> = {};
@@ -312,6 +298,9 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
               setPendingParentsEmails(pending);
               setPendingDialogChildEmail(x.jsonText.emailUserCurrent ?? currentUser.emailUserCurrent ?? '');
               setOpenPendingParentsDialog(true);
+              completeLogin(loggedUser, { deferRedirect: true });
+            } else {
+              completeLogin(loggedUser);
             }
             break;
           }
@@ -323,11 +312,15 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
           }
           case TypeUser.NEW_USER: {
             if (googleAuth === true) {
-              setUser(toUserI({ ...currentUser, type: x.jsonText.typeUser, emailUserCurrent: x.jsonText.emailUserCurrent }));
-
-            }
-            else {
-              setUser(toUserI({ ...currentUser, type: TypeUser.NEW_USER }));
+              completeLogin(
+                toUserI({
+                  ...currentUser,
+                  type: x.jsonText.typeUser,
+                  emailUserCurrent: x.jsonText.emailUserCurrent,
+                })
+              );
+            } else {
+              completeLogin(toUserI({ ...currentUser, type: TypeUser.NEW_USER }));
             }
           }
             break;
@@ -625,6 +618,9 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
 
   const handleClosePendingParentsDialog = (): void => {
     setOpenPendingParentsDialog(false);
+    if (isUserValorizzato(user)) {
+      redirectAfterLogin(router, user as UserI);
+    }
   };
 
   const handlePendingParentToggle = (parentEmail: string): void => {
@@ -639,6 +635,9 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
       setLoading,
     ).then(() => {
       setOpenPendingParentsDialog(false);
+      if (isUserValorizzato(user)) {
+        redirectAfterLogin(router, user as UserI);
+      }
     });
   };
 

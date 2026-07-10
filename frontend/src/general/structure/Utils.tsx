@@ -319,6 +319,20 @@ export const navigateRouting = (router: AppRouterInstance, path: string, params?
     go(base);
   }
 };
+
+/** Sezione di destinazione dopo login (registrazione per utenti nuovi, altrimenti attività). */
+export const getPostLoginSection = (user: UserI): SectionName => {
+  const type = Number(user.type);
+  if (type === TypeUser.NEW_USER) {
+    return SectionName.REGISTER;
+  }
+  return SectionName.ACTIVITY;
+};
+
+export const redirectAfterLogin = (router: AppRouterInstance, user: UserI) => {
+  navigateRouting(router, getPostLoginSection(user), {});
+};
+
 export const sezioniMenuIniziale = (user: UserI): MenuLaterale[][] => {
   if (user === undefined || user === null) {
     return [[]];
