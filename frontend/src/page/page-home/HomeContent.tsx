@@ -201,15 +201,18 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
 
 
 
-  const handleConfirm = ((typeSimulated: number, emailUserCurrent: string) => {
+  const handleConfirm = (typeSimulated: number) => {
+    const selectedChildEmail = emailConfirmDialog.trim();
+    if (!selectedChildEmail) {
+      return;
+    }
     currentUser.email = emailLogin;
-    currentUser.emailChild = emailConfirmDialog;
+    currentUser.emailChild = selectedChildEmail;
     currentUser.type = typeSimulated;
-    currentUser.emailUserCurrent = emailUserCurrent;
+    currentUser.emailUserCurrent = selectedChildEmail;
     completeLogin(toUserI({ ...currentUser, type: typeSimulated as TypeUser }));
     handleCloseD();
-
-  });
+  };
 
   // Funzione di logout
   const logOut = () => {
@@ -220,7 +223,17 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
   };
 
   // Funzioni di gestione
-  const handleOpenD = () => setOpenD(true);
+  const handleOpenD = () => {
+    setEmailConfirmDialog("");
+    setOpenD(true);
+  };
+
+  useEffect(() => {
+    if (!openD || emailOptions.length !== 1) {
+      return;
+    }
+    setEmailConfirmDialog(emailOptions[0]);
+  }, [openD, emailOptions]);
   const handleCloseD = () => setOpenD(false);
   const handleEmailChange = (event: SelectChangeEvent) => {
     setEmailConfirmDialog(event.target.value);
@@ -842,7 +855,6 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
                 handleConfirm={handleConfirm}
                 email={emailConfirmDialog}
                 simulated={simulated}
-                emailUserCurrent={emailLogin}
               />
 
               <Dialog open={openResetDialog} onOpenChange={(next) => !next && handleCloseResetDialog()}>

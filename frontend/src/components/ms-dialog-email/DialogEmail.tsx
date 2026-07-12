@@ -1,7 +1,8 @@
 "use client";
-import { Trans } from "@lingui/react";
+import { Trans, useLingui } from "@lingui/react";
 import type { SelectChangeEvent } from "@/types/form-events";
-import React from "react";
+import { ChevronDown } from "lucide-react";
+import React, { useId } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,23 +11,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import "./DialogEmail.css";
 
 interface EmailDialogProps {
   openD: boolean;
   handleCloseD: () => void;
   emailOptions: string[];
   handleEmailChange: (event: SelectChangeEvent) => void;
-  handleConfirm: (simulated: any, emailUserCurrent: string) => void;
+  handleConfirm: (simulated: number) => void;
   email: string;
-  simulated: any;
-  emailUserCurrent: string;
+  simulated: number;
 }
 
 const DialogEmail: React.FC<EmailDialogProps> = ({
@@ -37,17 +31,19 @@ const DialogEmail: React.FC<EmailDialogProps> = ({
   handleConfirm,
   email,
   simulated,
-  emailUserCurrent,
 }) => {
-  const onEmailChange = (value: string | null) => {
-    handleEmailChange({ target: { value: value ?? "" } } as SelectChangeEvent);
+  const { i18n } = useLingui();
+  const selectId = useId();
+
+  const onEmailChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    handleEmailChange({ target: { value: event.target.value } });
   };
 
   return (
     <Dialog open={openD} onOpenChange={(open) => !open && handleCloseD()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-lg overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] p-0 shadow-[var(--shadow-md)] sm:max-w-lg"
+        className="dialog-email-content max-w-lg overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] p-0 shadow-[var(--shadow-md)] sm:max-w-lg"
       >
         <DialogHeader className="border-b border-[var(--color-border)] bg-[var(--color-surface-soft)] px-6 py-5 text-center">
           <DialogTitle className="m-0 text-center text-lg font-extrabold uppercase tracking-wide text-[var(--color-primary-hover)]">
@@ -63,21 +59,28 @@ const DialogEmail: React.FC<EmailDialogProps> = ({
               </p>
             </div>
 
-            <label className="ml-1 text-sm font-semibold text-[var(--color-muted-500)]">
+            <label htmlFor={selectId} className="ml-1 text-sm font-semibold text-[var(--color-muted-500)]">
               <Trans id="indirizzo_email" />
             </label>
-            <Select value={email || null} onValueChange={onEmailChange}>
-              <SelectTrigger className="mt-2 h-10 w-full rounded-[var(--radius-lg)] border-[var(--color-border)] bg-[var(--color-surface)]">
-                <SelectValue placeholder="" />
-              </SelectTrigger>
-              <SelectContent>
-                {emailOptions?.map((option) => (
-                  <SelectItem key={option} value={option}>
+            <div className="dialog-email-select-wrap">
+              <select
+                id={selectId}
+                className="dialog-email-select"
+                value={email}
+                onChange={onEmailChange}
+                autoComplete="email"
+              >
+                <option value="" disabled>
+                  {i18n._("indirizzo_email")}
+                </option>
+                {emailOptions.map((option) => (
+                  <option key={option} value={option}>
                     {option}
-                  </SelectItem>
+                  </option>
                 ))}
-              </SelectContent>
-            </Select>
+              </select>
+              <ChevronDown className="dialog-email-select-icon" aria-hidden />
+            </div>
           </div>
         </div>
 
@@ -90,7 +93,7 @@ const DialogEmail: React.FC<EmailDialogProps> = ({
             <Trans id="annulla" />
           </Button>
           <Button
-            onClick={() => handleConfirm(simulated, emailUserCurrent)}
+            onClick={() => handleConfirm(simulated)}
             disabled={!email}
             className="rounded-[var(--radius-lg)] bg-[var(--color-primary)] px-7 py-2.5 font-semibold text-[var(--color-on-primary)] transition-all hover:-translate-y-px hover:shadow-[var(--shadow-sm)] disabled:opacity-50"
           >

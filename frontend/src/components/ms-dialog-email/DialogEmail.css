@@ -1,0 +1,74 @@
+.dialog-email-select-wrap {
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.dialog-email-select {
+  display: block;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.625rem 2.5rem 0.625rem 0.875rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: 1rem;
+  line-height: 1.4;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.dialog-email-select:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+.dialog-email-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dialog-email-select-icon {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-text-muted);
+}
+
+.dialog-email-select option {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+}
+
+.dialog-email-content[data-open] {
+  animation: dialog-email-fade-in 150ms ease-out;
+}
+
+.dialog-email-content[data-closed] {
+  animation: dialog-email-fade-out 100ms ease-in;
+}
+
+@keyframes dialog-email-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-email-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
