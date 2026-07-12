@@ -185,6 +185,7 @@
   "home_password_reset_not_simulated": "Il ripristino password non è disponibile per gli account demo user@simulated.com e child@simulated.com.",
   "email_tutorato": "Email tutorato",
   "email_registrazione": "Email di registrazione",
+  "utente": "Utente",
   "privacy_descrizione": "La presente Privacy Policy descrive come raccogliamo, utilizziamo e proteggiamo i tuoi dati personali quando utilizzi il nostro progetto open source. La tua privacy è importante per noi, e ci impegniamo a trattare i tuoi dati in conformità al Regolamento Generale sulla Protezione dei Dati (GDPR).",
   "raccogliamo_dati_desc": "Raccogliamo i seguenti dati personali quando ti iscrivi alla nostra newsletter o utilizzi i nostri servizi:",
   "altri_dati_volontari": "Eventuali altri dati forniti volontariamente tramite i moduli del nostro sito",

@@ -184,6 +184,7 @@
   "home_password_reset_not_simulated": "Passwort zurücksetzen ist für die Demo-Konten user@simulated.com und child@simulated.com nicht verfügbar.",
   "email_tutorato": "E-Mail-Nachhilfe",
   "email_registrazione": "Registrierungs-E-Mail",
+  "utente": "Benutzer",
   "privacy_descrizione": "Diese Datenschutzrichtlinie beschreibt, wie wir Ihre personenbezogenen Daten erheben, verwenden und schützen, wenn Sie unser Open-Source-Projekt nutzen. Ihre Privatsphäre ist uns wichtig und wir verpflichten uns, Ihre Daten im Einklang mit der Datenschutz-Grundverordnung (DSGVO) zu verarbeiten.",
   "raccogliamo_dati_desc": "Wenn Sie sich für unseren Newsletter anmelden oder unsere Dienste nutzen, erheben wir folgende personenbezogene Daten:",
   "altri_dati_volontari": "Alle anderen Daten, die Sie freiwillig über die Formulare auf unserer Website angeben",
