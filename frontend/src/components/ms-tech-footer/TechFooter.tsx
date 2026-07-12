@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import "./TechFooter.css";
 
 const cdLogo = (
   <img
@@ -53,15 +54,15 @@ void cdLogo;
 
 const TechFooter = () => {
   return (
-    <footer className="techf-footer mt-auto w-full border-t border-[var(--color-border-strong)] bg-[var(--color-footer-bg)] px-3 py-4 text-center text-[var(--color-footer-text)] shadow-[0_-8px_24px_rgba(0,0,0,0.1)] html[data-theme=light]:shadow-[0_-14px_40px_rgba(0,0,0,0.22)] max-[700px]:px-2 max-[700px]:py-3">
-      <h2 className="techf-title mb-3 text-lg font-bold text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]">
+    <footer className="techf-footer w-full border-t border-[var(--color-border-strong)] bg-[var(--color-footer-bg)] px-3 text-center text-[var(--color-footer-text)] shadow-[0_-8px_24px_rgba(0,0,0,0.1)] html[data-theme=light]:shadow-[0_-14px_40px_rgba(0,0,0,0.22)] max-[700px]:px-2">
+      <h2 className="techf-title text-lg font-bold text-[var(--color-link-ui)] html[data-theme=light]:text-[#0a0a0a]">
         <Trans id="tecnologie_che_utilizzo" />
       </h2>
-      <div className="techf-grid grid w-full grid-cols-2 gap-1 sm:grid-cols-5">
+      <div className="techf-grid grid w-full">
         {technologies.map((tech) => (
           <div
             key={tech.name}
-            className="techf-item flex flex-col items-center pb-3 text-center max-[700px]:pb-2"
+            className="techf-item flex flex-col items-center text-center"
           >
             <Button
               variant="ghost"
