@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class EmailService {
@@ -40,6 +42,18 @@ public class EmailService {
                 String parentEmail = encryptDecryptConverter.decrypt(userPoint.getEmail());
                 String body = "Hai aggiunto i seguenti figli al tuo account: " + String.join(", ", parentSummary);
                 mailSenderService.sendEmail(parentEmail, "Conferma aggiunta figli", body);
+
+                Set<String> newlyCreatedChildEmails = new HashSet<>();
+                if (userChild != null) {
+                    userChild.forEach(c -> newlyCreatedChildEmails.add(encryptDecryptConverter.decrypt(c.getEmail())));
+                }
+                for (String childEmail : parentSummary) {
+                    if (!newlyCreatedChildEmails.contains(childEmail)) {
+                        String inviteBody = "L'utente " + parentEmail
+                                + " ti ha aggiunto come figlio. Accedi all'applicazione per confermare il collegamento.";
+                        mailSenderService.sendEmail(childEmail, "Invito famiglia", inviteBody);
+                    }
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

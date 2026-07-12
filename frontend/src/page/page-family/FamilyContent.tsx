@@ -11,7 +11,13 @@ import { Separator } from "@/components/ui/separator";
 import { AlertConfig } from "../../components/ms-alert/Alert";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import { ButtonName, HttpStatus, TypeAlertColor } from "../../general/structure/Constant";
-import { FormErrorValues, ResponseI, showMessage, verifyForm } from "../../general/structure/Utils";
+import {
+  FormErrorValues,
+  getFamilyAccountEmail,
+  ResponseI,
+  showMessage,
+  verifyForm,
+} from "../../general/structure/Utils";
 import { PointRegister } from "../page-register/RegisterContent";
 import { findByEmail, getEmailChild } from "../page-user-point/service/UserPointService";
 import "./FamilyContent.css";
@@ -48,9 +54,15 @@ const FamilyContent: React.FC<FamilyContentProps> = ({ alertConfig, isVertical: 
   };
 
   const loadFigli = (): Promise<ResponseI | undefined> => {
-    if (!user?.emailUserCurrent) return Promise.resolve(undefined);
+    const parentEmail = getFamilyAccountEmail(user);
+    if (!parentEmail) return Promise.resolve(undefined);
     return getEmailChild(
-      { ...user, email: user.emailChild },
+      {
+        ...user,
+        emailUserCurrent: parentEmail,
+        email: user.emailChild,
+        onlyCheckedChildren: false,
+      },
       (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message)
     ).then((res) => {
       if (res?.status === HttpStatus.OK) {
@@ -76,9 +88,9 @@ const FamilyContent: React.FC<FamilyContentProps> = ({ alertConfig, isVertical: 
   }, [inizialLoad]);
 
   useEffect(() => {
-    if (!user?.emailUserCurrent) return;
+    if (!getFamilyAccountEmail(user)) return;
     void loadFigli();
-  }, [user?.emailUserCurrent, user?.emailChild]);
+  }, [user?.email, user?.emailUserCurrent, user?.emailChild]);
 
   useEffect(() => {
     const errors: FormErrorValues = verifyForm(formValues);
@@ -137,8 +149,10 @@ const FamilyContent: React.FC<FamilyContentProps> = ({ alertConfig, isVertical: 
       if (!baseSet.has(e)) ops.push({ email: e, operation: true });
     });
     if (ops.length === 0) return Promise.resolve(undefined);
+    const parentEmail = getFamilyAccountEmail(user);
+    if (!parentEmail) return Promise.resolve(undefined);
     return updateChildrenByFamily(
-      { userPoint: { emailUserCurrent: user.emailUserCurrent }, userPointChild: ops },
+      { userPoint: { emailUserCurrent: parentEmail }, userPointChild: ops },
       (message: any) => showMessage(alertConfig.setOpen, alertConfig.setMessage, message),
       undefined,
       true
