@@ -2,6 +2,7 @@ package com.common.mapper;
 
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.dto.user.UserPointDTO;
+import com.common.security.EmailNormalization;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -47,20 +48,24 @@ public abstract class UserPointMapper {
     @AfterMapping
     protected void encryptField(UserPointDTO dto, @MappingTarget UserPoint point) {
         if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
-            point.setEmail(encryptDecryptConverter.convert(dto.getEmail()));
+            point.setEmail(encryptDecryptConverter.convert(EmailNormalization.normalize(dto.getEmail())));
         }
         if (dto.getEmailChild() != null && !dto.getEmailChild().isBlank()) {
-            point.setEmailChild(encryptDecryptConverter.convert(dto.getEmailChild()));
+            point.setEmailChild(encryptDecryptConverter.convert(EmailNormalization.normalize(dto.getEmailChild())));
         }
         if (dto.getEmailUserCurrent() != null && !dto.getEmailUserCurrent().isBlank()) {
-            point.setEmailUserCurrent(encryptDecryptConverter.convert(dto.getEmailUserCurrent()));
+            point.setEmailUserCurrent(
+                    encryptDecryptConverter.convert(EmailNormalization.normalize(dto.getEmailUserCurrent())));
         }
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             point.setPassword(encryptDecryptConverter.convert(dto.getPassword()));
         }
         if (dto.getEmailFigli() != null) {
             point.setEmailFigli(
-                    dto.getEmailFigli().stream().map(encryptDecryptConverter::convert).collect(Collectors.toList()));
+                    dto.getEmailFigli().stream()
+                            .map(EmailNormalization::normalize)
+                            .map(encryptDecryptConverter::convert)
+                            .collect(Collectors.toList()));
         }
     }
 }

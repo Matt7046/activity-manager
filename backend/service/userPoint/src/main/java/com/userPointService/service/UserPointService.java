@@ -3,6 +3,7 @@ package com.userPointService.service;
 import com.common.configurations.encrypt.EncryptDecryptConverter;
 import com.common.data.user.FiglioLink;
 import com.common.data.user.UserPoint;
+import com.common.security.EmailNormalization;
 import com.common.user.UserPointImageSlots;
 import com.common.structure.exception.ArithmeticCustomException;
 import com.common.structure.exception.ForbiddenException;
@@ -70,10 +71,61 @@ public class UserPointService {
     }
 
     /**
-     * Confermato solo se esiste {@link FiglioLink} con {@code check == true} per questa email figlio cifrata.
+     * Confermato solo se esiste {@link FiglioLink} con {@code check == true} per questa email figlio.
      */
     private boolean isChildLinkConfirmedForParent(UserPoint parent, String childEncEmail) {
-        return Boolean.TRUE.equals(figlioLinksByChildEnc(parent).get(childEncEmail));
+        if (Boolean.TRUE.equals(figlioLinksByChildEnc(parent).get(childEncEmail))) {
+            return true;
+        }
+        String childPlain = normalizedPlainEmail(childEncEmail);
+        for (FiglioLink fl : Optional.ofNullable(parent.getFigliLinks()).orElse(List.of())) {
+            if (fl != null && fl.getEmail() != null
+                    && childPlain.equals(normalizedPlainEmail(fl.getEmail()))
+                    && Boolean.TRUE.equals(fl.getCheck())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String normalizedPlainEmail(String storedOrPlain) {
+        if (storedOrPlain == null || storedOrPlain.isBlank()) {
+            return "";
+        }
+        return EmailNormalization.normalize(encryptDecryptConverter.safeDecrypt(storedOrPlain));
+    }
+
+    private List<UserPoint> findAllParentsHavingChild(String childStoredEmail) {
+        Set<String> keys = new LinkedHashSet<>();
+        if (childStoredEmail != null && !childStoredEmail.isBlank()) {
+            keys.add(childStoredEmail);
+            String plain = normalizedPlainEmail(childStoredEmail);
+            if (!plain.isEmpty()) {
+                keys.add(encryptDecryptConverter.storageForm(plain));
+            }
+        }
+        Map<String, UserPoint> byId = new LinkedHashMap<>();
+        for (String key : keys) {
+            for (UserPoint parent : userPointRepository.findAllParentsHavingChildInEmailFigli(key)) {
+                if (parent != null && parent.get_id() != null) {
+                    byId.put(parent.get_id(), parent);
+                }
+            }
+        }
+        return new ArrayList<>(byId.values());
+    }
+
+    public boolean isRegisteredAsChild(String childStoredEmail) {
+        return !findAllParentsHavingChild(childStoredEmail).isEmpty();
+    }
+
+    private String childEncInParentList(UserPoint parent, String childPlainNormalized) {
+        for (String enc : Optional.ofNullable(parent.getEmailFigli()).orElse(List.of())) {
+            if (childPlainNormalized.equals(normalizedPlainEmail(enc))) {
+                return enc;
+            }
+        }
+        return null;
     }
 
     /**
@@ -92,11 +144,15 @@ public class UserPointService {
     }
 
     public List<String> findPendingParentEmailsPlain(String childEncEmail) {
-        List<UserPoint> parents = userPointRepository.findAllParentsHavingChildInEmailFigli(childEncEmail);
+        String childPlain = normalizedPlainEmail(childEncEmail);
+        if (childPlain.isEmpty()) {
+            return List.of();
+        }
         List<String> out = new ArrayList<>();
-        for (UserPoint p : parents) {
-            if (!isChildLinkConfirmedForParent(p, childEncEmail)) {
-                out.add(encryptDecryptConverter.decrypt(p.getEmail()));
+        for (UserPoint parent : findAllParentsHavingChild(childEncEmail)) {
+            String figlioEnc = childEncInParentList(parent, childPlain);
+            if (figlioEnc != null && !isChildLinkConfirmedForParent(parent, figlioEnc)) {
+                out.add(encryptDecryptConverter.decrypt(parent.getEmail()));
             }
         }
         return out;
@@ -108,28 +164,32 @@ public class UserPointService {
      * Lista vuota o null = nessun genitore selezionato → tutti i pending vengono rimossi.
      */
     public void confirmChildParentLinks(String childEncEmail, List<String> parentPlainEmails) {
-        Set<String> selectedParentsEnc = new LinkedHashSet<>();
+        Set<String> selectedParentsPlain = new LinkedHashSet<>();
         if (parentPlainEmails != null) {
             parentPlainEmails.stream()
-                    .map(String::trim)
+                    .map(EmailNormalization::normalize)
                     .filter(s -> !s.isEmpty())
-                    .map(encryptDecryptConverter::convert)
-                    .forEach(selectedParentsEnc::add);
+                    .forEach(selectedParentsPlain::add);
         }
 
-        List<UserPoint> candidates = userPointRepository.findAllParentsHavingChildInEmailFigli(childEncEmail);
-        for (UserPoint parent : candidates) {
-            List<String> figli = parent.getEmailFigli();
-            if (figli == null || !figli.contains(childEncEmail)) {
+        String childPlain = normalizedPlainEmail(childEncEmail);
+        if (childPlain.isEmpty()) {
+            return;
+        }
+
+        for (UserPoint parent : findAllParentsHavingChild(childEncEmail)) {
+            String parentPlain = normalizedPlainEmail(parent.getEmail());
+            String figlioEnc = childEncInParentList(parent, childPlain);
+            if (figlioEnc == null) {
                 continue;
             }
-            if (isChildLinkConfirmedForParent(parent, childEncEmail)) {
+            if (isChildLinkConfirmedForParent(parent, figlioEnc)) {
                 continue;
             }
-            if (selectedParentsEnc.contains(parent.getEmail())) {
-                approveChildLinkForParent(parent, childEncEmail);
+            if (selectedParentsPlain.contains(parentPlain)) {
+                approveChildLinkForParent(parent, figlioEnc);
             } else {
-                removeChildFromParent(parent, childEncEmail);
+                removeChildFromParent(parent, figlioEnc);
             }
         }
     }
@@ -376,6 +436,10 @@ public class UserPointService {
     private void ensureChildUserPointCreated(String emailEncrypted, List<UserPoint> newChildrenOut) {
         UserPoint already = userPointRepository.findUserByEmailAll(emailEncrypted);
         if (already != null) {
+            if (already.getType() == null || Integer.valueOf(2).equals(already.getType())) {
+                already.setType(0);
+                userPointRepository.save(already);
+            }
             return;
         }
         UserPoint child = new UserPoint();
