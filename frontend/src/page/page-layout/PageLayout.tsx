@@ -9,7 +9,6 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import Alert, { AlertConfig } from "../../components/ms-alert/Alert";
 import Button, { Pulsante } from "../../components/ms-button/Button";
 import Drawer, { MenuLaterale } from "../../components/ms-drawer/Drawer";
-import Label from "../../components/ms-label/Label";
 import Language from "../../components/ms-language/Language";
 import Popover, { PopoverNotification } from "../../components/ms-popover/Popover";
 import ThemeToggle from "../../components/ms-theme-toggle/ThemeToggle";
@@ -230,8 +229,12 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
   const emailLabel =
     user?.emailUserCurrent === user?.emailChild
-      ? i18n._("email_registrazione")
+      ? i18n._("utente")
       : i18n._("email_tutorato");
+
+  const sectionTitle = sectionAttiva?.testo?.toUpperCase() ?? "";
+  const tutoratoTitle =
+    TypeUser.FAMILY === user?.type ? i18n._("tutorato").trim().toUpperCase() : "";
 
   const annotationRows = sectionAttiva?.path === SectionName.HOME ? 2 : 4;
 
@@ -250,13 +253,10 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             <div className="header-title-badge">
               {IconaTitolo && <IconaTitolo className="header-icon" aria-hidden />}
               <h6 className="header-title">
-                <Label
-                  _id={"title"}
-                  text={
-                    sectionAttiva?.testo?.toUpperCase() +
-                    (TypeUser.FAMILY === user?.type ? i18n._("tutorato")?.toUpperCase() : "")
-                  }
-                />
+                <span className="header-title-main">{sectionTitle}</span>
+                {tutoratoTitle ? (
+                  <span className="header-title-tutorato">{tutoratoTitle}</span>
+                ) : null}
               </h6>
             </div>
           </div>

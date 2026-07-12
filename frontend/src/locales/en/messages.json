@@ -185,6 +185,7 @@
   "home_password_reset_not_simulated": "Password reset is not available for demo accounts user@simulated.com and child@simulated.com.",
   "email_tutorato": "Email tutoring",
   "email_registrazione": "Registration email",
+  "utente": "User",
   "privacy_descrizione": "This Privacy Policy describes how we collect, use and protect your personal data when you use our open source project. Your privacy is important to us, and we are committed to processing your data in accordance with the General Data Protection Regulation (GDPR).",
   "raccogliamo_dati_desc": "We collect the following personal data when you sign up for our newsletter or use our services:",
   "altri_dati_volontari": "Any other data provided voluntarily through the forms on our site",

@@ -184,6 +184,7 @@
   "home_password_reset_not_simulated": "A redefinição de palavra-passe não está disponível para as contas demo user@simulated.com e child@simulated.com.",
   "email_tutorato": "Tutoria por e-mail",
   "email_registrazione": "E-mail de registro",
+  "utente": "Usuário",
   "privacy_descrizione": "Esta Política de Privacidade descreve como coletamos, usamos e protegemos seus dados pessoais quando você usa nosso projeto de código aberto. A sua privacidade é importante para nós e estamos empenhados em processar os seus dados de acordo com o Regulamento Geral de Proteção de Dados (RGPD).",
   "raccogliamo_dati_desc": "Recolhemos os seguintes dados pessoais quando subscreve a nossa newsletter ou utiliza os nossos serviços:",
   "altri_dati_volontari": "Quaisquer outros dados fornecidos voluntariamente através dos formulários do nosso site",

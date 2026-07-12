@@ -129,9 +129,24 @@
     letter-spacing: 0.04em;
     color: var(--color-primary);
     line-height: 1.2;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    max-width: 100%;
+}
+
+.header-title-main {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.header-title-tutorato {
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .header-title-badge {
@@ -216,12 +231,25 @@
         gap: var(--space-1);
     }
 
-    .header-title-badge {
-        padding: 8px 12px;
+    .header-title {
+        flex-direction: column;
+        gap: 0.05rem;
+        line-height: 1.1;
+        white-space: normal;
+        font-size: 0.88rem !important;
     }
 
-    .header-title {
-        font-size: 0.88rem !important;
+    .header-title-main {
+        max-width: 100%;
+    }
+
+    .header-title-tutorato {
+        font-size: 0.72rem;
+        letter-spacing: 0.05em;
+    }
+
+    .header-title-badge {
+        padding: 6px 10px;
     }
 
     .box-layout-text,
