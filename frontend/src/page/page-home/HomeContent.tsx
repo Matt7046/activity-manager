@@ -290,6 +290,23 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
     }).then(x => {
       getTypeUser(currentUser, () => showMessage(setOpen, setMessage, message, true), setLoading).then((x) => {
         setEmailLogin(x?.jsonText?.emailUserCurrent ?? '');
+        const pending = x?.jsonText?.pendingParentEmails as string[] | undefined;
+        const openPendingParentsIfAny = (loggedUser: ReturnType<typeof toUserI>): boolean => {
+          if (!pending || pending.length === 0) {
+            return false;
+          }
+          const sel: Record<string, boolean> = {};
+          pending.forEach((p) => {
+            sel[p] = true;
+          });
+          setPendingParentsSelected(sel);
+          setPendingParentsEmails(pending);
+          setPendingDialogChildEmail(x?.jsonText?.emailUserCurrent ?? currentUser.emailUserCurrent ?? '');
+          setOpenPendingParentsDialog(true);
+          completeLogin(loggedUser, { deferRedirect: true });
+          return true;
+        };
+
         switch (x?.jsonText?.typeUser) {
           case TypeUser.STANDARD: {
             setEmailLogin(currentUser.email ?? "");
@@ -301,18 +318,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
               emailChild: currentUser.emailChild || currentUser.emailUserCurrent,
               emailUserCurrent: x.jsonText.emailUserCurrent ?? currentUser.emailUserCurrent,
             });
-            const pending = x?.jsonText?.pendingParentEmails as string[] | undefined;
-            if (pending && pending.length > 0) {
-              const sel: Record<string, boolean> = {};
-              pending.forEach((p) => {
-                sel[p] = true;
-              });
-              setPendingParentsSelected(sel);
-              setPendingParentsEmails(pending);
-              setPendingDialogChildEmail(x.jsonText.emailUserCurrent ?? currentUser.emailUserCurrent ?? '');
-              setOpenPendingParentsDialog(true);
-              completeLogin(loggedUser, { deferRedirect: true });
-            } else {
+            if (!openPendingParentsIfAny(loggedUser)) {
               completeLogin(loggedUser);
             }
             break;
@@ -324,16 +330,18 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
             break;
           }
           case TypeUser.NEW_USER: {
-            if (googleAuth === true) {
-              completeLogin(
-                toUserI({
-                  ...currentUser,
-                  type: x.jsonText.typeUser,
-                  emailUserCurrent: x.jsonText.emailUserCurrent,
-                })
-              );
-            } else {
-              completeLogin(toUserI({ ...currentUser, type: TypeUser.NEW_USER }));
+            const loggedUser = toUserI({
+              ...currentUser,
+              type: x.jsonText.typeUser,
+              emailUserCurrent: x.jsonText.emailUserCurrent ?? currentUser.emailUserCurrent,
+              emailChild: currentUser.emailChild || currentUser.emailUserCurrent,
+            });
+            if (!openPendingParentsIfAny(loggedUser)) {
+              if (googleAuth === true) {
+                completeLogin(loggedUser);
+              } else {
+                completeLogin(toUserI({ ...currentUser, type: TypeUser.NEW_USER }));
+              }
             }
           }
             break;

@@ -85,6 +85,7 @@ public class UserPointProcessor {
             UserPointDTO subDTO = userPointMapper.toDTO(userList);
             subDTO.setEmailFigli(plainChildren);
             subDTO.setOnlyCheckedChildren(onlyChecked == null || Boolean.TRUE.equals(onlyChecked));
+            subDTO.setPassword(null);
             return new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
         });
     }
@@ -98,10 +99,14 @@ public class UserPointProcessor {
             Integer itemId = self != null ? self.getType() : 2;
             String emailUserCurrent = userPointDTO.getEmailUserCurrent();
             List<String> pending = null;
-            if (Integer.valueOf(0).equals(itemId) && self != null && self.getEmail() != null) {
+            if (self != null && self.getEmail() != null) {
                 List<String> found = userPointService.findPendingParentEmailsPlain(self.getEmail());
                 if (!found.isEmpty()) {
                     pending = found;
+                }
+                if (userPointService.isRegisteredAsChild(self.getEmail())
+                        && (itemId == null || Integer.valueOf(2).equals(itemId))) {
+                    itemId = 0;
                 }
             }
             return new ResponseDTO(new UserDTO(itemId, itemId == 2, emailUserCurrent, pending),
@@ -276,6 +281,7 @@ public class UserPointProcessor {
                 inviaNotifica(parentDto, newChildren, newlyAddedPlain);
             }
             UserPointDTO subDTO = userPointMapper.toDTO(updated);
+            subDTO.setPassword(null);
             return new ResponseDTO(subDTO, ActivityHttpStatus.OK.value(), new ArrayList<>());
         });
     }
