@@ -89,6 +89,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
   const githubOAuthStateRef = useRef<string>("");
   const githubHomePopupBridgeDoneRef = useRef(false);
   const facebookSdkInitRef = useRef(false);
+  const awaitingParentConfirmationRef = useRef(false);
 
   type CurrentUserState = Partial<UserI> & { name?: string };
 
@@ -149,10 +150,15 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
   }, [location, setDemoPanelOpen]);
 
   useEffect(() => {
-    if (location === '/home' && isUserValorizzato(user)) {
+    if (
+      location === '/home' &&
+      isUserValorizzato(user) &&
+      !openPendingParentsDialog &&
+      !awaitingParentConfirmationRef.current
+    ) {
       redirectAfterLogin(router, user as UserI);
     }
-  }, [location, user, router]);
+  }, [location, user, router, openPendingParentsDialog]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -302,6 +308,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
           setPendingParentsSelected(sel);
           setPendingParentsEmails(pending);
           setPendingDialogChildEmail(x?.jsonText?.emailUserCurrent ?? currentUser.emailUserCurrent ?? '');
+          awaitingParentConfirmationRef.current = true;
           setOpenPendingParentsDialog(true);
           completeLogin(loggedUser, { deferRedirect: true });
           return true;
@@ -638,6 +645,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
   };
 
   const handleClosePendingParentsDialog = (): void => {
+    awaitingParentConfirmationRef.current = false;
     setOpenPendingParentsDialog(false);
     if (isUserValorizzato(user)) {
       redirectAfterLogin(router, user as UserI);
@@ -655,6 +663,7 @@ const GoogleAuthComponent: React.FC<HomeContentProps> = ({ homeConfig }) => {
       (dialogMessage?: TypeMessage) => showMessage(setOpen, setMessage, dialogMessage, true),
       setLoading,
     ).then(() => {
+      awaitingParentConfirmationRef.current = false;
       setOpenPendingParentsDialog(false);
       if (isUserValorizzato(user)) {
         redirectAfterLogin(router, user as UserI);
