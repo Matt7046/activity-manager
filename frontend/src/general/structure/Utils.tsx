@@ -49,6 +49,16 @@ export interface UserI {
   field?: string
 }
 
+/** Email account famiglia (genitore), distinta dal tutorato selezionato ({@link UserI.emailUserCurrent}). */
+export const getFamilyAccountEmail = (
+  user: Pick<UserI, "email" | "emailUserCurrent"> | null | undefined,
+): string => {
+  if (!user) {
+    return "";
+  }
+  return user.email?.trim() || user.emailUserCurrent?.trim() || "";
+};
+
 /** Etichetta utente tutorato / child (nome demo o email). */
 export const getUserChildDisplay = (user: UserI | null | undefined): string => {
   if (!user) {
