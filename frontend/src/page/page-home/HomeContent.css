@@ -249,3 +249,61 @@ html[data-theme="light"] .github-button {
     padding-inline: 0.65rem !important;
   }
 }
+
+@media (max-width: 700px) {
+  .home-page-shell {
+    flex: 0 0 auto;
+    min-height: auto;
+  }
+
+  .home-page-main {
+    flex: 0 0 auto;
+    min-height: auto;
+  }
+
+  .home-page-shell .tech-wrapper {
+    margin-top: var(--space-4);
+  }
+
+  .welcome-container1 {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-4);
+  }
+
+  .home-page-shell .techf-footer {
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+  }
+
+  .home-page-shell .techf-title {
+    margin-bottom: var(--space-2) !important;
+    font-size: 1rem !important;
+  }
+
+  .home-page-shell .techf-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .home-page-shell .techf-item {
+    padding-bottom: 0.35rem !important;
+  }
+
+  .home-page-shell .techf-item button {
+    width: 2rem;
+    height: 2rem;
+    min-width: 2rem;
+  }
+
+  .home-page-shell .techf-icon {
+    width: 1.35rem !important;
+    height: 1.35rem !important;
+  }
+
+  .home-page-shell .techf-name {
+    font-size: 0.625rem;
+    line-height: 1.15;
+  }
+}
