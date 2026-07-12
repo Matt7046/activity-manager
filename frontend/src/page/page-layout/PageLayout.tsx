@@ -262,20 +262,24 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           </div>
 
           <div className="page-layout-header__end">
-            <div className="language-container">
-              <ThemeToggle placement="header" />
-              <Language placement="header" />
+            <div className="page-layout-header__prefs">
+              <div className="language-container">
+                <ThemeToggle placement="header" />
+                <Language placement="header" />
+              </div>
             </div>
-            {sectionAttiva?.path !== null && !PUBLIC_SECTION_PATHS.has(sectionAttiva.path!) && (
-              <Popover
-                open={openAnchor}
-                onOpenChange={setOpenAnchor}
-                trigger={<Button pulsanti={[pulsanteNotifiche]} />}
-                notifications={popoverNotifications}
-                pulsanteNotification={pulsanteNotification}
-              />
-            )}
-            <Button pulsanti={[pulsanteLogout]} />
+            <div className="page-layout-header__actions">
+              {sectionAttiva?.path !== null && !PUBLIC_SECTION_PATHS.has(sectionAttiva.path!) && (
+                <Popover
+                  open={openAnchor}
+                  onOpenChange={setOpenAnchor}
+                  trigger={<Button pulsanti={[pulsanteNotifiche]} />}
+                  notifications={popoverNotifications}
+                  pulsanteNotification={pulsanteNotification}
+                />
+              )}
+              <Button pulsanti={[pulsanteLogout]} />
+            </div>
           </div>
         </header>
 
