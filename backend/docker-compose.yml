@@ -67,6 +67,7 @@ services:
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /root/nginx-apps:/etc/nginx/apps-enabled:ro
       # FIX CERTIFICATI: Montiamo tutta la cartella e quella delle lib per i link simbolici
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/lib/letsencrypt:/var/lib/letsencrypt:ro
