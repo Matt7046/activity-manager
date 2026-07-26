@@ -4,7 +4,7 @@ rem DEPLOY di un servizio Activity Manager (flusso produzione)
 rem   1) merge main -> production (+ push)
 rem   2) docker build da backend\ con docker-compose.prod.yml (come cartella prod)
 rem   3) docker push Hub
-rem   4) sul VPS: compose pull + up SOLO quel servizio (stesso compose prod)
+rem   4) sul VPS: pull + up con docker-compose.yml (unico compose sul server)
 rem
 rem Uso: DEPLOY-SERVICE.BAT frontend
 rem      DEPLOY-SERVICE.BAT activity-service
