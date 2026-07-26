@@ -26,6 +26,39 @@ echo.
 echo === BUILD %BUILD_SVC% ^(come prod^) ===
 echo CWD: %CD%
 echo File: docker-compose.prod.yml
+
+rem Blocca build frontend senza SERVICE_URL bake-in (rompe la home: axios baseURL vuoto).
+rem Next.js legge solo frontend/.env a build-time (FRONTEND_USE_LOCAL_ENV=0); backend/.env non basta.
+if /i "%~1"=="frontend" (
+  set "FE_ENV=%BACKEND_DIR%\..\frontend\.env"
+  set "BE_ENV=%BACKEND_DIR%\.env"
+  set "FE_URL_OK="
+  if exist "%FE_ENV%" (
+    findstr /B /C:"NEXT_PUBLIC_SERVICE_URL=http" "%FE_ENV%" >nul
+    if not errorlevel 1 set "FE_URL_OK=1"
+    findstr /B /C:"SERVICE_URL=http" "%FE_ENV%" >nul
+    if not errorlevel 1 set "FE_URL_OK=1"
+  )
+  if not defined FE_URL_OK (
+    set "BE_HAS_URL="
+    if exist "%BE_ENV%" (
+      findstr /B /C:"NEXT_PUBLIC_SERVICE_URL=http" "%BE_ENV%" >nul
+      if not errorlevel 1 set "BE_HAS_URL=1"
+      findstr /B /C:"SERVICE_URL=http" "%BE_ENV%" >nul
+      if not errorlevel 1 set "BE_HAS_URL=1"
+    )
+    echo [ERRORE] Critico: NEXT_PUBLIC_SERVICE_URL / SERVICE_URL mancante o vuoto in frontend\.env
+    if defined BE_HAS_URL (
+      echo Trovato in backend\.env ma Next bakea da frontend\.env — copia NEXT_PUBLIC_SERVICE_URL li'.
+    ) else (
+      echo Non trovato neanche in backend\.env. Copia da server /root/app/frontend/.env
+    )
+    echo Atteso es. NEXT_PUBLIC_SERVICE_URL=https://activity-manager.colorsdev.tech/api
+    echo NON committare .env.
+    exit /b 1
+  )
+)
+
 echo docker compose -f docker-compose.prod.yml build %BUILD_EXTRA% %BUILD_SVC%
 call docker compose -f docker-compose.prod.yml build %BUILD_EXTRA% %BUILD_SVC%
 if errorlevel 1 (
