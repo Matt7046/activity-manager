@@ -9,8 +9,10 @@ call "%~dp0_resolve-service.bat" "%~1"
 if errorlevel 1 exit /b 1
 
 set "SSH_TARGET=%DEPLOY_USER%@%DEPLOY_HOST%"
-rem Usa ; (non &&) cosi' tutto resta un unico argomento remoto per ssh
-set "REMOTE_CMD=cd %DEPLOY_PATH% ; docker compose -f %DEPLOY_COMPOSE_FILE% pull %REPLICAS% ; docker compose -f %DEPLOY_COMPOSE_FILE% up -d %REPLICAS%"
+rem Usa ; (non &&) cosi' tutto resta un unico argomento remoto per ssh.
+rem --force-recreate: senza questo, se i container sono gia' Running restano sulla vecchia immagine
+rem anche dopo un pull riuscito.
+set "REMOTE_CMD=cd %DEPLOY_PATH% ; docker compose -f %DEPLOY_COMPOSE_FILE% pull %REPLICAS% ; docker compose -f %DEPLOY_COMPOSE_FILE% up -d --force-recreate --remove-orphans=false %REPLICAS%"
 
 echo.
 echo === SERVER %SSH_TARGET% ===
