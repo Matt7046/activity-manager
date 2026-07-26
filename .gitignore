@@ -51,3 +51,7 @@ backend/.vscode/
 
 # File locali / prove in public (es. association non da versionare); se servono in repo, rimuovi questa riga.
 frontend/public/.well-known/
+
+# Deploy locale (host/path/SSH) — usare config.bat.example come template
+backend/batavviodocker/deploy/config.bat
+
