@@ -25,10 +25,12 @@ if defined DEPLOY_SSH_KEY (
   ssh -o StrictHostKeyChecking=accept-new %SSH_TARGET% "%REMOTE_CMD%"
 )
 if errorlevel 1 (
-  echo.
-  echo [ERRORE] SSH/pull/up fallito.
-  echo Verifica DEPLOY_PATH / DEPLOY_COMPOSE_FILE in config.bat e accesso SSH.
-  exit /b 1
+echo.
+echo [ERRORE] SSH/pull/up fallito.
+echo Verifica DEPLOY_PATH / DEPLOY_COMPOSE_FILE in config.bat e accesso SSH.
+echo Sul VPS deve esistere: %DEPLOY_PATH%\%DEPLOY_COMPOSE_FILE%
+echo ^(di solito docker-compose.yml, NON docker-compose.prod.yml^)
+exit /b 1
 )
 
 echo [OK] Server aggiornato: %REPLICAS%

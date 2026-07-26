@@ -1,12 +1,11 @@
 @echo off
-rem Copia come config.bat e adatta se serve.
-rem Build/push usano SEMPRE backend\docker-compose.prod.yml (come cartella prod).
-rem Sul VPS: stesso file (image Hub identiche a docker-compose.yml).
+rem Build locale: docker-compose.prod.yml (come cartella prod).
+rem Server VPS: docker-compose.yml (unico compose presente su /root/app/backend).
 
 set "DEPLOY_HOST=173.212.220.20"
 set "DEPLOY_USER=root"
 set "DEPLOY_PATH=/root/app/backend"
-set "DEPLOY_COMPOSE_FILE=docker-compose.prod.yml"
+set "DEPLOY_COMPOSE_FILE=docker-compose.yml"
 set "DEPLOY_GIT_MERGE=1"
 set "DEPLOY_GIT_PUSH=1"
 set "DEPLOY_USE_CACHE=1"
