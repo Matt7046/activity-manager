@@ -18,8 +18,11 @@ notepad config.bat
 Imposta almeno:
 
 - `DEPLOY_HOST` / `DEPLOY_USER` / `DEPLOY_PATH` (es. `/root/app/backend`)
-- `DEPLOY_COMPOSE_FILE=docker-compose.yml` (pull da Hub, senza rebuild sul server)
+- `DEPLOY_COMPOSE_FILE=docker-compose.prod.yml` (stesso file della cartella `prod`)
 - Preferibile: chiave SSH in `DEPLOY_SSH_KEY` (evita password in chiaro)
+
+Build locale: `cd` in `backend\` + `docker-compose.prod.yml` (identico a `prod\REBUILD-*.BAT`).
+Sul VPS il comando remoto usa `;` al posto di `&&` così Windows non esegue `docker compose` in locale nella cartella `deploy`.
 
 `config.bat` è in `.gitignore`.
 

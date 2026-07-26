@@ -1,16 +1,13 @@
 @echo off
-rem Copia questo file come config.bat e adatta i valori.
-rem config.bat e' gitignore-ato (non mettere password nel repo).
+rem Copia come config.bat e adatta se serve.
+rem Build/push usano SEMPRE backend\docker-compose.prod.yml (come cartella prod).
+rem Sul VPS: stesso file (image Hub identiche a docker-compose.yml).
 
 set "DEPLOY_HOST=173.212.220.20"
 set "DEPLOY_USER=root"
 set "DEPLOY_PATH=/root/app/backend"
-rem Compose usato sul server (pull da Docker Hub, senza build):
-set "DEPLOY_COMPOSE_FILE=docker-compose.yml"
-rem Opzionale: chiave SSH (altrimenti ssh chiede password / usa agent)
-rem set "DEPLOY_SSH_KEY=%USERPROFILE%\.ssh\id_rsa"
-rem Se true, fa merge main -> production e push del branch prima del build
+set "DEPLOY_COMPOSE_FILE=docker-compose.prod.yml"
 set "DEPLOY_GIT_MERGE=1"
 set "DEPLOY_GIT_PUSH=1"
-rem Build Docker con cache layer (piu' veloce). Metti 0 per --no-cache
 set "DEPLOY_USE_CACHE=1"
+rem set "DEPLOY_SSH_KEY=%USERPROFILE%\.ssh\id_rsa"
