@@ -41,3 +41,7 @@ local.env
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Font locali per generate-pwa-assets (non redistribuire font di sistema)
+/scripts/fonts/*.ttf
+/scripts/fonts/*.otf
