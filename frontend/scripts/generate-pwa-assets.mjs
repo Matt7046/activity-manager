@@ -3,7 +3,11 @@
  * e relative icone PWA / favicon / screenshot — sfondo trasparente.
  *
  * Sorgente icona: public/logo-colorsdev-v2.png (solo il mark, senza ".tech")
- * Uso: node scripts/generate-pwa-assets.mjs  (anche come prebuild)
+ * Font etichetta: scripts/fonts/Label.ttf (incorporato in SVG → funziona anche in CI Linux)
+ *
+ * Uso:
+ *   node scripts/generate-pwa-assets.mjs
+ *   node scripts/generate-pwa-assets.mjs --rebuild-logo
  */
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -15,8 +19,10 @@ const publicDir = path.join(__dirname, "..", "public");
 const pwaDir = path.join(publicDir, "pwa");
 const brandLogoPath = path.join(publicDir, "logo-colorsdev-v2.png");
 const appLogoPath = path.join(publicDir, "logo-activity-manager.png");
+const labelFontPath = path.join(__dirname, "fonts", "Label.ttf");
 
 const LABEL = "activity-manager";
+const FORCE_REBUILD_LOGO = process.argv.includes("--rebuild-logo");
 
 const ensureBrandLogo = async () => {
   try {
@@ -27,6 +33,33 @@ const ensureBrandLogo = async () => {
     );
     process.exit(0);
   }
+};
+
+const fileExists = async (p) => {
+  try {
+    await fs.access(p);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+/** Font locale o di sistema, in data-URI per librsvg (niente tofu su Linux). */
+const resolveLabelFontDataUri = async () => {
+  const candidates = [
+    labelFontPath,
+    "C:\\Windows\\Fonts\\arial.ttf",
+    "C:\\Windows\\Fonts\\segoeui.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+    "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+  ];
+  for (const candidate of candidates) {
+    if (!(await fileExists(candidate))) continue;
+    const buf = await fs.readFile(candidate);
+    return `data:font/ttf;base64,${buf.toString("base64")}`;
+  }
+  return null;
 };
 
 /** Trova la fine del mark (prima del gap sopra il testo ".tech"). */
@@ -81,8 +114,29 @@ const extractMark = async () => {
   return sharp(cropped).trim({ threshold: 10 }).png().toBuffer();
 };
 
+/** Conta pixel non trasparenti: se il testo SVG fallisce resta quasi vuoto. */
+const opaquePixelCount = async (pngBuf) => {
+  const { data, info } = await sharp(pngBuf)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const { channels } = info;
+  let n = 0;
+  for (let i = 3; i < data.length; i += channels) {
+    if (data[i] > 20) n++;
+  }
+  return n;
+};
+
 /** Composito mark + "activity-manager" su canvas trasparente. */
 const buildAppLogo = async () => {
+  const fontDataUri = await resolveLabelFontDataUri();
+  if (!fontDataUri) {
+    throw new Error(
+      "Nessun font per l'etichetta. Metti scripts/fonts/Label.ttf oppure installa DejaVu/Liberation su Linux.",
+    );
+  }
+
   const markBuf = await extractMark();
   const markMeta = await sharp(markBuf).metadata();
   const markW = markMeta.width ?? 700;
@@ -105,6 +159,12 @@ const buildAppLogo = async () => {
   const textSvg = Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
 <svg width="${canvasW}" height="${fontSize + 16}" xmlns="http://www.w3.org/2000/svg">
   <defs>
+    <style type="text/css"><![CDATA[
+      @font-face {
+        font-family: "PwaLabel";
+        src: url("${fontDataUri}");
+      }
+    ]]></style>
     <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#4ecdc4"/>
       <stop offset="45%" stop-color="#5b7cfa"/>
@@ -115,7 +175,7 @@ const buildAppLogo = async () => {
     x="50%"
     y="72%"
     text-anchor="middle"
-    font-family="Segoe UI, Arial, Helvetica, sans-serif"
+    font-family="PwaLabel, DejaVu Sans, Arial, sans-serif"
     font-size="${fontSize}"
     font-weight="600"
     letter-spacing="0.5"
@@ -124,6 +184,12 @@ const buildAppLogo = async () => {
 </svg>`);
 
   const textPng = await sharp(textSvg).png().toBuffer();
+  const textPixels = await opaquePixelCount(textPng);
+  if (textPixels < 80) {
+    throw new Error(
+      `Rendering testo fallito (${textPixels} px). Controlla scripts/fonts/Label.ttf.`,
+    );
+  }
 
   await sharp({
     create: {
@@ -185,7 +251,16 @@ const screenshot = async (fileName, canvasW, canvasH) => {
 const main = async () => {
   await ensureBrandLogo();
   await fs.mkdir(pwaDir, { recursive: true });
-  await buildAppLogo();
+  await fs.mkdir(path.dirname(labelFontPath), { recursive: true });
+
+  const hasAppLogo = await fileExists(appLogoPath);
+  if (FORCE_REBUILD_LOGO || !hasAppLogo) {
+    await buildAppLogo();
+  } else {
+    console.log(
+      "[pwa] Uso logo-activity-manager.png esistente (pass --rebuild-logo per rigenerare il testo).",
+    );
+  }
 
   await resizeContainedSquare(192).toFile(path.join(pwaDir, "icon-192.png"));
   await resizeContainedSquare(512).toFile(path.join(pwaDir, "icon-512.png"));
