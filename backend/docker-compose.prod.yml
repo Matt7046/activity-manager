@@ -75,6 +75,8 @@ services:
       - /root/nginx-apps:/etc/nginx/apps-enabled:ro
       # Frontend web Password Manager
       - /root/password-manager/web:/var/www/password-manager-web:ro
+      # Frontend web Mail Manager
+      - /root/mail-manager/web:/var/www/mail-manager-web:ro
       # FIX CERTIFICATI: Montiamo tutta la cartella e quella delle lib per i link simbolici
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/lib/letsencrypt:/var/lib/letsencrypt:ro
